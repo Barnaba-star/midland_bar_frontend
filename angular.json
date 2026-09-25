@@ -71,7 +71,10 @@
               "buildTarget": "angular-routes:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options": {
+            "port": 4300
+          }
         },
         "extract-i18n": {
           "builder": "@angular/build:extract-i18n"

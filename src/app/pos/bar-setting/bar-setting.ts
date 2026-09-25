@@ -1,3 +1,4 @@
+import { StockItemDialogComponent, StockItemResult } from '../../Utils/component/dialogs/stock-item-dialog-component/stock-item-dialog-component';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { TitleAction, Title2 } from "../../Utils/component/title2/title2";
 import { Authentication } from '../../Utils/services/authentication';
@@ -13,7 +14,6 @@ import { TableComponent } from "../../Utils/component/table/table";
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../../Utils/component/dialog/dialog';
 import { ServiceDetailsDialogComponent } from '../../Utils/component/dialogs/service-details-dialog-component/service-details-dialog-component';
-import { EditCommissionDialogComponent } from '../../Utils/component/dialogs/edit-commission-dialog-component/edit-commission-dialog-component';
 import { error } from 'console';
 import { DeleteConfirmationComponent } from '../../Utils/component/dialogs/delete-confirmation-component/delete-confirmation-component';
 import { UserRoleDialogComponent } from '../../Utils/component/dialogs/user-role-dialog-component/user-role-dialog-component';
@@ -39,11 +39,52 @@ export interface BarServiceEntity {
   description?: string;
   commissionType?: string;
   commissionValue?: number;
-  duration?: number;
+  category?: string;
+  unit?: string;
+  packUnit?: string;
+  unitsPerPack?: number;
+  kind?: string;
+  stockSource?: string;
+  stockSourceUid?: string;
+  stockSourceName?: string;
+  unitsPerSale?: number;
+  sourceStockQuantity?: number;
+  unitLadder?: any;
+  saleUnitName?: string;
+  saleUnitCount?: number;
+  buyingPrice?: number;
+  stockQuantity?: number;
+  lowStock?: boolean;
+  trackStock?: boolean;
   price?: number;
   updatedAt?: string | null;
   usageType?:string;
 }
+
+/** Stored as DRINK / FOOD - the backend's ProductCategory. */
+const PRODUCT_CATEGORY_OPTIONS = [
+  { value: 'DRINK', label: 'SETTING_PAGE.CATEGORY_DRINK' },
+  { value: 'FOOD', label: 'SETTING_PAGE.CATEGORY_FOOD' }
+];
+
+/** How stock is bought. '' = one unit at a time, no pack. */
+const PRODUCT_PACK_OPTIONS = [
+  { value: '', label: 'PRODUCT_FORM.NO_PACK' },
+  { value: 'Crate', label: 'PRODUCT_FORM.UNIT_CRATE' },
+  { value: 'Carton', label: 'PRODUCT_FORM.UNIT_CARTON' },
+  { value: 'Box', label: 'PRODUCT_FORM.UNIT_BOX' },
+  { value: 'Bottle', label: 'PRODUCT_FORM.UNIT_BOTTLE' },
+  { value: 'Kilo', label: 'PRODUCT_FORM.UNIT_KILO' },
+  { value: 'Whole', label: 'PRODUCT_FORM.UNIT_WHOLE' }
+];
+
+/** What a stock item is counted in - the smallest thing a service takes of it. */
+const STOCK_UNIT_OPTIONS = [
+  { value: 'Stick', label: 'PRODUCT_FORM.UNIT_STICK' },
+  { value: 'Piece', label: 'PRODUCT_FORM.UNIT_PIECE' },
+  { value: 'Quarter', label: 'PRODUCT_FORM.UNIT_QUARTER' },
+  { value: 'Bottle', label: 'PRODUCT_FORM.UNIT_BOTTLE' }
+];
 
 @Component({
   selector: 'app-bar-setting',
@@ -97,6 +138,11 @@ throw new Error('Method not implemented.');
       icon: 'commission',
       title: 'SALON.COMMISSION',
       roles: ['ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'MANAGER', 'CASHIER']
+    },
+    {
+      icon: 'more',
+      title: 'SALON.BILL_CODES',
+      roles: ['ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'MANAGER', 'CASHIER']
     }
   ];
 
@@ -106,6 +152,9 @@ throw new Error('Method not implemented.');
 
   onAction(action: string) {
   this.selectedSetting = action;
+  if (action === 'SALON.BILL_CODES') {
+    this.loadBillCodes();
+  }
  if (action === 'SALON.SERVICE') {
   this.barServiceInfo=false;
   this.barServiceAddForm=false;
@@ -124,112 +173,85 @@ throw new Error('Method not implemented.');
 
  }
 }
-serviceFields:FormField[] = [
-  {
-    name: 'serviceName',
-    type: 'text',
-    label: 'Service Name',
-    placeholder: 'Enter service name',
-    required: true,
-  },
-    {
-    name: 'serviceCode',
-    type: 'text',
-    label: 'Service Code',
-    placeholder: 'Enter service code',
-    required: true,
-  },
-  {
-    name: 'price',
-    type: 'number',
-    label: 'Price',
-    placeholder: 'Enter price',
-    required: true,
-  },
-  {
-    name: 'duration',
-    type: 'number',
-    label: 'Duration (in minutes)',
-    placeholder: 'Enter duration in minutes',
-    required: true,
-  },
-   {
-    name: 'status',
-    type: 'select',
-    placeholder: 'Enter status',
-    required: true,
-    options: [
-      { value: 'active', label: 'Active' },
-      { value: 'Not Active', label: 'Not Active' }
-    ]
-  },
-   {
-    name:'usageType',
-    type:'select',
-    placeholder:'Usage Type',
-    options:[{label:'ASSIGNED', value:'ASSIGNED'}, {label:'SHARED', value:'SHARED'}]
-  },
-    {
-    name: 'description',
-    type: 'textarea',
-    label: 'Description',
-    placeholder: 'Enter service description',
-    required: true,
+/** Stock items (beef, goat meat) that services can be made from - loaded when a service form opens. */
+stockItems: any[] = [];
 
-  },
+/** A stock item's measures, smallest first (the unit alone for one saved before ladders). */
+private ladderOf(item: any): string[] {
+  try {
+    const ladder = JSON.parse(item.unitLadder ?? '[]') as { name: string }[];
+    if (ladder.length) {
+      return ladder.map((l) => l.name);
+    }
+  } catch {
+    // fall through
+  }
+  return [item.unit || this.translate.instant('PRODUCT_FORM.UNIT_PIECE')];
+}
 
-]
+private loadStockItems(then: () => void) {
+  this.service.findBarServiceList().subscribe({
+    next: (res) => {
+      this.stockItems = (res.data ?? []).filter((s: any) => s.kind === 'STOCK_ITEM');
+      then();
+    },
+    error: (err) => {
+      console.error('Error loading stock items:', err);
+      this.stockItems = [];
+      then();
+    },
+  });
+}
 
-serviceFieldsEdit:FormField[] = [
-  {
-    name: 'serviceName',
-    type: 'text',
-    placeholder: 'Enter service name',
-    required: true,
-  },
+/**
+ * A service sold at the counter. "Stock" says how it is counted: itself
+ * (a crate of Castle Lite), not at all (chips), or out of a stock item -
+ * a mshikaki takes 1 unit of beef, a robo takes 5.
+ */
+private serviceFormFields(): FormField[] {
+  return [
+    { name: 'serviceName', type: 'text', label: 'PRODUCT_FORM.NAME', placeholder: 'PRODUCT_FORM.NAME_PH', required: true },
+    { name: 'category', type: 'select', label: 'PRODUCT_FORM.CATEGORY', placeholder: 'PRODUCT_FORM.CATEGORY', required: true, options: PRODUCT_CATEGORY_OPTIONS },
+    { name: 'price', type: 'number', label: 'PRODUCT_FORM.SELLING_PRICE', placeholder: 'PRODUCT_FORM.SELLING_PRICE_PH', required: true },
     {
-    name: 'serviceCode',
-    type: 'text',
-    placeholder: 'Enter service code',
-    required: true,
-  },
-  {
-    name: 'price',
-    type: 'number',
-    placeholder: 'Enter price',
-    required: true,
-  },
-  {
-    name: 'duration',
-    type: 'number',
-    placeholder: 'Enter duration in minutes',
-    required: true,
-  },
-  {
-    name:'usageType',
-    type:'select',
-    placeholder:'Usage Type',
-    options:[{label:'ASSIGNED', value:'ASSIGNED'}, {label:'SHARED', value:'SHARED'}]
-  },
-    {
-    name: 'status',
-    type: 'select',
-    placeholder: 'Enter status',
-    required: true,
-    options: [
-      { value: 'active', label: 'Active' },
-      { value: 'Not Active', label: 'Not Active' }
-    ]
-  },
-    {
-    name: 'description',
-    type: 'textarea',
-    placeholder: 'Enter service description',
-    required: true,
+      name: 'stockSource',
+      type: 'select',
+      label: 'PRODUCT_FORM.STOCK_SOURCE',
+      placeholder: 'PRODUCT_FORM.STOCK_SOURCE',
+      required: true,
+      options: [
+        { value: 'SELF', label: 'PRODUCT_FORM.SOURCE_SELF' },
+        { value: 'NONE', label: 'PRODUCT_FORM.SOURCE_NONE' },
+        // One choice per measure of each stock item: "Beef › Nusu".
+        ...this.stockItems.flatMap((item) => this.ladderOf(item).map((level) => ({
+          value: `${item.uid}|${level}`,
+          label: this.translate.instant('PRODUCT_FORM.SOURCE_FROM_LEVEL', { name: item.serviceName, level }),
+        }))),
+      ],
+    },
+    { name: 'saleUnitCount', type: 'number', label: 'PRODUCT_FORM.SALE_UNIT_COUNT', placeholder: 'PRODUCT_FORM.SALE_UNIT_COUNT_PH' },
+    { name: 'packUnit', type: 'select', label: 'PRODUCT_FORM.PACK_UNIT', placeholder: 'PRODUCT_FORM.PACK_UNIT', options: PRODUCT_PACK_OPTIONS },
+    { name: 'unitsPerPack', type: 'number', label: 'PRODUCT_FORM.UNITS_PER_PACK', placeholder: 'PRODUCT_FORM.UNITS_PER_PACK_PH' },
+    { name: 'buyingPrice', type: 'number', label: 'PRODUCT_FORM.BUYING_PRICE', placeholder: 'PRODUCT_FORM.BUYING_PRICE_PH' },
+    { name: 'description', type: 'textarea', label: 'PRODUCT_FORM.DESCRIPTION', placeholder: 'PRODUCT_FORM.DESCRIPTION_PH' },
+  ];
+}
 
-  },
-
-]
+/**
+ * Something kept in the store and never sold as-is - beef, bought by the
+ * kilo and counted in mishikaki (1 kilo = 20, say).
+ */
+private stockItemFormFields(): FormField[] {
+  return [
+    { name: 'serviceName', type: 'text', label: 'PRODUCT_FORM.STOCK_ITEM_NAME', placeholder: 'PRODUCT_FORM.STOCK_ITEM_NAME_PH', required: true },
+    { name: 'category', type: 'select', label: 'PRODUCT_FORM.CATEGORY', placeholder: 'PRODUCT_FORM.CATEGORY', required: true, options: PRODUCT_CATEGORY_OPTIONS },
+    { name: 'unit', type: 'select', label: 'PRODUCT_FORM.COUNTED_IN', placeholder: 'PRODUCT_FORM.COUNTED_IN', required: true, options: STOCK_UNIT_OPTIONS },
+    { name: 'packUnit', type: 'select', label: 'PRODUCT_FORM.PACK_UNIT', placeholder: 'PRODUCT_FORM.PACK_UNIT', options: PRODUCT_PACK_OPTIONS },
+    { name: 'unitsPerPack', type: 'number', label: 'PRODUCT_FORM.UNITS_PER_PACK', placeholder: 'PRODUCT_FORM.UNITS_PER_PACK_STOCK_PH' },
+    { name: 'buyingPrice', type: 'number', label: 'PRODUCT_FORM.BUYING_PRICE', placeholder: 'PRODUCT_FORM.BUYING_PRICE_PH', required: true },
+    { name: 'description', type: 'textarea', label: 'PRODUCT_FORM.DESCRIPTION', placeholder: 'PRODUCT_FORM.DESCRIPTION_PH' },
+  ];
+}
 
 barServiceEntity: BarServiceEntity = {};
 barServiceList: BarServiceEntity[] = [];
@@ -265,19 +287,14 @@ serviceColumns: {
     iconColor: '#28a745'
   },
   {
-    field: 'duration',
-    header: 'Duration',
-    icon: 'more',
-    iconPosition: 'left',
-    iconColor: '#6c757d'
+    field: 'category',
+    header: 'Category'
   },
-   {
-    field: 'usageType',
-    header: 'usageType',
-    icon: 'more',
-    iconPosition: 'left',
-    iconColor: '#6c757d'
+  {
+    field: 'buyingPrice',
+    header: 'Buying Price'
   },
+
   {
     field: 'status',
     header: 'Status'
@@ -285,51 +302,120 @@ serviceColumns: {
 ];
 onAddService(){
   this.barServiceInfo=false;
+  this.loadStockItems(() => this.openServiceDialog('SERVICE'));
+}
+
+onAddStockItem(){
+  this.barServiceInfo=false;
+  this.openStockItemDialog();
+}
+
+/** Stock items have their own form: a ladder of measures is a list, not a fixed set of fields. */
+private openStockItemDialog(row?: any) {
+  const dialogRef = this.dialog.open(StockItemDialogComponent, {
+    width: '760px',
+    maxWidth: '95vw',
+    autoFocus: false,
+    data: { item: row },
+  });
+  dialogRef.afterClosed().subscribe((result?: StockItemResult) => {
+    if (!result) {
+      return;
+    }
+    const dto: BarServiceDTO = {
+      uid: row?.uid,
+      kind: 'STOCK_ITEM',
+      serviceName: result.serviceName,
+      category: result.category,
+      unitLadder: result.unitLadder,
+      buyingPrice: result.buyingPrice,
+      description: result.description,
+    };
+    this.service.saveBarEntity(dto).subscribe({
+      next: (response) => {
+        if (response?.data) {
+          this.alertService.show('success', this.translate.instant(row ? 'PRODUCT_FORM.UPDATED' : 'PRODUCT_FORM.SAVED'));
+          this.findBarServicePage();
+          this.cdr.markForCheck();
+        }
+      },
+      error: (error) => console.error('Error saving stock item:', error),
+    });
+  });
+}
+
+/** The add/edit form for either kind; row is the record being edited, if any. */
+private openServiceDialog(kind: 'SERVICE' | 'STOCK_ITEM', row?: any) {
+  const isStockItem = kind === 'STOCK_ITEM';
+  const title = row
+    ? (isStockItem ? 'PRODUCT_FORM.EDIT_STOCK_ITEM_TITLE' : 'PRODUCT_FORM.EDIT_TITLE')
+    : (isStockItem ? 'PRODUCT_FORM.ADD_STOCK_ITEM_TITLE' : 'PRODUCT_FORM.ADD_TITLE');
+  const formData = row
+    ? {
+        ...row,
+        stockSource: row.stockSourceUid
+          ? `${row.stockSourceUid}|${row.saleUnitName ?? ''}`
+          : (row.trackStock ? 'SELF' : 'NONE'),
+        saleUnitCount: row.saleUnitCount ?? row.unitsPerSale ?? 1,
+      }
+    : (isStockItem ? {} : { stockSource: 'SELF', saleUnitCount: 1 });
+
   const dialogRef = this.dialog.open(DialogComponent, {
     width: '720px',
     maxWidth: '95vw',
     autoFocus: false,
     data: {
-      formTitle: 'Add Service',
-      fields: this.serviceFields,
+      formTitle: title,
+      fields: isStockItem ? this.stockItemFormFields() : this.serviceFormFields(),
+      formData,
     },
   });
 
   dialogRef.afterClosed().subscribe((data) => {
-    if (data) {
-      this.submitServiceForm(data);
+    if (!data) {
+      return;
     }
-    this.cdr.markForCheck();
+    const dto: BarServiceDTO = {
+      uid: row?.uid,
+      kind,
+      serviceName: data.serviceName,
+      category: data.category,
+      description: data.description,
+      packUnit: data.packUnit || undefined,
+      unitsPerPack: data.unitsPerPack === '' ? undefined : data.unitsPerPack,
+      buyingPrice: data.buyingPrice === '' ? undefined : data.buyingPrice,
+    };
+    if (isStockItem) {
+      dto.unit = data.unit;
+    } else {
+      dto.price = data.price;
+      const count = Number(data.saleUnitCount) || 1;
+      if (typeof data.stockSource === 'string' && data.stockSource.includes('|')) {
+        // "uid|Nusu": made from that stock item, one sale = count x Nusu.
+        const [uid, level] = data.stockSource.split('|');
+        dto.stockSource = uid;
+        if (level) {
+          dto.saleUnitName = level;
+          dto.saleUnitCount = count;
+        } else {
+          dto.unitsPerSale = count;
+        }
+      } else {
+        dto.stockSource = data.stockSource;
+      }
+    }
+    this.service.saveBarEntity(dto).subscribe({
+      next: (response) => {
+        if (response?.data) {
+          this.alertService.show('success', this.translate.instant(row ? 'PRODUCT_FORM.UPDATED' : 'PRODUCT_FORM.SAVED'));
+          this.findBarServicePage();
+          this.cdr.markForCheck();
+        }
+      },
+      error: (error) => console.error('Error saving service:', error),
+    });
   });
 }
-submitServiceForm(data: any) {
-    this.barServiceAddForm=false;
-    this.barServiceInfo=false;
-  const barServiceDTO:BarServiceDTO={
-    serviceName: data.serviceName,
-    serviceCode: data.serviceCode,
-    price: data.price,
-    duration: data.duration,
-    status: data.status,
-    description: data.description,
-    usageType:data.usageType
-  }
-  console.log('Service DTO:', barServiceDTO);
-  this.service.saveBarEntity(barServiceDTO).subscribe({
-    next: (response) => {
-      if(response){
-        this.alertService.show('success', 'Service saved successfully!');
-        this.findBarServicePage();
-        console.log('Service saved successfully:', response.data);
-        this.cdr.markForCheck();
-      }
-    },
-    error: (error) => {
-      console.error('Error saving service:', error);
-    }
-  })
-  }
-
 
    onViewRecord(row: any) {
     this.dialog.open(ServiceDetailsDialogComponent, {
@@ -355,8 +441,8 @@ tableConfig = {
     { field: 'serviceName', header: 'SERVICE NAME' },
     { field: 'serviceCode', header: 'SERVICE CODE' },
     { field: 'price', header: 'PRICE' },
-    { field: 'duration', header: 'DURATION' },
-    {field:'usageType', header:'usageType'},
+    { field: 'category', header: 'CATEGORY' },
+    { field: 'buyingPrice', header: 'BUYING PRICE' },
     { field: 'status', header: 'STATUS' }
   ] as TableColumn[]
 };
@@ -413,46 +499,12 @@ nextPage() {
 
 
    onEditRecord(row: any) {
-    console.log('Edit record:', row);
-    this.serviceEditUID = row.uid
-        const dialogRef = this.dialog.open(DialogComponent, {
-          width: '1200px',
-          data: {
-            formTitle: 'Update Service',
-            fields: this.serviceFieldsEdit,
-            formData: [row],
-          },
-        });
-
-        dialogRef.afterClosed().subscribe((result) => {
-          if (!result) return;
-           console.log('Updated form data:', result);
-              const barServiceDTO:BarServiceDTO={
-              uid: this.serviceEditUID,
-              serviceName: result.serviceName,
-              serviceCode: result.serviceCode,
-              price: result.price,
-              duration: result.duration,
-              status: result.status,
-              description: result.description,
-              usageType:result.usageType
-            }
-            console.log('Service Edited Value is:', barServiceDTO);
-              this.service.saveBarEntity(barServiceDTO).subscribe({
-                  next: (response) => {
-                    if(response){
-                      this.alertService.show('success', 'Service Updated successfully!');
-                      this.findBarServicePage();
-                      this.cdr.markForCheck();
-                    }
-                  },
-                  error: (error) => {
-                    console.error('Error saving service:', error);
-                  }
-                })
-          });
-
-
+    this.serviceEditUID = row.uid;
+    if (row.kind === 'STOCK_ITEM') {
+      this.openStockItemDialog(row);
+    } else {
+      this.loadStockItems(() => this.openServiceDialog('SERVICE', row));
+    }
    }
    onDeleteRecord(row:any){
     const dialogRef = this.dialog.open(DeleteConfirmationComponent, {
@@ -476,14 +528,14 @@ nextPage() {
       next:(res)=>{
         if(res){
           console.log('Service Deleted Successfully', res.data);
-          this.alertService.show('success', 'Service successfully Deleted');
+          this.alertService.show('success', this.translate.instant('PRODUCT_FORM.DELETED'));
           this.findBarServicePage();
           this.cdr.markForCheck();
         }
       },
       error:(error)=>{
         console.error('Error Occurred', error)
-        this.alertService.show('error', 'Error When Deleting Service');
+        this.alertService.show('error', this.translate.instant('PRODUCT_FORM.DELETE_FAILED'));
       }
     })
    }
@@ -492,283 +544,243 @@ nextPage() {
 
    /****
     * ************************************************************************** COMMISSIONS METHODS*****************************************************************
+    *
+    * Every service is listed with its split. Choosing one opens the split
+    * editor: a percentage per bucket, typed directly - what is typed is what
+    * is stored (the backend keeps whole percentages) - with the Tshs each
+    * comes to on one unit shown beside it.
     */
 
-   addCommission:Boolean=false;
-   configureCommission:Boolean=false;
-   selectedService:Boolean=false;
-   barServiceData:BarServiceData={};
-addCommissionForm: FormField[] = [
-  {
-    name: 'serviceName',
-    type: 'select',
-    placeholder: 'Service/Huduma',
-    required: true,
-    options: []
-  }
-];
-
-findBarServiceList() {
-  this.addCommission = true;
-   this.selectedService=false;
-   this.commissionDataSource=[];
-  this.barService.findBarServiceList().subscribe({
-    next: (res) => {
-      console.log('Service Founds', res.data)
-this.addCommissionForm[0].options = (res.data ?? []).map((service: any) => ({
-  label: service.serviceName,
-  value: service.uid
-}));
-      this.cdr.detectChanges();
-    },
-    error: (error) => {
-      console.error('Error Occurred', error);
-      this.alertService.show('error', 'Error When Loading Services');
-    }
-  });
-}
-
-    onAddCommission(){
-      this.commissionDataSource=[];
-    this.selectedService=false;
-    const dialogRef = this.dialog.open(DialogComponent, {
-      width: '1200px',
-      data:{
-        formTitle: 'Select Service/Chagua Huduma',
-        fields: this.addCommissionForm,
-      }
-
-    });
-     dialogRef.afterClosed().subscribe((result) => {
-          if (!result) return;
-          console.log('Commission Selected', result)
-          this.barService.findBarServiceByUID(result.serviceName).subscribe({
-            next:(res)=>{
-              if(res){
-                console.log('Service By UID', res.data);
-                this.barServiceData=res.data;
-                this.selectedService=true;
-                this.cdr.detectChanges();
-              }
-            },
-             error: (error) => {
-      console.error('Error Occurred', error);
-      this.alertService.show('error', 'Error When Loading Services');
-    }
-          })
-     })
-   }
-
-
-servicePrice = 0;
-remainingAmount = 0;
-
-commissionRows = [
-  { name: 'Staff Commission', code: 'STF', amount: 0, percentage: 0 },
-  { name: 'Owner Commission', code: 'OWN', amount: 0, percentage: 0 },
-  { name: 'Maintenance', code: 'MTN', amount: 0, percentage: 0 },
-  { name: 'TRA Commission', code: 'TRA', amount: 0, percentage: 0 },
-  { name: 'Emergency', code: 'EMG', amount: 0, percentage: 0 },
-  { name: 'Others', code: 'OTH', amount: 0, percentage: 0 },
-  { name: 'Rent', code: 'RT', amount: 0, percentage: 0 },
-  { name: 'Loan', code: 'LN', amount: 0, percentage: 0 },
-  { name: 'Luku', code: 'LK', amount: 0, percentage: 0 },
-  { name: 'Water', code: 'WTR', amount: 0, percentage: 0 },
-  { name: 'Stock Purchase', code: 'SP', amount: 0, percentage: 0 }
-];
-
-calculateCommission(row: any) {
-  const price = Number(this.barServiceData.price) || 0;
-  const amount = Number(row.amount) || 0;
-
-  row.percentage = price > 0
-    ? (amount / price) * 100
-    : 0;
-
-  this.remainingAmount = price -
-    this.commissionRows.reduce(
-      (total, item) => total + (Number(item.amount) || 0),
-      0
-    );
-}
-
-saveCommission() {
-
-  const commission: CommissionDTO = {
-    barServiceUID: this.barServiceData.uid,
-
-    staffPercent:
-      this.commissionRows.find(x => x.code === 'STF')?.percentage || 0,
-
-    ownerPercent:
-      this.commissionRows.find(x => x.code === 'OWN')?.percentage || 0,
-
-    maintenancePercent:
-      this.commissionRows.find(x => x.code === 'MTN')?.percentage || 0,
-
-    traPercent:
-      this.commissionRows.find(x => x.code === 'TRA')?.percentage || 0,
-
-    emergencyPercent:
-      this.commissionRows.find(x => x.code === 'EMG')?.percentage || 0,
-
-    otherPercent:
-      this.commissionRows.find(x => x.code === 'OTH')?.percentage || 0,
-    loanPercent:
-      this.commissionRows.find(x => x.code === 'LN')?.percentage || 0,
-          rentPercent:
-      this.commissionRows.find(x => x.code === 'RT')?.percentage || 0,
-          waterPercent:
-      this.commissionRows.find(x => x.code === 'WTR')?.percentage || 0,
-          lukuPercent:
-      this.commissionRows.find(x => x.code === 'LK')?.percentage || 0,
-        stockPurchasePercent:
-      this.commissionRows.find(x => x.code === 'SP')?.percentage || 0,
-
-    totalPercent: this.commissionRows.reduce(
-      (total, row) => total + (Number(row.percentage) || 0),
-      0
-    )
-  };
-
-  console.log('Commission DTO:', commission);
-  this.barService.saveCommissions(commission).subscribe({
-    next:(res)=>{
-      if(res){
-        console.log('Commission saved', res.data);
-        this.alertService.show('success', 'commission saved')
-         this.addCommission =false;
-         this.selectedService=false;
-         this.serviceDataSource.data=[]
-         this.cdr.detectChanges();
-      }
-    },
-     error: (error) => {
-      console.error('Error Occurred', error);
-      this.alertService.show('error', 'Error When Loading Services');
-  }
-})
-}
+// Shared with the Services and Users tabs, which page with the same fields.
 page = 0;
 size = 5;
-
 totalElements = 0;
 totalPages = 0;
-commissionDataSource: any[] = [];
+
+readonly commissionBuckets: { key: keyof CommissionDTO; label: string }[] = [
+  { key: 'staffPercent', label: 'COMMISSION_BREAKDOWN.STAFF' },
+  { key: 'ownerPercent', label: 'COMMISSION_BREAKDOWN.OWNER' },
+  { key: 'traPercent', label: 'COMMISSION_BREAKDOWN.TRA' },
+  { key: 'maintenancePercent', label: 'COMMISSION_BREAKDOWN.MAINTENANCE' },
+  { key: 'emergencyPercent', label: 'COMMISSION_BREAKDOWN.EMERGENCY' },
+  { key: 'loanPercent', label: 'COMMISSION_BREAKDOWN.LOAN' },
+  { key: 'rentPercent', label: 'COMMISSION_BREAKDOWN.RENT' },
+  { key: 'lukuPercent', label: 'COMMISSION_BREAKDOWN.LUKU' },
+  { key: 'waterPercent', label: 'COMMISSION_BREAKDOWN.WATER' },
+  { key: 'stockPurchasePercent', label: 'COMMISSION_BREAKDOWN.STOCK_PURCHASE' },
+  { key: 'otherPercent', label: 'COMMISSION_BREAKDOWN.OTHER' },
+];
+
+/** Kept so the tab switch (onAction) can still reset it. */
+addCommission: Boolean = false;
+
+serviceCommissions: any[] = [];
+commissionPage = 0;
+commissionSize = 10;
+commissionTotalPages = 0;
+commissionTotalElements = 0;
+commissionSearch = '';
+private commissionSearchTimer?: ReturnType<typeof setTimeout>;
+
+/** The service whose split is open in the editor, or null. */
+editingService: any = null;
+/** Percent per bucket key while editing. */
+splitDraft: Record<string, number> = {};
+savingCommission = false;
 
 findCommissionPage() {
-  this.addCommission = false;
-  this.selectedService = false;
+  this.editingService = null;
   const params: PageableParam = {
-    page: this.page,
-    size: this.size
+    page: this.commissionPage,
+    size: this.commissionSize,
+    searchParam: this.commissionSearch || undefined,
   };
-
-  this.barService.findCommissionPage(params).subscribe({
+  this.barService.findServiceCommissionPage(params).subscribe({
     next: (res) => {
-      if (res.data) {
-        this.commissionDataSource = res.data;
-
-        // Muhimu: hizi lazima zitoke kwenye pagination response
-        this.totalElements = res.totalElements;
-        this.totalPages = res.totalPages;
-
-        this.cdr.detectChanges();
-
-        console.log('Data Found:', res);
-      }
+      this.serviceCommissions = res.data ?? [];
+      this.commissionTotalPages = res.totalPages ?? 0;
+      this.commissionTotalElements = res.totalElements ?? 0;
+      this.cdr.detectChanges();
     },
-    error: (err) => {
-      console.error('Error fetching commission page:', err);
-    }
+    error: (err) => console.error('Error fetching service commissions:', err),
   });
 }
-onCommissionPageChange(event: PageEvent) {
-  this.page = event.pageIndex;
-  this.size = event.pageSize;
 
+onCommissionSearch(event: Event) {
+  const value = (event.target as HTMLInputElement).value;
+  clearTimeout(this.commissionSearchTimer);
+  this.commissionSearchTimer = setTimeout(() => {
+    this.commissionSearch = value.trim();
+    this.commissionPage = 0;
+    this.findCommissionPage();
+  }, 300);
+}
+
+changeCommissionPage(page: number) {
+  if (page < 0 || page >= this.commissionTotalPages) {
+    return;
+  }
+  this.commissionPage = page;
   this.findCommissionPage();
 }
 
+openSplitEditor(row: any) {
+  this.editingService = row;
+  this.splitDraft = {};
+  for (const bucket of this.commissionBuckets) {
+    this.splitDraft[bucket.key] = Number(row[bucket.key]) || 0;
+  }
+  this.cdr.detectChanges();
+  // The editor sits above the list; bring it into view from a row far down.
+  document.querySelector('.split-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
 
-editCommission(commission: any) {
-  const dialogRef = this.dialog.open(EditCommissionDialogComponent, {
-    width: '480px',
-    maxHeight: '85vh',
-    data: { commission },
+closeSplitEditor() {
+  this.editingService = null;
+  this.cdr.detectChanges();
+}
+
+get draftTotal(): number {
+  return this.commissionBuckets.reduce((sum, b) => sum + (Number(this.splitDraft[b.key]) || 0), 0);
+}
+
+/** Tshs a percentage of the selling price comes to, on one unit. */
+bucketAmount(percent: number): number {
+  const price = Number(this.editingService?.price) || 0;
+  return (price * (Number(percent) || 0)) / 100;
+}
+
+saveCommission() {
+  if (!this.editingService || this.savingCommission) {
+    return;
+  }
+  const bad = this.commissionBuckets.some(b => {
+    const v = Number(this.splitDraft[b.key]) || 0;
+    return v < 0 || v > 100 || !Number.isInteger(v);
   });
+  if (bad) {
+    this.alertService.show('error', this.translate.instant('COMMISSION_FORM.WHOLE_NUMBERS'));
+    return;
+  }
+  if (this.draftTotal > 100) {
+    this.alertService.show('error', this.translate.instant('COMMISSION_FORM.OVER_100', { total: this.draftTotal }));
+    return;
+  }
 
-  dialogRef.afterClosed().subscribe((result) => {
-    if (!result) return;
+  const dto: CommissionDTO = {
+    uid: this.editingService.commissionUid || undefined,
+    barServiceUID: this.editingService.serviceUid,
+  };
+  for (const bucket of this.commissionBuckets) {
+    (dto as any)[bucket.key] = Number(this.splitDraft[bucket.key]) || 0;
+  }
 
-    const commissionDTO: CommissionDTO = {
-      uid: commission.uid,
-      barServiceUID: commission.barServiceUID,
-      ...result,
-    };
-
-    this.barService.saveCommissions(commissionDTO).subscribe({
-      next: (res) => {
-        if (res) {
-          this.alertService.show('success', 'Commission updated successfully');
-          const index = this.commissionDataSource.findIndex(item => item.uid === commission.uid);
-          if (index !== -1) {
-            // Merge instead of replacing outright: the update response only
-            // carries the CommissionDTO fields, not the joined display
-            // fields (e.g. serviceName, price) the list endpoint returns -
-            // a full replace was wiping those out of the row after saving.
-            this.commissionDataSource[index] = { ...this.commissionDataSource[index], ...res.data };
-            this.commissionDataSource = [...this.commissionDataSource];
-            this.cdr.detectChanges();
-          }
-        }
-      },
-      error: (error) => {
-        console.error('Error updating commission:', error);
-        this.alertService.show('error', error?.error?.message || 'Error updating commission');
+  this.savingCommission = true;
+  this.barService.saveCommissions(dto).subscribe({
+    next: (res) => {
+      this.savingCommission = false;
+      if (res?.data) {
+        this.alertService.show('success', this.translate.instant('COMMISSION_FORM.SAVED', { name: this.editingService.serviceName }));
+        this.findCommissionPage();
       }
+    },
+    error: (err) => {
+      this.savingCommission = false;
+      console.error('Error saving commission:', err);
+    },
+  });
+}
+
+deleteCommission(row: any) {
+  const dialogRef = this.dialog.open(DeleteConfirmationComponent, {
+    width: '420px',
+    maxWidth: '95vw',
+    disableClose: true,
+    data: { itemName: row.serviceName },
+  });
+  dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+    if (!confirmed) {
+      return;
+    }
+    this.barService.deleteCommission(row.commissionUid).subscribe({
+      next: () => {
+        this.alertService.show('success', this.translate.instant('COMMISSION_FORM.DELETED'));
+        this.findCommissionPage();
+      },
+      error: (err) => console.error('Error deleting commission:', err),
     });
   });
 }
 
-deleteCommission(commission: any) {
-  console.log('Delete commission:', commission);
 
-  this.barService.deleteCommission(commission.uid).subscribe({
+
+   /****
+    * ************************************************************************** BILL CODES *****************************************************************
+    * The names bills are opened under. A code is taken while an unpaid bill
+    * holds it, and cannot be deleted until that bill is paid.
+    */
+
+billCodes: { uid: string; code: string; inUse: boolean }[] = [];
+newBillCode = '';
+savingBillCode = false;
+
+loadBillCodes() {
+  this.barService.findBillCodes().subscribe({
     next: (res) => {
-      console.log('Commission deleted successfully:', res);
-
-      this.commissionDataSource = this.commissionDataSource.filter(
-        (item) => item.uid !== commission.uid
-      );
-
-      this.totalElements--;
-
-      if (this.commissionDataSource.length === 0 && this.page > 0) {
-        this.page--;
-      }
-
-      this.findCommissionPage();
+      this.billCodes = res.data ?? [];
       this.cdr.detectChanges();
-
-      this.alertService.show(
-        'success',
-        'Commission successfully deleted'
-      );
     },
-
-    error: (err) => {
-      console.error('Error deleting commission:', err);
-
-      this.alertService.show(
-        'error',
-        err?.error?.message || 'Error deleting commission'
-      );
-    }
+    error: (err) => console.error('Error loading bill codes:', err),
   });
 }
 
+addBillCode() {
+  const code = this.newBillCode.trim().toUpperCase();
+  if (!code || this.savingBillCode) {
+    return;
+  }
+  this.savingBillCode = true;
+  this.barService.saveBillCode(code).subscribe({
+    next: (res) => {
+      this.savingBillCode = false;
+      if (res?.data) {
+        this.newBillCode = '';
+        this.alertService.show('success', this.translate.instant('BILL_CODES.SAVED', { code }));
+        this.loadBillCodes();
+      }
+    },
+    error: (err) => {
+      this.savingBillCode = false;
+      console.error('Error saving bill code:', err);
+    },
+  });
+}
 
+removeBillCode(row: { uid: string; code: string; inUse: boolean }) {
+  if (row.inUse) {
+    return;
+  }
+  const dialogRef = this.dialog.open(DeleteConfirmationComponent, {
+    width: '420px',
+    maxWidth: '95vw',
+    disableClose: true,
+    data: { itemName: row.code },
+  });
+  dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+    if (!confirmed) {
+      return;
+    }
+    this.barService.deleteBillCode(row.uid).subscribe({
+      next: (res) => {
+        if (res?.data) {
+          this.alertService.show('success', this.translate.instant('BILL_CODES.DELETED', { code: row.code }));
+          this.loadBillCodes();
+        }
+      },
+      error: (err) => console.error('Error deleting bill code:', err),
+    });
+  });
+}
 
 userDataSource: UserTableData[] = [];findUserPageByBranch() {
 

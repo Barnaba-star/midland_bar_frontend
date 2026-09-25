@@ -145,7 +145,7 @@
             <div class="service-info">
 
               <strong class="service-name">
-                {{ service.serviceName || 'Unnamed Service' }}
+                {{ service.quantity || 1 }} × {{ service.serviceName || 'Unnamed Service' }}
               </strong>
 
               <span class="staff-name">
@@ -165,7 +165,7 @@
               </span>
 
               <strong>
-                Tshs {{ service.price | number:'1.0-0' }}
+                Tshs {{ (service.lineTotal ?? service.price) | number:'1.0-0' }}
               </strong>
 
             </div>

@@ -47,7 +47,8 @@ private baseUrl: string = `${this.api}/authentication/login`;
     const idleTime = 1 * 60 * 1000;
 
     this.idleTimer = setTimeout(() => {
-      this.route.navigate(['/landing']);
+      // The landing page is the root route; there is no '/landing'.
+      this.route.navigate(['/']);
     }, idleTime);
   }
 loginError: string = '';

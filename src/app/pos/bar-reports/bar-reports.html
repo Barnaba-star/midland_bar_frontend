@@ -1150,388 +1150,145 @@
   }
 
   @case ('REPORTS.STORE') {
-    <div class="action-container">
-      <div class="service-report-header">
-        <div class="service-report-header-left">
-          <div class="service-report-icon">
-            <mat-icon svgIcon="store"></mat-icon>
-          </div>
-
+    <div class="action-container sr-page">
+      <div class="sr-card">
+        <!-- Header -->
+        <div class="sr-header">
           <div>
-            <span class="section-label">{{ 'REPORTS_PAGE.STORE_REPORT_LABEL' | translate }}</span>
-            <h2>{{ 'REPORTS_PAGE.STORE_USAGE_TITLE' | translate }}</h2>
+            <h3>{{ 'STOCK_REPORT.TITLE' | translate }}</h3>
+            <p>{{ 'STOCK_REPORT.SUBTITLE' | translate }}</p>
           </div>
-        </div>
-      </div>
-
-      <div class="report-summary-header">
-        <div class="summary-item">
-          <span class="summary-label">{{ 'COMMON.DURATION' | translate }}</span>
-          <strong class="summary-value">
-            {{ getSelectedStoreDateLabel() }}
-          </strong>
-        </div>
-        <div class="summary-item">
-          <span class="summary-label">{{ 'REPORTS_PAGE.CLOSED_STORES_LABEL' | translate }}</span>
-          <strong class="summary-value">
-            {{ closedStoreCount }}
-          </strong>
-        </div>
-
-        <div class="summary-item">
-          <span class="summary-label">{{ 'REPORTS_PAGE.OPENED_DATE_LABEL' | translate }}</span>
-          <strong class="summary-value">
-            {{ reportOpenedDate ? (reportOpenedDate | date: 'dd MMM yyyy') : '-' }}
-          </strong>
-        </div>
-
-        <div class="summary-item">
-          <span class="summary-label">{{ 'REPORTS_PAGE.CLOSED_DATE_LABEL' | translate }}</span>
-          <strong class="summary-value">
-            {{ reportClosedDate ? (reportClosedDate | date: 'dd MMM yyyy') : '-' }}
-          </strong>
-        </div>
-      </div>
-      <div class="table-wrapper">
-        <div class="date-filter">
-          <button
-            type="button"
-            [class.active]="selectedDateFilter === 'DAY'"
-            (click)="selectDateFilter('DAY')"
-          >
-            {{ 'COMMON.TODAY' | translate }}
-          </button>
-
-          <button
-            type="button"
-            [class.active]="selectedDateFilter === 'YESTERDAY'"
-            (click)="selectDateFilter('YESTERDAY')"
-          >
-            {{ 'COMMON.YESTERDAY' | translate }}
-          </button>
-
-          <button
-            type="button"
-            [class.active]="selectedDateFilter === 'THIS_WEEK'"
-            (click)="selectDateFilter('WEEK')"
-          >
-            {{ 'COMMON.THIS_WEEK' | translate }}
-          </button>
-
-          <button
-            type="button"
-            [class.active]="selectedDateFilter === 'LAST_WEEK'"
-            (click)="selectDateFilter('LAST_WEEK')"
-          >
-            {{ 'COMMON.LAST_WEEK' | translate }}
-          </button>
-
-          <button
-            type="button"
-            [class.active]="selectedDateFilter === 'THIS_MONTH'"
-            (click)="selectDateFilter('MONTH')"
-          >
-            {{ 'COMMON.THIS_MONTH' | translate }}
-          </button>
-
-          <button
-            type="button"
-            [class.active]="selectedDateFilter === 'LAST_MONTH'"
-            (click)="selectDateFilter('LAST_MONTH')"
-          >
-            {{ 'COMMON.LAST_MONTH' | translate }}
-          </button>
-
-          <button
-            type="button"
-            [class.active]="selectedDateFilter === 'THIS_YEAR'"
-            (click)="selectDateFilter('THIS_YEAR')"
-          >
-            {{ 'COMMON.THIS_YEAR' | translate }}
-          </button>
-
-          <button
-            type="button"
-            [class.active]="selectedDateFilter === 'LAST_YEAR'"
-            (click)="selectDateFilter('LAST_YEAR')"
-          >
-            {{ 'COMMON.LAST_YEAR' | translate }}
-          </button>
-
-          <div class="date-picker-wrapper">
-            <button
-              type="button"
-              class="custom-date-btn"
-              [class.active]="selectedDateFilter !== 'DAY'"
-              (click)="openDatePicker()"
-            >
-              {{ 'REPORTS_PAGE.CUSTOM_DATE_BTN' | translate }}
-            </button>
-
-            <input
-              #dateInput
-              type="date"
-              class="date-picker-hidden"
-              (change)="onDateSelectedD(dateInput.value)"
-            />
+          <div class="sr-search">
+            <mat-icon>search</mat-icon>
+            <input type="search" [placeholder]="'SERVICE_PAGE.SEARCH_PH' | translate" (input)="onStockReportSearch($event)" />
           </div>
         </div>
 
-        @if (serviceAndStoreReports.length > 0) {
-        <table class="report-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>{{ 'COMMISSION_BREAKDOWN.SERVICE' | translate }}</th>
-              <th>{{ 'REPORTS_PAGE.COL_STORE_CODE' | translate }}</th>
-              <th>{{ 'COMMON.STATUS' | translate }}</th>
-              <th>{{ 'REPORTS_PAGE.COL_BUYING_PRICE' | translate }}</th>
-              <th>{{ 'REPORTS_PAGE.COL_OPENED_DATE' | translate }}</th>
-              <th>{{ 'REPORTS_PAGE.COL_CLOSED_DATE' | translate }}</th>
-              <th>{{ 'REPORTS_PAGE.COL_USAGE' | translate }}</th>
-              <th>{{ 'REPORTS_PAGE.COL_AMOUNT_COLLECTED' | translate }}</th>
-              <th>{{ 'REPORTS_PAGE.COL_COMMISSION_EARNED' | translate }}</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            @for (row of serviceAndStoreReports; track row.uid) {
-              <tr>
-                <td>{{ $index + 1 }}</td>
-                <td>
-                  <span class="service-name">
-                    {{ row.serviceName || '-' }}
-                  </span>
-                </td>
-
-                <td>
-                  {{ row.openStoreCode || '-' }}
-                </td>
-
-                <td>
-                  <span
-                    class="status-badge"
-                    [class.open]="row.status === 'OPEN'"
-                    [class.closed]="row.status === 'CLOSED'"
-                  >
-                    {{ row.status || '-' }}
-                  </span>
-                </td>
-
-                <td><small>Tshs</small> {{ row.buyingPrice | number: '1.2-2' }}</td>
-
-                <td>
-                  {{ row.openedDate ? (row.openedDate | date: 'dd MMM yyyy') : '-' }}
-                </td>
-
-                <td>
-                  {{ row.closedDate ? (row.closedDate | date: 'dd MMM yyyy') : '-' }}
-                </td>
-
-                <td>
-                  {{ row.reportCount }}
-                </td>
-                <td>
-                  <strong><small>Tshs</small> {{ row.sharedAmount | number: '1.2-2' }}</strong>
-                </td>
-
-                <td>
-                  <div class="commission-summary">
-                    <!-- Total -->
-                    <div
-                      class="commission-total"
-                      (click)="row.showCommission = !row.showCommission"
-                    >
-                      <div>
-                        <span class="total-label"> {{ 'REPORTS_PAGE.TOTAL_COMMISSION_LABEL' | translate }} </span>
-
-                        <strong>
-                          <small>Tshs</small> {{ row.sharedAmount | number: '1.2-2' }}
-                        </strong>
-                      </div>
-
-                      <span class="commission-arrow" [class.open]="row.showCommission"> ⌄ </span>
-                    </div>
-
-                    <!-- Breakdown -->
-                    <!-- Breakdown -->
-                    <div class="commission-breakdown" *ngIf="row.showCommission">
-                      <div class="commission-stat">
-                        <span>{{ 'COMMISSION_BREAKDOWN.TRA' | translate }}</span>
-                        <strong>
-                          Tshs
-                          {{
-                            calculateSharedCommission(
-                              row.traAmount,
-                              row.totalPrice,
-                              row.sharedAmount
-                            ) | number: '1.2-2'
-                          }}
-                        </strong>
-                      </div>
-
-                      <div class="commission-stat">
-                        <span>{{ 'COMMISSION_BREAKDOWN.EMERGENCY' | translate }}</span>
-                        <strong>
-                          Tshs
-                          {{
-                            calculateSharedCommission(
-                              row.emergencyAmount,
-                              row.totalPrice,
-                              row.sharedAmount
-                            ) | number: '1.2-2'
-                          }}
-                        </strong>
-                      </div>
-
-                      <div class="commission-stat">
-                        <span>{{ 'COMMISSION_BREAKDOWN.STAFF' | translate }}</span>
-                        <strong>
-                          Tshs
-                          {{
-                            calculateSharedCommission(
-                              row.staffAmount,
-                              row.totalPrice,
-                              row.sharedAmount
-                            ) | number: '1.2-2'
-                          }}
-                        </strong>
-                      </div>
-
-                      <div class="commission-stat">
-                        <span>{{ 'COMMISSION_BREAKDOWN.OTHERS' | translate }}</span>
-                        <strong>
-                          Tshs
-                          {{
-                            calculateSharedCommission(
-                              row.othersAmount,
-                              row.totalPrice,
-                              row.sharedAmount
-                            ) | number: '1.2-2'
-                          }}
-                        </strong>
-                      </div>
-
-                      <div class="commission-stat">
-                        <span>{{ 'COMMISSION_BREAKDOWN.OWNER' | translate }}</span>
-                        <strong>
-                          Tshs
-                          {{
-                            calculateSharedCommission(
-                              row.ownerAmount,
-                              row.totalPrice,
-                              row.sharedAmount
-                            ) | number: '1.2-2'
-                          }}
-                        </strong>
-                      </div>
-
-                      <div class="commission-stat">
-                        <span>{{ 'COMMISSION_BREAKDOWN.MAINTENANCE' | translate }}</span>
-                        <strong>
-                          Tshs
-                          {{
-                            calculateSharedCommission(
-                              row.maintenanceAmount,
-                              row.totalPrice,
-                              row.sharedAmount
-                            ) | number: '1.2-2'
-                          }}
-                        </strong>
-                      </div>
-
-                      <div class="commission-stat">
-                        <span>{{ 'COMMISSION_BREAKDOWN.RENT' | translate }}</span>
-                        <strong>
-                          Tshs
-                          {{
-                            calculateSharedCommission(
-                              row.rentAmount,
-                              row.totalPrice,
-                              row.sharedAmount
-                            ) | number: '1.2-2'
-                          }}
-                        </strong>
-                      </div>
-
-                      <div class="commission-stat">
-                        <span>{{ 'COMMISSION_BREAKDOWN.LOAN' | translate }}</span>
-                        <strong>
-                          Tshs
-                          {{
-                            calculateSharedCommission(
-                              row.loanAmount,
-                              row.totalPrice,
-                              row.sharedAmount
-                            ) | number: '1.2-2'
-                          }}
-                        </strong>
-                      </div>
-
-                      <div class="commission-stat">
-                        <span>{{ 'COMMISSION_BREAKDOWN.LUKU' | translate }}</span>
-                        <strong>
-                          Tshs
-                          {{
-                            calculateSharedCommission(
-                              row.lukuAmount,
-                              row.totalPrice,
-                              row.sharedAmount
-                            ) | number: '1.2-2'
-                          }}
-                        </strong>
-                      </div>
-
-                      <div class="commission-stat">
-                        <span>{{ 'COMMISSION_BREAKDOWN.WATER' | translate }}</span>
-                        <strong>
-                          Tshs
-                          {{
-                            calculateSharedCommission(
-                              row.waterAmount,
-                              row.totalPrice,
-                              row.sharedAmount
-                            ) | number: '1.2-2'
-                          }}
-                        </strong>
-                      </div>
-
-                      <div class="commission-stat">
-                        <span>{{ 'COMMISSION_BREAKDOWN.STOCK_PURCHASE' | translate }}</span>
-                        <strong>
-                          Tshs
-                          {{
-                            calculateSharedCommission(
-                              row.stockPurchaseAmount,
-                              row.totalPrice,
-                              row.sharedAmount
-                            ) | number: '1.2-2'
-                          }}
-                        </strong>
-                      </div>
-                    </div>
-                  </div>
-                </td>
-              </tr>
+        <!-- Period -->
+        <div class="sr-filter">
+          <label>
+            <span>{{ 'STORE_PAGE.FROM' | translate }}</span>
+            <input type="date" [value]="stockReportFrom" [max]="stockReportTo" (change)="onStockReportDate('from', $event)" />
+          </label>
+          <label>
+            <span>{{ 'STORE_PAGE.TO' | translate }}</span>
+            <input type="date" [value]="stockReportTo" [min]="stockReportFrom" (change)="onStockReportDate('to', $event)" />
+          </label>
+          <div class="sr-ranges">
+            @for (r of stockReportRanges; track r.key) {
+              <button type="button" [class.active]="stockReportRange === r.key" (click)="setStockReportRange(r.key)">
+                {{ r.label | translate }}
+              </button>
             }
-          </tbody>
-        </table>
-        } @else {
-          <app-empty-state
-            icon="store"
-            title="REPORTS_PAGE.EMPTY_STORE_REPORT_TITLE"
-            text="REPORTS_PAGE.EMPTY_STORE_REPORT_TEXT"
-          />
-        }
-      </div>
-      <div class="pagination">
-        <button type="button" (click)="previousPagePre()" [disabled]="page === 0">{{ 'COMMON.PREVIOUS' | translate }}</button>
+          </div>
+        </div>
 
-        <span> {{ 'REPORTS_PAGE.PAGE_OF_PAGES' | translate: { page: page + 1, total: totalPages } }} </span>
+        <!-- Totals for the period -->
+        <div class="sr-tiles">
+          <div class="sr-tile">
+            <small>{{ 'STOCK_REPORT.BOUGHT_UNITS' | translate }}</small>
+            <strong>{{ stockReportTotals.boughtUnits | number }}</strong>
+            @if (seesStockMoney) {
+              <span>Tshs {{ stockReportTotals.boughtCost | number }}</span>
+            }
+          </div>
+          <div class="sr-tile">
+            <small>{{ 'STOCK_REPORT.SOLD_UNITS' | translate }}</small>
+            <strong>{{ stockReportTotals.soldUnits | number }}</strong>
+            @if (seesStockMoney) {
+              <span>Tshs {{ stockReportTotals.soldValue | number }}</span>
+            }
+          </div>
+          @if (seesStockMoney) {
+            <div class="sr-tile">
+              <small>{{ 'STOCK_REPORT.COST_OF_SOLD' | translate }}</small>
+              <strong>Tshs {{ stockReportTotals.soldCost | number }}</strong>
+            </div>
+            <div class="sr-tile" [class.good]="stockReportTotals.profit > 0" [class.bad]="stockReportTotals.profit < 0">
+              <small>{{ 'STOCK_REPORT.GROSS_PROFIT' | translate }}</small>
+              <strong>Tshs {{ stockReportTotals.profit | number }}</strong>
+            </div>
+            <div class="sr-tile" [class.bad]="stockReportTotals.adjustedValue < 0">
+              <small>{{ 'STOCK_ADJUST.TILE' | translate }}</small>
+              <strong>Tshs {{ stockReportTotals.adjustedValue | number }}</strong>
+            </div>
+            <div class="sr-tile">
+              <small>{{ 'STOCK_REPORT.ON_HAND_VALUE' | translate }}</small>
+              <strong>Tshs {{ stockReportTotals.onHandValue | number: '1.0-0' }}</strong>
+            </div>
+          }
+        </div>
 
-        <button type="button" (click)="nextPageNext()" [disabled]="page >= totalPages - 1">
-          {{ 'COMMON.NEXT' | translate }}
-        </button>
+        <!-- Per service -->
+        <div class="table-responsive">
+          <table class="sr-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>{{ 'SERVICE_PAGE.COL_SERVICE' | translate }}</th>
+                <th>{{ 'STORE_PAGE.COL_PURCHASED' | translate }}</th>
+                @if (seesStockMoney) { <th>{{ 'STORE_PAGE.COL_PURCHASE_COST' | translate }}</th> }
+                <th>{{ 'STOCK_REPORT.COL_SOLD' | translate }}</th>
+                @if (seesStockMoney) {
+                  <th>{{ 'STORE_PAGE.COL_USED_VALUE' | translate }}</th>
+                  <th>{{ 'STOCK_REPORT.COST_OF_SOLD' | translate }}</th>
+                  <th>{{ 'STOCK_REPORT.GROSS_PROFIT' | translate }}</th>
+                }
+                <th>{{ 'STOCK_ADJUST.COL_ADJUSTED' | translate }}</th>
+                <th>{{ 'STORE_PAGE.COL_ON_HAND_NOW' | translate }}</th>
+                @if (seesStockMoney) { <th>{{ 'STORE_PAGE.COL_VALUE' | translate }}</th> }
+              </tr>
+            </thead>
+            <tbody>
+              @for (m of stockReportRows; track m.uid; let i = $index) {
+                @let bought = packsOf(m.purchasedUnits ?? 0, m);
+                @let sold = packsOf(m.usedUnits ?? 0, m);
+                @let now = packsOf(m.stockQuantity ?? 0, m);
+                @let profit = (m.soldValue ?? 0) - (m.soldCost ?? 0);
+                <tr>
+                  <td class="sr-muted">{{ i + 1 }}</td>
+                  <td>
+                    <div class="sr-svc">
+                      <span>{{ m.serviceName }}</span>
+                      <small>{{ m.serviceCode }}</small>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="sr-in">@for (p of bought.parts; track $index) { {{ p.count }} {{ p.label | translate }}@if (!$last) {, } }</span>
+                    <small class="sr-muted">({{ m.purchasedUnits ?? 0 | number }})</small>
+                  </td>
+                  @if (seesStockMoney) { <td>Tshs {{ (m.purchasedCost ?? 0) | number }}</td> }
+                  <td>
+                    <span class="sr-out">@for (p of sold.parts; track $index) { {{ p.count }} {{ p.label | translate }}@if (!$last) {, } }</span>
+                    <small class="sr-muted">({{ m.usedUnits ?? 0 | number }})</small>
+                  </td>
+                  @if (seesStockMoney) {
+                    <td>Tshs {{ (m.soldValue ?? 0) | number }}</td>
+                    <td>Tshs {{ (m.soldCost ?? 0) | number }}</td>
+                    <td [class.sr-good]="profit > 0" [class.sr-bad]="profit < 0"><strong>Tshs {{ profit | number }}</strong></td>
+                  }
+                  <td>
+                    @if (m.adjustedUnits) {
+                      <span [class.sr-bad]="m.adjustedUnits < 0" [class.sr-good]="m.adjustedUnits > 0">{{ m.adjustedUnits > 0 ? '+' : '' }}{{ m.adjustedUnits | number }}</span>
+                      @if (seesStockMoney) { <small class="sr-muted">(Tshs {{ m.adjustedValue | number }})</small> }
+                    } @else {
+                      <span class="sr-muted">0</span>
+                    }
+                  </td>
+                  <td>
+                    <strong>@for (p of now.parts; track $index) { {{ p.count }} {{ p.label | translate }}@if (!$last) {, } }</strong>
+                  </td>
+                  @if (seesStockMoney) { <td>Tshs {{ onHandValue(m) | number: '1.0-0' }}</td> }
+                </tr>
+              }
+              @if (stockReportRows.length === 0) {
+                <tr>
+                  <td colspan="11" class="sr-empty">{{ 'STORE_PAGE.USED_EMPTY' | translate }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   }

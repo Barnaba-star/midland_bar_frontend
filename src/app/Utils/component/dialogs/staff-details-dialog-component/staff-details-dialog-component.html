@@ -44,7 +44,7 @@
       <mat-icon>wc</mat-icon>
       <div>
         <span>{{ 'COMMON.GENDER' | translate }}</span>
-        <strong>{{ staff?.gender || '—' }}</strong>
+        <strong>{{ staff?.gender ? ((staff.gender === 'Male' ? 'STAFF_FORM.MALE' : 'STAFF_FORM.FEMALE') | translate) : '—' }}</strong>
       </div>
     </div>
 
@@ -57,10 +57,10 @@
     </div>
 
     <div class="detail-item">
-      <mat-icon>content_cut</mat-icon>
+      <mat-icon>badge</mat-icon>
       <div>
         <span>{{ 'COMMON.CATEGORY' | translate }}</span>
-        <strong>{{ staff?.barCategory || '—' }}</strong>
+        <strong>{{ staff?.barCategory ? (('STAFF_FORM.CAT_' + staff.barCategory) | translate) : '—' }}</strong>
       </div>
     </div>
 

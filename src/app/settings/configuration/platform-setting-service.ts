@@ -22,6 +22,8 @@ export interface PlatformSetting {
 
   sessionHours: number;
 
+  lowStockLevel: number;
+
   errorRetentionDays: number;
   errorPurgeDays: number;
 }

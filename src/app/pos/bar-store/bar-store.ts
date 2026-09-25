@@ -1,536 +1,393 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { Authentication } from '../../Utils/services/authentication';
-import { POS_FULL_ACCESS_ROLES } from '../pos-role.guard';
-import { TitleAction } from '../../Utils/component/title/title.component';
-import { Title2 } from '../../Utils/component/title2/title2';
-import { MatIcon } from '@angular/material/icon';
-import { FormField } from '../../Utils/models/form-field';
-import { ServiceBarMethod } from '../service-bar-method';
-import { error } from 'console';
-import { Store, StoreDTO } from '../BarModel';
-import { AlertService } from '../../Utils/services/alert';
-import { PageableParam } from '../../Utils/models/responces';
-import { DecimalPipe, UpperCasePipe } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../../Utils/component/dialog/dialog';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { StockAdjustDialogComponent, StockAdjustResult } from '../../Utils/component/dialogs/stock-adjust-dialog-component/stock-adjust-dialog-component';
+import { StockHistoryDialogComponent } from '../../Utils/component/dialogs/stock-history-dialog-component/stock-history-dialog-component';
+import { AlertService } from '../../Utils/services/alert';
+import { FormField } from '../../Utils/models/form-field';
+import { unitKey } from '../../Utils/pipes/stock-packs.pipe';
+import { Authentication } from '../../Utils/services/authentication';
+import { TitleAction } from '../../Utils/component/title/title.component';
+import { Title2 } from '../../Utils/component/title2/title2';
 import { EmptyStateComponent } from '../../Utils/component/empty-state/empty-state';
+import { PageableParam } from '../../Utils/models/responces';
+import { StockPacksPipe } from '../../Utils/pipes/stock-packs.pipe';
+import { ServiceBarMethod } from '../service-bar-method';
+import { BarServiceEntity, StockReceiptDTO } from '../BarModel';
 
+/** Where a product's count stands, for the status badge. */
+export type StockState = 'OUT' | 'LOW' | 'OK' | 'NOT_COUNTED';
 
+/**
+ * The bar's store: every service registered under Setting > Services, with
+ * what is on hand. Nothing is added here by hand - a service appears the
+ * moment it is registered, at 0, and its count moves through Add Stock and
+ * sales.
+ */
 @Component({
-  selector: 'app-bar-bookings',
-  imports: [
-    EmptyStateComponent,Title2, MatIcon, DecimalPipe, UpperCasePipe, TranslatePipe],
+  selector: 'app-bar-store',
+  imports: [EmptyStateComponent, Title2, MatIconModule, DecimalPipe, TranslatePipe, StockPacksPipe],
   templateUrl: './bar-store.html',
   styleUrl: './bar-store.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BarStore implements OnInit{
-  staffFields: any;
-  savedData($event: Event) {
-    throw new Error('Method not implemented.');
-  }
-
+export class BarStore implements OnInit {
   constructor(
     private visibility: Authentication,
     private barService: ServiceBarMethod,
-    private alert: AlertService,
     private cdr: ChangeDetectorRef,
     private dialog: MatDialog,
+    private alert: AlertService,
     private translate: TranslateService,
   ) {}
-  ngOnInit(): void {
-    this.selectedBooking = 'STORE.MANAGE';
-    this.loadBarStorePage();
+
+  /**
+   * Adding stock needs SAVE_STORE, which the seed gives CEO and MANAGER
+   * (ROOT passes every check). Hiding the button from the rest only spares
+   * them a refusal - the backend is what enforces it.
+   */
+  get canAddStock(): boolean {
+    return ['ROOT', 'CEO', 'MANAGER'].some(role => this.visibility.hasRole(role));
   }
-  selectedBooking = '';
+
+  ngOnInit(): void {
+    this.selectedAction = 'STORE.MANAGE';
+    this.loadStock();
+  }
+
+  selectedAction = '';
+
   titleActions: TitleAction[] = [
     {
       icon: 'setting',
       title: 'STORE.MANAGE',
       roles: ['ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'MANAGER', 'CASHIER'],
     },
+    {
+      // Carries purchase costs, so it stays with those who see money -
+      // not the cashier, as on the POS home.
+      icon: 'more',
+      title: 'STORE.USED',
+      roles: ['ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'MANAGER'],
+    },
   ];
-
-  // Store buttons: CEO (and above) and MANAGER see all three - available,
-  // in use and closed. CASHIER only sees available + in use.
-  get canSeeClosedStores(): boolean {
-    return [...POS_FULL_ACCESS_ROLES, 'MANAGER'].some(role => this.visibility.hasRole(role));
-  }
 
   getTitled(title: TitleAction[]): TitleAction[] {
     return this.visibility.filteredTitleActions(title);
   }
 
   onAction(action: string) {
-    this.selectedBooking = action;
-    switch (action) {
-      case 'STORE.MANAGE':
-        this.loadBarStorePage();
-        this.deleteStore = false;
-
-        break;
+    this.selectedAction = action;
+    if (action === 'STORE.MANAGE') {
+      this.loadStock();
+    }
+    if (action === 'STORE.USED') {
+      this.loadMovements();
     }
   }
 
-  openAddStoreDialog(): void {
+  // ---------------------------------------------------------------
+  // USED - what was bought and what was used over a period
+  // ---------------------------------------------------------------
 
-    this.loadBarService();
+  /** yyyy-MM-dd, both ends included. Defaults to this month so far. */
+  fromDate = toIsoDate(new Date(new Date().getFullYear(), new Date().getMonth(), 1));
+  toDate = toIsoDate(new Date());
+  movements: any[] = [];
+  movementPage = 0;
+  movementSize = 10;
+  movementTotalPages = 0;
+  movementTotalElements = 0;
+  movementSearch = '';
+  private movementSearchTimer?: ReturnType<typeof setTimeout>;
 
-    this.translate.get('STORE_PAGE.FORM_TITLE_ADD').subscribe(formTitle => {
-
-      const dialogRef = this.dialog.open(DialogComponent, {
-        width: '900px',
-        maxWidth: '95vw',
-        data: {
-          formTitle,
-          fields: this.bookingFields,
-        },
-      });
-
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          this.onSaveStore(result);
-        }
-      });
-    });
-  }
-
-  bookingFields: FormField[] = [
-    {
-      name: 'nameOfStore',
-      type: 'text',
-      label: 'Store Item Name',
-      placeholder: 'Enter Store Item Name',
-      required: true,
-    },
-
-    {
-      name: 'quantity',
-      type: 'number',
-      label: 'Enter Quantity',
-      placeholder: 'Enter Store Item Quantity',
-      required: true,
-    },
-
-    {
-      name: 'buyingPrice',
-      type: 'number',
-      label: 'Enter Buying Price',
-      placeholder: 'Enter Single Item Buying Price',
-      required: true,
-    },
-
-    {
-      name: 'barService',
-      type: 'select',
-      label: 'Attached Service',
-      placeholder: 'Attach Bar Service',
-      required: true,
-      options: [],
-    },
-    {
-      name: 'description',
-      type: 'textarea',
-      label: 'Description',
-      placeholder: 'Enter service description',
-      required: true,
-    },
-  ];
-
-  loadBarService() {
-    this.barService.findBarServiceList().subscribe({
-      next: (res) => {
-        if (res.data) {
-          console.log('Services Found', res.data);
-          const options = res.data.map((service: any) => ({
-            label: service.serviceName,
-            value: service.uid,
-          }));
-          const serviceField = this.bookingFields.find((field) => field.name === 'barService');
-          if (serviceField) {
-            serviceField.options = options;
-          }
-          this.cdr.markForCheck();
-        }
-      },
-
-      error: (error) => {
-        console.error('Error Occurred when Fetching Service', error);
-      },
-    });
-  }
-  onSaveStore(store: any) {
-    const storeDTO: StoreDTO = {
-      nameOfStore: store.nameOfStore,
-      quantity: store.quantity,
-      description: store.description,
-      barServiceEntityUID: store.barService,
-      buyingPrice: store.buyingPrice,
-    };
-
-    console.log('Store to save', storeDTO);
-
-    this.barService.saveStore(storeDTO).subscribe({
-      next: (res) => {
-        if (res.data) {
-          this.alert.show('success', 'Store saved successfully');
-
-          // Refresh the Manage Store table so the new item shows up.
-          this.loadBarStorePage();
-
-          console.log('Response Data', res.data);
-          this.cdr.markForCheck();
-        }
-      },
-
-      error: (error) => {
-        console.error('Error Occurred when saving store', error);
-        this.alert.show('error', 'Error Occurred When Saving Store');
-      },
-    });
-  }
-
-  storeDataSource: Store[] = [];
-  storeOpenDataSource: Store[] = [];
-
-  currentPage = 0;
-  pageSize = 5;
-  totalElements = 0;
-  totalPages = 0;
-  searchParam: string = '';
-  loadBarStorePage(): void {
-    this.storeOpenDataSource=[];
+  loadMovements() {
     const params: PageableParam = {
-      page: this.currentPage,
-      size: this.pageSize,
+      page: this.movementPage,
+      size: this.movementSize,
+      searchParam: this.movementSearch || undefined,
+      fromDate: this.fromDate,
+      toDate: this.toDate,
     };
-
-    this.barService.findBarStorePage(params).subscribe({
+    this.barService.findStockMovementPage(params).subscribe({
       next: (res) => {
-        console.log('Stores Found:', res);
-        if (res.data) {
-          this.storeDataSource = res.data.map((item: any) => ({
-            uid: item.uid,
-            nameOfStore: item.nameOfStore,
-            codeOfStore: item.codeOfStore,
-            description: item.description,
-            quantity: item.quantity,
-            nameOfService: item.serviceName,
-            openedDate: item.openedDate,
-            totalQuantityPrice: item.totalQuantityPrice,
-            usedQuantity: item.usedQuantity,
-            notUsedQuantity: item.notUsedQuantity,
-            status: item.status,
-            buyingPrice: item.buyingPrice,
-          }));
-           this.cdr.detectChanges();
-          this.totalElements = res.totalElements ?? res.data?.length ?? 0;
-          this.totalPages = Math.ceil(this.totalElements / this.pageSize);
-          this.cdr.detectChanges();
-        } else {
-          this.storeDataSource = [];
-          this.cdr.markForCheck();
-        }
+        this.movements = res.data ?? [];
+        this.movementTotalPages = res.totalPages ?? 0;
+        this.movementTotalElements = res.totalElements ?? 0;
+        this.cdr.detectChanges();
       },
-
-      error: (error) => {
-        console.error('Error Occurred when Fetching Stores:', error);
-      },
+      error: (err) => console.error('Error loading stock movements:', err),
     });
   }
-  nextPage(): void {
-    if (this.currentPage < this.totalPages - 1) {
-      this.currentPage++;
-      this.loadBarStorePage();
-    }
-  }
 
-  previousPage(): void {
-    if (this.currentPage > 0) {
-      this.currentPage--;
-      this.loadBarStorePage();
-    }
-  }
-
-  goToPage(page: number): void {
-    if (page >= 0 && page < this.totalPages) {
-      this.currentPage = page;
-      this.loadBarStorePage();
-    }
-  }
-
-  changePageSize(size: number): void {
-    this.pageSize = size;
-    this.currentPage = 0;
-    this.loadBarStorePage();
-  }
-
-  deleteStore: boolean = false;
-  storeRecord: Store = {};
-  onDeleteStore(event: Store): void {
-    this.storeRecord = event;
-    this.deleteStore = true;
-    console.log('Store Delete:', this.storeRecord);
-  }
-  onConfirmDeleteStore(event: Store): void {
-    console.log('Store Delete:', this.storeRecord);
-    if (!event.uid) {
+  onDateChange(which: 'from' | 'to', event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    if (!value) {
       return;
     }
-    this.barService.deleteStore(event.uid).subscribe({
-      next: (res) => {
-        if (res.data) {
-          const index = this.storeDataSource.findIndex((item) => item.uid === res.data.uid);
-          if (index !== -1) {
-            this.storeDataSource.splice(index, 1);
-            this.storeDataSource = [...this.storeDataSource];
-            this.cdr.detectChanges();
-            this.alert.show('success', 'Store deleted successfully');
-          }
-          this.deleteStore = false;
-          this.storeRecord = {};
-          this.cdr.markForCheck();
-        }
-      },
-
-      error: (error) => {
-        console.error('Error deleting store:', error);
-
-        this.alert.show('error', 'Failed to delete store');
-      },
-    });
+    if (which === 'from') {
+      this.fromDate = value;
+    } else {
+      this.toDate = value;
+    }
+    this.movementPage = 0;
+    this.loadMovements();
   }
 
-  addQuantityFields: FormField[] = [
-    {
-      name: 'quantity',
-      type: 'number',
-      placeholder: 'Enter Store Item Quantity',
-      required: true,
-    },
-  ];
- addQuantityToStore(store: any) {
-  const dialogRef = this.dialog.open(DialogComponent, {
-    width: '700px',
-    panelClass: 'custom-dialog',
-    position: {
-      top: '350px',
-    },
-    data: {
-      formTitle: `Add Quantity (Current: ${store.quantity} AVL)`,
-      fields: this.addQuantityFields,
-    },
-  });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        const storeDTO: StoreDTO = {
-          uid: store.uid,
-          quantity: result.quantity,
-        };
-        this.barService.addQuantityToStore(storeDTO).subscribe({
-          next: (res) => {
-            if (res.data) {
-              this.alert.show('success', 'Quantity added successfully');
-              console.log('Store to add quantity', res.data);
-              const index = this.storeDataSource.findIndex((item) => item.uid === res.data.uid);
-              if (index !== -1) {
-                this.storeDataSource[index].nameOfService =
-                  res.data.barServiceEntity.serviceName;
-                this.storeDataSource[index].nameOfStore = res.data.nameOfStore;
-                this.storeDataSource[index].codeOfStore = res.data.codeOfStore;
-                this.storeDataSource[index].description = res.data.description;
-                this.storeDataSource[index].buyingPrice = res.data.buyingPrice;
-                this.storeDataSource[index].status = res.data.status;
-                this.storeDataSource[index].quantity = res.data.quantity;
-                this.storeDataSource[index].totalQuantityPrice = res.data.totalQuantityPrice;
-                this.storeDataSource[index].usedQuantity = res.data.usedQuantity;
-                this.storeDataSource[index].notUsedQuantity = res.data.notUsedQuantity;
-                this.cdr.detectChanges();
-              }
-            }
-          },
-          error: (error) => {
-            console.error('Error Occurred when adding quantity to store', error);
-            this.alert.show('error', 'Error Occurred When Adding Quantity to Store');
-          },
-        });
-      }
-    });
+  /** Quick ranges: today, the last 7 days, this month. */
+  setRange(range: 'TODAY' | 'WEEK' | 'MONTH') {
+    const today = new Date();
+    this.toDate = toIsoDate(today);
+    if (range === 'TODAY') {
+      this.fromDate = this.toDate;
+    } else if (range === 'WEEK') {
+      this.fromDate = toIsoDate(new Date(today.getFullYear(), today.getMonth(), today.getDate() - 6));
+    } else {
+      this.fromDate = toIsoDate(new Date(today.getFullYear(), today.getMonth(), 1));
+    }
+    this.movementPage = 0;
+    this.loadMovements();
   }
 
-   openStoreFields: FormField[] = [
-    {
-      name: 'quantity',
-      type: 'number',
-      placeholder: 'Enter Store Item Quantity',
-      readonly: true,
-      required: false,
-    },
-  ];
-
-  openStore(store: any) {
-    const dialogRef = this.dialog.open(DialogComponent, {
-      width: '700px',
-      panelClass: 'custom-dialog',
-      position: {
-        top: '350px',
-      },
-  data: {
-  formTitle: `1 quantity will be opened and made available (Current Qty: ${store.notUsedQuantity} AVL)`,
-  message: '1 quantity will be opened and made available for use.',
-  fields: this.openStoreFields,
-  formData: {
-    ...store,
-    quantity: 1
-  },
-},
-
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        const storeDTO: StoreDTO = {
-          uid: store.uid,
-        };
-        this.barService.openStore(storeDTO).subscribe({
-          next: (res) => {
-            if (res.data) {
-              this.alert.show('success', 'Store opened successfully');
-              const index = this.storeDataSource.findIndex((item) => item.uid === res.data.uid);
-              if (index !== -1) {
-                this.storeDataSource[index].nameOfStore = res.data.nameOfStore;
-                this.storeDataSource[index].codeOfStore = res.data.codeOfStore;
-                this.storeDataSource[index].description = res.data.description;
-                this.storeDataSource[index].buyingPrice = res.data.buyingPrice;
-                this.storeDataSource[index].status = res.data.status;
-                this.storeDataSource[index].quantity = res.data.quantity;
-                this.storeDataSource[index].totalQuantityPrice = res.data.totalQuantityPrice;
-                this.storeDataSource[index].usedQuantity = res.data.usedQuantity;
-                this.storeDataSource[index].notUsedQuantity = res.data.notUsedQuantity;
-                this.cdr.detectChanges();
-                console.log('Store opened successfully:', this.storeDataSource[index]);
-              }
-            }
-          },
-          error: (error) => {
-            console.error('Error Occurred when opening store', error);
-            this.alert.show('error', 'Error Occurred When Opening Store');
-          },
-        });
-      }
-    });
+  onMovementSearch(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    clearTimeout(this.movementSearchTimer);
+    this.movementSearchTimer = setTimeout(() => {
+      this.movementSearch = value.trim();
+      this.movementPage = 0;
+      this.loadMovements();
+    }, 300);
   }
 
+  changeMovementPage(page: number) {
+    if (page < 0 || page >= this.movementTotalPages) {
+      return;
+    }
+    this.movementPage = page;
+    this.loadMovements();
+  }
 
-  /******************************************************************************************.  STORES THAT IS OPEN.  *************************************************************************** */
-  search:string=''
-  findOpenClosedStorePage(): void {
-    this.storeDataSource = [];
+  /** A unit count shown as packs + loose, the way the Store tab shows stock. */
+  asPacks(units: number, row: any) {
+    return new StockPacksPipe().transform({ stockQuantity: units, unit: row.unit, packUnit: row.packUnit, unitsPerPack: row.unitsPerPack, unitLadder: row.unitLadder });
+  }
+
+  get movementTotals() {
+    return this.movements.reduce(
+      (t, m) => ({
+        purchasedCost: t.purchasedCost + (m.purchasedCost ?? 0),
+        usedValue: t.usedValue + (m.usedUnits ?? 0) * (m.price ?? 0),
+      }),
+      { purchasedCost: 0, usedValue: 0 },
+    );
+  }
+
+  page = 0;
+  size = 10;
+  totalElements = 0;
+  totalPages = 0;
+  products: BarServiceEntity[] = [];
+
+  /** Matched against name, code and description, as on the Services page. */
+  searchTerm = '';
+  private searchTimer?: ReturnType<typeof setTimeout>;
+
+  loadStock() {
     const params: PageableParam = {
-      page: this.currentPage,
-      size: this.pageSize,
-      searchParam: this.search
+      page: this.page,
+      size: this.size,
+      searchParam: this.searchTerm || undefined,
+      // Only what has a count of its own: bottles and stock items. A
+      // mshikaki or a nusu is counted through the meat it is made from.
+      filter: 'COUNTED',
     };
 
-    this.barService.findOpenStorePage(params).subscribe({
+    this.barService.findBarServicePage(params).subscribe({
       next: (res) => {
-        if (res.data) {
-          this.storeOpenDataSource = res.data.map((item: any) => ({
-            uid: item.uid,
-            nameOfStore: item.nameOfStore,
-            codeOfStore: item.openStoreCode,
-            description: item.description,
-            quantity: item.quantity,
-            nameOfService: item.serviceName,
-            openedDate: item.openedDate,
-            closedDate:item.closedDate,
-            totalQuantityPrice: item.totalQuantityPrice,
-            usedQuantity: item.usedQuantity,
-            notUsedQuantity: item.notUsedQuantity,
-            status: item.status,
-            buyingPrice: item.buyingPrice,
-            openQuantity: item.openQuantity,
-          }));
-
-          this.totalElements = res.totalElements ?? res.data?.length ?? 0;
-          this.totalPages = Math.ceil(this.totalElements / this.pageSize);
-          this.cdr.detectChanges();
-              console.log('Open Stores Found:', res.data);
-        } else {
-          this.storeDataSource = [];
-          this.cdr.markForCheck();
-        }
+        this.products = res.data ?? [];
+        this.totalElements = res.totalElements ?? 0;
+        this.totalPages = res.totalPages ?? 0;
+        this.cdr.detectChanges();
       },
-
-      error: (error) => {
-        console.error('Error Occurred when Fetching Stores:', error);
+      error: (err) => {
+        console.error('Error loading store:', err);
       },
     });
   }
-  nextPageOpenStore(): void {
-    if (this.currentPage < this.totalPages - 1) {
-      this.currentPage++;
-      this.findOpenClosedStorePage();
-    }
+
+  onSearch(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    clearTimeout(this.searchTimer);
+    // Wait for a pause in typing rather than asking the backend per keystroke.
+    this.searchTimer = setTimeout(() => {
+      this.searchTerm = value.trim();
+      this.page = 0;
+      this.loadStock();
+    }, 300);
   }
 
-  previousPageOpenStore(): void {
-    if (this.currentPage > 0) {
-      this.currentPage--;
-      this.findOpenClosedStorePage();
-    }
+  clearSearch(input: HTMLInputElement) {
+    input.value = '';
+    clearTimeout(this.searchTimer);
+    this.searchTerm = '';
+    this.page = 0;
+    this.loadStock();
   }
 
-  goToPageOpenStore(page: number): void {
-    if (page >= 0 && page < this.totalPages) {
-      this.currentPage = page;
-      this.findOpenClosedStorePage();
+  changePage(page: number) {
+    if (page < 0 || page >= this.totalPages) {
+      return;
     }
+    this.page = page;
+    this.loadStock();
   }
 
-  changePageSizeOpenStore(size: number): void {
-    this.pageSize = size;
-    this.currentPage = 0;
-    this.findOpenClosedStorePage();
+  changePageSize(event: Event) {
+    this.size = Number((event.target as HTMLSelectElement).value);
+    this.page = 0;
+    this.loadStock();
   }
 
-  closeOpenStore(event:any){
-    const storeDTO:StoreDTO={
-      openStoreUID: event.uid,
+  stockState(product: BarServiceEntity): StockState {
+    if (!product.trackStock) {
+      return 'NOT_COUNTED';
     }
-    this.barService.closeOpenStore(storeDTO).subscribe({
-      next:(res)=>{
-        if(res.data){
+    if ((product.stockQuantity ?? 0) <= 0) {
+      return 'OUT';
+    }
+    return product.lowStock ? 'LOW' : 'OK';
+  }
 
-          const index = this.storeOpenDataSource.findIndex(idx=> idx.uid === res.data.uid)
-          if(index !==-1){
-            this.storeOpenDataSource[index].uid = res.data.uid,
-            this.storeOpenDataSource[index].closedDate=res.data.updatedAt,
-            this.storeOpenDataSource[index].status=res.data.status,
-            this.storeOpenDataSource[index].codeOfStore=res.data.openStoreCode,
-            this.storeOpenDataSource[index].nameOfService =res.data.store.barServiceEntity.serviceName;
+  /** What the units on hand cost to buy: buying price is per pack. */
+  stockValue(product: BarServiceEntity): number {
+    const perPack = product.unitsPerPack || 1;
+    return ((product.stockQuantity ?? 0) * (product.buyingPrice ?? 0)) / perPack;
+  }
 
-            this.cdr.detectChanges();
-            console.log('Closed Data', res.data);
+  onAddStock(product: BarServiceEntity) {
+    const hasPack = !!product.packUnit && (product.unitsPerPack ?? 1) > 1;
+    const pack = hasPack ? this.translate.instant(unitKey(product.packUnit!)) : '';
+    const fields: FormField[] = [];
+    if (hasPack) {
+      fields.push({
+        name: 'packs',
+        type: 'number',
+        label: this.translate.instant('STOCK_FORM.PACKS', { pack }),
+        placeholder: this.translate.instant('STOCK_FORM.PACKS_PH', { pack, units: product.unitsPerPack }),
+      });
+    }
+    fields.push(
+      {
+        name: 'looseUnits',
+        type: 'number',
+        label: hasPack ? 'STOCK_FORM.LOOSE' : 'STOCK_FORM.UNITS',
+        placeholder: hasPack ? 'STOCK_FORM.LOOSE_PH' : 'STOCK_FORM.UNITS',
+      },
+      {
+        name: 'packPrice',
+        type: 'number',
+        label: hasPack ? this.translate.instant('STOCK_FORM.PACK_PRICE', { pack }) : 'STOCK_FORM.UNIT_PRICE',
+        placeholder: 'STOCK_FORM.PRICE_PH',
+        required: true,
+      },
+      {
+        name: 'supplier',
+        type: 'text',
+        label: 'STOCK_FORM.SUPPLIER',
+        placeholder: 'STOCK_FORM.SUPPLIER_PH',
+        required: true,
+      },
+      {
+        name: 'note',
+        type: 'textarea',
+        label: 'STOCK_FORM.NOTE',
+        placeholder: 'STOCK_FORM.OPTIONAL',
+      },
+    );
+
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: '720px',
+      maxWidth: '95vw',
+      autoFocus: false,
+      data: {
+        formTitle: this.translate.instant('STOCK_FORM.TITLE', { name: product.serviceName }),
+        fields,
+        // Last delivery's price as the starting point - usually unchanged.
+        formData: { packPrice: product.buyingPrice },
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (!result) {
+        return;
+      }
+      const dto: StockReceiptDTO = {
+        barServiceUID: product.uid!,
+        packs: hasPack ? Number(result.packs) || 0 : 0,
+        looseUnits: Number(result.looseUnits) || 0,
+        packPrice: result.packPrice === '' || result.packPrice == null ? undefined : Number(result.packPrice),
+        supplier: result.supplier,
+        note: result.note,
+      };
+      if ((dto.packs ?? 0) <= 0 && (dto.looseUnits ?? 0) <= 0) {
+        this.alert.show('error', this.translate.instant('STOCK_FORM.NOTHING_ENTERED'));
+        return;
+      }
+      this.barService.addStock(dto).subscribe({
+        next: (res) => {
+          if (res?.data) {
+            this.alert.show('success', this.translate.instant('STOCK_FORM.SAVED', { name: product.serviceName }));
+            this.loadStock();
           }
-        }
-      },
-      error(err) {
-          console.error('Error Occurred', err)
-      },
-    })
+        },
+        error: (err) => console.error('Error adding stock:', err),
+      });
+    });
   }
 
-findClosedStorePage(){
-  this.search='CLOSED'
-  this.storeOpenDataSource=[]
-  this.findOpenClosedStorePage();
-}
-findOpenStorePage(){
-   this.search='OPEN'
-  this.storeOpenDataSource=[]
-  this.findOpenClosedStorePage();
+  onAdjust(product: BarServiceEntity) {
+    const dialogRef = this.dialog.open(StockAdjustDialogComponent, {
+      width: '620px',
+      maxWidth: '95vw',
+      autoFocus: false,
+      data: product,
+    });
+    dialogRef.afterClosed().subscribe((result?: StockAdjustResult) => {
+      if (!result) {
+        return;
+      }
+      this.barService.adjustStock({ barServiceUID: product.uid!, ...result }).subscribe({
+        next: (res) => {
+          if (res?.data) {
+            this.alert.show('success', this.translate.instant('STOCK_ADJUST.SAVED', { name: product.serviceName }));
+            this.loadStock();
+          }
+        },
+        error: (err) => console.error('Error adjusting stock:', err),
+      });
+    });
+  }
+
+  onHistory(product: BarServiceEntity) {
+    this.dialog.open(StockHistoryDialogComponent, {
+      width: '900px',
+      maxWidth: '95vw',
+      data: product,
+    });
+  }
+
+  /** Value of the stock on this page, for the header. */
+  get pageStockValue(): number {
+    return this.products.reduce((sum, p) => sum + this.stockValue(p), 0);
+  }
 }
 
+/** Local calendar date as yyyy-MM-dd (toISOString would shift it to UTC). */
+function toIsoDate(date: Date): string {
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${date.getFullYear()}-${m}-${d}`;
 }

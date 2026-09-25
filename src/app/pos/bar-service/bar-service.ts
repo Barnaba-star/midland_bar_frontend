@@ -62,6 +62,29 @@ onAction(action: string) {
 page = 0;
 size = 5;
 
+/** Matched against name, code and description - "ginger" finds ginger drinks. */
+searchTerm = '';
+private searchTimer?: ReturnType<typeof setTimeout>;
+
+onSearch(event: Event) {
+  const value = (event.target as HTMLInputElement).value;
+  clearTimeout(this.searchTimer);
+  // Wait for a pause in typing rather than asking the backend per keystroke.
+  this.searchTimer = setTimeout(() => {
+    this.searchTerm = value.trim();
+    this.page = 0;
+    this.findBarServicePage();
+  }, 300);
+}
+
+clearSearch(input: HTMLInputElement) {
+  input.value = '';
+  clearTimeout(this.searchTimer);
+  this.searchTerm = '';
+  this.page = 0;
+  this.findBarServicePage();
+}
+
 barServiceDataSource: any[] = [];
 totalElements = 0;
 totalPages = 0;
@@ -71,7 +94,8 @@ findBarServicePage() {
 
   const params: PageableParam = {
     page: this.page,
-    size: this.size
+    size: this.size,
+    searchParam: this.searchTerm || undefined
   };
 
   this.barService.findBarServicePage(params).subscribe({

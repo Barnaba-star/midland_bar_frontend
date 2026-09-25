@@ -1,6 +1,6 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
   <!-- Title -->
-  <h2 class="form-title">{{ formTitle }}</h2>
+  <h2 class="form-title">{{ formTitle | translate }}</h2>
    <div class="title-line"></div>
   <div class="form-grid">
     <ng-container *ngFor="let field of fields">
@@ -15,7 +15,7 @@
             *ngIf="field.label && field.type !== 'checkbox' && field.type !== 'checkbox-group'"
             class="form-label"
           >
-            {{ field.label }}
+            {{ field.label | translate }}
             <span *ngIf="field.required" class="required">*</span>
           </label>
           <ng-container [ngSwitch]="field.type">
@@ -34,7 +34,7 @@
                 matInput
                 type="text"
                 [formControlName]="field.name"
-                [placeholder]="field.placeholder || field.label || 'Enter text'"
+                [placeholder]="(field.placeholder || field.label || 'Enter text') | translate"
                 [readonly]="field.readonly"
                 [autocomplete]="field.autoComplete || 'off'"
               />
@@ -45,7 +45,7 @@
                   field.required && form.get(field.name)?.invalid && form.get(field.name)?.touched
                 "
               >
-                {{ field.label || 'This field' }} is required.
+                {{ 'COMMON.FIELD_REQUIRED' | translate: { field: ((field.label || 'COMMON.THIS_FIELD') | translate) } }}
               </mat-error>
             </mat-form-field>
 
@@ -63,7 +63,7 @@
                 matInput
                 type="number"
                 [formControlName]="field.name"
-                [placeholder]="field.placeholder || field.label || 'Enter number'"
+                [placeholder]="(field.placeholder || field.label || 'Enter number') | translate"
                 [min]="field.min ?? null"
                 [max]="field.max ?? null"
                 [step]="field.step || 1"
@@ -75,7 +75,7 @@
                   field.required && form.get(field.name)?.invalid && form.get(field.name)?.touched
                 "
               >
-                {{ field.label || 'This field' }} is required.
+                {{ 'COMMON.FIELD_REQUIRED' | translate: { field: ((field.label || 'COMMON.THIS_FIELD') | translate) } }}
               </mat-error>
             </mat-form-field>
 
@@ -92,7 +92,7 @@
                 matInput
                 [rows]="field.rows || 4"
                 [formControlName]="field.name"
-                [placeholder]="field.placeholder || field.label || 'Enter description'"
+                [placeholder]="(field.placeholder || field.label || 'Enter description') | translate"
               ></textarea>
               <mat-hint *ngIf="field.hint"> {{ field.hint }} </mat-hint>
               <mat-error
@@ -100,7 +100,7 @@
                   field.required && form.get(field.name)?.invalid && form.get(field.name)?.touched
                 "
               >
-                {{ field.label || 'This field' }} is required.
+                {{ 'COMMON.FIELD_REQUIRED' | translate: { field: ((field.label || 'COMMON.THIS_FIELD') | translate) } }}
               </mat-error>
             </mat-form-field>
             <!-- ================================================== SELECT =================================================== -->
@@ -115,14 +115,14 @@
               <mat-select
                 [formControlName]="field.name"
                 [multiple]="field.multiple"
-                [placeholder]="field.placeholder || field.label || 'Select option'"
+                [placeholder]="(field.placeholder || field.label || 'Select option') | translate"
               >
                 <mat-option
                   *ngFor="let option of field.options"
                   [value]="option.value"
                   [ngClass]="{ 'selected-option': form.get(field.name)?.value === option.value }"
                 >
-                  {{ option.label }}
+                  {{ option.label | translate }}
                 </mat-option>
               </mat-select>
               <mat-hint *ngIf="field.hint"> {{ field.hint }} </mat-hint>
@@ -131,7 +131,7 @@
                   field.required && form.get(field.name)?.invalid && form.get(field.name)?.touched
                 "
               >
-                {{ field.label || 'This field' }} is required.
+                {{ 'COMMON.FIELD_REQUIRED' | translate: { field: ((field.label || 'COMMON.THIS_FIELD') | translate) } }}
               </mat-error>
             </mat-form-field>
             <!-- ================================================== RADIO =================================================== -->
@@ -142,7 +142,7 @@
                   [value]="option.value"
                   class="radio-button"
                 >
-                  {{ option.label }}
+                  {{ option.label | translate }}
                 </mat-radio-button>
               </mat-radio-group>
               <mat-error
@@ -150,17 +150,17 @@
                   field.required && form.get(field.name)?.invalid && form.get(field.name)?.touched
                 "
               >
-                {{ field.label || 'This field' }} is required.
+                {{ 'COMMON.FIELD_REQUIRED' | translate: { field: ((field.label || 'COMMON.THIS_FIELD') | translate) } }}
               </mat-error>
             </div>
             <!-- ================================================== CHECKBOX =================================================== -->
             <mat-checkbox *ngSwitchCase="'checkbox'" [formControlName]="field.name">
-              {{ field.label }} <span *ngIf="field.required" class="required">*</span>
+              {{ field.label | translate }} <span *ngIf="field.required" class="required">*</span>
             </mat-checkbox>
             <!-- ================================================== CHECKBOX GROUP =================================================== -->
             <div *ngSwitchCase="'checkbox-group'">
               <label class="form-label">
-                {{ field.label }} <span *ngIf="field.required" class="required">*</span>
+                {{ field.label | translate }} <span *ngIf="field.required" class="required">*</span>
               </label>
               <mat-form-field appearance="outline" class="w-100">
                 <img
@@ -173,10 +173,10 @@
                 <mat-select
                   [formControlName]="field.name"
                   multiple
-                  [placeholder]="field.placeholder || field.label || 'Select options'"
+                  [placeholder]="(field.placeholder || field.label || 'Select options') | translate"
                 >
                   <mat-option *ngFor="let option of field.options" [value]="option.value">
-                    {{ option.label }}
+                    {{ option.label | translate }}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
@@ -184,7 +184,7 @@
             <!-- ================================================== FILE =================================================== -->
             <div *ngSwitchCase="'file'" class="file-upload-container">
               <label class="form-label" *ngIf="field.label">
-                {{ field.label }} <span *ngIf="field.required" class="required">*</span>
+                {{ field.label | translate }} <span *ngIf="field.required" class="required">*</span>
               </label>
               <div class="file-input-wrapper">
                 <img
@@ -201,7 +201,7 @@
                 />
               </div>
               <small *ngIf="field.placeholder" class="field-placeholder">
-                {{ field.placeholder }}
+                {{ field.placeholder | translate }}
               </small>
               <div *ngIf="previewUrls[field.name] && field.viewer" class="image-preview">
                 <img [src]="previewUrls[field.name]" alt="Preview" />
@@ -211,7 +211,7 @@
                   field.required && form.get(field.name)?.invalid && form.get(field.name)?.touched
                 "
               >
-                {{ field.label || 'This field' }} is required.
+                {{ 'COMMON.FIELD_REQUIRED' | translate: { field: ((field.label || 'COMMON.THIS_FIELD') | translate) } }}
               </mat-error>
             </div>
             <!-- ================================================== DATE =================================================== -->
@@ -223,12 +223,12 @@
                 [src]="field.icon"
                 [alt]="field.label || 'date'"
               />
-              <mat-label *ngIf="field.label"> {{ field.label }} </mat-label>
+              <mat-label *ngIf="field.label"> {{ field.label | translate }} </mat-label>
               <input
                 matInput
                 [matDatepicker]="picker"
                 [formControlName]="field.name"
-                [placeholder]="field.placeholder || 'Select date'"
+                [placeholder]="(field.placeholder || 'Select date') | translate"
               />
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
@@ -238,7 +238,7 @@
                   field.required && form.get(field.name)?.invalid && form.get(field.name)?.touched
                 "
               >
-                {{ field.label || 'This field' }} is required.
+                {{ 'COMMON.FIELD_REQUIRED' | translate: { field: ((field.label || 'COMMON.THIS_FIELD') | translate) } }}
               </mat-error>
             </mat-form-field>
             <!-- ================================================== AUTOCOMPLETE =================================================== -->
@@ -250,11 +250,11 @@
                 [src]="field.icon"
                 [alt]="field.label || 'icon'"
               />
-              <mat-label *ngIf="field.label"> {{ field.label }} </mat-label>
+              <mat-label *ngIf="field.label"> {{ field.label | translate }} </mat-label>
               <input
                 matInput
                 [formControl]="field.searchControl"
-                [placeholder]="field.placeholder || field.label || 'Search'"
+                [placeholder]="(field.placeholder || field.label || 'Search') | translate"
                 [matAutocomplete]="auto"
               />
               <mat-autocomplete
@@ -265,7 +265,7 @@
                   *ngFor="let option of field.filteredOptions$ | async"
                   [value]="option.value"
                 >
-                  {{ option.label }}
+                  {{ option.label | translate }}
                 </mat-option>
               </mat-autocomplete>
               <mat-error
@@ -273,7 +273,7 @@
                   field.required && form.get(field.name)?.invalid && form.get(field.name)?.touched
                 "
               >
-                {{ field.label || 'This field' }} is required.
+                {{ 'COMMON.FIELD_REQUIRED' | translate: { field: ((field.label || 'COMMON.THIS_FIELD') | translate) } }}
               </mat-error>
             </mat-form-field>
             <!-- ================================================== DATETIME =================================================== -->
@@ -285,12 +285,12 @@
                 [src]="field.icon"
                 [alt]="field.label || 'datetime'"
               />
-              <mat-label *ngIf="field.label"> {{ field.label }} </mat-label>
+              <mat-label *ngIf="field.label"> {{ field.label | translate }} </mat-label>
               <input
                 matInput
                 type="datetime-local"
                 [formControlName]="field.name"
-                [placeholder]="field.placeholder || 'Select date and time'"
+                [placeholder]="(field.placeholder || 'Select date and time') | translate"
               />
               <mat-hint *ngIf="field.hint"> {{ field.hint }} </mat-hint>
               <mat-error
@@ -298,7 +298,7 @@
                   field.required && form.get(field.name)?.invalid && form.get(field.name)?.touched
                 "
               >
-                {{ field.label || 'This field' }} is required.
+                {{ 'COMMON.FIELD_REQUIRED' | translate: { field: ((field.label || 'COMMON.THIS_FIELD') | translate) } }}
               </mat-error>
             </mat-form-field>
             <!-- ================================================== MONTH =================================================== -->
@@ -310,19 +310,19 @@
                 [src]="field.icon"
                 [alt]="field.label || 'month'"
               />
-              <mat-label *ngIf="field.label"> {{ field.label }} </mat-label>
+              <mat-label *ngIf="field.label"> {{ field.label | translate }} </mat-label>
               <input
                 matInput
                 type="month"
                 [formControlName]="field.name"
-                [placeholder]="field.placeholder || 'Select month'"
+                [placeholder]="(field.placeholder || 'Select month') | translate"
               />
               <mat-error
                 *ngIf="
                   field.required && form.get(field.name)?.invalid && form.get(field.name)?.touched
                 "
               >
-                {{ field.label || 'This field' }} is required.
+                {{ 'COMMON.FIELD_REQUIRED' | translate: { field: ((field.label || 'COMMON.THIS_FIELD') | translate) } }}
               </mat-error>
             </mat-form-field>
             <!-- ================================================== WEEK =================================================== -->
@@ -334,32 +334,32 @@
                 [src]="field.icon"
                 [alt]="field.label || 'week'"
               />
-              <mat-label *ngIf="field.label"> {{ field.label }} </mat-label>
+              <mat-label *ngIf="field.label"> {{ field.label | translate }} </mat-label>
               <input
                 matInput
                 type="week"
                 [formControlName]="field.name"
-                [placeholder]="field.placeholder || 'Select week'"
+                [placeholder]="(field.placeholder || 'Select week') | translate"
               />
               <mat-error
                 *ngIf="
                   field.required && form.get(field.name)?.invalid && form.get(field.name)?.touched
                 "
               >
-                {{ field.label || 'This field' }} is required.
+                {{ 'COMMON.FIELD_REQUIRED' | translate: { field: ((field.label || 'COMMON.THIS_FIELD') | translate) } }}
               </mat-error>
             </mat-form-field>
             <!-- ================================================== RICH TEXT =================================================== -->
             <div *ngSwitchCase="'rich-text'" class="rich-text-editor">
               <label class="form-label">
-                {{ field.label }} <span *ngIf="field.required" class="required">*</span>
+                {{ field.label | translate }} <span *ngIf="field.required" class="required">*</span>
               </label>
               <quill-editor [formControlName]="field.name"></quill-editor>
             </div>
             <!-- ================================================== MAP =================================================== -->
             <div *ngSwitchCase="'map-location'" class="map-location">
               <label class="form-label">
-                {{ field.label }} <span *ngIf="field.required" class="required">*</span>
+                {{ field.label | translate }} <span *ngIf="field.required" class="required">*</span>
               </label>
               <div class="map-container" (mapClick)="setLocation(field.name, $event)"></div>
             </div>

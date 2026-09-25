@@ -12,7 +12,6 @@
 
   margin-top: 0;
   gap: 10px;
-  padding-left: 20px;
   animation: fadeInUp 0.8s ease-out forwards;
 }
 
@@ -64,7 +63,7 @@
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 5px 20px rgba(16, 24, 40, 0.05);
-  width: 1500px;
+  width: 100%;
 }
 
 /* =========================
@@ -76,7 +75,9 @@
   align-items: center;
   justify-content: space-between;
 
-  padding: 20px 24px;
+  gap: 16px;
+
+  padding: 18px 20px;
 
   background: linear-gradient(
     135deg,
@@ -90,7 +91,13 @@
 .service-header-left {
   display: flex;
   align-items: center;
-  gap: 13px;
+  gap: 14px;
+
+  min-width: 0;
+}
+
+.service-header-left > div {
+  min-width: 0;
 }
 
 .service-header-icon {
@@ -114,17 +121,27 @@
 .service-card-header h3 {
   margin: 0;
 
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 18px;
+  font-weight: 700;
 
-  color: #334155;
+  color: #172033;
+
+  line-height: 1.25;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .service-card-header p {
-  margin: 4px 0 0;
+  margin: 3px 0 0;
 
   font-size: 13px;
   color: #8a94a6;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* =========================
@@ -497,3 +514,104 @@
 
 }
 
+
+/* Stock at or below the product's alert level. */
+.duration.low-stock,
+.duration.low-stock mat-icon {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+.service-search {
+  flex: 1;
+  max-width: 420px;
+  margin: 0 24px;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 8px 12px;
+
+  border: 1px solid #e4e7ec;
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.service-search:focus-within {
+  border-color: var(--color-primary);
+}
+
+.service-search mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+  color: #98a2b3;
+}
+
+.service-search input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 13px;
+  color: #1d2939;
+}
+
+.clear-search {
+  display: flex;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.no-match {
+  padding: 28px 16px !important;
+  text-align: center;
+  color: #98a2b3;
+}
+
+/* =========================
+   TYPE SIZES
+   Rows read smaller than the header above them.
+========================= */
+
+.service-table thead th {
+  font-size: 13px;
+}
+
+.service-table tbody td,
+.service-table .index-column,
+.service-table .service-name,
+.service-table .service-code,
+.service-table .service-price,
+.service-table .price,
+.service-table .duration,
+.service-table .status-badge {
+  font-size: 12px;
+}
+
+.service-table .service-details small {
+  font-size: 11px;
+}
+
+
+/* =========================
+   ALIGNMENT
+   Everything in the card reads from the left edge.
+========================= */
+
+.service-card-header h3,
+.service-card-header p,
+.service-table thead th,
+.service-table tbody td,
+.service-table .actions-column {
+  text-align: left;
+}

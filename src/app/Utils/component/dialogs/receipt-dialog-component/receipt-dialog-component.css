@@ -1,0 +1,64 @@
+.receipt-dialog {
+  padding: 20px;
+}
+
+.r-loading {
+  padding: 24px 0;
+  text-align: center;
+  color: #98a2b3;
+}
+
+/* Looks like the slip that will come out of the printer. */
+.r-paper {
+  width: 300px;
+  margin: 0 auto;
+  padding: 16px 14px;
+  border: 1px solid #e4e7ec;
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(16, 24, 40, 0.08);
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  color: #111827;
+}
+
+.r-center {
+  text-align: center;
+}
+
+.r-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.r-muted {
+  color: #667085;
+}
+
+.r-sub {
+  padding-left: 12px;
+  font-size: 11px;
+}
+
+.r-rule {
+  margin: 8px 0;
+  border-top: 1px dashed #98a2b3;
+}
+
+.r-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 1px 0;
+}
+
+.r-total {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.r-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}

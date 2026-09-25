@@ -67,4 +67,7 @@ export interface PageableParam {
   sortBy?: string;
   direction?: 'ASC' | 'DESC';
   date?:Date;
+  /** Inclusive range for period reports, as yyyy-MM-dd. */
+  fromDate?: string;
+  toDate?: string;
 }

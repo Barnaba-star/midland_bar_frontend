@@ -22,7 +22,7 @@ private profilePicURL = `${this.baseURL}/attachment`
 
  createHeaders(): HttpHeaders {
     let headers = new HttpHeaders();
-    const token = this.cookieService.get('jwt_token');
+    const token = this.cookieService.get('bar_jwt_token');
     if (token) {
       headers = headers.set('Authorization', `Bearer ${token}`);
     }
@@ -30,19 +30,19 @@ private profilePicURL = `${this.baseURL}/attachment`
   }
 
 setToken(token: string): void {
-    this.cookieService.set('jwt_token', token, 7, '/');
+    this.cookieService.set('bar_jwt_token', token, 7, '/');
     // A different user means different roles, so anything filtered against
     // the old token has to go.
     this.clearRoleCaches();
   }
  getToken(): string {
-  const rawToken = this.cookieService.get('jwt_token');
+  const rawToken = this.cookieService.get('bar_jwt_token');
   return rawToken?.replace(/^"(.*)"$/, '$1');
 }
 
 
 removeToken(): void {
-  this.cookieService.delete('jwt_token');
+  this.cookieService.delete('bar_jwt_token', '/');
   this.clearRoleCaches();
 }
 

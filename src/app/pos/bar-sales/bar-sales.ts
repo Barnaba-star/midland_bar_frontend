@@ -7,6 +7,9 @@ import { ServiceBarMethod } from '../service-bar-method';
 import { SaleOpenedDTO, SalesOpened, BarSalesDTO } from '../BarModel';
 import { AlertService } from '../../Utils/services/alert';
 import { MatDialog } from '@angular/material/dialog';
+import { SaleItemDialogComponent, SaleItemResult } from '../../Utils/component/dialogs/sale-item-dialog-component/sale-item-dialog-component';
+import { PayBillDialogComponent, PayBillResult } from '../../Utils/component/dialogs/pay-bill-dialog-component/pay-bill-dialog-component';
+import { ReceiptDialogComponent } from '../../Utils/component/dialogs/receipt-dialog-component/receipt-dialog-component';
 import { DialogComponent } from '../../Utils/component/dialog/dialog';
 import { FormsModule } from '@angular/forms';
 import { CommonModule, DecimalPipe } from '@angular/common';
@@ -16,7 +19,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { SaleDetailsDialogComponent } from '../../Utils/component/sale-details-dialog-component/sale-details-dialog-component';
 import { ViewChild } from '@angular/core';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { EmptyStateComponent } from '../../Utils/component/empty-state/empty-state';
 
 
@@ -61,6 +64,7 @@ export class BarSales implements OnInit{
     private alertService: AlertService,
     private dialog: MatDialog,
     private cdr: ChangeDetectorRef,
+    private translate: TranslateService,
   ) {}
   ngOnInit(): void {
     this.selectedSales='SALES.MANAGE'
@@ -130,21 +134,36 @@ export class BarSales implements OnInit{
     {
       name: 'openSaleCode',
       type: 'select',
-      placeholder: 'Enter sale code',
+      label: 'SALES_FLOW.CODE',
+      placeholder: 'SALES_FLOW.CODE',
       required: true,
-      options: [
-        { label: 'SK-1', value: 'SK-1' },
-        { label: 'SK-2', value: 'SK-2' },
-        { label: 'SK-3', value: 'SK-3' },
-      ],
+      // Filled each time from the codes no unpaid bill is holding.
+      options: [],
     },
   ];
   salesOpenedList: SalesOpened[] = [];
   openNewSales() {
+    // Only codes set up in POS Setting that no unpaid bill is holding.
+    this.barServce.findAvailableBillCodes().subscribe({
+      next: (res) => {
+        const codes = res.data ?? [];
+        if (codes.length === 0) {
+          this.alertService.show('error', this.translate.instant('SALES_FLOW.NO_FREE_CODE'));
+          return;
+        }
+        this.openSales[0].options = codes.map((code) => ({ label: code, value: code }));
+        this.openBillDialog();
+      },
+      error: (err) => console.error('Error loading bill codes:', err),
+    });
+  }
+
+  private openBillDialog() {
     const dialogRef = this.dialog.open(DialogComponent, {
-      width: '1200px',
+      width: '520px',
+      maxWidth: '95vw',
       data: {
-        formTitle: 'Open New Sale',
+        formTitle: 'SALES_FLOW.OPEN_TITLE',
         fields: this.openSales,
       },
     });
@@ -153,18 +172,15 @@ export class BarSales implements OnInit{
       const openSaleDTO: SaleOpenedDTO = {
         salesCode: result.openSaleCode,
       };
-      console.log('Code', openSaleDTO.salesCode);
       this.barServce.saveOpenSale(openSaleDTO).subscribe({
         next: (res) => {
           if (res.data) {
-            console.log('Sales Opened', res.data);
             this.salesOpenedList = [...this.salesOpenedList, res.data];
             this.cdr.detectChanges();
-            console.log('Sales Opened UID', this.saleOpenedUID);
           }
         },
         error: (error) => {
-          console.error('Error Occurred When Opening New Sale');
+          console.error('Error Occurred When Opening New Sale', error);
         },
       });
     });
@@ -226,7 +242,8 @@ openSaleDetailsDialog() {
       data: {
         sale: this.selectedSale,
         services: this.selectedSaleServices,
-        showPayment: true
+        // Paying has its own button and dialog (Lipa); this one only shows.
+        showPayment: false
       },
 
       autoFocus: false
@@ -324,8 +341,8 @@ openSaleDetailsDialogForMore(sale: SalesOpened) {
   totalPrice: number = 0;
   getSelectedSaleTotal(): number {
     return this.selectedSaleServices.reduce((total, service) => {
-      this.totalPrice = total + (service.price || 0);
-      return total + (service.price || 0);
+      this.totalPrice = total + (Number(service.lineTotal ?? service.price) || 0);
+      return total + (Number(service.lineTotal ?? service.price) || 0);
     }, 0);
   }
 
@@ -368,52 +385,144 @@ openSaleDetailsDialogForMore(sale: SalesOpened) {
     });
   }
 
-  saveBarSales(event: any) {
-    console.log('UID SELECTED', event);
-    if (!event || event.length === 0) {
-      console.error('No sale selected');
+  /*
+   * The lines on each open bill, as recorded - loaded with the bills and
+   * refreshed after every add. Keyed by bill uid.
+   */
+  billLines: Record<string, any[]> = {};
+  /** Bills whose lines are shown; the rest show just a summary line. */
+  openDrafts: Record<string, boolean> = {};
+  addingTo: string | null = null;
+
+  saveBarSales(sale: SalesOpened) {
+    if (!sale?.uid || this.addingTo) {
       return;
     }
-
-    this.saleOpenedUID = event.uid!;
-    console.log('UID SELECTED', this.saleOpenedUID);
-    const dialogRef = this.dialog.open(DialogComponent, {
-      width: '1200px',
-      data: {
-        formTitle: 'Add New Sale',
-        fields: this.salesFields,
-      },
+    const dialogRef = this.dialog.open(SaleItemDialogComponent, {
+      width: '560px',
+      maxWidth: '95vw',
+      autoFocus: false,
+      data: { billCode: sale.salesCode },
     });
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe((result?: SaleItemResult) => {
       if (!result) return;
-      const barSalesDTO: BarSalesDTO = {
-        paymentMethod: result.paymentMethod,
-        barServiceUID: result.barService,
-        barStaffUID: result.staffName,
-        salesOpenedUID: this.saleOpenedUID,
-      };
-      console.log('DTO TO SAVE', barSalesDTO);
-      this.barServce.saveBarSales(barSalesDTO).subscribe({
-        next: (res) => {
-          if (res.data) {
-            console.log('Sales Recorder', res.data[0].salesOpened);
-            const index = this.salesOpenedList.findIndex(
-              (idx) => idx.uid === res.data[0].salesOpened.uid,
-            );
-            if (index !== -1) {
-              this.salesOpenedList[index] = res.data[0].salesOpened;
+      this.addingTo = sale.uid!;
+      this.barServce
+        .addSaleItems({
+          salesOpenedUID: sale.uid!,
+          items: [{ barServiceUID: result.service.uid, quantity: result.quantity }],
+        })
+        .subscribe({
+          next: (res) => {
+            this.addingTo = null;
+            if (res?.data) {
+              this.salesOpenedList = this.salesOpenedList.map((b) =>
+                b.uid === res.data.uid ? { ...b, ...res.data } : b,
+              );
+              this.alertService.show(
+                'success',
+                this.translate.instant('SALES_FLOW.ADDED', {
+                  qty: result.quantity,
+                  name: result.service.serviceName,
+                  code: sale.salesCode,
+                }),
+              );
+              this.loadBillLines(sale);
             }
-            this.alertService.show('success', 'Bill Saved');
             this.cdr.detectChanges();
-            console.log('Sales Opened UID', this.saleOpenedUID);
-          }
-        },
-        error: (error) => {
-          console.error('Error Occurred When Opening New Sale');
-        },
-      });
+          },
+          error: (err) => {
+            this.addingTo = null;
+            console.error('Error adding to bill:', err);
+            this.cdr.detectChanges();
+          },
+        });
     });
   }
+
+  payingBill: string | null = null;
+
+  /** Lipa: settle the bill, then show its receipt. */
+  onPay(sale: SalesOpened) {
+    if (!sale?.uid || this.payingBill) {
+      return;
+    }
+    // Fresh lines, so the dialog shows exactly what the backend will charge.
+    this.barServce.findBarSalesList(sale.uid).subscribe({
+      next: (res) => {
+        const lines = res.data ?? [];
+        const total = lines.reduce((sum: number, l: any) => sum + (Number(l.lineTotal ?? l.price) || 0), 0);
+        if (!lines.length || total <= 0) {
+          this.alertService.show('error', this.translate.instant('PAY_BILL.EMPTY'));
+          return;
+        }
+        const dialogRef = this.dialog.open(PayBillDialogComponent, {
+          width: '640px',
+          maxWidth: '95vw',
+          autoFocus: false,
+          data: { code: sale.salesCode, total, lines },
+        });
+        dialogRef.afterClosed().subscribe((result?: PayBillResult) => {
+          if (!result) {
+            return;
+          }
+          this.payingBill = sale.uid!;
+          this.barServce.payBill({ salesOpenedUID: sale.uid!, payments: result.payments }).subscribe({
+            next: (paid) => {
+              this.payingBill = null;
+              if (paid?.data) {
+                // Paid bills leave the open list; the code is free again.
+                this.salesOpenedList = this.salesOpenedList.filter((b) => b.uid !== sale.uid);
+                const { [sale.uid!]: _, ...rest } = this.billLines;
+                this.billLines = rest;
+                this.alertService.show('success', this.translate.instant('PAY_BILL.DONE', { code: sale.salesCode }));
+                this.openReceipt(sale.uid!);
+              }
+              this.cdr.detectChanges();
+            },
+            error: (err) => {
+              this.payingBill = null;
+              console.error('Error paying bill:', err);
+              this.cdr.detectChanges();
+            },
+          });
+        });
+      },
+      error: (err) => console.error('Error loading bill lines:', err),
+    });
+  }
+
+  openReceipt(billUid: string) {
+    this.dialog.open(ReceiptDialogComponent, {
+      width: '400px',
+      maxWidth: '95vw',
+      autoFocus: false,
+      data: { billUid },
+    });
+  }
+
+  loadBillLines(sale: SalesOpened) {
+    if (!sale?.uid) {
+      return;
+    }
+    this.barServce.findBarSalesList(sale.uid).subscribe({
+      next: (res) => {
+        this.billLines = { ...this.billLines, [sale.uid!]: res.data ?? [] };
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Error loading bill lines:', err),
+    });
+  }
+
+  toggleDraft(sale: SalesOpened) {
+    this.openDrafts = { ...this.openDrafts, [sale.uid!]: !this.openDrafts[sale.uid!] };
+    this.cdr.detectChanges();
+  }
+
+  lineCount(sale: SalesOpened): number {
+    return (this.billLines[sale.uid!] ?? []).reduce((sum, l) => sum + (Number(l.quantity) || 1), 0);
+  }
+
   onSaleSelected(sale: SalesOpened) {
     console.log('Selected Sale:', sale);
     console.log('UID:', sale.uid);
@@ -467,7 +576,8 @@ openSaleDetailsDialogForMore(sale: SalesOpened) {
       next: (res) => {
         if (res) {
           this.salesOpenedList = res.data ?? [];
-          console.log('Sales For Today', this.salesOpenedList);
+          this.billLines = {};
+          this.salesOpenedList.forEach((bill) => this.loadBillLines(bill));
           this.cdr.detectChanges();
         }
       },
@@ -686,18 +796,28 @@ totalPaymentAmount: number = 0;
                   result: Record<string, PaymentSummary>,
                   sale: any
                 ) => {
-                  const method =sale.paymentMethod?.toLowerCase();
-                  if (!method) {
-                    return result;
+                  // A split bill counts towards each method it was paid
+                  // with, by the amount paid that way.
+                  let parts: { method: string; amount: number }[] = [];
+                  try {
+                    parts = sale.paymentBreakdown ? JSON.parse(sale.paymentBreakdown) : [];
+                  } catch {
+                    parts = [];
                   }
-                  if (!result[method]) {
-                    result[method] = {
-                      count: 0,
-                      total: 0
-                    };
+                  if (!parts.length && sale.paymentMethod && sale.paymentMethod !== 'split') {
+                    parts = [{ method: sale.paymentMethod, amount: Number(sale.bill || 0) }];
                   }
-                  result[method].count += 1;
-                  result[method].total +=Number(sale.bill || 0);
+                  for (const part of parts) {
+                    const method = part.method?.toLowerCase();
+                    if (!method) {
+                      continue;
+                    }
+                    if (!result[method]) {
+                      result[method] = { count: 0, total: 0 };
+                    }
+                    result[method].count += 1;
+                    result[method].total += Number(part.amount || 0);
+                  }
                   return result;
                 },{});
             console.log('Payment Summary Object:',summary);

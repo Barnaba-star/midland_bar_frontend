@@ -2159,3 +2159,342 @@ mat-paginator {
   letter-spacing: 0.4px;
   text-transform: uppercase;
 }
+
+/* Stock at or below the product's alert level. */
+.duration.low-stock,
+.duration.low-stock mat-icon {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+
+/* =========================
+   ALIGNMENT
+   The services table reads from the left edge.
+========================= */
+
+.service-table thead th,
+.service-table tbody td,
+.service-table .action-column {
+  text-align: left;
+}
+
+
+/* =========================
+   COMMISSION - list + split editor
+========================= */
+
+.commission-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: left;
+}
+
+.split-card,
+.commission-list-card {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #e8edf3;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(16, 24, 40, 0.05);
+}
+
+.split-card {
+  border-color: var(--color-primary);
+}
+
+.split-header,
+.commission-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);
+  border-bottom: 1px solid #edf0f4;
+}
+
+.split-header h3,
+.commission-list-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #172033;
+}
+
+.split-header p,
+.commission-list-header p {
+  margin: 3px 0 0;
+  font-size: 13px;
+  color: #8a94a6;
+}
+
+.split-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 12px;
+  padding: 18px 20px;
+}
+
+.split-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.split-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #344054;
+}
+
+.split-input {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid #e4e7ec;
+  border-radius: 8px;
+}
+
+.split-input:focus-within {
+  border-color: var(--color-primary);
+}
+
+.split-input input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: #172033;
+}
+
+.split-field small {
+  font-size: 11px;
+  color: #98a2b3;
+}
+
+.split-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 20px;
+  border-top: 1px solid #edf0f4;
+}
+
+.split-total {
+  font-size: 13px;
+  color: #344054;
+}
+
+.split-total.full strong {
+  color: #027a48;
+}
+
+.split-total.over strong {
+  color: #dc2626;
+}
+
+.row-action:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.commission-search {
+  flex: 1;
+  max-width: 380px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid #e4e7ec;
+  border-radius: 10px;
+}
+
+.commission-search input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 13px;
+}
+
+.commission-search mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+  color: #98a2b3;
+}
+
+.commission-count {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.commission-count span {
+  font-size: 20px;
+  font-weight: 700;
+  color: #172033;
+}
+
+.commission-count small {
+  font-size: 11px;
+  color: #8a94a6;
+}
+
+.commission-list-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.commission-list-table th {
+  padding: 12px 14px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e9edf3;
+  color: #667085;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.commission-list-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #f0f2f5;
+  color: #344054;
+  font-size: 12px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.commission-list-table tr.editing td {
+  background: #f5f8ff;
+}
+
+.svc {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.svc-name {
+  font-weight: 700;
+  color: #1d2939;
+}
+
+.commission-page .muted {
+  color: #98a2b3;
+}
+
+.split-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #fffaeb;
+  color: #b54708;
+  font-weight: 600;
+}
+
+.split-state.set {
+  background: #ecfdf3;
+  color: #027a48;
+}
+
+.split-state .status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.empty-row {
+  padding: 28px 14px !important;
+  text-align: center !important;
+  color: #98a2b3 !important;
+}
+
+.commission-pages {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 20px;
+  border-top: 1px solid #edf0f4;
+  font-size: 12px;
+}
+
+.commission-pages .page-btn {
+  display: flex;
+  padding: 3px;
+  border: 1px solid #e4e7ec;
+  border-radius: 6px;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.commission-pages .page-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+
+/* =========================
+   BILL CODES
+========================= */
+
+.bill-code-add {
+  flex: 1;
+  max-width: 380px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bill-code-add input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #e4e7ec;
+  border-radius: 10px;
+  font-size: 13px;
+  text-transform: uppercase;
+  outline: none;
+}
+
+.bill-code-add input:focus {
+  border-color: var(--color-primary);
+}
+
+
+/* =========================
+   STOCK ITEMS / SOURCES
+========================= */
+
+.add-service-btn.secondary {
+  margin-left: 8px;
+}
+
+.kind-badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #e0f2fe;
+  color: #0369a1;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.source-note {
+  display: block;
+  margin-top: 4px;
+  color: #667085;
+  font-size: 11px;
+}

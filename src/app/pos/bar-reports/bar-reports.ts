@@ -24,6 +24,7 @@ import { error } from 'console';
 import { IncomeExpenseDetailsDialogComponent } from '../../Utils/component/income-expense-details-dialog-component/income-expense-details-dialog-component';
 import { StockPurchaseDetailsDialogComponent } from '../../Utils/component/dialogs/stock-purchase-details-dialog-component/stock-purchase-details-dialog-component';
 import { EmptyStateComponent } from '../../Utils/component/empty-state/empty-state';
+import { StockPacksPipe } from '../../Utils/pipes/stock-packs.pipe';
 
 
 
@@ -32,7 +33,7 @@ import { EmptyStateComponent } from '../../Utils/component/empty-state/empty-sta
 @Component({
   selector: 'app-bar-reports',
   standalone: true,
-  imports: [
+  imports: [StockPacksPipe, 
     EmptyStateComponent,Title2, MatIcon, CommonModule, FormsModule, CdkConnectedOverlay, CdkOverlayOrigin, MatFormField, MatLabel, FormsModule,
     MatDatepickerModule,
     MatFormFieldModule,
@@ -126,8 +127,7 @@ export class BarReports implements OnInit{
       break;
 
     case 'REPORTS.STORE':
-      console.log('Open Store');
-      this.findServiceAndStoreReportPage();
+      this.setStockReportRange('MONTH');
 
       break;
 
@@ -1545,4 +1545,126 @@ closeStockPaymentDialog(): void {
 }
 
 
+
+  // ---------------------------------------------------------------
+  // STOCK REPORT (the Store tab): bought, sold, profit, on hand
+  // ---------------------------------------------------------------
+
+  /** Costs and profit are for those who see money - not the cashier, as on the POS home. */
+  get seesStockMoney(): boolean {
+    return [...POS_FULL_ACCESS_ROLES, 'MANAGER'].some(role => this.visibility.hasRole(role));
+  }
+
+  readonly stockReportRanges = [
+    { key: 'TODAY', label: 'COMMON.TODAY' },
+    { key: 'WEEK', label: 'COMMON.THIS_WEEK' },
+    { key: 'MONTH', label: 'COMMON.THIS_MONTH' },
+    { key: 'LAST_MONTH', label: 'COMMON.LAST_MONTH' },
+    { key: 'YEAR', label: 'COMMON.THIS_YEAR' },
+  ];
+  stockReportRange = 'MONTH';
+  stockReportFrom = '';
+  stockReportTo = '';
+  stockReportSearch = '';
+  stockReportRows: any[] = [];
+  private stockReportTimer?: ReturnType<typeof setTimeout>;
+
+  setStockReportRange(range: string) {
+    const today = new Date();
+    const y = today.getFullYear();
+    const m = today.getMonth();
+    let from = today;
+    let to = today;
+    if (range === 'WEEK') {
+      // Weeks start on Monday, as the weekly pots do.
+      const back = (today.getDay() + 6) % 7;
+      from = new Date(y, m, today.getDate() - back);
+    } else if (range === 'MONTH') {
+      from = new Date(y, m, 1);
+    } else if (range === 'LAST_MONTH') {
+      from = new Date(y, m - 1, 1);
+      to = new Date(y, m, 0);
+    } else if (range === 'YEAR') {
+      from = new Date(y, 0, 1);
+    }
+    this.stockReportRange = range;
+    this.stockReportFrom = isoDate(from);
+    this.stockReportTo = isoDate(to);
+    this.loadStockReport();
+  }
+
+  onStockReportDate(which: 'from' | 'to', event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    if (!value) {
+      return;
+    }
+    if (which === 'from') {
+      this.stockReportFrom = value;
+    } else {
+      this.stockReportTo = value;
+    }
+    this.stockReportRange = '';
+    this.loadStockReport();
+  }
+
+  onStockReportSearch(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    clearTimeout(this.stockReportTimer);
+    this.stockReportTimer = setTimeout(() => {
+      this.stockReportSearch = value.trim();
+      this.loadStockReport();
+    }, 300);
+  }
+
+  loadStockReport() {
+    // A report shows every counted service at once, so the totals above
+    // the table cover the whole period, not one page of it.
+    const params: PageableParam = {
+      page: 0,
+      size: 1000,
+      searchParam: this.stockReportSearch || undefined,
+      fromDate: this.stockReportFrom,
+      toDate: this.stockReportTo,
+    };
+    this.barService.findStockMovementPage(params).subscribe({
+      next: (res) => {
+        this.stockReportRows = res.data ?? [];
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Error loading stock report:', err),
+    });
+  }
+
+  packsOf(units: number, row: any) {
+    return new StockPacksPipe().transform({ stockQuantity: units, unit: row.unit, packUnit: row.packUnit, unitsPerPack: row.unitsPerPack, unitLadder: row.unitLadder });
+  }
+
+  /** What is on hand now would cost to buy: buying price is per pack. */
+  onHandValue(row: any): number {
+    return ((row.stockQuantity ?? 0) * (row.buyingPrice ?? 0)) / (row.unitsPerPack || 1);
+  }
+
+  get stockReportTotals() {
+    return this.stockReportRows.reduce(
+      (t, r) => {
+        t.boughtUnits += r.purchasedUnits ?? 0;
+        t.boughtCost += r.purchasedCost ?? 0;
+        t.soldUnits += r.usedUnits ?? 0;
+        t.soldValue += r.soldValue ?? 0;
+        t.soldCost += r.soldCost ?? 0;
+        t.profit += (r.soldValue ?? 0) - (r.soldCost ?? 0);
+        t.onHandValue += this.onHandValue(r);
+        t.adjustedValue += r.adjustedValue ?? 0;
+        return t;
+      },
+      { boughtUnits: 0, boughtCost: 0, soldUnits: 0, soldValue: 0, soldCost: 0, profit: 0, onHandValue: 0, adjustedValue: 0 },
+    );
+  }
+}
+
+/** Local calendar date as yyyy-MM-dd (toISOString would shift it to UTC). */
+function isoDate(date: Date): string {
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${date.getFullYear()}-${m}-${d}`;
 }

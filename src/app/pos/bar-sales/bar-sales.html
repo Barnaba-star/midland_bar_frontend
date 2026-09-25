@@ -65,6 +65,26 @@
                   </div>
                 </div>
 
+                <!-- ================= LINES ON THE BILL (folded) ================= -->
+                @if ((billLines[sale.uid!] ?? []).length > 0) {
+                  <div class="draft-lines">
+                    <button type="button" class="draft-title" (click)="toggleDraft(sale)" [attr.aria-expanded]="!!openDrafts[sale.uid!]">
+                      <span>{{ 'SALES_FLOW.ON_BILL' | translate }} ({{ lineCount(sale) }})</span>
+                      <span class="draft-summary">
+                        <mat-icon>{{ openDrafts[sale.uid!] ? 'expand_less' : 'expand_more' }}</mat-icon>
+                      </span>
+                    </button>
+                    @if (openDrafts[sale.uid!]) {
+                      @for (line of billLines[sale.uid!]; track line.uid) {
+                        <div class="draft-line">
+                          <span class="draft-qty">{{ line.quantity || 1 }} ×</span>
+                          <span class="draft-name">{{ line.serviceName }}</span>
+                          <span class="draft-amount">Tshs {{ (line.lineTotal ?? line.price) | number }}</span>
+                        </div>
+                      }
+                    }
+                  </div>
+                }
                 <!-- ================= FOOTER ================= -->
              <div class="sale-actions">
 
@@ -73,6 +93,7 @@
     type="button"
     class="sale-action-btn add-btn"
     (click)="saveBarSales(sale)"
+    [disabled]="addingTo === sale.uid || sale.paymentStatus === 'PAID'"
   >
     <span class="action-icon">
       <mat-icon>add</mat-icon>
@@ -84,6 +105,20 @@
   </button>
 
 
+  <!-- LIPA -->
+  <button
+    type="button"
+    class="sale-action-btn pay-btn"
+    (click)="onPay(sale)"
+    [disabled]="payingBill === sale.uid || !(billLines[sale.uid!] ?? []).length"
+  >
+    <span class="action-icon">
+      <mat-icon>payments</mat-icon>
+    </span>
+    <span class="action-text">
+      {{ 'PAY_BILL.BTN' | translate }}
+    </span>
+  </button>
   <!-- TAZAMA NDANI -->
   <button
     type="button"
@@ -735,20 +770,18 @@
                 <!-- ACTION -->
                 <td class="action-cell">
 
-                  <button
-                    type="button"
-                    class="sale-action-btn"
-                    (click)="
-                      openSaleDetailsDialogForMore(sale)
-                    "
-                    [title]="'SALES_PAGE.TOOLTIP_VIEW_DETAILS' | translate"
-                  >
-
-                    <mat-icon svgIcon="more">
-
-                    </mat-icon>
-
-                  </button>
+                  <div class="row-actions">
+                    <button type="button" class="row-action view" (click)="openSaleDetailsDialogForMore(sale)">
+                      <mat-icon>visibility</mat-icon>
+                      <span>{{ 'COMMON.VIEW' | translate }}</span>
+                    </button>
+                    @if (sale.paymentStatus === 'PAID') {
+                      <button type="button" class="row-action edit" (click)="openReceipt(sale.uid)">
+                        <mat-icon>receipt_long</mat-icon>
+                        <span>{{ 'RECEIPT.BTN' | translate }}</span>
+                      </button>
+                    }
+                  </div>
 
                 </td>
 

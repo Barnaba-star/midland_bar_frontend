@@ -1,0 +1,59 @@
+<div class="receipt-dialog">
+  @if (loading) {
+    <p class="r-loading">…</p>
+  } @else if (!receipt) {
+    <p class="r-loading">{{ 'RECEIPT.NOT_FOUND' | translate }}</p>
+  } @else {
+    <div class="r-paper" #paper>
+      <div class="r-center r-title">{{ receipt.branchName || 'Midland Bar' }}</div>
+      <div class="r-center r-muted">{{ (receipt.status === 'PAID' ? 'RECEIPT.TITLE' : 'RECEIPT.PROFORMA') | translate }}</div>
+      <div class="r-rule"></div>
+
+      <div class="r-row"><span>{{ 'RECEIPT.BILL' | translate }}</span><span>{{ receipt.code }}</span></div>
+      @if (receipt.paidAt) {
+        <div class="r-row"><span>{{ 'RECEIPT.DATE' | translate }}</span><span>{{ receipt.paidAt | date: 'dd/MM/yyyy HH:mm' }}</span></div>
+      }
+      @if (receipt.paidBy) {
+        <div class="r-row"><span>{{ 'RECEIPT.SERVED_BY' | translate }}</span><span>{{ receipt.paidBy }}</span></div>
+      }
+      <div class="r-rule"></div>
+
+      @for (l of receipt.lines; track $index) {
+        <div class="r-row"><span>{{ l.quantity || 1 }} × {{ l.name }}</span><span>{{ (l.lineTotal ?? l.unitPrice) | number }}</span></div>
+        @if ((l.quantity || 1) > 1) {
+          <div class="r-muted r-sub">@ {{ l.unitPrice | number }}</div>
+        }
+      }
+      <div class="r-rule"></div>
+
+      <div class="r-row r-total"><span>{{ 'RECEIPT.TOTAL' | translate }}</span><span>Tshs {{ receipt.total | number }}</span></div>
+
+      @if (receipt.payments?.length) {
+        <div class="r-rule"></div>
+        @for (p of receipt.payments; track $index) {
+          <div class="r-row"><span>{{ 'PAY_BILL.METHOD_' + p.method | translate }}</span><span>{{ p.amount | number }}</span></div>
+          @if (p.tendered) {
+            <div class="r-row r-muted r-sub"><span>{{ 'PAY_BILL.TENDERED' | translate }}</span><span>{{ p.tendered | number }}</span></div>
+          }
+        }
+        @if (totalChange > 0) {
+          <div class="r-row"><span>{{ 'PAY_BILL.CHANGE' | translate }}</span><span>{{ totalChange | number }}</span></div>
+        }
+      }
+
+      <div class="r-rule"></div>
+      <div class="r-center r-muted">{{ 'RECEIPT.THANKS' | translate }}</div>
+    </div>
+  }
+
+  <div class="r-actions">
+    <button type="button" class="row-action view" (click)="close()">
+      <mat-icon>close</mat-icon>
+      <span>{{ 'COMMON.CLOSE' | translate }}</span>
+    </button>
+    <button type="button" class="row-action edit" [disabled]="!receipt" (click)="print()">
+      <mat-icon>print</mat-icon>
+      <span>{{ 'RECEIPT.PRINT' | translate }}</span>
+    </button>
+  </div>
+</div>

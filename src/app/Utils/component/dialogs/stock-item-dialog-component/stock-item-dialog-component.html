@@ -1,0 +1,87 @@
+<div class="si-dialog">
+  <div class="si-header">
+    <h3>{{ (data?.item ? 'PRODUCT_FORM.EDIT_STOCK_ITEM_TITLE' : 'PRODUCT_FORM.ADD_STOCK_ITEM_TITLE') | translate }}</h3>
+    <button type="button" class="si-close" (click)="cancel()" [attr.aria-label]="'COMMON.CLOSE' | translate">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="si-grid">
+    <label class="si-field">
+      <span>{{ 'PRODUCT_FORM.STOCK_ITEM_NAME' | translate }} *</span>
+      <input type="text" [(ngModel)]="name" [placeholder]="'PRODUCT_FORM.STOCK_ITEM_NAME_PH' | translate" />
+    </label>
+    <label class="si-field">
+      <span>{{ 'PRODUCT_FORM.CATEGORY' | translate }} *</span>
+      <select [(ngModel)]="category">
+        <option value="FOOD">{{ 'SETTING_PAGE.CATEGORY_FOOD' | translate }}</option>
+        <option value="DRINK">{{ 'SETTING_PAGE.CATEGORY_DRINK' | translate }}</option>
+      </select>
+    </label>
+  </div>
+
+  <!-- Ladder of measures, smallest first -->
+  <div class="si-ladder">
+    <div class="si-ladder-title">
+      <strong>{{ 'STOCK_ITEM_FORM.LADDER_TITLE' | translate }}</strong>
+      <small>{{ 'STOCK_ITEM_FORM.LADDER_HINT' | translate }}</small>
+    </div>
+
+    @for (row of rows; track $index; let i = $index) {
+      <div class="si-rung">
+        <span class="si-step">{{ i + 1 }}</span>
+        <input
+          type="text"
+          class="si-rung-name"
+          [(ngModel)]="row.name"
+          [placeholder]="(i === 0 ? 'STOCK_ITEM_FORM.SMALLEST_PH' : 'STOCK_ITEM_FORM.LEVEL_PH') | translate"
+        />
+        @if (i === 0) {
+          <span class="si-rung-note">{{ 'STOCK_ITEM_FORM.SMALLEST' | translate }}</span>
+        } @else {
+          <span class="si-eq">=</span>
+          <input type="number" min="2" step="1" class="si-rung-per" [(ngModel)]="row.per" />
+          <span class="si-rung-of">{{ rows[i - 1].name || ('STOCK_ITEM_FORM.PREVIOUS' | translate) }}</span>
+          <span class="si-rung-base">= {{ base(i) | number }} {{ rows[0].name }}</span>
+          <button type="button" class="si-remove" (click)="removeRow(i)" [attr.aria-label]="'COMMON.DELETE' | translate">
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+      </div>
+    }
+
+    <button type="button" class="row-action view si-add" (click)="addRow()">
+      <mat-icon>add</mat-icon>
+      <span>{{ 'STOCK_ITEM_FORM.ADD_LEVEL' | translate }}</span>
+    </button>
+  </div>
+
+  <div class="si-grid">
+    <label class="si-field">
+      <span>{{ 'STOCK_ITEM_FORM.BUYING_PRICE' | translate: { level: top.name || '…' } }} *</span>
+      <input type="number" min="0" [(ngModel)]="buyingPrice" />
+      @if (buyingPrice && rows.length > 1) {
+        <small>{{ 'STOCK_ITEM_FORM.COST_OF_SMALLEST' | translate: { name: rows[0].name || '…' } }}: Tshs {{ costOfSmallest | number: '1.0-2' }}</small>
+      }
+    </label>
+    <label class="si-field">
+      <span>{{ 'PRODUCT_FORM.DESCRIPTION' | translate }}</span>
+      <input type="text" [(ngModel)]="description" [placeholder]="'PRODUCT_FORM.DESCRIPTION_PH' | translate" />
+    </label>
+  </div>
+
+  @if (error) {
+    <p class="si-error">{{ error | translate }}</p>
+  }
+
+  <div class="si-actions">
+    <button type="button" class="row-action view" (click)="cancel()">
+      <mat-icon>close</mat-icon>
+      <span>{{ 'COMMON.CANCEL' | translate }}</span>
+    </button>
+    <button type="button" class="row-action edit" (click)="save()">
+      <mat-icon>save</mat-icon>
+      <span>{{ 'COMMON.SUBMIT' | translate }}</span>
+    </button>
+  </div>
+</div>

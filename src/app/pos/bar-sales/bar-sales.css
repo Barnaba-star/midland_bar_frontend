@@ -4082,3 +4082,132 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     flex-basis: 27px;
   }
 }
+
+
+/* =========================
+   DRAFT LINES - picked, not yet recorded
+========================= */
+
+.draft-lines {
+  margin: 10px 0 4px;
+  padding: 10px 12px;
+  border: 1px dashed #f5c26b;
+  border-radius: 10px;
+  background: #fffcf5;
+  text-align: left;
+}
+
+.draft-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #b54708;
+}
+
+.draft-title small {
+  font-weight: 500;
+  color: #b54708;
+  opacity: 0.8;
+}
+
+.draft-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  font-size: 12px;
+  color: #344054;
+}
+
+.draft-qty {
+  min-width: 32px;
+  font-weight: 700;
+}
+
+.draft-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.draft-amount {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.draft-remove {
+  display: flex;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #98a2b3;
+  cursor: pointer;
+}
+
+.draft-remove mat-icon {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
+
+.draft-total {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px dashed #f5c26b;
+  font-size: 13px;
+  color: #172033;
+}
+
+
+/* The picked-lines box folds to one summary line; a tap opens it. */
+button.draft-title {
+  width: 100%;
+  margin-bottom: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.draft-summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  color: #172033;
+}
+
+.draft-summary mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+  color: #b54708;
+}
+
+.draft-note {
+  display: block;
+  margin: 6px 0 2px;
+  font-size: 11px;
+  color: #b54708;
+  opacity: 0.8;
+}
+
+
+/* Lipa - the main thing to do with a bill that has lines on it. */
+.sale-action-btn.pay-btn {
+  background: #027a48;
+  border-color: #027a48;
+  color: #ffffff;
+}
+
+.sale-action-btn.pay-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}

@@ -30,7 +30,23 @@ export interface BarServiceDTO{
   description?:string;
   commissionType?:string;
   commissionValue?:number;
-  duration?:number;
+  category?: string;
+  unit?: string;
+  packUnit?: string;
+  unitsPerPack?: number;
+  kind?: string;
+  stockSource?: string;
+  stockSourceUid?: string;
+  stockSourceName?: string;
+  unitsPerSale?: number;
+  sourceStockQuantity?: number;
+  unitLadder?: any;
+  saleUnitName?: string;
+  saleUnitCount?: number;
+  buyingPrice?: number;
+  stockQuantity?: number;
+  lowStock?: boolean;
+  trackStock?: boolean;
   price?:number;
   usageType?:string;
 }
@@ -43,7 +59,23 @@ export interface BarServiceData{
   description?:string;
   commissionType?:string;
   commissionValue?:number;
-  duration?:number;
+  category?: string;
+  unit?: string;
+  packUnit?: string;
+  unitsPerPack?: number;
+  kind?: string;
+  stockSource?: string;
+  stockSourceUid?: string;
+  stockSourceName?: string;
+  unitsPerSale?: number;
+  sourceStockQuantity?: number;
+  unitLadder?: any;
+  saleUnitName?: string;
+  saleUnitCount?: number;
+  buyingPrice?: number;
+  stockQuantity?: number;
+  lowStock?: boolean;
+  trackStock?: boolean;
   price?:number;
   usageType?:string;
 }
@@ -89,7 +121,23 @@ export interface BarServiceEntity{
   description?: string;
   commissionType?: string;
   commissionValue?: number;
-  duration?: number;
+  category?: string;
+  unit?: string;
+  packUnit?: string;
+  unitsPerPack?: number;
+  kind?: string;
+  stockSource?: string;
+  stockSourceUid?: string;
+  stockSourceName?: string;
+  unitsPerSale?: number;
+  sourceStockQuantity?: number;
+  unitLadder?: any;
+  saleUnitName?: string;
+  saleUnitCount?: number;
+  buyingPrice?: number;
+  stockQuantity?: number;
+  lowStock?: boolean;
+  trackStock?: boolean;
   price?: number;
 }
 export interface SaleOpenedDTO {
@@ -180,4 +228,15 @@ export interface PayStockAndPurchaseDTO {
    amount?:number;
    description?:string;
    weekDate:Date;
+}
+
+/** One delivery into the store. packs x unitsPerPack + looseUnits is what the count goes up by. */
+export interface StockReceiptDTO {
+  barServiceUID: string;
+  packs?: number;
+  looseUnits?: number;
+  /** Price of one pack on this delivery (one unit, with no pack). */
+  packPrice?: number;
+  supplier?: string;
+  note?: string;
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../Utils/enviroments/environment';
-import { CommissionDTO, PayStockAndPurchaseDTO, SaleOpenedDTO, BarBookingDTO, BarSalesDTO, BarServiceDTO, BarStaffDTO, SpendDTO, StaffCommissionDTO, StoreDTO } from './BarModel';
+import { CommissionDTO, PayStockAndPurchaseDTO, SaleOpenedDTO, BarBookingDTO, BarSalesDTO, BarServiceDTO, BarStaffDTO, SpendDTO, StaffCommissionDTO, StoreDTO, StockReceiptDTO } from './BarModel';
 import { PageableParam, Response, ResponseList, ResponsePage } from '../Utils/models/responces';
 
 @Injectable({
@@ -49,6 +49,10 @@ findCommissionByUID(commissionUID:string):Observable<Response<any>>{
 }
 findCommissionList():Observable<ResponseList<any>>{
   return this.http.get<ResponseList<any>>(`${this.barURL}/findCommissionList`)
+}
+/** Every service with its commission split, or empty fields where none is set. */
+findServiceCommissionPage(params: PageableParam): Observable<ResponsePage<any>> {
+  return this.http.post<ResponsePage<any>>(`${this.barURL}/findServiceCommissionPage`, params);
 }
 findCommissionPage(params: PageableParam): Observable<ResponsePage<any>> {
     return this.http.post<ResponsePage<any>>(`${this.barURL}/findCommissionPage`, params);
@@ -273,5 +277,68 @@ findRevenueTrend(days: number): Observable<ResponseList<any>> {
 
 findStaffEarnings(): Observable<ResponseList<any>> {
   return this.http.get<ResponseList<any>>(`${this.barURL}/findStaffEarnings`);
+}
+
+/***
+ * STOCK - deliveries into the store
+ */
+
+addStock(dto: StockReceiptDTO): Observable<Response<any>> {
+  return this.http.post<Response<any>>(`${this.barURL}/addStock`, dto);
+}
+
+/** Bought vs used per service between fromDate and toDate (inclusive). */
+findStockMovementPage(params: PageableParam): Observable<ResponsePage<any>> {
+  return this.http.post<ResponsePage<any>>(`${this.barURL}/findStockMovementPage`, params);
+}
+
+findStockReceipts(serviceUID: string, params: PageableParam): Observable<ResponsePage<any>> {
+  return this.http.post<ResponsePage<any>>(`${this.barURL}/findStockReceipts/${serviceUID}`, params);
+}
+
+/***
+ * BILL CODES - the names bills are opened under (POS Setting)
+ */
+
+saveBillCode(code: string): Observable<Response<any>> {
+  return this.http.post<Response<any>>(`${this.barURL}/saveBillCode`, { code });
+}
+
+deleteBillCode(uid: string): Observable<Response<any>> {
+  return this.http.post<Response<any>>(`${this.barURL}/deleteBillCode/${uid}`, null);
+}
+
+/** Every code, each flagged inUse while an unpaid bill holds it. */
+findBillCodes(): Observable<ResponseList<any>> {
+  return this.http.get<ResponseList<any>>(`${this.barURL}/findBillCodes`);
+}
+
+/** Codes a new bill may be opened under right now. */
+findAvailableBillCodes(): Observable<ResponseList<string>> {
+  return this.http.get<ResponseList<string>>(`${this.barURL}/findAvailableBillCodes`);
+}
+
+/** Ring lines up on an open bill; stock, buckets and the seller's commission move with it. */
+addSaleItems(dto: { salesOpenedUID: string; items: { barServiceUID: string; quantity: number }[] }): Observable<Response<any>> {
+  return this.http.post<Response<any>>(`${this.barURL}/addSaleItems`, dto);
+}
+
+/** Correct a store count: REMOVE for a reason, or COUNT to what was found. Units are in the smallest measure. */
+adjustStock(dto: { barServiceUID: string; mode: 'REMOVE' | 'COUNT'; units: number; reason?: string; note?: string }): Observable<Response<any>> {
+  return this.http.post<Response<any>>(`${this.barURL}/adjustStock`, dto);
+}
+
+findStockAdjustments(serviceUID: string, params: PageableParam): Observable<ResponsePage<any>> {
+  return this.http.post<ResponsePage<any>>(`${this.barURL}/findStockAdjustments/${serviceUID}`, params);
+}
+
+/** Settle a bill in one or more payments; they must add up to the bill. */
+payBill(dto: { salesOpenedUID: string; payments: { method: string; amount: number; tendered?: number }[] }): Observable<Response<any>> {
+  return this.http.post<Response<any>>(`${this.barURL}/payBill`, dto);
+}
+
+/** Lines, payments, totals and who took the money - for the printed receipt. */
+findBillReceipt(billUid: string): Observable<Response<any>> {
+  return this.http.get<Response<any>>(`${this.barURL}/findBillReceipt/${billUid}`);
 }
 }

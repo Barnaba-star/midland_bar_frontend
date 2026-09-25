@@ -1,0 +1,97 @@
+<div class="pay-dialog">
+  <div class="pay-header">
+    <div>
+      <h3>{{ 'PAY_BILL.TITLE' | translate: { code: data.code } }}</h3>
+      <p>{{ 'PAY_BILL.ITEMS' | translate: { n: data.lines.length } }}</p>
+    </div>
+    <div class="pay-due">
+      <small>{{ 'PAY_BILL.DUE' | translate }}</small>
+      <strong>Tshs {{ data.total | number }}</strong>
+    </div>
+  </div>
+
+  <!-- What is on the bill -->
+  <div class="pay-lines">
+    @for (l of data.lines; track $index) {
+      <div class="pay-line">
+        <span>{{ l.quantity || 1 }} × {{ l.serviceName }}</span>
+        <span>Tshs {{ (l.lineTotal ?? l.price) | number }}</span>
+      </div>
+    }
+  </div>
+
+  <!-- How it is paid -->
+  <div class="pay-rows">
+    @for (row of rows; track $index; let i = $index) {
+      <div class="pay-row">
+        <select [(ngModel)]="row.method">
+          @for (m of methods; track m) {
+            <option [value]="m">{{ 'PAY_BILL.METHOD_' + m | translate }}</option>
+          }
+        </select>
+        <label class="pay-amount">
+          <small>{{ 'PAY_BILL.AMOUNT' | translate }}</small>
+          <input type="number" min="1" step="1" [(ngModel)]="row.amount" />
+        </label>
+        @if (row.method === 'cash') {
+          <label class="pay-amount">
+            <small>{{ 'PAY_BILL.TENDERED' | translate }}</small>
+            <input type="number" min="0" step="1" [(ngModel)]="row.tendered" [placeholder]="'PAY_BILL.OPTIONAL' | translate" />
+          </label>
+          @let ch = change(row);
+          @if (ch !== null) {
+            <div class="pay-change" [class.bad]="ch < 0">
+              <small>{{ 'PAY_BILL.CHANGE' | translate }}</small>
+              <strong>Tshs {{ ch | number }}</strong>
+            </div>
+          }
+        }
+        <div class="pay-row-actions">
+          @if (remaining !== 0) {
+            <button type="button" class="pay-mini" (click)="fillRemaining(row)" [title]="'PAY_BILL.FILL' | translate">
+              <mat-icon>done_all</mat-icon>
+            </button>
+          }
+          @if (rows.length > 1) {
+            <button type="button" class="pay-mini" (click)="removeRow(i)" [attr.aria-label]="'COMMON.DELETE' | translate">
+              <mat-icon>close</mat-icon>
+            </button>
+          }
+        </div>
+      </div>
+    }
+
+    <button type="button" class="row-action view pay-split" (click)="addRow()">
+      <mat-icon>call_split</mat-icon>
+      <span>{{ 'PAY_BILL.SPLIT' | translate }}</span>
+    </button>
+  </div>
+
+  <div class="pay-summary" [class.ok]="remaining === 0" [class.bad]="remaining < 0">
+    <span>{{ 'PAY_BILL.PAID' | translate }}: <strong>Tshs {{ paid | number }}</strong></span>
+    <span>
+      @if (remaining > 0) {
+        {{ 'PAY_BILL.REMAINING' | translate }}: <strong>Tshs {{ remaining | number }}</strong>
+      } @else if (remaining < 0) {
+        {{ 'PAY_BILL.OVER' | translate }}: <strong>Tshs {{ -remaining | number }}</strong>
+      } @else {
+        <strong>{{ 'PAY_BILL.EXACT' | translate }}</strong>
+      }
+    </span>
+  </div>
+
+  @if (error) {
+    <p class="pay-error">{{ error | translate }}</p>
+  }
+
+  <div class="pay-actions">
+    <button type="button" class="row-action view" (click)="cancel()">
+      <mat-icon>close</mat-icon>
+      <span>{{ 'COMMON.CANCEL' | translate }}</span>
+    </button>
+    <button type="button" class="row-action edit pay-confirm" [disabled]="!canPay" (click)="pay()">
+      <mat-icon>payments</mat-icon>
+      <span>{{ 'PAY_BILL.CONFIRM' | translate: { amount: (data.total | number) } }}</span>
+    </button>
+  </div>
+</div>

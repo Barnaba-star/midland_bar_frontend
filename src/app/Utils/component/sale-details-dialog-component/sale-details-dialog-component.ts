@@ -47,7 +47,7 @@ export class SaleDetailsDialogComponent {
 
     return this.data.services.reduce(
       (total, service) =>
-        total + Number(service.price || 0),
+        total + Number(service.lineTotal ?? service.price ?? 0),
       0
     );
 

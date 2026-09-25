@@ -7,7 +7,7 @@
 @switch (selectedService){
   @case ('SERVICE.MANAGE') {
   <div class="action-container">
-   @if (barServiceDataSource.length > 0) {
+   @if (barServiceDataSource.length > 0 || searchTerm) {
 
   <div class="service-card">
 
@@ -15,14 +15,25 @@
     <div class="service-card-header">
 
       <div class="service-header-left">
-        <div class="service-header-icon">
-          <mat-icon>content_cut</mat-icon>
-        </div>
-
         <div>
           <h3>{{ 'SERVICE_PAGE.TITLE' | translate }}</h3>
           <p>{{ 'SERVICE_PAGE.SUBTITLE' | translate }}</p>
         </div>
+      </div>
+
+      <div class="service-search">
+        <mat-icon>search</mat-icon>
+        <input
+          #searchBox
+          type="search"
+          [placeholder]="'SERVICE_PAGE.SEARCH_PH' | translate"
+          (input)="onSearch($event)"
+        />
+        @if (searchTerm) {
+          <button type="button" class="clear-search" (click)="clearSearch(searchBox)" [attr.aria-label]="'COMMON.CLOSE' | translate">
+            <mat-icon>close</mat-icon>
+          </button>
+        }
       </div>
 
       <div class="service-summary">
@@ -46,7 +57,8 @@
             <th>#</th>
             <th>{{ 'SERVICE_PAGE.COL_SERVICE' | translate }}</th>
             <th>{{ 'COMMON.CODE' | translate }}</th>
-            <th>{{ 'COMMON.DURATION' | translate }}</th>
+            <th>{{ 'SETTING_PAGE.COL_CATEGORY' | translate }}</th>
+            <th>{{ 'SETTING_PAGE.COL_BUYING_PRICE' | translate }}</th>
             <th>{{ 'COMMON.PRICE' | translate }}</th>
             <th>{{ 'COMMON.STATUS' | translate }}</th>
             <th>{{ 'COMMON.ACTIONS' | translate }}</th>
@@ -73,7 +85,7 @@
                 <div class="service-info">
 
                   <div class="service-avatar">
-                    <mat-icon>content_cut</mat-icon>
+                    <mat-icon>{{ service.category === 'FOOD' ? 'restaurant' : 'local_bar' }}</mat-icon>
                   </div>
 
                   <div class="service-details">
@@ -98,14 +110,19 @@
 
 
 
-              <!-- Duration -->
+              <!-- Category -->
               <td>
-                <div class="duration">
-                  <mat-icon>schedule</mat-icon>
-                  <span>
-                    {{ service.duration || 0 }} min
-                  </span>
-                </div>
+                <span class="service-code">
+                  {{ (service.category === 'FOOD' ? 'SETTING_PAGE.CATEGORY_FOOD' : 'SETTING_PAGE.CATEGORY_DRINK') | translate }}
+                </span>
+              </td>
+
+
+              <!-- Buying price -->
+              <td>
+                <span class="price">
+                  Tshs {{ (service.buyingPrice || 0) | number:'1.2-2' }} @if (service.packUnit) { / {{ ('PRODUCT_FORM.UNIT_' + service.packUnit.toUpperCase()) | translate }} }
+                </span>
               </td>
 
               <!-- Price -->
@@ -139,19 +156,25 @@
               <!-- Actions -->
               <td class="actions-column">
 
-                <button
-                  mat-icon-button
-                  type="button"
-                  [matTooltip]="'COMMON.MORE' | translate"
-                  (click)="onMoreService(service)"
-                >
-                  <mat-icon>more_vert</mat-icon>
-                </button>
+                <div class="row-actions">
+                  <button type="button" class="row-action view" (click)="onMoreService(service)">
+                    <mat-icon>visibility</mat-icon>
+                    <span>{{ 'COMMON.VIEW' | translate }}</span>
+                  </button>
+                </div>
 
               </td>
 
             </tr>
 
+          }
+
+          @if (barServiceDataSource.length === 0 && searchTerm) {
+            <tr>
+              <td colspan="8" class="no-match">
+                {{ 'SERVICE_PAGE.NO_MATCH' | translate: { term: searchTerm } }}
+              </td>
+            </tr>
           }
 
         </tbody>
@@ -224,7 +247,7 @@
 
 }
 
-    @if(barServiceDataSource.length === 0){
+    @if(barServiceDataSource.length === 0 && !searchTerm){
        <app-empty-state
          icon="service"
          title="SERVICE_PAGE.EMPTY_TITLE"

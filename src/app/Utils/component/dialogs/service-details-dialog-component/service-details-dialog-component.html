@@ -37,10 +37,18 @@
     </div>
 
     <div class="detail-item">
-      <mat-icon>schedule</mat-icon>
+      <mat-icon>category</mat-icon>
       <div>
-        <span>{{ 'COMMON.DURATION' | translate }}</span>
-        <strong>{{ service?.duration || 0 }} min</strong>
+        <span>{{ 'SETTING_PAGE.COL_CATEGORY' | translate }}</span>
+        <strong>{{ (service?.category === 'FOOD' ? 'SETTING_PAGE.CATEGORY_FOOD' : 'SETTING_PAGE.CATEGORY_DRINK') | translate }}</strong>
+      </div>
+    </div>
+
+    <div class="detail-item">
+      <mat-icon>shopping_cart</mat-icon>
+      <div>
+        <span>{{ 'SETTING_PAGE.COL_BUYING_PRICE' | translate }}</span>
+        <strong>Tshs {{ (service?.buyingPrice || 0) | number: '1.2-2' }} @if (service!.packUnit) { / {{ ('PRODUCT_FORM.UNIT_' + service!.packUnit.toUpperCase()) | translate }} }</strong>
       </div>
     </div>
 

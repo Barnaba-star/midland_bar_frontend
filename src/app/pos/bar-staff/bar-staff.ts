@@ -20,6 +20,31 @@ import { StaffDetailsDialogComponent } from '../../Utils/component/dialogs/staff
 import { DeleteConfirmationComponent } from '../../Utils/component/dialogs/delete-confirmation-component/delete-confirmation-component';
 import { EmptyStateComponent } from '../../Utils/component/empty-state/empty-state';
 
+/** Stored as the backend's StaffCategory names. */
+export const STAFF_CATEGORY_OPTIONS = [
+  { value: 'WAITER', label: 'STAFF_FORM.CAT_WAITER' },
+  { value: 'BARTENDER', label: 'STAFF_FORM.CAT_BARTENDER' },
+  { value: 'COOK', label: 'STAFF_FORM.CAT_COOK' },
+  { value: 'CASHIER', label: 'STAFF_FORM.CAT_CASHIER' },
+  { value: 'SECURITY', label: 'STAFF_FORM.CAT_SECURITY' },
+  { value: 'CLEANER', label: 'STAFF_FORM.CAT_CLEANER' },
+];
+
+/** Icon per category, for the staff table. */
+export const STAFF_CATEGORY_ICONS: Record<string, string> = {
+  WAITER: 'room_service',
+  BARTENDER: 'local_bar',
+  COOK: 'restaurant',
+  CASHIER: 'point_of_sale',
+  SECURITY: 'security',
+  CLEANER: 'cleaning_services',
+};
+
+const GENDER_OPTIONS = [
+  { label: 'STAFF_FORM.MALE', value: 'Male' },
+  { label: 'STAFF_FORM.FEMALE', value: 'Female' },
+];
+
 @Component({
   selector: 'app-bar-staff',
   standalone: true,
@@ -72,6 +97,12 @@ export class BarStaff implements OnInit{
 
   onAction(action: string) {
     this.selectedStaff = action;
+    if (this.selectedStaff === 'STAFF.ADD') {
+      // The table of just-saved staff stays until Add Staff is pressed
+      // again; then it closes and the form comes back empty.
+      this.barStaff = [];
+      this.cdr.detectChanges();
+    }
     if (this.selectedStaff === 'STAFF.MANAGE') {
       this.loadStaffPage();
   
@@ -82,61 +113,57 @@ export class BarStaff implements OnInit{
     {
       name: 'firstName',
       type: 'text',
-      label: 'First Name',
-      placeholder: 'Enter staff name',
+      label: 'STAFF_FORM.FIRST_NAME',
+      placeholder: 'STAFF_FORM.FIRST_NAME',
       required: true,
     },
     {
       name: 'middleName',
       type: 'text',
-      label: 'Middle Name',
-      placeholder: 'Enter staff name',
-      required: true,
+      label: 'STAFF_FORM.MIDDLE_NAME',
+      placeholder: 'STAFF_FORM.OPTIONAL',
     },
     {
       name: 'lastName',
       type: 'text',
-      label: 'Last Name',
-      placeholder: 'Enter staff name',
+      label: 'STAFF_FORM.LAST_NAME',
+      placeholder: 'STAFF_FORM.LAST_NAME',
       required: true,
     },
     {
       name: 'phone',
       type: 'text',
-      label: 'Phone Number',
-      placeholder: 'Enter phone number',
+      label: 'STAFF_FORM.PHONE',
+      placeholder: 'STAFF_FORM.PHONE_PH',
       required: true,
     },
     {
       name: 'barCategory',
-      label: 'Category',
+      label: 'STAFF_FORM.CATEGORY',
+      placeholder: 'STAFF_FORM.CATEGORY',
       type: 'select',
-      options: [
-        { label: 'Beauty Therapist', value: 'Beauty Therapist' },
-        { label: 'Barber', value: 'Barber' },
-      ],
+      required: true,
+      options: STAFF_CATEGORY_OPTIONS,
     },
     {
-      label: 'Date of Birth',
+      label: 'STAFF_FORM.DOB',
       name: 'dateOfBirth',
-      placeholder: 'date of Birth',
+      placeholder: 'STAFF_FORM.DOB',
       type: 'date',
     },
     {
       name: 'description',
-      label: 'Description',
+      label: 'STAFF_FORM.DESCRIPTION',
+      placeholder: 'STAFF_FORM.OPTIONAL',
       type: 'textarea',
       rows: 1,
       colSpan: 2,
     },
     {
       name: 'gender',
-      label: 'Gender',
+      label: 'STAFF_FORM.GENDER',
       type: 'radio',
-      options: [
-        { label: 'Male', value: 'Male' },
-        { label: 'Female', value: 'Female' },
-      ],
+      options: GENDER_OPTIONS,
     },
   ];
 
@@ -144,53 +171,57 @@ export class BarStaff implements OnInit{
     {
       name: 'firstName',
       type: 'text',
-      placeholder: 'Enter staff name',
+      label: 'STAFF_FORM.FIRST_NAME',
+      placeholder: 'STAFF_FORM.FIRST_NAME',
       required: true,
     },
     {
       name: 'middleName',
       type: 'text',
-      placeholder: 'Enter staff name',
-      required: true,
+      label: 'STAFF_FORM.MIDDLE_NAME',
+      placeholder: 'STAFF_FORM.OPTIONAL',
     },
     {
       name: 'lastName',
       type: 'text',
-      placeholder: 'Enter staff name',
+      label: 'STAFF_FORM.LAST_NAME',
+      placeholder: 'STAFF_FORM.LAST_NAME',
       required: true,
     },
     {
       name: 'phoneNumber',
       type: 'text',
-      placeholder: 'Enter phone number',
+      label: 'STAFF_FORM.PHONE',
+      placeholder: 'STAFF_FORM.PHONE_PH',
       required: true,
     },
     {
       name: 'barCategory',
+      label: 'STAFF_FORM.CATEGORY',
+      placeholder: 'STAFF_FORM.CATEGORY',
       type: 'select',
-      options: [
-        { label: 'Beauty Therapist', value: 'Beauty Therapist' },
-        { label: 'Barber', value: 'Barber' },
-      ],
+      required: true,
+      options: STAFF_CATEGORY_OPTIONS,
     },
     {
+      label: 'STAFF_FORM.DOB',
       name: 'dateOfBirth',
-      placeholder: 'date of Birth',
+      placeholder: 'STAFF_FORM.DOB',
       type: 'date',
     },
     {
       name: 'description',
+      label: 'STAFF_FORM.DESCRIPTION',
+      placeholder: 'STAFF_FORM.OPTIONAL',
       type: 'textarea',
       rows: 1,
       colSpan: 2,
     },
     {
       name: 'gender',
+      label: 'STAFF_FORM.GENDER',
       type: 'radio',
-      options: [
-        { label: 'Male', value: 'Male' },
-        { label: 'Female', value: 'Female' },
-      ],
+      options: GENDER_OPTIONS,
     },
   ];
 
@@ -199,27 +230,27 @@ export class BarStaff implements OnInit{
   staffColumns = [
     {
       field: 'firstName',
-      header: 'First Name',
+      header: 'STAFF_FORM.FIRST_NAME',
     },
     {
       field: 'middleName',
-      header: 'Middle Name',
+      header: 'STAFF_FORM.MIDDLE_NAME',
     },
     {
       field: 'lastName',
-      header: 'Last Name',
+      header: 'STAFF_FORM.LAST_NAME',
     },
     {
       field: 'phoneNumber',
-      header: 'Phone Number',
+      header: 'STAFF_FORM.PHONE',
     },
     {
       field: 'barCategory',
-      header: 'Category',
+      header: 'STAFF_FORM.CATEGORY',
     },
     {
       field: 'gender',
-      header: 'Gender',
+      header: 'STAFF_FORM.GENDER',
     },
   ];
 
@@ -239,7 +270,7 @@ export class BarStaff implements OnInit{
       next: (response) => {
         console.log('Bar staff saved successfully:', response);
         if (response.data) {
-          this.alertService.show('success', 'Bar staff saved successfully.');
+          this.alertService.show('success', this.translate.instant('STAFF_FORM.SAVED'));
           this.barStaff.push(response.data);
           this.cdr.detectChanges();
           console.log('Saved Bar Staff:', this.barStaff);
@@ -257,7 +288,7 @@ export class BarStaff implements OnInit{
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '1200px',
       data: {
-        formTitle: 'Update Staff',
+        formTitle: 'STAFF_FORM.EDIT_TITLE',
         fields: this.editStaffFields,
         formData: [event],
       },
@@ -281,7 +312,7 @@ export class BarStaff implements OnInit{
         next: (response) => {
           console.log('Bar staff Updated successfully:', response);
           if (response.data) {
-            this.alertService.show('success', 'Bar staff updated successfully.');
+            this.alertService.show('success', this.translate.instant('STAFF_FORM.UPDATED'));
             this.barStaff = [];
             this.barStaff.push(response.data);
             this.cdr.detectChanges();
@@ -333,7 +364,7 @@ export class BarStaff implements OnInit{
       next: (response) => {
         console.log('Delete response:', response);
         if (response.data) {
-          this.alertService.show('success', 'Staff Deleted');
+          this.alertService.show('success', this.translate.instant('STAFF_FORM.DELETED'));
           this.barStaff = this.barStaff.filter((staff) => staff.uid !== this.staffUID);
           this.barStaffEdited = [];
           this.cdr.detectChanges();
@@ -343,7 +374,7 @@ export class BarStaff implements OnInit{
 
       error: (error) => {
         console.error('Error on deleting staff:', error);
-        this.alertService.show('error', 'Failed to delete staff');
+        this.alertService.show('error', this.translate.instant('STAFF_FORM.DELETE_FAILED'));
       },
     });
   }
@@ -353,36 +384,78 @@ export class BarStaff implements OnInit{
    */
   pageParam: PageableParam = {
     page: 0,
-    size: 100,
+    size: 10,
   };
+
+  readonly categoryOptions = STAFF_CATEGORY_OPTIONS;
+  readonly categoryIcons = STAFF_CATEGORY_ICONS;
+
+  /** Matched against any name or the phone number. */
+  searchTerm = '';
+  /** A StaffCategory name, or '' for all. */
+  categoryFilter = '';
+  private searchTimer?: ReturnType<typeof setTimeout>;
+
+  get filtering(): boolean {
+    return !!this.searchTerm || !!this.categoryFilter;
+  }
+
+  onSearch(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    clearTimeout(this.searchTimer);
+    // Wait for a pause in typing rather than asking the backend per keystroke.
+    this.searchTimer = setTimeout(() => {
+      this.searchTerm = value.trim();
+      this.pageParam.page = 0;
+      this.loadStaffPage();
+    }, 300);
+  }
+
+  clearSearch(input: HTMLInputElement) {
+    input.value = '';
+    clearTimeout(this.searchTimer);
+    this.searchTerm = '';
+    this.pageParam.page = 0;
+    this.loadStaffPage();
+  }
+
+  onCategoryFilter(event: Event) {
+    this.categoryFilter = (event.target as HTMLSelectElement).value;
+    this.pageParam.page = 0;
+    this.loadStaffPage();
+  }
+
+  categoryLabel(category: string): string {
+    return STAFF_CATEGORY_OPTIONS.find(o => o.value === category)?.label ?? category;
+  }
   barStaffPage: BarStaffEntity[] = [];
   barStaffDataSource = new MatTableDataSource<any>([]);
   staffColumnsPage: TableColumn[] = [
     {
       field: 'firstName',
-      header: 'First Name',
+      header: 'STAFF_FORM.FIRST_NAME',
       icon: 'person2',
       iconPosition: 'left',
       iconColor: '#198754',
     },
     {
       field: 'middleName',
-      header: 'Middle Name',
+      header: 'STAFF_FORM.MIDDLE_NAME',
     },
     {
       field: 'lastName',
-      header: 'Last Name',
+      header: 'STAFF_FORM.LAST_NAME',
     },
     {
       field: 'phoneNumber',
-      header: 'Phone',
+      header: 'STAFF_FORM.PHONE',
       icon: 'more',
       iconPosition: 'left',
       iconColor: '#0d6efd',
     },
     {
       field: 'gender',
-      header: 'Gender',
+      header: 'STAFF_FORM.GENDER',
       cellColors: {
         Male: {
           background: '#e7f1ff',
@@ -396,16 +469,14 @@ export class BarStaff implements OnInit{
     },
     {
       field: 'barCategory',
-      header: 'Category',
+      header: 'STAFF_FORM.CATEGORY',
       cellColors: {
-        Barber: {
-          background: '#e8f5e9',
-          color: '#198754',
-        },
-        'Beauty Therapist': {
-          background: '#fff3cd',
-          color: '#856404',
-        },
+        WAITER: { background: '#e7f1ff', color: '#0d6efd' },
+        BARTENDER: { background: '#f3e8ff', color: '#7c3aed' },
+        COOK: { background: '#fff3cd', color: '#856404' },
+        CASHIER: { background: '#e8f5e9', color: '#198754' },
+        SECURITY: { background: '#f2f4f7', color: '#344054' },
+        CLEANER: { background: '#e0f7fa', color: '#00838f' },
       },
     },
   ];
@@ -415,6 +486,8 @@ totalElements = 0;
 totalPages = 0;
 
 loadStaffPage() {
+  this.pageParam.searchParam = this.searchTerm || undefined;
+  this.pageParam.filter = this.categoryFilter || undefined;
   this.barService.findBarStaffPage(this.pageParam).subscribe({
     next: (response) => {
       if (response.data) {
@@ -450,7 +523,7 @@ loadStaffPage() {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '1200px',
       data: {
-        formTitle: 'Edit Staff Details',
+        formTitle: 'STAFF_FORM.EDIT_TITLE',
         fields: this.editStaffFields,
         formData: [event],
       },
@@ -480,7 +553,7 @@ loadStaffPage() {
               if (index != -1) {
                 this.barStaffDataSource.data[index] = res.data;
                 this.barStaffDataSource.data = [...this.barStaffDataSource.data];
-                this.alertService.show('success', 'Data Successfully Updated');
+                this.alertService.show('success', this.translate.instant('STAFF_FORM.UPDATED'));
                 this.cdr.detectChanges();
                 this.staffPageUID = '';
               }
@@ -535,7 +608,7 @@ loadStaffPage() {
             this.barStaffDataSource.data.splice(index, 1);
             this.barStaffDataSource.data = [...this.barStaffDataSource.data];
             this.cdr.detectChanges();
-            this.alertService.show('success', 'Staff Deleted')
+            this.alertService.show('success', this.translate.instant('STAFF_FORM.DELETED'))
           }
         }
       },

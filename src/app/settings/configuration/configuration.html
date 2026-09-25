@@ -104,6 +104,25 @@
     </div>
 
 
+    <!-- STOCK -->
+
+    <div class="general-section">
+
+      <h3 class="section-title">{{ 'CONFIGURATION_PAGE.SECTION_STOCK' | translate }}</h3>
+
+      <div class="field-grid">
+
+        <div class="field">
+          <label for="lowStockLevel">{{ 'CONFIGURATION_PAGE.LOW_STOCK_LEVEL' | translate }}</label>
+          <input id="lowStockLevel" type="number" min="0" [(ngModel)]="setting.lowStockLevel" name="lowStockLevel">
+          <small>{{ 'CONFIGURATION_PAGE.LOW_STOCK_LEVEL_HINT' | translate }}</small>
+        </div>
+
+      </div>
+
+    </div>
+
+
     <!-- MAINTENANCE -->
 
     <div class="general-section">

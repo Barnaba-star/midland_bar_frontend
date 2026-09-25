@@ -198,3 +198,68 @@ body {
     margin: 14mm;
   }
 }
+
+
+/* =========================
+   ROW ACTIONS
+   Labelled buttons rather than bare icons, used by every
+   table's action column (staff, services...).
+========================= */
+
+.row-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.row-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  padding: 5px 10px;
+
+  border: 1px solid transparent;
+  border-radius: 8px;
+
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.row-action mat-icon {
+  width: 15px;
+  height: 15px;
+  font-size: 15px;
+}
+
+.row-action.view {
+  background: #eef4ff;
+  color: #14315d;
+}
+
+.row-action.view:hover {
+  border-color: #14315d;
+}
+
+.row-action.edit {
+  background: #e8f5e9;
+  color: #198754;
+}
+
+.row-action.edit:hover {
+  border-color: #198754;
+}
+
+.row-action.delete {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.row-action.delete:hover {
+  border-color: #dc2626;
+}

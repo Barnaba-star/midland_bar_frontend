@@ -1,0 +1,123 @@
+.history-dialog {
+  padding: 20px;
+  text-align: left;
+}
+
+.history-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.history-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #172033;
+}
+
+.history-header p {
+  margin: 3px 0 0;
+  font-size: 13px;
+  color: #8a94a6;
+}
+
+.close-btn {
+  display: flex;
+  padding: 4px;
+  border: none;
+  border-radius: 8px;
+  background: #f2f4f7;
+  cursor: pointer;
+}
+
+.history-empty {
+  padding: 24px 0;
+  text-align: center;
+  color: #98a2b3;
+}
+
+.history-table-wrap {
+  overflow-x: auto;
+}
+
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.history-table th {
+  padding: 10px 12px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e9edf3;
+  color: #667085;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.history-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #f0f2f5;
+  color: #344054;
+  font-size: 12px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.history-table .note-row td {
+  padding-top: 0;
+  color: #667085;
+  font-style: italic;
+  white-space: normal;
+}
+
+.muted {
+  color: #98a2b3;
+}
+
+.history-pages {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 12px;
+  color: #667085;
+}
+
+.history-pages button {
+  display: flex;
+  padding: 2px;
+  border: 1px solid #e4e7ec;
+  border-radius: 6px;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.history-pages button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+
+.history-sub {
+  margin: 22px 0 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #172033;
+}
+
+.history-table td.neg {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+.history-table td.pos {
+  color: #027a48;
+  font-weight: 700;
+}

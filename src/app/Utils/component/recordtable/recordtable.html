@@ -3,7 +3,7 @@
     <tr>
       <th style="width: 50px;">{{ 'COMMON.SERIAL_NO' | translate | uppercase }}</th>
       @for (col of columns; track col) {
-        <th>{{ col.header | uppercase }}</th>
+        <th>{{ col.header | translate | uppercase }}</th>
       }
       <th>{{ 'COMMON.ACTIONS' | translate | uppercase }}</th>
     </tr>

@@ -1,0 +1,106 @@
+<div class="history-dialog">
+  <div class="history-header">
+    <div>
+      <h3>{{ 'STOCK_FORM.HISTORY_TITLE' | translate }}</h3>
+      <p>{{ product?.serviceName }} · {{ product?.serviceCode }}</p>
+    </div>
+    <button type="button" class="close-btn" (click)="close()" [attr.aria-label]="'COMMON.CLOSE' | translate">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  @if (loading) {
+    <p class="history-empty">…</p>
+  } @else if (receipts.length === 0) {
+    <p class="history-empty">{{ 'STOCK_FORM.HISTORY_EMPTY' | translate }}</p>
+  } @else {
+    <div class="history-table-wrap">
+      <table class="history-table">
+        <thead>
+          <tr>
+            <th>{{ 'STOCK_FORM.COL_DATE' | translate }}</th>
+            <th>{{ 'STOCK_FORM.COL_RECEIVED' | translate }}</th>
+            <th>{{ 'STOCK_FORM.COL_PRICE' | translate }}</th>
+            <th>{{ 'STOCK_FORM.COL_COST' | translate }}</th>
+            <th>{{ 'STOCK_FORM.SUPPLIER' | translate }}</th>
+            <th>{{ 'STOCK_FORM.COL_STOCK_AFTER' | translate }}</th>
+            <th>{{ 'STOCK_FORM.COL_BY' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (r of receipts; track r.uid) {
+            <tr>
+              <td>{{ r.receivedAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+              <td>
+                @if (packKey && r.packs) {
+                  {{ r.packs }} {{ packKey | translate }}@if (r.looseUnits) { + {{ r.looseUnits }} }
+                } @else {
+                  {{ r.unitsAdded }}
+                }
+                <small class="muted">({{ r.unitsAdded }})</small>
+              </td>
+              <td>Tshs {{ r.packPrice | number }}</td>
+              <td>Tshs {{ r.totalCost | number }}</td>
+              <td>{{ r.supplier || '--' }}</td>
+              <td>{{ r.stockAfter | number }}</td>
+              <td class="muted">{{ r.receivedBy }}</td>
+            </tr>
+            @if (r.note) {
+              <tr class="note-row">
+                <td colspan="7">{{ r.note }}</td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+
+    @if (totalPages > 1) {
+      <div class="history-pages">
+        <button type="button" [disabled]="page === 0" (click)="changePage(page - 1)">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        <span>{{ page + 1 }} / {{ totalPages }}</span>
+        <button type="button" [disabled]="page >= totalPages - 1" (click)="changePage(page + 1)">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+    }
+  }
+
+  <!-- Corrections: spoiled, broken, shrank, counted -->
+  <h4 class="history-sub">{{ 'STOCK_ADJUST.HISTORY_TITLE' | translate }}</h4>
+  @if (adjustments.length === 0) {
+    <p class="history-empty">{{ 'STOCK_ADJUST.HISTORY_EMPTY' | translate }}</p>
+  } @else {
+    <div class="history-table-wrap">
+      <table class="history-table">
+        <thead>
+          <tr>
+            <th>{{ 'STOCK_FORM.COL_DATE' | translate }}</th>
+            <th>{{ 'STOCK_ADJUST.REASON' | translate }}</th>
+            <th>{{ 'STOCK_ADJUST.CHANGE' | translate }}</th>
+            <th>{{ 'STOCK_ADJUST.VALUE' | translate }}</th>
+            <th>{{ 'STOCK_FORM.COL_STOCK_AFTER' | translate }}</th>
+            <th>{{ 'STOCK_FORM.COL_BY' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (a of adjustments; track a.uid) {
+            <tr>
+              <td>{{ a.adjustedAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+              <td>{{ 'STOCK_ADJUST.REASON_' + a.reason | translate }}</td>
+              <td [class.neg]="a.unitsChanged < 0" [class.pos]="a.unitsChanged > 0">{{ a.unitsChanged > 0 ? '+' : '' }}{{ a.unitsChanged | number }}</td>
+              <td>Tshs {{ a.costValue | number }}</td>
+              <td>{{ a.stockAfter | number }}</td>
+              <td class="muted">{{ a.adjustedBy }}</td>
+            </tr>
+            @if (a.note) {
+              <tr class="note-row"><td colspan="6">{{ a.note }}</td></tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

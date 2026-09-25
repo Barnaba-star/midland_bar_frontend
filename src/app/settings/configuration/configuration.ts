@@ -119,6 +119,7 @@ private emptySetting(): PlatformSetting {
     defaultSubscriptionAmount: 0,
     defaultSubscriptionDays: 0,
     sessionHours: 0,
+    lowStockLevel: 0,
     errorRetentionDays: 0,
     errorPurgeDays: 0,
   };

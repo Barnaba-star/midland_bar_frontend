@@ -1,0 +1,128 @@
+<div class="item-dialog">
+  <div class="item-header">
+    <div>
+      <h3>{{ 'SALE_ITEM.TITLE' | translate }}</h3>
+      @if (data?.billCode) {
+        <p>{{ 'SALE_ITEM.FOR_BILL' | translate: { code: data.billCode } }}</p>
+      }
+    </div>
+    <button type="button" class="close-btn" (click)="cancel()" [attr.aria-label]="'COMMON.CLOSE' | translate">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  @if (!selected) {
+    <!-- STEP 1: find the service -->
+    <div class="search-box">
+      <mat-icon>search</mat-icon>
+      <input
+        #searchInput
+        type="text"
+        autocomplete="off"
+        [(ngModel)]="search"
+        (keydown.enter)="onSearchEnter()"
+        [placeholder]="'SALE_ITEM.SEARCH_PH' | translate"
+      />
+    </div>
+
+    <div class="results">
+      @if (loading) {
+        <p class="hint">…</p>
+      } @else if (!search.trim()) {
+        <p class="hint">{{ 'SALE_ITEM.TYPE_HINT' | translate }}</p>
+      } @else if (matches.length === 0) {
+        <p class="hint">{{ 'SALE_ITEM.NO_MATCH' | translate: { term: search } }}</p>
+      } @else {
+        @for (s of matches; track s.uid) {
+          @let st = s | stockPacks;
+          @let left = available(s);
+          <button type="button" class="result" (click)="choose(s)" [class.out]="left === 0">
+            <mat-icon class="result-icon">{{ s.category === 'FOOD' ? 'restaurant' : 'local_bar' }}</mat-icon>
+            <span class="result-main">
+              <span class="result-name">{{ s.serviceName }}</span>
+              <small>{{ s.serviceCode }}</small>
+            </span>
+            <span class="result-side">
+              <strong>Tshs {{ s.price | number }}</strong>
+              <small>
+                @if (s.stockSourceUid) {
+                  @if (left === 0) {
+                    {{ 'STORE_PAGE.STATE_OUT' | translate }}
+                  } @else {
+                    {{ 'SALE_ITEM.CAN_SELL' | translate: { n: left } }}
+                  }
+                } @else if (!s.trackStock) {
+                  {{ 'SETTING_PAGE.NOT_COUNTED' | translate }}
+                } @else if (!s.stockQuantity) {
+                  {{ 'STORE_PAGE.STATE_OUT' | translate }}
+                } @else {
+                  {{ 'SALE_ITEM.ON_HAND' | translate }}:
+                  @for (p of st.parts; track $index) { {{ p.count }} {{ p.label | translate }}@if (!$last) {, } }
+                }
+              </small>
+            </span>
+          </button>
+        }
+      }
+    </div>
+  } @else {
+    <!-- STEP 2: how many -->
+    <div class="chosen">
+      <mat-icon class="result-icon">{{ selected.category === 'FOOD' ? 'restaurant' : 'local_bar' }}</mat-icon>
+      <div class="result-main">
+        <span class="result-name">{{ selected.serviceName }}</span>
+        <small>{{ selected.serviceCode }} · Tshs {{ selected.price | number }} {{ 'SALE_ITEM.EACH' | translate }}</small>
+      </div>
+      <button type="button" class="link-btn" (click)="changeService()">{{ 'SALE_ITEM.CHANGE' | translate }}</button>
+    </div>
+
+    <label class="qty-label">{{ 'SALE_ITEM.HOW_MANY' | translate }}</label>
+    <div class="qty-row">
+      <button type="button" class="qty-btn" (click)="step(-1)" [disabled]="quantity <= 1">
+        <mat-icon>remove</mat-icon>
+      </button>
+      <input
+        #quantityInput
+        type="number"
+        min="1"
+        step="1"
+        class="qty-input"
+        [(ngModel)]="quantity"
+        (keydown.enter)="confirm()"
+      />
+      <button type="button" class="qty-btn" (click)="step(1)">
+        <mat-icon>add</mat-icon>
+      </button>
+
+      <div class="qty-total">
+        <small>{{ 'SALE_ITEM.TOTAL' | translate }}</small>
+        <strong>Tshs {{ total | number }}</strong>
+      </div>
+    </div>
+
+    @let canSell = available(selected);
+    @if (canSell !== null) {
+      <p class="stock-note" [class.warn]="overStock">
+        @if (overStock) {
+          {{ 'SALE_ITEM.OVER_STOCK' | translate: { left: canSell } }}
+        } @else {
+          {{ 'SALE_ITEM.LEFT_AFTER' | translate: { left: canSell - quantity } }}
+        }
+        @if (selected.stockSourceName) {
+          <br /><small>{{ (selected.saleUnitName ? 'PRODUCT_FORM.SOURCE_NOTE_LEVEL' : 'PRODUCT_FORM.SOURCE_NOTE') | translate: { name: selected.stockSourceName, n: selected.saleUnitName ? (selected.saleUnitCount || 1) : selected.unitsPerSale, level: selected.saleUnitName } }}</small>
+        }
+      </p>
+    }
+
+    <div class="item-actions">
+      <button type="button" class="row-action view" (click)="cancel()">
+        <mat-icon>close</mat-icon>
+        <span>{{ 'COMMON.CANCEL' | translate }}</span>
+      </button>
+      <button type="button" class="row-action edit" [disabled]="!validQuantity || overStock" (click)="confirm()">
+        <mat-icon>add_shopping_cart</mat-icon>
+        <span>{{ 'SALE_ITEM.ADD_TO_BILL' | translate }}</span>
+      </button>
+    </div>
+  }
+</div>

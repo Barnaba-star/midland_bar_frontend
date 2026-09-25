@@ -1,412 +1,368 @@
 <app-title2
   titleHeader="MENU.STORE"
   [actions]="getTitled(titleActions)"
-  [activeAction]="selectedBooking"
+  [activeAction]="selectedAction"
   (customButtonClick)="onAction($event)"
 >
 </app-title2>
-@switch (selectedBooking) {
+
+@switch (selectedAction) {
   @case ('STORE.MANAGE') {
     <div class="action-container">
-      <div class="store-management-header">
-        <div class="store-management-title">
-          <mat-icon>storefront</mat-icon>
-          <span>{{ 'STORE_PAGE.MGMT_TITLE' | translate }}</span>
-        </div>
-       <div class="store-management-actions">
+      @if (products.length > 0 || searchTerm) {
+        <div class="store-card">
+          <!-- Header -->
+          <div class="store-card-header">
+            <div class="store-header-left">
+              <div>
+                <h3>{{ 'STORE_PAGE.MGMT_TITLE' | translate }}</h3>
+                <p>{{ 'STORE_PAGE.SUBTITLE' | translate }}</p>
+              </div>
+            </div>
 
-  <!-- ADD STORE -->
-  <button
-    type="button"
-    class="add-store-btn"
-    [title]="'STORE_PAGE.TOOLTIP_ADD_STORE' | translate"
-    (click)="openAddStoreDialog()"
-  >
-    <mat-icon>add</mat-icon>
-    <span>{{ 'STORE_PAGE.FORM_TITLE_ADD' | translate }}</span>
-  </button>
-
-  <!-- ALL STORES -->
-  <button
-    mat-flat-button
-    color="primary"
-    type="button"
-    class="store-action-btn store-action-btn-all"
-    [title]="'STORE_PAGE.ALL_STORES_TOOLTIP' | translate"
-    (click)="loadBarStorePage()"
-  >
-    <mat-icon>inventory_2</mat-icon>
-    <span>{{ 'STORE_PAGE.ALL_STORES' | translate }}</span>
-  </button>
-
-
-  <!-- STORES IN USE -->
-  <button
-    mat-flat-button
-    color="primary"
-    type="button"
-    class="store-action-btn store-action-btn-inuse"
-    [title]="'STORE_PAGE.STORES_IN_USE_TOOLTIP' | translate"
-    (click)="findOpenStorePage()"
-  >
-    <mat-icon>lock_open</mat-icon>
-    <span>{{ 'STORE_PAGE.STORES_IN_USE' | translate }}</span>
-  </button>
-
-
-  <!-- CLOSED STORES (CEO and above + MANAGER) -->
-  @if (canSeeClosedStores) {
-    <button
-      mat-flat-button
-      color="primary"
-      type="button"
-      class="store-action-btn store-action-btn-closed"
-      [title]="'STORE_PAGE.CLOSED_STORES_TOOLTIP' | translate"
-      (click)="findClosedStorePage()"
-    >
-      <mat-icon>lock</mat-icon>
-      <span>{{ 'STORE_PAGE.CLOSED_STORES' | translate }}</span>
-    </button>
-  }
-
-</div>
-
-      </div>
-      @if (storeDataSource.length > 0) {
-        <div class="table-responsive">
-          <table class="table store-table">
-            <thead>
-       <tr>
-  <th class="serial-column">#</th>
-  <th>{{ 'STORE_PAGE.COL_ITEM' | translate | uppercase }}</th>
-  <th>{{ 'STORE_PAGE.COL_QTY' | translate | uppercase }}</th>
-  <th>{{ 'STORE_PAGE.COL_SERVICE' | translate | uppercase }}</th>
-  <th>{{ 'STORE_PAGE.COL_REG_DATE' | translate | uppercase }}</th>
-  <th>{{ 'STORE_PAGE.COL_BUY_PRICE' | translate | uppercase }}</th>
-  <th>{{ 'STORE_PAGE.COL_TOTAL_PRICE' | translate | uppercase }}</th>
-  <th>{{ 'STORE_PAGE.COL_USED_QTY' | translate | uppercase }}</th>
-  <th>{{ 'STORE_PAGE.COL_UNUSED_QTY' | translate | uppercase }}</th>
-  <th>{{ 'COMMON.STATUS' | translate | uppercase }}</th>
-  <th>{{ 'COMMON.ACTIONS' | translate | uppercase }}</th>
-
-
-</tr>
-
-            </thead>
-            <tbody>
-              @for (store of storeDataSource; track store.uid; let i = $index) {
-                <tr>
-                  <!-- SERIAL NUMBER -->
-                  <td class="serial-column">
-                    <span class="serial-badge">
-                      {{ currentPage * pageSize + i + 1 }}
-                    </span>
-                  </td>
-                  <!-- ITEM NAME -->
-                  <td>
-                    <span class="item-name">
-                      {{ store.nameOfStore }}
-                    </span>
-                  </td>
-
-
-
-                  <!-- QUANTITY -->
-                  <td>
-                    {{ store.quantity }}
-                  </td>
-
-                  <!-- SERVICE NAME -->
-                  <td>
-                    {{ store.nameOfService }}
-                  </td>
-
-                  <!-- OPENED DATE -->
-                  <td>
-                    {{ store.openedDate }}
-                  </td>
-                  <!-- BUYING PRICE -->
-                  <td>Tshs {{ store.buyingPrice | number: '1.2-2' }}</td>
-
-                  <!-- TOTAL PRICE -->
-                  <td>Tshs {{ store.totalQuantityPrice | number: '1.2-2' }}</td>
-
-                  <!-- USED QUANTITY -->
-                  <td>
-                    {{ store.usedQuantity }}
-                  </td>
-                  <!-- NOT USED QUANTITY -->
-                  <td>
-                    {{ store.notUsedQuantity }}
-                  </td>
-
-                  <!-- STATUS -->
-                  <td>
-                    <span
-                      class="status-badge"
-                      [class.status-open]="store.status === 'OPEN'"
-                      [class.status-closed]="store.status === 'CLOSED'"
-                      [class.status-active]="store.status === 'ACTIVE'"
-                      [class.status-inactive]="store.status === 'INACTIVE'"
-                    >
-                      <span class="status-dot"></span>
-                      {{ store.status }}
-                    </span>
-                  </td>
-                  <td class="actions-column">
-                    <div class="action-buttons">
-
-
-                      <button
-                        type="button"
-                        class="action-btn add-btn"
-                        [title]="'STORE_PAGE.ADD_QUANTITY_BTN' | translate"
-                        (click)="addQuantityToStore(store)"
-                      >
-                        <mat-icon svgIcon="add"></mat-icon>
-                        <span>{{ 'STORE_PAGE.ADD_QUANTITY_BTN' | translate }}</span>
-                      </button>
-                  <button
-  type="button"
-  class="action-btn more-btn"
-  [title]="'STORE_PAGE.TOOLTIP_OPEN_STORE' | translate"
-  [disabled]="(store.notUsedQuantity ?? 0) <= 0"
-  [class.disabled-btn]="(store.notUsedQuantity ?? 0) <= 0"
-  (click)="(store.notUsedQuantity ?? 0) > 0 && openStore(store)"
->
-  <mat-icon>open_in_new</mat-icon>
-  <span>{{ 'STORE_PAGE.TOOLTIP_OPEN_STORE' | translate }}</span>
-</button>
-
-                    </div>
-                  </td>
-                </tr>
+            <div class="store-search">
+              <mat-icon>search</mat-icon>
+              <input
+                #searchBox
+                type="search"
+                [placeholder]="'SERVICE_PAGE.SEARCH_PH' | translate"
+                (input)="onSearch($event)"
+              />
+              @if (searchTerm) {
+                <button type="button" class="clear-search" (click)="clearSearch(searchBox)" [attr.aria-label]="'COMMON.CLOSE' | translate">
+                  <mat-icon>close</mat-icon>
+                </button>
               }
-            </tbody>
-          </table>
-        </div>
+            </div>
 
-        <!-- PAGINATION -->
-
-        <div class="pagination-wrapper">
-          <div class="pagination-info">
-            {{ 'STORE_PAGE.SHOWING_PAGE' | translate }}
-            <strong>{{ currentPage + 1 }}</strong>
-            {{ 'COMMON.OF' | translate }}
-            <strong>{{ totalPages }}</strong>
+            <div class="store-summary">
+              <span class="summary-number">{{ totalElements }}</span>
+              <span class="summary-label">{{ 'SERVICE_PAGE.SERVICES_LABEL' | translate }}</span>
+            </div>
           </div>
 
-          <div class="pagination-controls">
-            <button
-              type="button"
-              class="pagination-btn"
-              [disabled]="currentPage === 0"
-              (click)="previousPage()"
-            >
-              {{ 'COMMON.PREVIOUS' | translate }}
-            </button>
+          <!-- Table -->
+          <div class="table-responsive">
+            <table class="table store-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>{{ 'SERVICE_PAGE.COL_SERVICE' | translate }}</th>
+                  <th>{{ 'SETTING_PAGE.COL_CATEGORY' | translate }}</th>
+                  <th>{{ 'STORE_PAGE.COL_BOUGHT_IN' | translate }}</th>
+                  <th>{{ 'STORE_PAGE.COL_ON_HAND' | translate }}</th>
+                  <th>{{ 'STORE_PAGE.COL_UNITS' | translate }}</th>
+                  <th>{{ 'SETTING_PAGE.COL_BUYING_PRICE' | translate }}</th>
+                  <th>{{ 'STORE_PAGE.COL_VALUE' | translate }}</th>
+                  <th>{{ 'COMMON.STATUS' | translate }}</th>
+                  <th>{{ 'COMMON.ACTIONS' | translate }}</th>
+                </tr>
+              </thead>
 
-            @for (page of [].constructor(totalPages); track $index) {
-              <button
-                type="button"
-                class="pagination-number"
-                [class.active]="$index === currentPage"
-                (click)="goToPage($index)"
-              >
-                {{ $index + 1 }}
+              <tbody>
+                @for (product of products; track product.uid; let i = $index) {
+                  @let st = product | stockPacks;
+                  @let state = stockState(product);
+                  <tr>
+                    <!-- Number -->
+                    <td class="index-column">
+                      {{ page * size + i + 1 }}
+                    </td>
+
+                    <!-- Service -->
+                    <td>
+                      <div class="product-info">
+                        <span class="product-name">
+                          {{ product.serviceName || '--' }}
+                          @if (product.kind === 'STOCK_ITEM') {
+                            <span class="kind-badge">{{ 'PRODUCT_FORM.KIND_STOCK_ITEM' | translate }}</span>
+                          }
+                        </span>
+                        <small class="product-code">{{ product.serviceCode || '--' }}</small>
+                      </div>
+                    </td>
+
+                    <!-- Category -->
+                    <td>
+                      <span class="category-chip" [class.food]="product.category === 'FOOD'">
+                        <mat-icon>{{ product.category === 'FOOD' ? 'restaurant' : 'local_bar' }}</mat-icon>
+                        {{ (product.category === 'FOOD' ? 'SETTING_PAGE.CATEGORY_FOOD' : 'SETTING_PAGE.CATEGORY_DRINK') | translate }}
+                      </span>
+                    </td>
+
+                    <!-- Bought in -->
+                    <td>
+                      @if (st.packKey) {
+                        {{ st.packKey | translate }} ({{ product.unitsPerPack }})
+                      } @else {
+                        <span class="muted">{{ 'PRODUCT_FORM.NO_PACK' | translate }}</span>
+                      }
+                    </td>
+
+                    <!-- On hand, as packs + loose -->
+                    <td>
+                      @if (product.stockSourceName) {
+                        <span class="muted">{{ (product.saleUnitName ? 'PRODUCT_FORM.SOURCE_NOTE_LEVEL' : 'PRODUCT_FORM.SOURCE_NOTE') | translate: { name: product.stockSourceName, n: product.saleUnitName ? (product.saleUnitCount || 1) : product.unitsPerSale, level: product.saleUnitName } }}</span>
+                      } @else if (state === 'NOT_COUNTED') {
+                        <span class="muted">{{ 'SETTING_PAGE.NOT_COUNTED' | translate }}</span>
+                      } @else {
+                        <span class="on-hand" [class.low]="state !== 'OK'">
+                          @for (p of st.parts; track $index) { {{ p.count }} {{ p.label | translate }}@if (!$last) {, } }
+                        </span>
+                      }
+                    </td>
+
+                    <!-- Total units -->
+                    <td>
+                      @if (state === 'NOT_COUNTED') {
+                        <span class="muted">--</span>
+                      } @else {
+                        {{ st.total | number }}
+                      }
+                    </td>
+
+                    <!-- Buying price -->
+                    <td>
+                      Tshs {{ (product.buyingPrice || 0) | number }}
+                      @if (st.packKey) {
+                        <span class="muted">/ {{ st.packKey | translate }}</span>
+                      }
+                    </td>
+
+                    <!-- Stock value -->
+                    <td class="value-cell">
+                      Tshs {{ stockValue(product) | number: '1.0-0' }}
+                    </td>
+
+                    <!-- Status -->
+                    <td>
+                      <span class="stock-badge" [attr.data-state]="state">
+                        <span class="status-dot"></span>
+                        {{ 'STORE_PAGE.STATE_' + state | translate }}
+                      </span>
+                    </td>
+
+                    <!-- Actions -->
+                    <td>
+                      <div class="row-actions">
+                        @if (canAddStock && state !== 'NOT_COUNTED') {
+                          <button type="button" class="row-action edit" (click)="onAddStock(product)">
+                            <mat-icon>add_box</mat-icon>
+                            <span>{{ 'STOCK_FORM.ADD_BTN' | translate }}</span>
+                          </button>
+                        }
+                        @if (canAddStock && state !== 'NOT_COUNTED') {
+                          <button type="button" class="row-action delete" (click)="onAdjust(product)">
+                            <mat-icon>tune</mat-icon>
+                            <span>{{ 'STOCK_ADJUST.BTN' | translate }}</span>
+                          </button>
+                        }
+                        <button type="button" class="row-action view" (click)="onHistory(product)">
+                          <mat-icon>history</mat-icon>
+                          <span>{{ 'STOCK_FORM.HISTORY_BTN' | translate }}</span>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                }
+
+                @if (products.length === 0 && searchTerm) {
+                  <tr>
+                    <td colspan="10" class="no-match">
+                      {{ 'SERVICE_PAGE.NO_MATCH' | translate: { term: searchTerm } }}
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination -->
+          <div class="store-pagination">
+            <div class="page-size">
+              <span>{{ 'COMMON.SHOW' | translate }}</span>
+              <select [value]="size" (change)="changePageSize($event)">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+              </select>
+              <span>{{ 'COMMON.ENTRIES' | translate }}</span>
+            </div>
+
+            <div class="page-value">
+              {{ 'STORE_PAGE.PAGE_VALUE' | translate }}:
+              <strong>Tshs {{ pageStockValue | number: '1.0-0' }}</strong>
+            </div>
+
+            <div class="pagination-buttons">
+              <button type="button" class="page-btn" [disabled]="page === 0" (click)="changePage(page - 1)">
+                <mat-icon>chevron_left</mat-icon>
+                {{ 'COMMON.PREVIOUS' | translate }}
               </button>
-            }
 
-            <button
-              type="button"
-              class="pagination-btn"
-              [disabled]="currentPage >= totalPages - 1"
-              (click)="nextPage()"
-            >
-              {{ 'COMMON.NEXT' | translate }}
-            </button>
-          </div>
+              @for (p of [].constructor(totalPages); track $index) {
+                <button type="button" class="page-btn" [class.active-page]="page === $index" (click)="changePage($index)">
+                  {{ $index + 1 }}
+                </button>
+              }
 
-          <!-- PAGE SIZE -->
-
-          <div class="page-size-container">
-            <label for="pageSize"> {{ 'COMMON.ROWS_PER_PAGE' | translate }} </label>
-
-            <select
-              id="pageSize"
-              class="page-size-select"
-              [value]="pageSize"
-              (change)="changePageSize(+$any($event.target).value)"
-            >
-              <option [value]="5">5</option>
-              <option [value]="10">10</option>
-              <option [value]="20">20</option>
-              <option [value]="50">50</option>
-              <option [value]="100">100</option>
-            </select>
+              <button type="button" class="page-btn" [disabled]="page >= totalPages - 1" (click)="changePage(page + 1)">
+                {{ 'COMMON.NEXT' | translate }}
+                <mat-icon>chevron_right</mat-icon>
+              </button>
+            </div>
           </div>
         </div>
       }
-      @if (storeOpenDataSource.length > 0) {
-        <div class="table-responsive">
-          <table class="table store-table">
-            <thead>
-              <tr>
-                <th class="serial-column">#</th>
-                <th>{{ 'STORE_PAGE.COL_ITEM' | translate | uppercase }}</th>
-                <th>{{ 'COMMON.CODE' | translate | uppercase }}</th>
-                <th>{{ 'STORE_PAGE.COL_SERVICE' | translate | uppercase }}</th>
-                <th>{{ 'STORE_PAGE.COL_OPEN_DATE' | translate | uppercase }}</th>
-                <th>{{ 'STORE_PAGE.COL_CLOSE_DATE' | translate | uppercase }}</th>
-                <th>{{ 'COMMON.STATUS' | translate | uppercase }}</th>
-@if (storeOpenDataSource.length > 0 && storeOpenDataSource[0].status === 'OPEN') {
-  <th class="actions-column">{{ 'COMMON.ACTIONS' | translate | uppercase }}</th>
-} @else {
-  <th class="actions-column">{{ 'STORE_PAGE.NO_ACTION' | translate | uppercase }}</th>
-}
 
-              </tr>
-            </thead>
-            <tbody>
-              @for (store of storeOpenDataSource; track store.uid; let i = $index) {
-                <tr>
-                  <!-- SERIAL NUMBER -->
-                  <td class="serial-column">
-                    <span class="serial-badge">
-                      {{ currentPage * pageSize + i + 1 }}
-                    </span>
-                  </td>
-
-                  <!-- ITEM CODE -->
-                  <td>
-                    <span class="item-code">
-                      {{ store.nameOfStore }}
-                    </span>
-                  </td>
-                  <td>
-                    <span class="item-code">
-                      {{ store.codeOfStore }}
-                    </span>
-                  </td>
-
-                  <!-- SERVICE NAME -->
-                  <td>
-                    {{ store.nameOfService }}
-                  </td>
-
-                  <!-- OPENED DATE -->
-                  <td>
-                    {{ store.openedDate }}
-                  </td>
-                  <!-- CLOSE DATE -->
-                  <td>
-                    {{ store.closedDate || '--' }}
-                  </td>
-                  <!-- STATUS -->
-                  <td>
-                    <span
-                      class="status-badge"
-                      [class.status-open]="store.status === 'OPEN'"
-                      [class.status-closed]="store.status === 'CLOSED'"
-                      [class.status-active]="store.status === 'ACTIVE'"
-                      [class.status-inactive]="store.status === 'INACTIVE'"
-                    >
-                      <span class="status-dot"></span>
-                      {{ store.status }}
-                    </span>
-                  </td>
-                 <td class="actions-column">
-  <div class="action-buttons">
-    @if (store.status === 'OPEN') {
-      <button
-        type="button"
-        class="action-btn close-btn"
-        [title]="'STORE_PAGE.TOOLTIP_CLOSE_STORE' | translate"
-        (click)="closeOpenStore(store)"
-      >
-        <mat-icon svgIcon="close"></mat-icon>
-        <span>{{ 'STORE_PAGE.TOOLTIP_CLOSE_STORE' | translate }}</span>
-      </button>
-    } @else {
-      <span class="no-action">{{ 'STORE_PAGE.NO_ACTION' | translate | uppercase }}</span>
-    }
-  </div>
-</td>
-
-                </tr>
-              }
-            </tbody>
-          </table>
-        </div>
-
-        <!-- PAGINATION -->
-
-        <div class="pagination-wrapper">
-          <div class="pagination-info">
-            {{ 'STORE_PAGE.SHOWING_PAGE' | translate }}
-            <strong>{{ currentPage + 1 }}</strong>
-            {{ 'COMMON.OF' | translate }}
-            <strong>{{ totalPages }}</strong>
-          </div>
-
-          <div class="pagination-controls">
-            <button
-              type="button"
-              class="pagination-btn"
-              [disabled]="currentPage === 0"
-              (click)="previousPageOpenStore()"
-            >
-              {{ 'COMMON.PREVIOUS' | translate }}
-            </button>
-
-            @for (page of [].constructor(totalPages); track $index) {
-              <button
-                type="button"
-                class="pagination-number"
-                [class.active]="$index === currentPage"
-                (click)="goToPageOpenStore($index)"
-              >
-                {{ $index + 1 }}
-              </button>
-            }
-
-            <button
-              type="button"
-              class="pagination-btn"
-              [disabled]="currentPage >= totalPages - 1"
-              (click)="nextPageOpenStore()"
-            >
-              {{ 'COMMON.NEXT' | translate }}
-            </button>
-          </div>
-
-          <!-- PAGE SIZE -->
-
-          <div class="page-size-container">
-            <label for="pageSize"> {{ 'COMMON.ROWS_PER_PAGE' | translate }} </label>
-
-            <select
-              id="pageSize"
-              class="page-size-select"
-              [value]="pageSize"
-              (change)="changePageSizeOpenStore(+$any($event.target).value)"
-            >
-              <option [value]="5">5</option>
-              <option [value]="10">10</option>
-              <option [value]="20">20</option>
-              <option [value]="50">50</option>
-              <option [value]="100">100</option>
-            </select>
-          </div>
-        </div>
-      }
-      @if (storeDataSource.length === 0 && storeOpenDataSource.length === 0) {
+      @if (products.length === 0 && !searchTerm) {
         <app-empty-state
           icon="store"
           title="STORE_PAGE.EMPTY_TITLE"
           text="STORE_PAGE.EMPTY_TEXT"
         />
       }
+    </div>
+  }
+
+  @case ('STORE.USED') {
+    <div class="action-container">
+      <div class="store-card">
+        <!-- Header -->
+        <div class="store-card-header">
+          <div class="store-header-left">
+            <div>
+              <h3>{{ 'STORE_PAGE.USED_TITLE' | translate }}</h3>
+              <p>{{ 'STORE_PAGE.USED_SUBTITLE' | translate }}</p>
+            </div>
+          </div>
+
+          <div class="store-search">
+            <mat-icon>search</mat-icon>
+            <input
+              type="search"
+              [placeholder]="'SERVICE_PAGE.SEARCH_PH' | translate"
+              (input)="onMovementSearch($event)"
+            />
+          </div>
+        </div>
+
+        <!-- Date filter -->
+        <div class="date-filter">
+          <label>
+            <span>{{ 'STORE_PAGE.FROM' | translate }}</span>
+            <input type="date" [value]="fromDate" [max]="toDate" (change)="onDateChange('from', $event)" />
+          </label>
+          <label>
+            <span>{{ 'STORE_PAGE.TO' | translate }}</span>
+            <input type="date" [value]="toDate" [min]="fromDate" (change)="onDateChange('to', $event)" />
+          </label>
+          <div class="quick-ranges">
+            <button type="button" (click)="setRange('TODAY')">{{ 'STORE_PAGE.RANGE_TODAY' | translate }}</button>
+            <button type="button" (click)="setRange('WEEK')">{{ 'STORE_PAGE.RANGE_WEEK' | translate }}</button>
+            <button type="button" (click)="setRange('MONTH')">{{ 'STORE_PAGE.RANGE_MONTH' | translate }}</button>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-responsive">
+          <table class="table store-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>{{ 'SERVICE_PAGE.COL_SERVICE' | translate }}</th>
+                <th>{{ 'STORE_PAGE.COL_PURCHASED' | translate }}</th>
+                <th>{{ 'STORE_PAGE.COL_PURCHASE_COST' | translate }}</th>
+                <th>{{ 'STORE_PAGE.COL_USED' | translate }}</th>
+                <th>{{ 'STORE_PAGE.COL_USED_VALUE' | translate }}</th>
+                <th>{{ 'STOCK_ADJUST.COL_ADJUSTED' | translate }}</th>
+                <th>{{ 'STORE_PAGE.COL_ON_HAND_NOW' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (m of movements; track m.uid; let i = $index) {
+                @let bought = asPacks(m.purchasedUnits ?? 0, m);
+                @let used = asPacks(m.usedUnits ?? 0, m);
+                @let now = asPacks(m.stockQuantity ?? 0, m);
+                <tr>
+                  <td class="index-column">{{ movementPage * movementSize + i + 1 }}</td>
+                  <td>
+                    <div class="product-info">
+                      <span class="product-name">{{ m.serviceName }}</span>
+                      <small class="product-code">{{ m.serviceCode }}</small>
+                    </div>
+                  </td>
+                  <td>
+                    @if (m.purchasedUnits) {
+                      <span class="in-qty">
+                        @for (p of bought.parts; track $index) { {{ p.count }} {{ p.label | translate }}@if (!$last) {, } }
+                      </span>
+                      <small class="muted">({{ m.purchasedUnits | number }})</small>
+                    } @else {
+                      <span class="muted">0</span>
+                    }
+                  </td>
+                  <td>Tshs {{ (m.purchasedCost ?? 0) | number }}</td>
+                  <td>
+                    @if (m.usedUnits) {
+                      <span class="out-qty">
+                        @for (p of used.parts; track $index) { {{ p.count }} {{ p.label | translate }}@if (!$last) {, } }
+                      </span>
+                      <small class="muted">({{ m.usedUnits | number }})</small>
+                    } @else {
+                      <span class="muted">0</span>
+                    }
+                  </td>
+                  <td>Tshs {{ (m.usedUnits ?? 0) * (m.price ?? 0) | number }}</td>
+                  <td>
+                    @if (m.adjustedUnits) {
+                      <span [class.out-qty]="m.adjustedUnits < 0" [class.in-qty]="m.adjustedUnits > 0">{{ m.adjustedUnits > 0 ? '+' : '' }}{{ m.adjustedUnits | number }}</span>
+                      <small class="muted">(Tshs {{ m.adjustedValue | number }})</small>
+                    } @else {
+                      <span class="muted">0</span>
+                    }
+                  </td>
+                  <td>
+                    <span class="on-hand">
+                      @for (p of now.parts; track $index) { {{ p.count }} {{ p.label | translate }}@if (!$last) {, } }
+                    </span>
+                  </td>
+                </tr>
+              }
+
+              @if (movements.length === 0) {
+                <tr>
+                  <td colspan="8" class="no-match">{{ 'STORE_PAGE.USED_EMPTY' | translate }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Totals + pagination -->
+        <div class="store-pagination">
+          <div class="page-value">
+            {{ 'STORE_PAGE.TOTAL_PURCHASED' | translate }}: <strong>Tshs {{ movementTotals.purchasedCost | number }}</strong>
+            &nbsp;·&nbsp;
+            {{ 'STORE_PAGE.TOTAL_USED' | translate }}: <strong>Tshs {{ movementTotals.usedValue | number }}</strong>
+          </div>
+
+          @if (movementTotalPages > 1) {
+            <div class="pagination-buttons">
+              <button type="button" class="page-btn" [disabled]="movementPage === 0" (click)="changeMovementPage(movementPage - 1)">
+                <mat-icon>chevron_left</mat-icon>
+                {{ 'COMMON.PREVIOUS' | translate }}
+              </button>
+              <span class="muted">{{ movementPage + 1 }} / {{ movementTotalPages }}</span>
+              <button type="button" class="page-btn" [disabled]="movementPage >= movementTotalPages - 1" (click)="changeMovementPage(movementPage + 1)">
+                {{ 'COMMON.NEXT' | translate }}
+                <mat-icon>chevron_right</mat-icon>
+              </button>
+            </div>
+          }
+        </div>
+      </div>
     </div>
   }
 }

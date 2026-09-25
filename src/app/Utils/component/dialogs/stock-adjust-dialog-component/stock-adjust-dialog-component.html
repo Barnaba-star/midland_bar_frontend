@@ -1,0 +1,86 @@
+<div class="adj-dialog">
+  <div class="adj-header">
+    <div>
+      <h3>{{ 'STOCK_ADJUST.TITLE' | translate: { name: item?.serviceName } }}</h3>
+      @let now = item | stockPacks;
+      <p>
+        {{ 'STOCK_ADJUST.ON_HAND' | translate }}:
+        <strong>@for (p of now.parts; track $index) { {{ p.count }} {{ p.label | translate }}@if (!$last) {, } }</strong>
+      </p>
+    </div>
+    <button type="button" class="adj-close" (click)="cancel()" [attr.aria-label]="'COMMON.CLOSE' | translate">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="adj-modes">
+    <button type="button" [class.active]="mode === 'REMOVE'" (click)="setMode('REMOVE')">
+      <mat-icon>remove_circle_outline</mat-icon>
+      <span>{{ 'STOCK_ADJUST.MODE_REMOVE' | translate }}</span>
+    </button>
+    <button type="button" [class.active]="mode === 'COUNT'" (click)="setMode('COUNT')">
+      <mat-icon>fact_check</mat-icon>
+      <span>{{ 'STOCK_ADJUST.MODE_COUNT' | translate }}</span>
+    </button>
+  </div>
+
+  <p class="adj-hint">{{ (mode === 'REMOVE' ? 'STOCK_ADJUST.HINT_REMOVE' : 'STOCK_ADJUST.HINT_COUNT') | translate }}</p>
+
+  <div class="adj-measures">
+    @for (m of measures; track $index; let i = $index) {
+      <label class="adj-measure">
+        <span>{{ m.label | translate }}</span>
+        <input type="number" min="0" step="1" [(ngModel)]="amounts[i]" placeholder="0" />
+      </label>
+    }
+  </div>
+
+  @if (mode === 'REMOVE') {
+    <label class="adj-field">
+      <span>{{ 'STOCK_ADJUST.REASON' | translate }} *</span>
+      <select [(ngModel)]="reason">
+        <option value="" disabled>{{ 'STOCK_ADJUST.CHOOSE_REASON' | translate }}</option>
+        @for (r of reasons; track r) {
+          <option [value]="r">{{ 'STOCK_ADJUST.REASON_' + r | translate }}</option>
+        }
+      </select>
+    </label>
+  }
+
+  <label class="adj-field">
+    <span>{{ 'STOCK_FORM.NOTE' | translate }}@if (reason === 'OTHER' && mode === 'REMOVE') { * }</span>
+    <input type="text" maxlength="500" [(ngModel)]="note" [placeholder]="'STOCK_FORM.OPTIONAL' | translate" />
+  </label>
+
+  <!-- What saving will do -->
+  <div class="adj-preview" [class.loss]="change < 0" [class.gain]="change > 0">
+    @let afterParts = { stockQuantity: after < 0 ? 0 : after, unit: item?.unit, packUnit: item?.packUnit, unitsPerPack: item?.unitsPerPack, unitLadder: item?.unitLadder } | stockPacks;
+    <div>
+      <small>{{ 'STOCK_ADJUST.AFTER' | translate }}</small>
+      <strong>@for (p of afterParts.parts; track $index) { {{ p.count }} {{ p.label | translate }}@if (!$last) {, } }</strong>
+    </div>
+    <div>
+      <small>{{ 'STOCK_ADJUST.CHANGE' | translate }}</small>
+      <strong>{{ change > 0 ? '+' : '' }}{{ change | number }}</strong>
+    </div>
+    <div>
+      <small>{{ 'STOCK_ADJUST.VALUE' | translate }}</small>
+      <strong>Tshs {{ changeValue | number: '1.0-0' }}</strong>
+    </div>
+  </div>
+
+  @if (error) {
+    <p class="adj-error">{{ error | translate }}</p>
+  }
+
+  <div class="adj-actions">
+    <button type="button" class="row-action view" (click)="cancel()">
+      <mat-icon>close</mat-icon>
+      <span>{{ 'COMMON.CANCEL' | translate }}</span>
+    </button>
+    <button type="button" class="row-action edit" (click)="save()">
+      <mat-icon>save</mat-icon>
+      <span>{{ 'STOCK_ADJUST.SAVE' | translate }}</span>
+    </button>
+  </div>
+</div>

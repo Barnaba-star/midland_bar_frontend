@@ -34,19 +34,39 @@
 
   @case ('STAFF.MANAGE') {
     <div class="action-container">
-      @if (barStaffDataSource.data.length > 0) {
+      @if (barStaffDataSource.data.length > 0 || filtering) {
         <div class="staff-card">
           <!-- Header -->
           <div class="staff-card-header">
             <div class="staff-header-left">
-              <div class="staff-header-icon">
-                <mat-icon>groups</mat-icon>
-              </div>
-
               <div>
                 <h3>{{ 'STAFF_PAGE.MANAGEMENT_TITLE' | translate }}</h3>
                 <p>{{ 'STAFF_PAGE.MANAGEMENT_SUBTITLE' | translate }}</p>
               </div>
+            </div>
+
+            <div class="staff-filters">
+              <div class="staff-search">
+                <mat-icon>search</mat-icon>
+                <input
+                  #searchBox
+                  type="search"
+                  [placeholder]="'STAFF_PAGE.SEARCH_PH' | translate"
+                  (input)="onSearch($event)"
+                />
+                @if (searchTerm) {
+                  <button type="button" class="clear-search" (click)="clearSearch(searchBox)" [attr.aria-label]="'COMMON.CLOSE' | translate">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                }
+              </div>
+
+              <select class="staff-category-filter" [value]="categoryFilter" (change)="onCategoryFilter($event)">
+                <option value="">{{ 'STAFF_PAGE.ALL_CATEGORIES' | translate }}</option>
+                @for (option of categoryOptions; track option.value) {
+                  <option [value]="option.value">{{ option.label | translate }}</option>
+                }
+              </select>
             </div>
 
             <div class="staff-summary">
@@ -114,7 +134,7 @@
                             {{ staff.gender === 'Male' ? 'male' : 'female' }}
                           </mat-icon>
 
-                          {{ staff.gender }}
+                          {{ (staff.gender === 'Male' ? 'STAFF_FORM.MALE' : 'STAFF_FORM.FEMALE') | translate }}
                         </span>
                       } @else {
                         <span class="empty-value">--</span>
@@ -139,9 +159,9 @@
                     <!-- Category -->
                     <td>
                       @if (staff.barCategory) {
-                        <span class="category-badge">
-                          <mat-icon>content_cut</mat-icon>
-                          {{ staff.barCategory }}
+                        <span class="category-badge" [attr.data-category]="staff.barCategory">
+                          <mat-icon>{{ categoryIcons[staff.barCategory] || 'badge' }}</mat-icon>
+                          {{ categoryLabel(staff.barCategory) | translate }}
                         </span>
                       } @else {
                         <span class="empty-value">--</span>
@@ -165,17 +185,30 @@
 
                     <!-- Actions -->
                     <td class="actions-column">
-                      <button mat-icon-button type="button" [matTooltip]="'STAFF_PAGE.TOOLTIP_VIEW' | translate" (click)="onViewStaff(staff)">
-                        <mat-icon>visibility</mat-icon>
-                      </button>
+                      <div class="row-actions">
+                        <button type="button" class="row-action view" (click)="onViewStaff(staff)">
+                          <mat-icon>visibility</mat-icon>
+                          <span>{{ 'COMMON.VIEW' | translate }}</span>
+                        </button>
 
-                      <button mat-icon-button type="button" [matTooltip]="'STAFF_PAGE.TOOLTIP_EDIT' | translate" (click)="onEditBarStaffPage(staff)">
-                        <mat-icon>edit</mat-icon>
-                      </button>
+                        <button type="button" class="row-action edit" (click)="onEditBarStaffPage(staff)">
+                          <mat-icon>edit</mat-icon>
+                          <span>{{ 'COMMON.EDIT' | translate }}</span>
+                        </button>
 
-                      <button mat-icon-button class="delete-action-icon" type="button" [matTooltip]="'STAFF_PAGE.TOOLTIP_DELETE' | translate" (click)="onDeleteBarStaffPage(staff)">
-                        <mat-icon>delete_outline</mat-icon>
-                      </button>
+                        <button type="button" class="row-action delete" (click)="onDeleteBarStaffPage(staff)">
+                          <mat-icon>delete_outline</mat-icon>
+                          <span>{{ 'COMMON.DELETE' | translate }}</span>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                }
+
+                @if (barStaffDataSource.data.length === 0 && filtering) {
+                  <tr>
+                    <td colspan="8" class="no-match">
+                      {{ 'STAFF_PAGE.NO_MATCH' | translate }}
                     </td>
                   </tr>
                 }
@@ -234,7 +267,7 @@
         </div>
       }
 
-      @if (barStaffDataSource.data.length === 0) {
+      @if (barStaffDataSource.data.length === 0 && !filtering) {
         <app-empty-state
           icon="team"
           title="STAFF_PAGE.NOT_FOUND_TITLE"

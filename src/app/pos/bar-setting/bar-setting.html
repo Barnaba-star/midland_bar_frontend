@@ -282,6 +282,7 @@
 
           <div class="button-section">
             <button class="btn btn-primary" (click)="onAddService()">{{ 'SERVICE.ADD' | translate }}</button>
+            <button class="btn btn-primary" (click)="onAddStockItem()">{{ 'PRODUCT_FORM.ADD_STOCK_ITEM_TITLE' | translate }}</button>
 
             <button class="btn btn-primary" (click)="findBarServicePage()">
               {{ 'SERVICE.MANAGE' | translate }}
@@ -322,6 +323,14 @@
     <span>{{ 'SERVICE.ADD' | translate }}</span>
 
   </button>
+  <button
+    mat-stroked-button
+    class="add-service-btn secondary"
+    type="button"
+    (click)="onAddStockItem()">
+    <mat-icon>inventory_2</mat-icon>
+    <span>{{ 'PRODUCT_FORM.ADD_STOCK_ITEM_TITLE' | translate }}</span>
+  </button>
 </div>
 
 
@@ -340,8 +349,8 @@
             <th>{{ 'SERVICE_PAGE.COL_SERVICE' | translate }}</th>
             <th>{{ 'COMMON.CODE' | translate }}</th>
             <th>{{ 'COMMON.PRICE' | translate }}</th>
-            <th>{{ 'COMMON.DURATION' | translate }}</th>
-            <th>{{ 'SETTING_PAGE.COL_STORE_USAGE' | translate }}</th>
+            <th>{{ 'SETTING_PAGE.COL_CATEGORY' | translate }}</th>
+            <th>{{ 'SETTING_PAGE.COL_BUYING_PRICE' | translate }}</th>
             <th>{{ 'COMMON.STATUS' | translate }}</th>
             <th class="action-column">{{ 'COMMON.ACTION' | translate }}</th>
           </tr>
@@ -399,29 +408,30 @@
               </td>
 
 
-              <!-- Duration -->
+              <!-- Category -->
               <td>
-                <div class="duration">
-
-                  <mat-icon>schedule</mat-icon>
-
-                  <span>
-                    {{ service.duration || 0 }} min
-                  </span>
-
-                </div>
+                <span class="service-code">
+                  {{ (service.category === 'FOOD' ? 'SETTING_PAGE.CATEGORY_FOOD' : 'SETTING_PAGE.CATEGORY_DRINK') | translate }}
+                </span>
+                @if (service.kind === 'STOCK_ITEM') {
+                  <span class="kind-badge">{{ 'PRODUCT_FORM.KIND_STOCK_ITEM' | translate }}</span>
+                } @else if (service.stockSourceName) {
+                  <small class="source-note">
+                    @if (service.saleUnitName) {
+                      {{ 'PRODUCT_FORM.SOURCE_NOTE_LEVEL' | translate: { name: service.stockSourceName, n: service.saleUnitCount || 1, level: service.saleUnitName } }}
+                    } @else {
+                      {{ 'PRODUCT_FORM.SOURCE_NOTE' | translate: { name: service.stockSourceName, n: service.unitsPerSale } }}
+                    }
+                  </small>
+                }
               </td>
 
-                <td>
-                <div class="duration">
 
-                  <mat-icon svgIcon="store"></mat-icon>
-
-                  <span>
-                    {{ service.usageType}}
-                  </span>
-
-                </div>
+              <!-- Buying price -->
+              <td>
+                <span class="price">
+                  Tshs {{ (service.buyingPrice || 0) | number:'1.2-2' }} @if (service.packUnit) { / {{ ('PRODUCT_FORM.UNIT_' + service.packUnit.toUpperCase()) | translate }} }
+                </span>
               </td>
 
 
@@ -452,33 +462,22 @@
               <!-- Action -->
               <td class="action-column">
 
-                <button
-                  mat-icon-button
-                  class="action-btn"
-                  [matMenuTriggerFor]="serviceMenu">
-
-                  <mat-icon svgIcon="more"></mat-icon>
-
-                </button>
-
-                <mat-menu #serviceMenu="matMenu" panelClass="service-menu-panel">
-
-                  <button mat-menu-item type="button" (click)="onViewRecord(service)">
+                <div class="row-actions">
+                  <button type="button" class="row-action view" (click)="onViewRecord(service)">
                     <mat-icon>visibility</mat-icon>
                     <span>{{ 'COMMON.VIEW' | translate }}</span>
                   </button>
 
-                  <button mat-menu-item type="button" (click)="onEditRecord(service)">
-                    <mat-icon svgIcon="edit"></mat-icon>
+                  <button type="button" class="row-action edit" (click)="onEditRecord(service)">
+                    <mat-icon>edit</mat-icon>
                     <span>{{ 'COMMON.EDIT' | translate }}</span>
                   </button>
 
-                  <button mat-menu-item type="button" class="delete-action" (click)="onDeleteRecord(service)">
-                    <mat-icon svgIcon="delete"></mat-icon>
+                  <button type="button" class="row-action delete" (click)="onDeleteRecord(service)">
+                    <mat-icon>delete_outline</mat-icon>
                     <span>{{ 'COMMON.DELETE' | translate }}</span>
                   </button>
-
-                </mat-menu>
+                </div>
 
               </td>
 
@@ -591,6 +590,14 @@
             <mat-icon>add</mat-icon>
             <span>{{ 'SERVICE.ADD' | translate }}</span>
           </button>
+          <button
+            mat-stroked-button
+            type="button"
+            class="add-service-btn secondary"
+            (click)="onAddStockItem()">
+            <mat-icon>inventory_2</mat-icon>
+            <span>{{ 'PRODUCT_FORM.ADD_STOCK_ITEM_TITLE' | translate }}</span>
+          </button>
         </app-empty-state>
       }
 
@@ -598,315 +605,238 @@
   }
 
   @case ('SALON.COMMISSION') {
-    <div class="action-container123">
-      <!-- TOP ACTIONS -->
-      <div class="top-actions">
-        <button class="action-btn back-btn" (click)="findBarServiceList()">
-          <mat-icon svgIcon="add"></mat-icon>
-          {{ 'SETTING_PAGE.ADD_COMMISSION_BTN' | translate }}
-        </button>
+    <div class="action-container123 commission-page">
 
-        <button class="action-btn settings-btn" (click)="findCommissionPage()">
-          <mat-icon svgIcon="commission"></mat-icon>
-          {{ 'SETTING_PAGE.MANAGE_COMMISSIONS_BTN' | translate }}
-        </button>
-      </div>
-
-      <!-- COMMISSION LAYOUT -->
-      @if (addCommission === true) {
-        <div class="commission-layout">
-          <!-- LEFT COLUMN -->
-          <div class="commission-sidebar">
-            <button class="add-commission-btn" (click)="onAddCommission()">
-              <mat-icon svgIcon="add"></mat-icon>
-              {{ 'SETTING_PAGE.CHOOSE_SERVICE' | translate }}
+      <!-- SPLIT EDITOR: opens for the service chosen below -->
+      @if (editingService) {
+        <div class="split-card">
+          <div class="split-header">
+            <div>
+              <h3>{{ 'COMMISSION_FORM.EDITOR_TITLE' | translate: { name: editingService.serviceName } }}</h3>
+              <p>
+                {{ editingService.serviceCode }} ·
+                {{ 'COMMISSION_FORM.SELLING_PRICE' | translate }}: <strong>Tshs {{ editingService.price | number }}</strong>
+              </p>
+            </div>
+            <button type="button" class="row-action view" (click)="closeSplitEditor()">
+              <mat-icon>close</mat-icon>
+              <span>{{ 'COMMON.CANCEL' | translate }}</span>
             </button>
           </div>
 
-          <!-- RIGHT COLUMN -->
-          @if (selectedService === true) {
-            <div class="commission-table-area">
-              <!-- SERVICE INFORMATION -->
-              <div class="service-info-row">
-                <div class="service-info-item">
-                  <strong>
-                    {{ barServiceData.serviceName }}
-                  </strong>
+          <div class="split-grid">
+            @for (bucket of commissionBuckets; track bucket.key) {
+              <label class="split-field">
+                <span class="split-label">{{ bucket.label | translate }}</span>
+                <div class="split-input">
+                  <input type="number" min="0" max="100" step="1" [(ngModel)]="splitDraft[bucket.key]" />
+                  <span>%</span>
                 </div>
+                <small>Tshs {{ bucketAmount(splitDraft[bucket.key]) | number: '1.0-2' }}</small>
+              </label>
+            }
+          </div>
 
-                <div class="service-info-item">
-                  <strong>
-                    {{ barServiceData.serviceCode }}
-                  </strong>
-                </div>
-
-                <div class="service-info-item">
-                  <strong>
-                    Tshs {{ barServiceData.price | number: '1.2-2' }}
-                  </strong>
-                </div>
-
-                <div class="service-info-item">
-                  <strong
-                    [class.active-status]="barServiceData.status === 'active'"
-                    [class.inactive-status]="barServiceData.status !== 'active'"
-                  >
-                    {{ barServiceData.status | uppercase }}
-                  </strong>
-                </div>
-              </div>
-
-              <!-- COMMISSION TABLE -->
-              <div class="commission-table">
-                <!-- HEADER -->
-                <div class="commission-row commission-header">
-                  <div>{{ 'COMMON.NAME' | translate }}</div>
-                  <div>{{ 'COMMON.CODE' | translate }}</div>
-                  <div>{{ 'COMMON.AMOUNT' | translate }}</div>
-                  <div>{{ 'COMMISSION_BREAKDOWN.PERCENTAGE' | translate }}</div>
-                </div>
-
-                <!-- COMMISSION ROWS -->
-                @for (row of commissionRows; track row.code) {
-                  <div class="commission-row">
-                    <div>
-                      {{ row.name }}
-                    </div>
-
-                    <div>
-                      {{ row.code }}
-                    </div>
-
-                    <div>
-                      <input
-                        type="number"
-                        [(ngModel)]="row.amount"
-                        placeholder="2000"
-                        (blur)="calculateCommission(row)"
-                      />
-                    </div>
-
-                    <div>{{ row.percentage | number: '1.2-2' }}%</div>
-                  </div>
-                }
-
-                <!-- REMAINING AMOUNT -->
-                <div class="remaining-amount">
-                  <span> {{ 'SETTING_PAGE.REMAINING_AMOUNT' | translate }} </span>
-
-                  <strong>
-                    {{ remainingAmount | number: '1.2-2' }}
-                  </strong>
-                </div>
-
-                <!-- SAVE BUTTON -->
-                <div class="commission-action">
-                  <button
-                    mat-raised-button
-                    color="primary"
-                    class="save-commission-btn"
-                    type="button"
-                    (click)="saveCommission()"
-                  >
-                    <mat-icon> save </mat-icon>
-
-                    {{ 'SETTING_PAGE.SAVE_COMMISSION_BTN' | translate }}
-                  </button>
-                </div>
-              </div>
+          <div class="split-footer">
+            <div class="split-total" [class.over]="draftTotal > 100" [class.full]="draftTotal === 100">
+              {{ 'COMMISSION_FORM.TOTAL' | translate }}: <strong>{{ draftTotal }}%</strong>
+              · Tshs {{ bucketAmount(draftTotal) | number: '1.0-2' }}
+              @if (draftTotal < 100) {
+                <span class="muted">({{ 'COMMISSION_FORM.UNASSIGNED' | translate: { pct: 100 - draftTotal } }})</span>
+              }
             </div>
-          }
+            <button type="button" class="row-action edit" [disabled]="savingCommission || draftTotal > 100" (click)="saveCommission()">
+              <mat-icon>save</mat-icon>
+              <span>{{ 'SETTING_PAGE.SAVE_COMMISSION_BTN' | translate }}</span>
+            </button>
+          </div>
         </div>
       }
-      @if (commissionDataSource.length > 0) {
-        @if (commissionDataSource.length > 0) {
-          <div class="commission-card">
-            <!-- Header -->
-            <div class="commission-header">
-              <div class="commission-title">
-                <div class="commission-icon">
-                  <mat-icon>account_balance_wallet</mat-icon>
-                </div>
 
-                <div>
-                  <h3>{{ 'SETTING_PAGE.COMMISSION_CONFIG_TITLE' | translate }}</h3>
-                  <p>{{ 'SETTING_PAGE.COMMISSION_CONFIG_SUBTITLE' | translate }}</p>
-                </div>
-              </div>
+      <!-- SERVICES WITH THEIR SPLITS -->
+      <div class="commission-list-card">
+        <div class="commission-list-header">
+          <div>
+            <h3>{{ 'SETTING_PAGE.COMMISSION_CONFIG_TITLE' | translate }}</h3>
+            <p>{{ 'SETTING_PAGE.COMMISSION_CONFIG_SUBTITLE' | translate }}</p>
+          </div>
 
-              <div class="commission-count">
-                <span>{{ totalElements }}</span>
-                <small>{{ 'MENU.SERVICE' | translate }}</small>
-              </div>
-            </div>
+          <div class="commission-search">
+            <mat-icon>search</mat-icon>
+            <input type="search" [placeholder]="'SERVICE_PAGE.SEARCH_PH' | translate" (input)="onCommissionSearch($event)" />
+          </div>
 
-            <!-- Table -->
-            <div class="table-responsive">
-              <table class="table commission-table">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>{{ 'COMMISSION_BREAKDOWN.SERVICE' | translate }}</th>
-                    <th>{{ 'COMMISSION_BREAKDOWN.PRICE' | translate }}</th>
-                    <th>{{ 'COMMISSION_BREAKDOWN.OWNER' | translate }}</th>
-                    <th>{{ 'COMMISSION_BREAKDOWN.STAFF' | translate }}</th>
-                    <th>{{ 'COMMISSION_BREAKDOWN.TRA' | translate }}</th>
-                    <th>{{ 'COMMISSION_BREAKDOWN.MAINTENANCE' | translate }}</th>
-                    <th>{{ 'COMMISSION_BREAKDOWN.EMERGENCY' | translate }}</th>
-                    <th>{{ 'COMMISSION_BREAKDOWN.LOAN' | translate }}</th>
-                    <th>{{ 'COMMISSION_BREAKDOWN.RENT' | translate }}</th>
-                    <th>{{ 'COMMISSION_BREAKDOWN.LUKU' | translate }}</th>
-                    <th>{{ 'COMMISSION_BREAKDOWN.WATER' | translate }}</th>
-                    <th>{{ 'COMMISSION_BREAKDOWN.STOCK_PURCHASE' | translate }}</th>
-                    <th>{{ 'COMMISSION_BREAKDOWN.OTHER' | translate }}</th>
-                    <th>{{ 'COMMISSION_BREAKDOWN.TOTAL' | translate }}</th>
-                    <th>{{ 'COMMISSION_BREAKDOWN.ACTIONS' | translate }}</th>
-                  </tr>
-                </thead>
+          <div class="commission-count">
+            <span>{{ commissionTotalElements }}</span>
+            <small>{{ 'MENU.SERVICE' | translate }}</small>
+          </div>
+        </div>
 
-                <tbody>
-                  @for (commission of commissionDataSource; track commission.uid; let i = $index) {
-                    <tr>
-                      <td class="number-column">
-                        {{ i + 1 }}
-                      </td>
-
-                      <td>
-                        <div class="service-info">
-                          <div class="service-avatar">
-                            {{ commission.serviceName?.charAt(0) }}
-                          </div>
-
-                          <div>
-                            <div class="service-name">
-                              {{ commission.serviceName }}
-                            </div>
-                            <small>{{ 'SETTING_PAGE.SERVICE_COMMISSION_LABEL' | translate }}</small>
-                          </div>
-                        </div>
-                      </td>
-
-                      <td>
-                        <span class="price">Tshs {{ commission.price | number: '1.2-2' }}</span>
-                      </td>
-
-                      <td>
-                        <span class="percentage owner"> {{ commission.ownerPercent }}% </span>
-                      </td>
-
-                      <td>
-                        <span class="percentage staff"> {{ commission.staffPercent }}% </span>
-                      </td>
-
-                      <td>
-                        <span class="percentage tra"> {{ commission.traPercent }}% </span>
-                      </td>
-
-                      <td>
-                        <span class="percentage maintenance">
-                          {{ commission.maintenancePercent }}%
-                        </span>
-                      </td>
-                      <td>
-                        <span class="percentage emergency">
-                          {{ commission.emergencyPercent }}%
-                        </span>
-                      </td>
-                      <td>
-                        <span class="percentage emergency">
-                          {{ commission.loanPercent }}%
-                        </span>
-                      </td>
-                       <td>
-                        <span class="percentage emergency">
-                          {{ commission.rentPercent }}%
-                        </span>
-                      </td>
-                       <td>
-                        <span class="percentage emergency">
-                          {{ commission.lukuPercent }}%
-                        </span>
-                      </td>
-                       <td>
-                        <span class="percentage emergency">
-                          {{ commission.waterPercent }}%
-                        </span>
-                      </td>
-                       <td>
-                        <span class="percentage emergency">
-                          {{ commission.stockPurchasePercent }}%
-                        </span>
-                      </td>
-
-                      <td>
-                        <span class="percentage other"> {{ commission.otherPercent }}% </span>
-                      </td>
-
+        <div class="table-responsive">
+          <table class="commission-list-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>{{ 'COMMISSION_BREAKDOWN.SERVICE' | translate }}</th>
+                <th>{{ 'COMMISSION_BREAKDOWN.PRICE' | translate }}</th>
+                @for (bucket of commissionBuckets; track bucket.key) {
+                  <th>{{ bucket.label | translate }}</th>
+                }
+                <th>{{ 'COMMISSION_BREAKDOWN.TOTAL' | translate }}</th>
+                <th>{{ 'COMMON.STATUS' | translate }}</th>
+                <th>{{ 'COMMON.ACTIONS' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of serviceCommissions; track row.serviceUid; let i = $index) {
+                <tr [class.editing]="editingService?.serviceUid === row.serviceUid">
+                  <td class="muted">{{ commissionPage * commissionSize + i + 1 }}</td>
                   <td>
-  <span class="total-percentage">
-    <mat-icon>check_circle</mat-icon>
-    {{
-      (commission.ownerPercent || 0) +
-      (commission.staffPercent || 0) +
-      (commission.traPercent || 0) +
-      (commission.maintenancePercent || 0) +
-      (commission.emergencyPercent || 0) +
-      (commission.loanPercent || 0) +
-      (commission.rentPercent || 0) +
-      (commission.lukuPercent || 0) +
-      (commission.waterPercent || 0) +
-      (commission.stockPurchasePercent || 0) +
-      (commission.otherPercent || 0)
-    }}%
-  </span>
-</td>
-
-
-                      <td class="commission-actions-cell">
-                        <button
-                          mat-icon-button
-                          type="button"
-                          [matTooltip]="'SETTING_PAGE.TOOLTIP_EDIT_COMMISSION' | translate"
-                          (click)="editCommission(commission)"
-                        >
-                          <mat-icon svgIcon="edit"></mat-icon>
-                        </button>
-                        <button
-                          mat-icon-button
-                          type="button"
-                          [matTooltip]="'SETTING_PAGE.TOOLTIP_DELETE_COMMISSION' | translate"
-                          (click)="deleteCommission(commission)"
-                        >
-                          <mat-icon svgIcon="delete"></mat-icon>
-                        </button>
-                      </td>
-                    </tr>
+                    <div class="svc">
+                      <span class="svc-name">{{ row.serviceName }}</span>
+                      <small class="muted">{{ row.serviceCode }}</small>
+                    </div>
+                  </td>
+                  <td>Tshs {{ row.price | number }}</td>
+                  @for (bucket of commissionBuckets; track bucket.key) {
+                    <td>
+                      @if (row.commissionUid) {
+                        {{ row[bucket.key] ?? 0 }}%
+                      } @else {
+                        <span class="muted">--</span>
+                      }
+                    </td>
                   }
-                </tbody>
-              </table>
-            </div>
-            <mat-paginator
-      [length]="totalElements"
-      [pageSize]="size"
-      [pageIndex]="page"
-      [pageSizeOptions]="[5, 10, 20, 50]"
-      showFirstLastButtons
-      (page)="onCommissionPageChange($event)">
-    </mat-paginator>
+                  <td>
+                    @if (row.commissionUid) {
+                      <strong>{{ row.totalPercent ?? 0 }}%</strong>
+                    } @else {
+                      <span class="muted">--</span>
+                    }
+                  </td>
+                  <td>
+                    <span class="split-state" [class.set]="row.commissionUid">
+                      <span class="status-dot"></span>
+                      {{ (row.commissionUid ? 'COMMISSION_FORM.STATE_SET' : 'COMMISSION_FORM.STATE_NOT_SET') | translate }}
+                    </span>
+                  </td>
+                  <td>
+                    <div class="row-actions">
+                      @if (row.commissionUid) {
+                        <button type="button" class="row-action edit" (click)="openSplitEditor(row)">
+                          <mat-icon>edit</mat-icon>
+                          <span>{{ 'COMMON.EDIT' | translate }}</span>
+                        </button>
+                        <button type="button" class="row-action delete" (click)="deleteCommission(row)">
+                          <mat-icon>delete_outline</mat-icon>
+                          <span>{{ 'COMMON.DELETE' | translate }}</span>
+                        </button>
+                      } @else {
+                        <button type="button" class="row-action edit" (click)="openSplitEditor(row)">
+                          <mat-icon>add</mat-icon>
+                          <span>{{ 'COMMISSION_FORM.SET_BTN' | translate }}</span>
+                        </button>
+                      }
+                    </div>
+                  </td>
+                </tr>
+              }
+
+              @if (serviceCommissions.length === 0) {
+                <tr>
+                  <td [attr.colspan]="commissionBuckets.length + 6" class="empty-row">
+                    {{ (commissionSearch ? 'SERVICE_PAGE.NO_MATCH' : 'SETTING_PAGE.EMPTY_SERVICES_TEXT') | translate: { term: commissionSearch } }}
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        @if (commissionTotalPages > 1) {
+          <div class="commission-pages">
+            <button type="button" class="page-btn" [disabled]="commissionPage === 0" (click)="changeCommissionPage(commissionPage - 1)">
+              <mat-icon>chevron_left</mat-icon>
+            </button>
+            <span class="muted">{{ commissionPage + 1 }} / {{ commissionTotalPages }}</span>
+            <button type="button" class="page-btn" [disabled]="commissionPage >= commissionTotalPages - 1" (click)="changeCommissionPage(commissionPage + 1)">
+              <mat-icon>chevron_right</mat-icon>
+            </button>
           </div>
         }
+      </div>
+    </div>
+  }
+  @case ('SALON.BILL_CODES') {
+    <div class="action-container123 commission-page">
+      <div class="commission-list-card">
+        <div class="commission-list-header">
+          <div>
+            <h3>{{ 'BILL_CODES.TITLE' | translate }}</h3>
+            <p>{{ 'BILL_CODES.SUBTITLE' | translate }}</p>
+          </div>
 
+          <form class="bill-code-add" (ngSubmit)="addBillCode()">
+            <input
+              type="text"
+              name="newBillCode"
+              maxlength="30"
+              [(ngModel)]="newBillCode"
+              [placeholder]="'BILL_CODES.PLACEHOLDER' | translate"
+            />
+            <button type="submit" class="row-action edit" [disabled]="!newBillCode.trim() || savingBillCode">
+              <mat-icon>add</mat-icon>
+              <span>{{ 'BILL_CODES.ADD_BTN' | translate }}</span>
+            </button>
+          </form>
 
+          <div class="commission-count">
+            <span>{{ billCodes.length }}</span>
+            <small>{{ 'BILL_CODES.COUNT_LABEL' | translate }}</small>
+          </div>
+        </div>
 
-
-      }
-      @if (commissionDataSource.length === 0 && addCommission !== true) {
-        <app-empty-state
-          icon="commission"
-          title="SETTING_PAGE.EMPTY_COMMISSION_TITLE"
-          text="SETTING_PAGE.EMPTY_COMMISSION_TEXT"
-        />
-      }
+        <div class="table-responsive">
+          <table class="commission-list-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>{{ 'BILL_CODES.COL_CODE' | translate }}</th>
+                <th>{{ 'COMMON.STATUS' | translate }}</th>
+                <th>{{ 'COMMON.ACTIONS' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of billCodes; track row.uid; let i = $index) {
+                <tr>
+                  <td class="muted">{{ i + 1 }}</td>
+                  <td><strong>{{ row.code }}</strong></td>
+                  <td>
+                    <span class="split-state" [class.set]="!row.inUse">
+                      <span class="status-dot"></span>
+                      {{ (row.inUse ? 'BILL_CODES.IN_USE' : 'BILL_CODES.FREE') | translate }}
+                    </span>
+                  </td>
+                  <td>
+                    <div class="row-actions">
+                      <button type="button" class="row-action delete" [disabled]="row.inUse" (click)="removeBillCode(row)"
+                              [title]="row.inUse ? ('BILL_CODES.IN_USE_HINT' | translate) : ''">
+                        <mat-icon>delete_outline</mat-icon>
+                        <span>{{ 'COMMON.DELETE' | translate }}</span>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+              @if (billCodes.length === 0) {
+                <tr>
+                  <td colspan="4" class="empty-row">{{ 'BILL_CODES.EMPTY' | translate }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   }
 }

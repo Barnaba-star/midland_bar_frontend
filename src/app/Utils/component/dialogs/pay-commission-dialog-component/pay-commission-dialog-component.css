@@ -1,0 +1,196 @@
+.pay-dialog {
+  padding: 24px;
+}
+
+.pay-icon-wrapper {
+  width: 48px;
+  height: 48px;
+
+  margin: 0 auto 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #ecfdf3;
+
+  color: #027a48;
+}
+
+.pay-icon-wrapper mat-icon {
+  width: 24px;
+  height: 24px;
+
+  font-size: 24px;
+}
+
+.pay-content {
+  text-align: center;
+}
+
+.pay-content h2 {
+  margin: 0 0 6px;
+
+  color: #101828;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.pay-content p {
+  margin: 0 0 18px;
+
+  color: #667085;
+  font-size: 13px;
+}
+
+.pay-summary {
+  margin-bottom: 16px;
+  padding: 12px 14px;
+
+  border: 1px solid #eef2f7;
+  border-radius: 8px;
+
+  background: #f9fafb;
+
+  text-align: left;
+}
+
+.summary-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 6px 0;
+
+  font-size: 13px;
+}
+
+.summary-line .label {
+  color: #667085;
+}
+
+.summary-line .value {
+  color: #101828;
+  font-weight: 500;
+}
+
+.summary-line.total {
+  margin-top: 6px;
+  padding-top: 12px;
+
+  border-top: 1px solid #eef2f7;
+}
+
+.summary-line.total .label {
+  color: #344054;
+  font-weight: 600;
+}
+
+.summary-line.total .value {
+  color: #027a48;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.note-field {
+  display: flex;
+  flex-direction: column;
+
+  gap: 5px;
+
+  text-align: left;
+}
+
+.note-field span {
+  color: #667085;
+  font-size: 11px;
+  font-weight: 500;
+
+  text-transform: uppercase;
+  letter-spacing: .03em;
+}
+
+.note-field input {
+  height: 38px;
+
+  padding: 0 12px;
+
+  border: 1px solid #e4e7ec;
+  border-radius: 6px;
+
+  font-family: inherit;
+  font-size: 13px;
+
+  color: #101828;
+}
+
+.note-field input:focus {
+  outline: none;
+
+  border-color: #a6f4c5;
+}
+
+.pay-actions {
+  display: flex;
+
+  gap: 10px;
+
+  margin-top: 22px;
+}
+
+.pay-actions button {
+  flex: 1;
+
+  height: 40px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  border-radius: 8px;
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all .15s ease;
+}
+
+.cancel-button {
+  border: 1px solid #e4e7ec;
+
+  background: #ffffff;
+
+  color: #344054;
+}
+
+.cancel-button:hover {
+  background: #f9fafb;
+}
+
+.pay-button {
+  border: 1px solid #039855;
+
+  background: #039855;
+
+  color: #ffffff;
+}
+
+.pay-button:hover {
+  background: #027a48;
+
+  border-color: #027a48;
+}
+
+.pay-button mat-icon {
+  width: 18px;
+  height: 18px;
+
+  font-size: 18px;
+}

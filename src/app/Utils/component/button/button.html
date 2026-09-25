@@ -1,0 +1,13 @@
+<button mat-raised-button
+        [color]="isMaterialColor(color) ? color : null"
+        [type]="type"
+        [disabled]="disabled"
+        (click)="handleClick()">
+
+  <!-- Show icon if provided -->
+ <img *ngIf="icon" [src]="'assets/icons/' + icon + '.svg'" class="button-icon" alt="{{ icon }}" />
+
+
+  <!-- Show label -->
+  <span class="button-label">{{ label }}</span>
+</button>

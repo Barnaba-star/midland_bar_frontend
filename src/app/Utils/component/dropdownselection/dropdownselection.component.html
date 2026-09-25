@@ -1,0 +1,9 @@
+<div class="dropdown-wrapper">
+  <label class="dropdown-label">{{ label }}</label>
+  <select [ngModel]="selectedValue" (ngModelChange)="onSelectChange($event)" class="dropdown-select">
+    <option disabled selected value="">-- Select --</option>
+    <option *ngFor="let option of options" [value]="option.value">
+      {{ option.label }}
+    </option>
+  </select>
+</div>

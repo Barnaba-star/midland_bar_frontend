@@ -1,0 +1,55 @@
+<div class="select-user-dialog">
+
+  <div class="dialog-header">
+    <h2>{{ 'SELECT_USER_DIALOG.TITLE' | translate }}</h2>
+
+    <button type="button" class="close-btn" (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <p class="dialog-subtitle">
+    {{ subtitle || ('SELECT_USER_DIALOG.SUBTITLE' | translate) }}
+  </p>
+
+
+  <div class="input-wrapper search-wrapper">
+    <mat-icon>search</mat-icon>
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      (ngModelChange)="applyFilter()"
+      [placeholder]="'SELECT_USER_DIALOG.SEARCH_PLACEHOLDER' | translate"
+    />
+  </div>
+
+
+  @if (filteredUserList.length === 0) {
+    <div class="state-row">
+      <mat-icon>person_off</mat-icon>
+      <span>{{ 'SELECT_USER_DIALOG.EMPTY' | translate }}</span>
+    </div>
+  }
+
+  @if (filteredUserList.length > 0) {
+    <div class="user-row-list">
+      @for (user of filteredUserList; track user.uid) {
+        <button type="button" class="user-row-row" (click)="select(user)">
+
+          <div class="user-row-avatar" [class.female]="user.gender === 'Female'">
+            {{ (user.firstName || '?').charAt(0) }}
+          </div>
+
+          <div class="user-row-info">
+            <strong>{{ fullName(user) }}</strong>
+            <span>{{ user.username || user.email || '-' }}</span>
+          </div>
+
+          <mat-icon class="chevron">chevron_right</mat-icon>
+
+        </button>
+      }
+    </div>
+  }
+
+</div>

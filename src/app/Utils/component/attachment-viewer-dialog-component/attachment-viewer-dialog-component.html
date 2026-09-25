@@ -1,0 +1,13 @@
+
+<mat-dialog-content>
+  <iframe
+    [src]="data.url | safeUrl"
+    width="100%"
+    height="600px"
+    frameborder="0"
+  ></iframe>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close style="width: 120px; height: 50px; background-color: rgb(135, 135, 163); font-size: 18px;"> Close</button>
+</mat-dialog-actions>
+

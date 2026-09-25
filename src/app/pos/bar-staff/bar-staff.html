@@ -1,0 +1,246 @@
+<app-title2
+  titleHeader="MENU.STAFF"
+  [actions]="getTitled(titleActions)"
+  [activeAction]="selectedStaff"
+  (customButtonClick)="onAction($event)"
+>
+</app-title2>
+
+@switch (selectedStaff) {
+  @case ('STAFF.ADD') {
+    <div class="action-container">
+      @if (barStaff.length > 0) {
+        <app-recordtable
+          [columns]="staffColumns"
+          [data]="barStaff"
+          [showEdit]="true"
+          [showDelete]="true"
+          (editRecord)="onEditBarStaff($event)"
+          (deleteRecord)="onDeleteBarStaff($event)"
+        >
+        </app-recordtable>
+      }
+      @if (barStaff.length === 0) {
+        <app-form3
+          [formTitle]="'STAFF_PAGE.FORM_TITLE_ADD' | translate"
+          [fields]="staffFields"
+          (submitForm)="savedData($event)"
+        >
+        </app-form3>
+      }
+      @if (editBarStaff) {}
+    </div>
+  }
+
+  @case ('STAFF.MANAGE') {
+    <div class="action-container">
+      @if (barStaffDataSource.data.length > 0) {
+        <div class="staff-card">
+          <!-- Header -->
+          <div class="staff-card-header">
+            <div class="staff-header-left">
+              <div class="staff-header-icon">
+                <mat-icon>groups</mat-icon>
+              </div>
+
+              <div>
+                <h3>{{ 'STAFF_PAGE.MANAGEMENT_TITLE' | translate }}</h3>
+                <p>{{ 'STAFF_PAGE.MANAGEMENT_SUBTITLE' | translate }}</p>
+              </div>
+            </div>
+
+            <div class="staff-summary">
+              <span class="summary-number">
+                {{ totalElements }}
+              </span>
+
+              <span class="summary-label"> {{ 'STAFF_PAGE.MEMBERS' | translate }} </span>
+            </div>
+          </div>
+
+          <!-- Table -->
+          <div class="table-responsive">
+            <table class="table staff-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>{{ 'STAFF_PAGE.COL_STAFF_MEMBER' | translate }}</th>
+                  <th>{{ 'STAFF_PAGE.COL_PHONE' | translate }}</th>
+                  <th>{{ 'STAFF_PAGE.COL_GENDER' | translate }}</th>
+                  <th>{{ 'STAFF_PAGE.COL_DOB' | translate }}</th>
+                  <th>{{ 'STAFF_PAGE.COL_CATEGORY' | translate }}</th>
+                  <th>{{ 'COMMON.STATUS' | translate }}</th>
+                  <th>{{ 'COMMON.ACTIONS' | translate }}</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                @for (staff of barStaffDataSource.data; track staff.uid; let i = $index) {
+                  <tr>
+                    <!-- Number -->
+                    <td class="index-column">
+                      {{ (pageParam.page || 0) * (pageParam.size || 10) + i + 1 }}
+                    </td>
+
+                    <!-- Staff -->
+                    <td>
+                      <div class="staff-info">
+                        <div class="staff-avatar" [class.female]="staff.gender === 'Female'">
+                          {{ staff.firstName?.charAt(0) || '?' }}
+                        </div>
+
+                        <div class="staff-details">
+                          <span class="staff-name">
+                            {{ staff.firstName || '--' }}
+                            {{ staff.middleName || '' }}
+                            {{ staff.lastName || '' }}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      {{ staff.phoneNumber || ('STAFF_PAGE.NO_PHONE' | translate) }}
+                    </td>
+
+                    <!-- Gender -->
+                    <td>
+                      @if (staff.gender) {
+                        <span
+                          class="gender-badge"
+                          [class.male]="staff.gender === 'Male'"
+                          [class.female]="staff.gender === 'Female'"
+                        >
+                          <mat-icon>
+                            {{ staff.gender === 'Male' ? 'male' : 'female' }}
+                          </mat-icon>
+
+                          {{ staff.gender }}
+                        </span>
+                      } @else {
+                        <span class="empty-value">--</span>
+                      }
+                    </td>
+
+                    <!-- Date of Birth -->
+                    <td>
+                      @if (staff.dateOfBirth) {
+                        <div class="date-info">
+                          <mat-icon>cake</mat-icon>
+
+                          <span>
+                            {{ staff.dateOfBirth }}
+                          </span>
+                        </div>
+                      } @else {
+                        <span class="empty-value">--</span>
+                      }
+                    </td>
+
+                    <!-- Category -->
+                    <td>
+                      @if (staff.barCategory) {
+                        <span class="category-badge">
+                          <mat-icon>content_cut</mat-icon>
+                          {{ staff.barCategory }}
+                        </span>
+                      } @else {
+                        <span class="empty-value">--</span>
+                      }
+                    </td>
+
+                    <!-- Status -->
+                    <td>
+                      @if (staff.active === true) {
+                        <span class="status-badge active">
+                          <span class="status-dot"></span>
+                          {{ 'COMMON.ACTIVE' | translate }}
+                        </span>
+                      } @else {
+                        <span class="status-badge inactive">
+                          <span class="status-dot"></span>
+                          {{ 'COMMON.INACTIVE' | translate }}
+                        </span>
+                      }
+                    </td>
+
+                    <!-- Actions -->
+                    <td class="actions-column">
+                      <button mat-icon-button type="button" [matTooltip]="'STAFF_PAGE.TOOLTIP_VIEW' | translate" (click)="onViewStaff(staff)">
+                        <mat-icon>visibility</mat-icon>
+                      </button>
+
+                      <button mat-icon-button type="button" [matTooltip]="'STAFF_PAGE.TOOLTIP_EDIT' | translate" (click)="onEditBarStaffPage(staff)">
+                        <mat-icon>edit</mat-icon>
+                      </button>
+
+                      <button mat-icon-button class="delete-action-icon" type="button" [matTooltip]="'STAFF_PAGE.TOOLTIP_DELETE' | translate" (click)="onDeleteBarStaffPage(staff)">
+                        <mat-icon>delete_outline</mat-icon>
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Footer / Pagination -->
+          <div class="staff-pagination">
+            <div class="page-size">
+              <span>{{ 'COMMON.SHOW' | translate }}</span>
+
+              <select [value]="pageParam.size" (change)="changePageSize($event)">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+              </select>
+
+              <span>{{ 'COMMON.ENTRIES' | translate }}</span>
+            </div>
+
+            <div class="pagination-buttons">
+              <button
+                mat-stroked-button
+                type="button"
+                [disabled]="pageParam.page === 0"
+                (click)="changePage((pageParam.page || 0) - 1)"
+              >
+                <mat-icon>chevron_left</mat-icon>
+                {{ 'COMMON.PREVIOUS' | translate }}
+              </button>
+
+              @for (p of [].constructor(totalPages); track $index) {
+                <button
+                  mat-button
+                  type="button"
+                  [class.active-page]="pageParam.page === $index"
+                  (click)="changePage($index)"
+                >
+                  {{ $index + 1 }}
+                </button>
+              }
+
+              <button
+                mat-stroked-button
+                type="button"
+                [disabled]="pageParam.page! >= totalPages - 1"
+                (click)="changePage((pageParam.page || 0) + 1)"
+              >
+                {{ 'COMMON.NEXT' | translate }}
+                <mat-icon>chevron_right</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+
+      @if (barStaffDataSource.data.length === 0) {
+        <app-empty-state
+          icon="team"
+          title="STAFF_PAGE.NOT_FOUND_TITLE"
+          text="STAFF_PAGE.NOT_FOUND_TEXT"
+        />
+      }
+    </div>
+  }
+}

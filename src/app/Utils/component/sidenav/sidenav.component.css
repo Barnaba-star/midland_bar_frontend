@@ -1,0 +1,119 @@
+mat-sidenav-container {
+  display: flex;
+  flex-direction: row;
+  height: 90vh;
+  border-right: 2px solid white;
+  padding: 0;       /* padding yote ndani 0 */
+  margin: 0;
+}
+
+/* Sidenav style */
+mat-sidenav {
+  flex: 0 0 240px;
+  max-width: 150px;
+  background-color:white;
+  padding: 0px 0px;
+  border-radius: 0;
+  font-size: larger;
+  padding: 0;
+  margin: 0;
+}
+
+
+
+
+/* List items */
+mat-nav-list a.mat-mdc-list-item {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center;
+  transition: background-color 0.3s;
+  color: #cbd5e1;
+  text-decoration: none;
+  background-color: white;
+  height: 90px;
+  border-radius: 0;
+  padding: 0;
+  gap: 4px;
+  border-top: 1px solid #e2e8f0;  /* light grey */
+  border-bottom: 1px solid #e2e8f0;
+}
+
+/* Active link style */
+mat-nav-list a.active {
+  background-color: white;
+  color: #ffffff;
+  font-weight: bold;
+  border-bottom: 2px solid white;
+}
+
+
+
+
+.menu-label {
+  font-size: 15px;
+  flex-grow: 1;
+
+}
+
+
+.sidenav-header {
+  display: flex;
+  align-items: center;
+
+  gap: 4px;
+
+}
+
+.logo-image {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color:  #7d8084;;
+}
+
+
+
+.menu-icon {
+  width: 44px;
+  height: 44px;
+  margin-left: 4px;
+  fill: currentColor;
+  color: rgba(182, 150, 109, 0.95);
+  transition: color 0.3s ease;
+}
+.log-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 2px;
+  fill: currentColor;
+  color: #2716c2;
+  transition: color 0.3s ease;
+}
+.logo-icons{
+background-color: white;
+}
+
+
+
+/* Sidenav content */
+mat-sidenav-content {
+  flex: 1;
+  background-color: white;
+  padding: 0.5px;
+  border-bottom: 1px solid white;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+  border-right: 2px solid white;
+  padding: 0;
+  margin: 0;
+}
+.mat-mdc-list-item-content {
+  flex-direction: row!important;
+  align-items: center !important;
+}

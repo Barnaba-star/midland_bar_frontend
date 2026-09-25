@@ -1,0 +1,475 @@
+<form [formGroup]="form">
+
+  <!-- Title -->
+  <h2 class="form-title">{{ formTitle }}</h2>
+
+  <div class="form-grid">
+
+    @for (field of fields; track field.name) {
+
+      @if (shouldShowField(field)) {
+
+        <div
+          class="form-grid-item"
+          [class.full-width]="shouldSpanFullWidth(field.type)">
+
+          <div class="form-field-wrapper">
+
+            @if (field.type !== 'checkbox' && field.type !== 'checkbox-group') {
+              <label>{{ field.label }}</label>
+            }
+
+            @switch (field.type) {
+
+              <!-- Text -->
+              @case ('text') {
+
+                <mat-form-field appearance="outline" class="w-100">
+
+                  @if (field.prefix) {
+                    <span matPrefix>{{ field.prefix }}&nbsp;</span>
+                  }
+
+                  <input
+                    matInput
+                    type="text"
+                    [formControlName]="field.name"
+                    [placeholder]="field.placeholder || 'Enter text here'" />
+
+                  @if (field.suffix) {
+                    <span matSuffix>&nbsp;{{ field.suffix }}</span>
+                  }
+
+                </mat-form-field>
+
+              }
+
+              <!-- Number -->
+              @case ('number') {
+
+                <mat-form-field appearance="outline" class="w-100">
+
+                  @if (field.prefix) {
+                    <span matPrefix>{{ field.prefix }}&nbsp;</span>
+                  }
+
+                  <input
+                    matInput
+                    type="number"
+                    [formControlName]="field.name"
+                    [placeholder]="field.placeholder || field.label" />
+
+                  @if (hasError(field)) {
+                    <mat-error>
+                      {{ getErrorMessage(field) }}
+                    </mat-error>
+                  }
+
+                  @if (field.suffix) {
+                    <span matSuffix>&nbsp;{{ field.suffix }}</span>
+                  }
+
+                </mat-form-field>
+
+              }
+
+              <!-- Textarea -->
+              @case ('textarea') {
+
+                <mat-form-field
+                  appearance="outline"
+                  class="w-100"
+                  style="margin-top:20px;">
+
+                  <textarea
+                    matInput
+                    [formControlName]="field.name"
+                    [placeholder]="field.placeholder || field.label">
+                  </textarea>
+
+                  @if (hasError(field)) {
+                    <mat-error>
+                      {{ getErrorMessage(field) }}
+                    </mat-error>
+                  }
+
+                </mat-form-field>
+
+              }
+
+              <!-- Select -->
+              @case ('select') {
+
+                <mat-form-field appearance="outline" class="w-100">
+
+                  <mat-select
+                    [formControlName]="field.name"
+                    [placeholder]="field.placeholder || field.label">
+
+                    @for (option of field.options; track option.value) {
+
+                      <mat-option
+                        [value]="option.value"
+                        [ngClass]="{
+                          'selected-option':
+                          form.get(field.name)?.value === option.value
+                        }">
+
+                        {{ option.label }}
+
+                      </mat-option>
+
+                    }
+
+                  </mat-select>
+
+                  @if (hasError(field)) {
+                    <mat-error>
+                      {{ getErrorMessage(field) }}
+                    </mat-error>
+                  }
+
+                </mat-form-field>
+
+              }
+
+              <!-- Radio -->
+              @case ('radio') {
+
+                <div class="radio-group">
+
+                  <mat-radio-group [formControlName]="field.name">
+
+                    @for (option of field.options; track option.value) {
+
+                      <mat-radio-button
+                        [value]="option.value"
+                        class="radio-button">
+
+                        {{ option.label }}
+
+                      </mat-radio-button>
+
+                    }
+
+                  </mat-radio-group>
+
+                  @if (hasError(field)) {
+                    <mat-error>
+                      {{ getErrorMessage(field) }}
+                    </mat-error>
+                  }
+
+                </div>
+
+              }
+              <!-- Checkbox -->
+              @case ('checkbox') {
+
+                <mat-checkbox
+                  [formControlName]="field.name"
+                  [aria-label]="field.placeholder || field.label">
+
+                  {{ field.label }}
+
+                  @if (hasError(field)) {
+                    <mat-error>
+                      {{ getErrorMessage(field) }}
+                    </mat-error>
+                  }
+
+                </mat-checkbox>
+
+              }
+
+
+              <!-- Checkbox Group -->
+              @case ('checkbox-group') {
+
+                <div>
+
+                  <mat-form-field appearance="outline" class="w-100">
+
+                    <mat-select
+                      [formControlName]="field.name"
+                      multiple
+                      [placeholder]="field.placeholder || field.label">
+
+                      @for (option of field.options; track option.value) {
+
+                        <mat-option [value]="option.value">
+
+                          {{ option.label }}
+
+                        </mat-option>
+
+                      }
+
+                    </mat-select>
+
+                    @if (hasError(field)) {
+
+                      <mat-error>
+                        {{ getErrorMessage(field) }}
+                      </mat-error>
+
+                    }
+
+                  </mat-form-field>
+
+                </div>
+
+              }
+
+
+              <!-- File Upload -->
+              @case ('file') {
+
+                <div class="file-upload-container">
+
+                  @if (field.label) {
+                    <label class="form-label">
+                      {{ field.label }}
+                    </label>
+                  }
+
+                  <input
+                    type="file"
+                    class="file-control"
+                    [accept]="field.accept"
+                    (change)="onFileSelected($event, field.name)" />
+
+                  @if (previewUrls[field.name] && field.viewer) {
+
+                    <div class="image-preview">
+
+                      <img
+                        [src]="previewUrls[field.name]"
+                        alt="Preview">
+
+                    </div>
+
+                  }
+
+                  @if (hasError(field)) {
+
+                    <div class="validation-error">
+                      {{ getErrorMessage(field) }}
+                    </div>
+
+                  }
+
+                </div>
+
+              }
+
+
+              <!-- Date -->
+              @case ('date') {
+
+                <mat-form-field appearance="outline" class="w-100">
+
+                  @if (field.label) {
+                    <mat-label>
+                      {{ field.label }}
+                    </mat-label>
+                  }
+
+                  <input
+                    matInput
+                    [matDatepicker]="picker"
+                    [formControlName]="field.name"
+                    [placeholder]="field.placeholder || field.label">
+
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="picker">
+                  </mat-datepicker-toggle>
+
+                  <mat-datepicker #picker></mat-datepicker>
+
+                  @if (hasError(field)) {
+
+                    <mat-error>
+                      {{ getErrorMessage(field) }}
+                    </mat-error>
+
+                  }
+
+                </mat-form-field>
+
+              }
+
+              <!-- Datetime -->
+              @case ('datetime') {
+
+                <mat-form-field appearance="fill" class="w-100">
+
+                  @if (field.label) {
+                    <mat-label>
+                      {{ field.label }}
+                    </mat-label>
+                  }
+
+                  <input
+                    matInput
+                    type="datetime-local"
+                    [formControlName]="field.name"
+                    [placeholder]="field.placeholder || field.label">
+
+                  @if (hasError(field)) {
+
+                    <mat-error>
+                      {{ getErrorMessage(field) }}
+                    </mat-error>
+
+                  }
+
+                </mat-form-field>
+
+              }
+
+
+              <!-- Month -->
+              @case ('month') {
+
+                <mat-form-field appearance="fill" class="w-100">
+
+                  @if (field.label) {
+                    <mat-label>
+                      {{ field.label }}
+                    </mat-label>
+                  }
+
+                  <input
+                    matInput
+                    type="month"
+                    [formControlName]="field.name"
+                    [placeholder]="field.placeholder || field.label">
+
+                  @if (hasError(field)) {
+
+                    <mat-error>
+                      {{ getErrorMessage(field) }}
+                    </mat-error>
+
+                  }
+
+                </mat-form-field>
+
+              }
+
+
+              <!-- Week -->
+              @case ('week') {
+
+                <mat-form-field appearance="fill" class="w-100">
+
+                  @if (field.label) {
+                    <mat-label>
+                      {{ field.label }}
+                    </mat-label>
+                  }
+
+                  <input
+                    matInput
+                    type="week"
+                    [formControlName]="field.name"
+                    [placeholder]="field.placeholder || field.label">
+
+                  @if (hasError(field)) {
+
+                    <mat-error>
+                      {{ getErrorMessage(field) }}
+                    </mat-error>
+
+                  }
+
+                </mat-form-field>
+
+              }
+
+
+              <!-- Rich Text -->
+              @case ('rich-text') {
+
+                <div class="rich-text-editor">
+
+                  @if (field.label) {
+                    <label>
+                      {{ field.label }}
+                    </label>
+                  }
+
+                  <quill-editor
+                    [formControlName]="field.name">
+                  </quill-editor>
+
+                  @if (hasError(field)) {
+
+                    <div class="validation-error">
+                      {{ getErrorMessage(field) }}
+                    </div>
+
+                  }
+
+                </div>
+
+              }
+
+
+              <!-- Map Location -->
+              @case ('map-location') {
+
+                <div class="map-location">
+
+                  @if (field.label) {
+                    <label>
+                      {{ field.label }}
+                    </label>
+                  }
+
+                  <div
+                    class="map-container"
+                    (mapClick)="setLocation(field.name, $event)">
+                    <!-- Your map component here -->
+                  </div>
+
+                  @if (hasError(field)) {
+
+                    <div class="validation-error">
+                      {{ getErrorMessage(field) }}
+                    </div>
+
+                  }
+
+                </div>
+
+              }
+
+
+              <!-- FAB Button -->
+              @case ('fab') {
+
+                <button
+                  mat-fab
+                  color="primary"
+                  (click)="addFieldRequested.emit()">
+
+                  <mat-icon>
+                    {{ field.icon || 'add' }}
+                  </mat-icon>
+
+                </button>
+
+              }
+            }
+          </div>
+        </div>
+      }
+    }
+  </div>
+</form>
+
+
+

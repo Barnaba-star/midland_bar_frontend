@@ -1,0 +1,25 @@
+<div class="status-dialog" [ngClass]="data.status">
+
+  <!-- Icon -->
+  <div class="icon-wrapper">
+    <mat-icon svgIcon="error" class="iconClass"></mat-icon>
+  </div>
+
+  <!-- Title -->
+  <h2 class="dialog-title">
+    {{ data.title || (statusKey | translate) }}
+  </h2>
+
+  <!-- Message -->
+  <div class="dialog-message">
+    {{ data.message }}
+  </div>
+
+  <!-- Close -->
+  <mat-dialog-actions *ngIf="data.showClose !== false">
+    <button mat-button class="close-btn" (click)="close()">
+      {{ 'COMMON.CLOSE' | translate }}
+    </button>
+  </mat-dialog-actions>
+
+</div>

@@ -1,0 +1,783 @@
+<app-title2
+  titleHeader="MENU.SALES"
+  [actions]="getTitled(titleActions)"
+  [activeAction]="selectedSales"
+  (customButtonClick)="onAction($event)"
+>
+</app-title2>
+@switch (selectedSales) {
+  @case ('SALES.ADD') {
+    <div class="action-container">
+      <div class="bills-header">
+        <p>
+          <span class="bill-count">{{ salesOpenedList.length }}</span>
+          <span class="bill-text">{{ 'SALES_PAGE.BILLS_IN_PROGRESS' | translate }}</span>
+          <span class="separator">•</span>
+          <span class="bill-date">
+            <i class="bi bi-calendar3"></i>
+            {{ getSelectedDate() }}
+          </span>
+        </p>
+
+        <button class="add-bill-btn" (click)="openNewSales()">
+          <span>+</span>
+          {{ 'SALES_PAGE.OPEN_BILL' | translate }}
+        </button>
+      </div>
+      <div class="outerSale">
+        <!-- ================= LEFT 70% ================= -->
+        <div class="sales-section">
+          <div class="sales-list">
+            @for (sale of salesOpenedList; track sale.uid) {
+              <div class="sale-card" [class.selected]="selectedSale?.uid === sale.uid">
+                <!-- ================= HEADER ================= -->
+                <div class="sale-header">
+                  <div class="sale-code">
+                    <strong>{{ sale.salesCode }}</strong>
+                  </div>
+
+                  <div
+                    class="sale-status"
+                    [class.status-paid]="sale.paymentStatus === 'PAID'"
+                    [class.status-pending]="sale.paymentStatus !== 'PAID'"
+                  >
+                    <span class="status-dot"></span>
+                    {{ sale.paymentStatus }}
+                  </div>
+                </div>
+
+                <!-- ================= BODY ================= -->
+                <div class="sale-body">
+                  <div class="sale-info">
+                    <span>{{ 'SALES_PAGE.BILL' | translate }}</span>
+
+                    <strong class="bill-amount">
+                      Tshs {{ sale.bill | number: '1.2-2' }}
+                    </strong>
+                  </div>
+
+                  <div class="sale-info">
+                    <span>{{ 'SALES_PAGE.AMOUNT_PAID' | translate }}</span>
+
+                    <strong class="paid-amount">
+                      Tshs {{ sale.paidAmount | number: '1.2-2' }}
+                    </strong>
+                  </div>
+                </div>
+
+                <!-- ================= FOOTER ================= -->
+             <div class="sale-actions">
+
+  <!-- ONGEZA HUDUMA -->
+  <button
+    type="button"
+    class="sale-action-btn add-btn"
+    (click)="saveBarSales(sale)"
+  >
+    <span class="action-icon">
+      <mat-icon>add</mat-icon>
+    </span>
+
+    <span class="action-text">
+      {{ 'SERVICE.ADD' | translate }}
+    </span>
+  </button>
+
+
+  <!-- TAZAMA NDANI -->
+  <button
+    type="button"
+    class="sale-action-btn load-btn"
+    (click)="findBarSalesList(sale)"
+  >
+    <span class="action-icon">
+      <mat-icon>refresh</mat-icon>
+    </span>
+
+    <span class="action-text">
+      {{ 'SALES_PAGE.VIEW_INSIDE' | translate }}
+    </span>
+  </button>
+
+
+  <!-- FUNGA BILL
+  <button
+    type="button"
+    class="sale-action-btn complete-btn"
+    (click)="closeBill(sale)"
+  >
+    <span class="action-icon">
+      <mat-icon>check_circle</mat-icon>
+    </span>
+
+    <span class="action-text">
+      Funga Bill
+    </span>
+  </button> -->
+
+</div>
+
+              </div>
+            }
+
+            @if (salesOpenedList.length === 0) {
+              <app-empty-state
+                icon="payment"
+                title="SALES_PAGE.EMPTY_TITLE"
+                text="SALES_PAGE.EMPTY_TEXT"
+              />
+            }
+          </div>
+        </div>
+
+        <!-- ================= RIGHT 30% =================
+        <div class="rightPart">
+          @if (selectedSale) {
+            <div class="details-panel">
+              <!-- Header
+              <div class="details-header">
+                <div>
+                  <span class="details-label"> SELECTED SALE </span>
+
+                  <h3>
+                    {{ selectedSale.salesCode }}
+                  </h3>
+                </div>
+
+                <div class="sale-status">ACTIVE</div>
+              </div>
+
+              <!-- Sale information
+              <div class="details-info">
+                <div class="detail-row">
+                  <span>Sales Code</span>
+
+                  <strong>
+                    {{ selectedSale.salesCode }}
+                  </strong>
+                </div>
+
+                <div class="detail-row">
+                  <span>Payment Method</span>
+
+                  <strong>
+                    {{ selectedSale.paymentMethod || 'Not selected' }}
+                  </strong>
+                </div>
+              </div>
+
+              <!-- Services
+              <div class="services-section">
+                <div class="services-title">
+                  <h4>Services</h4>
+
+                  <span>
+                    {{ selectedSaleServices.length }}
+                  </span>
+                </div>
+
+                @if (selectedSaleServices.length > 0) {
+                  <div class="services-list">
+                    @for (service of selectedSaleServices; track service.uid) {
+                      <div class="service-item">
+                        <div class="service-main">
+                          <small> Staff: </small>
+                          <small> Service: </small>
+                          <small> Price: </small>
+                        </div>
+
+                        <div class="service-details">
+                          <strong>
+                            {{ service.firstName }}
+                          </strong>
+                          <strong>
+                            {{ service.serviceName }}
+                          </strong>
+                          <strong>Tshs: {{ service.price }}</strong>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                } @else {
+                  <div class="no-services">
+                    <mat-icon> shopping_bag </mat-icon>
+
+                    <p>No services loaded</p>
+
+                    <small> Click "Load Services" on a sale. </small>
+                  </div>
+                }
+              </div>
+
+              <!-- Total
+              <div class="total-section">
+                <span>
+                  Total Tshs:&nbsp;
+                  <strong>{{ getSelectedSaleTotal() }}</strong>
+                </span>
+              </div>
+              <div class="payment-wrapper">
+                <label for="paymentMethod">Payment Method</label>
+
+                <select
+                  id="paymentMethod"
+                  class="payment-select"
+                  [(ngModel)]="selectedPaymentMethod"
+                >
+                  <option value="" disabled>Chagua njia ya malipo</option>
+                  <option value="cash">💵 Cash</option>
+                  <option value="mpesa">📱 M-Pesa</option>
+                  <option value="tigopesa">📱 Tigo Pesa</option>
+                  <option value="airtelmoney">📱 Airtel Money</option>
+                  <option value="halopesa">📱 HaloPesa</option>
+                  <option value="bank">🏦 Bank</option>
+                </select>
+              </div>
+
+              <button
+                type="button"
+                class="checkout-btn"
+                [disabled]="!selectedPaymentMethod"
+                (click)="proceedToPayment()"
+              >
+                Proceed to Payment
+              </button>
+            </div>
+          } @else {
+            <!-- Empty right panel
+
+            <div class="empty-details">
+              <mat-icon> point_of_sale </mat-icon>
+
+              <h3>No Sale Selected</h3>
+
+              <p>Select a sale to view its services.</p>
+            </div>
+          }
+        </div>
+      --></div>
+    </div>
+  }
+
+ @case ('SALES.MANAGE') {
+
+  <div class="action-container">
+
+    <div class="sales-list-container">
+
+      <!-- =====================================================
+           HEADER
+      ====================================================== -->
+      <div class="list-header">
+
+        <!-- REPORT INFORMATION -->
+        <div class="report-header">
+
+          <div class="report-icon">
+            <mat-icon>assessment</mat-icon>
+          </div>
+
+          <div class="report-info">
+           <h3>
+  {{ selectedFilter === selectedDate
+      ? selectedDate
+      : displayedFilter()
+  }}
+  {{ 'MENU.SALES' | translate }}
+</h3>
+          </div>
+
+
+        </div>
+        <div class="report-customer">
+
+  <span class="customer-count">
+    {{ salesOpenByStatus.length }}
+  </span>
+
+  <span class="customer-label">
+    {{ (salesOpenByStatus.length === 1 ? 'SALES_PAGE.SALE_SINGULAR' : 'SALES_PAGE.SALES_PLURAL') | translate }}
+  </span>
+
+</div>
+
+
+       <!-- TOTAL SALES -->
+<div class="grand-total">
+
+  <div class="grand-total-icon">
+    <mat-icon>payments</mat-icon>
+  </div>
+
+  <div class="grand-total-content">
+
+    <span class="grand-total-label">
+      {{ 'SALES_PAGE.TOTAL_SALES' | translate }}
+    </span>
+
+    <strong class="grand-total-amount">
+      Tshs {{ totalPaymentAmount | number:'1.2-2' }}
+    </strong>
+
+  </div>
+
+</div>
+
+
+
+      </div>
+
+      <!-- =====================================================
+           FILTER BUTTONS
+      ====================================================== -->
+ <div class="header-controls">
+
+  <div class="filter-buttons">
+
+    @for (filter of filters; track filter.value) {
+
+      <button
+        type="button"
+        class="filter-btn"
+        [class.active]="selectedFilter === filter.value"
+        (click)="selectFilter(filter.value)"
+      >
+        {{ filter.label }}
+      </button>
+
+    }
+
+
+    <!-- ================= SPECIFIC DATE ================= -->
+
+    <div
+      class="date-filter"
+      [class.active]="selectedFilter === 'SPECIFIC_DATE'"
+    >
+
+     <div
+  class="date-filter-content"
+  [class.has-date]="selectedDate"
+>
+
+
+  <div class="date-input-wrapper">
+
+    <mat-icon class="date-icon">
+      calendar_month
+    </mat-icon>
+
+    <input
+      type="date"
+      [(ngModel)]="selectedDate"
+      (change)="onSpecificDateChange()"
+      aria-label="Select date"
+    />
+
+  </div>
+
+</div>
+
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<!-- Hidden date picker -->
+<div class="hidden-date-picker">
+
+  <mat-form-field appearance="outline">
+
+    <input
+      matInput
+      [matDatepicker]="filterDatePicker"
+      [(ngModel)]="selectedDateObject"
+      (dateChange)="onSpecificDateSelected($event)"
+    />
+
+    <mat-datepicker #filterDatePicker></mat-datepicker>
+
+  </mat-form-field>
+
+</div>
+
+
+      <!-- =====================================================
+           PAYMENT SUMMARY
+      ====================================================== -->
+
+      @if (paymentSummary.length > 0) {
+
+        <div class="payment-summary">
+
+          <!-- SUMMARY HEADER -->
+          <div class="payment-summary-header">
+
+            <div>
+
+              <span class="summary-label">
+                {{ 'SALES_PAGE.PAYMENT_SUMMARY' | translate }}
+              </span>
+
+
+            </div>
+
+            <div class="summary-icon">
+
+              <mat-icon>
+                payments
+              </mat-icon>
+
+            </div>
+
+          </div>
+
+
+          <!-- PAYMENT METHODS -->
+          <div class="payment-summary-list">
+
+            <div
+              class="payment-row"
+              *ngFor="let payment of paymentSummary"
+            >
+
+              <div class="payment-method">
+
+
+                <div class="payment-method-info">
+
+                  <strong>
+                    <strong>
+  {{ formatPaymentMethod(payment.method) }}
+</strong>
+
+                  </strong>
+
+                  <small>
+
+                    {{ payment.count }}
+
+                    {{
+                      (payment.count === 1
+                        ? 'SALES_PAGE.SALE_SINGULAR'
+                        : 'SALES_PAGE.SALES_PLURAL') | translate
+                    }}
+
+                  </small>
+
+                </div>
+
+              </div>
+
+
+              <div class="payment-total">
+                {{ payment.total  | number:'1.0-0'}}
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- GRAND TOTAL -->
+          <div class="payment-total-row">
+
+            <div class="payment-method">
+
+              <div class="total-icon">
+
+                <mat-icon>
+                  summarize
+                </mat-icon>
+
+              </div>
+
+              <div class="payment-method-info">
+
+                <strong>
+                  {{ 'COMMON.TOTAL' | translate | uppercase }}
+                </strong>
+
+                <small>
+
+                  {{ salesOpenByStatus.length }}
+
+                  {{
+                    (salesOpenByStatus.length === 1
+                      ? 'SALES_PAGE.SALE_SINGULAR'
+                      : 'SALES_PAGE.SALES_PLURAL') | translate
+                  }}
+
+                </small>
+
+              </div>
+
+            </div>
+
+
+            <div class="payment-total grand-payment-total">
+
+              Tshs
+              {{ totalPaymentAmount | number:'1.2-2' }}
+
+            </div>
+
+          </div>
+
+        </div>
+
+      }
+
+
+      <!-- =====================================================
+           SALES TABLE
+      ====================================================== -->
+
+      <div
+        class="sales-section"
+        *ngIf="salesOpenByStatus.length > 0"
+      >
+
+        <div class="table-header">
+
+          <div>
+
+            <span class="table-label">
+              {{ 'SALES_PAGE.SALES_TRANSACTIONS' | translate }}
+            </span>
+
+            <h3>
+              {{ 'SALES_PAGE.SALES_LIST' | translate }}
+            </h3>
+
+          </div>
+
+          <span class="transaction-count">
+
+            {{ salesOpenByStatus.length }}
+
+            {{
+              (salesOpenByStatus.length === 1
+                ? 'SALES_PAGE.TRANSACTION_SINGULAR'
+                : 'SALES_PAGE.TRANSACTION_PLURAL') | translate
+            }}
+
+          </span>
+
+        </div>
+
+
+        <div class="sales-table-wrapper">
+
+          <table class="sales-table">
+
+            <!-- TABLE HEADER -->
+            <thead>
+
+              <tr>
+
+                <th>
+                  #
+                </th>
+
+                <th>
+                  {{ 'SALES_PAGE.COL_SALE_CODE' | translate }}
+                </th>
+
+                <th>
+                  {{ 'COMMON.DATE' | translate }}
+                </th>
+
+                <th>
+                  {{ 'SALES_PAGE.COL_PAYMENT_METHOD' | translate }}
+                </th>
+
+                <th>
+                  {{ 'COMMON.STATUS' | translate }}
+                </th>
+
+                <th class="amount-header">
+                  {{ 'SALES_PAGE.COL_AMOUNT' | translate }}
+                </th>
+
+
+                <th>
+                  {{ 'COMMON.ACTION' | translate }}
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <!-- TABLE BODY -->
+            <tbody>
+
+              <tr
+                *ngFor="
+                  let sale of salesOpenByStatus;
+                  let i = index
+                "
+              >
+
+                <!-- NUMBER -->
+                <td class="number-cell">
+
+                  <span class="row-number">
+                    {{ i + 1 }}
+                  </span>
+
+                </td>
+
+
+                <!-- SALE CODE -->
+                <td class="sale-code-cell">
+
+                  <div class="sale-info">
+
+                    <strong>
+                      {{ sale.salesCode }}
+                    </strong>
+
+                  </div>
+
+                </td>
+
+
+                <!-- DATE -->
+                <td class="date-cell">
+
+                  <div class="sale-date">
+
+                    <i class="bi bi-calendar3"></i>
+
+                    <span>
+                      {{ sale.createdAt | date:'dd MMM yyyy' }}
+                    </span>
+
+                  </div>
+
+                </td>
+
+
+                <!-- PAYMENT METHOD -->
+                <td>
+
+                  <div class="table-payment-method">
+
+                    <span class="table-payment-icon">
+
+                      <i class="bi bi-wallet2"></i>
+
+                    </span>
+
+                    <span>
+                      {{ formatPaymentMethod(sale.paymentMethod || 'Not selected') }}
+
+                    </span>
+
+                  </div>
+
+                </td>
+
+
+                <!-- STATUS -->
+                <td>
+
+                  <span
+                    class="status-badge"
+                    [ngClass]="
+                      sale.paymentStatus?.toLowerCase()
+                    "
+                  >
+
+                    <i
+                      class="bi bi-check-circle-fill"
+                      *ngIf="
+                        sale.paymentStatus === 'PAID'
+                      "
+                    >
+                    </i>
+
+                    <i
+                      class="bi bi-clock-fill"
+                      *ngIf="
+                        sale.paymentStatus === 'PENDING'
+                      "
+                    >
+                    </i>
+
+                    {{ sale.paymentStatus }}
+
+                  </span>
+
+                </td>
+
+
+                <!-- AMOUNT -->
+                <td class="amount-cell">
+
+                  <strong>
+                    Tshs
+                    {{ sale.paidAmount | number:'1.2-2' }}
+                  </strong>
+
+                </td>
+
+
+
+
+                <!-- ACTION -->
+                <td class="action-cell">
+
+                  <button
+                    type="button"
+                    class="sale-action-btn"
+                    (click)="
+                      openSaleDetailsDialogForMore(sale)
+                    "
+                    [title]="'SALES_PAGE.TOOLTIP_VIEW_DETAILS' | translate"
+                  >
+
+                    <mat-icon svgIcon="more">
+
+                    </mat-icon>
+
+                  </button>
+
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+
+      <!-- =====================================================
+           EMPTY STATE
+      ====================================================== -->
+
+      <app-empty-state
+        *ngIf="salesOpenByStatus.length === 0"
+        icon="payment2"
+        title="SALES_PAGE.EMPTY_TRANSACTIONS_TITLE"
+        text="SALES_PAGE.EMPTY_TRANSACTIONS_TEXT"
+      />
+
+    </div>
+
+  </div>
+
+}
+
+}

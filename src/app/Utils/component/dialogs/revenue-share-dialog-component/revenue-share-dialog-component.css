@@ -1,0 +1,556 @@
+.revenue-share-dialog {
+  display: flex;
+  flex-direction: column;
+  max-height: 82vh;
+  /* Material's dialog surface brings no padding of its own, so it is set
+     here. A little extra on top keeps the title off the panel edge. */
+  padding: 26px 24px 20px;
+  box-sizing: border-box;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.dialog-header {
+  /* Never shrink: in a flex column a long body would otherwise squeeze the
+     header until the title was cut off. */
+  flex: 0 0 auto;
+  padding: 0 0 14px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.header-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.dialog-title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding-top: 2px;
+  color: #0f172a;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: -0.25px;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+/* A thin accent under the title reads as a heading rather than plain text. */
+.dialog-title::after {
+  content: '';
+  display: block;
+  width: 34px;
+  height: 3px;
+  margin-top: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #4f46e5 0%, #818cf8 100%);
+}
+
+
+/* =========================
+   MONTH FILTERS
+========================= */
+
+.header-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.filter-label {
+  color: #94a3b8;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+/* Copied from the error settings page so the two filters look the same. */
+.filter-select {
+  height: 36px;
+  padding: 0 12px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  color: #374151;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+
+/* =========================
+   ICON BUTTON
+========================= */
+
+.icon-btn {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  color: #64748b;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.icon-btn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+
+/* =========================
+   BODY
+========================= */
+
+.dialog-body {
+  flex: 1 1 auto;
+  /* Without min-height:0 a flex item refuses to shrink below its content, so
+     the overflow lands on its siblings instead of scrolling here. */
+  min-height: 0;
+  overflow-y: auto;
+  padding: 18px 0 4px;
+  margin: 0;
+}
+
+.state-note {
+  margin: 0;
+  padding: 14px 15px;
+  background: #f8fafc;
+  border: 1px dashed #e2e8f0;
+  border-radius: 12px;
+  color: #94a3b8;
+  font-size: 12.5px;
+}
+
+
+/* =========================
+   MONTH REVENUE
+========================= */
+
+.revenue-head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 22px;
+}
+
+.revenue-label {
+  color: #94a3b8;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+.revenue-value {
+  color: #0f172a;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.6px;
+  line-height: 1.2;
+}
+
+.revenue-unit {
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.revenue-meta {
+  color: #64748b;
+  font-size: 12.5px;
+}
+
+
+/* =========================
+   SHARE ROWS
+========================= */
+
+.share-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.share-row {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+}
+
+/* Running costs are what is left after the three shares, so a rule and a
+   heavier weight set them apart from the rows they follow. */
+.share-row-remainder {
+  padding-top: 15px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.share-top {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+
+.share-name {
+  color: #0f172a;
+  font-size: 13px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.share-row-remainder .share-name {
+  font-weight: 700;
+}
+
+.share-percent {
+  flex: 1;
+  min-width: 0;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* With no percentage to push it along, the amount still needs the free space
+   between the two ends of the row. */
+.share-row-remainder .share-name {
+  flex: 1;
+  min-width: 0;
+}
+
+.share-amount {
+  flex: 0 0 auto;
+  margin-left: auto;
+  color: #0f172a;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.share-row-remainder .share-amount {
+  font-weight: 700;
+}
+
+.share-track {
+  height: 7px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  overflow: hidden;
+}
+
+.share-bar {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.25s ease;
+}
+
+
+/* =========================
+   WHO HOLDS THE SHARE
+========================= */
+
+.who-btn {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 5px;
+  height: 24px;
+  padding: 0 9px;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.who-btn mat-icon {
+  width: 13px;
+  height: 13px;
+  font-size: 13px;
+  line-height: 13px;
+}
+
+.who-btn:hover {
+  background: #eef2ff;
+  border-color: #c7d2fe;
+  color: #4338ca;
+}
+
+/* The open row is tinted so it is clear which list belongs to which share. */
+.who-btn-open {
+  background: #eef2ff;
+  border-color: #c7d2fe;
+  color: #4338ca;
+}
+
+.who-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.28);
+}
+
+/* Indented and ruled off, so the list reads as belonging to the row above it. */
+.recipient-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-left: 14px;
+  padding-left: 12px;
+  border-left: 2px solid #eef2ff;
+}
+
+.recipient-note {
+  margin: 0;
+  padding: 8px 0;
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.recipient-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.recipient-row:last-child {
+  border-bottom: none;
+}
+
+.recipient-who {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.recipient-name {
+  color: #0f172a;
+  font-size: 12.5px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.recipient-username {
+  color: #94a3b8;
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+
+.recipient-figures {
+  display: flex;
+  gap: 14px;
+  margin-left: auto;
+}
+
+.recipient-figure {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+}
+
+.recipient-figure-label {
+  color: #94a3b8;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.recipient-figure-value {
+  color: #334155;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* What is still owed is the figure somebody has to act on, so it is the one
+   figure of the three set in a tinted pill rather than plain text. */
+.recipient-outstanding {
+  padding: 1px 7px;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 999px;
+  color: #b45309;
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+/* Nothing left owing is not a call to action, so the pill drops its colour. */
+.recipient-outstanding-clear {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+
+/* =========================
+   RECORDING A PAYOUT
+========================= */
+
+.recipient-action {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 86px;
+}
+
+.pay-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 26px;
+  padding: 0 11px;
+  background: #0f172a;
+  border: 1px solid #0f172a;
+  border-radius: 999px;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+}
+
+.pay-btn mat-icon {
+  width: 13px;
+  height: 13px;
+  font-size: 13px;
+  line-height: 13px;
+}
+
+.pay-btn:hover:not(:disabled) {
+  background: #1e293b;
+  border-color: #1e293b;
+}
+
+.pay-btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.pay-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.28);
+}
+
+/* Settled rows still say so in words - a tick on its own would not. */
+.paid-flag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 26px;
+  padding: 0 10px;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  border-radius: 999px;
+  color: #047857;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.paid-flag mat-icon {
+  width: 12px;
+  height: 12px;
+  font-size: 12px;
+  line-height: 12px;
+}
+
+
+/* =========================
+   ACTIONS
+========================= */
+
+.dialog-actions {
+  display: flex;
+  flex: 0 0 auto;
+  justify-content: flex-end;
+  gap: 10px;
+  min-height: auto;
+  padding: 16px 0 0;
+  border-top: 1px solid #e5e7eb;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 18px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1px;
+  cursor: pointer;
+  transition:
+    background 0.16s ease,
+    border-color 0.16s ease,
+    box-shadow 0.16s ease,
+    transform 0.08s ease;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-primary {
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  border: 1px solid #0f172a;
+  color: #ffffff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.18);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(180deg, #334155 0%, #1e293b 100%);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.22);
+}
+
+.btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.28);
+}
+
+
+@media (max-width: 640px) {
+  .dialog-actions {
+    flex-direction: column-reverse;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}

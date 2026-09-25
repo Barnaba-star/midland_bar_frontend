@@ -1,0 +1,119 @@
+<app-title2
+  [titleHeader]="'MESSAGE_ADMIN_PAGE.TITLE'"
+  (customButtonClick)="onAction($event)"
+  [actions]="getTitled(titleActions)"
+  [activeAction]="tab"
+></app-title2>
+
+@switch (tab) {
+  @case ('MESSAGE_ADMIN_PAGE.MANAGE_TAB') {
+
+    <div class="message-container">
+
+      <div class="message-header">
+
+        <div>
+          <h2>{{ 'MESSAGE_ADMIN_PAGE.MGMT_TITLE' | translate }}</h2>
+          <p>{{ 'MESSAGE_ADMIN_PAGE.MGMT_SUBTITLE' | translate }}</p>
+        </div>
+
+        <app-search-box
+          [placeholder]="'MESSAGE_ADMIN_PAGE.SEARCH' | translate"
+          (searchChange)="onSearch($event)"
+        ></app-search-box>
+
+      </div>
+
+
+      <!-- Waiting on us first, because that is the list with work in it. -->
+      <div class="status-tabs">
+        @for (option of statuses; track option) {
+          <button
+            type="button"
+            class="status-tab"
+            [class.selected]="status === option"
+            (click)="onStatus(option)">
+            {{ 'BRANCH_MESSAGE.STATUS_' + option | translate }}
+          </button>
+        }
+      </div>
+
+
+      @if (loading) {
+        <p class="state-note">{{ 'COMMON.LOADING' | translate }}</p>
+      } @else if (failed) {
+        <p class="state-note error">{{ 'MESSAGE_ADMIN_PAGE.LOAD_FAILED' | translate }}</p>
+      } @else if (messages.length === 0) {
+
+        <div class="empty">
+          <div class="empty-icon"><mat-icon svgIcon="announce"></mat-icon></div>
+          <h3>{{ 'MESSAGE_ADMIN_PAGE.EMPTY_TITLE' | translate }}</h3>
+          <p>{{ 'MESSAGE_ADMIN_PAGE.EMPTY_TEXT' | translate }}</p>
+        </div>
+
+      } @else {
+
+        <div class="thread-list">
+
+          @for (message of messages; track message.uid) {
+
+            <button type="button" class="thread" (click)="open(message)">
+
+              <div class="thread-top">
+                <span class="category" [class]="'category-' + message.category.toLowerCase()">
+                  {{ 'BRANCH_MESSAGE.CATEGORY_' + message.category | translate }}
+                </span>
+
+                <span class="branch">{{ message.branchName }}</span>
+                @if (message.branchCode) {
+                  <span class="branch-code">{{ message.branchCode }}</span>
+                }
+
+                <!-- The branch spoke last, so this one is ours to answer. -->
+                @if (message.awaitingReply && message.status !== 'CLOSED') {
+                  <span class="awaiting">{{ 'MESSAGE_ADMIN_PAGE.AWAITING' | translate }}</span>
+                }
+
+                <span class="when">{{ message.lastActivityAt | date:'dd/MM/yyyy HH:mm' }}</span>
+              </div>
+
+              <span class="subject">{{ message.subject || ('BRANCH_MESSAGE.NO_SUBJECT' | translate) }}</span>
+              <span class="snippet">{{ snippet(message) }}</span>
+
+              <div class="thread-foot">
+                <span class="raised-by">{{ message.raisedByName }}</span>
+                @if (message.replyCount > 0) {
+                  <span class="replies">
+                    <mat-icon svgIcon="announce"></mat-icon>
+                    {{ message.replyCount }}
+                  </span>
+                }
+                <span class="status-pill" [class]="'status-' + message.status.toLowerCase()">
+                  {{ 'BRANCH_MESSAGE.STATUS_' + message.status | translate }}
+                </span>
+              </div>
+
+            </button>
+
+          }
+
+        </div>
+
+
+        @if (totalPages > 1) {
+          <div class="pagination">
+            <button type="button" (click)="previousPage()" [disabled]="page === 0">
+              {{ 'COMMON.PREVIOUS' | translate }}
+            </button>
+            <span>{{ page + 1 }} / {{ totalPages }}</span>
+            <button type="button" (click)="nextPage()" [disabled]="page + 1 >= totalPages">
+              {{ 'COMMON.NEXT' | translate }}
+            </button>
+          </div>
+        }
+
+      }
+
+    </div>
+  }
+}

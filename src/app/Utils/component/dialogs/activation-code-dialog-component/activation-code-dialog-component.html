@@ -1,0 +1,70 @@
+<div class="code-dialog">
+
+  <div class="dialog-header">
+    <div class="header-icon">
+      <mat-icon>check_circle</mat-icon>
+    </div>
+    <h2>{{ 'ACTIVATION_CODE_DIALOG.TITLE' | translate }}</h2>
+  </div>
+
+  <p class="dialog-subtitle">
+    {{ 'ACTIVATION_CODE_DIALOG.SUBTITLE' | translate }}
+  </p>
+
+
+  <div class="credentials">
+
+    <div class="credential">
+      <span class="credential-label">{{ 'ACTIVATION_CODE_DIALOG.USERNAME' | translate }}</span>
+      <span class="credential-value">{{ data.username }}</span>
+    </div>
+
+    <div class="credential">
+      <span class="credential-label">{{ 'ACTIVATION_CODE_DIALOG.CODE' | translate }}</span>
+      <span class="credential-value code">{{ data.activationCode }}</span>
+    </div>
+
+  </div>
+
+
+  <div class="notes">
+
+    <p class="note">
+      <mat-icon>schedule</mat-icon>
+      <span>{{ 'ACTIVATION_CODE_DIALOG.EXPIRY' | translate: { hours: data.validHours } }}</span>
+    </p>
+
+    <p class="note">
+      <mat-icon>lock_reset</mat-icon>
+      <span>{{ 'ACTIVATION_CODE_DIALOG.ONE_TIME' | translate }}</span>
+    </p>
+
+    @if (data.phone) {
+      <p class="note">
+        <mat-icon>sms</mat-icon>
+        <span>{{ 'ACTIVATION_CODE_DIALOG.ALSO_SENT' | translate: { phone: data.phone } }}</span>
+      </p>
+    }
+
+    <p class="note warn">
+      <mat-icon>visibility_off</mat-icon>
+      <span>{{ 'ACTIVATION_CODE_DIALOG.SHOWN_ONCE' | translate }}</span>
+    </p>
+
+  </div>
+
+
+  <div class="dialog-footer">
+
+    <button type="button" class="copy-btn" (click)="copy()">
+      <mat-icon>{{ copied ? 'check' : 'content_copy' }}</mat-icon>
+      {{ (copied ? 'ACTIVATION_CODE_DIALOG.COPIED' : 'ACTIVATION_CODE_DIALOG.COPY') | translate }}
+    </button>
+
+    <button type="button" class="done-btn" (click)="close()">
+      {{ 'COMMON.DONE' | translate }}
+    </button>
+
+  </div>
+
+</div>

@@ -1,0 +1,238 @@
+<app-title2
+  titleHeader="SERVICE.MANAGE"
+  [actions]=getTitled(titleActions)
+  [activeAction]="selectedService"
+  (customButtonClick)="onAction($event)">
+</app-title2>
+@switch (selectedService){
+  @case ('SERVICE.MANAGE') {
+  <div class="action-container">
+   @if (barServiceDataSource.length > 0) {
+
+  <div class="service-card">
+
+    <!-- Header -->
+    <div class="service-card-header">
+
+      <div class="service-header-left">
+        <div class="service-header-icon">
+          <mat-icon>content_cut</mat-icon>
+        </div>
+
+        <div>
+          <h3>{{ 'SERVICE_PAGE.TITLE' | translate }}</h3>
+          <p>{{ 'SERVICE_PAGE.SUBTITLE' | translate }}</p>
+        </div>
+      </div>
+
+      <div class="service-summary">
+        <span class="summary-number">
+          {{ totalElements }}
+        </span>
+        <span class="summary-label">
+          {{ 'SERVICE_PAGE.SERVICES_LABEL' | translate }}
+        </span>
+      </div>
+
+    </div>
+
+    <!-- Table -->
+    <div class="table-responsive">
+
+      <table class="table service-table">
+
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>{{ 'SERVICE_PAGE.COL_SERVICE' | translate }}</th>
+            <th>{{ 'COMMON.CODE' | translate }}</th>
+            <th>{{ 'COMMON.DURATION' | translate }}</th>
+            <th>{{ 'COMMON.PRICE' | translate }}</th>
+            <th>{{ 'COMMON.STATUS' | translate }}</th>
+            <th>{{ 'COMMON.ACTIONS' | translate }}</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          @for (
+            service of barServiceDataSource;
+            track service.uid;
+            let i = $index
+          ) {
+
+            <tr>
+
+              <!-- Number -->
+              <td class="index-column">
+                {{ (page * size) + i + 1 }}
+              </td>
+
+              <!-- Service -->
+              <td>
+                <div class="service-info">
+
+                  <div class="service-avatar">
+                    <mat-icon>content_cut</mat-icon>
+                  </div>
+
+                  <div class="service-details">
+                    <span class="service-name">
+                      {{ service.serviceName || '--' }}
+                    </span>
+
+                    <small>
+                      {{ service.description || ('SERVICE_PAGE.NO_DESCRIPTION' | translate) }}
+                    </small>
+                  </div>
+
+                </div>
+              </td>
+
+              <!-- Code -->
+              <td>
+                <span class="service-code">
+                  {{ service.serviceCode || '--' }}
+                </span>
+              </td>
+
+
+
+              <!-- Duration -->
+              <td>
+                <div class="duration">
+                  <mat-icon>schedule</mat-icon>
+                  <span>
+                    {{ service.duration || 0 }} min
+                  </span>
+                </div>
+              </td>
+
+              <!-- Price -->
+              <td>
+                <span class="service-price">
+                  Tshs {{ service.price | number: '1.2-2' }}
+                </span>
+              </td>
+
+              <!-- Status -->
+              <td>
+
+                @if (service.status === 'active') {
+
+                  <span class="status-badge active">
+                    <span class="status-dot"></span>
+                    {{ 'COMMON.ACTIVE' | translate }}
+                  </span>
+
+                } @else {
+
+                  <span class="status-badge inactive">
+                    <span class="status-dot"></span>
+                    {{ service.status || ('COMMON.INACTIVE' | translate) }}
+                  </span>
+
+                }
+
+              </td>
+
+              <!-- Actions -->
+              <td class="actions-column">
+
+                <button
+                  mat-icon-button
+                  type="button"
+                  [matTooltip]="'COMMON.MORE' | translate"
+                  (click)="onMoreService(service)"
+                >
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+
+              </td>
+
+            </tr>
+
+          }
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <!-- Pagination -->
+    <div class="service-pagination">
+
+      <div class="page-size">
+
+        <span>{{ 'COMMON.SHOW' | translate }}</span>
+
+        <select
+          [value]="size"
+          (change)="changePageSize($event)"
+        >
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="50">50</option>
+        </select>
+
+        <span>{{ 'COMMON.ENTRIES' | translate }}</span>
+
+      </div>
+
+      <div class="pagination-buttons">
+
+        <button
+          mat-stroked-button
+          type="button"
+          [disabled]="page === 0"
+          (click)="changePage(page - 1)"
+        >
+          <mat-icon>chevron_left</mat-icon>
+          {{ 'COMMON.PREVIOUS' | translate }}
+        </button>
+
+        @for (p of [].constructor(totalPages); track $index) {
+
+          <button
+            mat-button
+            type="button"
+            [class.active-page]="page === $index"
+            (click)="changePage($index)"
+          >
+            {{ $index + 1 }}
+          </button>
+
+        }
+
+        <button
+          mat-stroked-button
+          type="button"
+          [disabled]="page >= totalPages - 1"
+          (click)="changePage(page + 1)"
+        >
+          {{ 'COMMON.NEXT' | translate }}
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+}
+
+    @if(barServiceDataSource.length === 0){
+       <app-empty-state
+         icon="service"
+         title="SERVICE_PAGE.EMPTY_TITLE"
+         text="SERVICE_PAGE.EMPTY_TEXT"
+       />
+    }
+
+    </div>
+
+  }
+}

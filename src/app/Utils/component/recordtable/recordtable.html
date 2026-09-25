@@ -1,0 +1,170 @@
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th style="width: 50px;">{{ 'COMMON.SERIAL_NO' | translate | uppercase }}</th>
+      @for (col of columns; track col) {
+        <th>{{ col.header | uppercase }}</th>
+      }
+      <th>{{ 'COMMON.ACTIONS' | translate | uppercase }}</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    @if (data.length > 0) {
+      @for (row of data; track row) {
+        <tr>
+<td>
+ <div
+  class="serial-number"
+  [style.background]="serialNumber.background"
+  [style.color]="serialNumber.color"
+  [style.width]="serialNumber.size"
+  [style.height]="serialNumber.size"
+  [style.border]="serialNumber.border"
+  [style.fontWeight]="serialNumber.fontWeight">
+
+  {{ $index + 1 }}
+
+</div>
+</td>
+
+
+    @for (col of columns; track col.field) {
+
+  <td>
+
+    <div class="cell-content">
+
+      @if (col.icon && col.iconPosition !== 'right') {
+        <mat-icon
+          class="cell-icon"
+          [svgIcon]="col.icon"
+          [style.color]="
+            col.iconColor ||
+            col.cellColors?.[row[col.field]]?.color
+          ">
+        </mat-icon>
+      }
+
+      <span class="cell-label">
+        {{ row[col.field] }}
+      </span>
+
+      @if (col.icon && col.iconPosition === 'right') {
+        <mat-icon
+          class="cell-icon"
+          [svgIcon]="col.icon"
+          [style.color]="
+            col.iconColor ||
+            col.cellColors?.[row[col.field]]?.color
+          ">
+        </mat-icon>
+      }
+
+    </div>
+
+  </td>
+
+}
+       <td class="actions-cell">
+
+  <!-- View -->
+  @if (showView) {
+    <button
+      type="button"
+      class="action-btn view-btn"
+      (click)="onView(row)"
+      [title]="'COMMON.VIEW' | translate">
+
+      <mat-icon>visibility</mat-icon>
+
+    </button>
+  }
+
+  <!-- Edit -->
+  @if (showEdit) {
+    <button
+      type="button"
+      class="action-btn edit-btn"
+      (click)="onEdit(row)"
+      [title]="'COMMON.EDIT' | translate">
+
+      <mat-icon>edit</mat-icon>
+
+    </button>
+  }
+
+  <!-- Delete -->
+  @if (showDelete) {
+    <button
+      type="button"
+      class="action-btn delete-btn"
+      (click)="onDelete(row)"
+      [title]="'COMMON.DELETE' | translate">
+
+      <mat-icon>delete</mat-icon>
+
+    </button>
+  }
+
+  <!-- Document -->
+  @if (showDoc) {
+    <button
+      type="button"
+      class="action-btn doc-btn"
+      (click)="onOpenDoc(row)"
+      [title]="'COMMON.DOCUMENT' | translate">
+
+      <mat-icon>description</mat-icon>
+
+    </button>
+  }
+
+  <!-- More Menu -->
+  @if (menuList.length > 0) {
+
+    <button
+      type="button"
+      (click)="toggleMenu(row)"
+      class="btn btn-sm btn-outline-primary"
+      [mat-menu-trigger-for]="menu">
+
+      <img
+        src="assets/icons/more.svg"
+        alt="menu" />
+
+    </button>
+
+    <mat-menu
+      #menu="matMenu"
+      class="my-menu">
+
+      @for (menuItem of menuList; track menuItem.action) {
+
+        <button
+          mat-menu-item
+          (click)="handleMenuClick(menuItem.action, row)">
+
+          <mat-icon [svgIcon]="menuItem.icon"></mat-icon>
+
+          <span>{{ menuItem.label }}</span>
+
+        </button>
+
+      }
+
+    </mat-menu>
+
+  }
+
+</td>
+
+
+
+
+
+        </tr>
+      }
+    }
+  </tbody>
+</table>

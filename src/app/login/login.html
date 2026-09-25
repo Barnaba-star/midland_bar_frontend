@@ -1,0 +1,64 @@
+<div class="login-container">
+  <div class="bg-blob blob-one"></div>
+  <div class="bg-blob blob-two"></div>
+
+  <mat-card class="login-card">
+    <div class="brand">
+      <img src="assets/images/midland.png" alt="Midland Solutions" class="brand-logo">
+      <h1 class="brand-title">{{ 'LOGIN.WELCOME_BACK' | translate }}</h1>
+      <p class="brand-subtitle">{{ 'LOGIN.SUBTITLE' | translate }}</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'COMMON.USERNAME' | translate }}</mat-label>
+        <mat-icon matPrefix>person</mat-icon>
+        <input matInput formControlName="username" type="text" autocomplete="username">
+        <mat-error *ngIf="username?.hasError('required') && username?.touched">
+          {{ 'LOGIN.USERNAME_REQUIRED' | translate }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'COMMON.PASSWORD' | translate }}</mat-label>
+        <mat-icon matPrefix>lock</mat-icon>
+        <input matInput formControlName="password" [type]="showPassword ? 'text' : 'password'" autocomplete="current-password">
+        <button mat-icon-button matSuffix type="button" (click)="showPassword = !showPassword" [attr.aria-label]="(showPassword ? 'LOGIN.HIDE_PASSWORD' : 'LOGIN.SHOW_PASSWORD') | translate">
+          <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        <mat-error *ngIf="password?.hasError('required') && password?.touched">
+          {{ 'LOGIN.PASSWORD_REQUIRED' | translate }}
+        </mat-error>
+      </mat-form-field>
+
+      <div class="login-error" *ngIf="loginError">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ loginError }}</span>
+      </div>
+
+      @if (paymentSent) {
+        <div class="login-sent">
+          <mat-icon svgIcon="success"></mat-icon>
+          <p>{{ 'LOGIN.PAYMENT_SENT' | translate }}</p>
+        </div>
+      }
+
+      @if (subscriptionExpired) {
+        <!-- The one login failure the customer can fix from this screen, so
+             it gets a way out rather than just an explanation. -->
+        <div class="login-expired">
+          <p>{{ expiredHelpKey | translate }}</p>
+          <button type="button" class="subscribe-btn" (click)="openSubscribeDialog()">
+            <mat-icon svgIcon="payment"></mat-icon>
+            <span>{{ 'LOGIN.SUBSCRIBE_BTN' | translate }}</span>
+          </button>
+        </div>
+      }
+
+      <button mat-flat-button color="primary" class="submit-button full-width" type="submit" [disabled]="loginForm.invalid || submitting">
+        <mat-icon *ngIf="submitting" class="spinner">autorenew</mat-icon>
+        <span>{{ (submitting ? 'LOGIN.SIGNING_IN' : 'LOGIN.SIGN_IN') | translate }}</span>
+      </button>
+    </form>
+  </mat-card>
+</div>

@@ -1,0 +1,200 @@
+<app-title2
+  [titleHeader]="'AUDIT_SETTING_PAGE.TITLE'"
+  (customButtonClick)="onAction($event)"
+  [actions]="getTitled(titleActions)"
+  [activeAction]="audits"
+></app-title2>
+
+@switch (audits) {
+  @case ('AUDIT_SETTING_PAGE.MANAGE_TAB') {
+
+    <div class="audit-log-container">
+
+      <div class="audit-header">
+
+        <div>
+          <h2>{{ 'AUDIT_SETTING_PAGE.MGMT_TITLE' | translate }}</h2>
+          <p>{{ 'AUDIT_SETTING_PAGE.MGMT_SUBTITLE' | translate }}</p>
+        </div>
+
+        <div class="header-actions">
+          <button type="button" class="refresh-btn" (click)="refresh()">
+            {{ 'AUDIT_SETTING_PAGE.REFRESH_BTN' | translate }}
+          </button>
+
+          <!-- Offered only when something is actually old enough to remove. -->
+          @if (canPurge) {
+            <button type="button" class="purge-btn" [disabled]="purging" (click)="openPurge()">
+              {{ 'AUDIT_SETTING_PAGE.PURGE_BTN' | translate }}
+            </button>
+          }
+        </div>
+
+      </div>
+
+
+      <!-- COUNTS -->
+
+      <div class="summary-row">
+
+        <div class="summary-card">
+          <span class="summary-label">{{ 'AUDIT_SETTING_PAGE.LAST_DAY' | translate }}</span>
+          <span class="summary-value">{{ lastDayCount }}</span>
+        </div>
+
+        <div class="summary-card">
+          <span class="summary-label">{{ 'AUDIT_SETTING_PAGE.LAST_WEEK' | translate }}</span>
+          <span class="summary-value">{{ lastWeekCount }}</span>
+        </div>
+
+        <div class="summary-card">
+          <span class="summary-label">{{ 'AUDIT_SETTING_PAGE.ACTIVE_USERS' | translate }}</span>
+          <span class="summary-value">{{ activeUsersCount }}</span>
+        </div>
+
+        <div class="summary-card">
+          <span class="summary-label">{{ 'AUDIT_SETTING_PAGE.OLDER_THAN_90' | translate }}</span>
+          <span class="summary-value">{{ olderThan90Count }}</span>
+        </div>
+
+      </div>
+
+
+      <!-- FILTERS -->
+
+      <div class="filter-row">
+
+        <app-search-box
+          [placeholder]="'AUDIT_SETTING_PAGE.SEARCH_PLACEHOLDER'"
+          (searchChange)="onSearchChange($event)"
+        ></app-search-box>
+
+        <select
+          class="filter-select"
+          [value]="outcomeFilter"
+          (change)="onFilterChange($any($event.target).value)">
+          <option value="">{{ 'AUDIT_SETTING_PAGE.OUTCOME_ALL' | translate }}</option>
+          <option value="SUCCESS">{{ 'AUDIT_SETTING_PAGE.OUTCOME_SUCCESS' | translate }}</option>
+          <option value="FAILED">{{ 'AUDIT_SETTING_PAGE.OUTCOME_FAILED' | translate }}</option>
+        </select>
+
+      </div>
+
+
+      <!-- TABLE -->
+
+      <div class="table-wrapper">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>{{ 'AUDIT_SETTING_PAGE.COL_TIME' | translate }}</th>
+              <th>{{ 'AUDIT_SETTING_PAGE.COL_USER' | translate }}</th>
+              <th>{{ 'AUDIT_SETTING_PAGE.COL_ACTION' | translate }}</th>
+              <th>{{ 'AUDIT_SETTING_PAGE.COL_OUTCOME' | translate }}</th>
+              <th>{{ 'AUDIT_SETTING_PAGE.COL_PATH' | translate }}</th>
+              <th>{{ 'AUDIT_SETTING_PAGE.COL_DURATION' | translate }}</th>
+              <th>{{ 'AUDIT_SETTING_PAGE.COL_VIEW' | translate }}</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            @for (auditLog of auditLogs; track auditLog.uid; let i = $index) {
+              <tr>
+
+                <td>{{ currentPage * pageSize + i + 1 }}</td>
+
+                <td class="time-cell">
+                  {{ auditLog.occurredAt | date: 'dd/MM/yyyy HH:mm:ss' }}
+                </td>
+
+                <td class="user-cell" [title]="auditLog.username">
+                  {{ displayUser(auditLog) }}
+                </td>
+
+                <td class="action-cell" [title]="auditLog.action">
+                  {{ auditLog.action || '-' }}
+                </td>
+
+                <td>
+                  <span
+                    class="level-badge"
+                    [class.outcome-success]="auditLog.outcome === 'SUCCESS'"
+                    [class.outcome-failed]="auditLog.outcome === 'FAILED'">
+                    {{ auditLog.outcome }}
+                  </span>
+                </td>
+
+                <td class="path-cell" [title]="auditLog.path">
+                  {{ auditLog.httpMethod }} {{ auditLog.path }}
+                </td>
+
+                <td class="duration-cell">{{ auditLog.durationMs }} ms</td>
+
+                <td>
+                  <button type="button" class="view-btn" (click)="openDetail(auditLog)">
+                    {{ 'AUDIT_SETTING_PAGE.VIEW_BTN' | translate }}
+                  </button>
+                </td>
+
+              </tr>
+            }
+
+            @if (!isLoading && auditLogs.length === 0) {
+              <tr>
+                <td colspan="8">
+                  <div class="empty-state">
+                    {{ 'AUDIT_SETTING_PAGE.EMPTY_TEXT' | translate }}
+                  </div>
+                </td>
+              </tr>
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+
+      <!-- PAGINATION -->
+
+      @if (totalPages > 1) {
+        <div class="pagination-row">
+
+          <button
+            type="button"
+            class="pagination-btn"
+            [disabled]="currentPage === 0"
+            (click)="goToPage(currentPage - 1)">
+            &lsaquo;
+          </button>
+
+          @for (page of pageNumbers; track page) {
+            <button
+              type="button"
+              class="pagination-btn page-number"
+              [class.active]="currentPage === page"
+              (click)="goToPage(page)">
+              {{ page + 1 }}
+            </button>
+          }
+
+          <button
+            type="button"
+            class="pagination-btn"
+            [disabled]="currentPage >= totalPages - 1"
+            (click)="goToPage(currentPage + 1)">
+            &rsaquo;
+          </button>
+
+        </div>
+      }
+
+    </div>
+
+  }
+}

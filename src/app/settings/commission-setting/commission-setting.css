@@ -1,0 +1,601 @@
+.info-card12 {
+  margin: 16px;
+  padding: 0;
+
+  background: #ffffff;
+
+  border: 1px solid #eef2f7;
+  border-radius: 10px;
+
+  overflow: hidden;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.commission-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  flex-wrap: wrap;
+  gap: 16px;
+
+  padding: 16px 20px;
+
+  border-bottom: 1px solid #eef2f7;
+}
+
+.commission-header h3 {
+  margin: 0;
+
+  color: #101828;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.commission-header p {
+  margin: 4px 0 0;
+
+  color: #667085;
+  font-size: 12px;
+}
+
+.period-picker {
+  display: flex;
+  align-items: flex-end;
+
+  gap: 10px;
+}
+
+/* app-search-box ni inline kwa default - bila hili haipati upana wowote. */
+.period-picker app-search-box {
+  display: block;
+  width: 240px;
+}
+
+.period-field {
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+.period-field span {
+  color: #667085;
+  font-size: 11px;
+  font-weight: 500;
+
+  text-transform: uppercase;
+  letter-spacing: .03em;
+}
+
+.period-field select {
+  height: 34px;
+
+  padding: 0 10px;
+
+  min-width: 120px;
+
+  border: 1px solid #e4e7ec;
+  border-radius: 6px;
+
+  background: #ffffff;
+
+  color: #101828;
+  font-family: inherit;
+  font-size: 13px;
+
+  cursor: pointer;
+}
+
+.period-field select:focus {
+  outline: none;
+
+  border-color: #bfdbfe;
+}
+
+
+/* =========================
+   SUMMARY TILES
+========================= */
+
+.summary-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+
+  gap: 1px;
+
+  background: #eef2f7;
+
+  border-bottom: 1px solid #eef2f7;
+}
+
+.summary-tile {
+  display: flex;
+  flex-direction: column;
+
+  gap: 2px;
+
+  padding: 14px 20px;
+
+  background: #ffffff;
+}
+
+.summary-label {
+  color: #667085;
+  font-size: 11px;
+  font-weight: 500;
+
+  text-transform: uppercase;
+  letter-spacing: .03em;
+}
+
+.summary-value {
+  color: #101828;
+  font-size: 22px;
+  font-weight: 600;
+
+  line-height: 1.2;
+}
+
+.summary-tile.accent .summary-value {
+  color: #5b21b6;
+}
+
+.summary-unit {
+  color: #98a2b3;
+  font-size: 11px;
+}
+
+
+/* =========================
+   TABLE
+========================= */
+
+.table-container {
+  width: 100%;
+
+  overflow-x: auto;
+}
+
+.commission-table {
+  width: 100%;
+  min-width: 860px;
+
+  border-collapse: collapse;
+}
+
+.commission-table thead th {
+  padding: 10px 14px;
+
+  background: #f9fafb;
+
+  color: #667085;
+  font-size: 11px;
+  font-weight: 600;
+
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+
+  white-space: nowrap;
+
+  border-bottom: 1px solid #eef2f7;
+}
+
+.commission-table td {
+  padding: 12px 14px;
+
+  color: #344054;
+  font-size: 13px;
+
+  border-bottom: 1px solid #f4f6f9;
+
+  vertical-align: middle;
+}
+
+.num {
+  text-align: right !important;
+}
+
+.index {
+  color: #98a2b3;
+  font-size: 12px;
+}
+
+.staff-row {
+  cursor: pointer;
+
+  transition: background .12s ease;
+}
+
+.staff-row:hover {
+  background: #f9fafb;
+}
+
+.staff-row.expanded {
+  background: #f5f3ff;
+}
+
+/* A staff member owed nothing this month is still shown - that zero is the
+   signal their branches went quiet - but shouldn't compete for attention. */
+.staff-row:not(.has-earnings) .commission {
+  color: #98a2b3;
+}
+
+.staff-info {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: #ede9fe;
+
+  color: #5b21b6;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.staff-name {
+  display: flex;
+  flex-direction: column;
+}
+
+.full-name {
+  color: #101828;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.username {
+  color: #98a2b3;
+  font-size: 11px;
+}
+
+.paid-badge {
+  display: inline-block;
+
+  min-width: 26px;
+
+  padding: 2px 8px;
+
+  border-radius: 12px;
+
+  background: #ecfdf3;
+
+  color: #027a48;
+  font-size: 12px;
+  font-weight: 600;
+
+  text-align: center;
+}
+
+.paid-badge.none {
+  background: #f2f4f7;
+
+  color: #98a2b3;
+}
+
+.commission {
+  color: #5b21b6;
+  font-weight: 600;
+}
+
+.chevron {
+  width: 18px;
+  height: 18px;
+
+  font-size: 18px;
+
+  color: #98a2b3;
+}
+
+
+/* =========================
+   DRILL-DOWN
+========================= */
+
+.detail-row > td {
+  padding: 0 !important;
+
+  background: #fbfaff;
+}
+
+.detail-table {
+  width: 100%;
+
+  border-collapse: collapse;
+}
+
+.detail-table thead th {
+  padding: 8px 14px 8px 46px;
+
+  background: transparent;
+
+  color: #98a2b3;
+  font-size: 10px;
+  font-weight: 600;
+
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+}
+
+.detail-table td {
+  padding: 8px 14px 8px 46px;
+
+  font-size: 12px;
+
+  border-bottom: 1px solid #f4f6f9;
+}
+
+.detail-table tr:last-child td {
+  border-bottom: none;
+}
+
+.branch-code {
+  margin-left: 6px;
+
+  color: #98a2b3;
+  font-size: 11px;
+}
+
+.detail-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 20px;
+
+  color: #98a2b3;
+  font-size: 12px;
+}
+
+
+/* =========================
+   EMPTY / LOADING
+========================= */
+
+.empty-state {
+  height: 200px;
+
+  text-align: center !important;
+
+  color: #98a2b3 !important;
+  font-size: 13px !important;
+}
+
+.empty-state mat-icon {
+  display: block;
+
+  width: 32px;
+  height: 32px;
+
+  margin: 0 auto 10px;
+
+  font-size: 32px;
+
+  color: #d0d5dd;
+}
+
+.empty-state strong {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: #667085;
+  font-size: 14px;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+
+@media (max-width: 768px) {
+  .commission-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .period-picker {
+    width: 100%;
+  }
+
+  .period-field {
+    flex: 1;
+  }
+
+  .period-field select {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+
+/* =========================
+   PAYOUT STATUS / BUTTON
+========================= */
+
+.summary-tile.warn .summary-value {
+  color: #b54708;
+}
+
+.status-cell {
+  white-space: nowrap;
+}
+
+.status-none {
+  color: #d0d5dd;
+}
+
+.status-paid {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 4px;
+
+  padding: 3px 10px;
+
+  border-radius: 12px;
+
+  background: #ecfdf3;
+
+  color: #027a48;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-paid mat-icon {
+  width: 14px;
+  height: 14px;
+
+  font-size: 14px;
+}
+
+.pay-button {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 6px;
+
+  height: 30px;
+
+  padding: 0 12px;
+
+  border: 1px solid #039855;
+  border-radius: 6px;
+
+  background: #039855;
+
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  cursor: pointer;
+
+  transition: all .15s ease;
+}
+
+.pay-button:hover:not(:disabled) {
+  background: #027a48;
+
+  border-color: #027a48;
+}
+
+.pay-button:disabled {
+  opacity: .6;
+
+  cursor: default;
+}
+
+.pay-button mat-icon {
+  width: 16px;
+  height: 16px;
+
+  font-size: 16px;
+
+  flex-shrink: 0;
+}
+
+/* a top-up is pending: show what has already gone out so the smaller
+   button figure doesn't read like the whole month's commission */
+.part-paid {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #98a2b3;
+  font-size: 10px;
+}
+
+
+/* =========================
+   BRANCH BREAKDOWN BUTTON
+========================= */
+
+.branches-button {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 6px;
+
+  height: 30px;
+
+  padding: 0 10px;
+
+  border: 1px solid #e4e7ec;
+  border-radius: 6px;
+
+  background: #ffffff;
+
+  color: #475467;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+
+  white-space: nowrap;
+
+  cursor: pointer;
+
+  transition: all .15s ease;
+}
+
+.branches-button:hover {
+  background: #eff8ff;
+
+  border-color: #b2ddff;
+
+  color: #175cd3;
+}
+
+.branches-button mat-icon {
+  width: 16px;
+  height: 16px;
+
+  font-size: 16px;
+
+  flex-shrink: 0;
+}
+
+/* Shown instead of the Pay button to anyone who may read the report but not
+   pay out - a STAFF member still needs to know they are owed. */
+.status-owed {
+  display: inline-block;
+
+  padding: 3px 10px;
+
+  border-radius: 12px;
+
+  background: #fffaeb;
+
+  color: #b54708;
+  font-size: 12px;
+  font-weight: 600;
+}

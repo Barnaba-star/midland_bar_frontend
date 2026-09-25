@@ -1,0 +1,126 @@
+.help-container {
+  padding: 18px 22px 28px;
+  box-sizing: border-box;
+}
+
+.help-header {
+  margin-bottom: 16px;
+}
+
+.help-header h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.help-header p {
+  margin: 4px 0 0;
+  max-width: 620px;
+  color: #64748b;
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+
+/* =========================
+   THE NOTES
+========================= */
+
+.note-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.note {
+  padding: 16px 18px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.note-title {
+  margin: 0 0 8px;
+  color: #0f172a;
+  font-size: 14px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+/* The note is written with its own paragraphs and lists - keep the breaks
+   the author typed rather than running it into one block. */
+.note-body {
+  margin: 0;
+  color: #475467;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.note-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.note-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 13px;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  background: #f8fafc;
+  color: #175cd3;
+  font-size: 12.5px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.note-link:hover {
+  border-color: #c7d2fe;
+  background: #eff8ff;
+}
+
+.note-link mat-icon {
+  width: 15px;
+  height: 15px;
+  font-size: 15px;
+}
+
+.file-name {
+  max-width: 180px;
+  overflow: hidden;
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* =========================
+   STATES
+========================= */
+
+.state-note {
+  padding: 40px 0;
+  color: #94a3b8;
+  font-size: 13px;
+  text-align: center;
+}
+
+.state-note.error {
+  color: #b42318;
+}
+
+
+@media (max-width: 640px) {
+
+  .help-container {
+    padding: 14px 12px 24px;
+  }
+}

@@ -1,0 +1,631 @@
+<div class="branch-users-dialog">
+
+  <!-- ========================= -->
+  <!-- HEADER -->
+  <!-- ========================= -->
+
+  <div class="dialog-header">
+
+    <div class="header-left">
+
+      <div class="branch-avatar">
+
+        <mat-icon>
+          business
+        </mat-icon>
+
+      </div>
+
+
+      <div class="header-text">
+
+        <h2>
+          {{ branch?.branchName || ('USER_VIEW_DIALOG.DEFAULT_TITLE' | translate) }}
+        </h2>
+
+        <span>
+          {{ 'USER_VIEW_DIALOG.BRANCH_CODE_LABEL' | translate }}
+          <strong>
+            {{ branch?.branchCode || '—' }}
+          </strong>
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <button
+      type="button"
+      class="close-icon"
+      (click)="close()"
+    >
+
+      <mat-icon>
+        close
+      </mat-icon>
+
+    </button>
+
+  </div>
+
+
+  <!-- ========================= -->
+  <!-- BRANCH INFORMATION -->
+  <!-- ========================= -->
+
+  <div class="content">
+
+    <section class="branch-section">
+
+
+      <div class="section-heading">
+
+        <div class="heading-icon purple">
+
+          <mat-icon>
+            store
+          </mat-icon>
+
+        </div>
+
+
+        <div>
+
+          <h3>
+            {{ 'USER_VIEW_DIALOG.BRANCH_INFO_TITLE' | translate }}
+          </h3>
+
+          <span>
+            {{ 'USER_VIEW_DIALOG.BRANCH_INFO_SUBTITLE' | translate }}
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div class="branch-main-card">
+
+
+        <div class="branch-main-left">
+
+          <div class="large-branch-icon">
+
+            <mat-icon>
+              business
+            </mat-icon>
+
+          </div>
+
+
+          <div>
+
+            <h2>
+              {{ branch?.branchName || '—' }}
+            </h2>
+
+            <div class="branch-code">
+
+              <span>
+                {{ 'USER_VIEW_DIALOG.CODE_LABEL' | translate }}
+              </span>
+
+              {{ branch?.branchCode || '—' }}
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div
+          class="branch-status"
+          [class.active]="branch?.isActive"
+        >
+
+          <span class="status-dot"></span>
+
+          {{ branch?.status || ('USER_VIEW_DIALOG.UNKNOWN_STATUS' | translate) }}
+
+        </div>
+
+      </div>
+
+
+      <div class="branch-grid">
+
+
+        <div class="branch-info">
+
+          <mat-icon>
+            category
+          </mat-icon>
+
+          <div>
+
+            <span>
+              {{ 'COMMON.CATEGORY' | translate }}
+            </span>
+
+            <strong>
+              {{ branch?.branchCategory || '—' }}
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <div class="branch-info">
+
+          <mat-icon>
+            location_on
+          </mat-icon>
+
+          <div>
+
+            <span>
+              {{ 'COMMON.REGION' | translate }}
+            </span>
+
+            <strong>
+              {{ branch?.region || '—' }}
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <div class="branch-info">
+
+          <mat-icon>
+            home
+          </mat-icon>
+
+          <div>
+
+            <span>
+              {{ 'COMMON.ADDRESS' | translate }}
+            </span>
+
+            <strong>
+              {{ branch?.address || '—' }}
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <div class="branch-info">
+
+          <mat-icon>
+            phone
+          </mat-icon>
+
+          <div>
+
+            <span>
+              {{ 'COMMON.PHONE' | translate }}
+            </span>
+
+            <strong>
+              {{ branch?.phone || '—' }}
+            </strong>
+
+          </div>
+
+        </div>
+
+
+      </div>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- USERS -->
+    <!-- ========================= -->
+
+    <section class="users-section">
+
+
+      <div class="users-heading">
+
+
+        <div class="section-heading">
+
+          <div class="heading-icon blue">
+
+            <mat-icon>
+              groups
+            </mat-icon>
+
+          </div>
+
+
+          <div>
+
+            <h3>
+              {{ 'USER_VIEW_DIALOG.BRANCH_USERS_TITLE' | translate }}
+            </h3>
+
+            <span>
+              {{ 'USER_VIEW_DIALOG.BRANCH_USERS_SUBTITLE' | translate }}
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="users-count">
+
+          <mat-icon>
+            people
+          </mat-icon>
+
+          {{ users.length }}
+
+          {{ (users.length === 1 ? 'USER_VIEW_DIALOG.USER_SINGULAR' : 'USER_VIEW_DIALOG.USERS_PLURAL') | translate }}
+
+        </div>
+
+      </div>
+
+
+      <!-- NO USERS -->
+
+      @if (users.length === 0) {
+
+        <div class="empty-state">
+
+          <mat-icon>
+            group_off
+          </mat-icon>
+
+          <h3>
+            {{ 'USER_VIEW_DIALOG.EMPTY_USERS_TITLE' | translate }}
+          </h3>
+
+          <p>
+            {{ 'USER_VIEW_DIALOG.EMPTY_USERS_TEXT' | translate }}
+          </p>
+
+        </div>
+
+      }
+
+
+      <!-- USERS -->
+
+      @for (user of users; track user.uid) {
+
+
+        <div class="user-card">
+
+
+          <!-- USER HEADER -->
+
+          <div class="user-header">
+
+
+            <div class="user-profile">
+
+
+              <div class="user-avatar">
+
+                {{ getUserInitials(user) }}
+
+              </div>
+
+
+              <div class="user-name">
+
+                <h3>
+
+                  {{ user.firstName }}
+                  {{ user.middleName }}
+                  {{ user.lastName }}
+
+                </h3>
+
+
+                <span>
+
+                  <mat-icon>
+                    person
+                  </mat-icon>
+
+                  {{ user.username }}
+
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <div
+              class="user-status"
+              [ngClass]="getUserStatusClass(user)"
+            >
+
+              <span class="status-dot"></span>
+
+              {{ getUserStatus(user) | translate }}
+
+            </div>
+
+
+          </div>
+
+
+          <!-- USER DETAILS -->
+
+          <div class="user-details">
+
+
+            <div class="user-detail">
+
+              <mat-icon>
+                phone
+              </mat-icon>
+
+              <div>
+
+                <span>
+                  {{ 'COMMON.PHONE' | translate }}
+                </span>
+
+                <strong>
+                  {{ user.phone || '—' }}
+                </strong>
+
+              </div>
+
+            </div>
+
+
+            <div class="user-detail">
+
+              <mat-icon>
+                email
+              </mat-icon>
+
+              <div>
+
+                <span>
+                  {{ 'COMMON.EMAIL' | translate }}
+                </span>
+
+                <strong>
+                  {{ user.email || '—' }}
+                </strong>
+
+              </div>
+
+            </div>
+
+
+            <div class="user-detail">
+
+              <mat-icon>
+                wc
+              </mat-icon>
+
+              <div>
+
+                <span>
+                  {{ 'COMMON.GENDER' | translate }}
+                </span>
+
+                <strong>
+                  {{ user.gender || '—' }}
+                </strong>
+
+              </div>
+
+            </div>
+
+
+            <div class="user-detail">
+
+              <mat-icon>
+                calendar_today
+              </mat-icon>
+
+              <div>
+
+                <span>
+                  {{ 'STAFF_PAGE.COL_DOB' | translate }}
+                </span>
+
+                <strong>
+                  {{ user.dateOfBirth || '—' }}
+                </strong>
+
+              </div>
+
+            </div>
+
+
+          </div>
+
+
+          <!-- ROLES -->
+
+          <div class="roles-section">
+
+
+            <div class="roles-header">
+
+              <div>
+
+                <mat-icon>
+                  admin_panel_settings
+                </mat-icon>
+
+                <span>
+                  {{ 'USER_VIEW_DIALOG.ROLES_LABEL' | translate }}
+                </span>
+
+              </div>
+
+
+              <span class="role-count">
+
+                {{ user.roles?.length || 0 }}
+
+                {{
+                  (user.roles?.length === 1
+                    ? 'USER_VIEW_DIALOG.ROLE_SINGULAR'
+                    : 'USER_VIEW_DIALOG.ROLES_PLURAL') | translate
+                }}
+
+              </span>
+
+            </div>
+
+
+            <div class="roles-list">
+
+
+              @for (
+                role of user.roles;
+                track role.uid
+              ) {
+
+
+                <div class="role-card">
+
+
+                  <div class="role-icon">
+
+                    <mat-icon>
+                      shield
+                    </mat-icon>
+
+                  </div>
+
+
+                  <div class="role-details">
+
+                    <strong>
+                      {{ role.name }}
+                    </strong>
+
+                    <span>
+                      {{ role.description || ('ROLE_DETAILS_DIALOG.NO_DESCRIPTION' | translate) }}
+                    </span>
+
+                  </div>
+
+
+                  <div class="role-meta">
+
+                    <span>
+                      {{ role.code }}
+                    </span>
+
+                    <small>
+                      {{ role.category }}
+                    </small>
+
+                  </div>
+
+
+                </div>
+
+              }
+
+
+              @if (!user.roles?.length) {
+
+                <div class="no-role">
+
+                  <mat-icon>
+                    shield
+                  </mat-icon>
+
+                  {{ 'USER_VIEW_DIALOG.NO_ROLE_ASSIGNED' | translate }}
+
+                </div>
+
+              }
+
+            </div>
+
+          </div>
+
+
+          <!-- ROOT USER -->
+
+          @if (user.isRoot) {
+
+            <div class="root-badge">
+
+              <mat-icon>
+                verified
+              </mat-icon>
+
+              {{ 'USER_VIEW_DIALOG.ROOT_SUPER_USER' | translate }}
+
+            </div>
+
+          }
+
+
+        </div>
+
+      }
+
+    </section>
+
+  </div>
+
+
+  <!-- ========================= -->
+  <!-- FOOTER -->
+  <!-- ========================= -->
+
+  <div class="dialog-footer">
+
+
+    <div class="footer-info">
+
+      <mat-icon>
+        groups
+      </mat-icon>
+
+      <span>
+
+        {{ users.length }}
+
+        {{
+          (users.length === 1
+            ? 'USER_VIEW_DIALOG.FOOTER_SUFFIX_SINGULAR'
+            : 'USER_VIEW_DIALOG.FOOTER_SUFFIX_PLURAL') | translate
+        }}
+
+      </span>
+
+    </div>
+
+
+    <button
+      type="button"
+      class="close-button"
+      (click)="close()"
+    >
+
+      {{ 'COMMON.CLOSE' | translate }}
+
+    </button>
+
+  </div>
+
+</div>

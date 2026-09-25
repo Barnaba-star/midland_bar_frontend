@@ -1,0 +1,349 @@
+.audit-detail-dialog {
+  display: flex;
+  flex-direction: column;
+  max-height: 82vh;
+  /* Material's dialog surface brings no padding of its own, so it is set
+     here. A little extra on top keeps the title off the panel edge rather
+     than hugging it. */
+  padding: 26px 24px 20px;
+  box-sizing: border-box;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.dialog-header {
+  /* Never shrink. In a flex column a long stack trace pushes against the
+     header, and the default flex-shrink:1 let it be squeezed until the title
+     was cut off - that is the clipping, not the text itself. */
+  flex: 0 0 auto;
+  padding: 0 0 14px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.header-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* The title gets the full row to itself - the badges moved below it so a
+   longer heading can never be squeezed or cut. */
+.dialog-title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding-top: 2px;
+  color: #0f172a;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: -0.25px;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+/* A thin accent under the title reads as a heading rather than plain text. */
+.dialog-title::after {
+  content: '';
+  display: block;
+  width: 34px;
+  height: 3px;
+  margin-top: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #4f46e5 0%, #818cf8 100%);
+}
+
+.header-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+
+/* =========================
+   CHIPS
+========================= */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 11px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #334155;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.chip-success {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.chip-failed {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.chip-action {
+  background: #eef2ff;
+  color: #3730a3;
+}
+
+.chip-muted {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  font-weight: 500;
+}
+
+
+/* =========================
+   ICON BUTTON
+========================= */
+
+.icon-btn {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  color: #64748b;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.icon-btn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+
+/* =========================
+   BODY
+========================= */
+
+.dialog-body {
+  flex: 1 1 auto;
+  /* Without min-height:0 a flex item refuses to shrink below its content, so
+     the overflow lands on its siblings instead of scrolling here. */
+  min-height: 0;
+  overflow-y: auto;
+  /* Sides come from the wrapper; only the vertical rhythm is set here. */
+  padding: 18px 0 4px;
+  margin: 0;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 22px;
+  margin-bottom: 20px;
+}
+
+.detail-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.detail-row-wide {
+  grid-column: 1 / -1;
+}
+
+.detail-label {
+  color: #94a3b8;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+.detail-value {
+  color: #0f172a;
+  font-size: 13px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.user-agent {
+  color: #64748b;
+  font-size: 12px;
+}
+
+
+/* =========================
+   BLOCKS
+========================= */
+
+.block {
+  margin-bottom: 18px;
+}
+
+.block-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 7px;
+}
+
+.block-label {
+  display: block;
+  margin-bottom: 7px;
+  color: #94a3b8;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+.block-head .block-label {
+  margin-bottom: 0;
+}
+
+.link-btn {
+  padding: 0;
+  background: none;
+  border: none;
+  color: #4f46e5;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.link-btn:hover {
+  text-decoration: underline;
+}
+
+.payload-box {
+  margin: 0;
+  padding: 13px 15px;
+  border-radius: 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* The payload is what a reader actually came for, so it is the one block
+   that reads like an editor rather than a note. */
+.payload-box {
+  max-height: 240px;
+  overflow-y: auto;
+  background: #0b1120;
+  border: 1px solid #0b1120;
+  color: #bae6fd;
+}
+
+.no-payload {
+  margin: 0;
+  padding: 13px 15px;
+  background: #f8fafc;
+  border: 1px dashed #e2e8f0;
+  border-radius: 12px;
+  color: #94a3b8;
+  font-size: 12.5px;
+}
+
+
+/* =========================
+   ACTIONS
+========================= */
+
+.dialog-actions {
+  display: flex;
+  flex: 0 0 auto;
+  justify-content: flex-end;
+  gap: 10px;
+  min-height: auto;
+  padding: 16px 0 0;
+  border-top: 1px solid #e5e7eb;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 18px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1px;
+  cursor: pointer;
+  transition:
+    background 0.16s ease,
+    border-color 0.16s ease,
+    box-shadow 0.16s ease,
+    transform 0.08s ease;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn mat-icon {
+  width: 17px;
+  height: 17px;
+  font-size: 17px;
+}
+
+.btn-ghost {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #334155;
+}
+
+.btn-ghost:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.btn-primary {
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  border: 1px solid #0f172a;
+  color: #ffffff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.18);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(180deg, #334155 0%, #1e293b 100%);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.22);
+}
+
+.btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.28);
+}
+
+
+@media (max-width: 640px) {
+  .detail-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .dialog-actions {
+    flex-direction: column-reverse;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}

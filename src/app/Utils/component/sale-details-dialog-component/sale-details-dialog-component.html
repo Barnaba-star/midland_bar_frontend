@@ -1,0 +1,334 @@
+<div class="sale-dialog">
+
+  <!-- ================= HEADER ================= -->
+  <div class="dialog-header">
+
+    <div class="sale-title">
+
+      <div class="sale-icon">
+        <mat-icon>receipt_long</mat-icon>
+      </div>
+
+      <div class="sale-title-text">
+        <span>SELECTED SALE</span>
+
+        <h2>
+          {{ data.sale?.salesCode || 'N/A' }}
+        </h2>
+      </div>
+
+    </div>
+
+    <button
+      type="button"
+      class="close-btn"
+      (click)="close()"
+      aria-label="Close dialog"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+
+  </div>
+
+
+  <!-- ================= SALE SUMMARY ================= -->
+  <div class="sale-summary">
+
+    <!-- Payment Status -->
+    <div class="summary-item">
+
+      <span class="summary-label">
+        Payment Status
+      </span>
+
+      <strong
+        class="status-value"
+        [class.paid]="data.sale?.paymentStatus === 'PAID'"
+        [class.pending]="data.sale?.paymentStatus !== 'PAID'"
+      >
+        <span class="status-dot"></span>
+
+        {{ data.sale?.paymentStatus || 'PENDING' }}
+      </strong>
+
+    </div>
+
+
+    <!-- Payment Method -->
+    <div class="summary-item">
+
+      <span class="summary-label">
+        Payment Method
+      </span>
+
+      <strong class="method-value">
+        {{ data.sale?.paymentMethod || 'Not selected' }}
+      </strong>
+
+    </div>
+
+
+    <!-- Bill -->
+    <div class="summary-item">
+
+      <span class="summary-label">
+        Bill Amount
+      </span>
+
+      <strong class="amount-value">
+        Tshs {{ data.sale?.bill | number:'1.0-0' }}
+      </strong>
+
+    </div>
+
+
+    <!-- Paid -->
+    <div class="summary-item">
+
+      <span class="summary-label">
+        Amount Paid
+      </span>
+
+      <strong class="paid-value">
+        Tshs {{ data.sale?.paidAmount | number:'1.0-0' }}
+      </strong>
+
+    </div>
+
+  </div>
+
+
+  <!-- ================= SERVICES ================= -->
+  <div class="services-section">
+
+    <div class="section-header">
+
+      <div class="section-heading">
+
+        <span class="section-label">
+          SALE SERVICES
+        </span>
+
+        <h3>
+          Services
+        </h3>
+
+      </div>
+
+      <div class="service-count">
+        {{ data.services.length || 0 }}
+      </div>
+
+    </div>
+
+
+    <!-- SERVICES AVAILABLE -->
+    @if (data.services.length > 0) {
+
+      <div class="services-list">
+
+        @for (
+          service of data.services;
+          track service.uid;
+          let i = $index
+        ) {
+
+          <div class="service-item">
+
+            <!-- Number -->
+            <div class="service-number">
+              {{ i + 1 }}
+            </div>
+
+
+            <!-- Service information -->
+            <div class="service-info">
+
+              <strong class="service-name">
+                {{ service.serviceName || 'Unnamed Service' }}
+              </strong>
+
+              <span class="staff-name">
+                <mat-icon>person</mat-icon>
+
+                {{ service.firstName || 'Not assigned' }}
+              </span>
+
+            </div>
+
+
+            <!-- Price -->
+            <div class="service-price">
+
+              <span>
+                Price
+              </span>
+
+              <strong>
+                Tshs {{ service.price | number:'1.0-0' }}
+              </strong>
+
+            </div>
+
+          </div>
+
+        }
+
+      </div>
+
+    }
+
+
+    <!-- NO SERVICES -->
+    @else {
+
+      <div class="no-services">
+
+        <div class="no-services-icon">
+          <mat-icon>
+            shopping_bag
+          </mat-icon>
+        </div>
+
+        <div>
+          <h4>
+            No Services
+          </h4>
+
+          <p>
+            There are no services attached to this sale.
+          </p>
+        </div>
+
+      </div>
+
+    }
+
+  </div>
+
+
+  <!-- ================= TOTAL ================= -->
+  <div class="dialog-total">
+
+    <div class="total-label">
+
+      <span>
+        SALE TOTAL
+      </span>
+
+      <small>
+        {{ data.services.length || 0 }}
+        {{ data.services.length === 1 ? 'service' : 'services' }}
+      </small>
+
+    </div>
+
+    <strong>
+      Tshs {{ getTotal() | number:'1.0-0' }}
+    </strong>
+
+  </div>
+
+
+  <!-- ================= PAYMENT ================= -->
+  @if (data.showPayment) {
+
+    <div class="payment-section">
+
+      <div class="payment-heading">
+
+        <div>
+          <span class="payment-label">
+            PAYMENT
+          </span>
+
+          <h3>
+            Payment Method
+          </h3>
+        </div>
+
+        <div class="payment-icon">
+          <mat-icon>
+            payments
+          </mat-icon>
+        </div>
+
+      </div>
+
+
+      <div class="payment-wrapper">
+
+        <label for="paymentMethod">
+          Select Payment Method
+        </label>
+
+        <select
+          id="paymentMethod"
+          class="payment-select"
+          [(ngModel)]="selectedPaymentMethod"
+        >
+
+          <option
+            value=""
+            disabled
+          >
+            Select payment method
+          </option>
+
+          <option value="cash">
+            💵 Cash
+          </option>
+
+          <option value="mpesa">
+            📱 M-Pesa
+          </option>
+
+          <option value="tigopesa">
+            📱 Tigo Pesa
+          </option>
+
+          <option value="airtelmoney">
+            📱 Airtel Money
+          </option>
+
+          <option value="halopesa">
+            📱 HaloPesa
+          </option>
+
+          <option value="bank">
+            🏦 Bank
+          </option>
+
+        </select>
+
+      </div>
+
+    </div>
+
+  }
+
+
+  <!-- ================= FOOTER ================= -->
+  <div class="dialog-footer">
+    @if (data.showPayment) {
+
+      <button
+        type="button"
+        class="payment-btn"
+        [disabled]="!selectedPaymentMethod"
+        (click)="confirmPayment()"
+      >
+
+        <mat-icon>
+          payments
+        </mat-icon>
+
+        Proceed to Payment
+
+      </button>
+
+    }
+
+  </div>
+
+</div>

@@ -1,0 +1,64 @@
+<div class="region-dialog">
+
+  <div class="dialog-header">
+
+    <div class="header-top">
+      <h2 class="dialog-title">
+        {{ (isEdit ? 'REGION_DIALOG.EDIT_TITLE' : 'REGION_DIALOG.ADD_TITLE') | translate }}
+      </h2>
+
+      <button type="button" class="icon-btn" (click)="cancel()" [attr.aria-label]="'COMMON.CLOSE' | translate">
+        <mat-icon svgIcon="close"></mat-icon>
+      </button>
+    </div>
+
+  </div>
+
+
+  <div class="dialog-body">
+
+    <label class="field">
+      <span class="field-label">{{ 'REGION_DIALOG.NAME_LABEL' | translate }}</span>
+
+      <input
+        type="text"
+        class="field-input"
+        [(ngModel)]="name"
+        (ngModelChange)="onFieldChange()"
+        [placeholder]="'REGION_DIALOG.NAME_PLACEHOLDER' | translate"
+        autocomplete="off" />
+    </label>
+
+    <label class="field">
+      <span class="field-label">{{ 'REGION_DIALOG.CODE_LABEL' | translate }}</span>
+
+      <input
+        type="text"
+        class="field-input field-input-code"
+        [(ngModel)]="code"
+        (ngModelChange)="onFieldChange()"
+        [placeholder]="'REGION_DIALOG.CODE_PLACEHOLDER' | translate"
+        maxlength="10"
+        autocomplete="off" />
+    </label>
+
+    <!-- What the code is for is not obvious from the box, so it is spelled out. -->
+    <p class="field-hint">{{ 'REGION_DIALOG.CODE_HINT' | translate }}</p>
+
+  </div>
+
+
+  <div class="dialog-actions">
+
+    <button type="button" class="btn btn-ghost" (click)="cancel()">
+      <span>{{ 'REGION_DIALOG.CANCEL' | translate }}</span>
+    </button>
+
+    <button type="button" class="btn btn-primary" [disabled]="!isValid" (click)="confirm()">
+      <mat-icon svgIcon="save"></mat-icon>
+      <span>{{ 'REGION_DIALOG.SAVE_BTN' | translate }}</span>
+    </button>
+
+  </div>
+
+</div>

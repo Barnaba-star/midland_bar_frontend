@@ -1,0 +1,310 @@
+<app-title2
+[titleHeader]="'NODE_SETTING_PAGE.TITLE'"
+[actions]=getTitled(titleActions)
+[activeAction]="selectedNode"
+(customButtonClick)="onAction($event)"
+></app-title2>
+
+@switch (selectedNode) {
+
+@case ('NODE_SETTING_PAGE.MANAGE_BRANCH_TAB' ) {
+<div class="info-card12">
+
+  <!-- HEADER -->
+  <div class="table-header">
+
+  <div class="branch-title">
+
+  <h2>
+    {{ 'NODE_SETTING_PAGE.BRANCH_HEADING' | translate }}
+    <span class="branch-count-circle">
+      {{ branch.length }}
+    </span>
+    {{ 'NODE_SETTING_PAGE.REGISTERED_SUFFIX' | translate }}
+  </h2>
+
+</div>
+
+  <div class="table-header-actions">
+
+    <!-- SEARCH -->
+    <app-search-box
+      (searchChange)="onSearch($event)"
+      [placeholder]="'NODE_SETTING_PAGE.SEARCH_PLACEHOLDER'"
+    ></app-search-box>
+
+    <!-- ADD BRANCH -->
+    <button
+      type="button"
+      class="add-branch-btn"
+      [title]="'NODE_SETTING_PAGE.TOOLTIP_ADD_BRANCH' | translate"
+      (click)="openAddBranchDialog()"
+    >
+      <mat-icon>add</mat-icon>
+      <span>{{ 'NODE_SETTING_PAGE.FORM_TITLE_REGISTER' | translate }}</span>
+    </button>
+
+    <div class="branch-count">
+      <mat-icon>account_tree</mat-icon>
+      <span>{{ branch.length }}</span>
+    </div>
+
+  </div>
+
+  </div>
+
+
+  <!-- TABLE -->
+  <div class="branch-table-wrapper">
+
+    <table class="branch-table">
+
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>{{ 'NODE_SETTING_PAGE.COL_BRANCH' | translate }}</th>
+          <th>{{ 'NODE_SETTING_PAGE.COL_CODE' | translate }}</th>
+          <th>{{ 'NODE_SETTING_PAGE.COL_CATEGORY' | translate }}</th>
+          <th>{{ 'NODE_SETTING_PAGE.COL_REGION' | translate }}</th>
+          <th>{{ 'NODE_SETTING_PAGE.COL_PHONE' | translate }}</th>
+          <th>{{ 'NODE_SETTING_PAGE.COL_STATUS' | translate }}</th>
+          <th>{{ 'NODE_SETTING_PAGE.COL_ACTIONS' | translate }}</th>
+        </tr>
+      </thead>
+
+
+      <tbody>
+
+        <tr
+          *ngFor="let item of branch; let i = index"
+        >
+
+          <!-- NUMBER -->
+          <td>
+            <span class="row-number">
+              {{ i + 1 }}
+            </span>
+          </td>
+
+
+          <!-- BRANCH -->
+          <td>
+
+            <div class="branch-info">
+
+              <div class="branch-icon">
+                <mat-icon>business</mat-icon>
+              </div>
+
+              <div class="branch-details">
+
+                <strong>
+                  {{ item.branchName| uppercase }}
+                </strong>
+
+                <span>
+                  {{ item.address || ('NODE_SETTING_PAGE.NO_ADDRESS' | translate) | lowercase }}
+                </span>
+
+              </div>
+
+            </div>
+
+          </td>
+
+
+          <!-- CODE -->
+          <td>
+
+            <span class="branch-code">
+              {{ item.branchCode | uppercase}}
+            </span>
+
+          </td>
+
+
+          <!-- CATEGORY -->
+          <td>
+
+            <span class="category-badge">
+              {{ item.branchCategory | uppercase}}
+            </span>
+
+          </td>
+
+          <!-- REGION -->
+          <td>
+
+            <div class="region-cell">
+
+              <mat-icon>location_on</mat-icon>
+
+              <span>
+                {{ item.region | uppercase}}
+              </span>
+
+            </div>
+
+          </td>
+
+
+          <!-- PHONE -->
+          <td>
+
+            <div class="phone-cell">
+
+              <mat-icon>phone</mat-icon>
+
+              <span>
+                {{ item.phone || ('COMMON.NA' | translate) }}
+              </span>
+
+            </div>
+
+          </td>
+
+
+          <!-- STATUS -->
+          <td>
+
+            <span
+              class="status-badge"
+              [class.active]="isActive(item.status)"
+              [class.inactive]="!isActive(item.status)"
+            >
+
+              <span class="status-dot"></span>
+
+              {{ item.status | uppercase}}
+
+            </span>
+
+          </td>
+
+<!-- ACTIONS -->
+<td class="action-column">
+  <div class="action-buttons">
+
+    <!-- MORE -->
+    <button
+      type="button"
+      class="action-btn more-btn"
+      [matMenuTriggerFor]="branchMenu"
+      [matTooltip]="'NODE_SETTING_PAGE.TOOLTIP_MORE' | translate"
+    >
+      <mat-icon>more_vert</mat-icon>
+      <span class="action-label">{{ 'NODE_SETTING_PAGE.LABEL_MORE' | translate }}</span>
+    </button>
+
+    <!-- Every row action lives in here. On the row they were six icons
+         competing for width; in a menu each one carries its full wording.
+         The ROOT branch is the platform's own, so it cannot be edited or
+         deleted - same guard the row buttons used to carry. -->
+    <mat-menu #branchMenu="matMenu" class="branch-action-menu">
+
+      <button
+        mat-menu-item
+        type="button"
+        [disabled]="item.branchCode?.toUpperCase() === 'ROOT'"
+        (click)="editItem(item)">
+        <mat-icon>edit</mat-icon>
+        <span>{{ 'NODE_SETTING_PAGE.TOOLTIP_EDIT' | translate }}</span>
+      </button>
+
+      <button mat-menu-item type="button" (click)="openSubscriptionDialog(item)">
+        <mat-icon>payments</mat-icon>
+        <span>{{ 'NODE_SETTING_PAGE.TOOLTIP_SUBSCRIPTION' | translate }}</span>
+      </button>
+
+      <button mat-menu-item type="button" (click)="addUserToBranch(item)">
+        <mat-icon>person_add</mat-icon>
+        <span>{{ 'NODE_SETTING_PAGE.TOOLTIP_ADD_USER' | translate }}</span>
+      </button>
+
+      <button mat-menu-item type="button" (click)="assignRoleToBranchUser(item)">
+        <mat-icon>admin_panel_settings</mat-icon>
+        <span>{{ 'NODE_SETTING_PAGE.TOOLTIP_ASSIGN_ROLE' | translate }}</span>
+      </button>
+
+      <button mat-menu-item type="button" (click)="moreActions(item)">
+        <mat-icon>visibility</mat-icon>
+        <span>{{ 'NODE_SETTING_PAGE.MENU_VIEW_USER' | translate }}</span>
+      </button>
+
+      <!-- Destructive, so it sits apart from the rest. -->
+      <button
+        mat-menu-item
+        type="button"
+        class="menu-item-danger"
+        [disabled]="item.branchCode?.toUpperCase() === 'ROOT'"
+        (click)="deleteItem(item)">
+        <mat-icon>delete</mat-icon>
+        <span>{{ 'NODE_SETTING_PAGE.TOOLTIP_DELETE' | translate }}</span>
+      </button>
+
+    </mat-menu>
+
+  </div>
+</td>
+
+
+
+        </tr>
+
+
+        <!-- EMPTY -->
+        <tr *ngIf="branch.length === 0">
+
+          <td
+            colspan="8"
+            class="empty-row"
+          >
+
+            <mat-icon>
+              business
+            </mat-icon>
+
+            <strong>
+              {{ 'NODE_SETTING_PAGE.EMPTY_TITLE' | translate }}
+            </strong>
+
+            <span>
+              {{ 'NODE_SETTING_PAGE.EMPTY_TEXT' | translate }}
+            </span>
+
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+    <div class="branch-pagination">
+
+  <div class="pagination-info">
+    {{ 'NODE_SETTING_PAGE.SHOWING_LABEL' | translate }}
+    <strong>{{ branch.length }}</strong>
+    {{ 'NODE_SETTING_PAGE.BRANCHES_LABEL' | translate }}
+  </div>
+
+  <mat-paginator
+    [length]="totalBranches"
+    [pageSize]="pageSize"
+    [pageIndex]="pageIndex"
+    [pageSizeOptions]="[5, 10, 20, 50]"
+    (page)="onBranchPageChange($event)"
+    showFirstLastButtons>
+  </mat-paginator>
+
+</div>
+
+
+  </div>
+
+</div>
+
+
+  }
+
+
+}

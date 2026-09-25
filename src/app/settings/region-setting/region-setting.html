@@ -1,0 +1,119 @@
+<app-title2
+  [titleHeader]="'REGION_SETTING_PAGE.TITLE'"
+  (customButtonClick)="onAction($event)"
+  [actions]="getTitled(titleActions)"
+  [activeAction]="regions"
+></app-title2>
+
+@switch (regions) {
+  @case ('REGION_SETTING_PAGE.MANAGE_TAB') {
+
+    <div class="region-container">
+
+      <div class="region-header">
+
+        <div>
+          <h2>{{ 'REGION_SETTING_PAGE.MGMT_TITLE' | translate }}</h2>
+          <p>{{ 'REGION_SETTING_PAGE.MGMT_SUBTITLE' | translate }}</p>
+        </div>
+
+        <div class="header-actions">
+          <button type="button" class="refresh-btn" (click)="refresh()">
+            {{ 'REGION_SETTING_PAGE.REFRESH_BTN' | translate }}
+          </button>
+
+          <button type="button" class="add-btn" (click)="addRegion()">
+            {{ 'REGION_SETTING_PAGE.ADD_BTN' | translate }}
+          </button>
+        </div>
+
+      </div>
+
+
+      <!-- COUNTS -->
+
+      <div class="summary-row">
+
+        <div class="summary-card">
+          <span class="summary-label">{{ 'REGION_SETTING_PAGE.TOTAL' | translate }}</span>
+          <span class="summary-value">{{ allRegions.length }}</span>
+        </div>
+
+      </div>
+
+
+      <!-- FILTERS -->
+
+      <div class="filter-row">
+
+        <app-search-box
+          [placeholder]="'REGION_SETTING_PAGE.SEARCH_PLACEHOLDER'"
+          (searchChange)="onSearchChange($event)"
+        ></app-search-box>
+
+      </div>
+
+
+      <!-- TABLE -->
+
+      <div class="table-wrapper">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>{{ 'REGION_SETTING_PAGE.COL_NAME' | translate }}</th>
+              <th>{{ 'REGION_SETTING_PAGE.COL_CODE' | translate }}</th>
+              <th>{{ 'REGION_SETTING_PAGE.COL_ACTION' | translate }}</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            @for (region of filteredRegions; track region.uid; let i = $index) {
+              <tr>
+
+                <td>{{ i + 1 }}</td>
+
+                <td class="name-cell">{{ region.name }}</td>
+
+                <td>
+                  <span class="level-badge">{{ region.code }}</span>
+                </td>
+
+                <td>
+                  <div class="row-actions">
+                    <button type="button" class="view-btn" (click)="editRegion(region)">
+                      {{ 'REGION_SETTING_PAGE.EDIT' | translate }}
+                    </button>
+
+                    <button type="button" class="view-btn delete-btn" (click)="deleteRegion(region)">
+                      {{ 'REGION_SETTING_PAGE.DELETE' | translate }}
+                    </button>
+                  </div>
+                </td>
+
+              </tr>
+            }
+
+            @if (!isLoading && filteredRegions.length === 0) {
+              <tr>
+                <td colspan="4">
+                  <div class="empty-state">
+                    {{ 'REGION_SETTING_PAGE.EMPTY_TEXT' | translate }}
+                  </div>
+                </td>
+              </tr>
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  }
+}

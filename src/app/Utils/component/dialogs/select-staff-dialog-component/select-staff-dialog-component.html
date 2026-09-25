@@ -1,0 +1,177 @@
+<div class="select-staff-dialog">
+
+  <div class="dialog-header">
+    <h2>
+      {{ (step === 'pick' ? 'SELECT_STAFF_DIALOG.TITLE' : 'SELECT_STAFF_DIALOG.DETAILS_TITLE') | translate }}
+    </h2>
+
+    <button type="button" class="close-btn" (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+
+  @if (step === 'pick') {
+
+    <p class="dialog-subtitle">{{ 'SELECT_STAFF_DIALOG.SUBTITLE' | translate }}</p>
+
+
+    <div class="input-wrapper search-wrapper">
+      <mat-icon>search</mat-icon>
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="applyFilter()"
+        [placeholder]="'SELECT_STAFF_DIALOG.SEARCH_PLACEHOLDER' | translate"
+      />
+    </div>
+
+
+    @if (loading) {
+      <div class="state-row">
+        <mat-icon class="spin">autorenew</mat-icon>
+        <span>{{ 'COMMON.LOADING' | translate }}</span>
+      </div>
+    }
+
+    @if (!loading && errorMessage) {
+      <div class="error-banner">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ errorMessage }}</span>
+      </div>
+    }
+
+    @if (!loading && !errorMessage && filteredStaffList.length === 0) {
+      <div class="state-row">
+        <mat-icon>person_off</mat-icon>
+        <span>{{ 'SELECT_STAFF_DIALOG.EMPTY' | translate }}</span>
+      </div>
+    }
+
+    @if (!loading && filteredStaffList.length > 0) {
+      <div class="staff-list">
+        @for (staff of filteredStaffList; track staff.uid) {
+          <button type="button" class="staff-row" (click)="select(staff)">
+
+            <div class="staff-avatar" [class.female]="staff.gender === 'Female'">
+              {{ (staff.firstName || '?').charAt(0) }}
+            </div>
+
+            <div class="staff-info">
+              <strong>{{ fullName(staff) }}</strong>
+              <span>{{ staff.phoneNumber || ('STAFF_PAGE.NO_PHONE' | translate) }}</span>
+            </div>
+
+            <mat-icon class="chevron">chevron_right</mat-icon>
+
+          </button>
+        }
+      </div>
+    }
+
+    <button type="button" class="manual-link" (click)="enterManually()">
+      <mat-icon>edit_note</mat-icon>
+      <span>{{ 'SELECT_STAFF_DIALOG.ENTER_MANUALLY' | translate }}</span>
+    </button>
+
+  }
+
+
+  @if (step === 'details') {
+
+    <p class="dialog-subtitle">{{ 'SELECT_STAFF_DIALOG.DETAILS_SUBTITLE' | translate }}</p>
+
+    <div class="details-form">
+
+      <label class="field">
+        <span>{{ 'USER_FIELDS.FIRST_NAME' | translate }} *</span>
+        <div class="input-wrapper">
+          <input type="text" [(ngModel)]="form.firstName" />
+        </div>
+      </label>
+
+      <label class="field">
+        <span>{{ 'USER_FIELDS.MIDDLE_NAME' | translate }}</span>
+        <div class="input-wrapper">
+          <input type="text" [(ngModel)]="form.middleName" />
+        </div>
+      </label>
+
+      <label class="field">
+        <span>{{ 'USER_FIELDS.LAST_NAME' | translate }} *</span>
+        <div class="input-wrapper">
+          <input type="text" [(ngModel)]="form.lastName" />
+        </div>
+      </label>
+
+      <label class="field">
+        <span>{{ 'USER_FIELDS.GENDER' | translate }}</span>
+        <div class="input-wrapper">
+          <select [(ngModel)]="form.gender">
+            <option value="">-</option>
+            <option value="Male">{{ 'USER_FIELDS.MALE' | translate }}</option>
+            <option value="Female">{{ 'USER_FIELDS.FEMALE' | translate }}</option>
+          </select>
+        </div>
+      </label>
+
+      @if (roles.length) {
+        <label class="field">
+          <span>{{ 'USER_FIELDS.ROLE' | translate }}</span>
+          <div class="input-wrapper">
+            <select [(ngModel)]="form.role">
+              <option value="">-</option>
+              @for (role of roles; track role.uid) {
+                <option [value]="role.uid">{{ role.name }}</option>
+              }
+            </select>
+          </div>
+        </label>
+      }
+
+      <label class="field">
+        <span>{{ 'USER_FIELDS.DOB' | translate }}</span>
+        <div class="input-wrapper">
+          <input type="date" [(ngModel)]="form.dateOfBirth" />
+        </div>
+      </label>
+
+      <label class="field">
+        <span>{{ 'USER_FIELDS.PHONE' | translate }}</span>
+        <div class="input-wrapper">
+          <input type="text" [(ngModel)]="form.phoneNumber" />
+        </div>
+      </label>
+
+      <label class="field">
+        <span>{{ 'USER_FIELDS.EMAIL' | translate }}</span>
+        <div class="input-wrapper">
+          <input type="email" [(ngModel)]="form.email" />
+        </div>
+      </label>
+
+      <label class="field">
+        <span>{{ 'USER_FIELDS.ADDRESS' | translate }}</span>
+        <div class="input-wrapper">
+          <input type="text" [(ngModel)]="form.address" />
+        </div>
+      </label>
+
+    </div>
+
+    <div class="details-actions">
+
+      <button type="button" class="back-btn" (click)="back()">
+        <mat-icon>arrow_back</mat-icon>
+        <span>{{ 'COMMON.BACK' | translate }}</span>
+      </button>
+
+      <button type="button" class="save-btn" [disabled]="!canSave" (click)="save()">
+        {{ 'COMMON.SAVE' | translate }}
+      </button>
+
+    </div>
+
+  }
+
+</div>

@@ -1,0 +1,123 @@
+<div class="audit-detail-dialog">
+
+  <div class="dialog-header">
+
+    <div class="header-top">
+      <h2 class="dialog-title">{{ 'AUDIT_DETAIL_DIALOG.TITLE' | translate }}</h2>
+
+      <button type="button" class="icon-btn" (click)="onClose()" [attr.aria-label]="'COMMON.CLOSE' | translate">
+        <mat-icon svgIcon="close"></mat-icon>
+      </button>
+    </div>
+
+    <div class="header-meta">
+      <span
+        class="chip"
+        [class.chip-success]="data.outcome === 'SUCCESS'"
+        [class.chip-failed]="data.outcome === 'FAILED'">
+        {{ data.outcome }}
+      </span>
+
+      <span class="chip chip-action">{{ data.action || '-' }}</span>
+
+      <span class="chip chip-muted">{{ data.occurredAt | date: 'dd/MM/yyyy HH:mm:ss' }}</span>
+    </div>
+
+  </div>
+
+
+  <div class="dialog-body">
+
+    <div class="detail-grid">
+
+      <div class="detail-row">
+        <span class="detail-label">{{ 'AUDIT_DETAIL_DIALOG.TIME' | translate }}</span>
+        <span class="detail-value">{{ data.occurredAt | date: 'dd/MM/yyyy HH:mm:ss' }}</span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">{{ 'AUDIT_DETAIL_DIALOG.USER' | translate }}</span>
+        <span class="detail-value">{{ displayUser }}</span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">{{ 'AUDIT_DETAIL_DIALOG.BRANCH' | translate }}</span>
+        <span class="detail-value">{{ data.branchUid || '-' }}</span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">{{ 'AUDIT_DETAIL_DIALOG.ACTION' | translate }}</span>
+        <span class="detail-value">{{ data.action || '-' }}</span>
+      </div>
+
+      <div class="detail-row detail-row-wide">
+        <span class="detail-label">{{ 'AUDIT_DETAIL_DIALOG.PATH' | translate }}</span>
+        <span class="detail-value">{{ data.httpMethod }} {{ data.path || '-' }}</span>
+      </div>
+
+      @if (data.queryString) {
+        <div class="detail-row detail-row-wide">
+          <span class="detail-label">{{ 'AUDIT_DETAIL_DIALOG.QUERY' | translate }}</span>
+          <span class="detail-value">{{ data.queryString }}</span>
+        </div>
+      }
+
+      <div class="detail-row">
+        <span class="detail-label">{{ 'AUDIT_DETAIL_DIALOG.STATUS_CODE' | translate }}</span>
+        <span class="detail-value">{{ data.statusCode ?? '-' }}</span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">{{ 'AUDIT_DETAIL_DIALOG.DURATION' | translate }}</span>
+        <span class="detail-value">{{ data.durationMs ?? '-' }} ms</span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">{{ 'AUDIT_DETAIL_DIALOG.IP_ADDRESS' | translate }}</span>
+        <span class="detail-value">{{ data.ipAddress || '-' }}</span>
+      </div>
+
+      <div class="detail-row detail-row-wide">
+        <span class="detail-label">{{ 'AUDIT_DETAIL_DIALOG.USER_AGENT' | translate }}</span>
+        <span class="detail-value user-agent">{{ data.userAgent || '-' }}</span>
+      </div>
+
+    </div>
+
+
+    <!-- What was actually sent - the whole point of reading a record from here. -->
+    <div class="block">
+      <div class="block-head">
+        <span class="block-label">{{ 'AUDIT_DETAIL_DIALOG.PAYLOAD' | translate }}</span>
+
+        @if (data.payload) {
+          <button type="button" class="link-btn" (click)="copyPayload()">
+            {{ (payloadCopied ? 'AUDIT_DETAIL_DIALOG.COPIED' : 'AUDIT_DETAIL_DIALOG.COPY_PAYLOAD') | translate }}
+          </button>
+        }
+      </div>
+
+      @if (data.payload) {
+        <pre class="payload-box">{{ prettyPayload }}</pre>
+      } @else {
+        <p class="no-payload">{{ 'AUDIT_DETAIL_DIALOG.NO_PAYLOAD' | translate }}</p>
+      }
+    </div>
+
+  </div>
+
+
+  <div class="dialog-actions">
+
+    <button type="button" class="btn btn-ghost" (click)="copyDetails()">
+      <mat-icon svgIcon="attachment"></mat-icon>
+      <span>{{ (copied ? 'AUDIT_DETAIL_DIALOG.COPIED' : 'AUDIT_DETAIL_DIALOG.COPY_BTN') | translate }}</span>
+    </button>
+
+    <button type="button" class="btn btn-primary" (click)="onClose()">
+      <span>{{ 'COMMON.CLOSE' | translate }}</span>
+    </button>
+
+  </div>
+
+</div>

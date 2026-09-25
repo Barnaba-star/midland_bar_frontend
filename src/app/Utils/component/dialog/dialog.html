@@ -1,0 +1,16 @@
+<div style="display: flex; justify-content: flex-end; align-items: center; ">
+  <button mat-icon-button (click)="onClose()" [attr.aria-label]="'COMMON.CLOSE' | translate" style="display: flex; justify-content: flex-end;">
+    <img src ="/assets/icons/close.svg" [attr.alt]="'COMMON.CLOSE' | translate" />
+  </button>
+</div>
+
+
+<app-form
+  [fields]="fields"
+  [initialData]="initialFormData"
+  [formTitle]="formTitle"
+  (submitForm)="onSubmitFromChild($event)">
+</app-form>
+
+<div style="margin-top: 16px; display: flex; justify-content: flex-end;">
+</div>

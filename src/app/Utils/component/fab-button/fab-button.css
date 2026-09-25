@@ -1,0 +1,26 @@
+
+
+.fab-button {
+position: fixed;
+right: 20px;     
+bottom: 80px;   
+z-index: 1000;   
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+transition: transform 0.3s ease;
+color: rgb(156, 179, 207);
+border-radius: 100px;
+width: 80px;
+height: 50px;
+align-items: center;
+}
+
+.fab-button:hover {
+  transform: scale(1.1);
+}
+.app-icon {
+  width: 30px;
+  height: 30px;
+  margin-right: 25px;
+  font-size: 20px;
+  color: rgb(60, 99, 147);
+}

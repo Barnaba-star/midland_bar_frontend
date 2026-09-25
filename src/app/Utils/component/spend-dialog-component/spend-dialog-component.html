@@ -1,0 +1,113 @@
+<div class="dialog-container">
+
+  <div class="dialog-header">
+    <h2>Spend {{ data.name }}</h2>
+
+    <p class="subtitle">
+      Enter the amount and provide a description for this expense.
+    </p>
+  </div>
+
+  <mat-dialog-content>
+
+    <div class="available-balance">
+
+      <div class="balance-info">
+
+        <div class="balance-icon">
+          <mat-icon>account_balance_wallet</mat-icon>
+        </div>
+
+        <div class="balance-label">
+          <span>Available Amount</span>
+
+          <strong>
+            {{ data.income - data.expenses | number:'1.2-2' }}
+          </strong>
+        </div>
+
+      </div>
+
+    </div>
+
+   <form [formGroup]="spendForm">
+
+  <div class="row">
+
+    <!-- Amount -->
+    <div class="col-12 form-group">
+
+      <label class="field-label">
+        Amount
+      </label>
+
+      <mat-form-field appearance="outline" class="w-100">
+
+        <mat-icon matPrefix>payments</mat-icon>
+
+        <input class="inputData"
+          matInput
+          type="number"
+          formControlName="amount"
+          placeholder="Enter amount"
+        />
+
+      </mat-form-field>
+
+    </div>
+
+
+    <!-- Description -->
+    <div class="col-12 form-group">
+
+      <label class="field-label">
+        Description
+      </label>
+
+      <mat-form-field appearance="outline" class="w-100">
+
+        <mat-icon matPrefix>description</mat-icon>
+
+        <textarea class="inputData"
+          matInput
+          rows="4"
+          formControlName="description"
+          placeholder="What was this money spent on?"
+        ></textarea>
+
+      </mat-form-field>
+
+    </div>
+
+  </div>
+
+</form>
+
+
+  </mat-dialog-content>
+
+
+  <mat-dialog-actions align="end">
+
+    <button
+      mat-button
+      type="button"
+      (click)="cancel()"
+    >
+      Cancel
+    </button>
+
+    <button
+      mat-raised-button
+      color="primary"
+      type="button"
+      [disabled]="spendForm.invalid"
+      (click)="submit()"
+    >
+      <mat-icon>shopping_cart</mat-icon>
+      Spend
+    </button>
+
+  </mat-dialog-actions>
+
+</div>

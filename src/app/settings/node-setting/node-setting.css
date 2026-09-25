@@ -1,0 +1,1404 @@
+.info-card{
+    width: 80%;
+    margin: 20px auto;
+    border: 1px solid #d6d6d6;
+    border-radius: 8px;
+    background: #fff;
+    overflow: hidden;
+    animation:fadeInUp 2s ease;
+
+}
+
+
+.info-cardStepper{
+    width: 95%;
+    margin: 20px auto;
+    border: 1px solid #d6d6d6;
+    border-radius: 8px;
+    background: #fff;
+    overflow: hidden;
+    animation:fadeInUp .8s ease;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0px;
+  padding: 12px 18px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);
+  border: 1px solid #edf0f4;
+  border-radius: 12px;
+  height: 80px;
+}
+
+.table-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #172033;
+}
+
+.table-header p {
+  margin: 4px 0 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.record-badge {
+  background: #14315d;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.info-row{
+    padding: 18px 24px;
+    border-bottom: 1px dotted #bdbdbd;
+}
+
+.info-row:last-child{
+    border-bottom: none;
+}
+
+.info-row h3{
+    margin: 0;
+    color: #14315d;
+}
+
+.info-row strong{
+    display: block;
+    margin-bottom: 8px;
+    color: #424242;
+}
+
+.info-row p{
+    margin: 0;
+    line-height: 1.7;
+    color: #616161;
+}
+
+
+.info-header{
+    padding:20px 25px;
+    border-bottom:1px solid #edf0f4;
+    background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);
+}
+
+.info-header h2{
+    margin:0;
+    font-size:18px;
+    font-weight: 700;
+    color:#0a1c38;
+}
+
+.info-header p{
+    margin-top:8px;
+    color:#666;
+    line-height:1.6;
+}
+
+app-form{
+    display:block;
+    padding:20px;
+}
+
+@keyframes fadeInUp{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+
+
+
+
+.button-section{
+    display:flex;
+    justify-content:flex-end;
+    padding:20px;
+}
+
+.btn{
+    padding:10px 25px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:15px;
+}
+
+.btn-primary{
+    background:#14315d;
+    color:white;
+}
+
+.btn-primary:hover{
+    background:#0a1c38;
+}
+
+.info-card-data{
+    width: 80%;
+    margin: 60px auto;
+    border: 1px solid #d6d6d6;
+    border-radius: 8px;
+    height: 300px;
+    background: #fff;
+    overflow: hidden;
+    background-color: rgb(224, 214, 214);
+    animation:fadeInUp .4s ease;
+}
+
+  .action-container {
+    margin-top: 150px;
+    margin-left: 150px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-sans);
+    font-size: 18px;
+    animation: bounce 80s infinite;
+  }
+.bounce {
+    animation: bounce 30s infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+.action-container {
+  width: 80%;
+  height: 80vh; /* Jaza screen lote */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 15px;
+
+}
+
+.empty-icon {
+  font-size: 90px;
+  width: 90px;
+  height: 90px;
+  color: rgba(182, 150, 109, 0.95);
+  margin-bottom: 10px;
+}
+
+.action-container h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #424242;
+}
+
+.action-container p {
+  margin-top: 1px;
+  color: #757575;
+  font-size: 15px;
+}
+
+.footerButoons{
+  width: 98%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  box-sizing: border-box;
+
+}
+.titles{
+  width: 98%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  box-sizing: border-box;
+  animation:fadeInUp 1s ease;
+
+}
+
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+.info-card12 {
+  width: 100%;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  text-align: center;
+  margin-top: 10px;
+  gap: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: #f8fafc;
+  border-radius: 10px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+  overflow: hidden;
+
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+
+
+/* =====================================================
+   HOVER
+===================================================== */
+
+.info-card12:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 4px 10px rgba(15, 23, 42, 0.05),
+    0 16px 38px rgba(15, 23, 42, 0.10);
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.info-card12 .table-header {
+  position: relative;
+
+  min-height: 82px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 17px 22px;
+
+  box-sizing: border-box;
+
+  color: var(--color-text, #0a1c38);
+
+  background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);
+
+  border-bottom: 1px solid var(--color-border, #edf0f4);
+
+  overflow: hidden;
+}
+
+
+/* =====================================================
+   HEADER LIGHT EFFECT
+   (a white header stays white -> stays white; these subtle
+   tinted circles give it texture without needing a colored
+   background, so dark mode's invert() turns it clean black
+   instead of inverting an odd gradient)
+===================================================== */
+
+.info-card12 .table-header::before {
+  content: "";
+
+  position: absolute;
+
+  top: -80px;
+  right: -60px;
+
+  width: 220px;
+  height: 220px;
+
+  border-radius: 50%;
+
+  background: rgba(20, 49, 93, 0.05);
+
+  pointer-events: none;
+}
+
+
+.info-card12 .table-header::after {
+  content: "";
+
+  position: absolute;
+
+  bottom: -100px;
+  left: 35%;
+
+  width: 260px;
+  height: 180px;
+
+  border-radius: 50%;
+
+  background: rgba(201, 150, 46, 0.06);
+
+  pointer-events: none;
+}
+
+
+/* =====================================================
+   HEADER CONTENT
+===================================================== */
+
+.info-card12 .table-header > div:first-child {
+  position: relative;
+
+  z-index: 2;
+
+  min-width: 0;
+}
+
+
+.info-card12 .table-header h2 {
+  margin: 0 0 5px;
+
+  color: var(--color-text, #172033);
+
+  font-size: 19px;
+
+  line-height: 1.25;
+
+  font-weight: 750;
+
+  letter-spacing: -0.3px;
+}
+
+
+.info-card12 .table-header p {
+  margin: 0;
+
+  color: var(--color-text-muted, #666);
+
+  font-size: 12px;
+
+  line-height: 1.4;
+
+  font-weight: 500;
+}
+
+
+/* =====================================================
+   HEADER ACTIONS (Add Branch + count)
+===================================================== */
+
+.table-header-actions {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* app-search-box ni inline kwa default - bila hili haipati upana wowote. */
+.table-header-actions app-search-box {
+  display: block;
+  width: 260px;
+}
+
+.add-branch-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 40px;
+
+  padding: 0 16px;
+
+  gap: 8px;
+
+  border: 1px solid #cddcff;
+  border-radius: 10px;
+
+  background: #eef2ff;
+  color: #1d4ed8;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.add-branch-btn:hover {
+  background: #e0e7ff;
+}
+
+.add-branch-btn mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
+
+/* =====================================================
+   COUNT BADGE
+===================================================== */
+
+.info-card12 .branch-count {
+  position: relative;
+
+  z-index: 2;
+
+  min-width: 52px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  padding: 0 13px;
+
+  border-radius: 12px;
+
+  background: var(--color-primary-light, #eef2ff);
+
+  border: 1px solid var(--color-border, #e5e7eb);
+
+  color: var(--color-primary, #14315d);
+
+  font-size: 14px;
+
+  font-weight: 750;
+}
+
+
+.info-card12 .branch-count mat-icon {
+  width: 19px;
+  height: 19px;
+
+  font-size: 19px;
+
+  color: var(--color-primary, #14315d);
+}
+
+
+/* =====================================================
+   TABLE AREA
+===================================================== */
+
+.info-card12 .branch-table-wrapper {
+  width: 100%;
+
+  padding: 0;
+
+  background: #ffffff;
+
+  overflow-x: auto;
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.info-card12 .branch-table {
+  width: 100%;
+
+  min-width: 1050px;
+
+  border-collapse: separate;
+
+  border-spacing: 0;
+}
+
+
+/* =====================================================
+   TABLE HEADER
+===================================================== */
+
+.info-card12 .branch-table thead {
+  background: #f8fafc;
+}
+
+
+.info-card12 .branch-table th {
+  height: 48px;
+
+  padding: 0 15px;
+
+  color: #667085;
+
+  background: #f8fafc;
+
+  border-bottom: 1px solid #e8edf3;
+
+  text-align: left;
+
+  font-size: 10px;
+
+  font-weight: 750;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.055em;
+
+  white-space: nowrap;
+}
+
+
+/* =====================================================
+   TABLE ROW
+===================================================== */
+
+.info-card12 .branch-table tbody tr {
+  background: #ffffff;
+
+  transition:
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+
+.info-card12 .branch-table tbody tr:hover {
+  background: #f8fbff;
+
+  box-shadow:
+    inset 3px 0 0 #14315d;
+}
+
+
+/* =====================================================
+   TABLE CELLS
+===================================================== */
+
+.info-card12 .branch-table td {
+  height: 67px;
+
+  padding: 8px 15px;
+
+  color: #344054;
+
+  border-bottom: 1px solid #edf1f5;
+
+  font-size: 12px;
+
+  vertical-align: middle;
+
+  white-space: nowrap;
+}
+
+
+.info-card12 .branch-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+
+/* =====================================================
+   BRANCH ICON
+===================================================== */
+
+.info-card12 .branch-icon {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 11px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #eff6ff,
+      #dbeafe
+    );
+
+  color: #14315d;
+
+  box-shadow:
+    0 2px 6px rgba(20, 49, 93, 0.10);
+}
+
+
+.info-card12 .branch-icon mat-icon {
+  width: 19px;
+  height: 19px;
+
+  font-size: 19px;
+}
+
+
+/* =====================================================
+   BRANCH NAME
+===================================================== */
+
+.info-card12 .branch-details strong {
+  color: #1d2939;
+
+  font-size: 13px;
+
+  font-weight: 700;
+}
+
+
+.info-card12 .branch-details span {
+  color: #98a2b3;
+
+  font-size: 11px;
+}
+
+
+/* =====================================================
+   CODE
+===================================================== */
+
+.info-card12 .branch-code {
+  padding: 5px 8px;
+
+  border-radius: 6px;
+
+  background: #f2f4f7;
+
+  color: #475467;
+
+  font-family: "Courier New", monospace;
+
+  font-size: 11px;
+
+  font-weight: 650;
+}
+
+
+/* =====================================================
+   CATEGORY
+===================================================== */
+
+.info-card12 .category-badge {
+  padding: 6px 9px;
+
+  border-radius: 7px;
+
+  background: #ecfdf3;
+
+  color: #027a48;
+
+  font-size: 11px;
+
+  font-weight: 650;
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.info-card12 .status-badge {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  padding: 6px 10px;
+
+  border-radius: 20px;
+
+  font-size: 11px;
+
+  font-weight: 700;
+}
+
+
+.info-card12 .status-badge.active {
+  background: #ecfdf3;
+
+  color: #027a48;
+}
+
+
+.info-card12 .status-badge.inactive {
+  background: #fef3f2;
+
+  color: #b42318;
+}
+
+
+.info-card12 .status-dot {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: currentColor;
+
+  box-shadow:
+    0 0 0 3px rgba(2, 122, 72, 0.10);
+}
+
+
+/* =====================================================
+   LOCATION & PHONE
+===================================================== */
+
+.info-card12 .region-cell,
+.info-card12 .phone-cell {
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+}
+
+
+.info-card12 .region-cell mat-icon,
+.info-card12 .phone-cell mat-icon {
+  width: 16px;
+  height: 16px;
+
+  font-size: 16px;
+
+  color: #667085;
+}
+
+
+/* =====================================================
+   EMPTY STATE
+===================================================== */
+
+.info-card12 .empty-row {
+  height: 230px !important;
+
+  text-align: center;
+
+  vertical-align: middle !important;
+}
+
+
+.info-card12 .empty-row mat-icon {
+  display: block;
+
+  width: 42px;
+  height: 42px;
+
+  margin: 0 auto 10px;
+
+  color: #cbd5e1;
+
+  font-size: 42px;
+}
+
+
+.info-card12 .empty-row strong {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #475467;
+
+  font-size: 14px;
+}
+
+
+.info-card12 .empty-row span {
+  color: #98a2b3;
+
+  font-size: 12px;
+}
+
+
+/* =====================================================
+   SCROLLBAR
+===================================================== */
+
+.info-card12 .branch-table-wrapper::-webkit-scrollbar {
+  height: 7px;
+}
+
+
+.info-card12 .branch-table-wrapper::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+
+
+.info-card12 .branch-table-wrapper::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+
+  border-radius: 10px;
+}
+
+
+.info-card12 .branch-table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 700px) {
+
+  .info-card12 {
+    margin: 12px 0;
+
+    border-radius: 14px;
+  }
+
+  .info-card12 .table-header {
+    min-height: 72px;
+
+    padding: 14px 16px;
+  }
+
+  .info-card12 .table-header h2 {
+    font-size: 16px;
+  }
+
+  .info-card12 .table-header p {
+    font-size: 11px;
+  }
+
+  .info-card12 .branch-count {
+    min-width: 44px;
+    height: 42px;
+
+    padding: 0 9px;
+  }
+
+}
+.info-card12 {
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+
+  padding: 0 !important;
+
+  box-sizing: border-box;
+}
+
+
+/* HEADER IANZIE KUSHOTO */
+.info-card12 .table-header {
+  width: 100%;
+
+  margin: 0 !important;
+
+  padding: 17px 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  box-sizing: border-box;
+
+  text-align: left;
+}
+
+
+/* CONTENT YA HEADER */
+.info-card12 .table-header > div:first-child {
+  margin-left: 0 !important;
+
+  padding-left: 0 !important;
+
+  text-align: left;
+}
+
+
+/* TABLE WRAPPER */
+.info-card12 .branch-table-wrapper {
+  width: 100%;
+
+  margin: 0 !important;
+
+  padding: 0 !important;
+
+  overflow-x: auto;
+}
+
+
+/* TABLE IANZIE 0 */
+.info-card12 .branch-table {
+  width: 100%;
+
+  margin: 0 !important;
+
+  padding: 0 !important;
+
+  border-spacing: 0;
+
+  border-collapse: separate;
+
+  text-align: left;
+}
+
+
+/* TABLE HEADER */
+.info-card12 .branch-table th {
+  text-align: left;
+
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+
+/* TABLE DATA */
+.info-card12 .branch-table td {
+  text-align: left;
+
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.branch-pagination {
+  width: 100%;
+
+  min-height: 64px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  padding: 5px 14px;
+
+  box-sizing: border-box;
+
+  border-top: 1px solid #edf1f5;
+
+  background: #ffffff;
+}
+
+
+.pagination-info {
+  color: #667085;
+
+  font-size: 11px;
+
+  white-space: nowrap;
+}
+
+
+.pagination-info strong {
+  color: #344054;
+
+  font-weight: 700;
+}
+
+
+/* Angular Material paginator */
+.branch-pagination mat-paginator {
+  background: transparent !important;
+
+  color: #667085 !important;
+}
+
+
+/* Mobile */
+@media (max-width: 600px) {
+
+  .branch-pagination {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    padding: 10px 12px;
+  }
+
+}
+.branch-title h2 {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  margin: 0;
+
+  color: var(--color-text, #172033);
+
+  font-size: 20px;
+  font-weight: 300;
+}
+
+
+.branch-count-circle {
+  width: 42px;
+  height: 42px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: var(--color-primary-light, #eef2ff);
+
+  border: 1px solid var(--color-border, #e5e7eb);
+
+  color: var(--color-primary, #14315d);
+
+  font-size: 13px;
+  font-weight: 800;
+}
+
+
+
+
+.branch-form-header {
+  width: 100%;
+
+  min-height: 92px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 18px 22px;
+
+  box-sizing: border-box;
+
+  color: var(--color-text, #172033);
+
+  background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);
+
+  border-bottom: 1px solid var(--color-border, #edf0f4);
+
+  border-radius: 18px 18px 0 0;
+
+  position: relative;
+
+  overflow: hidden;
+}
+
+
+/* Decorative glow (subtle brand tint, not white-on-white) */
+.branch-form-header::before {
+  content: "";
+
+  position: absolute;
+
+  width: 190px;
+  height: 190px;
+
+  top: -110px;
+  right: 100px;
+
+  border-radius: 50%;
+
+  background: rgba(20, 49, 93, 0.05);
+
+  pointer-events: none;
+}
+
+
+.branch-form-header::after {
+  content: "";
+
+  position: absolute;
+
+  width: 230px;
+  height: 150px;
+
+  bottom: -100px;
+  right: -40px;
+
+  border-radius: 50%;
+
+  background: rgba(201, 150, 46, 0.06);
+
+  pointer-events: none;
+}
+
+
+/* LEFT SIDE */
+.branch-form-title {
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  position: relative;
+
+  z-index: 2;
+}
+
+
+/* ICON */
+.branch-form-icon {
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 14px;
+
+  background: var(--color-primary-light, #eef2ff);
+
+  border: 1px solid var(--color-border, #e5e7eb);
+
+}
+
+
+.branch-form-icon mat-icon {
+  width: 25px;
+  height: 25px;
+
+  font-size: 25px;
+
+  color: var(--color-primary, #14315d);
+}
+
+
+/* TITLE */
+.branch-form-text h2 {
+  margin: 0 0 5px;
+
+  color: var(--color-text, #172033);
+
+  font-size: 19px;
+
+  line-height: 1.2;
+
+  font-weight: 750;
+
+  letter-spacing: -0.3px;
+}
+
+
+.branch-form-text p {
+  margin: 0;
+
+  color: var(--color-text-muted, #666);
+
+  font-size: 12px;
+
+  line-height: 1.4;
+}
+
+
+/* BADGE */
+.branch-form-badge {
+  position: relative;
+
+  z-index: 2;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  padding: 9px 13px;
+
+  border-radius: 20px;
+
+  background: var(--color-accent-light, #faf1de);
+
+  border: 1px solid var(--color-accent, #c9962e);
+
+  color: var(--color-accent-dark, #a67a1f);
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  white-space: nowrap;
+
+}
+
+
+.branch-form-badge mat-icon {
+  width: 17px;
+  height: 17px;
+
+  font-size: 17px;
+}
+
+
+/* FORM CONTENT */
+.branch-form-content {
+  width: 100%;
+
+  padding: 22px;
+
+  box-sizing: border-box;
+
+  background: #ffffff;
+}
+
+
+/* MOBILE */
+@media (max-width: 650px) {
+
+  .branch-form-header {
+    align-items: flex-start;
+
+    padding: 16px;
+
+    flex-direction: column;
+  }
+
+  .branch-form-badge {
+    align-self: flex-start;
+  }
+
+  .branch-form-content {
+    padding: 16px;
+  }
+
+  .branch-form-text h2 {
+    font-size: 17px;
+  }
+
+}
+
+.action-column {
+  white-space: nowrap;
+}
+
+.action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+}
+
+.action-btn {
+  /* Icon plus a short label. The full wording stays in the tooltip - six
+     buttons carrying "Assign Role To Branch User" would push the row far
+     wider than the screen. */
+  height: 34px;
+  min-width: 34px;
+  padding: 0 11px;
+  gap: 6px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fff;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.action-btn mat-icon {
+  font-size: 17px;
+  width: 17px;
+  height: 17px;
+}
+
+.action-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1px;
+  white-space: nowrap;
+}
+
+/* Below this the labels cost more than they earn, so the buttons go back
+   to icons and the tooltip carries the meaning. */
+@media (max-width: 1024px) {
+  .action-btn {
+    padding: 0;
+    width: 34px;
+  }
+
+  .action-label {
+    display: none;
+  }
+}
+
+/* EDIT */
+.edit-btn {
+  color: #14315d;
+}
+
+.edit-btn:hover {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}
+
+/* DELETE */
+.delete-btn {
+  color: #dc2626;
+}
+
+.delete-btn:hover {
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+
+
+
+
+
+
+/* MORE */
+.more-btn {
+  color: #6b7280;
+}
+
+.more-btn:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+}
+.action-btn:disabled {
+  background-color: #f1f1f1 !important;
+  color: #b5b5b5 !important;
+  border-color: #e0e0e0 !important;
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.action-btn:disabled mat-icon {
+  color: #b5b5b5 !important;
+}
+
+
+/* =========================
+   ROW ACTION MENU
+========================= */
+
+/* Delete is the one item that cannot be undone, so it is coloured and
+   separated from everything above it. ::ng-deep is needed because the menu
+   panel is rendered in an overlay, outside this component's view. */
+::ng-deep .branch-action-menu .menu-item-danger {
+  color: #dc2626;
+  border-top: 1px solid #f1f5f9;
+}
+
+::ng-deep .branch-action-menu .menu-item-danger .mat-icon {
+  color: #dc2626;
+}
+
+::ng-deep .branch-action-menu .menu-item-danger:hover:not([disabled]) {
+  background: #fef2f2;
+}
+
+::ng-deep .branch-action-menu .mat-mdc-menu-item .mat-icon {
+  margin-right: 10px;
+}

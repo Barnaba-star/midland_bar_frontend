@@ -1,0 +1,288 @@
+.guidance-container {
+  padding: 18px 22px 28px;
+  box-sizing: border-box;
+}
+
+.guidance-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.guidance-header h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.guidance-header p {
+  margin: 4px 0 0;
+  color: #64748b;
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+.add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 16px;
+  border: 1px solid #0f172a;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.add-btn:hover {
+  background: linear-gradient(180deg, #334155 0%, #1e293b 100%);
+}
+
+.add-btn mat-icon {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
+
+
+/* =========================
+   THE NOTES
+========================= */
+
+.note-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.note {
+  padding: 16px 18px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+/* A draft is held back on purpose, so it should look held back. */
+.note.draft {
+  border-style: dashed;
+  background: #fcfcfd;
+}
+
+.note-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* The reading order, which is not the writing order. */
+.position {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background: #f1f5f9;
+  color: #64748b;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.note-title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  color: #0f172a;
+  font-size: 14.5px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.state-pill {
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #64748b;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+.state-pill.live {
+  background: #ecfdf3;
+  color: #067647;
+}
+
+.note-body {
+  margin: 10px 0 0;
+  color: #475569;
+  font-size: 12.5px;
+  line-height: 1.6;
+  /* Written with line breaks that mean something. */
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+
+.note-attachments {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.attachment {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  max-width: 100%;
+  padding: 6px 11px;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 11.5px;
+  font-weight: 600;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.attachment:hover {
+  border-color: #c7d2fe;
+  background: #f5f3ff;
+  color: #3730a3;
+}
+
+.attachment mat-icon {
+  width: 14px;
+  height: 14px;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+
+.note-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #475569;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.action:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.action.danger:hover {
+  border-color: #fecdca;
+  background: #fef3f2;
+  color: #b42318;
+}
+
+.action mat-icon {
+  width: 14px;
+  height: 14px;
+  font-size: 14px;
+}
+
+
+/* =========================
+   STATES
+========================= */
+
+.state-note {
+  padding: 40px 0;
+  color: #94a3b8;
+  font-size: 13px;
+  text-align: center;
+}
+
+.state-note.error {
+  color: #b42318;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.empty-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  margin-bottom: 12px;
+  border-radius: 14px;
+  background: #f1f5f9;
+  color: #94a3b8;
+}
+
+.empty-icon mat-icon {
+  width: 24px;
+  height: 24px;
+  font-size: 24px;
+}
+
+.empty h3 {
+  margin: 0 0 4px;
+  color: #475467;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.empty p {
+  margin: 0;
+  max-width: 320px;
+  color: #98a2b3;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+
+@media (max-width: 640px) {
+
+  .guidance-container {
+    padding: 14px 12px 24px;
+  }
+
+  .add-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

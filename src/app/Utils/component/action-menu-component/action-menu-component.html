@@ -1,0 +1,9 @@
+<div class="menu-box">
+ @for (item of menuItems; track item) {
+  <div class="menu-item" (click)="onItemClick(item)">
+    <img [src]="item.icon" class="menu-icon" />
+    <span>{{ item.label }}</span>
+  </div>
+}
+
+</div>

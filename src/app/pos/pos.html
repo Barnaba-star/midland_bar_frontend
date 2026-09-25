@@ -1,0 +1,248 @@
+<app-main-sidenav2 [menuItems]=this.getItems(menuItems) >
+  <router-outlet></router-outlet>
+  @if(isHome===true){
+
+    <div class="pos-home">
+
+      <div class="pos-home-intro">
+        <h1>{{ summary?.branchName || ('POS_HOME.YOUR_BRANCH' | translate) }}</h1>
+      </div>
+
+      <!-- ============ ROW 1 - THE NUMBERS ============ -->
+      <!-- Four numbers, not four charts: a single figure reads faster as a
+           figure than as a one-slice chart. -->
+      <section class="dash-row dash-row-tiles">
+      <div class="dash-tiles">
+
+        <div class="dash-tile">
+          <span class="tile-label">{{ 'POS_HOME.TODAY_REVENUE' | translate }}</span>
+          <span class="tile-value">{{ money(summary?.todayRevenue) }}<small>TZS</small></span>
+          @if (revenueChange !== null) {
+            <!-- Arrow and number carry the meaning; the colour only reinforces
+                 it, so this still reads without colour vision. -->
+            <span class="tile-change" [class.up]="revenueChange > 0" [class.down]="revenueChange < 0">
+              <mat-icon>{{ revenueChange >= 0 ? 'arrow_upward' : 'arrow_downward' }}</mat-icon>
+              {{ revenueChange > 0 ? '+' : '' }}{{ revenueChange }}%
+              <span class="tile-change-note">{{ 'POS_HOME.VS_YESTERDAY' | translate }}</span>
+            </span>
+          }
+        </div>
+
+        <div class="dash-tile" [class.needs-action]="summary?.pendingBillsCount > 0">
+          <span class="tile-label">{{ 'POS_HOME.PENDING_BILLS' | translate }}</span>
+          <span class="tile-value">{{ summary?.pendingBillsCount || 0 }}</span>
+          <span class="tile-sub">{{ money(summary?.pendingBillsAmount) }} TZS</span>
+        </div>
+
+        <div class="dash-tile">
+          <span class="tile-label">{{ 'POS_HOME.SERVICES_TODAY' | translate }}</span>
+          <span class="tile-value">{{ summary?.servicesSoldToday || 0 }}</span>
+        </div>
+
+        <div class="dash-tile">
+          <span class="tile-label">{{ 'POS_HOME.OPEN_STORES' | translate }}</span>
+          <span class="tile-value">{{ summary?.openStores || 0 }}<small>/ {{ summary?.totalStores || 0 }}</small></span>
+        </div>
+
+      </div>
+      </section>
+
+
+      <!-- ============ ROW 2 - THE CHARTS ============ -->
+      @if (seesMoney) {
+      <section class="dash-row dash-row-charts">
+
+        <!-- ============ REVENUE TREND ============ -->
+        <div class="dash-panel panel-full">
+          <div class="panel-head">
+            <h3>{{ 'POS_HOME.TREND_TITLE' | translate }}</h3>
+            <span class="panel-note">{{ summary?.branchName || ('POS_HOME.YOUR_BRANCH' | translate) }}</span>
+          </div>
+
+          @if (trendPoints.length) {
+            <div class="chart-frame">
+              <div class="y-axis">
+                @for (tick of trendYTicks; track $index) {
+                  <span>{{ tick }}</span>
+                }
+              </div>
+              <div class="chart-wrap">
+              <svg
+                class="trend-chart"
+                [attr.viewBox]="'0 0 ' + chartWidth + ' ' + chartHeight"
+                preserveAspectRatio="none"
+                role="img"
+                [attr.aria-label]="'POS_HOME.TREND_TITLE' | translate">
+
+                <path class="trend-area" [attr.d]="trendArea"></path>
+                <path class="trend-line" [attr.d]="trendPath"></path>
+
+                @if (hoveredPoint) {
+                  <line
+                    class="trend-crosshair"
+                    [attr.x1]="hoveredPoint.x" [attr.x2]="hoveredPoint.x"
+                    [attr.y1]="12" [attr.y2]="chartHeight - 22"></line>
+                  <circle class="trend-dot" [attr.cx]="hoveredPoint.x" [attr.cy]="hoveredPoint.y" r="4.5"></circle>
+                }
+
+                <!-- Hit targets are wider than the marks so a day is easy to land on. -->
+                @for (point of trendPoints; track point.date) {
+                  <rect
+                    class="trend-hit"
+                    [attr.x]="point.x - 6" y="0" width="12" [attr.height]="chartHeight"
+                    (mouseenter)="onTrendHover(point)"
+                    (mouseleave)="onTrendHover(null)"></rect>
+                }
+              </svg>
+
+              @if (hoveredPoint) {
+                <div class="chart-tooltip" [style.left.%]="(hoveredPoint.x / chartWidth) * 100">
+                  <span class="tip-date">{{ hoveredPoint.date | date: 'dd/MM/yyyy' }}</span>
+                  <span class="tip-value">{{ money(hoveredPoint.amount) }} TZS</span>
+                </div>
+              }
+              </div>
+            </div>
+
+            <div class="x-axis">
+              @for (tick of trendXTicks; track $index) {
+                <span [style.left.%]="tick.percent">{{ tick.label }}</span>
+              }
+            </div>
+            <span class="axis-caption">{{ 'POS_HOME.AXIS_CAPTION' | translate }}</span>
+          } @else {
+            <app-empty-state compact icon="payment2" title="POS_HOME.NO_DATA" />
+          }
+        </div>
+
+
+        <!-- ============ TWO RANKED BAR CHARTS ============ -->
+
+          <div class="dash-panel">
+            <div class="panel-head">
+              <h3>{{ 'POS_HOME.BY_SERVICE_TITLE' | translate }}</h3>
+              <span class="panel-note">{{ 'POS_HOME.THIS_MONTH' | translate }}</span>
+            </div>
+
+            @if (serviceColumns.length) {
+            <div class="column-chart">
+              @for (col of serviceColumns; track col.label) {
+                <div class="column-item" [attr.title]="col.label.startsWith('POS_HOME.') ? null : col.label">
+                  <span class="column-value">{{ money(col.amount) }}</span>
+                  <div class="column-track">
+                    <div class="column-fill" [style.height.%]="col.percent"></div>
+                  </div>
+                  <span class="column-label">{{ col.label.startsWith('POS_HOME.') ? (col.label | translate) : col.label }}</span>
+                </div>
+              }
+            </div>
+          } @else {
+              <app-empty-state compact icon="service" title="POS_HOME.NO_DATA" />
+            }
+          </div>
+
+        <!-- ============ HEADLINE SPLIT (ring) ============ -->
+        <div class="dash-panel">
+          <div class="panel-head">
+            <h3>{{ 'POS_HOME.DONUT_TITLE' | translate }}</h3>
+            <span class="panel-note">{{ 'POS_HOME.THIS_MONTH' | translate }}</span>
+          </div>
+
+          @if (donutSlices.length) {
+            <div class="donut-wrap">
+              <svg class="donut" viewBox="0 0 100 100" role="img"
+                   [attr.aria-label]="'POS_HOME.DONUT_TITLE' | translate">
+                <circle class="donut-track" cx="50" cy="50" r="42"></circle>
+                @for (slice of donutSlices; track slice.label) {
+                  <circle
+                    class="donut-slice"
+                    cx="50" cy="50" r="42"
+                    [attr.stroke]="slice.color"
+                    [attr.stroke-dasharray]="slice.dash"
+                    [attr.stroke-dashoffset]="slice.offset"></circle>
+                }
+              </svg>
+
+              <!-- The legend carries the labels and shares, so no slice
+                   depends on its colour to be identified. -->
+              <ul class="donut-legend">
+                @for (slice of donutSlices; track slice.label) {
+                  <li>
+                    <span class="swatch" [style.background]="slice.color"></span>
+                    <span class="legend-label">{{ slice.label | translate }}</span>
+                    <span class="legend-value">{{ slice.percent }}%<small>{{ money(slice.amount) }}</small></span>
+                  </li>
+                }
+              </ul>
+            </div>
+          } @else {
+            <app-empty-state compact icon="commission" title="POS_HOME.NO_DATA" />
+          }
+        </div>
+
+
+          <div class="dash-panel panel-full">
+            <div class="panel-head">
+              <h3>{{ 'POS_HOME.SPLIT_TITLE' | translate }}</h3>
+              <span class="panel-note">{{ 'POS_HOME.THIS_MONTH' | translate }}</span>
+            </div>
+
+            @if (splitBars.length) {
+              <div class="bar-list">
+                @for (bar of splitBars; track bar.label) {
+                  <div class="bar-row">
+                    <span class="bar-label">{{ bar.label | translate }}</span>
+                    <span class="bar-track"><span class="bar-fill" [style.width.%]="bar.percent"></span></span>
+                    <span class="bar-value">{{ money(bar.amount) }}</span>
+                  </div>
+                }
+              </div>
+            } @else {
+              <app-empty-state compact icon="pay" title="POS_HOME.NO_DATA" />
+            }
+          </div>
+
+
+        <!-- ============ STOCK AND PURCHASE ============ -->
+        <div class="dash-panel panel-full">
+          <div class="panel-head">
+            <h3>{{ 'POS_HOME.STOCK_TITLE' | translate }}</h3>
+            <span class="panel-note">{{ 'POS_HOME.THIS_WEEK' | translate }}</span>
+          </div>
+
+          @if (stockRows.length) {
+            <div class="stock-totals">
+              <span><b>{{ money(stockTotals.total) }}</b> {{ 'POS_HOME.STOCK_TOTAL' | translate }}</span>
+              <span><b>{{ money(stockTotals.paid) }}</b> {{ 'POS_HOME.STOCK_PAID' | translate }}</span>
+              <span class="stock-remaining"><b>{{ money(stockTotals.remaining) }}</b> {{ 'POS_HOME.STOCK_REMAINING' | translate }}</span>
+            </div>
+
+            <div class="bar-list">
+              @for (row of stockRows; track row.label) {
+                <div class="bar-row">
+                  <span class="bar-label">{{ row.label }}</span>
+                  <span class="bar-track"><span class="bar-fill" [style.width.%]="row.percent"></span></span>
+                  <span class="bar-value">
+                    {{ money(row.total) }}
+                    <small>· {{ money(row.remaining) }} {{ 'POS_HOME.STOCK_LEFT_SHORT' | translate }}</small>
+                  </span>
+                </div>
+              }
+            </div>
+          } @else {
+            <app-empty-state compact icon="stock" title="POS_HOME.NO_DATA" />
+          }
+        </div>
+
+      </section>
+      }
+
+
+
+
+
+    </div>
+
+  }
+</app-main-sidenav2>
+

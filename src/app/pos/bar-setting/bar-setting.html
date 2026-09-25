@@ -1,0 +1,912 @@
+<app-title2
+  titleHeader="MENU.SETTING"
+  [actions]="getTitled(titleActions)"
+  [activeAction]="selectedSetting"
+  (customButtonClick)="onAction($event)"
+>
+</app-title2>
+
+@switch (selectedSetting) {
+  @case ('SALON.STAFF') {
+    @if (userDataSource.length > 0) {
+       <div class="action-container123">
+      <div class="user-management-card">
+        <!-- Header -->
+        <div class="user-management-header">
+          <div class="user-header-content">
+            <div class="user-header-icon">
+              <mat-icon>manage_accounts</mat-icon>
+            </div>
+
+            <div>
+              <h3>{{ 'SETTING_PAGE.USER_MGMT_TITLE' | translate }}</h3>
+              <p>{{ 'SETTING_PAGE.USER_MGMT_SUBTITLE' | translate }}</p>
+            </div>
+          </div>
+
+          <div class="user-count">
+            <span class="count-number">
+              {{ totalElements }}
+            </span>
+
+            <span class="count-label"> {{ 'SETTING_PAGE.USERS_LABEL' | translate }} </span>
+          </div>
+
+          <button
+            type="button"
+            class="add-user-btn"
+            [matTooltip]="'SETTING_PAGE.TOOLTIP_ADD_USER' | translate"
+            (click)="addUser()"
+          >
+            <mat-icon>person_add</mat-icon>
+            {{ 'SETTING_PAGE.ADD_USER_BTN' | translate }}
+          </button>
+        </div>
+
+        <!-- Table -->
+        <div class="table-responsive">
+          <table class="table user-management-table">
+            <thead>
+              <tr>
+                <th class="serial-column">#</th>
+                <th>{{ 'SETTING_PAGE.COL_USERNAME' | translate | uppercase }}</th>
+                <th>{{ 'SETTING_PAGE.COL_FULLNAME' | translate | uppercase }}</th>
+                <th>{{ 'SETTING_PAGE.COL_ROLE' | translate | uppercase }}</th>
+                <th>{{ 'SETTING_PAGE.COL_BRANCH' | translate | uppercase }}</th>
+                <th class="actions-column">{{ 'COMMON.ACTIONS' | translate | uppercase }}</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @for (user of userDataSource; track user.uid; let i = $index) {
+                <tr>
+                  <!-- Serial -->
+                  <td class="serial-column">
+                    {{ page * size + i + 1 }}
+                  </td>
+
+                  <!-- Username -->
+                  <td>
+                    <div class="username-wrapper">
+                      <div class="username-avatar">
+                        <mat-icon>person</mat-icon>
+                      </div>
+
+                      <span class="username-text">
+                        {{ user.username }}
+                      </span>
+                    </div>
+                  </td>
+
+                  <!-- Full Name -->
+                  <td>
+                    <span class="fullname-text">
+                      {{ user.fullName }}
+                    </span>
+                  </td>
+
+                  <!-- Role -->
+                  <td>
+                    @if (user.isBlocked) {
+                      <span class="blocked-badge">{{ 'SETTING_PAGE.BLOCKED' | translate }}</span>
+                    }
+                    <span class="role-badge">
+                      <mat-icon>admin_panel_settings</mat-icon>
+
+                      {{ user.roleName }}
+                    </span>
+                  </td>
+
+                  <!-- Branch -->
+                  <td>
+                    <div class="branch-wrapper">
+                      <mat-icon>business</mat-icon>
+
+                      <span>
+                        {{ user.branchName }}
+                      </span>
+                    </div>
+                  </td>
+
+                  <!-- Actions -->
+                  <td class="actions-column">
+                    <div class="user-actions">
+
+                      <button
+                        type="button"
+                        class="user-action"
+                        [matTooltip]="'SETTING_PAGE.TOOLTIP_ASSIGN_ROLE' | translate"
+                        (click)="onAssignRole(user)"
+                      >
+                        <mat-icon>badge</mat-icon>
+                        <span>{{ 'SETTING_PAGE.BTN_ASSIGN_ROLE' | translate }}</span>
+                      </button>
+
+                      <!-- Revoked, not removed: their uid is what the
+                           commission report and every payment record point
+                           at, so the row stays and the login stops. -->
+                      <button
+                        type="button"
+                        class="user-action"
+                        [class.danger]="!user.isBlocked"
+                        [disabled]="blockingUid === user.uid"
+                        [matTooltip]="(user.isBlocked ? 'SETTING_PAGE.TOOLTIP_RESTORE_USER' : 'SETTING_PAGE.TOOLTIP_REVOKE_USER') | translate"
+                        (click)="onToggleAccess(user)"
+                      >
+                        <mat-icon>{{ user.isBlocked ? 'lock_open' : 'block' }}</mat-icon>
+                        <span>{{ (user.isBlocked ? 'SETTING_PAGE.BTN_RESTORE_USER' : 'SETTING_PAGE.BTN_REVOKE_USER') | translate }}</span>
+                      </button>
+
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="user-pagination">
+          <div class="pagination-info">
+            {{ 'COMMON.SHOWING' | translate }}
+
+            <strong>
+              {{ totalElements === 0 ? 0 : page * size + 1 }}
+            </strong>
+
+            {{ 'COMMON.TO' | translate }}
+
+            <strong>
+              {{ Math.min((page + 1) * size, totalElements) }}
+            </strong>
+
+            {{ 'COMMON.OF' | translate }}
+
+            <strong>
+              {{ totalElements }}
+            </strong>
+
+            {{ 'SETTING_PAGE.USERS_LABEL' | translate | lowercase }}
+          </div>
+
+          <div class="pagination-controls">
+            <!-- Previous -->
+            <button
+              type="button"
+              mat-stroked-button
+              [disabled]="page === 0"
+              (click)="changePage(page - 1)"
+            >
+              <mat-icon svgIcon="more"></mat-icon>
+              {{ 'COMMON.PREVIOUS' | translate }}
+            </button>
+
+            <!-- Pages -->
+            @for (p of [].constructor(totalPages); track $index) {
+              <button
+                type="button"
+                mat-button
+                [class.active-page]="page === $index"
+                (click)="changePage($index)"
+              >
+                {{ $index + 1 }}
+              </button>
+            }
+
+            <!-- Next -->
+            <button
+              type="button"
+              mat-stroked-button
+              [disabled]="page >= totalPages - 1"
+              (click)="changePage(page + 1)"
+            >
+              {{ 'COMMON.NEXT' | translate }}
+              <mat-icon svgIcon="more"></mat-icon>
+            </button>
+          </div>
+
+          <!-- Page Size -->
+          <div class="page-size-wrapper">
+            <span>{{ 'COMMON.SHOW' | translate }}</span>
+
+            <select [value]="size" (change)="changePageSize($event)">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      </div>
+    }
+    @if (userDataSource.length === 0) {
+      <app-empty-state
+        icon="team"
+        title="SETTING_PAGE.EMPTY_USERS_TITLE"
+        text="SETTING_PAGE.EMPTY_USERS_TEXT"
+      />
+    }
+  }
+
+  @case ('SALON.SERVICE') {
+    <div class="action-container123">
+      @if (barServiceEntity.uid && barServiceAddForm === false) {
+        <div class="card-container">
+          <app-recordtable
+            [columns]="serviceColumns"
+            [data]="[barServiceEntity]"
+            [showView]="true"
+            [showEdit]="true"
+            [showDelete]="true"
+            (deleteRecord)="onDeleteRecord($event)"
+            (editRecord)="onEditRecord($event)"
+            (viewRecord)="onViewRecord($event)"
+            [serialNumber]="{
+              enabled: true,
+              background: '#413e58',
+              color: '#ffffff',
+              size: '32px',
+              border: '',
+              fontWeight: '600',
+            }"
+          >
+          </app-recordtable>
+        </div>
+      }
+
+      @if (barServiceInfo === true) {
+        <div class="info-card">
+          <div class="info-header">
+            <h2>{{ 'SERVICE_PAGE.TITLE' | translate }}</h2>
+
+            <p style="color: white">
+              {{ 'SETTING_PAGE.INFO_DESC' | translate }}
+            </p>
+          </div>
+
+          <div class="info-row">
+            <strong>{{ 'SETTING_PAGE.BEFORE_YOU_CONTINUE' | translate }}</strong>
+
+            <p>
+              {{ 'SETTING_PAGE.BEFORE_YOU_CONTINUE_DESC' | translate }}
+            </p>
+          </div>
+
+          <div class="info-row">
+            <strong>{{ 'SETTING_PAGE.WHAT_HAPPENS_NEXT' | translate }}</strong>
+
+            <p [innerHTML]="'SETTING_PAGE.WHAT_HAPPENS_NEXT_DESC' | translate">
+            </p>
+          </div>
+
+          <div class="button-section">
+            <button class="btn btn-primary" (click)="onAddService()">{{ 'SERVICE.ADD' | translate }}</button>
+
+            <button class="btn btn-primary" (click)="findBarServicePage()">
+              {{ 'SERVICE.MANAGE' | translate }}
+            </button>
+          </div>
+        </div>
+      }
+
+     @if (serviceDataSource.data.length > 0) {
+
+  <div class="service-table-card">
+
+    <!-- Header -->
+<div class="service-table-header">
+
+  <div class="header-left">
+
+    <div class="header-icon">
+      <mat-icon>content_cut</mat-icon>
+    </div>
+
+    <div>
+      <h2>{{ 'SERVICE_PAGE.TITLE' | translate }}</h2>
+      <p>{{ 'SETTING_PAGE.TABLE_SUBTITLE' | translate }}</p>
+    </div>
+
+  </div>
+
+ <div class="header-right">
+  <button
+    mat-flat-button
+    class="add-service-btn"
+    type="button"
+    (click)="onAddService()">
+
+    <mat-icon>add</mat-icon>
+
+    <span>{{ 'SERVICE.ADD' | translate }}</span>
+
+  </button>
+</div>
+
+
+</div>
+
+
+
+    <!-- Table -->
+    <div class="table-scroll">
+
+      <table class="service-table">
+
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>{{ 'SERVICE_PAGE.COL_SERVICE' | translate }}</th>
+            <th>{{ 'COMMON.CODE' | translate }}</th>
+            <th>{{ 'COMMON.PRICE' | translate }}</th>
+            <th>{{ 'COMMON.DURATION' | translate }}</th>
+            <th>{{ 'SETTING_PAGE.COL_STORE_USAGE' | translate }}</th>
+            <th>{{ 'COMMON.STATUS' | translate }}</th>
+            <th class="action-column">{{ 'COMMON.ACTION' | translate }}</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          @for (service of serviceDataSource.data; track service.uid; let i = $index) {
+
+            <tr>
+
+              <!-- Number -->
+              <td class="number-cell">
+                {{ (page * size) + i + 1 }}
+              </td>
+
+
+              <!-- Service -->
+              <td>
+                <div class="service-info">
+
+                  <div class="service-avatar">
+                    {{ service.serviceName?.charAt(0) || '?' | uppercase }}
+                  </div>
+
+                  <div class="service-details">
+                    <span class="service-name">
+                      {{ service.serviceName || ('SETTING_PAGE.UNNAMED_SERVICE' | translate) }}
+                    </span>
+
+                    @if (service.description) {
+                      <span class="service-description">
+                        {{ service.description }}
+                      </span>
+                    }
+                  </div>
+
+                </div>
+              </td>
+
+
+              <!-- Code -->
+              <td>
+                <span class="service-code">
+                  {{ service.serviceCode || '—' }}
+                </span>
+              </td>
+
+
+              <!-- Price -->
+              <td>
+                <span class="price">
+                  Tshs {{ service.price | number:'1.2-2' }}
+                </span>
+              </td>
+
+
+              <!-- Duration -->
+              <td>
+                <div class="duration">
+
+                  <mat-icon>schedule</mat-icon>
+
+                  <span>
+                    {{ service.duration || 0 }} min
+                  </span>
+
+                </div>
+              </td>
+
+                <td>
+                <div class="duration">
+
+                  <mat-icon svgIcon="store"></mat-icon>
+
+                  <span>
+                    {{ service.usageType}}
+                  </span>
+
+                </div>
+              </td>
+
+
+              <!-- Status -->
+              <td>
+
+                @if (service.status?.toLowerCase() === 'active') {
+
+                  <span class="status-badge active">
+                    <span class="status-dot"></span>
+                    {{ 'COMMON.ACTIVE' | translate }}
+                  </span>
+
+                } @else {
+
+                  <span class="status-badge inactive">
+                    <span class="status-dot"></span>
+                    {{ 'COMMON.INACTIVE' | translate }}
+                  </span>
+
+                }
+
+              </td>
+
+
+
+
+              <!-- Action -->
+              <td class="action-column">
+
+                <button
+                  mat-icon-button
+                  class="action-btn"
+                  [matMenuTriggerFor]="serviceMenu">
+
+                  <mat-icon svgIcon="more"></mat-icon>
+
+                </button>
+
+                <mat-menu #serviceMenu="matMenu" panelClass="service-menu-panel">
+
+                  <button mat-menu-item type="button" (click)="onViewRecord(service)">
+                    <mat-icon>visibility</mat-icon>
+                    <span>{{ 'COMMON.VIEW' | translate }}</span>
+                  </button>
+
+                  <button mat-menu-item type="button" (click)="onEditRecord(service)">
+                    <mat-icon svgIcon="edit"></mat-icon>
+                    <span>{{ 'COMMON.EDIT' | translate }}</span>
+                  </button>
+
+                  <button mat-menu-item type="button" class="delete-action" (click)="onDeleteRecord(service)">
+                    <mat-icon svgIcon="delete"></mat-icon>
+                    <span>{{ 'COMMON.DELETE' | translate }}</span>
+                  </button>
+
+                </mat-menu>
+
+              </td>
+
+            </tr>
+
+          }
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+
+    <!-- Footer -->
+<!-- Footer -->
+<div class="service-table-footer">
+
+  <div class="showing-info">
+
+    @if (totalElements > 0) {
+
+      {{ 'COMMON.SHOWING' | translate }}
+
+      <strong>
+        {{ (page * size) + 1 }}
+      </strong>
+
+      –
+
+      <strong>
+        {{ Math.min((page + 1) * size, totalElements) }}
+      </strong>
+
+      {{ 'COMMON.OF' | translate }}
+
+      <strong>
+        {{ totalElements }}
+      </strong>
+
+      {{ 'SERVICE_PAGE.SERVICES_LABEL' | translate | lowercase }}
+
+    } @else {
+
+      {{ 'SETTING_PAGE.EMPTY_SERVICES_TITLE' | translate }}
+
+    }
+
+  </div>
+
+
+  <div class="pagination">
+
+    <!-- Previous -->
+    <button
+      mat-icon-button
+      class="pagination-btn"
+      type="button"
+      [disabled]="page === 0"
+      (click)="previousPage()">
+
+      <mat-icon svgIcon="back"></mat-icon>
+
+    </button>
+
+
+    <!-- Current Page -->
+    <div class="page-number">
+      {{ page + 1 }}
+    </div>
+
+
+    <span class="page-of">
+      {{ 'COMMON.OF' | translate }} {{ totalPages }}
+    </span>
+
+
+    <!-- Next -->
+    <button
+      mat-icon-button
+      class="pagination-btn"
+      type="button"
+      [disabled]="page >= totalPages - 1"
+      (click)="nextPage()">
+
+      <mat-icon svgIcon="right"></mat-icon>
+
+    </button>
+
+  </div>
+
+</div>
+
+
+  </div>
+
+}
+
+      @if (serviceDataSource.data.length === 0 && barServiceAddForm === false && barServiceInfo === false) {
+        <app-empty-state
+          icon="service"
+          title="SETTING_PAGE.EMPTY_SERVICES_TITLE"
+          text="SETTING_PAGE.EMPTY_SERVICES_TEXT"
+        >
+          <button
+            mat-flat-button
+            type="button"
+            class="add-service-btn"
+            (click)="onAddService()">
+            <mat-icon>add</mat-icon>
+            <span>{{ 'SERVICE.ADD' | translate }}</span>
+          </button>
+        </app-empty-state>
+      }
+
+    </div>
+  }
+
+  @case ('SALON.COMMISSION') {
+    <div class="action-container123">
+      <!-- TOP ACTIONS -->
+      <div class="top-actions">
+        <button class="action-btn back-btn" (click)="findBarServiceList()">
+          <mat-icon svgIcon="add"></mat-icon>
+          {{ 'SETTING_PAGE.ADD_COMMISSION_BTN' | translate }}
+        </button>
+
+        <button class="action-btn settings-btn" (click)="findCommissionPage()">
+          <mat-icon svgIcon="commission"></mat-icon>
+          {{ 'SETTING_PAGE.MANAGE_COMMISSIONS_BTN' | translate }}
+        </button>
+      </div>
+
+      <!-- COMMISSION LAYOUT -->
+      @if (addCommission === true) {
+        <div class="commission-layout">
+          <!-- LEFT COLUMN -->
+          <div class="commission-sidebar">
+            <button class="add-commission-btn" (click)="onAddCommission()">
+              <mat-icon svgIcon="add"></mat-icon>
+              {{ 'SETTING_PAGE.CHOOSE_SERVICE' | translate }}
+            </button>
+          </div>
+
+          <!-- RIGHT COLUMN -->
+          @if (selectedService === true) {
+            <div class="commission-table-area">
+              <!-- SERVICE INFORMATION -->
+              <div class="service-info-row">
+                <div class="service-info-item">
+                  <strong>
+                    {{ barServiceData.serviceName }}
+                  </strong>
+                </div>
+
+                <div class="service-info-item">
+                  <strong>
+                    {{ barServiceData.serviceCode }}
+                  </strong>
+                </div>
+
+                <div class="service-info-item">
+                  <strong>
+                    Tshs {{ barServiceData.price | number: '1.2-2' }}
+                  </strong>
+                </div>
+
+                <div class="service-info-item">
+                  <strong
+                    [class.active-status]="barServiceData.status === 'active'"
+                    [class.inactive-status]="barServiceData.status !== 'active'"
+                  >
+                    {{ barServiceData.status | uppercase }}
+                  </strong>
+                </div>
+              </div>
+
+              <!-- COMMISSION TABLE -->
+              <div class="commission-table">
+                <!-- HEADER -->
+                <div class="commission-row commission-header">
+                  <div>{{ 'COMMON.NAME' | translate }}</div>
+                  <div>{{ 'COMMON.CODE' | translate }}</div>
+                  <div>{{ 'COMMON.AMOUNT' | translate }}</div>
+                  <div>{{ 'COMMISSION_BREAKDOWN.PERCENTAGE' | translate }}</div>
+                </div>
+
+                <!-- COMMISSION ROWS -->
+                @for (row of commissionRows; track row.code) {
+                  <div class="commission-row">
+                    <div>
+                      {{ row.name }}
+                    </div>
+
+                    <div>
+                      {{ row.code }}
+                    </div>
+
+                    <div>
+                      <input
+                        type="number"
+                        [(ngModel)]="row.amount"
+                        placeholder="2000"
+                        (blur)="calculateCommission(row)"
+                      />
+                    </div>
+
+                    <div>{{ row.percentage | number: '1.2-2' }}%</div>
+                  </div>
+                }
+
+                <!-- REMAINING AMOUNT -->
+                <div class="remaining-amount">
+                  <span> {{ 'SETTING_PAGE.REMAINING_AMOUNT' | translate }} </span>
+
+                  <strong>
+                    {{ remainingAmount | number: '1.2-2' }}
+                  </strong>
+                </div>
+
+                <!-- SAVE BUTTON -->
+                <div class="commission-action">
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    class="save-commission-btn"
+                    type="button"
+                    (click)="saveCommission()"
+                  >
+                    <mat-icon> save </mat-icon>
+
+                    {{ 'SETTING_PAGE.SAVE_COMMISSION_BTN' | translate }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+      @if (commissionDataSource.length > 0) {
+        @if (commissionDataSource.length > 0) {
+          <div class="commission-card">
+            <!-- Header -->
+            <div class="commission-header">
+              <div class="commission-title">
+                <div class="commission-icon">
+                  <mat-icon>account_balance_wallet</mat-icon>
+                </div>
+
+                <div>
+                  <h3>{{ 'SETTING_PAGE.COMMISSION_CONFIG_TITLE' | translate }}</h3>
+                  <p>{{ 'SETTING_PAGE.COMMISSION_CONFIG_SUBTITLE' | translate }}</p>
+                </div>
+              </div>
+
+              <div class="commission-count">
+                <span>{{ totalElements }}</span>
+                <small>{{ 'MENU.SERVICE' | translate }}</small>
+              </div>
+            </div>
+
+            <!-- Table -->
+            <div class="table-responsive">
+              <table class="table commission-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>{{ 'COMMISSION_BREAKDOWN.SERVICE' | translate }}</th>
+                    <th>{{ 'COMMISSION_BREAKDOWN.PRICE' | translate }}</th>
+                    <th>{{ 'COMMISSION_BREAKDOWN.OWNER' | translate }}</th>
+                    <th>{{ 'COMMISSION_BREAKDOWN.STAFF' | translate }}</th>
+                    <th>{{ 'COMMISSION_BREAKDOWN.TRA' | translate }}</th>
+                    <th>{{ 'COMMISSION_BREAKDOWN.MAINTENANCE' | translate }}</th>
+                    <th>{{ 'COMMISSION_BREAKDOWN.EMERGENCY' | translate }}</th>
+                    <th>{{ 'COMMISSION_BREAKDOWN.LOAN' | translate }}</th>
+                    <th>{{ 'COMMISSION_BREAKDOWN.RENT' | translate }}</th>
+                    <th>{{ 'COMMISSION_BREAKDOWN.LUKU' | translate }}</th>
+                    <th>{{ 'COMMISSION_BREAKDOWN.WATER' | translate }}</th>
+                    <th>{{ 'COMMISSION_BREAKDOWN.STOCK_PURCHASE' | translate }}</th>
+                    <th>{{ 'COMMISSION_BREAKDOWN.OTHER' | translate }}</th>
+                    <th>{{ 'COMMISSION_BREAKDOWN.TOTAL' | translate }}</th>
+                    <th>{{ 'COMMISSION_BREAKDOWN.ACTIONS' | translate }}</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  @for (commission of commissionDataSource; track commission.uid; let i = $index) {
+                    <tr>
+                      <td class="number-column">
+                        {{ i + 1 }}
+                      </td>
+
+                      <td>
+                        <div class="service-info">
+                          <div class="service-avatar">
+                            {{ commission.serviceName?.charAt(0) }}
+                          </div>
+
+                          <div>
+                            <div class="service-name">
+                              {{ commission.serviceName }}
+                            </div>
+                            <small>{{ 'SETTING_PAGE.SERVICE_COMMISSION_LABEL' | translate }}</small>
+                          </div>
+                        </div>
+                      </td>
+
+                      <td>
+                        <span class="price">Tshs {{ commission.price | number: '1.2-2' }}</span>
+                      </td>
+
+                      <td>
+                        <span class="percentage owner"> {{ commission.ownerPercent }}% </span>
+                      </td>
+
+                      <td>
+                        <span class="percentage staff"> {{ commission.staffPercent }}% </span>
+                      </td>
+
+                      <td>
+                        <span class="percentage tra"> {{ commission.traPercent }}% </span>
+                      </td>
+
+                      <td>
+                        <span class="percentage maintenance">
+                          {{ commission.maintenancePercent }}%
+                        </span>
+                      </td>
+                      <td>
+                        <span class="percentage emergency">
+                          {{ commission.emergencyPercent }}%
+                        </span>
+                      </td>
+                      <td>
+                        <span class="percentage emergency">
+                          {{ commission.loanPercent }}%
+                        </span>
+                      </td>
+                       <td>
+                        <span class="percentage emergency">
+                          {{ commission.rentPercent }}%
+                        </span>
+                      </td>
+                       <td>
+                        <span class="percentage emergency">
+                          {{ commission.lukuPercent }}%
+                        </span>
+                      </td>
+                       <td>
+                        <span class="percentage emergency">
+                          {{ commission.waterPercent }}%
+                        </span>
+                      </td>
+                       <td>
+                        <span class="percentage emergency">
+                          {{ commission.stockPurchasePercent }}%
+                        </span>
+                      </td>
+
+                      <td>
+                        <span class="percentage other"> {{ commission.otherPercent }}% </span>
+                      </td>
+
+                  <td>
+  <span class="total-percentage">
+    <mat-icon>check_circle</mat-icon>
+    {{
+      (commission.ownerPercent || 0) +
+      (commission.staffPercent || 0) +
+      (commission.traPercent || 0) +
+      (commission.maintenancePercent || 0) +
+      (commission.emergencyPercent || 0) +
+      (commission.loanPercent || 0) +
+      (commission.rentPercent || 0) +
+      (commission.lukuPercent || 0) +
+      (commission.waterPercent || 0) +
+      (commission.stockPurchasePercent || 0) +
+      (commission.otherPercent || 0)
+    }}%
+  </span>
+</td>
+
+
+                      <td class="commission-actions-cell">
+                        <button
+                          mat-icon-button
+                          type="button"
+                          [matTooltip]="'SETTING_PAGE.TOOLTIP_EDIT_COMMISSION' | translate"
+                          (click)="editCommission(commission)"
+                        >
+                          <mat-icon svgIcon="edit"></mat-icon>
+                        </button>
+                        <button
+                          mat-icon-button
+                          type="button"
+                          [matTooltip]="'SETTING_PAGE.TOOLTIP_DELETE_COMMISSION' | translate"
+                          (click)="deleteCommission(commission)"
+                        >
+                          <mat-icon svgIcon="delete"></mat-icon>
+                        </button>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+            <mat-paginator
+      [length]="totalElements"
+      [pageSize]="size"
+      [pageIndex]="page"
+      [pageSizeOptions]="[5, 10, 20, 50]"
+      showFirstLastButtons
+      (page)="onCommissionPageChange($event)">
+    </mat-paginator>
+          </div>
+        }
+
+
+
+
+      }
+      @if (commissionDataSource.length === 0 && addCommission !== true) {
+        <app-empty-state
+          icon="commission"
+          title="SETTING_PAGE.EMPTY_COMMISSION_TITLE"
+          text="SETTING_PAGE.EMPTY_COMMISSION_TEXT"
+        />
+      }
+    </div>
+  }
+}

@@ -1,0 +1,5 @@
+/* The shell only frames the pages inside it; each one brings its own
+   layout, the way the Settings sections do. */
+:host {
+  display: block;
+}

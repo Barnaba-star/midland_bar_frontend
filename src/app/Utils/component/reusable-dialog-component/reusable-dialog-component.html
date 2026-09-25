@@ -1,0 +1,17 @@
+<div class="dialog" style="margin-top: 2px;">
+  <h5 mat-dialog-title *ngIf="data.title" class="small-title">{{ data.title }}</h5>
+
+  <mat-dialog-content>
+    <ng-container *ngTemplateOutlet="data.template"></ng-container>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button
+      *ngIf="showCloseButton"
+      mat-button
+      (click)="dialogRef.close()"
+      style="width: 100px;">
+      Funga
+    </button>
+  </mat-dialog-actions>
+</div>

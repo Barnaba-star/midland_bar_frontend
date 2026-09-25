@@ -1,0 +1,261 @@
+<app-title2
+  [titleHeader]="'PAYMENT_SETTING_PAGE.TITLE'"
+  (customButtonClick)="onAction($event)"
+  [actions]="getTitled(titleActions)"
+  [activeAction]="payments"
+></app-title2>
+
+<div class="payment-log-container">
+
+  <div class="payment-header">
+
+    <div>
+      <h2>{{ 'PAYMENT_SETTING_PAGE.MGMT_TITLE' | translate }}</h2>
+      <p>{{ 'PAYMENT_SETTING_PAGE.MGMT_SUBTITLE' | translate }}</p>
+    </div>
+
+    <div class="header-actions">
+      <button type="button" class="refresh-btn" (click)="openRevenueShare()">
+        {{ 'PAYMENT_SETTING_PAGE.SHARE_BTN' | translate }}
+      </button>
+
+      <button type="button" class="refresh-btn" (click)="refresh()">
+        {{ 'PAYMENT_SETTING_PAGE.REFRESH_BTN' | translate }}
+      </button>
+    </div>
+
+  </div>
+
+
+  <!-- COUNTS (both tabs) -->
+
+  <div class="summary-row">
+
+    <div class="summary-card">
+      <span class="summary-label">{{ 'PAYMENT_SETTING_PAGE.TOTAL_PAYMENTS' | translate }}</span>
+      <span class="summary-value">{{ totals.payments }}</span>
+    </div>
+
+    <div class="summary-card">
+      <span class="summary-label">{{ 'PAYMENT_SETTING_PAGE.TOTAL_AMOUNT' | translate }}</span>
+      <span class="summary-value">{{ totals.totalAmount | number }}</span>
+    </div>
+
+    <div class="summary-card">
+      <span class="summary-label">{{ 'PAYMENT_SETTING_PAGE.THIS_MONTH' | translate }}</span>
+      <span class="summary-value">{{ totals.thisMonth | number }}</span>
+    </div>
+
+    <div class="summary-card">
+      <span class="summary-label">{{ 'PAYMENT_SETTING_PAGE.BALANCE' | translate }}</span>
+      @if (balance === null) {
+        <span class="summary-value summary-muted">
+          {{ 'PAYMENT_SETTING_PAGE.BALANCE_UNAVAILABLE' | translate }}
+        </span>
+      } @else {
+        <span class="summary-value">{{ balance | number }}</span>
+      }
+    </div>
+
+  </div>
+
+
+  @switch (payments) {
+
+
+    <!-- ============ RECEIVED ============ -->
+
+    @case ('PAYMENT_SETTING_PAGE.RECEIVED_TAB') {
+
+      <div class="table-wrapper">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>{{ 'PAYMENT_SETTING_PAGE.COL_DATE' | translate }}</th>
+              <th>{{ 'PAYMENT_SETTING_PAGE.COL_BRANCH' | translate }}</th>
+              <th>{{ 'PAYMENT_SETTING_PAGE.COL_AMOUNT' | translate }}</th>
+              <th>{{ 'PAYMENT_SETTING_PAGE.COL_MONTHS' | translate }}</th>
+              <th>{{ 'PAYMENT_SETTING_PAGE.COL_COMMISSION' | translate }}</th>
+              <th>{{ 'PAYMENT_SETTING_PAGE.COL_STAFF' | translate }}</th>
+              <th>{{ 'PAYMENT_SETTING_PAGE.COL_REFERENCE' | translate }}</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            @for (payment of paymentList; track payment.uid; let i = $index) {
+              <tr>
+
+                <td>{{ currentPage * pageSize + i + 1 }}</td>
+
+                <td class="time-cell">
+                  {{ payment.paidAt | date: 'dd/MM/yyyy' }}
+                </td>
+
+                <td class="branch-cell">
+                  <span class="branch-name">{{ payment.branchName || '-' }}</span>
+                  <span class="branch-code">{{ payment.branchCode }}</span>
+                </td>
+
+                <td class="amount-cell">{{ payment.amount | number }}</td>
+
+                <td>{{ payment.months }}</td>
+
+                <td class="commission-cell">
+                  {{ payment.commissionAmount | number }}
+                  <span class="commission-percent">{{ payment.commissionPercent }}%</span>
+                </td>
+
+                <td>{{ payment.staffName || '-' }}</td>
+
+                <td class="reference-cell" [title]="payment.reference">
+                  {{ payment.reference || '-' }}
+                </td>
+
+              </tr>
+            }
+
+            @if (!isLoading && paymentList.length === 0) {
+              <tr>
+                <td colspan="8">
+                  <div class="empty-state">
+                    {{ 'PAYMENT_SETTING_PAGE.EMPTY_TEXT' | translate }}
+                  </div>
+                </td>
+              </tr>
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+
+      <!-- PAGINATION -->
+
+      @if (totalPages > 1) {
+        <div class="pagination-row">
+
+          <button
+            type="button"
+            class="pagination-btn"
+            [disabled]="currentPage === 0"
+            (click)="goToPage(currentPage - 1)">
+            &lsaquo;
+          </button>
+
+          @for (page of pageNumbers; track page) {
+            <button
+              type="button"
+              class="pagination-btn page-number"
+              [class.active]="currentPage === page"
+              (click)="goToPage(page)">
+              {{ page + 1 }}
+            </button>
+          }
+
+          <button
+            type="button"
+            class="pagination-btn"
+            [disabled]="currentPage >= totalPages - 1"
+            (click)="goToPage(currentPage + 1)">
+            &rsaquo;
+          </button>
+
+        </div>
+      }
+
+    }
+
+
+    <!-- ============ UNRESOLVED ============ -->
+
+    @case ('PAYMENT_SETTING_PAGE.UNRESOLVED_TAB') {
+
+      <div class="table-wrapper">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>{{ 'PAYMENT_SETTING_PAGE.COL_BRANCH' | translate }}</th>
+              <th>{{ 'PAYMENT_SETTING_PAGE.COL_STATUS' | translate }}</th>
+              <th>{{ 'PAYMENT_SETTING_PAGE.COL_REASON' | translate }}</th>
+              <th>{{ 'PAYMENT_SETTING_PAGE.COL_REFERENCE' | translate }}</th>
+              <th>{{ 'PAYMENT_SETTING_PAGE.COL_DATE' | translate }}</th>
+              <th>{{ 'PAYMENT_SETTING_PAGE.COL_ACTION' | translate }}</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            @for (branch of unresolvedList; track branch.uid; let i = $index) {
+              <tr>
+
+                <td>{{ i + 1 }}</td>
+
+                <td class="branch-cell">
+                  <span class="branch-name">{{ branch.branchName || '-' }}</span>
+                  <span class="branch-code">{{ branch.branchCode }}</span>
+                </td>
+
+                <td>
+                  <span
+                    class="level-badge"
+                    [class.status-pending]="branch.subscriptionStatus === 'PENDING'"
+                    [class.status-failed]="branch.subscriptionStatus === 'FAILED'">
+                    {{ branch.subscriptionStatus }}
+                  </span>
+                </td>
+
+                <td class="reason-cell" [title]="branch.lastPaymentFailure">
+                  {{ branch.lastPaymentFailure || '-' }}
+                </td>
+
+                <td class="reference-cell" [title]="branch.pendingPaymentRef">
+                  {{ branch.pendingPaymentRef || '-' }}
+                </td>
+
+                <td class="time-cell">
+                  {{ branch.pendingPaymentAt ? (branch.pendingPaymentAt | date: 'dd/MM/yyyy') : '-' }}
+                </td>
+
+                <td>
+                  <button
+                    type="button"
+                    class="reconcile-btn"
+                    [disabled]="reconcilingUid === branch.uid"
+                    (click)="reconcile(branch.uid)">
+                    {{ 'PAYMENT_SETTING_PAGE.RECONCILE_BTN' | translate }}
+                  </button>
+                </td>
+
+              </tr>
+            }
+
+            @if (!isLoadingUnresolved && unresolvedList.length === 0) {
+              <tr>
+                <td colspan="7">
+                  <div class="empty-state">
+                    {{ 'PAYMENT_SETTING_PAGE.EMPTY_UNRESOLVED' | translate }}
+                  </div>
+                </td>
+              </tr>
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    }
+
+  }
+
+</div>

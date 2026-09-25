@@ -1,0 +1,45 @@
+<div class="edit-commission-header">
+  <div>
+    <h3>Edit Commission</h3>
+    <p>{{ serviceName }}</p>
+  </div>
+  <button mat-icon-button type="button" (click)="onCancel()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<div class="edit-commission-body">
+  @for (row of rows; track row.code) {
+    <div class="edit-commission-row">
+      <label>{{ row.name }}</label>
+      <div class="edit-commission-input">
+        <input
+          type="number"
+          min="0"
+          max="100"
+          step="0.01"
+          [(ngModel)]="row.percent"
+          [ngModelOptions]="{ standalone: true }"
+        />
+        <span>%</span>
+      </div>
+    </div>
+  }
+</div>
+
+<div
+  class="edit-commission-total"
+  [class.complete]="totalPercent === 100"
+  [class.over]="totalPercent > 100"
+>
+  <span>Total</span>
+  <strong>{{ totalPercent | number: '1.2-2' }}%</strong>
+</div>
+
+<div class="edit-commission-actions">
+  <button mat-stroked-button type="button" (click)="onCancel()">Cancel</button>
+  <button mat-flat-button color="primary" type="button" (click)="onSave()">
+    <mat-icon>save</mat-icon>
+    Save Changes
+  </button>
+</div>

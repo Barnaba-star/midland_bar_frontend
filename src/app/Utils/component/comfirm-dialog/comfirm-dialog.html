@@ -1,0 +1,47 @@
+<div class="confirm-dialog">
+
+  <div class="dialog-header">
+
+    <span class="warn-badge">
+      <mat-icon svgIcon="warning"></mat-icon>
+    </span>
+
+    <h2 class="dialog-title">
+      {{ (data.title || 'COMMON.CONFIRM_DELETION') | translate }}
+    </h2>
+
+  </div>
+
+
+  <div class="dialog-body">
+
+    <p class="dialog-message">{{ data.message | translate }}</p>
+
+    @if (data.dropdownOptions?.length) {
+      <mat-form-field appearance="fill" class="dropdown-field">
+        <mat-label>{{ 'COMMON.SELECT_OPTION' | translate }}</mat-label>
+        <mat-select [(ngModel)]="selectedOption">
+          @for (option of data.dropdownOptions; track option.value) {
+            <mat-option [value]="option.value">{{ option.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    }
+
+  </div>
+
+
+  <div class="dialog-actions">
+
+    <button type="button" class="btn btn-ghost" (click)="onCancel()">
+      <span>{{ 'COMMON.CANCEL' | translate }}</span>
+    </button>
+
+    <button type="button" class="btn btn-danger" (click)="onConfirm()">
+      <mat-icon svgIcon="delete"></mat-icon>
+      <span>{{ (data.confirmLabel || 'COMMON.DELETE') | translate }}</span>
+    </button>
+
+  </div>
+
+</div>

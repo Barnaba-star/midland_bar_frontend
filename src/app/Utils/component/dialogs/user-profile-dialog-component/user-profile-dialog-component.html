@@ -1,0 +1,212 @@
+<div class="profile-dialog">
+
+  <!-- HEADER -->
+  <div class="profile-header">
+
+    <div class="profile-avatar">
+      {{ user.firstName?.charAt(0) }}
+    </div>
+
+    <div class="profile-title">
+      <h2>
+        {{ user.firstName }}
+        {{ user.middleName }}
+        {{ user.lastName }}
+      </h2>
+
+      <span>
+        {{ user.username }}
+      </span>
+    </div>
+
+    <button
+      mat-icon-button
+      class="close-btn"
+      (click)="close()"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+
+  </div>
+
+
+  <!-- STATUS -->
+  <div class="status-section">
+
+    <span
+      class="status active"
+      *ngIf="user.isActive"
+    >
+      <span class="status-dot"></span>
+      {{ 'COMMON.ACTIVE' | translate }}
+    </span>
+
+    <span
+      class="status blocked"
+      *ngIf="user.isBlocked"
+    >
+      <span class="status-dot"></span>
+      {{ 'COMMON.BLOCKED' | translate }}
+    </span>
+
+    <span
+      class="root-badge"
+      *ngIf="user.isRoot"
+    >
+      <mat-icon>verified</mat-icon>
+      {{ 'COMMON.ROOT_USER' | translate }}
+    </span>
+
+  </div>
+
+
+  <!-- USER INFORMATION -->
+  <div class="section">
+
+    <h3>
+      <mat-icon>person</mat-icon>
+      {{ 'USER_PROFILE_DIALOG.PERSONAL_INFO' | translate }}
+    </h3>
+
+    <div class="info-grid">
+
+      <div class="info-item">
+        <span>{{ 'COMMON.FIRST_NAME' | translate }}</span>
+        <strong>{{ user.firstName || '-' }}</strong>
+      </div>
+
+      <div class="info-item">
+        <span>{{ 'COMMON.MIDDLE_NAME' | translate }}</span>
+        <strong>{{ user.middleName || '-' }}</strong>
+      </div>
+
+      <div class="info-item">
+        <span>{{ 'COMMON.LAST_NAME' | translate }}</span>
+        <strong>{{ user.lastName || '-' }}</strong>
+      </div>
+
+      <div class="info-item">
+        <span>{{ 'COMMON.GENDER' | translate }}</span>
+        <strong>{{ user.gender || '-' }}</strong>
+      </div>
+
+      <div class="info-item">
+        <span>{{ 'STAFF_PAGE.COL_DOB' | translate }}</span>
+        <strong>
+          {{ user.dateOfBirth | date:'dd MMM yyyy' }}
+        </strong>
+      </div>
+
+      <div class="info-item">
+        <span>{{ 'COMMON.PHONE' | translate }}</span>
+        <strong>{{ user.phone || '-' }}</strong>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ACCOUNT INFORMATION -->
+  <div class="section">
+
+    <h3>
+      <mat-icon>manage_accounts</mat-icon>
+      {{ 'USER_PROFILE_DIALOG.ACCOUNT_INFO' | translate }}
+    </h3>
+
+    <div class="info-grid">
+
+      <div class="info-item">
+        <span>{{ 'COMMON.USERNAME' | translate }}</span>
+        <strong>{{ user.username || '-' }}</strong>
+      </div>
+
+      <div class="info-item">
+        <span>{{ 'COMMON.EMAIL' | translate }}</span>
+        <strong>{{ user.email || '-' }}</strong>
+      </div>
+
+      <div class="info-item">
+        <span>{{ 'COMMON.CREATED_AT' | translate }}</span>
+        <strong>
+          {{ user.createdAt | date:'dd MMM yyyy' }}
+        </strong>
+      </div>
+
+      <div class="info-item">
+        <span>{{ 'COMMON.UPDATED_AT' | translate }}</span>
+        <strong>
+          {{ user.updatedAt
+            ? (user.updatedAt | date:'dd MMM yyyy')
+            : '-' }}
+        </strong>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- BRANCH INFORMATION -->
+  <div class="section">
+
+    <h3>
+      <mat-icon>business</mat-icon>
+      {{ 'USER_PROFILE_DIALOG.BRANCH_INFO' | translate }}
+    </h3>
+
+    <div class="info-grid">
+
+      <div class="info-item">
+        <span>{{ 'COMMON.BRANCH_NAME' | translate }}</span>
+        <strong>{{ user.branchName || '-' }}</strong>
+      </div>
+
+      <div class="info-item">
+        <span>{{ 'COMMON.BRANCH_CODE' | translate }}</span>
+        <strong>{{ user.branchCode || '-' }}</strong>
+      </div>
+
+      <div class="info-item">
+        <span>{{ 'COMMON.ADDRESS' | translate }}</span>
+        <strong>{{ user.address || '-' }}</strong>
+      </div>
+
+      <!-- Read-only here on purpose: it is theirs to set, from their own
+           profile. Shown so whoever prepares the payroll can see who has
+           not filled it in yet. -->
+      <div class="info-item">
+        <span>{{ 'PROFILE_DIALOG.BANK_NAME' | translate }}</span>
+        <strong>{{ user.bankName || '-' }}</strong>
+      </div>
+
+      <div class="info-item">
+        <span>{{ 'PROFILE_DIALOG.ACCOUNT_NAME' | translate }}</span>
+        <strong>{{ user.accountName || '-' }}</strong>
+      </div>
+
+      <div class="info-item">
+        <span>{{ 'PROFILE_DIALOG.ACCOUNT_NUMBER' | translate }}</span>
+        <strong>{{ user.accountNumber || '-' }}</strong>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- FOOTER -->
+  <div class="dialog-footer">
+
+    <button
+      mat-stroked-button
+      type="button"
+      (click)="close()"
+    >
+      {{ 'COMMON.CLOSE' | translate }}
+    </button>
+
+  </div>
+
+</div>

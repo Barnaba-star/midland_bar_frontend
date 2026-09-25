@@ -1,0 +1,164 @@
+.confirm-dialog {
+  /* Material's surface has no padding of its own. */
+  padding: 26px 24px 20px;
+  box-sizing: border-box;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.dialog-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+}
+
+/* A tinted disc rather than a bare red icon - reads as a warning without
+   shouting, and keeps the title aligned to a single strong mark. */
+.warn-badge {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: #fef2f2;
+  border: 1px solid #fee2e2;
+  color: #dc2626;
+}
+
+.warn-badge mat-icon {
+  width: 21px;
+  height: 21px;
+  font-size: 21px;
+}
+
+.dialog-title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding-top: 8px;
+  color: #0f172a;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: -0.2px;
+  overflow-wrap: anywhere;
+}
+
+
+/* =========================
+   BODY
+========================= */
+
+.dialog-body {
+  /* Lines up under the title, past the badge. */
+  padding: 14px 0 4px 55px;
+}
+
+.dialog-message {
+  margin: 0;
+  color: #475569;
+  font-size: 14px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.dropdown-field {
+  width: 100%;
+  margin-top: 14px;
+}
+
+
+/* =========================
+   ACTIONS
+========================= */
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 18px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1px;
+  cursor: pointer;
+  transition:
+    background 0.16s ease,
+    border-color 0.16s ease,
+    box-shadow 0.16s ease,
+    transform 0.08s ease;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn mat-icon {
+  width: 17px;
+  height: 17px;
+  font-size: 17px;
+}
+
+.btn-ghost {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #334155;
+}
+
+.btn-ghost:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+/* The destructive action is the one that carries the colour, not "No". */
+.btn-danger {
+  background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
+  border: 1px solid #dc2626;
+  color: #ffffff;
+  box-shadow: 0 1px 2px rgba(220, 38, 38, 0.24);
+}
+
+.btn-danger:hover {
+  background: linear-gradient(180deg, #f05252 0%, #b91c1c 100%);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.28);
+}
+
+.btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.28);
+}
+
+.btn-danger:focus-visible {
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.3);
+}
+
+
+@media (max-width: 640px) {
+  .dialog-body {
+    padding-left: 0;
+  }
+
+  .dialog-actions {
+    flex-direction: column-reverse;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}

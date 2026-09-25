@@ -1,0 +1,29 @@
+<div class="sidebar">
+
+  <div class="menu-item logo">
+    <img src="assets/images/log.png" alt="Logo" />
+  </div>
+
+  <ng-container *ngFor="let item of menuItems; let i = index">
+    <!-- Main menu item -->
+    <div class="menu-item" (click)="item.children ? toggleSubmenu(i) : onItemClick(item)">
+      <mat-icon class="menu-icon">{{ item.icon }}</mat-icon>
+      <span class="label">{{ item.label }}</span>
+      <mat-icon *ngIf="item.children" class="arrow" [class.rotate]="openSubmenus[i]">expand_more</mat-icon>
+    </div>
+
+    <!-- Submenu -->
+    <div class="submenu" *ngIf="item.children && openSubmenus[i]">
+      <div class="submenu-item" *ngFor="let sub of item.children" (click)="onItemClick(sub)">
+        <span>{{ sub.label }}</span>
+        <mat-icon>{{ sub.icon }}</mat-icon>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Logout always at the bottom -->
+  <div class="menu-item logout-item">
+    <mat-icon class="menu-icon">logout</mat-icon>
+    <span class="label">Logout</span>
+  </div>
+</div>

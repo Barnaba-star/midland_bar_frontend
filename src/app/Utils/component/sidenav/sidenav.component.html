@@ -1,0 +1,36 @@
+<mat-sidenav-container>
+  <mat-sidenav mode="side" opened class="sidenav">
+
+    <div class="sidenav-header" (click)="goDashboard()">
+      <img src="/assets/images/log.png" alt="Logo" class="logo-image"/>
+    </div>
+
+    <mat-nav-list>
+      <ng-container *ngFor="let item of menuItems; let last = last">
+        <a
+          mat-list-item
+          [routerLink]="item.route"
+          routerLinkActive="active"
+          (click)="onItemClick(item)"
+          class="menu-item">
+          <div class="menu-icon-wrapper">
+            <mat-icon *ngIf="item.icon" [svgIcon]="item.icon" class="menu-icon"></mat-icon>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="menu-label-wrapper">
+            <span class="menu-label">{{ item.label }}</span>
+          </div>
+        </a>
+
+        <mat-divider *ngIf="!last"></mat-divider>
+      </ng-container>
+    </mat-nav-list>
+
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <ng-content></ng-content>
+  </mat-sidenav-content>
+</mat-sidenav-container>

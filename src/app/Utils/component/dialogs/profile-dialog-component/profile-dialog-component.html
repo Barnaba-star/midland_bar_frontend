@@ -1,0 +1,159 @@
+<div class="profile-dialog">
+
+  <div class="dialog-header">
+    <h2>{{ 'PROFILE_DIALOG.TITLE' | translate }}</h2>
+
+    <button type="button" class="close-btn" (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+
+  <div class="avatar-section">
+
+    <div class="avatar-preview">
+      @if (avatarUrl) {
+        <img [src]="avatarUrl" alt="" />
+      } @else {
+        <mat-icon svgIcon="person" class="avatar-fallback"></mat-icon>
+      }
+    </div>
+
+    <label class="change-photo-btn">
+      <mat-icon>photo_camera</mat-icon>
+      {{ 'PROFILE_DIALOG.CHANGE_PHOTO' | translate }}
+      <input
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+        (change)="onFileSelected($event)"
+        hidden
+      />
+    </label>
+
+    @if (errorMessageKey) {
+      <span class="error-text">{{ errorMessageKey | translate }}</span>
+    }
+
+  </div>
+
+
+  <div class="info-section">
+
+    <div class="info-row">
+      <span>{{ data.fullName }}</span>
+    </div>
+
+    <div class="info-row muted">
+      <mat-icon>email</mat-icon>
+      <span>{{ data.email || '—' }}</span>
+    </div>
+
+    <div class="info-row muted">
+      <mat-icon svgIcon="role"></mat-icon>
+      <span>{{ data.role || '—' }}</span>
+    </div>
+
+    <div class="info-row muted">
+      <mat-icon svgIcon="office"></mat-icon>
+      <span>{{ data.branchName || '—' }}</span>
+    </div>
+
+  </div>
+
+
+  <!-- Where the monthly payroll sends this person's share. Theirs to set. -->
+  <div class="account-section">
+
+    <label class="account-label" for="bankName">
+      {{ 'PROFILE_DIALOG.BANK_NAME' | translate }}
+    </label>
+
+    <input
+      id="bankName"
+      type="text"
+      class="account-input bank-input"
+      list="bankSuggestions"
+      [(ngModel)]="bankName"
+      [placeholder]="'PROFILE_DIALOG.BANK_PLACEHOLDER' | translate"
+      maxlength="100"
+      autocomplete="off" />
+
+    <!-- Suggestions only. A bank that is not here is still typed in. -->
+    <datalist id="bankSuggestions">
+      @for (bank of bankSuggestions; track bank) {
+        <option [value]="bank"></option>
+      }
+    </datalist>
+
+
+    <label class="account-label" for="accountName">
+      {{ 'PROFILE_DIALOG.ACCOUNT_NAME' | translate }}
+    </label>
+
+    <input
+      id="accountName"
+      type="text"
+      class="account-input bank-input"
+      [(ngModel)]="accountName"
+      [placeholder]="'PROFILE_DIALOG.ACCOUNT_NAME_PLACEHOLDER' | translate"
+      maxlength="150"
+      autocomplete="off" />
+
+
+    <label class="account-label" for="accountNumber">
+      {{ 'PROFILE_DIALOG.ACCOUNT_NUMBER' | translate }}
+    </label>
+
+    <div class="account-row">
+      <input
+        id="accountNumber"
+        type="text"
+        class="account-input"
+        [(ngModel)]="accountNumber"
+        [placeholder]="'PROFILE_DIALOG.ACCOUNT_PLACEHOLDER' | translate"
+        maxlength="50"
+        autocomplete="off" />
+
+      <button
+        type="button"
+        class="account-save"
+        [disabled]="!accountChanged || savingAccount"
+        (click)="saveBankDetails()">
+        @if (savingAccount) {
+          <mat-icon class="spin">autorenew</mat-icon>
+        } @else {
+          <mat-icon svgIcon="save"></mat-icon>
+        }
+      </button>
+    </div>
+
+    @if (accountError) {
+      <span class="account-error">{{ accountError }}</span>
+    }
+
+    <span class="account-hint">{{ 'PROFILE_DIALOG.ACCOUNT_HINT' | translate }}</span>
+
+  </div>
+
+
+  <div class="dialog-footer">
+
+    <button type="button" class="cancel-btn" (click)="close()">
+      {{ 'COMMON.CANCEL' | translate }}
+    </button>
+
+    <button
+      type="button"
+      class="save-btn"
+      [disabled]="!selectedFile || uploading"
+      (click)="save()"
+    >
+      @if (uploading) {
+        <mat-icon class="spin">autorenew</mat-icon>
+      }
+      {{ 'COMMON.SAVE' | translate }}
+    </button>
+
+  </div>
+
+</div>

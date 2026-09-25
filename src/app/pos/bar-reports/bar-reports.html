@@ -1,0 +1,2553 @@
+<app-title2
+  titleHeader="MENU.REPORT"
+  [actions]="getTitled(titleActions)"
+  [activeAction]="selectedReport"
+  (customButtonClick)="onAction($event)"
+>
+</app-title2>
+@switch (selectedReport) {
+  @case ('REPORTS.SERVICE') {
+    <div class="action-container">
+      @if (barReports.length > 0) {
+        <div class="container-fluid bar-page">
+          <!-- REPORT HEADER / ACTION AREA -->
+          <div class="service-report-header">
+            <div class="service-report-header-left">
+              <div class="service-report-icon">
+                <mat-icon svgIcon="service"></mat-icon>
+              </div>
+
+              <div>
+                <span class="section-label">{{ 'REPORTS_PAGE.SERVICE_REPORT_LABEL' | translate }}</span>
+                <h2>{{ 'REPORTS_PAGE.COMPLETED_SERVICES' | translate }}</h2>
+                <p>{{ 'REPORTS_PAGE.COMPLETED_SERVICES_DESC' | translate }}</p>
+              </div>
+            </div>
+
+            <button class="revenue-report-btn" type="button" (click)="findBarRevenueReport()">
+              <mat-icon svgIcon="report"></mat-icon>
+              <span>{{ 'REPORTS_PAGE.REVENUE_REPORT_BTN' | translate }}</span>
+            </button>
+          </div>
+
+          <div class="service-report-toolbar">
+            <div class="search-input-wrapper">
+              <mat-icon class="search-icon">search</mat-icon>
+
+              <input
+                type="text"
+                class="form-control"
+                [placeholder]="'REPORTS_PAGE.SEARCH_PLACEHOLDER' | translate"
+                [(ngModel)]="searchText"
+                (input)="searchReports()"
+              />
+
+              <button
+                *ngIf="searchText"
+                class="clear-search"
+                type="button"
+                (click)="clearSearch()"
+                aria-label="Clear search"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+
+            <span class="summary-page">{{ 'REPORTS_PAGE.PAGE_NUM' | translate: { num: currentPage + 1 } }}</span>
+          </div>
+
+          <!-- TABLE CARD -->
+          <div class="card border-0 shadow-sm bar-table-card">
+            <div class="card-body p-0 bar-table-body">
+              <div class="table-responsive bar-table-responsive">
+                <table class="table table-hover align-middle mb-0 bar-table">
+                  <!-- TABLE HEADER -->
+                  <thead>
+                    <tr>
+                      <th class="text-center">#</th>
+
+                      <th>{{ 'REPORTS_PAGE.COL_STAFF_NAME' | translate }}</th>
+
+                      <th>{{ 'COMMISSION_BREAKDOWN.SERVICE' | translate }}</th>
+
+                      <th class="text-end">{{ 'COMMON.PRICE' | translate }}</th>
+
+                      <th>{{ 'REPORTS_PAGE.COL_REVENUE_BREAKDOWN' | translate }}</th>
+                    </tr>
+                  </thead>
+
+                  <!-- TABLE BODY -->
+                  <tbody>
+                    @for (report of filteredReports; track report.uid; let i = $index) {
+                    <tr>
+                      <!-- NUMBER -->
+                      <td class="text-center">
+                        <span class="text-muted">
+                          {{ i + 1 }}
+                        </span>
+                      </td>
+
+                      <!-- CUSTOMER -->
+                      <td>
+                        <div class="customer-info">
+                          <div class="customer-avatar">
+                            {{ report.firstName?.charAt(0) || '?' }}
+                          </div>
+
+                          <div>
+                            <div class="fw-semibold">
+                              {{ getCustomerName(report) }}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+
+                      <!-- SERVICE -->
+                      <td>
+                        <div class="fw-semibold">
+                          {{ 'REPORTS_PAGE.CODE_LABEL' | translate }}
+                          {{ report.serviceCode || ('COMMON.NA' | translate) }}
+                        </div>
+                      </td>
+
+                      <!-- PRICE -->
+                      <td class="text-end">
+                        <div class="fw-bold text-primary">
+                          {{ formatAmount(report.price) }}
+                        </div>
+                      </td>
+
+                      <!-- BREAKDOWN -->
+                      <!-- BREAKDOWN -->
+                      <td>
+                        <div class="breakdown-container">
+                          <!-- TOTAL - ALWAYS VISIBLE -->
+                          <button
+                            type="button"
+                            class="breakdown-toggle"
+                            (click)="toggleBreakdown(report)"
+                            [attr.aria-expanded]="expandedReport === report"
+                          >
+                            <div class="total-label">
+                              <span class="total-title"> {{ 'COMMISSION_BREAKDOWN.TOTAL' | translate }} </span>
+
+                              <strong class="total-amount">
+                                {{ formatAmount(getTotalAmount(report)) }}
+                              </strong>
+                            </div>
+
+                            <div class="breakdown-action">
+                              <span class="view-breakdown">
+                                {{ (expandedReport === report ? 'COMMON.HIDE' : 'COMMON.VIEW') | translate }}
+                              </span>
+
+                              <i
+                                class="bi"
+                                [ngClass]="{
+                                  'bi-chevron-down': expandedReport !== report,
+                                  'bi-chevron-up': expandedReport === report,
+                                }"
+                              ></i>
+                            </div>
+                          </button>
+
+                          <!-- BREAKDOWN DETAILS -->
+                          <div class="breakdown-details" *ngIf="expandedReport === report">
+                            <div class="breakdown-item">
+                              <span> {{ 'COMMISSION_BREAKDOWN.STAFF' | translate }} </span>
+
+                              <strong>
+                                {{ formatAmount(report.staffAmount) }}
+                              </strong>
+                            </div>
+
+                            <div class="breakdown-item">
+                              <span> {{ 'COMMISSION_BREAKDOWN.OWNER' | translate }} </span>
+
+                              <strong>
+                                {{ formatAmount(report.ownerAmount) }}
+                              </strong>
+                            </div>
+
+                            <div class="breakdown-item">
+                              <span> {{ 'COMMISSION_BREAKDOWN.TRA' | translate }} </span>
+
+                              <strong>
+                                {{ formatAmount(report.traAmount) }}
+                              </strong>
+                            </div>
+
+                            <div class="breakdown-item">
+                              <span> {{ 'COMMISSION_BREAKDOWN.EMERGENCY' | translate }} </span>
+
+                              <strong>
+                                {{ formatAmount(report.emergencyAmount) }}
+                              </strong>
+                            </div>
+
+                            <div class="breakdown-item">
+                              <span> {{ 'COMMISSION_BREAKDOWN.MAINTENANCE' | translate }} </span>
+
+                              <strong>
+                                {{ formatAmount(report.maintenanceAmount) }}
+                              </strong>
+                            </div>
+                            <div class="breakdown-item">
+                              <span> {{ 'COMMISSION_BREAKDOWN.RENT' | translate }} </span>
+
+                              <strong>
+                                {{ formatAmount(report.rentAmount) }}
+                              </strong>
+                            </div>
+                            <div class="breakdown-item">
+                              <span> {{ 'COMMISSION_BREAKDOWN.LOAN' | translate }} </span>
+
+                              <strong>
+                                {{ formatAmount(report.loanAmount) }}
+                              </strong>
+                            </div>
+                            <div class="breakdown-item">
+                              <span> {{ 'COMMISSION_BREAKDOWN.LUKU' | translate }} </span>
+
+                              <strong>
+                                {{ formatAmount(report.lukuAmount) }}
+                              </strong>
+                            </div>
+                            <div class="breakdown-item">
+                              <span> {{ 'COMMISSION_BREAKDOWN.WATER' | translate }} </span>
+
+                              <strong>
+                                {{ formatAmount(report.waterAmount) }}
+                              </strong>
+                            </div>
+                            <div class="breakdown-item">
+                              <span> {{ 'COMMISSION_BREAKDOWN.STOCK_PURCHASE' | translate }} </span>
+
+                              <strong>
+                                {{ formatAmount(report.stockPurchaseAmount) }}
+                              </strong>
+                            </div>
+
+                            <div class="breakdown-item">
+                              <span> {{ 'COMMISSION_BREAKDOWN.OTHERS' | translate }} </span>
+
+                              <strong>
+                                {{ formatAmount(report.othersAmount) }}
+                              </strong>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    }
+
+                    <!-- EMPTY -->
+                    <tr *ngIf="filteredReports.length === 0">
+                      <td colspan="8">
+                        <app-empty-state
+                          icon="report"
+                          title="REPORTS_PAGE.EMPTY_REPORTS_TITLE"
+                          text="REPORTS_PAGE.EMPTY_REPORTS_TEXT"
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <!-- PAGINATION -->
+                <div class="pagination-container" *ngIf="totalElements > 0">
+                  <!-- LEFT -->
+                  <div class="pagination-info">
+                    {{ 'COMMON.SHOWING' | translate }}
+
+                    <strong>
+                      {{ currentPage * pageSize + 1 }}
+                    </strong>
+
+                    {{ 'COMMON.TO' | translate }}
+
+                    <strong>
+                      {{ getEndRecord() }}
+                    </strong>
+
+                    {{ 'COMMON.OF' | translate }}
+
+                    <strong>
+                      {{ totalElements }}
+                    </strong>
+
+                    {{ 'COMMON.RECORDS' | translate | lowercase }}
+                  </div>
+
+                  <!-- RIGHT -->
+                  <div class="pagination-controls">
+                    <!-- PAGE SIZE -->
+                    <div class="page-size">
+                      <span> {{ 'COMMON.ROWS' | translate }}: </span>
+
+                      <select
+                        class="form-select form-select-sm"
+                        [value]="pageSize"
+                        (change)="changePageSize($any($event.target).value)"
+                      >
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+
+                        <option value="20">20</option>
+
+                        <option value="50">50</option>
+
+                        <option value="100">100</option>
+                      </select>
+                    </div>
+
+                    <!-- PREVIOUS -->
+                    <button
+                      type="button"
+                      class="pagination-btn"
+                      [disabled]="currentPage === 0"
+                      (click)="previousPage()"
+                    >
+                      <i class="bi bi-chevron-left"></i>
+                    </button>
+
+                    <!-- PAGES -->
+                    @for (page of pageNumbers; track page) {
+                    <button
+                      type="button"
+                      class="pagination-btn page-number"
+                      [class.active]="currentPage === page"
+                      (click)="goToPage(page)"
+                    >
+                      {{ page + 1 }}
+                    </button>
+                    }
+
+                    <!-- NEXT -->
+                    <button
+                      type="button"
+                      class="pagination-btn"
+                      [disabled]="currentPage === totalPages - 1"
+                      (click)="nextPage()"
+                    >
+                      <i class="bi bi-chevron-right"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+      @if (barReports.length === 0 && reportForToday === false) {
+        <app-empty-state
+          icon="service"
+          title="REPORTS_PAGE.EMPTY_SERVICE_REPORT_TITLE"
+          text="REPORTS_PAGE.EMPTY_SERVICE_REPORT_TEXT"
+        />
+      }
+      @if (reportForToday === true) {
+        <div class="revenue-report-wrapper">
+          <div class="service-revenue-summary report-header">
+            <!-- LEFT -->
+            <div class="report-header-left">
+              <div class="report-icon">
+                <mat-icon svgIcon="report"></mat-icon>
+              </div>
+
+              <div class="report-title-content">
+                <span class="report-label">{{ 'REPORTS_PAGE.REVENUE_OVERVIEW' | translate }}</span>
+
+                <span class="selected-period">
+                  <mat-icon>date_range</mat-icon>
+                  {{ getSelectedRangeLabel() }}
+                </span>
+              </div>
+            </div>
+
+            <!-- RIGHT -->
+            <div class="report-header-right">
+              <div class="revenue-total-card">
+                <div class="revenue-total-info">
+                  <span class="revenue-total-label">{{ 'COMMISSION_BREAKDOWN.TOTAL_REVENUE' | translate }}</span>
+                  <strong class="revenue-total-amount">
+                    {{ formatAmount(getTodayRevenueTotal()) }}
+                  </strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="report-actions">
+            <button mat-raised-button color="primary" type="button" (click)="dayBarReport()">
+              {{ 'COMMON.TODAY' | translate }}
+            </button>
+
+            <button
+              mat-raised-button
+              color="secondary"
+              type="button"
+              (click)="yestadayBarReport()"
+            >
+              {{ 'COMMON.YESTERDAY' | translate }}
+            </button>
+            <button mat-raised-button color="secondary" type="button" (click)="weekBarReport()">
+              {{ 'COMMON.THIS_WEEK' | translate }}
+            </button>
+
+            <button
+              mat-raised-button
+              color="primary"
+              type="button"
+              (click)="lastWeekBarReport()"
+            >
+              {{ 'COMMON.LAST_WEEK' | translate }}
+            </button>
+
+            <button mat-raised-button color="primary" type="button" (click)="monthBarReport()">
+              {{ 'COMMON.THIS_MONTH' | translate }}
+            </button>
+
+            <button
+              mat-raised-button
+              color="primary"
+              type="button"
+              (click)="lastMonthBarReport()"
+            >
+              {{ 'COMMON.LAST_MONTH' | translate }}
+            </button>
+
+            <button mat-raised-button color="primary" type="button" (click)="yearBarReport()">
+              {{ 'COMMON.THIS_YEAR' | translate }}
+            </button>
+
+            <button
+              mat-raised-button
+              color="primary"
+              type="button"
+              (click)="lastYearBarReport()"
+            >
+              {{ 'COMMON.LAST_YEAR' | translate }}
+            </button>
+
+            <mat-form-field appearance="outline" class="report-date-input">
+              <mat-label>{{ 'COMMON.SELECT_DATE' | translate }}</mat-label>
+
+              <input
+                matInput
+                [matDatepicker]="picker"
+                [(ngModel)]="selectedDate"
+                (dateChange)="onDateSelected()"
+                [placeholder]="'COMMON.SELECT_DATE' | translate"
+              />
+
+              <mat-datepicker-toggle matIconSuffix [for]="picker"> </mat-datepicker-toggle>
+
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+
+          @if (revenueByService.length > 0) {
+          <!-- ========================= -->
+          <!-- LEFT - OVERALL REVENUE -->
+          <!-- ========================= -->
+
+          @if (revenueReportToday) {
+          <div class="service-revenue-summary2">
+            <div class="revenue-summary-header">
+              <span>{{ 'COMMISSION_BREAKDOWN.TOTAL_REVENUE' | translate }}</span>
+            </div>
+
+            <div class="revenue-summary-list">
+              <div class="revenue-summary-row">
+                <span>{{ 'COMMISSION_BREAKDOWN.STAFF' | translate }}</span>
+
+                <strong>
+                  {{ formatAmount(revenueReportToday.staffAmount) }}
+                </strong>
+              </div>
+
+              <div class="revenue-summary-row">
+                <span>{{ 'COMMISSION_BREAKDOWN.OWNER' | translate }}</span>
+
+                <strong>
+                  {{ formatAmount(revenueReportToday.ownerAmount) }}
+                </strong>
+              </div>
+
+              <div class="revenue-summary-row">
+                <span>{{ 'COMMISSION_BREAKDOWN.TRA' | translate }}</span>
+
+                <strong>
+                  {{ formatAmount(revenueReportToday.traAmount) }}
+                </strong>
+              </div>
+
+              <div class="revenue-summary-row">
+                <span>{{ 'COMMISSION_BREAKDOWN.EMERGENCY' | translate }}</span>
+
+                <strong>
+                  {{ formatAmount(revenueReportToday.emergencyAmount) }}
+                </strong>
+              </div>
+
+              <div class="revenue-summary-row">
+                <span>{{ 'COMMISSION_BREAKDOWN.MAINTENANCE' | translate }}</span>
+
+                <strong>
+                  {{ formatAmount(revenueReportToday.maintenanceAmount) }}
+                </strong>
+              </div>
+
+              <div class="revenue-summary-row">
+                <span>{{ 'COMMISSION_BREAKDOWN.RENT' | translate }}</span>
+
+                <strong>
+                  {{ formatAmount(revenueReportToday.rentAmount) }}
+                </strong>
+              </div>
+
+              <div class="revenue-summary-row">
+                <span>{{ 'COMMISSION_BREAKDOWN.LOAN' | translate }}</span>
+
+                <strong>
+                  {{ formatAmount(revenueReportToday.loanAmount) }}
+                </strong>
+              </div>
+
+              <div class="revenue-summary-row">
+                <span>{{ 'COMMISSION_BREAKDOWN.LUKU' | translate }}</span>
+
+                <strong>
+                  {{ formatAmount(revenueReportToday.lukuAmount) }}
+                </strong>
+              </div>
+
+              <div class="revenue-summary-row">
+                <span>{{ 'COMMISSION_BREAKDOWN.WATER' | translate }}</span>
+
+                <strong>
+                  {{ formatAmount(revenueReportToday.waterAmount) }}
+                </strong>
+              </div>
+
+              <div class="revenue-summary-row">
+                <span>{{ 'COMMISSION_BREAKDOWN.STOCK_PURCHASE' | translate }}</span>
+
+                <strong>
+                  {{ formatAmount(revenueReportToday.stockPurchaseAmount) }}
+                </strong>
+              </div>
+
+              <div class="revenue-summary-row">
+                <span>{{ 'COMMISSION_BREAKDOWN.OTHERS' | translate }}</span>
+
+                <strong>
+                  {{ formatAmount(revenueReportToday.othersAmount) }}
+                </strong>
+              </div>
+
+              <div class="revenue-summary-row total">
+                <span>{{ 'COMMISSION_BREAKDOWN.TOTAL_REVENUE' | translate }}</span>
+
+                <strong>
+                  {{ formatAmount(getTodayRevenueTotal()) }}
+                </strong>
+              </div>
+            </div>
+          </div>
+          }
+
+          <!-- ========================= -->
+          <!-- RIGHT - REVENUE BY SERVICE -->
+          <!-- ========================= -->
+
+          <div class="service-revenue-summary">
+            <div class="revenue-summary-header">
+              <span>{{ 'REPORTS_PAGE.REVENUE_BY_SERVICE' | translate }}</span>
+            </div>
+
+            <div class="service-revenue-list">
+              @for (service of revenueByService; track service.serviceUID) {
+                <div class="service-revenue-item">
+                  <!-- SERVICE HEADER -->
+                  <div class="service-revenue-name">
+                    <div>
+                      <strong>
+                        {{ service.serviceName || ('COMMON.NA' | translate) }}
+                      </strong>
+                    </div>
+                    <small>
+                      {{ service.serviceCode || ('COMMON.NA' | translate) }}
+                    </small>
+                  </div>
+
+                  <!-- BREAKDOWN -->
+                  <div class="service-breakdown">
+                    <div class="service-breakdown-row">
+                      <span>{{ 'COMMISSION_BREAKDOWN.STAFF' | translate }}</span>
+                      <strong>
+                        {{ formatAmount(service.staffAmount) }}
+                      </strong>
+                    </div>
+
+                    <div class="service-breakdown-row">
+                      <span>{{ 'COMMISSION_BREAKDOWN.OWNER' | translate }}</span>
+
+                      <strong>
+                        {{ formatAmount(service.ownerAmount) }}
+                      </strong>
+                    </div>
+
+                    <div class="service-breakdown-row">
+                      <span>{{ 'COMMISSION_BREAKDOWN.TRA' | translate }}</span>
+
+                      <strong>
+                        {{ formatAmount(service.traAmount) }}
+                      </strong>
+                    </div>
+
+                    <div class="service-breakdown-row">
+                      <span>{{ 'COMMISSION_BREAKDOWN.EMERGENCY' | translate }}</span>
+
+                      <strong>
+                        {{ formatAmount(service.emergencyAmount) }}
+                      </strong>
+                    </div>
+
+                    <div class="service-breakdown-row">
+                      <span>{{ 'COMMISSION_BREAKDOWN.MAINTENANCE' | translate }}</span>
+
+                      <strong>
+                        {{ formatAmount(service.maintenanceAmount) }}
+                      </strong>
+                    </div>
+                    <div class="service-breakdown-row">
+                      <span>{{ 'COMMISSION_BREAKDOWN.RENT' | translate }}</span>
+
+                      <strong>
+                        {{ formatAmount(service.rentAmount) }}
+                      </strong>
+                    </div>
+                    <div class="service-breakdown-row">
+                      <span>{{ 'COMMISSION_BREAKDOWN.LOAN' | translate }}</span>
+
+                      <strong>
+                        {{ formatAmount(service.loanAmount) }}
+                      </strong>
+                    </div>
+                    <div class="service-breakdown-row">
+                      <span>{{ 'COMMISSION_BREAKDOWN.LUKU' | translate }}</span>
+
+                      <strong>
+                        {{ formatAmount(service.lukuAmount) }}
+                      </strong>
+                    </div>
+                    <div class="service-breakdown-row">
+                      <span>{{ 'COMMISSION_BREAKDOWN.WATER' | translate }}</span>
+
+                      <strong>
+                        {{ formatAmount(service.waterAmount) }}
+                      </strong>
+                    </div>
+                    <div class="service-breakdown-row">
+                      <span>{{ 'COMMISSION_BREAKDOWN.STOCK_PURCHASE' | translate }}</span>
+
+                      <strong>
+                        {{ formatAmount(service.stockPurchaseAmount) }}
+                      </strong>
+                    </div>
+
+                    <div class="service-breakdown-row">
+                      <span>{{ 'COMMISSION_BREAKDOWN.OTHERS' | translate }}</span>
+
+                      <strong>
+                        {{ formatAmount(service.othersAmount) }}
+                      </strong>
+                    </div>
+
+                    <!-- SERVICE TOTAL -->
+                    <div class="service-breakdown-total">
+                      <span>{{ 'COMMISSION_BREAKDOWN.TOTAL' | translate }}</span>
+
+                      <strong>
+                        {{ formatAmount(getServiceTotal(service)) }}
+                      </strong>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+          } @else {
+            <app-empty-state
+              icon="payment2"
+              title="REPORTS_PAGE.NO_REVENUE_TITLE"
+              text="REPORTS_PAGE.NO_REVENUE_TEXT"
+            />
+          }
+        </div>
+      }
+    </div>
+  }
+
+  @case ('REPORTS.STAFF') {
+    <div class="action-container">
+      <div class="commission-wrapper">
+        <div class="table-container">
+          <!-- =========================
+             SUMMARY HEADER
+        ========================== -->
+          <div class="commission-summary-header">
+            <div class="summary-title">
+              <div class="service-report-header-left">
+                <div class="service-report-icon">
+                  <mat-icon>payments</mat-icon>
+                </div>
+
+                <div>
+                  <span class="section-label">{{ 'REPORTS_PAGE.STAFF_REPORT_LABEL' | translate }}</span>
+                  <h2>{{ 'REPORTS_PAGE.STAFF_COMMISSION_TITLE' | translate }}</h2>
+
+                  <span class="selected-period">
+                    <mat-icon>date_range</mat-icon>
+                    {{ getSelectedRangeLabel() }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="summary-cards">
+              <!-- Total -->
+              <div class="summary-card total">
+                <div class="summary-icon">
+                  <mat-icon>payments</mat-icon>
+                </div>
+
+                <div class="summary-info">
+                  <span>{{ 'COMMON.TOTAL' | translate }}</span>
+                  <strong>
+                    {{ getTotalCommission() | number }}
+                  </strong>
+                </div>
+              </div>
+
+              <!-- Paid -->
+              <div class="summary-card paid">
+                <div class="summary-icon">
+                  <mat-icon>check_circle</mat-icon>
+                </div>
+
+                <div class="summary-info">
+                  <span>{{ 'COMMON.PAID' | translate }}</span>
+                  <strong>
+                    {{ getPaidCommission() | number }}
+                  </strong>
+                </div>
+              </div>
+
+              <!-- Remaining -->
+              <div class="summary-card remaining">
+                <div class="summary-icon">
+                  <mat-icon>pending</mat-icon>
+                </div>
+
+                <div class="summary-info">
+                  <span>{{ 'COMMON.REMAINING' | translate }}</span>
+                  <strong>
+                    {{ getRemainingCommission() | number }}
+                  </strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- =========================
+             FILTERS
+        ========================== -->
+          <div class="commission-filters">
+            <!-- Today -->
+            <button
+              type="button"
+              class="filter-btn"
+              [class.active]="selectedRange === 'TODAY'"
+              (click)="filterCommissions('TODAY')"
+            >
+              <mat-icon>today</mat-icon>
+              <span>{{ 'COMMON.TODAY' | translate }}</span>
+            </button>
+
+            <!-- Yesterday -->
+            <button
+              type="button"
+              class="filter-btn"
+              [class.active]="selectedRange === 'YESTERDAY'"
+              (click)="filterCommissions('YESTERDAY')"
+            >
+              <mat-icon>history</mat-icon>
+              <span>{{ 'COMMON.YESTERDAY' | translate }}</span>
+            </button>
+
+            <!-- This Week -->
+            <button
+              type="button"
+              class="filter-btn"
+              [class.active]="selectedRange === 'THIS_WEEK'"
+              (click)="filterCommissions('THIS_WEEK')"
+            >
+              <mat-icon>date_range</mat-icon>
+              <span>{{ 'COMMON.THIS_WEEK' | translate }}</span>
+            </button>
+
+            <!-- Last Week -->
+            <button
+              type="button"
+              class="filter-btn"
+              [class.active]="selectedRange === 'LAST_WEEK'"
+              (click)="filterCommissions('LAST_WEEK')"
+            >
+              <mat-icon>history_toggle_off</mat-icon>
+              <span>{{ 'COMMON.LAST_WEEK' | translate }}</span>
+            </button>
+
+            <!-- This Month -->
+            <button
+              type="button"
+              class="filter-btn"
+              [class.active]="selectedRange === 'THIS_MONTH'"
+              (click)="filterCommissions('THIS_MONTH')"
+            >
+              <mat-icon>calendar_month</mat-icon>
+              <span>{{ 'COMMON.THIS_MONTH' | translate }}</span>
+            </button>
+
+            <!-- Last Month -->
+            <button
+              type="button"
+              class="filter-btn"
+              [class.active]="selectedRange === 'LAST_MONTH'"
+              (click)="filterCommissions('LAST_MONTH')"
+            >
+              <mat-icon>event_repeat</mat-icon>
+              <span>{{ 'COMMON.LAST_MONTH' | translate }}</span>
+            </button>
+
+            <!-- This Year -->
+            <button
+              type="button"
+              class="filter-btn"
+              [class.active]="selectedRange === 'THIS_YEAR'"
+              (click)="filterCommissions('THIS_YEAR')"
+            >
+              <mat-icon>event_repeat</mat-icon>
+              <span>{{ 'COMMON.THIS_YEAR' | translate }}</span>
+            </button>
+
+            <!-- Last Year -->
+            <button
+              type="button"
+              class="filter-btn"
+              [class.active]="selectedRange === 'LAST_YEAR'"
+              (click)="filterCommissions('LAST_YEAR')"
+            >
+              <mat-icon>event_repeat</mat-icon>
+              <span>{{ 'COMMON.LAST_YEAR' | translate }}</span>
+            </button>
+
+            <!-- Specific Date -->
+            <label class="date-filter">
+              <input type="date" [value]="selectedDate" (change)="filterByDate($event)" />
+            </label>
+          </div>
+
+          <!-- =========================
+             TABLE / EMPTY STATE
+        ========================== -->
+
+          @if (commissionReports.length > 0) {
+            <!-- =========================
+               COMMISSION TABLE
+          ========================== -->
+            <div class="commission-table-wrapper">
+              <table class="commission-table">
+                <!-- =========================
+                   TABLE HEADER
+              ========================== -->
+                <thead>
+                  <tr>
+                    <th class="index-col">#</th>
+                    <th>{{ 'REPORTS_PAGE.COL_STAFF' | translate }}</th>
+                    <th>{{ 'REPORTS_PAGE.COL_CATEGORY' | translate }}</th>
+                    <th>{{ 'COMMON.DATE' | translate }}</th>
+                    <th>{{ 'COMMON.TOTAL' | translate }}</th>
+                    <th>{{ 'COMMON.PAID' | translate }}</th>
+                    <th>{{ 'COMMON.REMAINING' | translate }}</th>
+                    <th>{{ 'REPORTS_PAGE.COL_PAYMENT' | translate }}</th>
+                    <th class="actions-header">{{ 'COMMON.ACTION' | translate }}</th>
+                  </tr>
+                </thead>
+
+                <!-- =========================
+                   TABLE BODY
+              ========================== -->
+                <tbody>
+                  @for (report of commissionReports; track report.uid; let i = $index) {
+                    <tr>
+                      <!-- # -->
+                      <td class="index-cell">
+                        <span class="row-number">
+                          {{ pageC * sizeC + i + 1 }}
+                        </span>
+                      </td>
+
+                      <!-- STAFF -->
+                      <td class="staff-cell">
+                        <div class="staff-info">
+                          <div class="staff-avatar">
+                            {{ report.firstName?.charAt(0) }}
+                          </div>
+
+                          <div class="staff-name">
+                            <strong>
+                              {{ report.firstName | uppercase }}
+                              {{ report.middleName | uppercase }}
+                              {{ report.lastName | uppercase }}
+                            </strong>
+                          </div>
+                        </div>
+                      </td>
+
+                      <!-- CATEGORY -->
+                      <td>
+                        <span class="category-badge">
+                          {{ report.barCategory | uppercase }}
+                        </span>
+                      </td>
+
+                      <!-- DATE -->
+                      <td>
+                        <span class="category-badge">
+                          {{ report.date | uppercase }}
+                        </span>
+                      </td>
+
+                      <!-- TOTAL -->
+                      <td class="amount-cell">
+                        Tshs
+                        {{ report.totalAmount | number: '1.2-2' }}
+                      </td>
+
+                      <!-- PAID -->
+                      <td class="amount-cell paid-amount">
+                        Tshs
+                        {{ report.paidAmount | number: '1.2-2' }}
+                      </td>
+
+                      <!-- REMAINING -->
+                      <td class="amount-cell remaining-amount">
+                        Tshs
+                        {{ report.remainingAmount | number: '1.2-2' }}
+                      </td>
+
+                      <!-- PAYMENT STATUS -->
+                      <td>
+                        <span
+                          class="payment-status"
+                          [ngClass]="{
+                            'status-paid': report.status === 'PAID',
+                            'status-pending': report.status === 'NOT PAID',
+                            'status-partially': report.status === 'PARTIAL',
+                          }"
+                        >
+                          {{ report.status | uppercase }}
+                        </span>
+                      </td>
+
+                      <!-- ACTION -->
+                      <td class="actions-cell">
+                        <button
+                          type="button"
+                          class="action-btn pay-btn"
+                          cdkOverlayOrigin
+                          #payOrigin="cdkOverlayOrigin"
+                          (click)="openPaymentOverlay(report, payOrigin)"
+                        >
+                          <i class="bi bi-cash-coin"></i>
+                          <span>{{ 'COMMON.PAY' | translate }}</span>
+                        </button>
+                      </td>
+
+                    </tr>
+                  }
+                </tbody>
+              </table>
+
+              <!-- =========================
+                 TABLE FOOTER
+            ========================== -->
+              <div class="commission-table-footer">
+                <!-- Showing Information -->
+                <div class="showing-info">
+                  @if (totalElements > 0) {
+                    {{ 'COMMON.SHOWING' | translate }}
+
+                    <strong>
+                      {{ getStartIndex() }}
+                    </strong>
+
+                    –
+
+                    <strong>
+                      {{ getEndIndex() }}
+                    </strong>
+
+                    {{ 'COMMON.OF' | translate }}
+
+                    <strong>
+                      {{ totalElements }}
+                    </strong>
+
+                    {{ 'REPORTS_PAGE.COMMISSIONS_LABEL' | translate }}
+                  } @else {
+                    {{ 'COMMON.SHOWING' | translate }}
+                    <strong>0</strong>
+                    {{ 'REPORTS_PAGE.COMMISSIONS_LABEL' | translate }}
+                  }
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination">
+                  <!-- Previous -->
+                  <button
+                    type="button"
+                    class="pagination-btn"
+                    [disabled]="pageC === 0"
+                    (click)="previousCommissionPage()"
+                  >
+                    <mat-icon svgIcon="back"></mat-icon>
+                  </button>
+
+                  <!-- Current Page -->
+                  <div class="page-number">
+                    {{ pageC + 1 }}
+                  </div>
+
+                  <span class="page-of"> {{ 'COMMON.OF' | translate }} {{ totalPagesC }} </span>
+
+                  <!-- Next -->
+                  <button
+                    type="button"
+                    class="pagination-btn"
+                    [disabled]="pageC >= totalPagesC - 1"
+                    (click)="nextCommissionPage()"
+                  >
+                    <mat-icon svgIcon="right"></mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          } @else {
+            <!-- =========================
+               NO RECORD FOUND
+          ========================== -->
+            <app-empty-state
+              icon="commission"
+              title="REPORTS_PAGE.EMPTY_COMMISSION_REPORT_TITLE"
+              text="REPORTS_PAGE.EMPTY_COMMISSION_REPORT_TEXT"
+            />
+          }
+
+          <!-- =========================
+             PAYMENT OVERLAY
+        ========================== -->
+         <ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="overlayOrigin"
+  [cdkConnectedOverlayOpen]="paymentOverlayOpen"
+  [cdkConnectedOverlayHasBackdrop]="true"
+  [cdkConnectedOverlayBackdropClass]="'cdk-overlay-transparent-backdrop'"
+  [cdkConnectedOverlayPositions]="[
+    {
+      originX: 'end',
+      originY: 'bottom',
+      overlayX: 'end',
+      overlayY: 'top',
+      offsetY: 8
+    },
+    {
+      originX: 'end',
+      originY: 'top',
+      overlayX: 'end',
+      overlayY: 'bottom',
+      offsetY: -8
+    }
+  ]"
+  (backdropClick)="closePaymentOverlay()"
+>
+  <div class="payment-overlay">
+
+    <div class="overlay-header">
+      <i class="bi bi-cash-coin"></i>
+      <span>{{ 'REPORTS_PAGE.PAY_COMMISSION_TITLE' | translate }}</span>
+    </div>
+
+    <!-- Amount -->
+    <div class="form-group">
+      <label>{{ 'COMMON.AMOUNT' | translate }}</label>
+
+      <input
+        type="number"
+        [(ngModel)]="paymentAmount"
+        class="amount-input"
+        [placeholder]="'REPORTS_PAGE.AMOUNT_PLACEHOLDER' | translate"
+      />
+    </div>
+
+    <!-- Description -->
+    <div class="form-group description-group">
+      <label>
+        {{ 'COMMON.DESCRIPTION' | translate }}
+        <span class="optional">{{ 'COMMON.OPTIONAL' | translate }}</span>
+      </label>
+
+      <textarea
+        [(ngModel)]="descriptions"
+        class="description-input"
+        rows="3"
+        [placeholder]="'REPORTS_PAGE.DESCRIPTION_PLACEHOLDER' | translate"
+      ></textarea>
+    </div>
+
+    <!-- Actions -->
+    <div class="overlay-actions">
+
+      <button
+        type="button"
+        class="cancel-btn"
+        (click)="closePaymentOverlay()"
+      >
+        {{ 'COMMON.CANCEL' | translate }}
+      </button>
+
+      <button
+        type="button"
+        class="submit-btn"
+        (click)="submitPayment()"
+      >
+        <i class="bi bi-check2"></i>
+        {{ 'REPORTS_PAGE.CONFIRM_PAYMENT_BTN' | translate }}
+      </button>
+
+    </div>
+
+  </div>
+</ng-template>
+
+
+
+        </div>
+      </div>
+    </div>
+  }
+
+  @case ('REPORTS.STORE') {
+    <div class="action-container">
+      <div class="service-report-header">
+        <div class="service-report-header-left">
+          <div class="service-report-icon">
+            <mat-icon svgIcon="store"></mat-icon>
+          </div>
+
+          <div>
+            <span class="section-label">{{ 'REPORTS_PAGE.STORE_REPORT_LABEL' | translate }}</span>
+            <h2>{{ 'REPORTS_PAGE.STORE_USAGE_TITLE' | translate }}</h2>
+          </div>
+        </div>
+      </div>
+
+      <div class="report-summary-header">
+        <div class="summary-item">
+          <span class="summary-label">{{ 'COMMON.DURATION' | translate }}</span>
+          <strong class="summary-value">
+            {{ getSelectedStoreDateLabel() }}
+          </strong>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">{{ 'REPORTS_PAGE.CLOSED_STORES_LABEL' | translate }}</span>
+          <strong class="summary-value">
+            {{ closedStoreCount }}
+          </strong>
+        </div>
+
+        <div class="summary-item">
+          <span class="summary-label">{{ 'REPORTS_PAGE.OPENED_DATE_LABEL' | translate }}</span>
+          <strong class="summary-value">
+            {{ reportOpenedDate ? (reportOpenedDate | date: 'dd MMM yyyy') : '-' }}
+          </strong>
+        </div>
+
+        <div class="summary-item">
+          <span class="summary-label">{{ 'REPORTS_PAGE.CLOSED_DATE_LABEL' | translate }}</span>
+          <strong class="summary-value">
+            {{ reportClosedDate ? (reportClosedDate | date: 'dd MMM yyyy') : '-' }}
+          </strong>
+        </div>
+      </div>
+      <div class="table-wrapper">
+        <div class="date-filter">
+          <button
+            type="button"
+            [class.active]="selectedDateFilter === 'DAY'"
+            (click)="selectDateFilter('DAY')"
+          >
+            {{ 'COMMON.TODAY' | translate }}
+          </button>
+
+          <button
+            type="button"
+            [class.active]="selectedDateFilter === 'YESTERDAY'"
+            (click)="selectDateFilter('YESTERDAY')"
+          >
+            {{ 'COMMON.YESTERDAY' | translate }}
+          </button>
+
+          <button
+            type="button"
+            [class.active]="selectedDateFilter === 'THIS_WEEK'"
+            (click)="selectDateFilter('WEEK')"
+          >
+            {{ 'COMMON.THIS_WEEK' | translate }}
+          </button>
+
+          <button
+            type="button"
+            [class.active]="selectedDateFilter === 'LAST_WEEK'"
+            (click)="selectDateFilter('LAST_WEEK')"
+          >
+            {{ 'COMMON.LAST_WEEK' | translate }}
+          </button>
+
+          <button
+            type="button"
+            [class.active]="selectedDateFilter === 'THIS_MONTH'"
+            (click)="selectDateFilter('MONTH')"
+          >
+            {{ 'COMMON.THIS_MONTH' | translate }}
+          </button>
+
+          <button
+            type="button"
+            [class.active]="selectedDateFilter === 'LAST_MONTH'"
+            (click)="selectDateFilter('LAST_MONTH')"
+          >
+            {{ 'COMMON.LAST_MONTH' | translate }}
+          </button>
+
+          <button
+            type="button"
+            [class.active]="selectedDateFilter === 'THIS_YEAR'"
+            (click)="selectDateFilter('THIS_YEAR')"
+          >
+            {{ 'COMMON.THIS_YEAR' | translate }}
+          </button>
+
+          <button
+            type="button"
+            [class.active]="selectedDateFilter === 'LAST_YEAR'"
+            (click)="selectDateFilter('LAST_YEAR')"
+          >
+            {{ 'COMMON.LAST_YEAR' | translate }}
+          </button>
+
+          <div class="date-picker-wrapper">
+            <button
+              type="button"
+              class="custom-date-btn"
+              [class.active]="selectedDateFilter !== 'DAY'"
+              (click)="openDatePicker()"
+            >
+              {{ 'REPORTS_PAGE.CUSTOM_DATE_BTN' | translate }}
+            </button>
+
+            <input
+              #dateInput
+              type="date"
+              class="date-picker-hidden"
+              (change)="onDateSelectedD(dateInput.value)"
+            />
+          </div>
+        </div>
+
+        @if (serviceAndStoreReports.length > 0) {
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>{{ 'COMMISSION_BREAKDOWN.SERVICE' | translate }}</th>
+              <th>{{ 'REPORTS_PAGE.COL_STORE_CODE' | translate }}</th>
+              <th>{{ 'COMMON.STATUS' | translate }}</th>
+              <th>{{ 'REPORTS_PAGE.COL_BUYING_PRICE' | translate }}</th>
+              <th>{{ 'REPORTS_PAGE.COL_OPENED_DATE' | translate }}</th>
+              <th>{{ 'REPORTS_PAGE.COL_CLOSED_DATE' | translate }}</th>
+              <th>{{ 'REPORTS_PAGE.COL_USAGE' | translate }}</th>
+              <th>{{ 'REPORTS_PAGE.COL_AMOUNT_COLLECTED' | translate }}</th>
+              <th>{{ 'REPORTS_PAGE.COL_COMMISSION_EARNED' | translate }}</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (row of serviceAndStoreReports; track row.uid) {
+              <tr>
+                <td>{{ $index + 1 }}</td>
+                <td>
+                  <span class="service-name">
+                    {{ row.serviceName || '-' }}
+                  </span>
+                </td>
+
+                <td>
+                  {{ row.openStoreCode || '-' }}
+                </td>
+
+                <td>
+                  <span
+                    class="status-badge"
+                    [class.open]="row.status === 'OPEN'"
+                    [class.closed]="row.status === 'CLOSED'"
+                  >
+                    {{ row.status || '-' }}
+                  </span>
+                </td>
+
+                <td><small>Tshs</small> {{ row.buyingPrice | number: '1.2-2' }}</td>
+
+                <td>
+                  {{ row.openedDate ? (row.openedDate | date: 'dd MMM yyyy') : '-' }}
+                </td>
+
+                <td>
+                  {{ row.closedDate ? (row.closedDate | date: 'dd MMM yyyy') : '-' }}
+                </td>
+
+                <td>
+                  {{ row.reportCount }}
+                </td>
+                <td>
+                  <strong><small>Tshs</small> {{ row.sharedAmount | number: '1.2-2' }}</strong>
+                </td>
+
+                <td>
+                  <div class="commission-summary">
+                    <!-- Total -->
+                    <div
+                      class="commission-total"
+                      (click)="row.showCommission = !row.showCommission"
+                    >
+                      <div>
+                        <span class="total-label"> {{ 'REPORTS_PAGE.TOTAL_COMMISSION_LABEL' | translate }} </span>
+
+                        <strong>
+                          <small>Tshs</small> {{ row.sharedAmount | number: '1.2-2' }}
+                        </strong>
+                      </div>
+
+                      <span class="commission-arrow" [class.open]="row.showCommission"> ⌄ </span>
+                    </div>
+
+                    <!-- Breakdown -->
+                    <!-- Breakdown -->
+                    <div class="commission-breakdown" *ngIf="row.showCommission">
+                      <div class="commission-stat">
+                        <span>{{ 'COMMISSION_BREAKDOWN.TRA' | translate }}</span>
+                        <strong>
+                          Tshs
+                          {{
+                            calculateSharedCommission(
+                              row.traAmount,
+                              row.totalPrice,
+                              row.sharedAmount
+                            ) | number: '1.2-2'
+                          }}
+                        </strong>
+                      </div>
+
+                      <div class="commission-stat">
+                        <span>{{ 'COMMISSION_BREAKDOWN.EMERGENCY' | translate }}</span>
+                        <strong>
+                          Tshs
+                          {{
+                            calculateSharedCommission(
+                              row.emergencyAmount,
+                              row.totalPrice,
+                              row.sharedAmount
+                            ) | number: '1.2-2'
+                          }}
+                        </strong>
+                      </div>
+
+                      <div class="commission-stat">
+                        <span>{{ 'COMMISSION_BREAKDOWN.STAFF' | translate }}</span>
+                        <strong>
+                          Tshs
+                          {{
+                            calculateSharedCommission(
+                              row.staffAmount,
+                              row.totalPrice,
+                              row.sharedAmount
+                            ) | number: '1.2-2'
+                          }}
+                        </strong>
+                      </div>
+
+                      <div class="commission-stat">
+                        <span>{{ 'COMMISSION_BREAKDOWN.OTHERS' | translate }}</span>
+                        <strong>
+                          Tshs
+                          {{
+                            calculateSharedCommission(
+                              row.othersAmount,
+                              row.totalPrice,
+                              row.sharedAmount
+                            ) | number: '1.2-2'
+                          }}
+                        </strong>
+                      </div>
+
+                      <div class="commission-stat">
+                        <span>{{ 'COMMISSION_BREAKDOWN.OWNER' | translate }}</span>
+                        <strong>
+                          Tshs
+                          {{
+                            calculateSharedCommission(
+                              row.ownerAmount,
+                              row.totalPrice,
+                              row.sharedAmount
+                            ) | number: '1.2-2'
+                          }}
+                        </strong>
+                      </div>
+
+                      <div class="commission-stat">
+                        <span>{{ 'COMMISSION_BREAKDOWN.MAINTENANCE' | translate }}</span>
+                        <strong>
+                          Tshs
+                          {{
+                            calculateSharedCommission(
+                              row.maintenanceAmount,
+                              row.totalPrice,
+                              row.sharedAmount
+                            ) | number: '1.2-2'
+                          }}
+                        </strong>
+                      </div>
+
+                      <div class="commission-stat">
+                        <span>{{ 'COMMISSION_BREAKDOWN.RENT' | translate }}</span>
+                        <strong>
+                          Tshs
+                          {{
+                            calculateSharedCommission(
+                              row.rentAmount,
+                              row.totalPrice,
+                              row.sharedAmount
+                            ) | number: '1.2-2'
+                          }}
+                        </strong>
+                      </div>
+
+                      <div class="commission-stat">
+                        <span>{{ 'COMMISSION_BREAKDOWN.LOAN' | translate }}</span>
+                        <strong>
+                          Tshs
+                          {{
+                            calculateSharedCommission(
+                              row.loanAmount,
+                              row.totalPrice,
+                              row.sharedAmount
+                            ) | number: '1.2-2'
+                          }}
+                        </strong>
+                      </div>
+
+                      <div class="commission-stat">
+                        <span>{{ 'COMMISSION_BREAKDOWN.LUKU' | translate }}</span>
+                        <strong>
+                          Tshs
+                          {{
+                            calculateSharedCommission(
+                              row.lukuAmount,
+                              row.totalPrice,
+                              row.sharedAmount
+                            ) | number: '1.2-2'
+                          }}
+                        </strong>
+                      </div>
+
+                      <div class="commission-stat">
+                        <span>{{ 'COMMISSION_BREAKDOWN.WATER' | translate }}</span>
+                        <strong>
+                          Tshs
+                          {{
+                            calculateSharedCommission(
+                              row.waterAmount,
+                              row.totalPrice,
+                              row.sharedAmount
+                            ) | number: '1.2-2'
+                          }}
+                        </strong>
+                      </div>
+
+                      <div class="commission-stat">
+                        <span>{{ 'COMMISSION_BREAKDOWN.STOCK_PURCHASE' | translate }}</span>
+                        <strong>
+                          Tshs
+                          {{
+                            calculateSharedCommission(
+                              row.stockPurchaseAmount,
+                              row.totalPrice,
+                              row.sharedAmount
+                            ) | number: '1.2-2'
+                          }}
+                        </strong>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+        } @else {
+          <app-empty-state
+            icon="store"
+            title="REPORTS_PAGE.EMPTY_STORE_REPORT_TITLE"
+            text="REPORTS_PAGE.EMPTY_STORE_REPORT_TEXT"
+          />
+        }
+      </div>
+      <div class="pagination">
+        <button type="button" (click)="previousPagePre()" [disabled]="page === 0">{{ 'COMMON.PREVIOUS' | translate }}</button>
+
+        <span> {{ 'REPORTS_PAGE.PAGE_OF_PAGES' | translate: { page: page + 1, total: totalPages } }} </span>
+
+        <button type="button" (click)="nextPageNext()" [disabled]="page >= totalPages - 1">
+          {{ 'COMMON.NEXT' | translate }}
+        </button>
+      </div>
+    </div>
+  }
+
+  @case ('REPORTS.INCOME') {
+    <div class="action-container income-expenses-page">
+      <!-- ================= HEADER ================= -->
+      <div class="income-header">
+        <div class="income-title">
+          <div class="income-title-icon">
+            <mat-icon>account_balance</mat-icon>
+          </div>
+
+          <div>
+            <span class="section-label"> {{ 'REPORTS_PAGE.FINANCIAL_REPORT_LABEL' | translate }} </span>
+
+            <h2>{{ 'REPORTS_PAGE.INCOME_EXPENSES_TITLE' | translate }}</h2>
+
+            <p>{{ 'REPORTS_PAGE.TRACK_DESC' | translate }}</p>
+          </div>
+        </div>
+
+        <!-- ================= FILTERS ================= -->
+
+        <div class="income-filters">
+          <button
+            type="button"
+            class="income-filter-btn"
+            [class.active]="filterWeek === 'THIS_WEEK'"
+            (click)="selectIncomeExpenseFilter('THIS_WEEK')"
+          >
+            <mat-icon>date_range</mat-icon>
+            {{ 'COMMON.THIS_WEEK' | translate }}
+          </button>
+
+          <button
+            type="button"
+            class="income-filter-btn"
+            [class.active]="filterWeek === 'LAST_WEEK'"
+            (click)="selectIncomeExpenseFilter('LAST_WEEK')"
+          >
+            <mat-icon>history</mat-icon>
+            {{ 'COMMON.LAST_WEEK' | translate }}
+          </button>
+
+          <button
+            type="button"
+            class="income-filter-btn"
+            [class.active]="filterWeek === 'THIS_MONTH'"
+            (click)="selectIncomeExpenseFilter('THIS_MONTH')"
+          >
+            <mat-icon>calendar_month</mat-icon>
+            {{ 'COMMON.THIS_MONTH' | translate }}
+          </button>
+
+          <button
+            type="button"
+            class="income-filter-btn"
+            [class.active]="filterWeek === 'LAST_MONTH'"
+            (click)="selectIncomeExpenseFilter('LAST_MONTH')"
+          >
+            <mat-icon>event_repeat</mat-icon>
+            {{ 'COMMON.LAST_MONTH' | translate }}
+          </button>
+
+          <button
+            type="button"
+            class="income-filter-btn"
+            [class.active]="filterWeek === 'THIS_YEAR'"
+            (click)="selectIncomeExpenseFilter('THIS_YEAR')"
+          >
+            <mat-icon>calendar_today</mat-icon>
+            {{ 'COMMON.THIS_YEAR' | translate }}
+          </button>
+
+          <button
+            type="button"
+            class="income-filter-btn"
+            [class.active]="filterWeek === 'LAST_YEAR'"
+            (click)="selectIncomeExpenseFilter('LAST_YEAR')"
+          >
+            <mat-icon>history_toggle_off</mat-icon>
+            {{ 'COMMON.LAST_YEAR' | translate }}
+          </button>
+        </div>
+      </div>
+
+      <!-- ================= SUMMARY CARDS ================= -->
+
+      <div class="income-summary">
+        <!-- TOTAL INCOME -->
+        <div class="income-card income-card-green">
+          <div class="income-card-icon">
+            <mat-icon>trending_up</mat-icon>
+          </div>
+
+          <div class="income-card-content">
+            <span> {{ 'REPORTS_PAGE.TOTAL_INCOME_LABEL' | translate }} </span>
+
+            <strong> Tshs {{ getTotalIncome() | number: '1.2-2' }} </strong>
+          </div>
+        </div>
+
+        <!-- TOTAL EXPENSES -->
+        <div class="income-card income-card-red">
+          <div class="income-card-icon">
+            <mat-icon>trending_down</mat-icon>
+          </div>
+
+          <div class="income-card-content">
+            <span> {{ 'REPORTS_PAGE.TOTAL_EXPENSES_LABEL' | translate }} </span>
+
+            <strong> Tshs {{ getTotalExpenses() | number: '1.2-2' }} </strong>
+          </div>
+        </div>
+
+        <!-- PROFIT -->
+        <div class="income-card income-card-blue">
+          <div class="income-card-icon">
+            <mat-icon>account_balance_wallet</mat-icon>
+          </div>
+
+          <div class="income-card-content">
+            <span> {{ 'REPORTS_PAGE.NET_BALANCE_LABEL' | translate }} </span>
+
+            <strong> Tshs {{ getNetBalance() | number: '1.2-2' }} </strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= TABLE ================= -->
+
+      <div class="income-table-container">
+        <div class="table-header">
+          <div>
+            <span class="table-label"> {{ 'REPORTS_PAGE.TRANSACTIONS_LABEL' | translate }} </span>
+
+            <h3>{{ 'REPORTS_PAGE.INCOME_EXPENSES_SUMMARY_TITLE' | translate }}</h3>
+          </div>
+
+          <div class="transaction-count">
+            <span>
+              {{ incomeExpenses.length }}
+            </span>
+
+            {{ 'COMMON.RECORDS' | translate }}
+          </div>
+        </div>
+
+        @if (incomeExpenses.length > 0) {
+          <div class="income-table-wrapper">
+            <table class="income-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+
+                  <th>{{ 'COMMON.NAME' | translate }}</th>
+
+                  <th>{{ 'COMMON.DESCRIPTION' | translate }}</th>
+
+                  <th>{{ 'REPORTS_PAGE.COL_WEEK' | translate }}</th>
+
+                  <th class="amount-column">{{ 'REPORTS_PAGE.COL_INCOME' | translate }}</th>
+
+                  <th class="amount-column">{{ 'REPORTS_PAGE.COL_EXPENSES' | translate }}</th>
+
+                  <th class="amount-column">{{ 'REPORTS_PAGE.COL_BALANCE' | translate }}</th>
+                  <th class="action-column">{{ 'COMMON.ACTION' | translate }}</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                @for (item of incomeExpenses; track item.uid; let i = $index) {
+                  <tr>
+                    <!-- NUMBER -->
+                    <td>
+                      <span class="row-number">
+                        {{ i + 1 }}
+                      </span>
+                    </td>
+
+                    <!-- NAME -->
+                    <td>
+                      <div class="income-name">
+                        <div class="name-icon">
+                          <mat-icon> payments </mat-icon>
+                        </div>
+
+                        <strong>
+                          {{ item.name }}
+                        </strong>
+                      </div>
+                    </td>
+
+                    <!-- DESCRIPTION -->
+                    <td>
+                      <span class="description">
+                        {{ item.descriptions || '—' }}
+                      </span>
+                    </td>
+
+                    <!-- WEEK -->
+                    <td>
+                      <div class="week-date">
+                        <mat-icon> calendar_month </mat-icon>
+
+                        <span>
+                          {{ item.weekStartDate }}
+                        </span>
+                      </div>
+                    </td>
+
+                    <!-- INCOME -->
+                    <td class="amount-column">
+                      <span class="income-amount">
+                        + Tshs
+                        {{ item.income | number: '1.2-2' }}
+                      </span>
+                    </td>
+
+                    <!-- EXPENSE -->
+                    <td class="amount-column">
+                      <span class="expense-amount">
+                        - Tshs
+                        {{ item.expenses | number: '1.2-2' }}
+                      </span>
+                    </td>
+
+                    <!-- BALANCE -->
+                    <td class="amount-column">
+                      <strong
+                        class="balance-amount"
+                        [class.negative]="(item.income || 0) - (item.expenses || 0) < 0"
+                      >
+                        Tshs
+                        {{ (item.income || 0) - (item.expenses || 0) | number: '1.2-2' }}
+                      </strong>
+                    </td>
+                    <td class="action-column">
+                      <button
+                        type="button"
+                        class="spend-btn"
+                        (click)="spendIncomeExpense(item)"
+                        [disabled]="item.name === 'Staff'"
+                      >
+                        <mat-icon>shopping_cart</mat-icon>
+
+                        <span>{{ 'REPORTS_PAGE.SPEND_BTN' | translate }}</span>
+                      </button>
+                    </td>
+
+                    <td class="action-details">
+                      <button
+                        type="button"
+                        class="details-btn"
+                        (click)="detailsForIncomeExpenses(item)"
+                      >
+                        <mat-icon svgIcon="more"></mat-icon>
+
+                        <span>{{ 'COMMON.DETAILS' | translate }}</span>
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        } @else {
+          <!-- EMPTY -->
+
+          <app-empty-state
+            icon="payment2"
+            title="REPORTS_PAGE.EMPTY_FINANCIAL_TITLE"
+            text="REPORTS_PAGE.EMPTY_FINANCIAL_TEXT"
+          />
+        }
+      </div>
+    </div>
+  }
+
+  @case ('REPORTS.STOCK') {
+    <div class="action-container">
+      <div class="stock-wrapper">
+        <div class="table-container">
+          <!-- =========================
+             SUMMARY HEADER
+        ========================== -->
+          <div class="stock-summary-header">
+            <div class="summary-title">
+              <div class="service-report-header-left">
+                <div class="service-report-icon">
+                  <mat-icon>inventory_2</mat-icon>
+                </div>
+
+                <div>
+                  <span class="section-label">{{ 'REPORTS_PAGE.STOCK_REPORT_LABEL' | translate }}</span>
+                  <h2>{{ 'REPORTS_PAGE.STOCK_PURCHASE_REPORT_TITLE' | translate }}</h2>
+
+                  <span class="selected-period">
+                    <mat-icon>date_range</mat-icon>
+                    {{ getStockSelectedRangeLabel() }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="summary-cards">
+              <!-- TOTAL -->
+              <div class="summary-card total">
+                <div class="summary-icon">
+                  <mat-icon>inventory_2</mat-icon>
+                </div>
+
+                <div class="summary-info">
+                  <span>{{ 'COMMON.TOTAL' | translate }}</span>
+
+                  <strong> Tshs {{ getStockTotalAmount() | number }} </strong>
+                </div>
+              </div>
+
+              <!-- PAID -->
+              <div class="summary-card paid">
+                <div class="summary-icon">
+                  <mat-icon>check_circle</mat-icon>
+                </div>
+
+                <div class="summary-info">
+                  <span>{{ 'COMMON.PAID' | translate }}</span>
+
+                  <strong> Tshs {{ getStockPaidAmount() | number }} </strong>
+                </div>
+              </div>
+
+              <!-- REMAINING -->
+              <div class="summary-card remaining">
+                <div class="summary-icon">
+                  <mat-icon>pending</mat-icon>
+                </div>
+
+                <div class="summary-info">
+                  <span>{{ 'COMMON.REMAINING' | translate }}</span>
+
+                  <strong> Tshs {{ getStockRemainingAmount() | number }} </strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- =========================
+             FILTERS
+        ========================== -->
+          <div class="stock-filters">
+            <button
+              type="button"
+              class="filter-btn"
+              [class.active]="stockSelectedFilter === 'THIS_WEEK'"
+              (click)="getStockAndPurchaseByFilter('THIS_WEEK')"
+            >
+              <mat-icon>date_range</mat-icon>
+              <span>{{ 'COMMON.THIS_WEEK' | translate }}</span>
+            </button>
+
+            <button
+              type="button"
+              class="filter-btn"
+              [class.active]="stockSelectedFilter === 'LAST_WEEK'"
+              (click)="getStockAndPurchaseByFilter('LAST_WEEK')"
+            >
+              <mat-icon>history_toggle_off</mat-icon>
+              <span>{{ 'COMMON.LAST_WEEK' | translate }}</span>
+            </button>
+
+            <button
+              type="button"
+              class="filter-btn"
+              [class.active]="stockSelectedFilter === 'THIS_MONTH'"
+              (click)="getStockAndPurchaseByFilter('THIS_MONTH')"
+            >
+              <mat-icon>calendar_month</mat-icon>
+              <span>{{ 'COMMON.THIS_MONTH' | translate }}</span>
+            </button>
+
+            <button
+              type="button"
+              class="filter-btn"
+              [class.active]="stockSelectedFilter === 'LAST_MONTH'"
+              (click)="getStockAndPurchaseByFilter('LAST_MONTH')"
+            >
+              <mat-icon>event_repeat</mat-icon>
+              <span>{{ 'COMMON.LAST_MONTH' | translate }}</span>
+            </button>
+
+            <button
+              type="button"
+              class="filter-btn"
+              [class.active]="stockSelectedFilter === 'THIS_YEAR'"
+              (click)="getStockAndPurchaseByFilter('THIS_YEAR')"
+            >
+              <mat-icon>calendar_today</mat-icon>
+              <span>{{ 'COMMON.THIS_YEAR' | translate }}</span>
+            </button>
+
+            <button
+              type="button"
+              class="filter-btn"
+              [class.active]="stockSelectedFilter === 'LAST_YEAR'"
+              (click)="getStockAndPurchaseByFilter('LAST_YEAR')"
+            >
+              <mat-icon>history</mat-icon>
+              <span>{{ 'COMMON.LAST_YEAR' | translate }}</span>
+            </button>
+          </div>
+
+          <!-- =========================
+             TABLE
+        ========================== -->
+          @if (stockAndPurchaseReports.length > 0) {
+            <div class="stock-table-wrapper">
+              <table class="stock-table">
+                <thead>
+                  <tr>
+                    <th class="index-col">#</th>
+
+                    <th>{{ 'COMMISSION_BREAKDOWN.SERVICE' | translate }}</th>
+
+                    <th>{{ 'REPORTS_PAGE.COL_WEEK' | translate }}</th>
+
+                    <th>{{ 'COMMON.TOTAL' | translate }}</th>
+
+                    <th>{{ 'COMMON.PAID' | translate }}</th>
+
+                    <th>{{ 'COMMON.REMAINING' | translate }}</th>
+
+                    <th>{{ 'REPORTS_PAGE.COL_PAYMENT' | translate }}</th>
+
+                    <th class="actions-header">{{ 'COMMON.ACTION' | translate }}</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  @for (stock of stockAndPurchaseReports; track stock.uid; let i = $index) {
+                    <tr>
+                      <!-- # -->
+                      <td class="index-cell">
+                        <span class="row-number">
+                          {{ i + 1 }}
+                        </span>
+                      </td>
+
+                      <!-- SERVICE -->
+                      <td class="service-cell">
+                        <div class="service-info">
+                          <div class="service-icon">
+                            <mat-icon>spa</mat-icon>
+                          </div>
+
+                          <div class="service-name">
+                            <strong>
+                              {{ stock.serviceName | uppercase }}
+                            </strong>
+
+                            <small> {{ 'COMMISSION_BREAKDOWN.STOCK_PURCHASE' | translate }} </small>
+                          </div>
+                        </div>
+                      </td>
+
+
+                      <!-- WEEK -->
+                      <td>
+                        <span class="week-badge">
+                          <mat-icon> date_range </mat-icon>
+
+                          {{ stock.weekDate | date: 'dd MMM yyyy' }}
+                        </span>
+                      </td>
+
+                      <!-- TOTAL -->
+                      <td class="amount-cell total-amount">
+                        Tshs
+                        {{ stock.totalAmount | number: '1.2-2' }}
+                      </td>
+
+                      <!-- PAID -->
+                      <td class="amount-cell paid-amount">
+                        Tshs
+                        {{ stock.payedAmount | number: '1.2-2' }}
+                      </td>
+
+                      <!-- REMAINING -->
+                      <td class="amount-cell remaining-amount">
+                        Tshs
+                        {{ stock.remainingAmount | number: '1.2-2' }}
+                      </td>
+
+                      <!-- PAYMENT STATUS -->
+                      <td>
+                        <span
+                          class="payment-status"
+                          [ngClass]="{
+                            'status-paid': stock.paymentStatus === 'PAID',
+
+                            'status-pending': stock.paymentStatus === 'NOT PAID',
+
+                            'status-partially': stock.paymentStatus === 'PARTIAL',
+                          }"
+                        >
+                          {{ stock.paymentStatus | uppercase }}
+                        </span>
+                      </td>
+
+                      <td class="actions-cell">
+                        <button
+                          type="button"
+                          class="action-btn pay-btn"
+                          [disabled]="stock.remainingAmount <= 0"
+                          [title]="'COMMON.PAY' | translate"
+                          (click)="payStockPurchase(stock)"
+                        >
+                          <i class="bi bi-cash-coin"></i>
+                          <span>{{ 'COMMON.PAY' | translate }}</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          class="action-btn details-btn"
+                          [title]="'COMMON.DETAILS' | translate"
+                          (click)="viewStockPurchaseDetails(stock)"
+                        >
+                          <mat-icon>visibility</mat-icon>
+                          <span>{{ 'COMMON.DETAILS' | translate | uppercase }}</span>
+                        </button>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+              <!-- =====================================================
+     STOCK PAYMENT DIALOG
+====================================================== -->
+
+<ng-template #stockPaymentDialog>
+
+  <div class="stock-payment-dialog">
+
+    <!-- =================================================
+         HEADER
+    ================================================== -->
+
+    <div class="stock-dialog-header">
+
+      <div class="dialog-title-wrapper">
+
+        <div class="dialog-icon">
+          <mat-icon>payments</mat-icon>
+        </div>
+
+        <div class="dialog-title">
+
+          <h2>
+            {{ 'REPORTS_PAGE.PAY_STOCK_PURCHASE_TITLE' | translate }}
+          </h2>
+
+          <p>
+            {{ 'REPORTS_PAGE.REVIEW_PAYMENT_DESC' | translate }}
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="dialog-close-btn"
+        [title]="'COMMON.CLOSE' | translate"
+        (click)="closeStockPaymentDialog()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+
+    </div>
+
+
+    <!-- =================================================
+         SERVICE INFORMATION
+    ================================================== -->
+
+    <div class="stock-service-card">
+
+      <div class="service-main">
+
+        <div class="service-avatar">
+          <mat-icon>spa</mat-icon>
+        </div>
+
+        <div class="service-details">
+
+          <span class="service-label">
+            {{ 'REPORTS_PAGE.SERVICE_LABEL' | translate }}
+          </span>
+
+          <h3>
+            {{ selectedStockPurchase?.serviceName | uppercase }}
+          </h3>
+
+        </div>
+
+      </div>
+
+
+      <!-- PAYMENT STATUS -->
+
+      <span
+        class="payment-status"
+        [ngClass]="{
+          'status-paid':
+            selectedStockPurchase?.paymentStatus === 'PAID',
+
+          'status-pending':
+            selectedStockPurchase?.paymentStatus === 'NOT PAID',
+
+          'status-partially':
+            selectedStockPurchase?.paymentStatus === 'PARTIAL'
+        }"
+      >
+
+        {{ selectedStockPurchase?.paymentStatus }}
+
+      </span>
+
+    </div>
+
+
+    <!-- =================================================
+         PAYMENT INFORMATION
+    ================================================== -->
+
+    <div class="stock-payment-info">
+
+
+      <!-- SERVICE PRICE -->
+
+      <div class="info-item">
+
+        <span>
+          {{ 'REPORTS_PAGE.SERVICE_PRICE_LABEL' | translate }}
+        </span>
+
+        <strong>
+
+          Tshs
+          {{ selectedStockPurchase?.servicePrice | number:'1.2-2' }}
+
+        </strong>
+
+      </div>
+
+
+      <!-- TOTAL -->
+
+      <div class="info-item">
+
+        <span>
+          {{ 'REPORTS_PAGE.TOTAL_AMOUNT_LABEL' | translate }}
+        </span>
+
+        <strong class="total-value">
+
+          Tshs
+          {{ selectedStockPurchase?.totalAmount | number:'1.2-2' }}
+
+        </strong>
+
+      </div>
+
+
+      <!-- PAID -->
+
+      <div class="info-item">
+
+        <span>
+          {{ 'REPORTS_PAGE.PAID_AMOUNT_LABEL' | translate }}
+        </span>
+
+        <strong class="paid-value">
+
+          Tshs
+          {{ selectedStockPurchase?.payedAmount | number:'1.2-2' }}
+
+        </strong>
+
+      </div>
+
+
+      <!-- REMAINING -->
+
+      <div class="info-item">
+
+        <span>
+          {{ 'COMMON.REMAINING_AMOUNT' | translate }}
+        </span>
+
+        <strong class="remaining-value">
+
+          Tshs
+          {{ selectedStockPurchase?.remainingAmount | number:'1.2-2' }}
+
+        </strong>
+
+      </div>
+
+
+      <!-- WEEK -->
+
+      <div class="info-item">
+
+        <span>
+          {{ 'COMMON.WEEK' | translate }}
+        </span>
+
+        <strong>
+
+          {{ selectedStockPurchase?.weekDate }}
+
+        </strong>
+
+      </div>
+
+
+      <!-- COMMISSION -->
+
+
+
+    </div>
+
+
+    <!-- =================================================
+         PAYMENT FORM
+    ================================================== -->
+
+    @if (
+      selectedStockPurchase &&
+      selectedStockPurchase.remainingAmount > 0
+    ) {
+
+      <div class="payment-form">
+
+
+        <!-- FORM HEADER -->
+
+        <div class="payment-form-header">
+
+          <div class="payment-form-icon">
+
+            <mat-icon>
+              account_balance_wallet
+            </mat-icon>
+
+          </div>
+
+          <div>
+
+            <h3>
+              {{ 'REPORTS_PAGE.MAKE_PAYMENT_TITLE' | translate }}
+            </h3>
+
+            <p>
+              {{ 'REPORTS_PAGE.ENTER_AMOUNT_DESC' | translate }}
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <!-- AMOUNT -->
+
+        <div class="amount-field">
+
+          <label>
+            {{ 'REPORTS_PAGE.PAYMENT_AMOUNT_LABEL' | translate }}
+          </label>
+
+
+          <div class="amount-input-wrapper">
+
+            <span>
+              Tshs
+            </span>
+
+            <input
+              type="number"
+              [(ngModel)]="stockPaymentAmount"
+              min="1"
+              [max]="selectedStockPurchase.remainingAmount"
+              [placeholder]="'REPORTS_PAGE.AMOUNT_PLACEHOLDER' | translate"
+            />
+
+          </div>
+
+
+          <div class="amount-hint">
+
+            {{ 'REPORTS_PAGE.MAX_PAYABLE_LABEL' | translate }}
+
+            <strong>
+
+              Tshs
+              {{
+                selectedStockPurchase.remainingAmount
+                  | number:'1.2-2'
+              }}
+
+            </strong>
+
+          </div>
+
+        </div>
+        <div class="description-field">
+
+  <label>
+    {{ 'COMMON.DESCRIPTION' | translate }}
+  </label>
+
+  <textarea
+    [(ngModel)]="stockPaymentDescription"
+    rows="3"
+    [placeholder]="'REPORTS_PAGE.DESCRIPTION_PLACEHOLDER' | translate"
+  ></textarea>
+
+</div>
+
+
+
+        <!-- QUICK AMOUNT BUTTONS -->
+
+        <div class="quick-payment">
+
+          <span>
+            {{ 'REPORTS_PAGE.QUICK_AMOUNT_LABEL' | translate }}
+          </span>
+
+
+          <div class="quick-payment-buttons">
+
+            <button
+              type="button"
+              (click)="
+                stockPaymentAmount =
+                  selectedStockPurchase.remainingAmount * 0.25
+              "
+            >
+              25%
+            </button>
+
+
+            <button
+              type="button"
+              (click)="
+                stockPaymentAmount =
+                  selectedStockPurchase.remainingAmount * 0.5
+              "
+            >
+              50%
+            </button>
+
+
+            <button
+              type="button"
+              (click)="
+                stockPaymentAmount =
+                  selectedStockPurchase.remainingAmount * 0.75
+              "
+            >
+              75%
+            </button>
+
+
+            <button
+              type="button"
+              (click)="
+                stockPaymentAmount =
+                  selectedStockPurchase.remainingAmount
+              "
+            >
+              {{ 'REPORTS_PAGE.FULL_LABEL' | translate }}
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    }
+
+
+    <!-- =================================================
+         FULLY PAID
+    ================================================== -->
+
+    @if (
+      selectedStockPurchase &&
+      selectedStockPurchase.remainingAmount <= 0
+    ) {
+
+      <div class="fully-paid-message">
+
+        <div class="fully-paid-icon">
+
+          <mat-icon>
+            check_circle
+          </mat-icon>
+
+        </div>
+
+
+        <div>
+
+          <strong>
+            {{ 'REPORTS_PAGE.FULLY_PAID_TITLE' | translate }}
+          </strong>
+
+          <span>
+            {{ 'REPORTS_PAGE.FULLY_PAID_TEXT' | translate }}
+          </span>
+
+        </div>
+
+      </div>
+
+    }
+
+
+    <!-- =================================================
+         DIALOG ACTIONS
+    ================================================== -->
+
+    <div class="stock-dialog-actions">
+
+
+      <button
+        type="button"
+        class="dialog-cancel-btn"
+        (click)="closeStockPaymentDialog()"
+      >
+
+        <mat-icon>
+          close
+        </mat-icon>
+
+        {{ 'COMMON.CANCEL' | translate }}
+
+      </button>
+
+
+      @if (
+        selectedStockPurchase &&
+        selectedStockPurchase.remainingAmount > 0
+      ) {
+
+        <button
+          type="button"
+          class="dialog-pay-btn"
+
+          [disabled]="
+            !stockPaymentAmount ||
+            stockPaymentAmount <= 0 ||
+            stockPaymentAmount >
+              selectedStockPurchase.remainingAmount
+          "
+
+          (click)="submitStockPayment()"
+        >
+
+          <mat-icon>
+            payments
+          </mat-icon>
+
+          {{ 'COMMON.PAY' | translate }}
+
+        </button>
+
+      }
+
+    </div>
+
+  </div>
+
+</ng-template>
+
+              <!-- FOOTER -->
+              <div class="stock-table-footer">
+                <div class="showing-info">
+                  {{ 'COMMON.SHOWING' | translate }}
+
+                  <strong>
+                    {{ stockAndPurchaseReports.length }}
+                  </strong>
+
+                  {{ 'REPORTS_PAGE.STOCK_PURCHASES_LABEL' | translate }}
+                </div>
+              </div>
+            </div>
+          } @else {
+            <!-- =========================
+               EMPTY STATE
+          ========================== -->
+            <app-empty-state
+              icon="stock"
+              title="REPORTS_PAGE.EMPTY_STOCK_TITLE"
+              text="REPORTS_PAGE.EMPTY_STOCK_TEXT"
+            />
+          }
+        </div>
+      </div>
+    </div>
+  }
+}

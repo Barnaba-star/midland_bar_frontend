@@ -1,0 +1,1215 @@
+/* =====================================================
+   MAIN PERMISSION MANAGEMENT CONTAINER
+===================================================== */
+.permission-management {
+  width: 100%;
+  min-height: 100vh;
+  padding: 15px 20px 30px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  animation: fadeInUp 0.6s ease-out;
+}
+
+
+.action-container {
+  width: 100%;
+
+  min-height: 80vh;
+  height: auto;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: flex-start;
+  align-items: stretch;
+
+  text-align: left;
+
+  margin-top: 15px;
+
+  gap: 5px;
+
+  padding: 0 20px 30px;
+
+  box-sizing: border-box;
+
+  overflow: visible;
+
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+/* =====================================================
+   SEARCH ROW
+===================================================== */
+
+.search-row {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 15px;
+
+  margin: 0 0 10px 0;
+
+  box-sizing: border-box;
+}
+
+
+/* =====================================================
+   ROLE / MODULE SELECT
+===================================================== */
+
+.role-select {
+  flex: 1;
+  min-width: 0;
+
+  margin: 0;
+}
+
+
+/* =====================================================
+   SEARCH BUTTON
+===================================================== */
+
+.search-button {
+  height: 56px;
+
+  min-width: 130px;
+
+  padding: 0 20px;
+
+  border-radius: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  flex-shrink: 0;
+}
+
+
+.search-button mat-icon {
+  font-size: 20px;
+}
+
+
+/* =====================================================
+   PERMISSION CARD
+===================================================== */
+
+.info-card {
+
+  width: 100%;
+
+  margin: 0 auto;
+
+  background: #ffffff;
+
+  border: 1px solid #e0e0e0;
+
+  border-radius: 12px;
+
+  overflow: hidden;
+
+  box-sizing: border-box;
+
+  box-shadow:
+    0 4px 14px rgba(0, 0, 0, 0.06);
+
+  animation: fadeInUp 0.5s ease-out;
+}
+
+
+/* =====================================================
+   CARD HEADER
+===================================================== */
+
+.info-card-header {
+
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 16px 20px;
+
+  box-sizing: border-box;
+
+  background: #f8f9fa;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+
+.header-title {
+
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+}
+
+
+.info-card-header h3 {
+
+  margin: 0;
+
+  color: #263238;
+
+  font-size: 17px;
+
+  font-weight: 600;
+}
+
+
+.info-card-header span {
+
+  color: #78909c;
+
+  font-size: 14px;
+
+  white-space: nowrap;
+}
+
+
+/* =====================================================
+   PERMISSION BODY
+===================================================== */
+
+.info-card-body {
+
+  width: 100%;
+
+  padding: 20px;
+
+  box-sizing: border-box;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 12px;
+}
+
+
+/* =====================================================
+   PERMISSION ITEM
+===================================================== */
+
+.permission-item {
+
+  width: 100%;
+
+  min-height: 48px;
+
+  padding: 10px 14px;
+
+  box-sizing: border-box;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 10px;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 8px;
+
+  background: #ffffff;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+.permission-item:hover {
+
+  background: #f8fbff;
+
+  border-color: #90caf9;
+
+  box-shadow:
+    0 3px 8px rgba(20, 49, 93, 0.08);
+}
+
+
+/* =====================================================
+   PERMISSION NAME
+===================================================== */
+
+.permission-name {
+
+  flex: 1;
+
+  min-width: 0;
+
+  color: #374151;
+
+  font-size: 14px;
+
+  line-height: 1.4;
+
+  word-break: break-word;
+}
+
+
+/* =====================================================
+   CHECKBOX
+===================================================== */
+
+.permission-item input[type="checkbox"] {
+
+  width: 18px;
+
+  height: 18px;
+
+  margin: 0;
+
+  cursor: pointer;
+
+  flex-shrink: 0;
+
+  accent-color: #14315d;
+}
+
+
+/* =====================================================
+   CARD FOOTER
+===================================================== */
+
+.info-card-footer {
+
+  width: 100%;
+
+  padding: 14px 20px;
+
+  box-sizing: border-box;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  background: #fafafa;
+
+  border-top: 1px solid #e5e7eb;
+}
+
+
+/* =====================================================
+   BUTTONS
+===================================================== */
+
+.btn-save,
+.btn-cancel {
+
+  border: none;
+
+  padding: 10px 20px;
+
+  border-radius: 6px;
+
+  font-size: 14px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.1s ease;
+}
+
+
+.btn-save {
+
+  color: #ffffff;
+
+  background: #14315d;
+}
+
+
+.btn-save:hover {
+
+  background: #0a1c38;
+}
+
+
+.btn-cancel {
+
+  color: #374151;
+
+  background: #e5e7eb;
+}
+
+
+.btn-cancel:hover {
+
+  background: #d1d5db;
+}
+
+
+.btn-save:active,
+.btn-cancel:active {
+
+  transform: scale(0.98);
+}
+
+
+/* =====================================================
+   DEFAULT PERMISSION CARD
+===================================================== */
+
+.permission-card {
+
+  width: 90%;
+
+  max-width: 1300px;
+
+  margin: 20px auto;
+
+  padding: 42px;
+
+  box-sizing: border-box;
+
+  background:
+    linear-gradient(
+      135deg,
+      #eef6ff,
+      #ffffff
+    );
+
+  border-radius: 14px;
+
+  box-shadow:
+    0 8px 20px rgba(20, 49, 93, 0.12);
+
+  animation: fadeInUp 0.8s ease-out;
+}
+
+
+/* =====================================================
+   DEFAULT CARD ROW
+===================================================== */
+
+.permission-row {
+
+  margin-bottom: 20px;
+
+  padding-bottom: 15px;
+
+  border-bottom:
+    1px dashed #d6e4f5;
+}
+
+
+.permission-row:last-child {
+
+  margin-bottom: 0;
+
+  border-bottom: none;
+}
+
+
+.permission-row.header {
+
+  padding-bottom: 12px;
+
+  border-bottom:
+    2px solid #d0d4d8;
+}
+
+
+.permission-row h2 {
+
+  margin: 0;
+
+  color: #0a1c38;
+
+  font-size: 18px;
+
+  font-weight: 700;
+}
+
+
+.permission-row strong {
+
+  display: inline-block;
+
+  margin-bottom: 8px;
+
+  color: #0d47a1;
+
+  font-size: 15px;
+}
+
+
+.permission-row p {
+
+  margin: 0;
+
+  color: #455a64;
+
+  font-size: 14px;
+
+  line-height: 1.8;
+}
+
+
+/* =====================================================
+   ANIMATION
+===================================================== */
+
+@keyframes fadeInUp {
+
+  from {
+
+    opacity: 0;
+
+    transform:
+      translateY(15px);
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 900px) {
+
+  .search-row {
+
+    flex-wrap: wrap;
+  }
+
+
+  .role-select {
+
+    flex: 1 1 calc(50% - 10px);
+
+    min-width: 250px;
+  }
+
+
+  .search-button {
+
+    flex: 0 0 auto;
+  }
+
+
+  .info-card-body {
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 600px) {
+
+  .permission-management {
+
+    padding: 10px;
+  }
+
+
+  .search-row {
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 10px;
+  }
+
+
+  .role-select {
+
+    width: 100%;
+
+    min-width: 100%;
+  }
+
+
+  .search-button {
+
+    width: 100%;
+  }
+
+
+  .info-card {
+
+    width: 100%;
+  }
+
+
+  .info-card-header {
+
+    padding: 14px;
+  }
+
+
+  .header-title {
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 5px;
+  }
+
+
+  .info-card-body {
+
+    grid-template-columns: 1fr;
+
+    padding: 14px;
+  }
+
+
+  .info-card-footer {
+
+    padding: 14px;
+
+    flex-direction: column-reverse;
+
+    align-items: stretch;
+  }
+
+
+  .btn-save,
+  .btn-cancel {
+
+    width: 100%;
+  }
+
+
+  .permission-card {
+
+    width: 100%;
+
+    padding: 25px;
+  }
+}
+/* =====================================================
+   PERMISSION FILTER SECTION
+===================================================== */
+
+.permission-filter-section {
+  width: 100%;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+}
+
+
+
+/* =====================================================
+   SECTION HEADING
+===================================================== */
+
+.filter-heading {
+  margin-bottom: 14px;
+}
+
+.filter-heading h2 {
+  margin: 0 0 4px 0;
+
+  color: #263238;
+
+  font-size: 20px;
+
+  font-weight: 600;
+}
+
+.filter-heading p {
+  margin: 0;
+
+  color: #78909c;
+
+  font-size: 13px;
+
+  line-height: 1.5;
+}
+
+/* =====================================================
+   MAIN FILTER SECTION
+===================================================== */
+
+.permission-filter-section {
+  width: 100%;
+
+  margin-bottom: 20px;
+
+  padding: 5px 0;
+
+  box-sizing: border-box;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 15px;
+}
+
+
+/* =====================================================
+   TOP ROW
+   HEADING LEFT
+   BUTTON RIGHT
+===================================================== */
+
+.filter-top-row {
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  box-sizing: border-box;
+}
+
+
+/* =====================================================
+   HEADING
+===================================================== */
+
+.filter-heading {
+  flex: 1;
+
+  min-width: 0;
+}
+
+
+.filter-heading h2 {
+  margin: 0 0 4px 0;
+
+  color: #263238;
+
+  font-size: 20px;
+
+  font-weight: 600;
+}
+
+
+.filter-heading p {
+  margin: 0;
+
+  color: #78909c;
+
+  font-size: 13px;
+
+  line-height: 1.5;
+}
+
+
+/* =====================================================
+   SEARCH BUTTON
+===================================================== */
+
+.search-button {
+  flex-shrink: 0;
+
+  width: 140px;
+
+  height: 44px;
+
+  padding: 0 18px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background: #14315d;
+
+  color: #ffffff;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  box-sizing: border-box;
+
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+}
+
+
+/* Hover */
+
+.search-button:hover:not(:disabled) {
+
+  background: #0a1c38;
+
+  box-shadow:
+    0 4px 10px rgba(20, 49, 93, 0.25);
+}
+
+
+/* Disabled */
+
+.search-button:disabled {
+
+  background: #b0bec5;
+
+  color: #eceff1;
+
+  cursor: not-allowed;
+
+  box-shadow: none;
+
+  opacity: 0.8;
+}
+
+
+/* =====================================================
+   SELECT ROW
+===================================================== */
+
+.search-row {
+
+  width: 100%;
+
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 18px;
+
+  box-sizing: border-box;
+}
+
+
+/* =====================================================
+   FILTER GROUP
+===================================================== */
+
+.filter-group {
+
+  flex: 1;
+
+  min-width: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 5px;
+}
+
+
+/* =====================================================
+   LABEL
+===================================================== */
+
+.filter-label {
+
+  display: block;
+
+  margin: 0;
+
+  color: #374151;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  line-height: 18px;
+}
+
+
+/* =====================================================
+   SELECT
+===================================================== */
+
+.role-select {
+
+  width: 100%;
+
+  margin: 0;
+}
+
+
+/* Remove Angular Material bottom space */
+
+.role-select
+.mat-mdc-form-field-subscript-wrapper {
+
+  display: none;
+}
+
+
+/* Select background */
+
+.role-select
+.mat-mdc-text-field-wrapper {
+
+  background: #fafafa;
+
+  border-radius: 10px;
+}
+
+
+/* Border */
+
+.role-select
+.mdc-notched-outline__leading,
+
+.role-select
+.mdc-notched-outline__notch,
+
+.role-select
+.mdc-notched-outline__trailing {
+
+  border-color: #d1d5db !important;
+}
+
+
+/* Focus */
+
+.role-select.mat-focused
+.mdc-notched-outline__leading,
+
+.role-select.mat-focused
+.mdc-notched-outline__notch,
+
+.role-select.mat-focused
+.mdc-notched-outline__trailing {
+
+  border-color: #14315d !important;
+
+  border-width: 2px;
+}
+
+
+/* Value */
+
+.role-select
+.mat-mdc-select-value {
+
+  font-size: 14px;
+
+  font-weight: 500;
+
+  color: #374151;
+}
+
+
+/* Arrow */
+
+.role-select
+.mat-mdc-select-arrow {
+
+  color: #14315d;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 700px) {
+
+  .filter-top-row {
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 12px;
+  }
+
+
+  .search-button {
+
+    width: 100%;
+  }
+
+
+  .search-row {
+
+    flex-direction: column;
+
+    gap: 10px;
+  }
+
+
+  .filter-group {
+
+    width: 100%;
+
+    flex: none;
+  }
+
+}
+/* =====================================================
+   PERMISSIONS BODY
+===================================================== */
+
+.info-card-body {
+
+  width: 100%;
+
+  padding: 20px;
+
+  box-sizing: border-box;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 0;
+
+}
+
+
+/* =====================================================
+   GROUP HEADER
+===================================================== */
+
+.permission-group-header {
+
+  width: 100%;
+
+  margin-top: 10px;
+
+  margin-bottom: 12px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+}
+
+
+.permission-group-header:first-child {
+
+  margin-top: 0;
+}
+
+
+/* GROUP TITLE */
+
+.group-title {
+
+  flex-shrink: 0;
+
+  color: #0a1c38;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.5px;
+}
+
+
+/* DIVIDER */
+
+.group-divider {
+
+  flex: 1;
+
+  height: 1px;
+
+  background: #d6e4f5;
+}
+
+
+/* =====================================================
+   GROUP ITEMS
+===================================================== */
+
+.permission-group-items {
+
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 12px;
+
+  margin-bottom: 15px;
+}
+
+
+/* =====================================================
+   PERMISSION ITEM
+===================================================== */
+
+.permission-item {
+
+  width: 100%;
+
+  min-height: 48px;
+
+  padding: 10px 14px;
+
+  box-sizing: border-box;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 10px;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 8px;
+
+  background: #ffffff;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+.permission-item:hover {
+
+  background: #f8fbff;
+
+  border-color: #90caf9;
+
+  box-shadow:
+    0 3px 8px rgba(20, 49, 93, 0.08);
+}
+
+
+/* =====================================================
+   PERMISSION NAME
+===================================================== */
+
+.permission-name {
+
+  flex: 1;
+
+  min-width: 0;
+
+  color: #374151;
+
+  font-size: 14px;
+
+  line-height: 1.4;
+
+  word-break: break-word;
+}
+
+
+/* =====================================================
+   CHECKBOX
+===================================================== */
+
+.permission-item input[type="checkbox"] {
+
+  width: 18px;
+
+  height: 18px;
+
+  margin: 0;
+
+  cursor: pointer;
+
+  flex-shrink: 0;
+
+  accent-color: #14315d;
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 900px) {
+
+  .permission-group-items {
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+  }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 600px) {
+
+  .permission-group-items {
+
+    grid-template-columns: 1fr;
+
+  }
+
+  .info-card-body {
+
+    padding: 15px;
+
+  }
+
+}

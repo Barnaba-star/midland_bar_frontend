@@ -1,0 +1,27 @@
+.footer-container {
+  position: inherit;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+
+  height: 50px;
+  padding: 0 20px;
+
+  display: flex;                    /* ✅ Enable flexbox */
+  align-items: center;             /* ⬇️ Center vertically */
+  justify-content: center;         /* ⬅️➡️ Center horizontally */
+  
+  color: rgb(32, 24, 24);
+  text-align: center;
+  z-index: 100;
+
+  border-right: 2px solid rgb(108, 175, 108);
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+}
+
+
+
+.default-text {
+  font-size: 14px;
+  opacity: 0.8;
+}

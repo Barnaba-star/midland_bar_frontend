@@ -1,0 +1,18 @@
+<div class="modal-backdrop">
+  <div class="modal-card">
+    <div class="modal-content">
+      <div *ngIf="icon" class="icon-container">
+        <div *ngIf="icon" class="icon-container">
+          <mat-icon svgIcon="delete" class="icon"></mat-icon>
+        </div>
+      </div>
+
+      <p>{{ message }}</p>
+
+      <div class="modal-actions">
+        <button class="cancel-btn" (click)="onCancel()">{{ 'COMMON.CANCEL' | translate }}</button>
+        <button class="delete-btn" (click)="onConfirm()">{{ 'COMMON.DELETE' | translate }}</button>
+      </div>
+    </div>
+  </div>
+</div>

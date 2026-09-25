@@ -1,0 +1,38 @@
+<app-main-sidenav2 [menuItems]=this.getItems(menuItems) >
+  <router-outlet></router-outlet>
+  @if(isHome===true){
+ @switch (isHome) {
+
+@default {
+  <div class="info-card">
+
+    <div class="info-row">
+      <h3>{{ 'SETTINGS_PAGE.TITLE' | translate }}</h3>
+    </div>
+
+    <div class="info-row">
+      <strong>{{ 'COMMON.PURPOSE' | translate }}</strong>
+      <p>
+        {{ 'SETTINGS_PAGE.PURPOSE_TEXT' | translate }}
+      </p>
+    </div>
+
+    <div class="info-row">
+      <strong>{{ 'COMMON.WHAT_YOU_CAN_DO' | translate }}</strong>
+      <p [innerHTML]="'SETTINGS_PAGE.WHAT_YOU_CAN_DO_LIST' | translate"></p>
+    </div>
+
+    <div class="info-row">
+      <strong>{{ 'COMMON.NOTE' | translate }}</strong>
+      <p>
+        {{ 'SETTINGS_PAGE.NOTE_TEXT' | translate }}
+      </p>
+    </div>
+
+  </div>
+}
+
+}
+
+  }
+</app-main-sidenav2>

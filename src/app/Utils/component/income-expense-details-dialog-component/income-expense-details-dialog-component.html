@@ -1,0 +1,239 @@
+<div class="dialog-container">
+
+  <!-- HEADER -->
+  <div class="dialog-header">
+    <h2>{{ data.name }}</h2>
+
+    <p class="subtitle">
+      {{ data.descriptions }}
+    </p>
+  </div>
+
+
+  <mat-dialog-content>
+
+    <!-- 1. SUMMARY -->
+    <div class="summary-grid">
+
+      <!-- INCOME -->
+      <div class="summary-card income">
+        <div class="summary-icon">
+          <mat-icon>trending_up</mat-icon>
+        </div>
+
+        <div>
+          <span>{{ 'REPORTS_PAGE.TOTAL_INCOME_LABEL' | translate }}</span>
+
+          <strong>
+            {{ data.income | number:'1.2-2' }}
+          </strong>
+        </div>
+      </div>
+
+
+      <!-- EXPENSE -->
+      <div class="summary-card expense">
+        <div class="summary-icon">
+          <mat-icon>trending_down</mat-icon>
+        </div>
+
+        <div>
+          <span>{{ 'REPORTS_PAGE.TOTAL_EXPENSES_LABEL' | translate }}</span>
+
+          <strong>
+            {{ data.expenses | number:'1.2-2' }}
+          </strong>
+        </div>
+      </div>
+
+
+      <!-- BALANCE -->
+      <div class="summary-card balance">
+        <div class="summary-icon">
+          <mat-icon>account_balance_wallet</mat-icon>
+        </div>
+
+        <div>
+          <span>{{ 'INCOME_EXPENSE_DIALOG.REMAINING_BALANCE' | translate }}</span>
+
+          <strong>
+            {{
+              data.income - data.expenses
+              | number:'1.2-2'
+            }}
+          </strong>
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- 2. BASIC DETAILS -->
+    <div class="details-section">
+
+      <div class="section-title">
+        <mat-icon>info</mat-icon>
+        <span>{{ 'COMMON.DETAILS' | translate }}</span>
+      </div>
+
+      <div class="details-box">
+
+        <div class="detail-row">
+          <span>{{ 'COMMON.NAME' | translate }}</span>
+          <strong>{{ data.name }}</strong>
+        </div>
+
+        <div class="detail-row">
+          <span>{{ 'COMMON.DESCRIPTION' | translate }}</span>
+          <strong>{{ data.descriptions }}</strong>
+        </div>
+
+        <div class="detail-row">
+          <span>{{ 'INCOME_EXPENSE_DIALOG.WEEK_START' | translate }}</span>
+          <strong>
+            {{ data.weekStartDate | date:'dd MMM yyyy' }}
+          </strong>
+        </div>
+
+        <div class="detail-row">
+          <span>{{ 'SALES_PAGE.COL_PAYMENT_METHOD' | translate }}</span>
+          <strong>
+            {{ data.paymentMethod || ('COMMON.NA' | translate) }}
+          </strong>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- 3. SPENDING HISTORY -->
+    <div class="history-section">
+
+      <div class="history-header">
+
+        <div class="section-title">
+          <mat-icon>receipt_long</mat-icon>
+
+          <span>
+            {{ 'INCOME_EXPENSE_DIALOG.SPENDING_HISTORY' | translate }}
+          </span>
+        </div>
+
+        <span class="spend-count">
+          {{ 'INCOME_EXPENSE_DIALOG.TRANSACTIONS_COUNT' | translate: { count: data.spends?.length || 0 } }}
+        </span>
+
+      </div>
+
+
+      <div class="history-table">
+
+        <!-- HEADER -->
+        <div
+          class="table-header"
+          *ngIf="data.spends?.length"
+        >
+           <div>{{ 'REPORTS_PAGE.COL_STAFF' | translate }} </div>
+          <div>{{ 'COMMON.DATE' | translate }}</div>
+          <div>{{ 'COMMON.AMOUNT' | translate }}</div>
+          <div>{{ 'COMMON.DESCRIPTION' | translate }}</div>
+        </div>
+
+
+        <!-- ROWS -->
+        <div
+          class="table-row"
+          *ngFor="let spend of data.spends"
+        >
+
+ <div class="staff-cell">
+
+  <div class="staff-icon">
+    <mat-icon>person</mat-icon>
+  </div>
+
+  <strong style="font-size: 12px;">
+    {{ spend.staffName | uppercase }}
+  </strong>
+
+</div>
+
+          <!-- DATE -->
+          <div class="date-cell">
+
+            <div class="date-icon">
+              <mat-icon>
+                calendar_today
+              </mat-icon>
+            </div>
+
+            <strong>
+              {{ spend.descriptionDate | date:'dd MMM yyyy' }}
+            </strong>
+
+          </div>
+
+
+          <!-- AMOUNT -->
+          <div class="amount-cell">
+
+            -{{ spend.spendAmount | number:'1.2-2' }}
+
+          </div>
+
+
+          <!-- DESCRIPTION -->
+          <div class="description-cell">
+
+            {{ spend.description | uppercase}}
+
+          </div>
+
+        </div>
+
+
+        <!-- EMPTY -->
+        <div
+          class="empty-history"
+          *ngIf="!data.spends?.length"
+        >
+
+          <mat-icon>
+            receipt_long
+          </mat-icon>
+
+          <h3>
+            {{ 'INCOME_EXPENSE_DIALOG.NO_SPENDING_TITLE' | translate }}
+          </h3>
+
+          <p>
+            {{ 'INCOME_EXPENSE_DIALOG.NO_SPENDING_TEXT' | translate: { name: data.name } }}
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </mat-dialog-content>
+
+
+  <!-- ACTIONS -->
+  <mat-dialog-actions align="end">
+
+<button
+  mat-flat-button
+  type="button"
+  class="close-btn"
+  (click)="close()"
+>
+  <mat-icon>close</mat-icon>
+  {{ 'COMMON.CLOSE' | translate }}
+</button>
+
+
+  </mat-dialog-actions>
+
+</div>

@@ -1,0 +1,98 @@
+<div class="subscribe-dialog">
+
+  <div class="dialog-header">
+    <h2>{{ 'SUBSCRIBE_DIALOG.TITLE' | translate }}</h2>
+
+    <button type="button" class="close-btn" (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <p class="dialog-subtitle">{{ 'SUBSCRIBE_DIALOG.SUBTITLE' | translate }}</p>
+
+
+  <div class="form-field">
+    <label>{{ 'SUBSCRIBE_DIALOG.NETWORK' | translate }}</label>
+    <div class="input-wrapper select-wrapper">
+      <select [(ngModel)]="mobileNetwork" name="mobileNetwork">
+        <option value="" disabled selected>{{ 'SUBSCRIBE_DIALOG.NETWORK_PLACEHOLDER' | translate }}</option>
+        @for (network of networks; track network.value) {
+          <option [value]="network.value">{{ network.label }}</option>
+        }
+      </select>
+      <mat-icon>expand_more</mat-icon>
+    </div>
+  </div>
+
+
+  <div class="form-field">
+    <label>{{ 'SUBSCRIBE_DIALOG.PHONE' | translate }}</label>
+    <div class="input-wrapper">
+      <input
+        type="tel"
+        [(ngModel)]="phoneNumber"
+        name="phoneNumber"
+        placeholder="0781000000"
+      />
+    </div>
+  </div>
+
+
+  <div class="form-field">
+    <label>{{ 'SUBSCRIBE_DIALOG.MONTHS' | translate }}</label>
+    <div class="month-options">
+      @for (m of monthOptions; track m) {
+        <button
+          type="button"
+          class="month-chip"
+          [class.active]="months === m"
+          (click)="months = m"
+        >
+          <span class="chip-months">
+            {{ m }} {{ m === 1 ? ('SUBSCRIBE_DIALOG.MONTH' | translate) : ('SUBSCRIBE_DIALOG.MONTHS_LABEL' | translate) }}
+          </span>
+          @if (amountFor(m); as chipAmount) {
+            <span class="chip-amount">{{ chipAmount }}</span>
+          }
+        </button>
+      }
+    </div>
+  </div>
+
+
+  @if (errorMessage) {
+    <div class="error-banner">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ errorMessage }}</span>
+    </div>
+  }
+
+  @if (successMessage) {
+    <div class="success-banner">
+      <mat-icon>check_circle</mat-icon>
+      <span>{{ successMessage }}</span>
+    </div>
+  }
+
+
+  <div class="dialog-footer">
+
+    <button type="button" class="cancel-btn" (click)="close()">
+      {{ 'COMMON.CANCEL' | translate }}
+    </button>
+
+    <button
+      type="button"
+      class="save-btn"
+      [disabled]="!canSubmit"
+      (click)="submit()"
+    >
+      @if (saving) {
+        <mat-icon class="spin">autorenew</mat-icon>
+      }
+      {{ 'SUBSCRIBE_DIALOG.SUBMIT' | translate }}
+    </button>
+
+  </div>
+
+</div>

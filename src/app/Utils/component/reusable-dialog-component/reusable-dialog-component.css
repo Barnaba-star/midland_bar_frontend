@@ -1,0 +1,5 @@
+.small-title {
+  font-size: 20px !important; /* override Angular Material default */
+ 
+}
+

@@ -1,0 +1,9 @@
+.upload-icon {
+  cursor: pointer;
+  color: #555;
+  font-size: 24px;
+}
+
+.upload-icon:hover {
+  color: #1976d2;
+}

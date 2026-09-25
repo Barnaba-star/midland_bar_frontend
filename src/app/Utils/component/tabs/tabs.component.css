@@ -1,0 +1,38 @@
+.custom-tab-group {
+  background-color: #223a6c;
+  border-bottom: 1px solid #ccc;
+  box-shadow: 0 4px 12px rgba(183, 42, 42, 0.1);
+  padding: 0;
+  border: 1px  #000;
+  position: sticky;  
+  top: 0;
+  z-index: 1000; 
+}
+
+
+
+
+.tab-icon {
+  vertical-align: middle;
+  margin-right: 8px;
+  font-size: 60px;
+}
+.app-icon {
+  width: 55px;
+  height: 55px;
+  font-size: 35px; /* Optional, haiongezi kitu kwa <img> lakini useful kama icon ni font */
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+  color: rgba(182, 150, 109, 0.95);
+}
+::ng-deep .mat-tab-label {
+  font-size: 30px;
+  font-weight: bold;
+}
+.mat-tab-label {
+  font-size: 30px;
+  font-weight: bold;
+}

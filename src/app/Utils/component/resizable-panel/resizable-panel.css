@@ -1,0 +1,41 @@
+.resizable-panel {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  padding-bottom: 30px;
+}
+
+.panel-section {
+  transition: all 0.5s ease;
+  overflow: hidden;
+}
+
+.panel-section.full-width {
+  flex: 1 1 100%;
+}
+
+.panel-section.partial-width {
+  flex: 1 1 calc(100% / var(--open-panels, 2));
+}
+
+.panel-section.hidden {
+  flex: 0 0 0;
+  opacity: 0;
+}
+
+
+@keyframes slideOpen {
+  0% {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+.panel-section.first-open {
+  animation: slideOpen 0.4s ease-out;
+  transform-origin: top;
+}

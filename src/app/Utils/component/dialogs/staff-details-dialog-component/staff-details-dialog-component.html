@@ -1,0 +1,86 @@
+<div class="staff-details-dialog">
+
+  <div class="dialog-header">
+
+    <div class="staff-avatar" [class.female]="staff?.gender === 'Female'">
+      {{ staff?.firstName?.charAt(0) || '?' }}
+    </div>
+
+    <div class="header-text">
+      <h2>
+        {{ staff?.firstName }}
+        {{ staff?.middleName }}
+        {{ staff?.lastName }}
+      </h2>
+
+      <span
+        class="status-badge"
+        [class.active]="staff?.active === true"
+        [class.inactive]="staff?.active !== true"
+      >
+        <span class="status-dot"></span>
+        {{ (staff?.active === true ? 'COMMON.ACTIVE' : 'COMMON.INACTIVE') | translate }}
+      </span>
+    </div>
+
+    <button type="button" class="close-btn" (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+
+  </div>
+
+
+  <div class="detail-grid">
+
+    <div class="detail-item">
+      <mat-icon>phone</mat-icon>
+      <div>
+        <span>{{ 'COMMON.PHONE' | translate }}</span>
+        <strong>{{ staff?.phoneNumber || ('STAFF_PAGE.NO_PHONE' | translate) }}</strong>
+      </div>
+    </div>
+
+    <div class="detail-item">
+      <mat-icon>wc</mat-icon>
+      <div>
+        <span>{{ 'COMMON.GENDER' | translate }}</span>
+        <strong>{{ staff?.gender || '—' }}</strong>
+      </div>
+    </div>
+
+    <div class="detail-item">
+      <mat-icon>cake</mat-icon>
+      <div>
+        <span>{{ 'STAFF_PAGE.COL_DOB' | translate }}</span>
+        <strong>{{ staff?.dateOfBirth || '—' }}</strong>
+      </div>
+    </div>
+
+    <div class="detail-item">
+      <mat-icon>content_cut</mat-icon>
+      <div>
+        <span>{{ 'COMMON.CATEGORY' | translate }}</span>
+        <strong>{{ staff?.barCategory || '—' }}</strong>
+      </div>
+    </div>
+
+    @if (staff?.description) {
+      <div class="detail-item full-width">
+        <mat-icon>notes</mat-icon>
+        <div>
+          <span>{{ 'COMMON.DESCRIPTION' | translate }}</span>
+          <strong>{{ staff?.description }}</strong>
+        </div>
+      </div>
+    }
+
+  </div>
+
+
+  <div class="dialog-footer">
+    <button type="button" class="close-footer-btn" (click)="close()">
+      {{ 'COMMON.CLOSE' | translate }}
+    </button>
+  </div>
+
+</div>

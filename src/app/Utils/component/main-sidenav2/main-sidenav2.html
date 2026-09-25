@@ -1,0 +1,626 @@
+<!-- ========================================================= -->
+<!-- TOP HEADER -->
+<!-- ========================================================= -->
+
+<div class="sidebar-header">
+
+  <!-- LEFT SIDE -->
+  <div class="left">
+
+    <!-- QUICK ACTIONS -->
+    <div class="quick-actions">
+
+      <!-- SIDEBAR TOGGLE -->
+      <button
+        type="button"
+        class="icon-btn"
+        [matTooltip]="
+          'COMMON.SIDE_NAVIGATION' | translate
+        "
+        (click)="toggleSidenav()"
+      >
+        <mat-icon svgIcon="expand"></mat-icon>
+      </button>
+
+      <!-- SEARCH -->
+      <button
+        type="button"
+        class="icon-btn"
+        [matTooltip]="'SEARCH.OPEN' | translate"
+        (click)="openSearch()"
+      >
+        <mat-icon>search</mat-icon>
+      </button>
+
+      <!-- NOTIFICATIONS -->
+      <div class="notifications-wrapper">
+
+        <button
+          type="button"
+          class="icon-btn"
+          [matTooltip]="'NOTIFICATIONS.TITLE' | translate"
+          (click)="toggleNotifications()"
+        >
+          <mat-icon>notifications</mat-icon>
+
+          @if ((unreadCount$ | async); as unreadCount) {
+            @if (unreadCount > 0) {
+              <span class="notification-badge">{{ unreadCount }}</span>
+            }
+          }
+        </button>
+
+        @if (notificationsOpen) {
+
+          <div class="notifications-panel">
+
+            <div class="notifications-panel-header">
+              <span>{{ 'NOTIFICATIONS.TITLE' | translate }}</span>
+
+              <button
+                type="button"
+                class="mark-all-read-btn"
+                (click)="markAllNotificationsRead()"
+              >
+                {{ 'NOTIFICATIONS.MARK_ALL_READ' | translate }}
+              </button>
+            </div>
+
+            <div class="notifications-list">
+
+              @for (notification of (notifications$ | async); track notification.uid) {
+
+                <div
+                  class="notification-item"
+                  [class.unread]="!notification.read"
+                  (click)="onNotificationClick(notification)"
+                >
+                  <mat-icon class="notification-icon">{{ notification.icon }}</mat-icon>
+
+                  <div class="notification-body">
+                    <span class="notification-title">{{ notification.titleKey | translate }}</span>
+                    <span class="notification-message">{{ notification.messageKey | translate: notification.messageParams }}</span>
+                  </div>
+
+                  @if (!notification.read) {
+                    <span class="notification-dot"></span>
+                  }
+                </div>
+
+              } @empty {
+
+                <div class="notifications-empty">
+                  <mat-icon>notifications_none</mat-icon>
+                  <span>{{ 'NOTIFICATIONS.EMPTY' | translate }}</span>
+                </div>
+
+              }
+
+            </div>
+
+          </div>
+
+        }
+
+      </div>
+
+      <!-- FULLSCREEN -->
+      <button
+        type="button"
+        class="icon-btn"
+        [matTooltip]="
+          (
+            isFullscreen
+              ? 'COMMON.EXIT_FULLSCREEN'
+              : 'COMMON.OPEN_FULLSCREEN'
+          ) | translate
+        "
+        (click)="toggleFullscreen()"
+      >
+        <mat-icon svgIcon="fullscreen"></mat-icon>
+      </button>
+
+      <!-- THEME TOGGLE -->
+      <button
+        type="button"
+        class="icon-btn"
+        [matTooltip]="
+          (isDarkMode ? 'COMMON.LIGHT_MODE' : 'COMMON.DARK_MODE') | translate
+        "
+        (click)="toggleTheme()"
+      >
+        <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
+
+      <!-- SETTINGS SHORTCUT -->
+      <button
+        type="button"
+        class="icon-btn"
+        [matTooltip]="'MENU.SETTING' | translate"
+        (click)="goToSettings()"
+      >
+        <mat-icon>settings</mat-icon>
+      </button>
+
+      <!-- HELP -->
+      <button
+        type="button"
+        class="icon-btn"
+        [matTooltip]="'HELP.TITLE' | translate"
+        (click)="openHelp()"
+      >
+        <mat-icon>help_outline</mat-icon>
+      </button>
+
+      <!-- REFRESH -->
+      <button
+        type="button"
+        class="icon-btn icon-btn-refresh"
+        [matTooltip]="'COMMON.REFRESH' | translate"
+        (click)="refreshSystem()"
+      >
+        <mat-icon>refresh</mat-icon>
+      </button>
+
+    </div>
+
+
+  </div>
+
+
+  <!-- CENTER: BRANCH NAME -->
+  <div class="header-center">
+    <div
+      class="branch-name-center"
+      [matTooltip]="
+        subscriptionStatus
+          ? (subscriptionBadgeLabel | translate) + (subscriptionEndDate ? (' · ' + (('MENU.SUBSCRIPTION_VALID_UNTIL' | translate) + ' ' + (subscriptionEndDate | date: 'dd/MM/yyyy'))) : '')
+          : ''
+      "
+    >
+      <mat-icon svgIcon="office"></mat-icon>
+      <span>{{ branchName }}</span>
+      @if (subscriptionStatus) {
+        <span [class]="subscriptionDotClass"></span>
+      }
+    </div>
+  </div>
+
+
+  <!-- RIGHT SIDE -->
+  <div class="right">
+
+    <!-- LANGUAGE -->
+    <div
+      class="language-toggle"
+      (click)="toggleLanguage()"
+    >
+
+      <span
+        [class.active]="selectedLanguage === 'en'"
+      >
+        EN
+      </span>
+
+      <span
+        [class.active]="selectedLanguage === 'sw'"
+      >
+        SW
+      </span>
+
+    </div>
+
+    <span class="header-divider"></span>
+
+    <div class="arrange">
+
+      <!-- LOGGED USER -->
+      <div
+        class="logedUser"
+        (click)="toggleProfile()"
+        [class.profile]="profile"
+      >
+
+        <div class="logged-user-content">
+
+          @if (profilePic) {
+            <img [src]="profilePic" alt="" class="avatar-img">
+          } @else {
+            <mat-icon
+              svgIcon="person"
+              class="app-icon"
+            >
+            </mat-icon>
+          }
+
+          <span class="user-name">
+            {{ fullName }}
+          </span>
+
+          <mat-icon class="chevron" [class.rotate]="profile">expand_more</mat-icon>
+
+        </div>
+
+
+        <!-- PROFILE MENU -->
+        @if (profile) {
+
+          <div class="menu">
+
+            <!-- EMAIL -->
+            <div class="profileItems">
+
+              <span>
+                {{ email }}
+              </span>
+
+              <mat-icon>
+                email
+              </mat-icon>
+
+            </div>
+
+
+            <mat-divider></mat-divider>
+
+
+            <!-- ROLE -->
+            <div class="profileItems">
+
+              <span>
+                {{ role }}
+              </span>
+
+              <mat-icon svgIcon="role">
+              </mat-icon>
+
+            </div>
+
+
+            <mat-divider></mat-divider>
+
+
+            <!-- PROFILE -->
+            <div
+              class="profileItems"
+              (click)="openProfileDialog()"
+            >
+
+              <span>
+                {{ 'COMMON.PROFILE' | translate }}
+              </span>
+
+              <mat-icon>
+                account_circle
+              </mat-icon>
+
+            </div>
+
+
+            <mat-divider></mat-divider>
+
+
+            <!-- SUBSCRIPTION STATUS -->
+            @if (subscriptionStatus) {
+              <div class="profileItems sub-status-row">
+
+                <div [class]="subscriptionBadgeClass">
+                  <span class="sub-badge-dot"></span>
+                  <span>{{ subscriptionBadgeLabel | translate }}</span>
+                </div>
+
+                @if (subscriptionEndDate) {
+                  <span class="sub-status-date">
+                    {{ 'MENU.SUBSCRIPTION_VALID_UNTIL' | translate }} {{ subscriptionEndDate | date: 'dd/MM/yyyy' }}
+                  </span>
+                }
+
+              </div>
+
+              <mat-divider></mat-divider>
+            }
+
+
+            <!-- SUBSCRIBE -->
+            <div
+              class="profileItems"
+              (click)="openSubscribeDialog()"
+            >
+
+              <span>
+                {{ 'COMMON.SUBSCRIBE' | translate }}
+              </span>
+
+              <mat-icon>
+                payments
+              </mat-icon>
+
+            </div>
+
+
+            <mat-divider></mat-divider>
+
+
+            <!-- PASSWORD -->
+            <div
+              class="profileItems"
+              (click)="openChangePasswordDialog()"
+            >
+
+              <span>
+                {{ 'COMMON.CHANGE_PASSWORD' | translate }}
+              </span>
+
+              <mat-icon>
+                password
+              </mat-icon>
+
+            </div>
+
+
+            <mat-divider></mat-divider>
+
+
+            <!-- LOGOUT -->
+            <div
+              class="profileItems logout-profile"
+              (click)="goToLogin()"
+            >
+
+              <span>
+                {{ 'MENU.LOGOUT' | translate }}
+              </span>
+
+              <mat-icon>
+                logout
+              </mat-icon>
+
+            </div>
+
+          </div>
+
+        }
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ========================================================= -->
+<!-- GLOBAL SEARCH -->
+<!-- ========================================================= -->
+
+@if (searchOpen) {
+
+  <div class="search-backdrop" (click)="closeSearch()"></div>
+
+  <div class="search-overlay" role="dialog" [attr.aria-label]="'SEARCH.OPEN' | translate">
+
+    <div class="search-box">
+
+      <mat-icon class="search-box-icon">search</mat-icon>
+
+      <input
+        #searchInput
+        type="text"
+        class="search-input"
+        [placeholder]="'SEARCH.PLACEHOLDER' | translate"
+        [(ngModel)]="searchQuery"
+        (ngModelChange)="onSearchInput()"
+        (keydown)="onSearchKeydown($event)"
+      />
+
+      <button type="button" class="search-close-btn" (click)="closeSearch()">
+        <mat-icon>close</mat-icon>
+      </button>
+
+    </div>
+
+    <div class="search-results">
+
+      @for (result of searchResults; track result.route; let i = $index) {
+
+        <div
+          class="search-result-item"
+          [class.active]="i === activeResultIndex"
+          (mouseenter)="activeResultIndex = i"
+          (click)="selectSearchResult(result)"
+        >
+          <mat-icon [svgIcon]="result.icon"></mat-icon>
+          <span>{{ result.labelKey | translate }}</span>
+        </div>
+
+      } @empty {
+
+        <div class="search-empty">
+          {{ 'SEARCH.NO_RESULTS' | translate }}
+        </div>
+
+      }
+
+    </div>
+
+  </div>
+
+}
+
+
+<!-- ========================================================= -->
+<!-- MAIN BODY -->
+<!-- ========================================================= -->
+
+<div class="body">
+
+
+  <!-- ======================================================= -->
+  <!-- MOBILE BACKDROP -->
+  <!-- ======================================================= -->
+
+  @if (isOpen && isMobileView) {
+
+    <div
+      class="sidebar-backdrop"
+      (click)="closeSidenav()"
+    ></div>
+
+  }
+
+
+  <!-- ======================================================= -->
+  <!-- SIDEBAR -->
+  <!-- ======================================================= -->
+
+  @if (isOpen) {
+
+    <aside class="sidebar">
+
+      <!-- LOGO -->
+      <div class="menu-item-logo">
+
+        <img
+          [src]="logoUrl"
+          alt="Logo"
+          (click)="goToDashboard()"
+        />
+
+        @if (canManageLogo) {
+
+          <label
+            class="logo-upload-btn"
+            [matTooltip]="'MAIN_LOGO.CHANGE' | translate"
+          >
+            <mat-icon>photo_camera</mat-icon>
+
+            <input
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/svg+xml"
+              (change)="onLogoSelected($event)"
+              hidden
+            />
+          </label>
+
+        }
+
+      </div>
+
+
+      <!-- MENU -->
+      @for (
+        item of menuItems;
+        track item.route || item.label;
+        let i = $index
+      ) {
+
+        <!-- MAIN MENU ITEM -->
+        <div
+          class="menu-item"
+          [class.active]="openIndex === i"
+          (click)="onItemClick(item, i)"
+        >
+
+          <span class="label">
+            {{ item.label | translate }}
+          </span>
+
+
+          <mat-icon
+            class="menu-icon"
+            [svgIcon]="item.icon"
+          >
+          </mat-icon>
+
+
+          <!-- ARROW -->
+          @if (
+            item.children &&
+            item.children.length > 0
+          ) {
+
+            <mat-icon
+              class="arrow"
+              [class.rotate]="openIndex === i"
+            >
+              arrow
+            </mat-icon>
+
+          }
+
+        </div>
+
+
+        <!-- SUB MENU -->
+        @if (
+          item.children &&
+          item.children.length > 0
+        ) {
+
+          <div
+            class="submenu"
+            [class.open]="openIndex === i"
+          >
+
+            @for (
+              sub of item.children;
+              track sub.route || sub.label
+            ) {
+
+              <div
+                class="submenu-item"
+                (click)="onSubItemClick(sub)"
+              >
+
+                <span>
+                  {{ sub.label | translate }}
+                </span>
+
+                <mat-icon>
+                  {{ sub.icon }}
+                </mat-icon>
+
+              </div>
+
+            }
+
+          </div>
+
+        }
+
+      }
+
+    </aside>
+  }
+
+
+  <!-- ======================================================= -->
+  <!-- CONTENT -->
+  <!-- ======================================================= -->
+
+  <main
+    class="content"
+    [class.sidebar-closed]="!isOpen"
+  >
+    <ng-content></ng-content>
+  </main>
+
+</div>
+
+
+
+<!-- ========================================================= -->
+<!-- FOOTER -->
+<!-- ========================================================= -->
+
+<footer class="footer">
+
+  <p>
+    <strong>
+      &copy; {{ currentYear }}
+      Midland Solutions Company Limited.
+    </strong>
+  </p>
+
+</footer>

@@ -1,0 +1,105 @@
+<app-title2
+  [titleHeader]="'GUIDANCE_ADMIN_PAGE.TITLE'"
+  (customButtonClick)="onAction($event)"
+  [actions]="getTitled(titleActions)"
+  [activeAction]="tab"
+></app-title2>
+
+@switch (tab) {
+  @case ('GUIDANCE_ADMIN_PAGE.MANAGE_TAB') {
+
+    <div class="guidance-container">
+
+      <div class="guidance-header">
+
+        <div>
+          <h2>{{ 'GUIDANCE_ADMIN_PAGE.MGMT_TITLE' | translate }}</h2>
+          <p>{{ 'GUIDANCE_ADMIN_PAGE.MGMT_SUBTITLE' | translate }}</p>
+        </div>
+
+        <button type="button" class="add-btn" (click)="add()">
+          <mat-icon svgIcon="add"></mat-icon>
+          <span>{{ 'GUIDANCE_ADMIN_PAGE.ADD' | translate }}</span>
+        </button>
+
+      </div>
+
+
+      @if (loading) {
+        <p class="state-note">{{ 'COMMON.LOADING' | translate }}</p>
+      } @else if (failed) {
+        <p class="state-note error">{{ 'GUIDANCE_ADMIN_PAGE.LOAD_FAILED' | translate }}</p>
+      } @else if (notes.length === 0) {
+
+        <div class="empty">
+          <div class="empty-icon"><mat-icon svgIcon="guidelines"></mat-icon></div>
+          <h3>{{ 'GUIDANCE_ADMIN_PAGE.EMPTY_TITLE' | translate }}</h3>
+          <p>{{ 'GUIDANCE_ADMIN_PAGE.EMPTY_TEXT' | translate }}</p>
+        </div>
+
+      } @else {
+
+        <div class="note-list">
+
+          @for (note of notes; track note.uid) {
+
+            <div class="note" [class.draft]="!note.published">
+
+              <div class="note-top">
+                <span class="position">{{ note.position }}</span>
+                <h3 class="note-title">{{ note.title }}</h3>
+
+                <span class="state-pill" [class.live]="note.published">
+                  {{ (note.published ? 'GUIDANCE_ADMIN_PAGE.PUBLISHED' : 'GUIDANCE_ADMIN_PAGE.DRAFT') | translate }}
+                </span>
+              </div>
+
+              @if (note.body) {
+                <p class="note-body">{{ note.body }}</p>
+              }
+
+              <div class="note-attachments">
+                @if (note.videoUrl) {
+                  <a class="attachment" [href]="note.videoUrl" target="_blank" rel="noopener">
+                    <mat-icon svgIcon="open"></mat-icon>
+                    <span>{{ 'GUIDANCE_ADMIN_PAGE.VIDEO' | translate }}</span>
+                  </a>
+                }
+                @if (note.fileName) {
+                  <a class="attachment" [href]="fileUrl(note)" target="_blank" rel="noopener">
+                    <mat-icon svgIcon="attachment"></mat-icon>
+                    <span>{{ note.fileName }}</span>
+                  </a>
+                }
+              </div>
+
+              <div class="note-actions">
+
+                <button type="button" class="action" (click)="togglePublished(note)">
+                  <mat-icon [svgIcon]="note.published ? 'hide' : 'open'"></mat-icon>
+                  <span>{{ (note.published ? 'GUIDANCE_ADMIN_PAGE.UNPUBLISH' : 'GUIDANCE_ADMIN_PAGE.PUBLISH') | translate }}</span>
+                </button>
+
+                <button type="button" class="action" (click)="edit(note)">
+                  <mat-icon svgIcon="edit"></mat-icon>
+                  <span>{{ 'COMMON.EDIT' | translate }}</span>
+                </button>
+
+                <button type="button" class="action danger" (click)="remove(note)">
+                  <mat-icon svgIcon="delete"></mat-icon>
+                  <span>{{ 'COMMON.DELETE' | translate }}</span>
+                </button>
+
+              </div>
+
+            </div>
+
+          }
+
+        </div>
+
+      }
+
+    </div>
+  }
+}

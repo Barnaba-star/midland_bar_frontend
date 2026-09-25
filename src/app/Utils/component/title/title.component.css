@@ -1,0 +1,107 @@
+.main-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 55px;
+  padding: 0 10px;
+  background-color: rgb(145, 135, 135);
+  border-bottom: 1px dotted #1e293b;
+  gap: 10px;
+  animation: dropdownFade 1.5s ease-out forwards;
+}
+@keyframes dropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.left,
+.right {
+  display: flex;
+  align-items: center;
+  flex: 1;
+
+}
+
+.left {
+  justify-content: flex-start;
+  background-color: rgb(145, 135, 135);
+  gap: 10px;
+}
+
+.right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+}
+
+.app-icon {
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+  color: rgb(202, 191, 206);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: dropdownFade 1.5s ease-out forwards;
+}
+
+.app-title {
+  font-size: 15px;
+  font-weight: 300px;
+  color: rgb(243, 244, 247);
+  letter-spacing: 0.1px;
+  font-family: 'Inter', system-ui, sans-serif;
+  margin-right: 10px ;
+  width: auto;
+  animation: dropdownFade 1.5s ease-out forwards;
+}
+
+.action {
+  background-color: rgb(81, 86, 81);
+  border-radius: 99px;
+  display: flex;
+  margin: 0 5px;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+ transition: background-color 1s ease,
+              color 1s ease,
+              transform 1s ease;
+               
+}
+
+
+.action:hover {
+  background-color: rgba(59, 130, 246, 0.08); /* soft blue */
+}
+
+
+.action.active {
+  background-color: rgba(59, 130, 246, 0.15);
+}
+
+.action-item.active .app-title,
+.action-item.active .app-icon {
+  color: #2563eb;
+  font-weight: 500;
+}
+
+
+.action-item:active {
+  transform: scale(0.97);
+}
+
+
+.action-item:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+

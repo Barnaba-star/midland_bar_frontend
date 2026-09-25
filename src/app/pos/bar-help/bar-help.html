@@ -1,0 +1,78 @@
+<app-title2
+  [titleHeader]="'HELP_PAGE.TITLE'"
+  [actions]="getTitled(titleActions)"
+  [activeAction]="tab"
+  (customButtonClick)="onAction($event)"
+></app-title2>
+
+@switch (tab) {
+  @case ('HELP_PAGE.MANAGE_TAB') {
+
+    <div class="help-container">
+
+      <div class="help-header">
+        <h2>{{ 'HELP_PAGE.MGMT_TITLE' | translate }}</h2>
+        <p>{{ 'HELP_PAGE.MGMT_SUBTITLE' | translate }}</p>
+      </div>
+
+
+      @if (loading) {
+        <p class="state-note">{{ 'COMMON.LOADING' | translate }}</p>
+      } @else if (failed) {
+        <p class="state-note error">{{ 'HELP_PAGE.LOAD_FAILED' | translate }}</p>
+      } @else if (notes.length === 0) {
+
+        <app-empty-state
+          icon="guidelines"
+          title="HELP_PAGE.EMPTY_TITLE"
+          text="HELP_PAGE.EMPTY_TEXT"
+        />
+
+      } @else {
+
+        <div class="note-list">
+
+          @for (note of notes; track note.uid) {
+
+            <article class="note">
+
+              <h3 class="note-title">{{ note.title }}</h3>
+
+              @if (note.body) {
+                <p class="note-body">{{ note.body }}</p>
+              }
+
+              @if (note.videoUrl || note.fileName) {
+
+                <div class="note-links">
+
+                  @if (note.videoUrl) {
+                    <a class="note-link" [href]="note.videoUrl" target="_blank" rel="noopener">
+                      <mat-icon svgIcon="open"></mat-icon>
+                      <span>{{ 'HELP_PAGE.WATCH_VIDEO' | translate }}</span>
+                    </a>
+                  }
+
+                  @if (note.fileName) {
+                    <a class="note-link" [href]="fileUrl(note.uid)" target="_blank" rel="noopener">
+                      <mat-icon svgIcon="attachment"></mat-icon>
+                      <span>{{ 'HELP_PAGE.OPEN_FILE' | translate }}</span>
+                      <span class="file-name">{{ note.fileName }}</span>
+                    </a>
+                  }
+
+                </div>
+
+              }
+
+            </article>
+
+          }
+
+        </div>
+
+      }
+
+    </div>
+  }
+}

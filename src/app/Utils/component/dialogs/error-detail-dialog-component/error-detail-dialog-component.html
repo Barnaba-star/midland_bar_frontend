@@ -1,0 +1,117 @@
+<div class="error-detail-dialog">
+
+  <div class="dialog-header">
+
+    <div class="header-top">
+      <h2 class="dialog-title">{{ 'ERROR_DETAIL_DIALOG.TITLE' | translate }}</h2>
+
+      <button type="button" class="icon-btn" (click)="onClose()" [attr.aria-label]="'COMMON.CLOSE' | translate">
+        <mat-icon svgIcon="close"></mat-icon>
+      </button>
+    </div>
+
+    <div class="header-meta">
+      <span
+        class="chip"
+        [class.chip-error]="data.level === 'ERROR'"
+        [class.chip-warn]="data.level === 'WARN'">
+        {{ data.level }}
+      </span>
+
+      <span class="chip chip-source">{{ data.source }}</span>
+
+      <span class="chip chip-muted">{{ data.occurredAt | date: 'dd/MM/yyyy HH:mm:ss' }}</span>
+    </div>
+
+  </div>
+
+
+  <div class="dialog-body">
+
+    <div class="detail-grid">
+
+      <div class="detail-row">
+        <span class="detail-label">{{ 'ERROR_DETAIL_DIALOG.TYPE' | translate }}</span>
+        <span class="detail-value">{{ data.exceptionType || '-' }}</span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">{{ 'ERROR_DETAIL_DIALOG.PATH' | translate }}</span>
+        <span class="detail-value">{{ data.httpMethod }} {{ data.path || '-' }}</span>
+      </div>
+
+      @if (data.queryString) {
+        <div class="detail-row">
+          <span class="detail-label">{{ 'ERROR_DETAIL_DIALOG.QUERY' | translate }}</span>
+          <span class="detail-value">{{ data.queryString }}</span>
+        </div>
+      }
+
+      <div class="detail-row">
+        <span class="detail-label">{{ 'ERROR_DETAIL_DIALOG.USER' | translate }}</span>
+        <span class="detail-value">{{ data.username || '-' }}</span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">{{ 'ERROR_DETAIL_DIALOG.BRANCH' | translate }}</span>
+        <span class="detail-value">{{ data.branchUid || '-' }}</span>
+      </div>
+
+      <div class="detail-row detail-row-wide">
+        <span class="detail-label">{{ 'ERROR_DETAIL_DIALOG.USER_AGENT' | translate }}</span>
+        <span class="detail-value user-agent">{{ data.userAgent || '-' }}</span>
+      </div>
+
+    </div>
+
+
+    <div class="block">
+      <span class="block-label">{{ 'ERROR_DETAIL_DIALOG.MESSAGE' | translate }}</span>
+      <pre class="message-box">{{ data.message || '-' }}</pre>
+    </div>
+
+
+    <!-- What was actually sent - the whole point of troubleshooting from here. -->
+    <div class="block">
+      <div class="block-head">
+        <span class="block-label">{{ 'ERROR_DETAIL_DIALOG.PAYLOAD' | translate }}</span>
+
+        @if (data.payload) {
+          <button type="button" class="link-btn" (click)="copyPayload()">
+            {{ (payloadCopied ? 'ERROR_DETAIL_DIALOG.COPIED' : 'ERROR_DETAIL_DIALOG.COPY_PAYLOAD') | translate }}
+          </button>
+        }
+      </div>
+
+      @if (data.payload) {
+        <pre class="payload-box">{{ prettyPayload }}</pre>
+      } @else {
+        <p class="no-payload">{{ 'ERROR_DETAIL_DIALOG.NO_PAYLOAD' | translate }}</p>
+      }
+    </div>
+
+
+    @if (data.stackTrace) {
+      <div class="block">
+        <span class="block-label">{{ 'ERROR_DETAIL_DIALOG.STACK_TRACE' | translate }}</span>
+        <pre class="stack-box">{{ data.stackTrace }}</pre>
+      </div>
+    }
+
+  </div>
+
+
+  <div class="dialog-actions">
+
+    <button type="button" class="btn btn-ghost" (click)="copyDetails()">
+      <mat-icon svgIcon="attachment"></mat-icon>
+      <span>{{ (copied ? 'ERROR_DETAIL_DIALOG.COPIED' : 'ERROR_DETAIL_DIALOG.COPY_BTN') | translate }}</span>
+    </button>
+
+    <button type="button" class="btn btn-primary" (click)="onClose()">
+      <span>{{ 'COMMON.CLOSE' | translate }}</span>
+    </button>
+
+  </div>
+
+</div>

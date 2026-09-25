@@ -1,0 +1,351 @@
+<div class="dialog-container">
+
+  <!-- HEADER -->
+  <div class="dialog-header">
+
+    <div>
+      <h2>
+        {{ 'STOCK_PURCHASE_DIALOG.TITLE' | translate }}
+      </h2>
+
+      <p>
+        {{ stock.serviceName || ('STOCK_PURCHASE_DIALOG.DEFAULT_LABEL' | translate) }}
+      </p>
+    </div>
+
+    <button
+      mat-icon-button
+      type="button"
+      (click)="close()"
+      [attr.aria-label]="'COMMON.CLOSE' | translate"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+
+  </div>
+
+
+  <mat-dialog-content>
+
+
+    <!-- ========================= -->
+    <!-- STOCK SUMMARY -->
+    <!-- ========================= -->
+
+    <div class="summary-title">
+      {{ 'STOCK_PURCHASE_DIALOG.PURCHASE_SUMMARY' | translate }}
+    </div>
+
+
+    <div class="summary-grid">
+
+
+      <!-- SERVICE -->
+
+      <div class="summary-card">
+
+        <span class="label">
+          {{ 'COMMON.SERVICE' | translate }}
+        </span>
+
+        <span class="value">
+          {{ stock.serviceName || '-' }}
+        </span>
+
+      </div>
+
+
+      <!-- SERVICE PRICE -->
+
+      <div class="summary-card">
+
+        <span class="label">
+          {{ 'REPORTS_PAGE.SERVICE_PRICE_LABEL' | translate }}
+        </span>
+
+        <span class="value">
+          {{ formatAmount(stock.servicePrice) }}
+        </span>
+
+      </div>
+
+
+      <!-- TOTAL -->
+
+      <div class="summary-card">
+
+        <span class="label">
+          {{ 'REPORTS_PAGE.TOTAL_AMOUNT_LABEL' | translate }}
+        </span>
+
+        <span class="value">
+          {{ formatAmount(stock.totalAmount) }}
+        </span>
+
+      </div>
+
+
+      <!-- PAID -->
+
+      <div class="summary-card">
+
+        <span class="label">
+          {{ 'REPORTS_PAGE.PAID_AMOUNT_LABEL' | translate }}
+        </span>
+
+        <span class="value paid">
+          {{ formatAmount(stock.payedAmount) }}
+        </span>
+
+      </div>
+
+
+      <!-- REMAINING -->
+
+      <div class="summary-card">
+
+        <span class="label">
+          {{ 'COMMON.REMAINING' | translate }}
+        </span>
+
+        <span class="value remaining">
+          {{ formatAmount(stock.remainingAmount) }}
+        </span>
+
+      </div>
+
+
+      <!-- STATUS -->
+
+      <div class="summary-card">
+
+        <span class="label">
+          {{ 'COMMON.STATUS' | translate }}
+        </span>
+
+        <span
+          class="status"
+          [class.paid-status]="
+            stock.paymentStatus === 'PAID'
+          "
+          [class.pending-status]="
+            stock.paymentStatus !== 'PAID'
+          "
+        >
+          {{ stock.paymentStatus || '-' }}
+        </span>
+
+      </div>
+
+
+      <!-- WEEK DATE -->
+
+      <div class="summary-card">
+
+        <span class="label">
+          {{ 'STOCK_PURCHASE_DIALOG.WEEK_DATE' | translate }}
+        </span>
+
+        <span class="value">
+          {{ stock.weekDate || '-' }}
+        </span>
+
+      </div>
+
+
+      <!-- COMMISSION -->
+
+      <div class="summary-card">
+
+        <span class="label">
+          {{ 'STOCK_PURCHASE_DIALOG.COMMISSION' | translate }}
+        </span>
+
+        <span class="value">
+
+          {{
+            stock.commissionUid
+              ? ('COMMON.AVAILABLE' | translate)
+              : ('COMMON.NONE' | translate)
+          }}
+
+        </span>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- ========================= -->
+    <!-- DESCRIPTIONS -->
+    <!-- ========================= -->
+
+    <div class="details-header">
+
+      <div>
+
+        <h3>
+          {{ 'STOCK_PURCHASE_DIALOG.PURCHASE_DESCRIPTIONS' | translate }}
+        </h3>
+
+        <p>
+          {{ details.length }}
+          {{ details.length === 1 ? ('STOCK_PURCHASE_DIALOG.RECORD_SINGULAR' | translate) : ('STOCK_PURCHASE_DIALOG.RECORD_PLURAL' | translate) }}
+        </p>
+
+      </div>
+
+
+      <div
+        class="description-total"
+        *ngIf="details.length > 0"
+      >
+
+        <span>
+          {{ 'STOCK_PURCHASE_DIALOG.DESCRIPTION_TOTAL' | translate }}
+        </span>
+
+        <strong>
+          {{ formatAmount(getTotalDescriptions()) }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- ========================= -->
+    <!-- DETAILS TABLE -->
+    <!-- ========================= -->
+
+    <div
+      class="table-wrapper"
+      *ngIf="details.length > 0"
+    >
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>
+              #
+            </th>
+
+            <th>
+              {{ 'COMMON.DESCRIPTION' | translate }}
+            </th>
+
+            <th>
+              {{ 'COMMON.DATE' | translate }}
+            </th>
+
+            <th>
+              {{ 'COMMON.AMOUNT' | translate }}
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          <tr
+            *ngFor="
+              let item of details;
+              let i = index
+            "
+          >
+
+            <td>
+              {{ i + 1 }}
+            </td>
+
+
+            <td class="description">
+
+              {{
+                getDescription(item)
+              }}
+
+            </td>
+
+
+            <td>
+
+              {{
+                getDescriptionDate(item)
+              }}
+
+            </td>
+
+
+            <td class="amount">
+
+              {{
+                formatAmount(
+                  getDescriptionAmount(item)
+                )
+              }}
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+
+
+    <!-- ========================= -->
+    <!-- NO DETAILS -->
+    <!-- ========================= -->
+
+    <div
+      class="empty-state"
+      *ngIf="details.length === 0"
+    >
+
+      <mat-icon>
+        inventory_2
+      </mat-icon>
+
+      <h3>
+        {{ 'STOCK_PURCHASE_DIALOG.NO_DESCRIPTIONS_TITLE' | translate }}
+      </h3>
+
+      <p>
+        {{ 'STOCK_PURCHASE_DIALOG.NO_DESCRIPTIONS_TEXT' | translate }}
+      </p>
+
+    </div>
+
+
+  </mat-dialog-content>
+
+
+
+  <!-- FOOTER -->
+
+  <mat-dialog-actions align="end">
+
+ <button
+  class="modern-close-btn"
+  type="button"
+  (click)="close()"
+>
+  <mat-icon>close</mat-icon>
+  <span>{{ 'COMMON.CLOSE' | translate }}</span>
+</button>
+
+
+  </mat-dialog-actions>
+
+</div>

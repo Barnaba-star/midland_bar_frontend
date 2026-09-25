@@ -1,0 +1,22 @@
+@if(show){
+
+  <div [ngClass]="cssClass">
+
+    <span class="alert-icon">
+      {{ icon }}
+    </span>
+
+    <span class="message">
+      {{ message }}
+    </span>
+
+    <button
+      class="close-btn"
+      type="button"
+      (click)="close()">
+      ✕
+    </button>
+
+  </div>
+
+}

@@ -1,0 +1,123 @@
+<div class="branches-dialog">
+
+  <!-- HEADER -->
+  <div class="dialog-header">
+    <div>
+      <h2>{{ 'STAFF_BRANCHES_DIALOG.TITLE' | translate }}</h2>
+      <p>{{ data.staffName }} · {{ data.period }}</p>
+    </div>
+
+    <button type="button" class="close-btn" (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+
+  @if (loading) {
+
+    <div class="state-row">
+      <mat-icon class="spin">autorenew</mat-icon>
+      <span>{{ 'COMMON.LOADING' | translate }}</span>
+    </div>
+
+  } @else if (branches.length === 0) {
+
+    <div class="state-row empty">
+      <mat-icon>store</mat-icon>
+      <span>{{ 'STAFF_BRANCHES_DIALOG.EMPTY' | translate }}</span>
+    </div>
+
+  } @else {
+
+    <!-- COUNTERS -->
+    <div class="counters">
+
+      <div class="counter paid">
+        <strong>{{ paidCount }}</strong>
+        <span>{{ 'STAFF_BRANCHES_DIALOG.PAID_COUNT' | translate }}</span>
+      </div>
+
+      <div class="counter unpaid">
+        <strong>{{ unpaidCount }}</strong>
+        <span>{{ 'STAFF_BRANCHES_DIALOG.UNPAID_COUNT' | translate }}</span>
+      </div>
+
+      <div class="counter total">
+        <strong>{{ totalCommission | number }}</strong>
+        <span>{{ 'STAFF_BRANCHES_DIALOG.COMMISSION' | translate }} (TSh)</span>
+      </div>
+
+    </div>
+
+
+    <!-- LIST: unpaid first, they are the ones needing attention -->
+    <div class="branch-list">
+
+      @for (branch of branches; track branch.branchUid) {
+
+        <div class="branch-row" [class.is-paid]="branch.paid">
+
+          <div class="branch-mark">
+            <mat-icon>{{ branch.paid ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+          </div>
+
+          <div class="branch-main">
+
+            <div class="branch-title">
+              <strong>{{ branch.branchName | uppercase }}</strong>
+              <span class="branch-code">{{ branch.branchCode }}</span>
+
+              @if (branch.deleted) {
+                <span
+                  class="deleted-tag"
+                  [matTooltip]="'STAFF_BRANCHES_DIALOG.DELETED_HINT' | translate"
+                >
+                  {{ 'STAFF_BRANCHES_DIALOG.DELETED' | translate }}
+                </span>
+              }
+            </div>
+
+            <div class="branch-meta">
+              @if (branch.region) {
+                <span>{{ branch.region | uppercase }}</span>
+              }
+              <span class="status-tag" [ngClass]="statusClass(branch)">
+                {{ statusKey(branch) | translate }}
+              </span>
+              @if (branch.closeSubscription) {
+                <span class="expiry">
+                  {{ 'STAFF_BRANCHES_DIALOG.UNTIL' | translate }}
+                  {{ branch.closeSubscription | date: 'dd MMM yyyy' }}
+                </span>
+              }
+            </div>
+
+          </div>
+
+          <div class="branch-amounts">
+
+            @if (branch.paid) {
+              <span class="amount">{{ branch.amountPaid | number }} TSh</span>
+              <span class="commission">
+                +{{ branch.commission | number }} {{ 'STAFF_BRANCHES_DIALOG.COMMISSION' | translate }}
+              </span>
+              @if (branch.payments > 1) {
+                <span class="times">
+                  {{ branch.payments }}× {{ 'STAFF_BRANCHES_DIALOG.PAYMENTS' | translate }}
+                </span>
+              }
+            } @else {
+              <span class="unpaid-label">{{ 'STAFF_BRANCHES_DIALOG.NOT_PAID' | translate }}</span>
+            }
+
+          </div>
+
+        </div>
+
+      }
+
+    </div>
+
+  }
+
+</div>

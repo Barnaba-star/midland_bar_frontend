@@ -1,0 +1,9 @@
+<input type="file" #fileInput style="display:none" (change)="onFileSelected($event)" [accept]="accept" />
+
+<mat-icon
+  [svgIcon]="icon"
+  class="upload-icon"
+  [matTooltip]="tooltip"
+  (click)="fileInput.click()"
+></mat-icon>
+

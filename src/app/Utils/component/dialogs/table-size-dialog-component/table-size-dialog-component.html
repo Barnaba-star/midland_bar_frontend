@@ -1,0 +1,70 @@
+<h2 mat-dialog-title>{{ 'TABLE_SIZE_DIALOG.TITLE' | translate }}</h2>
+
+<mat-dialog-content>
+
+  <div class="table-details">
+
+    <div class="detail-row">
+      <span>{{ 'COMMON.SCHEMA' | translate }}</span>
+      <strong>{{ data.schemaName }}</strong>
+    </div>
+
+    <div class="detail-row">
+      <span>{{ 'COMMON.TABLE' | translate }}</span>
+      <strong>{{ data.tableName }}</strong>
+    </div>
+
+    <div class="detail-row">
+      <span>{{ 'COMMON.ROWS' | translate }}</span>
+      <strong>{{ data.rowCount }}</strong>
+    </div>
+
+    <div class="detail-row">
+      <span>{{ 'STORAGE_SETTING_PAGE.COL_TOTAL_SIZE' | translate }}</span>
+      <strong>{{ data.totalSize }}</strong>
+    </div>
+
+  </div>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>{{ 'TABLE_SIZE_DIALOG.DATE_LABEL' | translate }}</mat-label>
+
+    <input
+      matInput
+      [matDatepicker]="picker"
+      [(ngModel)]="cutoffDate"
+    />
+
+    <mat-datepicker-toggle
+      matIconSuffix
+      [for]="picker">
+    </mat-datepicker-toggle>
+
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <div class="warning-box" *ngIf="cutoffDate">
+    ⚠️ {{ 'TABLE_SIZE_DIALOG.WARNING_PREFIX' | translate }}
+    <strong>
+      {{ cutoffDate | date:'dd MMM yyyy' }}
+    </strong>
+    {{ 'TABLE_SIZE_DIALOG.WARNING_SUFFIX' | translate }}
+  </div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+
+  <button mat-button (click)="close()">
+    {{ 'COMMON.CANCEL' | translate }}
+  </button>
+
+  <button
+    mat-raised-button
+    color="warn"
+    (click)="submit()"
+    [disabled]="!cutoffDate">
+    {{ 'TABLE_SIZE_DIALOG.DELETE_DATA_BTN' | translate }}
+  </button>
+
+</mat-dialog-actions>

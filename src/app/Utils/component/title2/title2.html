@@ -1,0 +1,111 @@
+<mat-toolbar class="main-toolbar">
+
+
+  <div class="left">
+
+
+    <button
+      type="button"
+      class="back-button"
+      [matTooltip]="'COMMON.BACK' | translate"
+      (click)="onBack()">
+
+      <mat-icon svgIcon="arrowback" class="app-icon-back"></mat-icon>
+
+    </button>
+
+
+    @if (breadcrumbs.length > 0) {
+
+      <nav class="breadcrumbs" [attr.aria-label]="'COMMON.BREADCRUMB' | translate">
+
+        @for (crumb of breadcrumbs; track crumb.label; let last = $last) {
+
+          @if (crumb.route && !last) {
+
+            <a class="breadcrumb-item" [routerLink]="crumb.route">
+              {{ crumb.label | translate }}
+            </a>
+
+            <mat-icon class="breadcrumb-sep">chevron_right</mat-icon>
+
+          } @else {
+
+            <span class="breadcrumb-item current" aria-current="page">
+              {{ crumb.label | translate }}
+            </span>
+
+          }
+
+        }
+
+      </nav>
+
+    } @else {
+
+      <span class="app-title">
+        {{titleHeader | translate}}
+      </span>
+
+    }
+
+
+  </div>
+
+
+
+
+  <div class="right">
+
+    @if (hasOverflowStart) {
+      <span class="scroll-fade scroll-fade-start" aria-hidden="true"></span>
+    }
+
+    <div
+      class="actions-list"
+      role="tablist"
+      [attr.aria-label]="titleHeader | translate"
+      #actionsList
+      (scroll)="onActionsScroll()">
+
+      @for (action of actions; track action.title) {
+
+        <div
+          class="action"
+          [class.active]="activeAction === action.title"
+          [class.disabled]="action.disabled"
+          role="tab"
+          [attr.aria-selected]="activeAction === action.title"
+          [attr.aria-disabled]="action.disabled ? true : null"
+          [attr.tabindex]="action.disabled ? -1 : 0"
+          (click)="onActionClick(action)"
+          (keydown)="onActionKeydown($event, action)">
+
+          <mat-icon
+            class="app-icon"
+            [svgIcon]="action.icon">
+          </mat-icon>
+
+          <span class="app-title-sm">
+            {{action.title | translate}}
+          </span>
+
+          @if (action.badge !== undefined && action.badge !== null) {
+            <span class="action-badge">{{ action.badge }}</span>
+          }
+
+        </div>
+
+      }
+
+    </div>
+
+    @if (hasOverflowEnd) {
+      <span class="scroll-fade scroll-fade-end" aria-hidden="true"></span>
+    }
+
+  </div>
+
+
+
+</mat-toolbar>

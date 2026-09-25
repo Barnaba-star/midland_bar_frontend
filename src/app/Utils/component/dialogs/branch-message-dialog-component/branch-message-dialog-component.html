@@ -1,0 +1,109 @@
+<div class="thread-dialog">
+
+  <div class="dialog-header">
+
+    <div class="header-text">
+      @if (message) {
+        <span class="category" [class]="'category-' + message.category.toLowerCase()">
+          {{ 'BRANCH_MESSAGE.CATEGORY_' + message.category | translate }}
+        </span>
+        <h2 class="dialog-title">{{ message.subject || ('BRANCH_MESSAGE.NO_SUBJECT' | translate) }}</h2>
+        <p class="header-meta">
+          {{ message.branchName }} · {{ message.raisedByName }}
+        </p>
+      } @else {
+        <h2 class="dialog-title">{{ 'BRANCH_MESSAGE.TITLE' | translate }}</h2>
+      }
+    </div>
+
+    <button type="button" class="icon-btn" (click)="close()" [attr.aria-label]="'COMMON.CLOSE' | translate">
+      <mat-icon svgIcon="close"></mat-icon>
+    </button>
+
+  </div>
+
+
+  @if (loading) {
+    <p class="state-note">{{ 'COMMON.LOADING' | translate }}</p>
+  } @else if (failed || !message) {
+    <p class="state-note error">{{ 'BRANCH_MESSAGE.LOAD_FAILED' | translate }}</p>
+  } @else {
+
+    <!-- Only the admin side moves a thread along. -->
+    @if (canManage) {
+      <div class="status-row">
+        <span class="status-label">{{ 'BRANCH_MESSAGE.STATUS' | translate }}</span>
+        @for (option of ['NEW', 'IN_PROGRESS', 'CLOSED']; track option) {
+          <button
+            type="button"
+            class="status-option"
+            [class.selected]="message.status === option"
+            (click)="setStatus(option)">
+            {{ 'BRANCH_MESSAGE.STATUS_' + option | translate }}
+          </button>
+        }
+      </div>
+    } @else {
+      <div class="status-row">
+        <span class="status-label">{{ 'BRANCH_MESSAGE.STATUS' | translate }}</span>
+        <span class="status-option selected">{{ 'BRANCH_MESSAGE.STATUS_' + message.status | translate }}</span>
+      </div>
+    }
+
+
+    <div class="conversation">
+
+      <!-- What was raised, then every turn since. -->
+      <div class="turn from-branch">
+        <div class="bubble">{{ message.body }}</div>
+        <span class="turn-meta">
+          {{ message.raisedByName }} · {{ message.createdAt | date:'dd/MM/yyyy HH:mm' }}
+        </span>
+      </div>
+
+      @for (reply of message.replies; track reply.uid) {
+        <div class="turn" [class.from-branch]="reply.fromBranch" [class.from-us]="!reply.fromBranch">
+          <div class="bubble">{{ reply.body }}</div>
+          <span class="turn-meta">
+            {{ reply.authorName }} · {{ reply.sentAt | date:'dd/MM/yyyy HH:mm' }}
+          </span>
+        </div>
+      }
+
+    </div>
+
+
+    @if (message.status === 'CLOSED') {
+      <p class="closed-note">{{ 'BRANCH_MESSAGE.CLOSED_NOTE' | translate }}</p>
+    } @else {
+
+      <div class="reply-box">
+        <textarea
+          rows="3"
+          [(ngModel)]="draft"
+          [placeholder]="'BRANCH_MESSAGE.REPLY_PLACEHOLDER' | translate"
+          maxlength="4000"></textarea>
+
+        <button
+          type="button"
+          class="send-btn"
+          [disabled]="!draft.trim() || sending"
+          (click)="send()">
+          @if (sending) {
+            <mat-icon class="spin">autorenew</mat-icon>
+          } @else {
+            <mat-icon svgIcon="forward"></mat-icon>
+          }
+          <span>{{ 'BRANCH_MESSAGE.SEND' | translate }}</span>
+        </button>
+      </div>
+
+      @if (errorMessage) {
+        <span class="reply-error">{{ errorMessage }}</span>
+      }
+
+    }
+
+  }
+
+</div>

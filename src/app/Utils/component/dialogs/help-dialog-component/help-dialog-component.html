@@ -1,0 +1,59 @@
+<div class="help-dialog">
+
+  <div class="help-header">
+
+    <div class="help-icon">
+      <mat-icon>help_outline</mat-icon>
+    </div>
+
+    <div>
+      <h2>{{ 'HELP.TITLE' | translate }}</h2>
+      <p>{{ 'HELP.SUBTITLE' | translate }}</p>
+    </div>
+
+    <button type="button" class="close-btn" (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+
+  </div>
+
+
+  <div class="help-section">
+
+    <h3>{{ 'HELP.SHORTCUTS_TITLE' | translate }}</h3>
+
+    <div class="shortcut-list">
+
+      @for (row of shortcuts; track row.keys) {
+        <div class="shortcut-row">
+          <span class="shortcut-keys">{{ row.keys }}</span>
+          <span class="shortcut-label">{{ row.labelKey | translate }}</span>
+        </div>
+      }
+
+    </div>
+
+  </div>
+
+
+  <div class="help-section">
+
+    <h3>{{ 'HELP.HEADER_ICONS_TITLE' | translate }}</h3>
+
+    <ul class="icon-legend">
+      <li><mat-icon>search</mat-icon> {{ 'HELP.ICON_SEARCH' | translate }}</li>
+      <li><mat-icon>notifications</mat-icon> {{ 'HELP.ICON_NOTIFICATIONS' | translate }}</li>
+      <li><mat-icon svgIcon="fullscreen"></mat-icon> {{ 'HELP.ICON_FULLSCREEN' | translate }}</li>
+      <li><mat-icon>dark_mode</mat-icon> {{ 'HELP.ICON_THEME' | translate }}</li>
+      <li><mat-icon>settings</mat-icon> {{ 'HELP.ICON_SETTINGS' | translate }}</li>
+      <li><mat-icon>refresh</mat-icon> {{ 'HELP.ICON_REFRESH' | translate }}</li>
+    </ul>
+
+  </div>
+
+
+  <div class="help-footer">
+    <p>{{ 'HELP.CONTACT_TEXT' | translate }}</p>
+  </div>
+
+</div>

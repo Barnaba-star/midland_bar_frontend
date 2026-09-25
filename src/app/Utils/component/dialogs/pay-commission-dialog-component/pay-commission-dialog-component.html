@@ -1,0 +1,65 @@
+<div class="pay-dialog">
+
+  <div class="pay-icon-wrapper">
+    <mat-icon>payments</mat-icon>
+  </div>
+
+
+  <div class="pay-content">
+
+    <h2>{{ 'PAY_COMMISSION_DIALOG.TITLE' | translate }}</h2>
+
+    <p>{{ 'PAY_COMMISSION_DIALOG.MESSAGE' | translate }}</p>
+
+
+    <div class="pay-summary">
+
+      <div class="summary-line">
+        <span class="label">{{ 'PAY_COMMISSION_DIALOG.STAFF' | translate }}</span>
+        <span class="value">{{ data.staffName }}</span>
+      </div>
+
+      <div class="summary-line">
+        <span class="label">{{ 'PAY_COMMISSION_DIALOG.PERIOD' | translate }}</span>
+        <span class="value">{{ data.period }}</span>
+      </div>
+
+      <div class="summary-line">
+        <span class="label">{{ 'PAY_COMMISSION_DIALOG.BRANCHES' | translate }}</span>
+        <span class="value">{{ data.branchesPaid }}</span>
+      </div>
+
+      <div class="summary-line total">
+        <span class="label">{{ 'PAY_COMMISSION_DIALOG.AMOUNT' | translate }}</span>
+        <span class="value">{{ data.amount | number }} TSh</span>
+      </div>
+
+    </div>
+
+
+    <label class="note-field">
+      <span>{{ 'PAY_COMMISSION_DIALOG.NOTE' | translate }}</span>
+      <input
+        type="text"
+        [(ngModel)]="note"
+        [placeholder]="'PAY_COMMISSION_DIALOG.NOTE_PLACEHOLDER' | translate"
+      />
+    </label>
+
+  </div>
+
+
+  <div class="pay-actions">
+
+    <button type="button" class="cancel-button" (click)="cancel()">
+      {{ 'COMMON.CANCEL' | translate }}
+    </button>
+
+    <button type="button" class="pay-button" (click)="confirm()">
+      <mat-icon>check</mat-icon>
+      {{ 'PAY_COMMISSION_DIALOG.CONFIRM' | translate }}
+    </button>
+
+  </div>
+
+</div>

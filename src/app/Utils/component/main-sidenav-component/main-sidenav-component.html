@@ -1,0 +1,140 @@
+<div class="layout">
+<div class="sidebar-header">
+
+  <div class="left">
+  <mat-icon style="color:  rgb(143, 137, 137)" (click)="toggleSidenav()"> {{ isOpen ? 'do_not_disturb_on' : 'menu' }}</mat-icon>
+  <mat-icon (click)="toggleFullscreen()" style="color:  rgb(143, 137, 137);   animation: dropdownFade 2s ease-out;">
+  {{ isFullscreen ? 'fullscreen_exit' : 'fullscreen' }}
+</mat-icon>
+
+
+<img [src]="profilePic"
+ class="logoPic"
+  alt="Logo"
+/>
+
+  </div>
+
+  <div class="right">
+ <div style="
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    padding: 2px 0;
+">
+
+    <p style="
+        color: rgb(88, 91, 105);
+        font-size: 14px;
+        margin: 0;
+    ">
+        {{role | uppercase}}
+    </p>
+
+    <mat-divider style="width: 100%;">
+        ---------------------
+    </mat-divider>
+
+    <p style="
+        font-size: 14px;
+        font-weight:400;
+        color: black;
+        margin: 0;
+    ">
+      {{branchName}}
+    </p>
+
+</div>
+<div class="arrange">
+    <div class="logedUser" (click)="toggleProfile()" [class.profile]="profile === true" style="background-color:  rgb(145, 135, 135);;">
+    <div style=" display: flex; align-items: center;gap: 15px;color: black;font-size: 17px;">
+    <mat-icon style="color: rgb(120, 108, 108); color: black;">
+        person
+    </mat-icon>
+
+    <span>
+        {{fullName}}
+    </span>
+</div>
+
+       @if(profile === true){
+        <div class="menu">
+       <mat-divider>-----------</mat-divider>
+          <div class="profileItems">
+                <div style="color: rgb(143, 137, 137)">{{email}}</div><mat-icon style="color: rgb(120, 108, 108);"> email</mat-icon>
+          </div>
+          <mat-divider style="color: rgb(237, 229, 229);">----------</mat-divider>
+        <div class="profileItems">
+                <div style="color: rgb(143, 137, 137)">Profile</div><mat-icon style="color: rgb(120, 108, 108);"> account_circle</mat-icon>
+          </div>
+          <mat-divider style="color: rgb(237, 229, 229);">----------</mat-divider>
+          <div class="profileItems" >
+                <div style="color: rgb(120, 108, 108);"> Change Password</div><mat-icon style="color: rgb(143, 132, 132);">password</mat-icon>
+          </div>
+          <mat-divider>-----------</mat-divider>
+           <div class="profileItems" (click)="goToLogin()" >
+                <div style="color: rgb(120, 108, 108);">Logout</div><mat-icon style="color: rgb(120, 108, 108);">logout</mat-icon>
+          </div>
+          <mat-divider>------------</mat-divider>
+        </div>
+
+      }
+
+    </div>
+  </div>
+
+ </div>
+</div>
+
+  <div class="body">
+
+<div class="sidebar"   *ngIf="isOpen" >
+<div class="menu-item-logo" >
+<img [src]="logoUrl" alt="Logo" (click)="goToDashboard()"/>
+</div>
+
+<ng-container *ngFor="let item of menuItems; let i = index">
+
+
+<div class="menu-item" (click)="onItemClick(item, i)">
+<mat-icon class="menu-icon">{{ item.icon }}</mat-icon>
+<span class="label">{{ item.label }}</span>
+
+<mat-icon *ngIf="item.children" class="arrow"
+[class.rotate]="openIndex === i">expand_more</mat-icon>
+</div>
+
+
+<div class="submenu" [class.open]="openIndex === i">
+<div class="submenu-item"
+*ngFor="let sub of item.children"
+(click)="onSubItemClick(sub)">
+<span>{{ sub.label }}</span>
+<mat-icon>{{ sub.icon }}</mat-icon>
+</div>
+</div>
+</ng-container>
+
+<div class="log-out" (click)="goToLogin()">
+<mat-icon class="logOutIcon">power_settings_new</mat-icon>
+</div>
+
+
+
+</div>
+
+
+<div class="content" [style.marginLeft.px]="isOpen ? 150 : 0">
+<ng-content></ng-content>
+</div>
+
+</div>
+
+<div class="footer">
+  <p><strong>&copy; {{currentYear}}  Midland Solutions Company Limited.</strong></p>
+</div>
+
+
+</div>

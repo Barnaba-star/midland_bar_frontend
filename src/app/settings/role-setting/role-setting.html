@@ -1,0 +1,210 @@
+<app-title2
+[titleHeader]="'ROLE_SETTING_PAGE.TITLE'"
+[actions]=getTitled(titleActions)
+[activeAction]="selectedRoleRole"
+(customButtonClick)="onAction($event)"
+></app-title2>
+
+@switch (selectedRoleRole) {
+ @case ('ROLE_SETTING_PAGE.MANAGE_TAB') {
+  <div class="info-card12">
+    <div class="table-wrapper">
+      <!-- ================= TABLE HEADER ================= -->
+  <div class="table-heading">
+
+    <div class="table-heading-left">
+
+      <div class="table-heading-icon">
+        <span class="material-icons">
+          admin_panel_settings
+        </span>
+      </div>
+
+      <div class="table-heading-content">
+
+        <div class="table-title-row">
+          <h2>{{ 'ROLE_SETTING_PAGE.ROLES_HEADING' | translate }}</h2>
+
+          <span class="role-count">
+            {{ totalElements }} {{ 'ROLE_SETTING_PAGE.ROLES_SUFFIX' | translate }}
+          </span>
+        </div>
+
+        <p>
+          {{ 'ROLE_SETTING_PAGE.SUBTITLE' | translate }}
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- Right side -->
+    <div class="table-heading-right">
+
+      <div class="table-status">
+        <span class="status-live-dot"></span>
+        {{ 'COMMON.ACTIVE' | translate }}
+      </div>
+
+      <button
+        type="button"
+        class="add-role-btn"
+        (click)="onSaveRole()">
+
+        <span class="material-icons">
+          add
+        </span>
+
+        {{ 'ROLE_SETTING_PAGE.ADD_ROLE_BTN' | translate }}
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- ================= ACCENT LINE ================= -->
+
+  <div class="heading-accent"></div>
+  <table class="role-table">
+
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>{{ 'ROLE_SETTING_PAGE.COL_ROLE_NAME' | translate | uppercase }} </th>
+        <th>{{ 'ROLE_SETTING_PAGE.COL_CODE' | translate | uppercase }}</th>
+        <th>{{ 'ROLE_SETTING_PAGE.COL_CATEGORY' | translate | uppercase }}</th>
+        <th>{{ 'ROLE_SETTING_PAGE.COL_STATUS' | translate | uppercase }}</th>
+        <th>{{ 'ROLE_SETTING_PAGE.COL_REG_DATE' | translate | uppercase }}</th>
+        <th>{{ 'ROLE_SETTING_PAGE.COL_ACTIONS' | translate | uppercase }}</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      @for (item of role; track item.uid; let i = $index) {
+
+        <tr>
+
+          <!-- Number -->
+          <td>
+            {{ (pageIndex * pageSize) + i + 1 }}
+          </td>
+
+          <!-- Name -->
+          <td>
+            <div class="role-name">
+              <div class="role-avatar">
+                {{ item.name?.charAt(0) }}
+              </div>
+
+              <span>{{ item.name | uppercase}}</span>
+            </div>
+          </td>
+
+          <!-- Code -->
+          <td>
+            <span class="code">
+              {{ item.code | uppercase}}
+            </span>
+          </td>
+
+          <!-- Category -->
+          <td>
+            {{ item.category | uppercase}}
+          </td>
+
+
+
+          <!-- Status -->
+          <td>
+            <span
+              class="status"
+              [class.active]="item.status === 'ACTIVE'"
+              [class.inactive]="item.status !== 'ACTIVE'">
+
+              <span class="status-dot"></span>
+
+              {{ item.status }}
+
+            </span>
+          </td>
+
+          <!-- Created -->
+          <td>
+            {{ item.createdAt | date:'dd MMM yyyy' }}
+          </td>
+
+          <!-- Actions -->
+     <td class="actions-cell">
+
+  <button
+    class="action-btn"
+    type="button"
+    [title]="'ROLE_SETTING_PAGE.TOOLTIP_VIEW' | translate"
+    (click)="moreRole(item)"
+    >
+    <span class="material-icons">visibility</span>
+    <span class="action-label">{{ 'ROLE_SETTING_PAGE.TOOLTIP_VIEW' | translate }}</span>
+  </button>
+
+  <button
+    class="action-btn"
+    type="button"
+    [title]="'ROLE_SETTING_PAGE.TOOLTIP_EDIT' | translate"
+    (click)="editRole(item)">
+    <span class="material-icons">edit</span>
+    <span class="action-label">{{ 'ROLE_SETTING_PAGE.TOOLTIP_EDIT' | translate }}</span>
+  </button>
+
+  <button
+    class="action-btn delete"
+    type="button"
+    [title]="'ROLE_SETTING_PAGE.TOOLTIP_DELETE' | translate"
+    (click)="deleteRole(item)">
+    <span class="material-icons">delete</span>
+    <span class="action-label">{{ 'ROLE_SETTING_PAGE.TOOLTIP_DELETE' | translate }}</span>
+  </button>
+
+</td>
+
+
+        </tr>
+
+      }
+
+      @if (role.length === 0) {
+
+        <tr>
+          <td colspan="8" class="empty-state">
+            {{ 'ROLE_SETTING_PAGE.EMPTY_TEXT' | translate }}
+          </td>
+        </tr>
+
+      }
+
+    </tbody>
+
+  </table>
+  <div class="pagination-wrapper">
+
+    <mat-paginator
+      [length]="totalElements"
+      [pageIndex]="pageIndex"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="[5, 10, 20, 50, 100]"
+      [showFirstLastButtons]="true"
+      (page)="onPageChange($event)">
+    </mat-paginator>
+
+  </div>
+
+</div>
+
+  </div>
+
+ }
+
+}

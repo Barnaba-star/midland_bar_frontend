@@ -1,0 +1,291 @@
+<app-title2
+[titleHeader]="'PERMISSION_SETTING_PAGE.TITLE'"
+[actions]=getTitled(titleActions)
+[activeAction]="selectedPermission"
+(customButtonClick)="onAction($event)"
+ ></app-title2>
+
+@switch (selectedPermission) {
+@case ('PERMISSION_SETTING_PAGE.MANAGE_TAB') {
+
+<div class="action-container">
+
+<div class="permission-filter-section">
+
+  <!-- =========================
+       TOP ROW
+  ========================== -->
+  <div class="filter-top-row">
+
+    <div class="filter-heading">
+
+      <h2>{{ 'PERMISSION_SETTING_PAGE.MANAGE_TITLE' | translate }}</h2>
+
+      <p>
+        {{ 'PERMISSION_SETTING_PAGE.MANAGE_DESC' | translate }}
+      </p>
+
+    </div>
+
+
+    <!-- SEARCH BUTTON -->
+    <button
+      type="button"
+      class="search-button"
+      [disabled]="!selectedRoleUid || !selectedModule"
+      (click)="fetchPermissions()">
+
+      <mat-icon>search</mat-icon>
+
+      <span>{{ 'PERMISSION_SETTING_PAGE.SEARCH_BTN' | translate }}</span>
+
+    </button>
+
+  </div>
+
+
+  <!-- =========================
+       SELECT ROW
+  ========================== -->
+  <div class="search-row">
+
+    <!-- ROLE -->
+    <div class="filter-group">
+
+      <label class="filter-label">
+        {{ 'PERMISSION_SETTING_PAGE.ROLE_LABEL' | translate }}
+      </label>
+
+      <mat-form-field
+        appearance="outline"
+        class="role-select">
+
+        <mat-label>{{ 'PERMISSION_SETTING_PAGE.SELECT_ROLE' | translate }}</mat-label>
+
+        <mat-select
+          [(value)]="selectedRoleUid"
+          (selectionChange)="selectRole($event.value)">
+
+          <mat-option
+            *ngFor="let role of roles"
+            [value]="role.uid">
+
+            {{ role.name | uppercase }}
+
+          </mat-option>
+
+        </mat-select>
+
+      </mat-form-field>
+
+    </div>
+
+
+    <!-- PROCESS / MODULE -->
+    <div class="filter-group">
+
+      <label class="filter-label">
+        {{ 'PERMISSION_SETTING_PAGE.PROCESS_LABEL' | translate }}
+      </label>
+
+      <mat-form-field
+        appearance="outline"
+        class="role-select">
+
+        <mat-label>{{ 'PERMISSION_SETTING_PAGE.SELECT_PROCESS' | translate }}</mat-label>
+
+        <mat-select
+          [(value)]="selectedModule"
+          (selectionChange)="onSelectModule($event.value)">
+
+          <mat-option
+            *ngFor="let module of modules"
+            [value]="module">
+
+            {{ module }}
+
+          </mat-option>
+
+        </mat-select>
+
+      </mat-form-field>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+  <!-- =========================
+       PERMISSIONS CARD
+  ========================== -->
+  <div
+    class="info-card"
+    *ngIf="showPermissions">
+
+    <!-- HEADER -->
+    <div class="info-card-header">
+
+      <div class="header-title">
+
+        <h3>
+          {{ 'PERMISSION_SETTING_PAGE.PERMISSIONS_FOR' | translate: { module: selectedModule } }}
+        </h3>
+
+        <span>
+          {{ permissionByModuleName.length }} {{ 'PERMISSION_SETTING_PAGE.PERMISSIONS_COUNT_LABEL' | translate }}
+        </span>
+
+      </div>
+
+    </div>
+
+
+ <!-- =========================
+     PERMISSIONS BODY
+========================== -->
+
+<div class="info-card-body">
+
+  <!-- GROUPS -->
+  <ng-container
+    *ngFor="let group of permissionGroups">
+
+    <!-- GROUP HEADER -->
+    <div class="permission-group-header">
+
+      <span class="group-title">
+        {{ group.name }}
+      </span>
+
+      <div class="group-divider"></div>
+
+    </div>
+
+
+    <!-- GROUP PERMISSIONS -->
+    <div class="permission-group-items">
+
+      <div
+        class="permission-item"
+        *ngFor="let permission of group.permissions">
+
+        <span class="permission-name">
+          {{ permission.name }}
+        </span>
+
+        <input
+          type="checkbox"
+          [checked]="checkIfRoleContainPermission(permission)"
+          (change)="onPermissionToggle(permission, $event)"
+        />
+
+      </div>
+
+    </div>
+
+  </ng-container>
+
+  <div
+    *ngIf="permissionGroups.length === 0"
+    style="padding: 30px 10px; text-align: center; color: #6b7280;">
+    {{ 'PERMISSION_SETTING_PAGE.NO_PERMISSIONS_TEXT' | translate }}
+  </div>
+
+</div>
+
+
+
+    <!-- FOOTER -->
+    <div class="info-card-footer">
+
+      <button
+        type="button"
+        class="btn-cancel"
+        (click)="showPermissions = false">
+
+        {{ 'COMMON.CANCEL' | translate }}
+
+      </button>
+
+
+      <button
+        type="button"
+        class="btn-save"
+        (click)="saveRoleAndPermissions()">
+
+        {{ 'COMMON.SAVE' | translate }}
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+</div>
+
+
+}
+
+
+@default {
+
+  <!-- =========================
+       DEFAULT INFORMATION CARD
+  ========================== -->
+
+  <div class="permission-card">
+
+    <div class="permission-row header">
+
+      <h2>
+        {{ 'PERMISSION_SETTING_PAGE.MGMT_TITLE' | translate }}
+      </h2>
+
+    </div>
+
+
+    <div class="permission-row">
+
+      <strong>
+        {{ 'COMMON.PURPOSE' | translate }}
+      </strong>
+
+      <p>
+        {{ 'PERMISSION_SETTING_PAGE.PURPOSE_TEXT' | translate }}
+      </p>
+
+    </div>
+
+
+    <div class="permission-row">
+
+      <strong>
+        {{ 'COMMON.WHAT_YOU_CAN_DO' | translate }}
+      </strong>
+
+      <p [innerHTML]="'PERMISSION_SETTING_PAGE.WHAT_YOU_CAN_DO_LIST' | translate"></p>
+
+    </div>
+
+
+    <div class="permission-row">
+
+      <strong>
+        {{ 'COMMON.NOTE' | translate }}
+      </strong>
+
+      <p>
+        {{ 'PERMISSION_SETTING_PAGE.NOTE_TEXT' | translate }}
+      </p>
+
+    </div>
+
+  </div>
+
+}
+
+}

@@ -1,0 +1,12 @@
+<div class="partition-container">
+  <h3 *ngIf="title" class="partition-title">{{ title }}</h3>
+  <div class="partition-grid">
+    <div class="left-part">
+      <ng-content select="[left]"></ng-content>
+    </div>
+    <div class="right-part">
+      <ng-content select="[right]"></ng-content>
+    </div>
+  </div>
+</div>
+

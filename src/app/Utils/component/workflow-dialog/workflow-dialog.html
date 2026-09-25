@@ -1,0 +1,50 @@
+  <button mat-icon-button (click)="onClose()" aria-label="Close dialog">
+    <mat-icon>close</mat-icon>
+  </button>
+<h2 mat-dialog-title>{{ data.formTitle }}</h2>
+
+
+
+<mat-dialog-content>
+  <ng-container *ngIf="(data.formData?.length || 0) > 0; else singleForm">
+    <div *ngFor="let form of data.formData; let i = index">
+
+  <div class="form-actions" *ngIf="data.showDeleteButton">
+<p style="font-size: 18px; block-size: 12px; font-weight: bold; margin-left: 30px;">
+   No#: {{form.index}}
+</p>
+
+  <div class="icon-group" style="margin-right: 20px;">
+    <img *ngIf="data.showAddButton"
+         src="assets/icons/add.svg"
+         alt="Add"
+         class="icon-btn"
+         (click)="addForm()"/>
+    <img src="assets/icons/delete.svg"
+         alt="Delete"
+         class="icon-btn"
+         (click)="deleteForm()" />
+  </div>
+</div>
+
+      <app-form
+        [fields]="data.fields || []"
+        [initialData]="form"
+        (submitForm)="onSubmit()">
+      </app-form>
+
+    </div>
+
+
+  </ng-container>
+  <ng-template #singleForm>
+    <app-form *ngIf="data.fields"
+              [fields]="data.fields || []"
+             (submitForm)="onSubmit()">
+    </app-form>
+  </ng-template>
+
+</mat-dialog-content>
+
+
+

@@ -1,0 +1,458 @@
+<app-title2
+  titleHeader="USERS_SETTING_PAGE.TITLE"
+  [actions]="getTitled(titleActions)"
+  [activeAction]="selectedUser"
+  (customButtonClick)="onAction($event)"
+>
+</app-title2>
+
+@switch (selectedUser) {@case ('USERS_SETTING_PAGE.ONLINE_TAB') {
+  <div class="online-users-card">
+
+    <div class="online-users-top">
+      <div>
+        <h3>{{ 'USERS_SETTING_PAGE.ONLINE_TITLE' | translate }}</h3>
+        <p>{{ 'USERS_SETTING_PAGE.ONLINE_SUBTITLE' | translate }}</p>
+      </div>
+
+      <div class="online-count">
+        <span class="live-dot"></span>
+        {{ onlineUsers.length }} {{ 'USERS_SETTING_PAGE.ONLINE_SUFFIX' | translate }}
+      </div>
+    </div>
+
+    @if (onlineUsers.length > 0) {
+
+      <div class="online-table-wrapper">
+        <table class="online-table">
+
+          <thead>
+            <tr>
+              <th>{{ 'USERS_SETTING_PAGE.COL_USER' | translate }}</th>
+               <th>{{ 'USERS_SETTING_PAGE.COL_EMAIL' | translate }}</th>
+              <th>{{ 'USERS_SETTING_PAGE.COL_ROLE' | translate }}</th>
+              <th>{{ 'USERS_SETTING_PAGE.COL_BRANCH' | translate }}</th>
+              <th>{{ 'USERS_SETTING_PAGE.COL_LAST_SEEN' | translate }}</th>
+              <th>{{ 'USERS_SETTING_PAGE.COL_STATUS' | translate }}</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            @for (user of onlineUsers; track $index) {
+
+              <tr>
+
+                <td>
+                  <div class="user-info">
+
+                    <div class="user-avatar">
+                      {{ user.firstName?.charAt(0) }}
+                      {{ user.lastName?.charAt(0) }}
+                    </div>
+
+                    <div class="user-name-wrapper">
+                      <strong>
+                        {{ user.firstName }}
+                        {{ user.middleName }}
+                        {{ user.lastName }}
+                      </strong>
+
+                    </div>
+
+                  </div>
+                </td>
+  <td>
+                  <span class="role-badge">
+                 {{ user.email || ('USERS_SETTING_PAGE.NO_EMAIL' | translate) }}
+                  </span>
+                </td>
+                <td>
+                  <span class="role-badge">
+                    {{ user.roleName || ('USERS_SETTING_PAGE.DEFAULT_ROLE' | translate) }}
+                  </span>
+                </td>
+
+                <td>
+                  <div class="branch-info">
+                    <strong>
+                      {{ user.branchName || ('COMMON.NA' | translate) }}
+                    </strong>
+
+                    @if (user.branchCode) {
+                   
+                    }
+                  </div>
+                </td>
+
+                <td>
+                  <span class="last-seen">
+                    {{ user.lastSeen | date:'dd MMM yyyy, HH:mm:ss' }}
+                  </span>
+                </td>
+
+                <td>
+                  <span class="online-status">
+                    <span class="status-dot"></span>
+                    {{ 'COMMON.ONLINE' | translate }}
+                  </span>
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+      </div>
+
+    } @else {
+
+      <div class="empty-online">
+        <div class="empty-online-icon">
+          <mat-icon>group_off</mat-icon>
+        </div>
+
+        <h4>{{ 'USERS_SETTING_PAGE.EMPTY_ONLINE_TITLE' | translate }}</h4>
+        <p>{{ 'USERS_SETTING_PAGE.EMPTY_ONLINE_TEXT' | translate }}</p>
+      </div>
+
+    }
+
+  </div>
+}
+
+
+  @case ('USERS_SETTING_PAGE.MANAGE_TAB') {
+  <div class="info-card12">
+
+  <div class="users-table-header">
+
+    <div>
+      <h3>{{ 'USERS_SETTING_PAGE.SYSTEM_USERS_TITLE' | translate }}</h3>
+      <p>{{ 'USERS_SETTING_PAGE.SYSTEM_USERS_SUBTITLE' | translate }}</p>
+    </div>
+
+ <div class="users-header-actions">
+
+  <app-search-box
+    (searchChange)="onSearch($event)"
+    [placeholder]="'USERS_SETTING_PAGE.SEARCH_PLACEHOLDER'"
+  ></app-search-box>
+
+ <div class="users-count">
+
+  <mat-icon>people</mat-icon>
+
+  <span>
+    {{ totalElements }} {{ 'USERS_SETTING_PAGE.USERS_SUFFIX' | translate }}
+  </span>
+
+  <button
+    type="button"
+    class="add-user-button"
+    [matTooltip]="'USERS_SETTING_PAGE.ADD_USER_BTN' | translate"
+    (click)="addUser()"
+  >
+    <mat-icon>add</mat-icon>
+    <span>{{ 'USERS_SETTING_PAGE.ADD_USER_BTN' | translate }}</span>
+  </button>
+
+</div>
+
+</div>
+
+
+  </div>
+
+
+  <div class="table-container">
+
+    <table class="users-table">
+
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>{{ 'USERS_SETTING_PAGE.COL_USER' | translate }}</th>
+          <th>{{ 'USERS_SETTING_PAGE.COL_USERNAME' | translate }}</th>
+          <th>{{ 'USERS_SETTING_PAGE.COL_CONTACT' | translate }}</th>
+          <th>{{ 'USERS_SETTING_PAGE.COL_GENDER' | translate }}</th>
+          <th>{{ 'USERS_SETTING_PAGE.COL_BRANCH' | translate }}</th>
+          <th>{{ 'USERS_SETTING_PAGE.COL_STATUS' | translate }}</th>
+          <th>{{ 'USERS_SETTING_PAGE.COL_CREATED' | translate }}</th>
+          <th>{{ 'USERS_SETTING_PAGE.COL_ACTION' | translate }}</th>
+        </tr>
+      </thead>
+
+
+      <tbody>
+
+        <tr *ngFor="let user of users; let i = index">
+
+          <!-- NUMBER -->
+          <td class="index">
+            {{ pageIndex * pageSize + i + 1 }}
+          </td>
+
+
+          <!-- USER -->
+          <td>
+
+            <div class="user-info">
+
+              <div class="avatar">
+                {{ user?.firstName?.charAt(0) || '?'  | uppercase}}
+              </div>
+
+              <div class="user-name">
+
+                <span class="full-name">
+                  {{ user?.firstName | uppercase}}
+                  {{ user?.middleName | uppercase}}
+                  {{ user?.lastName | uppercase}}
+                </span>
+
+                <span class="user-email">
+                  {{ user?.email || '-' }}
+                </span>
+
+              </div>
+
+            </div>
+
+          </td>
+
+
+          <!-- USERNAME -->
+          <td>
+
+            <span class="username">
+              {{ user?.username || '-' }}
+            </span>
+
+          </td>
+
+
+          <!-- CONTACT -->
+          <td>
+
+            <div class="contact-info">
+
+              <span>
+                <mat-icon>phone</mat-icon>
+                {{ user?.phone || '-' }}
+              </span>
+
+              <span>
+                <mat-icon>location_on</mat-icon>
+                {{ user?.address || '-' }}
+              </span>
+
+            </div>
+
+          </td>
+
+
+          <!-- GENDER -->
+          <td>
+
+            <span class="gender">
+              {{ user?.gender || '-' | uppercase}}
+            </span>
+
+          </td>
+
+
+          <!-- BRANCH -->
+          <td>
+
+            <div
+              class="branch"
+              *ngIf="user?.branchName; else noBranch"
+            >
+
+              <span class="branch-name">
+                {{ user.branchName | uppercase}}
+              </span>
+
+              <span
+                class="branch-code"
+                *ngIf="user?.branchCode"
+              >
+                {{ user.branchCode  | uppercase}}
+              </span>
+
+            </div>
+
+            <ng-template #noBranch>
+
+              <span class="not-available">
+                {{ 'USERS_SETTING_PAGE.NO_BRANCH' | translate }}
+              </span>
+
+            </ng-template>
+
+          </td>
+
+
+          <!-- STATUS -->
+          <td>
+
+            <div class="status-column">
+
+              <span
+                class="status"
+                [class.active]="user?.isActive"
+                [class.inactive]="!user?.isActive"
+              >
+
+                <span class="status-dot"></span>
+
+                {{ (user?.isActive ? 'COMMON.ACTIVE' : 'COMMON.INACTIVE') | translate }}
+
+              </span>
+
+
+              <span
+                *ngIf="user?.isBlocked"
+                class="blocked"
+              >
+                {{ 'COMMON.BLOCKED' | translate }}
+              </span>
+
+
+              <span
+                *ngIf="user?.isRoot"
+                class="root"
+              >
+                ROOT
+              </span>
+
+
+              <span
+                *ngIf="user?.mustChangePassword"
+                class="pending-activation"
+              >
+                {{ 'USERS_SETTING_PAGE.NOT_SIGNED_IN' | translate }}
+              </span>
+
+            </div>
+
+          </td>
+
+
+          <!-- CREATED -->
+          <td>
+
+            <span class="created-date">
+              {{ user?.createdAt || '-' }}
+            </span>
+
+          </td>
+
+
+          <!-- ACTION -->
+          <td>
+
+            <div class="action-buttons">
+
+              <!-- ASSIGN ROLE -->
+              <button
+                type="button"
+                class="action-button role-button"
+                [matTooltip]="'USERS_SETTING_PAGE.TOOLTIP_ASSIGN_ROLE' | translate"
+                (click)="moreUser(user)"
+              >
+                <mat-icon>badge</mat-icon>
+                <span>{{ 'USERS_SETTING_PAGE.BTN_ASSIGN_ROLE' | translate }}</span>
+              </button>
+
+
+              <!-- RESEND ACTIVATION CODE -->
+              <button
+                *ngIf="user?.mustChangePassword"
+                type="button"
+                class="action-button code-button"
+                [disabled]="resendingFor === user?.uid"
+                [matTooltip]="'USERS_SETTING_PAGE.TOOLTIP_RESEND_CODE' | translate"
+                (click)="resendCode(user)"
+              >
+                <mat-icon>sms</mat-icon>
+                <span>{{ 'USERS_SETTING_PAGE.BTN_RESEND_CODE' | translate }}</span>
+              </button>
+
+
+              <!-- VIEW -->
+              <button
+                type="button"
+                class="action-button view-button"
+                [matTooltip]="'USERS_SETTING_PAGE.TOOLTIP_VIEW_USER' | translate"
+                (click)="profileClick(user)"
+              >
+                <mat-icon>visibility</mat-icon>
+                <span>{{ 'USERS_SETTING_PAGE.BTN_VIEW_USER' | translate }}</span>
+              </button>
+
+
+              <!-- DELETE -->
+              <button
+                type="button"
+                class="action-button delete-button"
+                [matTooltip]="'USERS_SETTING_PAGE.TOOLTIP_DELETE_USER' | translate"
+                (click)="deleteUser(user)"
+              >
+                <mat-icon>delete_outline</mat-icon>
+                <span>{{ 'USERS_SETTING_PAGE.BTN_DELETE_USER' | translate }}</span>
+              </button>
+
+            </div>
+
+          </td>
+
+        </tr>
+
+
+        <!-- EMPTY -->
+        <tr *ngIf="users.length === 0">
+
+          <td
+            colspan="9"
+            class="empty-state"
+          >
+
+            <mat-icon>people_outline</mat-icon>
+
+            <strong>{{ 'USERS_SETTING_PAGE.EMPTY_USERS_TITLE' | translate }}</strong>
+
+            <span>
+              {{ 'USERS_SETTING_PAGE.EMPTY_USERS_TEXT' | translate }}
+            </span>
+
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+  <div class="pagination-wrapper">
+
+    <mat-paginator
+      [length]="totalElements"
+      [pageIndex]="pageIndex"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="[5, 10, 20, 50, 100]"
+      [showFirstLastButtons]="true"
+      (page)="onPageChange($event)">
+    </mat-paginator>
+
+  </div>
+
+</div>
+
+  }
+}

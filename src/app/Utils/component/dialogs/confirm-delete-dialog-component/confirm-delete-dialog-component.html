@@ -1,0 +1,42 @@
+<div class="delete-dialog">
+
+  <div class="delete-icon">
+    <mat-icon>delete_outline</mat-icon>
+  </div>
+
+  <h2>{{ data.title }}</h2>
+
+  <p>
+    {{ data.message }}
+  </p>
+
+  <div class="branch-info">
+    <strong>{{ data.item.branchName }}</strong>
+
+    <span>
+      {{ data.item.branchCode }}
+    </span>
+  </div>
+
+  <div class="dialog-actions">
+
+    <button
+      type="button"
+      class="cancel-btn"
+      (click)="cancel()"
+    >
+      {{ 'COMMON.CANCEL' | translate }}
+    </button>
+
+    <button
+      type="button"
+      class="delete-confirm-btn"
+      (click)="confirmDelete()"
+    >
+      <mat-icon>delete</mat-icon>
+      {{ 'COMMON.DELETE' | translate }}
+    </button>
+
+  </div>
+
+</div>

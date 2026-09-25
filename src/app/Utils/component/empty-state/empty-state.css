@@ -1,0 +1,127 @@
+/* One arrangement everywhere: icon on top, words underneath, centred. */
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  min-height: 200px;
+  padding: 32px 24px;
+
+  box-sizing: border-box;
+}
+
+
+/* Smaller than it was. An empty table is the least important thing on the
+   screen, so its icon should not be the largest mark on it. */
+
+.empty-state-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 52px;
+  height: 52px;
+
+  border-radius: 14px;
+
+  background: #f1f5f9;
+  color: #94a3b8;
+
+  margin-bottom: 12px;
+}
+
+.empty-state-icon mat-icon {
+  width: 24px;
+  height: 24px;
+  font-size: 24px;
+}
+
+
+/* A step below the side nav's 13px labels, and well below the 20px page
+   title - so this reads as a note, not as a heading. */
+
+.empty-state-title {
+  margin: 0 0 4px;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  color: #475467;
+}
+
+.empty-state-text {
+  margin: 0;
+
+  max-width: 320px;
+
+  font-size: 12px;
+  line-height: 1.5;
+
+  color: #98a2b3;
+}
+
+
+/* Whatever the page projects in - an Add button, usually. The wrapper
+   collapses when nothing is projected, so pages without one keep their
+   spacing. Projected content keeps the styling of the page that owns it. */
+
+.empty-state-actions {
+  margin-top: 16px;
+}
+
+.empty-state-actions:empty {
+  display: none;
+}
+
+
+/* Inside a chart card. The same shape, stepped down, so a dashboard panel
+   and a full page read as the same idea at two sizes. */
+
+.empty-state.compact {
+  min-height: 0;
+  padding: 22px 12px;
+}
+
+.empty-state.compact .empty-state-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+.empty-state.compact .empty-state-icon mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
+.empty-state.compact .empty-state-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: #98a2b3;
+}
+
+
+@media (max-width: 600px) {
+
+  .empty-state {
+    min-height: 160px;
+    padding: 24px 16px;
+  }
+
+  .empty-state-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+  }
+
+  .empty-state-icon mat-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+  }
+}

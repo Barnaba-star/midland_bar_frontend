@@ -1,0 +1,54 @@
+<div class="dashboard-shell">
+  <header class="topbar">
+    <div class="topbar-brand">
+      <img src="assets/images/midland.png" alt="Midland Solutions" class="topbar-logo">
+      <span class="topbar-name">Midland Solutions</span>
+    </div>
+
+    <div class="topbar-actions">
+      <div class="user-chip">
+        <mat-icon>account_circle</mat-icon>
+        <span>{{ fullName || ('DASHBOARD.WELCOME' | translate) }}</span>
+      </div>
+      <button mat-icon-button (click)="logout()" [attr.aria-label]="'MENU.LOGOUT' | translate" [matTooltip]="'MENU.LOGOUT' | translate">
+        <mat-icon svgIcon="logout"></mat-icon>
+      </button>
+    </div>
+  </header>
+
+  <main class="dashboard-container">
+    <div class="dashboard-intro">
+      <h1>{{ 'DASHBOARD.WELCOME' | translate }}{{ fullName ? ', ' + fullName : '' }}</h1>
+      <p>{{ 'DASHBOARD.INTRO_SUBTITLE' | translate }}</p>
+    </div>
+
+    <div class="card-grid">
+      <mat-card
+        class="custom-card"
+        *ngFor="let card of filteredCards"
+        (click)="goTo(card.route)"
+        tabindex="0"
+        (keyup.enter)="goTo(card.route)">
+
+        <div class="icon-badge">
+          <mat-icon [svgIcon]="card.icon"></mat-icon>
+        </div>
+
+        <mat-card-header>
+          <h4>{{ card.title | translate }}</h4>
+        </mat-card-header>
+
+        <mat-card-content>
+          <p class="description">
+            {{ card.description | translate }}
+          </p>
+        </mat-card-content>
+
+        <div class="card-cta">
+          <span>{{ 'DASHBOARD.OPEN' | translate }}</span>
+          <mat-icon>arrow_forward</mat-icon>
+        </div>
+      </mat-card>
+    </div>
+  </main>
+</div>

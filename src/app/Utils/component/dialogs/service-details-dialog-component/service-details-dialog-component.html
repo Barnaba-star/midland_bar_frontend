@@ -1,0 +1,72 @@
+<div class="service-details-dialog">
+
+  <div class="dialog-header">
+
+    <div class="service-icon">
+      <mat-icon>content_cut</mat-icon>
+    </div>
+
+    <div class="header-text">
+      <h2>{{ service?.serviceName || '--' }}</h2>
+
+      <span
+        class="status-badge"
+        [class.active]="service?.status === 'active'"
+        [class.inactive]="service?.status !== 'active'"
+      >
+        <span class="status-dot"></span>
+        {{ (service?.status === 'active' ? 'COMMON.ACTIVE' : 'COMMON.INACTIVE') | translate }}
+      </span>
+    </div>
+
+    <button type="button" class="close-btn" (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+
+  </div>
+
+
+  <div class="detail-grid">
+
+    <div class="detail-item">
+      <mat-icon>qr_code_2</mat-icon>
+      <div>
+        <span>{{ 'COMMON.CODE' | translate }}</span>
+        <strong>{{ service?.serviceCode || '--' }}</strong>
+      </div>
+    </div>
+
+    <div class="detail-item">
+      <mat-icon>schedule</mat-icon>
+      <div>
+        <span>{{ 'COMMON.DURATION' | translate }}</span>
+        <strong>{{ service?.duration || 0 }} min</strong>
+      </div>
+    </div>
+
+    <div class="detail-item">
+      <mat-icon>payments</mat-icon>
+      <div>
+        <span>{{ 'COMMON.PRICE' | translate }}</span>
+        <strong>Tshs {{ service?.price | number: '1.2-2' }}</strong>
+      </div>
+    </div>
+
+    <div class="detail-item full-width">
+      <mat-icon>notes</mat-icon>
+      <div>
+        <span>{{ 'COMMON.DESCRIPTION' | translate }}</span>
+        <strong>{{ service?.description || ('SERVICE_PAGE.NO_DESCRIPTION' | translate) }}</strong>
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="dialog-footer">
+    <button type="button" class="close-footer-btn" (click)="close()">
+      {{ 'COMMON.CLOSE' | translate }}
+    </button>
+  </div>
+
+</div>

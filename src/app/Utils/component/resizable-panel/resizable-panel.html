@@ -1,0 +1,19 @@
+
+
+
+<div class="resizable-panel">
+  <ng-container *ngFor="let child of projectedItems; let i = index">
+    <div class="panel-section"
+         [ngStyle]="{'flex-direction': layoutDirections[i]}"
+         [class.full-width]="activePanels.length === 1 && activePanels[0] === i"
+         [class.partial-width]="activePanels.includes(i)"
+         [class.hidden]="!activePanels.includes(i)"
+         [class.first-open]="i === 0 && activePanels.includes(0)"
+         [style.max-height.px]="activePanels.includes(i) ? 800 : 800"
+         style="overflow-y: auto;">
+      <ng-container *ngTemplateOutlet="child"></ng-container>
+    </div>
+  </ng-container>
+</div>
+
+

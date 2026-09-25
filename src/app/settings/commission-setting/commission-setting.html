@@ -1,0 +1,271 @@
+<app-title2 titleHeader="COMMISSION_PAGE.TITLE"></app-title2>
+
+<div class="info-card12">
+
+  <!-- ============ HEADER: period picker ============ -->
+  <div class="commission-header">
+
+    <div>
+      <h3>{{ (seesAllStaff ? 'COMMISSION_PAGE.HEADING' : 'COMMISSION_PAGE.HEADING_MINE') | translate }}</h3>
+      <p>{{ (seesAllStaff ? 'COMMISSION_PAGE.SUBHEADING' : 'COMMISSION_PAGE.SUBHEADING_MINE') | translate }}</p>
+    </div>
+
+    <div class="period-picker">
+
+      <app-search-box
+        (searchChange)="onSearch($event)"
+        [placeholder]="'COMMISSION_PAGE.SEARCH_PLACEHOLDER'"
+      ></app-search-box>
+
+      <label class="period-field">
+        <span>{{ 'COMMISSION_PAGE.MONTH' | translate }}</span>
+        <select [(ngModel)]="month" (ngModelChange)="onPeriodChange()">
+          @for (m of months; track m.value) {
+            <option [ngValue]="m.value">{{ m.label | translate }}</option>
+          }
+        </select>
+      </label>
+
+      <label class="period-field">
+        <span>{{ 'COMMISSION_PAGE.YEAR' | translate }}</span>
+        <select [(ngModel)]="year" (ngModelChange)="onPeriodChange()">
+          @for (y of years; track y) {
+            <option [ngValue]="y">{{ y }}</option>
+          }
+        </select>
+      </label>
+
+    </div>
+
+  </div>
+
+
+  <!-- ============ SUMMARY ============ -->
+  <div class="summary-row">
+
+    <div class="summary-tile">
+      <span class="summary-label">{{ 'COMMISSION_PAGE.TOTAL_COLLECTED' | translate }}</span>
+      <strong class="summary-value">{{ totalCollected | number }}</strong>
+      <span class="summary-unit">TSh</span>
+    </div>
+
+    <div class="summary-tile accent">
+      <span class="summary-label">{{ 'COMMISSION_PAGE.TOTAL_COMMISSION' | translate }}</span>
+      <strong class="summary-value">{{ totalCommission | number }}</strong>
+      <span class="summary-unit">TSh</span>
+    </div>
+
+    <div class="summary-tile warn">
+      <span class="summary-label">{{ 'COMMISSION_PAGE.TOTAL_OUTSTANDING' | translate }}</span>
+      <strong class="summary-value">{{ totalOutstanding | number }}</strong>
+      <span class="summary-unit">TSh</span>
+    </div>
+
+    @if (seesAllStaff) {
+    <div class="summary-tile">
+      <span class="summary-label">{{ 'COMMISSION_PAGE.EARNING_STAFF' | translate }}</span>
+      <strong class="summary-value">{{ payingStaffCount }}</strong>
+      <span class="summary-unit">{{ 'COMMISSION_PAGE.OF' | translate }} {{ report.length }}</span>
+    </div>
+    }
+
+  </div>
+
+
+  <!-- ============ TABLE ============ -->
+  <div class="table-container">
+
+    <table class="commission-table">
+
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>{{ 'COMMISSION_PAGE.COL_STAFF' | translate }}</th>
+          <th class="num">{{ 'COMMISSION_PAGE.COL_REGISTERED' | translate }}</th>
+          <th class="num">{{ 'COMMISSION_PAGE.COL_PAID' | translate }}</th>
+          <th class="num">{{ 'COMMISSION_PAGE.COL_COLLECTED' | translate }}</th>
+          <th class="num">{{ 'COMMISSION_PAGE.COL_COMMISSION' | translate }}</th>
+          <th class="num">{{ 'COMMISSION_PAGE.COL_STATUS' | translate }}</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        @for (row of report; track row.staffUid; let i = $index) {
+
+          <tr
+            class="staff-row"
+            [class.has-earnings]="row.commissionDue > 0"
+            [class.expanded]="expandedStaffUid === row.staffUid"
+            (click)="toggleStaff(row)"
+          >
+
+            <td class="index">{{ i + 1 }}</td>
+
+            <td>
+              <div class="staff-info">
+                <div class="avatar">{{ (row.staffName || '?').charAt(0) | uppercase }}</div>
+                <div class="staff-name">
+                  <span class="full-name">{{ row.staffName || '-' | uppercase }}</span>
+                  <span class="username">{{ row.username || '-' }}</span>
+                </div>
+              </div>
+            </td>
+
+            <td class="num">{{ row.branchesRegistered }}</td>
+
+            <td class="num">
+              <span
+                class="paid-badge"
+                [class.none]="row.branchesPaid === 0"
+                [matTooltip]="'COMMISSION_PAGE.TOOLTIP_PAID' | translate"
+              >
+                {{ row.branchesPaid }}
+              </span>
+            </td>
+
+            <td class="num">{{ row.totalCollected | number }}</td>
+
+            <td class="num commission">{{ row.commissionDue | number }}</td>
+
+            <td class="num status-cell">
+
+              @if (row.commissionDue === 0) {
+                <span class="status-none">-</span>
+              } @else if (row.outstanding === 0) {
+                <span
+                  class="status-paid"
+                  [matTooltip]="('COMMISSION_PAGE.PAID_ON' | translate) + ' ' + (row.lastPaidAt | date: 'dd MMM yyyy')"
+                >
+                  <mat-icon>check_circle</mat-icon>
+                  {{ 'COMMISSION_PAGE.STATUS_PAID' | translate }}
+                </span>
+              } @else if (!canPay) {
+                <span class="status-owed">
+                  {{ 'COMMISSION_PAGE.STATUS_OWED' | translate }}
+                </span>
+              } @else {
+                <button
+                  type="button"
+                  class="pay-button"
+                  [disabled]="paying === row.staffUid"
+                  [matTooltip]="'COMMISSION_PAGE.TOOLTIP_PAY' | translate"
+                  (click)="payStaff(row, $event)"
+                >
+                  <mat-icon [class.spin]="paying === row.staffUid">
+                    {{ paying === row.staffUid ? 'autorenew' : 'payments' }}
+                  </mat-icon>
+                  <span>{{ 'COMMISSION_PAGE.BTN_PAY' | translate }} {{ row.outstanding | number }}</span>
+                </button>
+
+                @if (row.commissionPaid > 0) {
+                  <span class="part-paid">
+                    {{ 'COMMISSION_PAGE.ALREADY_PAID' | translate }} {{ row.commissionPaid | number }}
+                  </span>
+                }
+              }
+
+            </td>
+
+            <td class="num">
+              <button
+                type="button"
+                class="branches-button"
+                [matTooltip]="'COMMISSION_PAGE.TOOLTIP_BRANCHES' | translate"
+                (click)="openBranches(row, $event)"
+              >
+                <mat-icon>store</mat-icon>
+                <span>{{ 'COMMISSION_PAGE.BTN_BRANCHES' | translate }}</span>
+              </button>
+            </td>
+
+            <td class="num">
+              @if (row.payments) {
+                <mat-icon class="chevron">
+                  {{ expandedStaffUid === row.staffUid ? 'expand_less' : 'expand_more' }}
+                </mat-icon>
+              }
+            </td>
+
+          </tr>
+
+
+          <!-- DRILL-DOWN: the individual payments behind the total -->
+          @if (expandedStaffUid === row.staffUid) {
+
+            <tr class="detail-row">
+              <td colspan="9">
+
+                @if (loadingPayments) {
+                  <div class="detail-state">
+                    <mat-icon class="spin">autorenew</mat-icon>
+                    <span>{{ 'COMMON.LOADING' | translate }}</span>
+                  </div>
+                } @else {
+
+                  <table class="detail-table">
+                    <thead>
+                      <tr>
+                        <th>{{ 'COMMISSION_PAGE.COL_BRANCH' | translate }}</th>
+                        <th>{{ 'COMMISSION_PAGE.COL_DATE' | translate }}</th>
+                        <th class="num">{{ 'COMMISSION_PAGE.COL_MONTHS' | translate }}</th>
+                        <th class="num">{{ 'COMMISSION_PAGE.COL_AMOUNT' | translate }}</th>
+                        <th class="num">{{ 'COMMISSION_PAGE.COL_RATE' | translate }}</th>
+                        <th class="num">{{ 'COMMISSION_PAGE.COL_COMMISSION' | translate }}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (payment of staffPayments; track payment.uid) {
+                        <tr>
+                          <td>
+                            <strong>{{ payment.branchName | uppercase }}</strong>
+                            <span class="branch-code">{{ payment.branchCode }}</span>
+                          </td>
+                          <td>{{ payment.paidAt | date: 'dd MMM yyyy' }}</td>
+                          <td class="num">{{ payment.months }}</td>
+                          <td class="num">{{ payment.amount | number }}</td>
+                          <td class="num">{{ payment.commissionPercent }}%</td>
+                          <td class="num commission">{{ payment.commissionAmount | number }}</td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+
+                }
+
+              </td>
+            </tr>
+
+          }
+
+        }
+
+
+        @if (!loading && report.length === 0) {
+          <tr>
+            <td colspan="9" class="empty-state">
+              <mat-icon>payments</mat-icon>
+              <strong>{{ 'COMMISSION_PAGE.EMPTY_TITLE' | translate }}</strong>
+              <span>{{ 'COMMISSION_PAGE.EMPTY_TEXT' | translate }}</span>
+            </td>
+          </tr>
+        }
+
+        @if (loading) {
+          <tr>
+            <td colspan="9" class="empty-state">
+              <mat-icon class="spin">autorenew</mat-icon>
+              <span>{{ 'COMMON.LOADING' | translate }}</span>
+            </td>
+          </tr>
+        }
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>

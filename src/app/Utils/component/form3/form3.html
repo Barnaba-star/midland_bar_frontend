@@ -1,0 +1,402 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <!-- Title -->
+  <h2 class="form-title">{{ formTitle }}</h2>
+   <div class="title-line"></div>
+  <div class="form-grid">
+    <ng-container *ngFor="let field of fields">
+      <div
+        *ngIf="shouldShowField(field)"
+        class="form-grid-item"
+        [class.full-width]="shouldSpanFullWidth(field.type)"
+      >
+        <div class="form-field-wrapper">
+          <!-- LABEL -->
+          <label
+            *ngIf="field.label && field.type !== 'checkbox' && field.type !== 'checkbox-group'"
+            class="form-label"
+          >
+            {{ field.label }}
+            <span *ngIf="field.required" class="required">*</span>
+          </label>
+          <ng-container [ngSwitch]="field.type">
+            <!-- ================================================== TEXT =================================================== -->
+            <mat-form-field *ngSwitchCase="'text'" appearance="outline" class="w-100">
+              <!-- SVG ICON -->
+              <img
+                *ngIf="field.icon"
+                matPrefix
+                class="field-icon"
+                [src]="field.icon"
+                [alt]="field.label || 'icon'"
+              />
+              <span *ngIf="field.prefix" matPrefix> {{ field.prefix }}&nbsp; </span>
+              <input
+                matInput
+                type="text"
+                [formControlName]="field.name"
+                [placeholder]="field.placeholder || field.label || 'Enter text'"
+                [readonly]="field.readonly"
+                [autocomplete]="field.autoComplete || 'off'"
+              />
+              <span *ngIf="field.suffix" matSuffix> &nbsp;{{ field.suffix }} </span>
+              <mat-hint *ngIf="field.hint"> {{ field.hint }} </mat-hint>
+              <mat-error
+                *ngIf="
+                  field.required && form.get(field.name)?.invalid && form.get(field.name)?.touched
+                "
+              >
+                {{ field.label || 'This field' }} is required.
+              </mat-error>
+            </mat-form-field>
+
+            <!-- ================================================== NUMBER =================================================== -->
+            <mat-form-field *ngSwitchCase="'number'" appearance="outline" class="w-100">
+              <img
+                *ngIf="field.icon"
+                matPrefix
+                class="field-icon"
+                [src]="field.icon"
+                [alt]="field.label || 'icon'"
+              />
+              <span *ngIf="field.prefix" matPrefix> {{ field.prefix }}&nbsp; </span>
+              <input
+                matInput
+                type="number"
+                [formControlName]="field.name"
+                [placeholder]="field.placeholder || field.label || 'Enter number'"
+                [min]="field.min ?? null"
+                [max]="field.max ?? null"
+                [step]="field.step || 1"
+              />
+              <span *ngIf="field.suffix" matSuffix> &nbsp;{{ field.suffix }} </span>
+              <mat-hint *ngIf="field.hint"> {{ field.hint }} </mat-hint>
+              <mat-error
+                *ngIf="
+                  field.required && form.get(field.name)?.invalid && form.get(field.name)?.touched
+                "
+              >
+                {{ field.label || 'This field' }} is required.
+              </mat-error>
+            </mat-form-field>
+
+            <!-- ================================================== TEXTAREA =================================================== -->
+            <mat-form-field *ngSwitchCase="'textarea'" appearance="outline" class="w-100 textarea-field">
+              <img
+                *ngIf="field.icon"
+                matPrefix
+                class="field-icon"
+                [src]="field.icon"
+                [alt]="field.label || 'icon'"
+              />
+              <textarea
+                matInput
+                [rows]="field.rows || 4"
+                [formControlName]="field.name"
+                [placeholder]="field.placeholder || field.label || 'Enter description'"
+              ></textarea>
+              <mat-hint *ngIf="field.hint"> {{ field.hint }} </mat-hint>
+              <mat-error
+                *ngIf="
+                  field.required && form.get(field.name)?.invalid && form.get(field.name)?.touched
+                "
+              >
+                {{ field.label || 'This field' }} is required.
+              </mat-error>
+            </mat-form-field>
+            <!-- ================================================== SELECT =================================================== -->
+            <mat-form-field *ngSwitchCase="'select'" appearance="outline" class="w-100">
+              <img
+                *ngIf="field.icon"
+                matPrefix
+                class="field-icon"
+                [src]="field.icon"
+                [alt]="field.label || 'icon'"
+              />
+              <mat-select
+                [formControlName]="field.name"
+                [multiple]="field.multiple"
+                [placeholder]="field.placeholder || field.label || 'Select option'"
+              >
+                <mat-option
+                  *ngFor="let option of field.options"
+                  [value]="option.value"
+                  [ngClass]="{ 'selected-option': form.get(field.name)?.value === option.value }"
+                >
+                  {{ option.label }}
+                </mat-option>
+              </mat-select>
+              <mat-hint *ngIf="field.hint"> {{ field.hint }} </mat-hint>
+              <mat-error
+                *ngIf="
+                  field.required && form.get(field.name)?.invalid && form.get(field.name)?.touched
+                "
+              >
+                {{ field.label || 'This field' }} is required.
+              </mat-error>
+            </mat-form-field>
+            <!-- ================================================== RADIO =================================================== -->
+            <div *ngSwitchCase="'radio'" class="radio-group">
+              <mat-radio-group [formControlName]="field.name">
+                <mat-radio-button
+                  *ngFor="let option of field.options"
+                  [value]="option.value"
+                  class="radio-button"
+                >
+                  {{ option.label }}
+                </mat-radio-button>
+              </mat-radio-group>
+              <mat-error
+                *ngIf="
+                  field.required && form.get(field.name)?.invalid && form.get(field.name)?.touched
+                "
+              >
+                {{ field.label || 'This field' }} is required.
+              </mat-error>
+            </div>
+            <!-- ================================================== CHECKBOX =================================================== -->
+            <mat-checkbox *ngSwitchCase="'checkbox'" [formControlName]="field.name">
+              {{ field.label }} <span *ngIf="field.required" class="required">*</span>
+            </mat-checkbox>
+            <!-- ================================================== CHECKBOX GROUP =================================================== -->
+            <div *ngSwitchCase="'checkbox-group'">
+              <label class="form-label">
+                {{ field.label }} <span *ngIf="field.required" class="required">*</span>
+              </label>
+              <mat-form-field appearance="outline" class="w-100">
+                <img
+                  *ngIf="field.icon"
+                  matPrefix
+                  class="field-icon"
+                  [src]="field.icon"
+                  [alt]="field.label || 'icon'"
+                />
+                <mat-select
+                  [formControlName]="field.name"
+                  multiple
+                  [placeholder]="field.placeholder || field.label || 'Select options'"
+                >
+                  <mat-option *ngFor="let option of field.options" [value]="option.value">
+                    {{ option.label }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <!-- ================================================== FILE =================================================== -->
+            <div *ngSwitchCase="'file'" class="file-upload-container">
+              <label class="form-label" *ngIf="field.label">
+                {{ field.label }} <span *ngIf="field.required" class="required">*</span>
+              </label>
+              <div class="file-input-wrapper">
+                <img
+                  *ngIf="field.icon"
+                  class="file-icon"
+                  [src]="field.icon"
+                  [alt]="field.label || 'file'"
+                />
+                <input
+                  type="file"
+                  class="file-control"
+                  [accept]="field.accept"
+                  (change)="onFileSelected($event, field.name)"
+                />
+              </div>
+              <small *ngIf="field.placeholder" class="field-placeholder">
+                {{ field.placeholder }}
+              </small>
+              <div *ngIf="previewUrls[field.name] && field.viewer" class="image-preview">
+                <img [src]="previewUrls[field.name]" alt="Preview" />
+              </div>
+              <mat-error
+                *ngIf="
+                  field.required && form.get(field.name)?.invalid && form.get(field.name)?.touched
+                "
+              >
+                {{ field.label || 'This field' }} is required.
+              </mat-error>
+            </div>
+            <!-- ================================================== DATE =================================================== -->
+            <mat-form-field *ngSwitchCase="'date'" appearance="outline" class="w-100">
+              <img
+                *ngIf="field.icon"
+                matPrefix
+                class="field-icon"
+                [src]="field.icon"
+                [alt]="field.label || 'date'"
+              />
+              <mat-label *ngIf="field.label"> {{ field.label }} </mat-label>
+              <input
+                matInput
+                [matDatepicker]="picker"
+                [formControlName]="field.name"
+                [placeholder]="field.placeholder || 'Select date'"
+              />
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              <mat-hint *ngIf="field.hint"> {{ field.hint }} </mat-hint>
+              <mat-error
+                *ngIf="
+                  field.required && form.get(field.name)?.invalid && form.get(field.name)?.touched
+                "
+              >
+                {{ field.label || 'This field' }} is required.
+              </mat-error>
+            </mat-form-field>
+            <!-- ================================================== AUTOCOMPLETE =================================================== -->
+            <mat-form-field *ngSwitchCase="'autocomplete-async'" appearance="outline" class="w-100">
+              <img
+                *ngIf="field.icon"
+                matPrefix
+                class="field-icon"
+                [src]="field.icon"
+                [alt]="field.label || 'icon'"
+              />
+              <mat-label *ngIf="field.label"> {{ field.label }} </mat-label>
+              <input
+                matInput
+                [formControl]="field.searchControl"
+                [placeholder]="field.placeholder || field.label || 'Search'"
+                [matAutocomplete]="auto"
+              />
+              <mat-autocomplete
+                #auto="matAutocomplete"
+                (optionSelected)="onFieldChange(field, $event)"
+              >
+                <mat-option
+                  *ngFor="let option of field.filteredOptions$ | async"
+                  [value]="option.value"
+                >
+                  {{ option.label }}
+                </mat-option>
+              </mat-autocomplete>
+              <mat-error
+                *ngIf="
+                  field.required && form.get(field.name)?.invalid && form.get(field.name)?.touched
+                "
+              >
+                {{ field.label || 'This field' }} is required.
+              </mat-error>
+            </mat-form-field>
+            <!-- ================================================== DATETIME =================================================== -->
+            <mat-form-field *ngSwitchCase="'datetime'" appearance="outline" class="w-100">
+              <img
+                *ngIf="field.icon"
+                matPrefix
+                class="field-icon"
+                [src]="field.icon"
+                [alt]="field.label || 'datetime'"
+              />
+              <mat-label *ngIf="field.label"> {{ field.label }} </mat-label>
+              <input
+                matInput
+                type="datetime-local"
+                [formControlName]="field.name"
+                [placeholder]="field.placeholder || 'Select date and time'"
+              />
+              <mat-hint *ngIf="field.hint"> {{ field.hint }} </mat-hint>
+              <mat-error
+                *ngIf="
+                  field.required && form.get(field.name)?.invalid && form.get(field.name)?.touched
+                "
+              >
+                {{ field.label || 'This field' }} is required.
+              </mat-error>
+            </mat-form-field>
+            <!-- ================================================== MONTH =================================================== -->
+            <mat-form-field *ngSwitchCase="'month'" appearance="outline" class="w-100">
+              <img
+                *ngIf="field.icon"
+                matPrefix
+                class="field-icon"
+                [src]="field.icon"
+                [alt]="field.label || 'month'"
+              />
+              <mat-label *ngIf="field.label"> {{ field.label }} </mat-label>
+              <input
+                matInput
+                type="month"
+                [formControlName]="field.name"
+                [placeholder]="field.placeholder || 'Select month'"
+              />
+              <mat-error
+                *ngIf="
+                  field.required && form.get(field.name)?.invalid && form.get(field.name)?.touched
+                "
+              >
+                {{ field.label || 'This field' }} is required.
+              </mat-error>
+            </mat-form-field>
+            <!-- ================================================== WEEK =================================================== -->
+            <mat-form-field *ngSwitchCase="'week'" appearance="outline" class="w-100">
+              <img
+                *ngIf="field.icon"
+                matPrefix
+                class="field-icon"
+                [src]="field.icon"
+                [alt]="field.label || 'week'"
+              />
+              <mat-label *ngIf="field.label"> {{ field.label }} </mat-label>
+              <input
+                matInput
+                type="week"
+                [formControlName]="field.name"
+                [placeholder]="field.placeholder || 'Select week'"
+              />
+              <mat-error
+                *ngIf="
+                  field.required && form.get(field.name)?.invalid && form.get(field.name)?.touched
+                "
+              >
+                {{ field.label || 'This field' }} is required.
+              </mat-error>
+            </mat-form-field>
+            <!-- ================================================== RICH TEXT =================================================== -->
+            <div *ngSwitchCase="'rich-text'" class="rich-text-editor">
+              <label class="form-label">
+                {{ field.label }} <span *ngIf="field.required" class="required">*</span>
+              </label>
+              <quill-editor [formControlName]="field.name"></quill-editor>
+            </div>
+            <!-- ================================================== MAP =================================================== -->
+            <div *ngSwitchCase="'map-location'" class="map-location">
+              <label class="form-label">
+                {{ field.label }} <span *ngIf="field.required" class="required">*</span>
+              </label>
+              <div class="map-container" (mapClick)="setLocation(field.name, $event)"></div>
+            </div>
+            <!-- ================================================== FAB =================================================== -->
+            <button
+              *ngSwitchCase="'fab'"
+              mat-fab
+              color="primary"
+              type="button"
+              (click)="addFieldRequested.emit()"
+            >
+              <mat-icon> {{ field.icon || 'add' }} </mat-icon>
+            </button>
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- Buttons -->
+  <div class="button-group">
+   <button
+  mat-raised-button
+  color="primary"
+  type="submit"
+  [disabled]="form.invalid"
+  class="submit-button"
+>
+  <mat-icon svgIcon="save" class="submit-icon"></mat-icon>
+  <span style="font-size: 18px;">{{ 'COMMON.SUBMIT' | translate }}</span>
+</button>
+    <button
+      *ngIf="showAddButton"
+      mat-raised-button
+      color="accent"
+      type="button"
+      (click)="onAdd()"
+    ></button>
+  </div>
+</form>

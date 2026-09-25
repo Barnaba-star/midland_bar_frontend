@@ -1,0 +1,13 @@
+<div class="wrapper" >
+  <h2 *ngIf="title">{{ title }}</h2>
+
+  <ng-container *ngIf="hasData; else noDataBlock">
+    <ng-content></ng-content>
+  </ng-container>
+
+  <ng-template #noDataBlock>
+    <div class="no-data">
+      <p>No data available.</p>
+    </div>
+  </ng-template>
+</div>

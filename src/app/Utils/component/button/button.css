@@ -1,0 +1,52 @@
+button {
+
+
+
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 8px;
+  width: 1600px; /* ← Badilisha kutoka 100% */
+  text-transform: capitalize;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: background-color 1s ease, box-shadow 1s ease;
+   min-width: 100px;
+background-color: red;
+gap : 10px
+}
+
+.button-icon {
+  margin-right: 6px;
+  font-size: 18px;
+  vertical-align: middle;
+}
+
+.button-label {
+  vertical-align: middle;
+}
+
+
+button:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+button {
+  transition: all 0.3s ease;  /* all properties animate smoothly */
+}
+
+button:hover {
+  transform: scale(1.05);  /* panua kidogo wakati wa hover */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.blue {
+  background-color: #1976d2; /* Material Blue 700 */
+  color: white;
+}
+
+.green {
+  background-color: #388e3c; /* Material Green 700 */
+  color: white;
+}
+
+.purple {
+  background-color: #7b1fa2; /* Material Purple 700 */
+  color: white;
+}

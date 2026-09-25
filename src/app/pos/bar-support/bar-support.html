@@ -1,0 +1,135 @@
+<app-title2
+  [titleHeader]="'SUPPORT_PAGE.TITLE'"
+  [actions]="getTitled(titleActions)"
+  [activeAction]="tab"
+  (customButtonClick)="onAction($event)"
+></app-title2>
+
+@switch (tab) {
+  @case ('SUPPORT_PAGE.MANAGE_TAB') {
+
+    <div class="support-container">
+
+      <div class="support-header">
+
+        <div>
+          <h2>{{ 'SUPPORT_PAGE.MGMT_TITLE' | translate }}</h2>
+          <p>{{ 'SUPPORT_PAGE.MGMT_SUBTITLE' | translate }}</p>
+        </div>
+
+        <button type="button" class="new-message-btn" (click)="toggleForm()">
+          <mat-icon svgIcon="add"></mat-icon>
+          <span>{{ 'SUPPORT_PAGE.NEW_MESSAGE' | translate }}</span>
+        </button>
+
+      </div>
+
+
+      @if (formOpen) {
+
+        <form class="new-message" (ngSubmit)="send()">
+
+          <label class="field-label">{{ 'SUPPORT_PAGE.CATEGORY' | translate }}</label>
+          <div class="category-tabs">
+            @for (option of categories; track option) {
+              <button
+                type="button"
+                class="category-tab"
+                [class.selected]="category === option"
+                (click)="category = option">
+                {{ 'BRANCH_MESSAGE.CATEGORY_' + option | translate }}
+              </button>
+            }
+          </div>
+
+          <label class="field-label" for="support-subject">{{ 'SUPPORT_PAGE.SUBJECT' | translate }}</label>
+          <input
+            id="support-subject"
+            type="text"
+            name="subject"
+            maxlength="120"
+            [placeholder]="'SUPPORT_PAGE.SUBJECT_PLACEHOLDER' | translate"
+            [(ngModel)]="subject"
+          />
+
+          <label class="field-label" for="support-body">{{ 'SUPPORT_PAGE.BODY' | translate }}</label>
+          <textarea
+            id="support-body"
+            name="body"
+            rows="5"
+            [placeholder]="'SUPPORT_PAGE.BODY_PLACEHOLDER' | translate"
+            [(ngModel)]="body"
+          ></textarea>
+
+          <div class="form-actions">
+            <button type="button" class="cancel-btn" (click)="cancel()">
+              {{ 'COMMON.CANCEL' | translate }}
+            </button>
+            <button type="submit" class="send-btn" [disabled]="sending || !body.trim()">
+              {{ 'SUPPORT_PAGE.SEND' | translate }}
+            </button>
+          </div>
+
+        </form>
+
+      }
+
+
+      @if (feedback) {
+        <p class="feedback" [class.error]="feedbackFailed">{{ feedback | translate }}</p>
+      }
+
+
+      @if (loading) {
+        <p class="state-note">{{ 'COMMON.LOADING' | translate }}</p>
+      } @else if (failed) {
+        <p class="state-note error">{{ 'SUPPORT_PAGE.LOAD_FAILED' | translate }}</p>
+      } @else if (messages.length === 0) {
+
+        <app-empty-state
+          icon="announce"
+          title="SUPPORT_PAGE.EMPTY_TITLE"
+          text="SUPPORT_PAGE.EMPTY_TEXT"
+        />
+
+      } @else {
+
+        <div class="thread-list">
+
+          @for (message of messages; track message.uid) {
+
+            <button type="button" class="thread" (click)="open(message)">
+
+              <div class="thread-top">
+                <span class="category" [class]="'category-' + message.category.toLowerCase()">
+                  {{ 'BRANCH_MESSAGE.CATEGORY_' + message.category | translate }}
+                </span>
+                <span class="when">{{ message.lastActivityAt | date:'dd/MM/yyyy HH:mm' }}</span>
+              </div>
+
+              <span class="subject">{{ message.subject || ('BRANCH_MESSAGE.NO_SUBJECT' | translate) }}</span>
+              <span class="snippet">{{ snippet(message) }}</span>
+
+              <div class="thread-foot">
+                @if (message.replyCount > 0) {
+                  <span class="replies">
+                    <mat-icon svgIcon="announce"></mat-icon>
+                    {{ message.replyCount }}
+                  </span>
+                }
+                <span class="status-pill" [class]="'status-' + message.status.toLowerCase()">
+                  {{ 'BRANCH_MESSAGE.STATUS_' + message.status | translate }}
+                </span>
+              </div>
+
+            </button>
+
+          }
+
+        </div>
+
+      }
+
+    </div>
+  }
+}

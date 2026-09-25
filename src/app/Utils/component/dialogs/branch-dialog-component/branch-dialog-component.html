@@ -1,0 +1,187 @@
+<div class="branch-dialog">
+
+  <div class="dialog-header">
+
+    <div class="header-top">
+
+      <div class="header-text">
+        <h2 class="dialog-title">
+          {{ (isEdit ? 'BRANCH_DIALOG.EDIT_TITLE' : 'BRANCH_DIALOG.ADD_TITLE') | translate }}
+        </h2>
+
+        @if (isEdit && branchCode) {
+          <span class="branch-code">{{ branchCode }}</span>
+        }
+      </div>
+
+      <button type="button" class="icon-btn" (click)="cancel()" [attr.aria-label]="'COMMON.CLOSE' | translate">
+        <mat-icon svgIcon="close"></mat-icon>
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div class="dialog-body">
+
+    <!-- What kind of business this is is not a question in a salon system. -->
+    <div class="category-note">
+      <mat-icon svgIcon="bar"></mat-icon>
+      <div>
+        <span class="category-label">{{ 'BRANCH_DIALOG.CATEGORY_LABEL' | translate }}</span>
+        <span class="category-value">{{ category }}</span>
+      </div>
+    </div>
+
+
+    <div class="field-grid">
+
+      <label class="field field-wide">
+        <span class="field-label">{{ 'BRANCH_DIALOG.NAME_LABEL' | translate }}</span>
+        <input
+          type="text"
+          class="field-input"
+          [(ngModel)]="branchName"
+          [placeholder]="'BRANCH_DIALOG.NAME_PLACEHOLDER' | translate"
+          autocomplete="off" />
+      </label>
+
+
+      <!-- The regions are whatever Settings > Regions holds - see the note
+           in the component. -->
+      <div class="field field-region">
+        <span class="field-label">{{ 'BRANCH_DIALOG.REGION_LABEL' | translate }}</span>
+
+        <div class="region-picker">
+
+          <input
+            type="text"
+            class="field-input"
+            [class.is-unset]="!region"
+            [(ngModel)]="regionSearch"
+            (ngModelChange)="onRegionSearch()"
+            (focus)="openRegions()"
+            (blur)="closeRegions()"
+            [disabled]="loadingRegions || regionsFailed"
+            [placeholder]="(loadingRegions ? 'BRANCH_DIALOG.REGION_LOADING' : 'BRANCH_DIALOG.REGION_PLACEHOLDER') | translate"
+            autocomplete="off" />
+
+          <mat-icon class="region-caret" svgIcon="arrowdown"></mat-icon>
+
+          @if (regionOpen && filteredRegions.length) {
+            <ul class="region-list">
+              @for (r of filteredRegions; track r.uid) {
+                <li>
+                  <button type="button" class="region-option" (click)="pickRegion(r)">
+                    <span class="region-name">{{ r.name }}</span>
+                    <span class="region-code">{{ r.code }}</span>
+                  </button>
+                </li>
+              }
+            </ul>
+          }
+
+          @if (regionOpen && !filteredRegions.length && !loadingRegions) {
+            <div class="region-list region-none">
+              {{ 'BRANCH_DIALOG.REGION_NO_MATCH' | translate }}
+            </div>
+          }
+
+        </div>
+
+        @if (regionsFailed) {
+          <span class="field-error">{{ 'BRANCH_DIALOG.REGION_FAILED' | translate }}</span>
+        } @else {
+          <span class="field-hint">{{ 'BRANCH_DIALOG.REGION_HINT' | translate }}</span>
+        }
+      </div>
+
+
+      <label class="field">
+        <span class="field-label">{{ 'BRANCH_DIALOG.PHONE_LABEL' | translate }}</span>
+        <input
+          type="tel"
+          class="field-input"
+          [(ngModel)]="phone"
+          [placeholder]="'BRANCH_DIALOG.PHONE_PLACEHOLDER' | translate"
+          autocomplete="off" />
+      </label>
+
+
+      <label class="field field-wide">
+        <span class="field-label">{{ 'BRANCH_DIALOG.ADDRESS_LABEL' | translate }}</span>
+        <textarea
+          class="field-input field-textarea"
+          rows="2"
+          [(ngModel)]="address"
+          [placeholder]="'BRANCH_DIALOG.ADDRESS_PLACEHOLDER' | translate"></textarea>
+        <span class="field-hint">{{ 'BRANCH_DIALOG.ADDRESS_HINT' | translate }}</span>
+      </label>
+
+
+      <label class="field field-wide">
+        <span class="field-label">{{ 'BRANCH_DIALOG.DESCRIPTION_LABEL' | translate }}</span>
+        <textarea
+          class="field-input field-textarea"
+          rows="3"
+          [(ngModel)]="description"
+          [placeholder]="'BRANCH_DIALOG.DESCRIPTION_PLACEHOLDER' | translate"></textarea>
+      </label>
+
+
+      <!-- A branch being registered is open for business; the only time this
+           is a real question is afterwards. -->
+      @if (isEdit) {
+        <div class="field field-wide">
+          <span class="field-label">{{ 'BRANCH_DIALOG.STATUS_LABEL' | translate }}</span>
+
+          <div class="status-toggle">
+            <button
+              type="button"
+              class="status-option"
+              [class.selected]="status === 'ACTIVE'"
+              (click)="status = 'ACTIVE'">
+              <span class="status-dot active"></span>
+              {{ 'COMMON.ACTIVE' | translate }}
+            </button>
+
+            <button
+              type="button"
+              class="status-option"
+              [class.selected]="status === 'INACTIVE'"
+              (click)="status = 'INACTIVE'">
+              <span class="status-dot inactive"></span>
+              {{ 'COMMON.INACTIVE' | translate }}
+            </button>
+          </div>
+        </div>
+      }
+
+    </div>
+
+
+    @if (errorMessage) {
+      <div class="error-banner">
+        <mat-icon svgIcon="warning"></mat-icon>
+        <span>{{ errorMessage }}</span>
+      </div>
+    }
+
+  </div>
+
+
+  <div class="dialog-actions">
+
+    <button type="button" class="btn btn-ghost" (click)="cancel()">
+      <span>{{ 'COMMON.CANCEL' | translate }}</span>
+    </button>
+
+    <button type="button" class="btn btn-primary" [disabled]="!canSave" (click)="save()">
+      <mat-icon svgIcon="save"></mat-icon>
+      <span>{{ (isEdit ? 'COMMON.SAVE' : 'BRANCH_DIALOG.REGISTER_BTN') | translate }}</span>
+    </button>
+
+  </div>
+
+</div>

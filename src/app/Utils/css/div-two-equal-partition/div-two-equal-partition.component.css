@@ -1,0 +1,26 @@
+.div-container {
+  margin: 15px auto;
+  padding: 2px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background-color: white;
+  max-width: 1500px;
+}
+
+
+
+.div-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+.partition-bottom-row {
+  margin-top: 12px;
+  background-color: #fafafa;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}

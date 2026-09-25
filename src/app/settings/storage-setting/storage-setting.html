@@ -1,0 +1,132 @@
+<app-title2
+  [titleHeader]="'STORAGE_SETTING_PAGE.TITLE'"
+  (customButtonClick)="onAction($event)"
+  [actions]="getTitled(titleActions)"
+  [activeAction]="storage"
+></app-title2>
+@switch (storage) {
+  @case ('STORAGE_SETTING_PAGE.MANAGE_TAB') {
+    <div class="table-size-container">
+
+  <div class="table-header">
+
+    <div>
+      <h2>{{ 'STORAGE_SETTING_PAGE.MGMT_TITLE' | translate }}</h2>
+
+      <p>
+        {{ 'STORAGE_SETTING_PAGE.MGMT_SUBTITLE' | translate }}
+      </p>
+    </div>
+
+    <button
+      type="button"
+      class="refresh-btn"
+      (click)="getTableSizes()">
+
+      {{ 'STORAGE_SETTING_PAGE.REFRESH_BTN' | translate }}
+
+    </button>
+
+  </div>
+
+
+  <!-- TABLE -->
+
+  <div class="table-wrapper">
+
+    <table>
+
+      <thead>
+
+        <tr>
+          <th>#</th>
+          <th>{{ 'STORAGE_SETTING_PAGE.COL_SCHEMA' | translate }}</th>
+          <th>{{ 'STORAGE_SETTING_PAGE.COL_TABLE' | translate }}</th>
+          <th>{{ 'STORAGE_SETTING_PAGE.COL_ROWS' | translate }}</th>
+          <th>{{ 'STORAGE_SETTING_PAGE.COL_TABLE_SIZE' | translate }}</th>
+          <th>{{ 'STORAGE_SETTING_PAGE.COL_INDEX_SIZE' | translate }}</th>
+          <th>{{ 'STORAGE_SETTING_PAGE.COL_TOTAL_SIZE' | translate }}</th>
+          <th>{{ 'STORAGE_SETTING_PAGE.COL_ACTION' | translate }}</th>
+        </tr>
+
+      </thead>
+
+
+      <tbody>
+
+        <tr
+          *ngFor="let table of tableSizes; let i = index">
+
+          <td>
+            {{ i + 1 }}
+          </td>
+
+          <td>
+            <span class="schema-badge">
+              {{ table.schemaName }}
+            </span>
+          </td>
+
+          <td>
+            <strong>
+              {{ table.tableName }}
+            </strong>
+          </td>
+
+          <td>
+            {{ table.rowCount | number }}
+          </td>
+
+          <td>
+            {{ table.tableSize }}
+          </td>
+
+          <td>
+            {{ table.indexSize }}
+          </td>
+
+          <td>
+            <strong>
+              {{ table.totalSize }}
+            </strong>
+          </td>
+          <td>
+  <div class="size-cell">
+
+    <button
+      type="button"
+      class="view-size-btn"
+      (click)="openSizeDialog(table)"
+    >
+      {{ 'STORAGE_SETTING_PAGE.ACTION_BTN' | translate }}
+    </button>
+  </div>
+</td>
+
+        </tr>
+
+
+        <!-- EMPTY -->
+
+        <tr *ngIf="tableSizes.length === 0">
+
+          <td
+            colspan="7"
+            class="empty-state">
+
+            {{ 'STORAGE_SETTING_PAGE.EMPTY_TEXT' | translate }}
+
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
+  }
+}

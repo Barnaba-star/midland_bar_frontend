@@ -1,0 +1,223 @@
+<div class="page">
+  <section class="hero-section">
+    <div class="glow glow-one"></div>
+    <div class="glow glow-two"></div>
+
+    <nav class="navbar">
+      <div class="navbar-brand">
+        <img src="assets/images/midland.png" alt="Midland Solutions Logo" class="navbar-logo">
+        <span class="navbar-name">Midland Solutions</span>
+      </div>
+      <button mat-stroked-button class="navbar-cta" (click)="goToLogin()">
+        {{ 'LOGIN.SIGN_IN' | translate }}
+      </button>
+    </nav>
+
+    <div class="hero">
+      <div class="hero-copy">
+        <span class="hero-badge">
+          <span class="badge-dot"></span>
+          {{ 'LANDING.HERO_BADGE' | translate }}
+        </span>
+        <h1 class="hero-title">
+          {{ 'LANDING.HERO_TITLE_LINE1' | translate }}<br>
+          <span class="hero-title-gradient">{{ 'LANDING.HERO_TITLE_LINE2' | translate }}</span>
+        </h1>
+        <p class="hero-subtitle">
+          {{ 'LANDING.HERO_SUBTITLE' | translate }}
+        </p>
+        <div class="hero-actions">
+          <button mat-flat-button class="hero-cta" (click)="goToLogin()">
+            <span>{{ 'LANDING.GET_STARTED' | translate }}</span>
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+          <a href="#features" class="hero-secondary">
+            {{ 'LANDING.SEE_INCLUDED' | translate }}
+            <mat-icon>expand_more</mat-icon>
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="mock-window">
+          <div class="mock-titlebar">
+            <span class="mock-dot dot-red"></span>
+            <span class="mock-dot dot-yellow"></span>
+            <span class="mock-dot dot-green"></span>
+          </div>
+          <div class="mock-body">
+            <div class="mock-row">
+              <div class="mock-stat stat-blue">
+                <mat-icon>point_of_sale</mat-icon>
+                <div>
+                  <span class="mock-stat-label">{{ 'LANDING.MOCK_TODAYS_SALES' | translate }}</span>
+                  <span class="mock-stat-value">{{ 'LANDING.MOCK_LIVE' | translate }}</span>
+                </div>
+              </div>
+              <div class="mock-stat stat-gold">
+                <mat-icon>groups</mat-icon>
+                <div>
+                  <span class="mock-stat-label">{{ 'LANDING.MOCK_STAFF_ONLINE' | translate }}</span>
+                  <span class="mock-stat-value">{{ 'COMMON.ACTIVE' | translate }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="mock-chart">
+              <span class="bar" style="--h: 40%; --c: var(--c-blue)"></span>
+              <span class="bar" style="--h: 65%; --c: var(--c-teal)"></span>
+              <span class="bar" style="--h: 50%; --c: var(--c-gold)"></span>
+              <span class="bar" style="--h: 85%; --c: var(--c-green)"></span>
+              <span class="bar" style="--h: 60%; --c: var(--c-pink)"></span>
+              <span class="bar" style="--h: 95%; --c: var(--c-blue)"></span>
+              <span class="bar" style="--h: 70%; --c: var(--c-gold)"></span>
+            </div>
+            <div class="mock-list">
+              <div class="mock-list-item">
+                <mat-icon class="list-icon">inventory_2</mat-icon>
+                <span>{{ 'LANDING.MOCK_INVENTORY_SYNCED' | translate }}</span>
+                <mat-icon class="list-check">check_circle</mat-icon>
+              </div>
+              <div class="mock-list-item">
+                <mat-icon class="list-icon">insights</mat-icon>
+                <span>{{ 'LANDING.MOCK_REPORT_GENERATED' | translate }}</span>
+                <mat-icon class="list-check">check_circle</mat-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="floating-badge badge-top">
+          <mat-icon>admin_panel_settings</mat-icon>
+          <span>{{ 'LANDING.SECURE_ACCESS' | translate }}</span>
+        </div>
+        <div class="floating-badge badge-bottom">
+          <mat-icon>store</mat-icon>
+          <span>{{ 'LANDING.MULTI_BRANCH' | translate }}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features" id="features">
+    <div class="features-intro">
+      <span class="section-eyebrow">{{ 'LANDING.FEATURES_EYEBROW' | translate }}</span>
+      <h2>{{ 'LANDING.FEATURES_TITLE_LINE1' | translate }}<br>{{ 'LANDING.FEATURES_TITLE_LINE2' | translate }}</h2>
+      <p>{{ 'LANDING.FEATURES_SUBTITLE' | translate }}</p>
+    </div>
+
+    <div class="feature-list">
+      <div class="feature-row">
+        <span class="feature-index">01</span>
+        <mat-icon class="feature-icon icon-blue">point_of_sale</mat-icon>
+        <div class="feature-text">
+          <h4 class="feature-title">{{ 'LANDING.FEATURE1_TITLE' | translate }}</h4>
+          <p class="feature-description">{{ 'LANDING.FEATURE1_DESC' | translate }}</p>
+        </div>
+      </div>
+
+      <div class="feature-row">
+        <span class="feature-index">02</span>
+        <mat-icon class="feature-icon icon-green">groups</mat-icon>
+        <div class="feature-text">
+          <h4 class="feature-title">{{ 'LANDING.FEATURE2_TITLE' | translate }}</h4>
+          <p class="feature-description">{{ 'LANDING.FEATURE2_DESC' | translate }}</p>
+        </div>
+      </div>
+
+      <div class="feature-row">
+        <span class="feature-index">03</span>
+        <mat-icon class="feature-icon icon-gold">inventory_2</mat-icon>
+        <div class="feature-text">
+          <h4 class="feature-title">{{ 'LANDING.FEATURE3_TITLE' | translate }}</h4>
+          <p class="feature-description">{{ 'LANDING.FEATURE3_DESC' | translate }}</p>
+        </div>
+      </div>
+
+      <div class="feature-row">
+        <span class="feature-index">04</span>
+        <mat-icon class="feature-icon icon-teal">insights</mat-icon>
+        <div class="feature-text">
+          <h4 class="feature-title">{{ 'LANDING.FEATURE4_TITLE' | translate }}</h4>
+          <p class="feature-description">{{ 'LANDING.FEATURE4_DESC' | translate }}</p>
+        </div>
+      </div>
+
+      <div class="feature-row">
+        <span class="feature-index">05</span>
+        <mat-icon class="feature-icon icon-pink">store</mat-icon>
+        <div class="feature-text">
+          <h4 class="feature-title">{{ 'LANDING.FEATURE5_TITLE' | translate }}</h4>
+          <p class="feature-description">{{ 'LANDING.FEATURE5_DESC' | translate }}</p>
+        </div>
+      </div>
+
+      <div class="feature-row">
+        <span class="feature-index">06</span>
+        <mat-icon class="feature-icon icon-navy">admin_panel_settings</mat-icon>
+        <div class="feature-text">
+          <h4 class="feature-title">{{ 'LANDING.SECURE_ACCESS' | translate }}</h4>
+          <p class="feature-description">{{ 'LANDING.FEATURE6_DESC' | translate }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="values">
+    <div class="section-heading">
+      <span class="section-eyebrow">{{ 'LANDING.VALUES_EYEBROW' | translate }}</span>
+      <h2>{{ 'LANDING.VALUES_TITLE' | translate }}</h2>
+      <p>{{ 'LANDING.VALUES_SUBTITLE' | translate }}</p>
+    </div>
+
+    <div class="values-strip">
+      <div class="value-item">
+        <mat-icon class="value-icon icon-blue">construction</mat-icon>
+        <h4 class="value-title">{{ 'LANDING.VALUE1_TITLE' | translate }}</h4>
+        <p class="value-description">
+          {{ 'LANDING.VALUE1_DESC' | translate }}
+        </p>
+      </div>
+
+      <div class="value-item">
+        <mat-icon class="value-icon icon-green">work</mat-icon>
+        <h4 class="value-title">{{ 'LANDING.VALUE2_TITLE' | translate }}</h4>
+        <p class="value-description">
+          {{ 'LANDING.VALUE2_DESC' | translate }}
+        </p>
+      </div>
+
+      <div class="value-item">
+        <mat-icon class="value-icon icon-gold">lightbulb</mat-icon>
+        <h4 class="value-title">{{ 'LANDING.VALUE3_TITLE' | translate }}</h4>
+        <p class="value-description">
+          {{ 'LANDING.VALUE3_DESC' | translate }}
+        </p>
+      </div>
+
+      <div class="value-item">
+        <mat-icon class="value-icon icon-teal">diamond</mat-icon>
+        <h4 class="value-title">{{ 'LANDING.VALUE4_TITLE' | translate }}</h4>
+        <p class="value-description">
+          {{ 'LANDING.VALUE4_DESC' | translate }}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-banner">
+    <div class="glow glow-cta"></div>
+    <h2 class="cta-title">{{ 'LANDING.CTA_TITLE' | translate }}</h2>
+    <p class="cta-subtitle">{{ 'LANDING.CTA_SUBTITLE' | translate }}</p>
+    <button mat-flat-button class="cta-button" (click)="goToLogin()">
+      <span>{{ 'LANDING.GET_STARTED' | translate }}</span>
+      <mat-icon>arrow_forward</mat-icon>
+    </button>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-brand">
+      <img src="assets/images/midland.png" alt="Midland Solutions Logo" class="footer-logo">
+      <span>Midland Solutions</span>
+    </div>
+    <span class="footer-copy">&copy; {{ currentYear }} Midland Solutions. {{ 'LANDING.ALL_RIGHTS_RESERVED' | translate }}</span>
+  </footer>
+</div>

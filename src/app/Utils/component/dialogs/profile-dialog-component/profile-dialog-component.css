@@ -1,0 +1,307 @@
+.profile-dialog {
+  padding: 24px;
+  width: 360px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.dialog-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-text, #111827);
+}
+
+.close-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  border-radius: 50%;
+  color: var(--color-text-muted, #6b7280);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+.close-btn:hover {
+  background: var(--color-bg, #f5f6fb);
+}
+
+.avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.avatar-preview {
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--color-primary-light, #eef2ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid var(--color-surface, #ffffff);
+  box-shadow: 0 0 0 1px var(--color-border, #e5e7eb);
+}
+
+.avatar-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-fallback {
+  width: 44px;
+  height: 44px;
+  font-size: 44px;
+  color: var(--color-primary, #14315d);
+}
+
+.change-photo-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 7px 14px;
+
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: 999px;
+
+  background: var(--color-surface, #ffffff);
+  color: var(--color-primary, #14315d);
+
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: background 0.2s ease;
+}
+
+.change-photo-btn:hover {
+  background: var(--color-bg, #f5f6fb);
+}
+
+.change-photo-btn mat-icon {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
+
+.error-text {
+  font-size: 12px;
+  color: #dc2626;
+  text-align: center;
+}
+
+.info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  padding: 14px 0;
+  border-top: 1px solid var(--color-border, #e5e7eb);
+  border-bottom: 1px solid var(--color-border, #e5e7eb);
+
+  margin-bottom: 20px;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text, #111827);
+}
+
+.info-row.muted {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-muted, #6b7280);
+}
+
+.info-row mat-icon {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  flex-shrink: 0;
+  color: var(--color-text-muted, #6b7280);
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.cancel-btn,
+.save-btn {
+  padding: 8px 18px;
+  border-radius: var(--radius-sm, 10px);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cancel-btn {
+  border: 1px solid var(--color-border, #e5e7eb);
+  background: var(--color-surface, #ffffff);
+  color: var(--color-text, #111827);
+}
+
+.cancel-btn:hover {
+  background: var(--color-bg, #f5f6fb);
+}
+
+.save-btn {
+  border: none;
+  background: var(--color-primary, #14315d);
+  color: #ffffff;
+}
+
+.save-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.save-btn:not(:disabled):hover {
+  filter: brightness(1.1);
+}
+
+.spin {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  animation: profile-dialog-spin 0.8s linear infinite;
+}
+
+@keyframes profile-dialog-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+
+/* =========================
+   BANK DETAILS
+   Where the monthly payroll sends this person's share. Set here, by them:
+   an account number entered on somebody's behalf is a dispute waiting to
+   happen, and they are the only one who can be sure of it.
+========================= */
+
+.account-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border, #e5e7eb);
+}
+
+.account-label {
+  color: #94a3b8;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+.account-row {
+  display: flex;
+  gap: 8px;
+}
+
+.account-input {
+  flex: 1;
+  min-width: 0;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: 10px;
+  background: var(--color-surface, #ffffff);
+  color: var(--color-text, #0f172a);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.account-input:focus {
+  outline: none;
+  border-color: #c7d2fe;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.18);
+}
+
+.account-input::placeholder {
+  font-family: inherit;
+  font-weight: 500;
+  letter-spacing: normal;
+  color: #cbd5e1;
+}
+
+/* Saves on its own rather than with the photo: the two are unrelated, and
+   one failing should not take the other with it. */
+.account-save {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 10px;
+  background: var(--color-primary, #14315d);
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.account-save:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.account-save mat-icon {
+  width: 17px;
+  height: 17px;
+  font-size: 17px;
+}
+
+.account-hint {
+  color: var(--color-text-muted, #94a3b8);
+  font-size: 11.5px;
+  line-height: 1.45;
+}
+
+/* The bank sits above the number and carries no save button of its own -
+   the two are saved together, because one without the other cannot be
+   paid to. */
+.bank-input {
+  font-family: inherit;
+  font-weight: 600;
+  letter-spacing: normal;
+  margin-bottom: 4px;
+}
+
+.account-error {
+  color: #b42318;
+  font-size: 11.5px;
+  line-height: 1.45;
+}

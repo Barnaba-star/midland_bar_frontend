@@ -1,0 +1,114 @@
+<div class="guidance-dialog">
+
+  <div class="dialog-header">
+    <h2 class="dialog-title">
+      {{ (isEdit ? 'GUIDANCE_DIALOG.EDIT_TITLE' : 'GUIDANCE_DIALOG.ADD_TITLE') | translate }}
+    </h2>
+
+    <button type="button" class="icon-btn" (click)="cancel()" [attr.aria-label]="'COMMON.CLOSE' | translate">
+      <mat-icon svgIcon="close"></mat-icon>
+    </button>
+  </div>
+
+
+  <div class="dialog-body">
+
+    <label class="field">
+      <span class="field-label">{{ 'GUIDANCE_DIALOG.TITLE_LABEL' | translate }}</span>
+      <input
+        type="text"
+        class="field-input"
+        [(ngModel)]="title"
+        [placeholder]="'GUIDANCE_DIALOG.TITLE_PLACEHOLDER' | translate"
+        maxlength="200"
+        autocomplete="off" />
+    </label>
+
+    <label class="field">
+      <span class="field-label">{{ 'GUIDANCE_DIALOG.BODY_LABEL' | translate }}</span>
+      <textarea
+        class="field-input field-textarea"
+        rows="6"
+        [(ngModel)]="body"
+        [placeholder]="'GUIDANCE_DIALOG.BODY_PLACEHOLDER' | translate"
+        maxlength="8000"></textarea>
+    </label>
+
+    <label class="field">
+      <span class="field-label">{{ 'GUIDANCE_DIALOG.VIDEO_LABEL' | translate }}</span>
+      <input
+        type="url"
+        class="field-input"
+        [(ngModel)]="videoUrl"
+        [placeholder]="'GUIDANCE_DIALOG.VIDEO_PLACEHOLDER' | translate"
+        maxlength="500"
+        autocomplete="off" />
+      <span class="field-hint">{{ 'GUIDANCE_DIALOG.VIDEO_HINT' | translate }}</span>
+    </label>
+
+
+    <div class="field">
+      <span class="field-label">{{ 'GUIDANCE_DIALOG.FILE_LABEL' | translate }}</span>
+
+      <label class="file-picker">
+        <mat-icon svgIcon="attachment"></mat-icon>
+        <span>{{ fileName || ('GUIDANCE_DIALOG.CHOOSE_FILE' | translate) }}</span>
+        <input
+          type="file"
+          accept="application/pdf,image/jpeg,image/png,image/webp"
+          (change)="onFileSelected($event)"
+          hidden />
+      </label>
+
+      <span class="field-hint">{{ 'GUIDANCE_DIALOG.FILE_HINT' | translate }}</span>
+    </div>
+
+
+    <div class="field-row">
+
+      <label class="field field-narrow">
+        <span class="field-label">{{ 'GUIDANCE_DIALOG.POSITION_LABEL' | translate }}</span>
+        <input type="number" class="field-input" [(ngModel)]="position" min="0" />
+        <span class="field-hint">{{ 'GUIDANCE_DIALOG.POSITION_HINT' | translate }}</span>
+      </label>
+
+      <!-- A draft is not in front of a thousand branches yet. -->
+      <label class="publish-toggle">
+        <input type="checkbox" [(ngModel)]="published" />
+        <span>
+          <strong>{{ 'GUIDANCE_DIALOG.PUBLISHED' | translate }}</strong>
+          <small>{{ 'GUIDANCE_DIALOG.PUBLISHED_HINT' | translate }}</small>
+        </span>
+      </label>
+
+    </div>
+
+
+    @if (errorMessage) {
+      <div class="error-banner">
+        <mat-icon svgIcon="warning"></mat-icon>
+        <span>{{ errorMessage }}</span>
+      </div>
+    }
+
+  </div>
+
+
+  <div class="dialog-actions">
+
+    <button type="button" class="btn btn-ghost" (click)="cancel()">
+      {{ 'COMMON.CANCEL' | translate }}
+    </button>
+
+    <button type="button" class="btn btn-primary" [disabled]="!canSave" (click)="save()">
+      @if (saving) {
+        <mat-icon class="spin">autorenew</mat-icon>
+      } @else {
+        <mat-icon svgIcon="save"></mat-icon>
+      }
+      <span>{{ 'COMMON.SAVE' | translate }}</span>
+    </button>
+
+  </div>
+
+</div>

@@ -1,0 +1,178 @@
+<app-title2
+[titleHeader]="'CONFIGURATION_PAGE.TITLE'"
+[actions]=getTitled(titleActions)
+[activeAction]="selectedConfiguration"
+(customButtonClick)="onAction($event)"
+ ></app-title2>
+
+@switch (selectedConfiguration) {
+
+@case ('CONFIGURATION_PAGE.GENERAL') {
+
+<div class="general-container">
+
+  <div class="general-header">
+    <div>
+      <h2>{{ 'CONFIGURATION_PAGE.GENERAL' | translate }}</h2>
+      <p>{{ 'CONFIGURATION_PAGE.GENERAL_SUBTITLE' | translate }}</p>
+    </div>
+  </div>
+
+  @if (isLoading) {
+
+    <div class="general-loading">{{ 'CONFIGURATION_PAGE.LOADING' | translate }}</div>
+
+  } @else {
+
+    <!-- COMMISSION AND SUBSCRIPTION -->
+
+    <div class="general-section">
+
+      <h3 class="section-title">{{ 'CONFIGURATION_PAGE.SECTION_BILLING' | translate }}</h3>
+
+      <div class="field-grid">
+
+        <div class="field">
+          <label for="commissionPercent">{{ 'CONFIGURATION_PAGE.COMMISSION_RATE' | translate }}</label>
+          <input id="commissionPercent" type="number" [(ngModel)]="setting.commissionPercent" name="commissionPercent">
+          <small>{{ 'CONFIGURATION_PAGE.COMMISSION_RATE_HINT' | translate }}</small>
+        </div>
+
+        <div class="field">
+          <label for="directorPercent">{{ 'CONFIGURATION_PAGE.DIRECTOR_PERCENT' | translate }}</label>
+          <input id="directorPercent" type="number" [(ngModel)]="setting.directorPercent" name="directorPercent">
+          <small>{{ 'CONFIGURATION_PAGE.DIRECTOR_PERCENT_HINT' | translate }}</small>
+        </div>
+
+        <div class="field">
+          <label for="rootPercent">{{ 'CONFIGURATION_PAGE.ROOT_PERCENT' | translate }}</label>
+          <input id="rootPercent" type="number" [(ngModel)]="setting.rootPercent" name="rootPercent">
+          <small>{{ 'CONFIGURATION_PAGE.ROOT_PERCENT_HINT' | translate }}</small>
+        </div>
+
+        <div class="field">
+          <label for="trialDays">{{ 'CONFIGURATION_PAGE.TRIAL_DAYS' | translate }}</label>
+          <input id="trialDays" type="number" [(ngModel)]="setting.trialDays" name="trialDays">
+          <small>{{ 'CONFIGURATION_PAGE.TRIAL_DAYS_HINT' | translate }}</small>
+        </div>
+
+        <div class="field">
+          <label for="gracePeriodDays">{{ 'CONFIGURATION_PAGE.GRACE_PERIOD_DAYS' | translate }}</label>
+          <input id="gracePeriodDays" type="number" [(ngModel)]="setting.gracePeriodDays" name="gracePeriodDays">
+          <small>{{ 'CONFIGURATION_PAGE.GRACE_PERIOD_DAYS_HINT' | translate }}</small>
+        </div>
+
+        <div class="field">
+          <label for="minimumPaymentAmount">{{ 'CONFIGURATION_PAGE.MINIMUM_PAYMENT' | translate }}</label>
+          <input id="minimumPaymentAmount" type="number" [(ngModel)]="setting.minimumPaymentAmount" name="minimumPaymentAmount">
+          <small>{{ 'CONFIGURATION_PAGE.MINIMUM_PAYMENT_HINT' | translate }}</small>
+        </div>
+
+        <div class="field">
+          <label for="defaultSubscriptionAmount">{{ 'CONFIGURATION_PAGE.DEFAULT_PLAN_PRICE' | translate }}</label>
+          <input id="defaultSubscriptionAmount" type="number" [(ngModel)]="setting.defaultSubscriptionAmount" name="defaultSubscriptionAmount">
+          <small>{{ 'CONFIGURATION_PAGE.DEFAULT_PLAN_PRICE_HINT' | translate }}</small>
+        </div>
+
+        <div class="field">
+          <label for="defaultSubscriptionDays">{{ 'CONFIGURATION_PAGE.DEFAULT_PLAN_LENGTH' | translate }}</label>
+          <input id="defaultSubscriptionDays" type="number" [(ngModel)]="setting.defaultSubscriptionDays" name="defaultSubscriptionDays">
+          <small>{{ 'CONFIGURATION_PAGE.DEFAULT_PLAN_LENGTH_HINT' | translate }}</small>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- SECURITY -->
+
+    <div class="general-section">
+
+      <h3 class="section-title">{{ 'CONFIGURATION_PAGE.SECTION_SECURITY' | translate }}</h3>
+
+      <div class="field-grid">
+
+        <div class="field">
+          <label for="sessionHours">{{ 'CONFIGURATION_PAGE.SESSION_LENGTH' | translate }}</label>
+          <input id="sessionHours" type="number" [(ngModel)]="setting.sessionHours" name="sessionHours">
+          <small>{{ 'CONFIGURATION_PAGE.SESSION_LENGTH_HINT' | translate }}</small>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- MAINTENANCE -->
+
+    <div class="general-section">
+
+      <h3 class="section-title">{{ 'CONFIGURATION_PAGE.SECTION_MAINTENANCE' | translate }}</h3>
+
+      <div class="field-grid">
+
+        <div class="field">
+          <label for="errorRetentionDays">{{ 'CONFIGURATION_PAGE.ERROR_RETENTION' | translate }}</label>
+          <input id="errorRetentionDays" type="number" [(ngModel)]="setting.errorRetentionDays" name="errorRetentionDays">
+          <small>{{ 'CONFIGURATION_PAGE.ERROR_RETENTION_HINT' | translate }}</small>
+        </div>
+
+        <div class="field">
+          <label for="errorPurgeDays">{{ 'CONFIGURATION_PAGE.ERROR_PURGE' | translate }}</label>
+          <input id="errorPurgeDays" type="number" [(ngModel)]="setting.errorPurgeDays" name="errorPurgeDays">
+          <small>{{ 'CONFIGURATION_PAGE.ERROR_PURGE_HINT' | translate }}</small>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="general-actions">
+
+      <button type="button" class="reset-btn" (click)="resetPlatformSetting()" [disabled]="isSaving">
+        {{ 'CONFIGURATION_PAGE.RESET_BTN' | translate }}
+      </button>
+
+      <button type="button" class="save-btn" (click)="savePlatformSetting()" [disabled]="isSaving">
+        {{ 'CONFIGURATION_PAGE.SAVE_BTN' | translate }}
+      </button>
+
+    </div>
+
+  }
+
+</div>
+}
+
+
+@default {
+<div class="configuration-card">
+
+  <div class="configuration-row header">
+    <h2>{{ 'CONFIGURATION_PAGE.MGMT_TITLE' | translate }}</h2>
+  </div>
+
+  <div class="configuration-row">
+    <strong>{{ 'COMMON.PURPOSE' | translate }}</strong>
+    <p>
+      {{ 'CONFIGURATION_PAGE.PURPOSE_TEXT' | translate }}
+    </p>
+  </div>
+
+  <div class="configuration-row">
+    <strong>{{ 'COMMON.WHAT_YOU_CAN_DO' | translate }}</strong>
+    <p [innerHTML]="'CONFIGURATION_PAGE.WHAT_YOU_CAN_DO_LIST' | translate"></p>
+  </div>
+
+  <div class="configuration-row">
+    <strong>{{ 'COMMON.NOTE' | translate }}</strong>
+    <p>
+      {{ 'CONFIGURATION_PAGE.NOTE_TEXT' | translate }}
+    </p>
+  </div>
+
+</div>
+}
+}

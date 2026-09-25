@@ -1,0 +1,201 @@
+<app-title2
+  [titleHeader]="'ERROR_SETTING_PAGE.TITLE'"
+  (customButtonClick)="onAction($event)"
+  [actions]="getTitled(titleActions)"
+  [activeAction]="errors"
+></app-title2>
+
+@switch (errors) {
+  @case ('ERROR_SETTING_PAGE.MANAGE_TAB') {
+
+    <div class="error-log-container">
+
+      <div class="error-header">
+
+        <div>
+          <h2>{{ 'ERROR_SETTING_PAGE.MGMT_TITLE' | translate }}</h2>
+          <p>{{ 'ERROR_SETTING_PAGE.MGMT_SUBTITLE' | translate }}</p>
+        </div>
+
+        <div class="header-actions">
+          <button type="button" class="refresh-btn" (click)="refresh()">
+            {{ 'ERROR_SETTING_PAGE.REFRESH_BTN' | translate }}
+          </button>
+
+          <button type="button" class="clear-btn" (click)="clearErrors()">
+            {{ 'ERROR_SETTING_PAGE.CLEAR_BTN' | translate }}
+          </button>
+        </div>
+
+      </div>
+
+
+      <!-- COUNTS -->
+
+      <div class="summary-row">
+
+        <div class="summary-card">
+          <span class="summary-label">{{ 'ERROR_SETTING_PAGE.LAST_DAY' | translate }}</span>
+          <span class="summary-value">{{ lastDayCount }}</span>
+        </div>
+
+        <div class="summary-card">
+          <span class="summary-label">{{ 'ERROR_SETTING_PAGE.LAST_WEEK' | translate }}</span>
+          <span class="summary-value">{{ lastWeekCount }}</span>
+        </div>
+
+        <div class="summary-card">
+          <span class="summary-label">{{ 'ERROR_SETTING_PAGE.TOTAL' | translate }}</span>
+          <span class="summary-value">{{ totalElements }}</span>
+        </div>
+
+      </div>
+
+
+      <!-- FILTERS -->
+
+      <div class="filter-row">
+
+        <select
+          class="filter-select"
+          [value]="sourceFilter"
+          (change)="onFilterChange($any($event.target).value, levelFilter)">
+          <option value="">{{ 'ERROR_SETTING_PAGE.SOURCE_ALL' | translate }}</option>
+          <option value="BACKEND">{{ 'ERROR_SETTING_PAGE.SOURCE_BACKEND' | translate }}</option>
+          <option value="FRONTEND">{{ 'ERROR_SETTING_PAGE.SOURCE_FRONTEND' | translate }}</option>
+        </select>
+
+        <select
+          class="filter-select"
+          [value]="levelFilter"
+          (change)="onFilterChange(sourceFilter, $any($event.target).value)">
+          <option value="">{{ 'ERROR_SETTING_PAGE.LEVEL_ALL' | translate }}</option>
+          <option value="ERROR">{{ 'ERROR_SETTING_PAGE.LEVEL_ERROR' | translate }}</option>
+          <option value="WARN">{{ 'ERROR_SETTING_PAGE.LEVEL_WARN' | translate }}</option>
+        </select>
+
+      </div>
+
+
+      <!-- TABLE -->
+
+      <div class="table-wrapper">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>{{ 'ERROR_SETTING_PAGE.COL_TIME' | translate }}</th>
+              <th>{{ 'ERROR_SETTING_PAGE.COL_LEVEL' | translate }}</th>
+              <th>{{ 'ERROR_SETTING_PAGE.COL_SOURCE' | translate }}</th>
+              <th>{{ 'ERROR_SETTING_PAGE.COL_TYPE' | translate }}</th>
+              <th>{{ 'ERROR_SETTING_PAGE.COL_MESSAGE' | translate }}</th>
+              <th>{{ 'ERROR_SETTING_PAGE.COL_PATH' | translate }}</th>
+              <th>{{ 'ERROR_SETTING_PAGE.COL_USER' | translate }}</th>
+              <th>{{ 'ERROR_SETTING_PAGE.COL_ACTION' | translate }}</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            @for (errorLog of errorLogs; track errorLog.uid; let i = $index) {
+              <tr>
+
+                <td>{{ currentPage * pageSize + i + 1 }}</td>
+
+                <td class="time-cell">
+                  {{ errorLog.occurredAt | date: 'dd/MM/yyyy HH:mm:ss' }}
+                </td>
+
+                <td>
+                  <span
+                    class="level-badge"
+                    [class.level-error]="errorLog.level === 'ERROR'"
+                    [class.level-warn]="errorLog.level === 'WARN'">
+                    {{ errorLog.level }}
+                  </span>
+                </td>
+
+                <td>
+                  <span class="source-badge">{{ errorLog.source }}</span>
+                </td>
+
+                <td class="type-cell" [title]="errorLog.exceptionType">
+                  {{ shortType(errorLog.exceptionType) }}
+                </td>
+
+                <td class="message-cell" [title]="errorLog.message">
+                  {{ shortMessage(errorLog.message) }}
+                </td>
+
+                <td class="path-cell" [title]="errorLog.path">
+                  {{ errorLog.httpMethod }} {{ errorLog.path }}
+                </td>
+
+                <td>{{ errorLog.username || '-' }}</td>
+
+                <td>
+                  <button type="button" class="view-btn" (click)="openDetail(errorLog)">
+                    {{ 'ERROR_SETTING_PAGE.VIEW_BTN' | translate }}
+                  </button>
+                </td>
+
+              </tr>
+            }
+
+            @if (!isLoading && errorLogs.length === 0) {
+              <tr>
+                <td colspan="9">
+                  <div class="empty-state">
+                    {{ 'ERROR_SETTING_PAGE.EMPTY_TEXT' | translate }}
+                  </div>
+                </td>
+              </tr>
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+
+      <!-- PAGINATION -->
+
+      @if (totalPages > 1) {
+        <div class="pagination-row">
+
+          <button
+            type="button"
+            class="pagination-btn"
+            [disabled]="currentPage === 0"
+            (click)="goToPage(currentPage - 1)">
+            &lsaquo;
+          </button>
+
+          @for (page of pageNumbers; track page) {
+            <button
+              type="button"
+              class="pagination-btn page-number"
+              [class.active]="currentPage === page"
+              (click)="goToPage(page)">
+              {{ page + 1 }}
+            </button>
+          }
+
+          <button
+            type="button"
+            class="pagination-btn"
+            [disabled]="currentPage >= totalPages - 1"
+            (click)="goToPage(currentPage + 1)">
+            &rsaquo;
+          </button>
+
+        </div>
+      }
+
+    </div>
+
+  }
+}

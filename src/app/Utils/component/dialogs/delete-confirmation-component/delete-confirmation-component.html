@@ -1,0 +1,76 @@
+<div class="delete-dialog">
+
+  <!-- Icon -->
+  <div class="delete-icon-wrapper">
+    <mat-icon>delete_outline</mat-icon>
+  </div>
+
+
+  <!-- Content -->
+  <div class="delete-content">
+
+    <h2>
+      {{ data.title || ('COMMON.DELETE_ITEM_TITLE' | translate) }}
+    </h2>
+
+    <p>
+      {{ data.message || ('COMMON.CONFIRM_DELETE_ITEM' | translate) }}
+    </p>
+
+
+    <!-- Item Name -->
+    <div
+      class="item-preview"
+      *ngIf="data.itemName"
+    >
+
+      <div class="item-preview-icon">
+        <mat-icon>description</mat-icon>
+      </div>
+
+      <div class="item-preview-content">
+
+        <span class="item-label">
+          {{ 'COMMON.ITEM' | translate }}
+        </span>
+
+        <span class="item-name">
+          {{ data.itemName }}
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- Actions -->
+  <div class="delete-actions">
+
+    <button
+      type="button"
+      class="cancel-button"
+      (click)="cancel()"
+    >
+      {{ data.cancelText || ('COMMON.CANCEL' | translate) }}
+    </button>
+
+
+    <button
+      type="button"
+      class="delete-button"
+      (click)="confirm()"
+    >
+
+      <mat-icon>
+        delete_outline
+      </mat-icon>
+
+      {{ data.confirmText || ('COMMON.DELETE' | translate) }}
+
+    </button>
+
+  </div>
+
+</div>

@@ -1,0 +1,75 @@
+<div class="purge-audit-dialog">
+
+  <div class="dialog-header">
+
+    <div class="header-top">
+      <h2 class="dialog-title">{{ 'PURGE_AUDIT_DIALOG.TITLE' | translate }}</h2>
+
+      <button type="button" class="icon-btn" (click)="close()" [attr.aria-label]="'COMMON.CLOSE' | translate">
+        <mat-icon svgIcon="close"></mat-icon>
+      </button>
+    </div>
+
+  </div>
+
+
+  <div class="dialog-body">
+
+    <!-- Pick the age, not the rows: nothing newer than the cut-off is touched. -->
+    <p class="field-label">{{ 'PURGE_AUDIT_DIALOG.OLDER_THAN' | translate }}</p>
+
+    <div class="age-options" role="radiogroup">
+
+      @for (option of dayOptions; track option) {
+        <button
+          type="button"
+          class="age-chip"
+          role="radio"
+          [class.active]="days === option"
+          [attr.aria-checked]="days === option"
+          (click)="select(option)">
+
+          <span class="chip-days">
+            {{ option }} {{ 'PURGE_AUDIT_DIALOG.DAYS' | translate }}
+          </span>
+
+          <!-- A chip whose count was never measured shows no count at all. -->
+          @if (countFor(option) !== null) {
+            <span class="chip-count">
+              {{ countFor(option) | number }} {{ 'PURGE_AUDIT_DIALOG.ENTRIES' | translate }}
+            </span>
+          }
+
+        </button>
+      }
+
+    </div>
+
+
+    <p class="notice notice-danger">
+      <mat-icon svgIcon="warning"></mat-icon>
+      <span>{{ 'PURGE_AUDIT_DIALOG.PERMANENT' | translate }}</span>
+    </p>
+
+    <p class="notice">
+      <mat-icon svgIcon="question"></mat-icon>
+      <span>{{ 'PURGE_AUDIT_DIALOG.PROTECTED' | translate }}</span>
+    </p>
+
+  </div>
+
+
+  <div class="dialog-actions">
+
+    <button type="button" class="btn btn-ghost" (click)="close()">
+      <span>{{ 'PURGE_AUDIT_DIALOG.CANCEL' | translate }}</span>
+    </button>
+
+    <button type="button" class="btn btn-danger" (click)="confirm()">
+      <mat-icon svgIcon="delete"></mat-icon>
+      <span>{{ 'PURGE_AUDIT_DIALOG.PURGE_BTN' | translate }}</span>
+    </button>
+
+  </div>
+
+</div>

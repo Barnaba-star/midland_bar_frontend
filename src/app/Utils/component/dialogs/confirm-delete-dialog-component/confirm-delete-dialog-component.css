@@ -1,0 +1,107 @@
+.delete-dialog {
+  padding: 28px;
+  text-align: center;
+}
+
+.delete-icon {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.delete-icon mat-icon {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+}
+
+.delete-dialog h2 {
+  margin: 0 0 10px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.delete-dialog p {
+  margin: 0 auto 18px;
+  max-width: 350px;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.branch-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  padding: 12px;
+  margin-bottom: 24px;
+
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.branch-info strong {
+  color: #111827;
+}
+
+.branch-info span {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.cancel-btn,
+.delete-confirm-btn {
+  height: 40px;
+  padding: 0 18px;
+
+  border-radius: 7px;
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  font-weight: 500;
+}
+
+.cancel-btn {
+  border: 1px solid #d1d5db;
+  background: white;
+  color: #374151;
+}
+
+.cancel-btn:hover {
+  background: #f3f4f6;
+}
+
+.delete-confirm-btn {
+  border: none;
+  background: #dc2626;
+  color: white;
+}
+
+.delete-confirm-btn:hover {
+  background: #b91c1c;
+}
+
+.delete-confirm-btn mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}

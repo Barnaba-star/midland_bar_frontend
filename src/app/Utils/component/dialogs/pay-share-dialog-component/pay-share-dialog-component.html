@@ -1,0 +1,97 @@
+<div class="pay-share-dialog">
+
+  <div class="dialog-header">
+
+    <div class="header-top">
+      <h2 class="dialog-title">{{ 'PAY_SHARE_DIALOG.TITLE' | translate }}</h2>
+
+      <button type="button" class="icon-btn" (click)="cancel()" [attr.aria-label]="'COMMON.CLOSE' | translate">
+        <mat-icon svgIcon="close"></mat-icon>
+      </button>
+    </div>
+
+  </div>
+
+
+  <div class="dialog-body">
+
+    <p class="recipient-name">{{ data.name }}</p>
+
+    <!-- The month as it stands, read only - the only figure to set is below. -->
+    <div class="figure-grid">
+
+      <div class="figure">
+        <span class="figure-label">{{ 'PAY_SHARE_DIALOG.EARNS' | translate }}</span>
+        <span class="figure-value">{{ data.amount | number }} TZS</span>
+      </div>
+
+      <div class="figure">
+        <span class="figure-label">{{ 'PAY_SHARE_DIALOG.PAID' | translate }}</span>
+        <span class="figure-value">{{ data.paid | number }} TZS</span>
+      </div>
+
+      <div class="figure">
+        <span class="figure-label">{{ 'PAY_SHARE_DIALOG.OUTSTANDING' | translate }}</span>
+        <span class="figure-value figure-value-owed">{{ data.outstanding | number }} TZS</span>
+      </div>
+
+    </div>
+
+
+    <label class="amount-field">
+      <span class="amount-label">{{ 'PAY_SHARE_DIALOG.AMOUNT_LABEL' | translate }}</span>
+
+      <span class="amount-input-wrap">
+        <input
+          type="number"
+          class="amount-input"
+          [class.amount-input-bad]="!isValid"
+          [(ngModel)]="amount"
+          (ngModelChange)="onAmountChange()"
+          min="1"
+          [max]="data.outstanding"
+          step="1"
+          inputmode="numeric" />
+        <span class="amount-unit">TZS</span>
+      </span>
+    </label>
+
+    <!-- What is left once this is written down, so it is clear before confirming. -->
+    @if (isValid) {
+      @if (isFullyPaid) {
+        <p class="amount-hint amount-hint-clear">{{ 'PAY_SHARE_DIALOG.FULLY_PAID' | translate }}</p>
+      } @else {
+        <p class="amount-hint">
+          {{ 'PAY_SHARE_DIALOG.REMAINING' | translate }}: {{ remaining | number }} TZS
+        </p>
+      }
+    } @else if (isTooMuch) {
+      <p class="amount-error">{{ 'PAY_SHARE_DIALOG.TOO_MUCH' | translate }}</p>
+    } @else {
+      <p class="amount-error">{{ 'PAY_SHARE_DIALOG.INVALID' | translate }}</p>
+    }
+
+
+    <!-- No money moves from here, and saying so is the whole point of this note. -->
+    <p class="notice">
+      <mat-icon svgIcon="warning"></mat-icon>
+      <span>{{ 'PAY_SHARE_DIALOG.NOT_SENDING' | translate }}</span>
+    </p>
+
+  </div>
+
+
+  <div class="dialog-actions">
+
+    <button type="button" class="btn btn-ghost" (click)="cancel()">
+      <span>{{ 'PAY_SHARE_DIALOG.CANCEL' | translate }}</span>
+    </button>
+
+    <button type="button" class="btn btn-primary" [disabled]="!isValid" (click)="confirm()">
+      <mat-icon svgIcon="pay"></mat-icon>
+      <span>{{ 'PAY_SHARE_DIALOG.PAY_BTN' | translate }}</span>
+    </button>
+
+  </div>
+
+</div>

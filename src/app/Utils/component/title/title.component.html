@@ -1,0 +1,18 @@
+<mat-toolbar class="main-toolbar">
+
+  <div class="left">
+     <mat-icon svgIcon="arrowback" class="app-icon" (click)="onBack()"></mat-icon>
+    <span class="app-title" style="font-size: 20px;">{{titleHeader}}</span>
+  </div>
+
+  <div class="right">
+    <div class="action"
+         *ngFor="let action of actions"
+         (click)="onActionClick(action)">
+      <mat-icon class="app-icon">{{ action.icon }}</mat-icon>
+      <span class="app-title">{{ action.title }}</span>
+
+    </div>
+  </div>
+
+</mat-toolbar>

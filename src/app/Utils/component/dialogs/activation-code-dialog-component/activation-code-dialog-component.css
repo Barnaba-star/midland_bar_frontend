@@ -1,0 +1,189 @@
+.code-dialog {
+  padding: 24px;
+  width: 400px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.dialog-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 32px;
+  height: 32px;
+
+  border-radius: 50%;
+
+  background: #ecfdf3;
+  color: #067647;
+}
+
+.header-icon mat-icon {
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+}
+
+.dialog-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-text, #111827);
+}
+
+.dialog-subtitle {
+  margin: 8px 0 18px;
+  font-size: 13px;
+  color: var(--color-text-muted, #6b7280);
+}
+
+
+/* The two things to read out, side by side and large enough to read
+   across a counter. */
+
+.credentials {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  padding: 16px;
+
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: var(--radius-sm, 10px);
+
+  background: var(--color-bg, #f5f6fb);
+}
+
+.credential {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.credential-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-muted, #6b7280);
+}
+
+.credential-value {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-text, #111827);
+
+  /* A username can be long; the code never is. */
+  word-break: break-all;
+  text-align: right;
+}
+
+.credential-value.code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 24px;
+  letter-spacing: 4px;
+  color: var(--color-primary, #14315d);
+  word-break: normal;
+}
+
+
+.notes {
+  margin: 16px 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+
+  margin: 0;
+
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--color-text-muted, #6b7280);
+}
+
+.note mat-icon {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.note.warn {
+  color: #b54708;
+}
+
+
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.copy-btn,
+.done-btn {
+  padding: 8px 18px;
+  border-radius: var(--radius-sm, 10px);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.copy-btn {
+  border: 1px solid var(--color-border, #e5e7eb);
+  background: var(--color-surface, #ffffff);
+  color: var(--color-text, #111827);
+}
+
+.copy-btn:hover {
+  background: var(--color-bg, #f5f6fb);
+}
+
+.copy-btn mat-icon {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
+
+.done-btn {
+  border: none;
+  background: var(--color-primary, #14315d);
+  color: #ffffff;
+}
+
+.done-btn:hover {
+  filter: brightness(1.1);
+}
+
+
+@media (max-width: 480px) {
+
+  .code-dialog {
+    width: 100%;
+    padding: 20px 16px;
+  }
+
+  .credential {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+
+  .credential-value {
+    text-align: left;
+  }
+}

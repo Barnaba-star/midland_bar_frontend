@@ -1,0 +1,18 @@
+<div class="search-box">
+
+  <mat-icon class="search-icon" svgIcon="filter"></mat-icon>
+
+  <input
+    class="search-input"
+    type="text"
+    [placeholder]="placeholder | translate"
+    [(ngModel)]="searchText"
+    (ngModelChange)="onInputChange()" />
+
+  @if (searchText) {
+    <button type="button" class="clear-btn" (click)="clear()" [attr.aria-label]="'COMMON.CANCEL' | translate">
+      <mat-icon svgIcon="close"></mat-icon>
+    </button>
+  }
+
+</div>

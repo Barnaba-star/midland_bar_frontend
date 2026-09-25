@@ -1,0 +1,157 @@
+<app-title2
+  [titleHeader]="'EXPIRING_SETTING_PAGE.TITLE'"
+  (customButtonClick)="onAction($event)"
+  [actions]="getTitled(titleActions)"
+  [activeAction]="expiring"
+></app-title2>
+
+@switch (expiring) {
+  @case ('EXPIRING_SETTING_PAGE.MANAGE_TAB') {
+
+    <div class="expiring-container">
+
+      <div class="expiring-header">
+
+        <div>
+          <h2>{{ 'EXPIRING_SETTING_PAGE.MGMT_TITLE' | translate }}</h2>
+          <p>{{ 'EXPIRING_SETTING_PAGE.MGMT_SUBTITLE' | translate }}</p>
+        </div>
+
+        <div class="header-actions">
+          <button type="button" class="refresh-btn" (click)="refresh()">
+            {{ 'EXPIRING_SETTING_PAGE.REFRESH_BTN' | translate }}
+          </button>
+        </div>
+
+      </div>
+
+
+      <!-- COUNTS -->
+
+      <div class="summary-row">
+
+        <div class="summary-card">
+          <span class="summary-label">{{ 'EXPIRING_SETTING_PAGE.EXPIRED_COUNT' | translate }}</span>
+          <span class="summary-value">{{ expiredCount }}</span>
+        </div>
+
+        <div class="summary-card">
+          <span class="summary-label">{{ 'EXPIRING_SETTING_PAGE.SOON_COUNT' | translate }}</span>
+          <span class="summary-value">{{ soonCount }}</span>
+        </div>
+
+        <div class="summary-card">
+          <span class="summary-label">{{ 'EXPIRING_SETTING_PAGE.TOTAL_COUNT' | translate }}</span>
+          <span class="summary-value">{{ branches.length }}</span>
+        </div>
+
+      </div>
+
+
+      <!-- FILTERS -->
+
+      <div class="filter-row">
+
+        <select
+          class="filter-select"
+          [value]="windowDays"
+          (change)="onWindowChange($any($event.target).value)">
+          @for (option of windowOptions; track option.value) {
+            <option [value]="option.value">{{ option.label | translate }}</option>
+          }
+        </select>
+
+      </div>
+
+
+      <!-- TABLE -->
+
+      <div class="table-wrapper">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>{{ 'EXPIRING_SETTING_PAGE.COL_BRANCH' | translate }}</th>
+              <th>{{ 'EXPIRING_SETTING_PAGE.COL_REGION' | translate }}</th>
+              <th>{{ 'EXPIRING_SETTING_PAGE.COL_PHONE' | translate }}</th>
+              <th>{{ 'EXPIRING_SETTING_PAGE.COL_DATE' | translate }}</th>
+              <th>{{ 'EXPIRING_SETTING_PAGE.COL_STATUS' | translate }}</th>
+              <th>{{ 'EXPIRING_SETTING_PAGE.COL_AMOUNT' | translate }}</th>
+              <th>{{ 'EXPIRING_SETTING_PAGE.COL_REGISTERED_BY' | translate }}</th>
+              <th>{{ 'EXPIRING_SETTING_PAGE.COL_REASON' | translate }}</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            @for (branch of branches; track branch.uid; let i = $index) {
+              <tr [class.row-lapsed]="branch.daysLeft < 0">
+
+                <td>{{ i + 1 }}</td>
+
+                <td class="branch-cell">
+                  <span class="branch-name">{{ branch.branchName }}</span>
+                  <span class="branch-code">{{ branch.branchCode }}</span>
+                </td>
+
+                <td>{{ branch.region || '-' }}</td>
+
+                <td class="phone-cell">{{ branch.phone || '-' }}</td>
+
+                <td class="time-cell">
+                  {{ branch.closeSubscription | date: 'dd/MM/yyyy' }}
+                </td>
+
+                <td>
+                  @if (branch.daysLeft < 0) {
+                    <span class="level-badge status-lapsed">
+                      {{ 'EXPIRING_SETTING_PAGE.LAPSED_DAYS' | translate: { days: lapsedDays(branch) } }}
+                    </span>
+                  } @else if (branch.daysLeft === 0) {
+                    <span class="level-badge status-lapsed">
+                      {{ 'EXPIRING_SETTING_PAGE.LAPSES_TODAY' | translate }}
+                    </span>
+                  } @else if (branch.daysLeft <= 7) {
+                    <span class="level-badge status-soon">
+                      {{ 'EXPIRING_SETTING_PAGE.DAYS_LEFT' | translate: { days: branch.daysLeft } }}
+                    </span>
+                  } @else {
+                    <span class="level-badge status-later">
+                      {{ 'EXPIRING_SETTING_PAGE.DAYS_LEFT' | translate: { days: branch.daysLeft } }}
+                    </span>
+                  }
+                </td>
+
+                <td class="amount-cell">{{ branch.subscriptionAmount | number }} TZS</td>
+
+                <td>{{ branch.registeredBy || '-' }}</td>
+
+                <td class="reason-cell" [title]="branch.lastPaymentFailure">
+                  {{ branch.lastPaymentFailure || '-' }}
+                </td>
+
+              </tr>
+            }
+
+            @if (!isLoading && branches.length === 0) {
+              <tr>
+                <td colspan="9">
+                  <div class="empty-state">
+                    {{ 'EXPIRING_SETTING_PAGE.EMPTY_TEXT' | translate }}
+                  </div>
+                </td>
+              </tr>
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  }
+}

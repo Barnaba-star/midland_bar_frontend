@@ -1,0 +1,36 @@
+.partition-container {
+  border: 3px solid #ddd;
+  border-radius: 12px;
+  background-color: white;
+  max-width: 1800px;
+  
+  padding: 0 0px 0px 0px;  /* Padding: juu = 0 */
+  overflow: hidden;
+}
+
+.partition-title {
+ font-size: 25px;
+  font-weight: 600;
+  color: #fff;
+  background-color: rgb(207, 213, 213);
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.partition-grid {
+  display: grid;
+  grid-template-columns: 80% 20%;
+ 
+}
+
+.left-part,
+.right-part {
+  background-color: white;
+  padding: 0px;
+  border-radius: 8px;
+  border: 3px solid #e0e0e0;
+}
+.right-part{
+background-color: white;
+width: 100%;
+}

@@ -1,0 +1,270 @@
+<div class="role-dialog">
+
+  <!-- HEADER -->
+
+  <div class="role-dialog-header">
+
+    <div class="role-dialog-title">
+
+      <div class="role-dialog-icon">
+        <span class="material-icons">
+          admin_panel_settings
+        </span>
+      </div>
+
+      <div>
+        <h2>{{ 'ROLE_DETAILS_DIALOG.TITLE' | translate }}</h2>
+
+        <p>
+          {{ 'ROLE_DETAILS_DIALOG.SUBTITLE' | translate }}
+        </p>
+      </div>
+
+    </div>
+
+    <button
+      type="button"
+      class="close-btn"
+      (click)="close()">
+
+      <span class="material-icons">
+        close
+      </span>
+
+    </button>
+
+  </div>
+
+
+  <!-- BODY -->
+
+  <div class="role-dialog-body">
+
+    <!-- ROLE SUMMARY -->
+
+    <div class="role-summary">
+
+      <div class="role-avatar">
+
+        {{ data.name?.charAt(0) }}
+
+      </div>
+
+      <div class="role-summary-info">
+
+        <h3>
+          {{ data.name }}
+        </h3>
+
+        <span class="role-code">
+          {{ data.code }}
+        </span>
+
+      </div>
+
+      <div
+        class="status-badge"
+        [class.inactive]="!data.isActive">
+
+        <span class="status-dot"></span>
+
+        {{ data.isActive ? ('COMMON.ACTIVE' | translate) : ('COMMON.INACTIVE' | translate) }}
+
+      </div>
+
+    </div>
+
+
+    <!-- ROLE INFORMATION -->
+
+    <div class="section-header">
+
+      <span class="material-icons">
+        info
+      </span>
+
+      <span>
+        {{ 'ROLE_DETAILS_DIALOG.ROLE_INFORMATION' | translate }}
+      </span>
+
+    </div>
+
+
+    <div class="role-info-grid">
+
+      <div class="info-item">
+
+        <span class="label">
+          {{ 'COMMON.NAME' | translate }}
+        </span>
+
+        <span class="value">
+          {{ data.name }}
+        </span>
+
+      </div>
+
+
+      <div class="info-item">
+
+        <span class="label">
+          {{ 'COMMON.CODE' | translate }}
+        </span>
+
+        <span class="value code">
+          {{ data.code }}
+        </span>
+
+      </div>
+
+
+      <div class="info-item">
+
+        <span class="label">
+          {{ 'COMMON.CATEGORY' | translate }}
+        </span>
+
+        <span class="value">
+          {{ data.category }}
+        </span>
+
+      </div>
+
+
+      <div class="info-item">
+
+        <span class="label">
+          {{ 'COMMON.STATUS' | translate }}
+        </span>
+
+        <span class="value">
+          {{ data.status }}
+        </span>
+
+      </div>
+
+
+      <div class="info-item full">
+
+        <span class="label">
+          {{ 'COMMON.DESCRIPTION' | translate }}
+        </span>
+
+        <span class="value">
+          {{ data.description || ('ROLE_DETAILS_DIALOG.NO_DESCRIPTION' | translate) }}
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- PERMISSIONS -->
+
+    <div class="permissions-header">
+
+      <div class="section-header">
+
+        <span class="material-icons">
+          verified_user
+        </span>
+
+        <span>
+          {{ 'SALON.PERMISSION' | translate }}
+        </span>
+
+      </div>
+
+      <span class="permission-count">
+        {{ data.permission?.length || 0 }}
+      </span>
+
+    </div>
+
+
+    @if (data.permission?.length > 0) {
+
+      <div class="permissions-list">
+
+        @for (
+          permission of data.permission;
+          track permission.uid
+        ) {
+
+          <div class="permission-item">
+
+            <div class="permission-icon">
+
+              <span class="material-icons">
+                check_circle
+              </span>
+
+            </div>
+
+
+            <div class="permission-content">
+
+              <div class="permission-name">
+                {{ permission.name }}
+              </div>
+
+              <div class="permission-meta">
+
+                <span>
+                  {{ permission.module }}
+                </span>
+
+                <span>•</span>
+
+                <span>
+                  {{ permission.group }}
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <span class="permission-status">
+              {{ 'COMMON.ACTIVE' | translate }}
+            </span>
+
+          </div>
+
+        }
+
+      </div>
+
+    } @else {
+
+      <div class="empty-permissions">
+
+        <span class="material-icons">
+          lock_open
+        </span>
+
+        {{ 'ROLE_DETAILS_DIALOG.NO_PERMISSIONS' | translate }}
+
+      </div>
+
+    }
+
+  </div>
+
+
+  <!-- FOOTER -->
+
+  <div class="role-dialog-footer">
+
+    <button
+      type="button"
+      class="close-dialog-btn"
+      (click)="close()">
+
+      {{ 'COMMON.CLOSE' | translate }}
+
+    </button>
+
+  </div>
+
+</div>

@@ -1,0 +1,127 @@
+.dialog-container {
+  width: 100%;
+}
+
+.dialog-header {
+  padding: 24px 24px 10px;
+
+  h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 600;
+  }
+
+  .subtitle {
+    margin: 5px 0 0;
+    color: #777;
+    font-size: 14px;
+  }
+}
+
+mat-dialog-content {
+  padding: 20px 24px !important;
+}
+
+.available-balance {
+  width: 100%;
+  padding: 16px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+
+  background: #f4f8ff;
+  border: 1px solid #dce8ff;
+  border-radius: 10px;
+}
+
+.balance-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.balance-icon {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #e5efff;
+  color: #1976d2;
+  border-radius: 10px;
+}
+
+.balance-label {
+  display: flex;
+  flex-direction: column;
+
+  span {
+    font-size: 12px;
+    color: #777;
+  }
+
+  strong {
+    font-size: 18px;
+    color: #1976d2;
+  }
+}
+
+.form-group {
+  width: 100%;
+  margin-bottom: 18px;
+}
+
+.field-label {
+  display: block;
+  margin-bottom: 6px;
+
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+}
+
+mat-form-field {
+  width: 100% !important;
+}
+
+form {
+  width: 100%;
+}
+
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+mat-dialog-actions {
+  padding: 16px 24px 22px !important;
+  margin: 0 !important;
+
+  border-top: 1px solid #eee;
+}
+.inputData {
+  width: 100% !important;
+  box-sizing: border-box;
+
+  font-size: 15px;
+  color: #1f2937;
+}
+
+/* Input height */
+input.inputData {
+  height: 52px;
+}
+
+/* Textarea */
+textarea.inputData {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* Material field */
+mat-form-field {
+  width: 100% !important;
+  display: block;
+}
+

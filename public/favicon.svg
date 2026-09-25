@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Midland Bar">
+  <!-- A filled tile rather than a floating outline: at 16px in a tab strip
+       a line drawing disappears, while a solid shape holds its edge. -->
+  <rect width="32" height="32" rx="7" fill="#14315d"/>
+  <!-- A cocktail glass, in the brand's gold. The bowl is deliberately wide:
+       the triangle is the part that still reads when this is 16 pixels
+       across, and the stem and base are what stop it reading as an arrow. -->
+  <g fill="#d8ab52">
+    <path d="M6.5 8.5h19L16 19z"/>
+    <rect x="15.1" y="18.4" width="1.8" height="6.4"/>
+    <rect x="9.5" y="24.4" width="13" height="2.1" rx="1.05"/>
+  </g>
+</svg>

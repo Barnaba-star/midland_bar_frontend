@@ -13,7 +13,12 @@
       @if (receipt.paidAt) {
         <div class="r-row"><span>{{ 'RECEIPT.DATE' | translate }}</span><span>{{ receipt.paidAt | date: 'dd/MM/yyyy HH:mm' }}</span></div>
       }
-      @if (receipt.paidBy) {
+      @if (receipt.staffName) {
+        <div class="r-row"><span>{{ 'RECEIPT.SERVED_BY' | translate }}</span><span>{{ receipt.staffCode }} · {{ receipt.staffName }}</span></div>
+        @if (receipt.paidBy) {
+          <div class="r-row"><span>{{ 'RECEIPT.RECEIVED_BY' | translate }}</span><span>{{ receipt.paidBy }}</span></div>
+        }
+      } @else if (receipt.paidBy) {
         <div class="r-row"><span>{{ 'RECEIPT.SERVED_BY' | translate }}</span><span>{{ receipt.paidBy }}</span></div>
       }
       <div class="r-rule"></div>

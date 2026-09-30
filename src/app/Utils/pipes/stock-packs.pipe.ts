@@ -77,6 +77,14 @@ export function unitKey(unit: string): string {
   return KNOWN_UNITS.includes(upper) ? 'PRODUCT_FORM.UNIT_' + upper : unit;
 }
 
+/** unitKey for templates: `packUnit | unitLabel | translate` shows Kreti, or Mkungu as typed. */
+@Pipe({ name: 'unitLabel' })
+export class UnitLabelPipe implements PipeTransform {
+  transform(unit: string | null | undefined): string {
+    return unit ? unitKey(unit) : '';
+  }
+}
+
 function parseLadder(json: string | null | undefined): Rung[] {
   if (!json) {
     return [];

@@ -1,6 +1,8 @@
 
 export interface BarStaffDTO{
   uid?: string;
+  /** K1, A2... - blank gives the next number (001, 002...). */
+  staffCode?: string;
   firstName?: string;
   middleName?:string;
   lastName?:string;
@@ -13,6 +15,8 @@ export interface BarStaffDTO{
 }
 export interface BarStaffEntity{
   uid?: string;
+  /** Typed at Staff Sell - 001, 002... */
+  staffCode?: string;
   firstName?: string;
   middleName?:string;
   lastName?:string;
@@ -151,6 +155,10 @@ export interface SaleOpenedDTO {
 export interface SalesOpened{
     uid?: string;
     salesCode?: string;
+    /** Set on bills opened at Staff Sell - whose bill it is. */
+    staffUid?: string;
+    staffName?: string;
+    staffCode?: string;
     paymentMethod?: string;
     paidAmount?:number;
     paymentStatus?:string;
@@ -239,4 +247,48 @@ export interface StockReceiptDTO {
   packPrice?: number;
   supplier?: string;
   note?: string;
+}
+
+/** The staff member behind a Staff Sell code. */
+export interface StaffSellStaff {
+    uid: string;
+    staffCode: string;
+    name: string;
+    category?: string;
+}
+
+/** One staff member's day on the Sales page. Null staffCode = bills opened on the Sales page itself. */
+export interface StaffSalesRow {
+    staffCode: string | null;
+    staffName: string | null;
+    total: number;
+    paidBills: number;
+    byMethod: Record<string, number>;
+    openBills: number;
+    openAmount: number;
+}
+
+/** What a staff member wrote at Staff Sell, waiting on the supervisor. */
+export interface StaffOrder {
+    uid: string;
+    salesOpenedUid: string;
+    salesCode: string;
+    staffUid: string;
+    staffCode: string;
+    staffName: string;
+    /** DRAFT (still writing), SENT (with the supervisor), RECEIVED, REJECTED. */
+    status: 'DRAFT' | 'SENT' | 'RECEIVED' | 'REJECTED';
+    sentAt?: string;
+    decidedAt?: string;
+    decidedBy?: string;
+    rejectReason?: string;
+    lines: StaffOrderLine[];
+}
+
+export interface StaffOrderLine {
+    uid: string;
+    barServiceUid: string;
+    serviceName: string;
+    quantity: number;
+    unitPrice: number;
 }

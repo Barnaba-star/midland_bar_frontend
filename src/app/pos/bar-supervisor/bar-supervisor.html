@@ -1,0 +1,81 @@
+<div class="sup">
+  <header class="sup-bar">
+    @if (!onlySupervisor) {
+      <button type="button" class="bar-btn" (click)="backToPos()">
+        <mat-icon>arrow_back</mat-icon>
+        <span>POS</span>
+      </button>
+    }
+    <div class="sup-brand">
+      <img src="assets/images/midland.png" alt="" class="sup-logo">
+      <span class="sup-name">{{ 'SUPERVISOR_PAGE.TITLE' | translate }}</span>
+      @if (orders.length) {
+        <span class="sup-count">{{ orders.length }}</span>
+      }
+    </div>
+    <button type="button" class="bar-btn icon" (click)="toggleSound()"
+      [attr.aria-label]="(sound ? 'SUPERVISOR_PAGE.SOUND_OFF' : 'SUPERVISOR_PAGE.SOUND_ON') | translate">
+      <mat-icon>{{ sound ? 'volume_up' : 'volume_off' }}</mat-icon>
+    </button>
+    <span class="sup-user">{{ userName }}</span>
+    <button type="button" class="bar-btn icon" (click)="logout()" [attr.aria-label]="'MENU.LOGOUT' | translate">
+      <mat-icon>logout</mat-icon>
+    </button>
+  </header>
+
+  <main class="sup-main">
+    @if (!loaded) {
+      <p class="sup-note">{{ 'COMMON.LOADING' | translate }}</p>
+    } @else if (orders.length === 0) {
+      <div class="sup-empty">
+        <mat-icon>local_bar</mat-icon>
+        <h2>{{ 'SUPERVISOR_PAGE.EMPTY_TITLE' | translate }}</h2>
+        <p>{{ 'SUPERVISOR_PAGE.EMPTY_TEXT' | translate }}</p>
+      </div>
+    } @else {
+      <div class="ticket-grid">
+        @for (order of orders; track order.uid) {
+          <article class="ticket" [class.fresh]="fresh.has(order.uid)" [class.busy]="busy[order.uid]">
+            <div class="ticket-head">
+              <div>
+                <span class="ticket-bill">{{ order.salesCode }}</span>
+                <span class="ticket-staff"><b>{{ order.staffCode }}</b> {{ order.staffName }}</span>
+              </div>
+              <span class="ticket-time" [class.late]="waited(order) >= 5">
+                <mat-icon>schedule</mat-icon>
+                {{ order.sentAt | date: 'HH:mm' }}
+                @if (waited(order) > 0) { · {{ waited(order) }}′ }
+              </span>
+            </div>
+
+            <ul class="ticket-lines">
+              @for (line of order.lines; track line.uid) {
+                <li>
+                  <span class="qty">{{ line.quantity }}×</span>
+                  <span class="name">{{ line.serviceName }}</span>
+                  <span class="amt">{{ line.quantity * line.unitPrice | number }}</span>
+                </li>
+              }
+            </ul>
+
+            <div class="ticket-total">
+              <span>{{ 'SUPERVISOR_PAGE.TOTAL' | translate }}</span>
+              <strong>Tshs {{ total(order) | number }}</strong>
+            </div>
+
+            <div class="ticket-actions">
+              <button type="button" class="btn-reject" [disabled]="busy[order.uid]" (click)="reject(order)">
+                <mat-icon>block</mat-icon>
+                {{ 'SUPERVISOR_PAGE.REJECT' | translate }}
+              </button>
+              <button type="button" class="btn-receive" [disabled]="busy[order.uid]" (click)="receive(order)">
+                <mat-icon>check</mat-icon>
+                {{ 'SUPERVISOR_PAGE.RECEIVE' | translate }}
+              </button>
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </main>
+</div>

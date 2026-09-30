@@ -55,6 +55,15 @@ findBranchList():Observable<ResponseList<any>>{
  return this.http.get<ResponseList<any>>(`${this.branchUrl}/findBranchList`)
 }
 
+/** The branches a user works in besides home - main office only. */
+findUserBranches(userUID: string): Observable<Response<any>> {
+  return this.http.get<Response<any>>(`${this.userURL}/findUserBranches/${userUID}`);
+}
+
+saveUserBranches(dto: { userUID: string; branchUIDs: string[] }): Observable<Response<any>> {
+  return this.http.post<Response<any>>(`${this.userURL}/saveUserBranches`, dto);
+}
+
 findRoles():Observable<ResponseList<any>>{
   return this.http.get<ResponseList<any>>(`${this.roleURL}/findRoles`)
 }

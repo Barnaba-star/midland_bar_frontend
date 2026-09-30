@@ -1,0 +1,36 @@
+<form class="unlock" (ngSubmit)="submit()">
+  <div class="unlock-head">
+    <span class="unlock-icon"><mat-icon>lock</mat-icon></span>
+    <div>
+      <h3>{{ 'STAFF_SELL_PAGE.UNLOCK_TITLE' | translate }}</h3>
+      <p>{{ 'STAFF_SELL_PAGE.UNLOCK_HINT' | translate }}</p>
+    </div>
+  </div>
+
+  <label class="unlock-field">
+    <span>{{ 'COMMON.USERNAME' | translate }}</span>
+    <input name="username" [(ngModel)]="username" autocomplete="off" autocapitalize="none" spellcheck="false" />
+  </label>
+
+  <label class="unlock-field">
+    <span>{{ 'COMMON.PASSWORD' | translate }}</span>
+    <div class="pass-wrap">
+      <input name="password" [(ngModel)]="password" [type]="showPassword ? 'text' : 'password'" autocomplete="off" />
+      <button type="button" class="pass-toggle" (click)="showPassword = !showPassword"
+        [attr.aria-label]="(showPassword ? 'LOGIN.HIDE_PASSWORD' : 'LOGIN.SHOW_PASSWORD') | translate">
+        <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+    </div>
+  </label>
+
+  <div class="unlock-actions">
+    <button type="button" class="row-action view" (click)="cancel()">
+      <mat-icon>close</mat-icon>
+      <span>{{ 'COMMON.CANCEL' | translate }}</span>
+    </button>
+    <button type="submit" class="unlock-btn" [disabled]="!username.trim() || !password || checking">
+      <mat-icon>lock_open</mat-icon>
+      {{ (checking ? 'COMMON.LOADING' : 'STAFF_SELL_PAGE.UNLOCK_BTN') | translate }}
+    </button>
+  </div>
+</form>

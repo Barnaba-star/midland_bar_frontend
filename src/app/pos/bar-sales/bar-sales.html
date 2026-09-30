@@ -10,7 +10,7 @@
     <div class="action-container">
       <div class="bills-header">
         <p>
-          <span class="bill-count">{{ salesOpenedList.length }}</span>
+          <span class="bill-count">{{ visibleBills.length }}</span>
           <span class="bill-text">{{ 'SALES_PAGE.BILLS_IN_PROGRESS' | translate }}</span>
           <span class="separator">•</span>
           <span class="bill-date">
@@ -24,18 +24,101 @@
           {{ 'SALES_PAGE.OPEN_BILL' | translate }}
         </button>
       </div>
+      <!-- ================= EACH STAFF MEMBER'S DAY ================= -->
+      @if (staffSales.length) {
+        <section class="staff-sales">
+          <div class="staff-sales-head">
+            <h3>{{ 'SALES_PAGE.STAFF_SALES_TITLE' | translate }}</h3>
+            <input type="date" class="staff-sales-date" [value]="staffSalesDate" (change)="onStaffSalesDate($any($event.target).value)" />
+          </div>
+
+          <div class="staff-sales-list">
+            @for (row of staffSales; track row.staffCode ?? '') {
+              <button type="button" class="staff-sales-row"
+                [class.active]="staffFilter === (row.staffCode ?? 'NONE')"
+                (click)="setStaffFilter(row.staffCode ?? 'NONE')">
+                <span class="ss-who">
+                  @if (row.staffCode) {
+                    <b>{{ row.staffCode }}</b> {{ row.staffName }}
+                  } @else {
+                    {{ 'SALES_PAGE.FILTER_NONE' | translate }}
+                  }
+                </span>
+                <span class="ss-total">Tshs {{ row.total | number }}</span>
+                <span class="ss-methods">
+                  @for (m of methodsOf(row); track m.method) {
+                    <span class="ss-method">{{ 'PAY_BILL.METHOD_' + m.method | translate }} <b>{{ m.amount | number }}</b></span>
+                  } @empty {
+                    <span class="ss-none">{{ 'SALES_PAGE.STAFF_SALES_NOTHING_PAID' | translate }}</span>
+                  }
+                </span>
+                @if (row.openBills) {
+                  <span class="ss-open">{{ 'SALES_PAGE.STAFF_SALES_OPEN' | translate: { n: row.openBills } }} · {{ row.openAmount | number }}</span>
+                }
+              </button>
+            }
+
+            <div class="staff-sales-row totals">
+              <span class="ss-who">{{ 'SALES_PAGE.STAFF_SALES_ALL' | translate }}</span>
+              <span class="ss-total">Tshs {{ staffSalesTotals.total | number }}</span>
+              <span class="ss-methods">
+                @for (m of methodsOf(totalsRow()); track m.method) {
+                  <span class="ss-method">{{ 'PAY_BILL.METHOD_' + m.method | translate }} <b>{{ m.amount | number }}</b></span>
+                }
+              </span>
+              @if (staffSalesTotals.openAmount) {
+                <span class="ss-open">{{ 'SALES_PAGE.STAFF_SALES_UNPAID' | translate }} · {{ staffSalesTotals.openAmount | number }}</span>
+              }
+            </div>
+          </div>
+        </section>
+      }
+
+      <!-- ================= WHOSE BILLS ================= -->
+      @if (staffOptions.length) {
+        <div class="staff-filter" role="tablist" [attr.aria-label]="'SALES_PAGE.FILTER_STAFF' | translate">
+          <button type="button" class="staff-chip" [class.active]="staffFilter === 'ALL'" (click)="setStaffFilter('ALL')">
+            {{ 'SALES_PAGE.FILTER_ALL' | translate }}
+            <span class="chip-count">{{ salesOpenedList.length }}</span>
+          </button>
+          @for (opt of staffOptions; track opt.code) {
+            <button type="button" class="staff-chip" [class.active]="staffFilter === opt.code" (click)="setStaffFilter(opt.code)">
+              <b>{{ opt.code }}</b> {{ opt.name }}
+              <span class="chip-count">{{ opt.count }}</span>
+            </button>
+          }
+          @if (unassignedCount) {
+            <button type="button" class="staff-chip" [class.active]="staffFilter === 'NONE'" (click)="setStaffFilter('NONE')">
+              {{ 'SALES_PAGE.FILTER_NONE' | translate }}
+              <span class="chip-count">{{ unassignedCount }}</span>
+            </button>
+          }
+        </div>
+      }
+
       <div class="outerSale">
         <!-- ================= LEFT 70% ================= -->
         <div class="sales-section">
           <div class="sales-list">
-            @for (sale of salesOpenedList; track sale.uid) {
+            @for (sale of visibleBills; track sale.uid) {
               <div class="sale-card" [class.selected]="selectedSale?.uid === sale.uid">
                 <!-- ================= HEADER ================= -->
                 <div class="sale-header">
                   <div class="sale-code">
                     <strong>{{ sale.salesCode }}</strong>
+                    @if (sale.staffCode) {
+                      <span class="sale-staff">{{ sale.staffCode }} · {{ sale.staffName }}</span>
+                    }
                   </div>
 
+                  <!-- Only while the bill reads zero; once a service is on it there is nothing to delete. -->
+                  @if (!((sale.bill || 0) > 0) && sale.paymentStatus !== 'PAID') {
+                    <button type="button" class="bill-delete-btn" (click)="deleteEmptyBill(sale)" [disabled]="deletingBill === sale.uid"
+                            [attr.aria-label]="'SALES_PAGE.DELETE_BILL' | translate" [title]="'SALES_PAGE.DELETE_BILL' | translate">
+                      <mat-icon>delete</mat-icon>
+                      <span>{{ 'COMMON.DELETE' | translate }}</span>
+                    </button>
+                  }
                   <div
                     class="sale-status"
                     [class.status-paid]="sale.paymentStatus === 'PAID'"
@@ -65,26 +148,7 @@
                   </div>
                 </div>
 
-                <!-- ================= LINES ON THE BILL (folded) ================= -->
-                @if ((billLines[sale.uid!] ?? []).length > 0) {
-                  <div class="draft-lines">
-                    <button type="button" class="draft-title" (click)="toggleDraft(sale)" [attr.aria-expanded]="!!openDrafts[sale.uid!]">
-                      <span>{{ 'SALES_FLOW.ON_BILL' | translate }} ({{ lineCount(sale) }})</span>
-                      <span class="draft-summary">
-                        <mat-icon>{{ openDrafts[sale.uid!] ? 'expand_less' : 'expand_more' }}</mat-icon>
-                      </span>
-                    </button>
-                    @if (openDrafts[sale.uid!]) {
-                      @for (line of billLines[sale.uid!]; track line.uid) {
-                        <div class="draft-line">
-                          <span class="draft-qty">{{ line.quantity || 1 }} ×</span>
-                          <span class="draft-name">{{ line.serviceName }}</span>
-                          <span class="draft-amount">Tshs {{ (line.lineTotal ?? line.price) | number }}</span>
-                        </div>
-                      }
-                    }
-                  </div>
-                }
+                <!-- What is on the bill shows in View inside only. -->
                 <!-- ================= FOOTER ================= -->
              <div class="sale-actions">
 
@@ -105,28 +169,15 @@
   </button>
 
 
-  <!-- LIPA -->
-  <button
-    type="button"
-    class="sale-action-btn pay-btn"
-    (click)="onPay(sale)"
-    [disabled]="payingBill === sale.uid || !(billLines[sale.uid!] ?? []).length"
-  >
-    <span class="action-icon">
-      <mat-icon>payments</mat-icon>
-    </span>
-    <span class="action-text">
-      {{ 'PAY_BILL.BTN' | translate }}
-    </span>
-  </button>
   <!-- TAZAMA NDANI -->
   <button
     type="button"
     class="sale-action-btn load-btn"
     (click)="findBarSalesList(sale)"
+    [disabled]="payingBill === sale.uid"
   >
     <span class="action-icon">
-      <mat-icon>refresh</mat-icon>
+      <mat-icon>visibility</mat-icon>
     </span>
 
     <span class="action-text">
@@ -155,7 +206,7 @@
               </div>
             }
 
-            @if (salesOpenedList.length === 0) {
+            @if (visibleBills.length === 0) {
               <app-empty-state
                 icon="payment"
                 title="SALES_PAGE.EMPTY_TITLE"

@@ -1,49 +1,234 @@
-.login-container {
-  position: relative;
+/*
+ * Login, matched to the landing page: a photo of the bar after hours on the
+ * left, the form printed on a cream ticket on the right.
+ */
+.login-page {
+  --ink: #0e0c0a;
+  --ink-2: #16130f;
+  --line: rgba(255, 236, 205, 0.1);
+  --cream: #f6ecdc;
+  --paper: #fbf6ec;
+  --muted: #a89c8a;
+  --amber: #f5a524;
+  --amber-2: #ffc861;
+  --display: 'Bebas Neue', 'Oswald', Impact, sans-serif;
+
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
   min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  background: linear-gradient(160deg, #eaeff8 0%, #f5f6fb 45%, #faf1de 100%);
-  padding: 24px;
-  box-sizing: border-box;
+  background: var(--ink);
+  color: var(--cream);
 }
 
-.bg-blob {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(70px);
-  opacity: 0.35;
-  pointer-events: none;
+.amber {
+  color: var(--amber);
 }
 
-.blob-one {
-  width: 420px;
-  height: 420px;
-  top: -140px;
-  left: -120px;
-  background: var(--color-primary);
-}
+/* ---------- Left panel ---------- */
 
-.blob-two {
-  width: 380px;
-  height: 380px;
-  bottom: -160px;
-  right: -100px;
-  background: var(--color-accent);
-}
-
-.login-card {
+.login-panel {
   position: relative;
-  z-index: 1;
-  width: 380px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 40px;
+  padding: 32px 48px 0;
+  overflow: hidden;
+  border-right: 1px solid var(--line);
+  background:
+    linear-gradient(180deg, rgba(14, 12, 10, 0.9) 0%, rgba(14, 12, 10, 0.62) 45%, rgba(14, 12, 10, 0.94) 100%),
+    url('/assets/images/bar/pendant-bar.jpg') center / cover no-repeat;
+}
+
+.panel-brand {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.panel-logo {
+  width: 38px;
+  height: 38px;
+  padding: 4px;
+  border-radius: 10px;
+  background: var(--cream);
+  object-fit: contain;
+}
+
+.panel-name {
+  font-family: var(--display);
+  font-size: 26px;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.panel-name em {
+  font-style: normal;
+  color: var(--amber);
+}
+
+.panel-copy {
+  position: relative;
+}
+
+.panel-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--amber);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--amber);
+  box-shadow: 0 0 0 4px rgba(245, 165, 36, 0.2);
+}
+
+.panel-title {
+  display: flex;
+  flex-direction: column;
+  margin: 16px 0 18px;
+  font-family: var(--display);
+  font-size: clamp(56px, 7vw, 96px);
+  font-weight: 400;
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+.panel-sub {
+  max-width: 420px;
+  margin: 0;
+  color: #d8ccb8;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.panel-list {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 20px 0 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+  color: var(--cream);
+  font-size: 14px;
+}
+
+.panel-list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.panel-list mat-icon {
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+  color: var(--amber);
+}
+
+/* Three shots of the bar, running the full width of the panel. */
+.panel-photos {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  margin: 0 -48px;
+  border-top: 3px solid var(--amber);
+}
+
+.panel-photos figure {
+  position: relative;
+  height: clamp(130px, 17vh, 190px);
+  margin: 0;
+  overflow: hidden;
+}
+
+.panel-photos img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.panel-photos figcaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 28px 14px 10px;
+  background: linear-gradient(0deg, rgba(14, 12, 10, 0.9), rgba(14, 12, 10, 0));
+  font-family: var(--display);
+  font-size: 20px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---------- Right side ---------- */
+
+.login-side {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 72px 24px 48px;
+}
+
+.back-link {
+  position: absolute;
+  top: 32px;
+  right: 32px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  color: var(--amber);
+}
+
+.back-link mat-icon {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
+
+.login-ticket {
+  width: 400px;
   max-width: 100%;
-  padding: 36px 32px 28px;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-  background: var(--color-surface);
+  padding: 26px 28px 44px;
+  background: var(--paper);
+  color: #1d1812;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.55);
   animation: riseIn 0.4s ease-out;
+  /* torn bottom edge, like the bill on the landing page */
+  -webkit-mask: radial-gradient(circle 7px at 50% 100%, transparent 98%, #000) 0 0 / 18px 100%;
+          mask: radial-gradient(circle 7px at 50% 100%, transparent 98%, #000) 0 0 / 18px 100%;
+
+  /* Material fields and button, in the ticket's colours */
+  --mat-sys-primary: #b86e00;
+  --mdc-outlined-text-field-focus-outline-color: #b86e00;
+  --mdc-outlined-text-field-focus-label-text-color: #b86e00;
+  --mat-form-field-container-text-font: var(--font-sans);
 }
 
 @keyframes riseIn {
@@ -57,31 +242,46 @@
   }
 }
 
-.brand {
+.ticket-head {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  text-align: center;
-  margin-bottom: 24px;
+  justify-content: space-between;
 }
 
-.brand-logo {
-  width: 96px;
-  height: auto;
-  margin-bottom: 12px;
+.ticket-code {
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #7a6f60;
+}
+
+.ticket-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
 }
 
 .brand-title {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 600;
-  color: var(--color-text);
+  margin: 10px 0 4px;
+  font-family: var(--display);
+  font-size: 40px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  text-transform: uppercase;
+  color: #1d1812;
 }
 
 .brand-subtitle {
-  margin: 4px 0 0;
+  margin: 0;
   font-size: 13px;
-  color: var(--color-text-muted);
+  color: #7a6f60;
+}
+
+.ticket-rule {
+  margin: 18px 0 20px;
+  border-top: 1px dashed #b9ad99;
 }
 
 .full-width {
@@ -94,8 +294,8 @@
 
 .submit-button {
   margin-top: 8px;
-  height: 46px;
-  border-radius: var(--radius-sm);
+  height: 48px;
+  border-radius: 999px;
   font-weight: 600;
   letter-spacing: 0.2px;
   display: flex;
@@ -103,10 +303,14 @@
   justify-content: center;
   gap: 8px;
 
-  --mdc-filled-button-container-color: var(--color-primary);
-  --mdc-filled-button-label-text-color: #ffffff;
-  --mat-sys-primary: var(--color-primary);
-  --mat-sys-on-primary: #ffffff;
+  --mdc-filled-button-container-color: var(--amber);
+  --mdc-filled-button-label-text-color: #1a1206;
+  --mat-sys-primary: var(--amber);
+  --mat-sys-on-primary: #1a1206;
+}
+
+.submit-button:disabled {
+  opacity: 0.55;
 }
 
 .spinner {
@@ -123,9 +327,9 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #fef2f2;
-  color: #b91c1c;
-  border-radius: var(--radius-sm);
+  background: #fdecea;
+  color: #a4221a;
+  border-radius: 10px;
   padding: 10px 12px;
   margin: 4px 0 12px;
   font-size: 13px;
@@ -141,6 +345,62 @@ input.mat-input-element:-webkit-autofill {
   -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
   box-shadow: 0 0 0px 1000px transparent inset !important;
   -webkit-text-fill-color: inherit !important;
+}
+
+/* ---------- Narrow screens: the ticket alone, the panel shrunk to a header ---------- */
+
+@media (max-width: 900px) {
+  .login-page {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+  }
+
+  .login-panel {
+    justify-content: flex-start;
+    gap: 20px;
+    padding: 20px 16px 0;
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .panel-title {
+    font-size: 48px;
+    margin-bottom: 0;
+  }
+
+  .panel-sub,
+  .panel-list {
+    display: none;
+  }
+
+  .login-side {
+    justify-content: flex-start;
+    padding: 56px 16px 40px;
+  }
+
+  .panel-photos {
+    margin: 4px -16px 0;
+  }
+
+  .panel-photos figure {
+    height: 96px;
+  }
+
+  .panel-photos figcaption {
+    padding: 18px 8px 6px;
+    font-size: 16px;
+  }
+
+  .back-link {
+    top: 20px;
+    right: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login-ticket {
+    animation: none;
+  }
 }
 
 
@@ -175,8 +435,8 @@ input.mat-input-element:-webkit-autofill {
   gap: 8px;
   height: 40px;
   padding: 0 18px;
-  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-  border: 1px solid #0f172a;
+  background: #1d1812;
+  border: 1px solid #1d1812;
   border-radius: 12px;
   color: #ffffff;
   font-size: 13px;
@@ -186,8 +446,8 @@ input.mat-input-element:-webkit-autofill {
 }
 
 .subscribe-btn:hover {
-  background: linear-gradient(180deg, #334155 0%, #1e293b 100%);
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.22);
+  background: #3a3024;
+  box-shadow: 0 4px 12px rgba(29, 24, 18, 0.25);
 }
 
 .subscribe-btn:active {
@@ -196,7 +456,7 @@ input.mat-input-element:-webkit-autofill {
 
 .subscribe-btn:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.28);
+  box-shadow: 0 0 0 3px rgba(245, 165, 36, 0.4);
 }
 
 .subscribe-btn mat-icon {

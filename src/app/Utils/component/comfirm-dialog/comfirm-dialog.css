@@ -41,7 +41,7 @@
   min-width: 0;
   margin: 0;
   padding-top: 8px;
-  color: #0f172a;
+  color: #1d1812;
   font-size: 18px;
   font-weight: 700;
   line-height: 1.4;
@@ -61,7 +61,7 @@
 
 .dialog-message {
   margin: 0;
-  color: #475569;
+  color: #5c5042;
   font-size: 14px;
   line-height: 1.6;
   overflow-wrap: anywhere;
@@ -83,7 +83,7 @@
   gap: 10px;
   margin-top: 20px;
   padding-top: 16px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid #e8dcc8;
 }
 
 .btn {
@@ -117,13 +117,13 @@
 
 .btn-ghost {
   background: #ffffff;
-  border: 1px solid #e2e8f0;
-  color: #334155;
+  border: 1px solid #e8dcc8;
+  color: #4a3f33;
 }
 
 .btn-ghost:hover {
-  background: #f8fafc;
-  border-color: #cbd5e1;
+  background: #faf6ef;
+  border-color: #d8ccb8;
 }
 
 /* The destructive action is the one that carries the colour, not "No". */
@@ -141,7 +141,7 @@
 
 .btn:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.28);
+  box-shadow: 0 0 0 3px rgba(184, 110, 0, 0.28);
 }
 
 .btn-danger:focus-visible {

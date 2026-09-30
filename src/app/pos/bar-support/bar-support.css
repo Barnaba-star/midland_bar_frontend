@@ -14,14 +14,14 @@
 
 .support-header h2 {
   margin: 0;
-  color: #0f172a;
+  color: #1d1812;
   font-size: 17px;
   font-weight: 700;
 }
 
 .support-header p {
   margin: 4px 0 0;
-  color: #64748b;
+  color: #7a6f60;
   font-size: 12.5px;
   line-height: 1.5;
 }
@@ -34,7 +34,7 @@
   padding: 0 14px;
   border: none;
   border-radius: 10px;
-  background: #0f172a;
+  background: #1d1812;
   color: #ffffff;
   font-family: inherit;
   font-size: 12.5px;
@@ -58,14 +58,14 @@
   flex-direction: column;
   padding: 16px;
   margin-bottom: 18px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e8dcc8;
   border-radius: 12px;
   background: #ffffff;
 }
 
 .field-label {
   margin-bottom: 6px;
-  color: #475467;
+  color: #5c5042;
   font-size: 11.5px;
   font-weight: 700;
   letter-spacing: 0.3px;
@@ -81,10 +81,10 @@
 
 .category-tab {
   padding: 7px 15px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e8dcc8;
   border-radius: 999px;
   background: #ffffff;
-  color: #64748b;
+  color: #7a6f60;
   font-family: inherit;
   font-size: 12.5px;
   font-weight: 600;
@@ -93,12 +93,12 @@
 }
 
 .category-tab:hover {
-  background: #f8fafc;
+  background: #faf6ef;
 }
 
 .category-tab.selected {
-  border-color: #0f172a;
-  background: #0f172a;
+  border-color: #1d1812;
+  background: #1d1812;
   color: #ffffff;
 }
 
@@ -106,10 +106,10 @@
 .new-message textarea {
   margin-bottom: 14px;
   padding: 10px 12px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e8dcc8;
   border-radius: 10px;
   background: #ffffff;
-  color: #0f172a;
+  color: #1d1812;
   font-family: inherit;
   font-size: 13px;
   resize: vertical;
@@ -118,7 +118,7 @@
 .new-message input:focus,
 .new-message textarea:focus {
   outline: none;
-  border-color: #94a3b8;
+  border-color: #a89c8a;
 }
 
 .form-actions {
@@ -139,14 +139,14 @@
 }
 
 .cancel-btn {
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e8dcc8;
   background: #ffffff;
-  color: #334155;
+  color: #4a3f33;
 }
 
 .send-btn {
   border: none;
-  background: #0f172a;
+  background: #1d1812;
   color: #ffffff;
 }
 
@@ -189,7 +189,7 @@
   gap: 6px;
   width: 100%;
   padding: 14px 16px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e8dcc8;
   border-radius: 12px;
   background: #ffffff;
   font-family: inherit;
@@ -199,8 +199,8 @@
 }
 
 .thread:hover {
-  border-color: #c7d2fe;
-  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06);
+  border-color: #f3d9a8;
+  box-shadow: 0 2px 10px rgba(29, 24, 18, 0.06);
 }
 
 .thread-top {
@@ -236,19 +236,19 @@
 
 .when {
   margin-left: auto;
-  color: #94a3b8;
+  color: #a89c8a;
   font-size: 11px;
 }
 
 .subject {
-  color: #0f172a;
+  color: #1d1812;
   font-size: 13.5px;
   font-weight: 600;
   overflow-wrap: anywhere;
 }
 
 .snippet {
-  color: #64748b;
+  color: #7a6f60;
   font-size: 12px;
   line-height: 1.5;
   overflow-wrap: anywhere;
@@ -265,7 +265,7 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  color: #94a3b8;
+  color: #a89c8a;
   font-size: 11px;
   font-weight: 600;
 }
@@ -308,7 +308,7 @@
 
 .state-note {
   padding: 40px 0;
-  color: #94a3b8;
+  color: #a89c8a;
   font-size: 13px;
   text-align: center;
 }

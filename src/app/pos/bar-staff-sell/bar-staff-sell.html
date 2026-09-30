@@ -1,0 +1,164 @@
+<div class="module">
+  <!-- ============ TOP BAR - a module of its own, like POS and Settings ============ -->
+  <!-- Staff are not users: the manager signs in and opens this for them.
+       The only way out is back to POS, which is the manager's. -->
+  <header class="module-bar">
+    <button type="button" class="exit-btn" (click)="exitToPos()">
+      <mat-icon>arrow_back</mat-icon>
+      <span>{{ 'STAFF_SELL_PAGE.EXIT' | translate }}</span>
+    </button>
+    <div class="module-brand">
+      <img src="assets/images/midland.png" alt="" class="module-logo">
+      <span class="module-name">{{ 'STAFF_SELL_PAGE.TITLE' | translate }}</span>
+    </div>
+  </header>
+
+    <div class="staff-sell">
+
+      @if (!staff) {
+        <!-- ============ WHO IS SELLING ============ -->
+        <form class="code-card" (ngSubmit)="findStaff()">
+          <span class="code-eyebrow">{{ 'STAFF_SELL_PAGE.CODE_EYEBROW' | translate }}</span>
+          <h2 class="code-title">{{ 'STAFF_SELL_PAGE.CODE_TITLE' | translate }}</h2>
+          <p class="code-hint">{{ 'STAFF_SELL_PAGE.CODE_HINT' | translate }}</p>
+
+          <input
+            #codeInput
+            class="code-input"
+            name="code"
+            [(ngModel)]="code"
+            autocomplete="off"
+            autocapitalize="characters"
+            spellcheck="false"
+            maxlength="10"
+            placeholder="K1"
+            autofocus
+            [attr.aria-label]="'STAFF_SELL_PAGE.CODE_TITLE' | translate"
+          />
+
+          <button type="submit" class="code-btn" [disabled]="!code.trim() || looking">
+            {{ (looking ? 'COMMON.LOADING' : 'STAFF_SELL_PAGE.CONTINUE') | translate }}
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+        </form>
+      } @else {
+        <!-- ============ THE STAFF MEMBER AND THEIR BILLS ============ -->
+        <div class="staff-bar">
+          <div class="staff-who">
+            <span class="staff-code">{{ staff.staffCode }}</span>
+            <div>
+              <strong class="staff-name">{{ staff.name }}</strong>
+              <small>
+                {{ bills.length }} {{ 'STAFF_SELL_PAGE.OPEN_BILLS' | translate }}
+                · Tshs {{ total | number }}
+              </small>
+            </div>
+          </div>
+
+          <div class="staff-actions">
+            @if (unsentCount) {
+              <button type="button" class="send-btn" [disabled]="sending" (click)="sendOrders()">
+                <mat-icon>send</mat-icon>
+                <span>{{ 'STAFF_SELL_PAGE.SEND' | translate }} ({{ unsentCount }})</span>
+              </button>
+            }
+            <button type="button" class="row-action edit" [disabled]="opening" (click)="openBill()">
+              <mat-icon>add</mat-icon>
+              <span>{{ 'SALES_PAGE.OPEN_BILL' | translate }}</span>
+            </button>
+            <button type="button" class="row-action view" (click)="refresh()">
+              <mat-icon>refresh</mat-icon>
+            </button>
+            <button type="button" class="row-action view" [disabled]="sending" (click)="switchStaff()">
+              <mat-icon>logout</mat-icon>
+              <span>{{ 'STAFF_SELL_PAGE.SWITCH' | translate }}</span>
+            </button>
+          </div>
+        </div>
+
+        @if (bills.length === 0) {
+          <app-empty-state
+            icon="payment2"
+            title="STAFF_SELL_PAGE.NO_BILLS_TITLE"
+            text="STAFF_SELL_PAGE.NO_BILLS_TEXT"
+          />
+        } @else {
+          <div class="bill-grid">
+            @for (bill of bills; track bill.uid) {
+              <div class="bill-card">
+                <div class="bill-head">
+                  <strong class="bill-code">{{ bill.salesCode }}</strong>
+                  <!-- Only while the bill reads zero; once a service is on it there is nothing to delete. -->
+                  @if (!((bill.bill || 0) > 0) && !hasOrders(bill) && bill.paymentStatus !== 'PAID') {
+                    <button type="button" class="bill-delete-btn" (click)="deleteEmptyBill(bill)" [disabled]="busyBill === bill.uid">
+                      <mat-icon>delete</mat-icon>
+                      <span>{{ 'COMMON.DELETE' | translate }}</span>
+                    </button>
+                  }
+                  <span class="bill-status">{{ bill.paymentStatus }}</span>
+                </div>
+
+                <div class="bill-amount">
+                  <span>{{ 'SALES_PAGE.BILL' | translate }}</span>
+                  <strong>Tshs {{ (bill.bill || 0) | number }}</strong>
+                </div>
+
+                <!-- Written, not on the bill yet -->
+                @for (order of ordersFor(bill, 'DRAFT'); track order.uid) {
+                  <div class="order-block draft">
+                    <span class="order-tag">{{ 'STAFF_SELL_PAGE.ORDER_DRAFT' | translate }}</span>
+                    <ul class="order-lines">
+                      @for (line of order.lines; track line.uid) {
+                        <li>
+                          <span>{{ line.quantity }} × {{ line.serviceName }}</span>
+                          <button type="button" class="line-remove" (click)="removeLine(order, line.uid)" [attr.aria-label]="'COMMON.DELETE' | translate">
+                            <mat-icon>close</mat-icon>
+                          </button>
+                        </li>
+                      }
+                    </ul>
+                  </div>
+                }
+                @for (order of ordersFor(bill, 'SENT'); track order.uid) {
+                  <div class="order-block sent">
+                    <span class="order-tag"><mat-icon>hourglass_top</mat-icon>{{ 'STAFF_SELL_PAGE.ORDER_SENT' | translate }}</span>
+                    <ul class="order-lines">
+                      @for (line of order.lines; track line.uid) {
+                        <li><span>{{ line.quantity }} × {{ line.serviceName }}</span><span>{{ line.quantity * line.unitPrice | number }}</span></li>
+                      }
+                    </ul>
+                  </div>
+                }
+                @for (order of ordersFor(bill, 'REJECTED'); track order.uid) {
+                  <div class="order-block rejected">
+                    <span class="order-tag"><mat-icon>block</mat-icon>{{ 'STAFF_SELL_PAGE.ORDER_REJECTED' | translate }}: {{ order.rejectReason }}</span>
+                    <ul class="order-lines">
+                      @for (line of order.lines; track line.uid) {
+                        <li><span>{{ line.quantity }} × {{ line.serviceName }}</span></li>
+                      }
+                    </ul>
+                  </div>
+                }
+
+                <!-- What is already on the bill shows only in View inside; its count rides on that button. -->
+
+                <div class="bill-actions">
+                  <button type="button" class="bill-btn add" [disabled]="busyBill === bill.uid" (click)="addToBill(bill)">
+                    <mat-icon>add</mat-icon>
+                    {{ 'SERVICE.ADD' | translate }}
+                  </button>
+                  <button type="button" class="bill-btn view" [disabled]="busyBill === bill.uid" (click)="viewBill(bill)">
+                    <mat-icon>visibility</mat-icon>
+                    {{ 'SALES_PAGE.VIEW_INSIDE' | translate }}
+                    @if (lineCount(bill)) {
+                      <span class="bill-count">{{ lineCount(bill) }}</span>
+                    }
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      }
+    </div>
+</div>

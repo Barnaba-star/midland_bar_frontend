@@ -5,7 +5,7 @@
   height: 55px;
   padding: 0 10px;
   background-color: rgb(145, 135, 135);
-  border-bottom: 1px dotted #1e293b;
+  border-bottom: 1px dotted #2b2118;
   gap: 10px;
   animation: dropdownFade 1.5s ease-out forwards;
 }
@@ -79,7 +79,7 @@
 
 
 .action:hover {
-  background-color: rgba(59, 130, 246, 0.08); /* soft blue */
+  background-color: rgba(245, 165, 36, 0.1); /* soft amber */
 }
 
 

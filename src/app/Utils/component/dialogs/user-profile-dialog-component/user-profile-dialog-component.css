@@ -22,7 +22,7 @@
     #f0fdf4,
     #ffffff
   );
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e8dcc8;
 }
 
 .profile-avatar {
@@ -55,22 +55,22 @@
 
 .profile-title h2 {
   margin: 0 0 4px;
-  color: #111827;
+  color: #1d1812;
   font-size: 18px;
   font-weight: 700;
 }
 
 .profile-title span {
-  color: #6b7280;
+  color: #7a6f60;
   font-size: 13px;
 }
 
 .close-btn {
-  color: #6b7280;
+  color: #7a6f60;
 }
 
 .close-btn:hover {
-  background: #f3f4f6;
+  background: #f1e8d8;
 }
 
 
@@ -116,8 +116,8 @@
 }
 
 .root-badge {
-  color: #7c3aed;
-  background: #ede9fe;
+  color: #b86e00;
+  background: #fdf1dc;
 }
 
 .root-badge mat-icon {
@@ -141,7 +141,7 @@
 
   margin: 0 0 15px;
 
-  color: #374151;
+  color: #4a3f33;
   font-size: 14px;
   font-weight: 700;
 }
@@ -165,9 +165,9 @@
 .info-item {
   padding: 12px 14px;
 
-  background: #f9fafb;
+  background: #faf6ef;
 
-  border: 1px solid #eef0f3;
+  border: 1px solid #f1e8d8;
   border-radius: 10px;
 }
 
@@ -176,7 +176,7 @@
 
   margin-bottom: 5px;
 
-  color: #9ca3af;
+  color: #a89c8a;
 
   font-size: 11px;
   font-weight: 600;
@@ -188,7 +188,7 @@
 .info-item strong {
   display: block;
 
-  color: #1f2937;
+  color: #2b2118;
 
   font-size: 14px;
   font-weight: 600;

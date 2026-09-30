@@ -111,6 +111,12 @@ export class BarStaff implements OnInit{
 
   staffFields: FormField[] = [
     {
+      name: 'staffCode',
+      type: 'text',
+      label: 'STAFF_FORM.STAFF_CODE',
+      placeholder: 'STAFF_FORM.STAFF_CODE_PH',
+    },
+    {
       name: 'firstName',
       type: 'text',
       label: 'STAFF_FORM.FIRST_NAME',
@@ -168,6 +174,12 @@ export class BarStaff implements OnInit{
   ];
 
   editStaffFields: FormField[] = [
+    {
+      name: 'staffCode',
+      type: 'text',
+      label: 'STAFF_FORM.STAFF_CODE',
+      placeholder: 'STAFF_FORM.STAFF_CODE_PH',
+    },
     {
       name: 'firstName',
       type: 'text',
@@ -256,6 +268,7 @@ export class BarStaff implements OnInit{
 
   savedData(value: any): void {
     const barStaffDTO: BarStaffDTO = {
+      staffCode: value.staffCode,
       firstName: value.firstName,
       middleName: value.middleName,
       lastName: value.lastName,
@@ -299,6 +312,7 @@ export class BarStaff implements OnInit{
       console.log('Updated form data:', result);
       const staffEdited: BarStaffDTO = {
         uid: this.staffUID,
+        staffCode: result.staffCode,
         firstName: result.firstName,
         middleName: result.middleName,
         lastName: result.lastName,
@@ -534,6 +548,7 @@ loadStaffPage() {
         // console.log('Edited Data', result);
         const barStaffDTO: BarStaffDTO = {
           uid: this.staffPageUID,
+          staffCode: result.staffCode,
           firstName: result.firstName,
           middleName: result.middleName,
           lastName: result.lastName,

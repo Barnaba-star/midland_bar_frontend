@@ -84,42 +84,6 @@ menuItems: SidenavItem[] = [
         icon: 'save',
         route: '/settings/storage',
         roles: this.rootOnlyRoles
-      },
-      {
-        label: 'SETTINGS_MENU.ERRORS',
-        icon: 'warning',
-        route: '/settings/errors',
-        roles: this.manageRoles
-      },
-      {
-        label: 'SETTINGS_MENU.AUDIT',
-        icon: 'history',
-        route: '/settings/audit',
-        roles: this.manageRoles
-      },
-      {
-        label: 'SETTINGS_MENU.PAYMENTS',
-        icon: 'payment',
-        route: '/settings/payments',
-        roles: this.manageRoles
-      },
-      {
-        label: 'SETTINGS_MENU.PAYROLL',
-        icon: 'pay',
-        route: '/settings/payroll',
-        roles: this.manageRoles
-      },
-      {
-        label: 'SETTINGS_MENU.EXPIRING',
-        icon: 'calender',
-        route: '/settings/expiring',
-        roles: this.settingsRoles
-      },
-      {
-        label: 'SETTINGS_MENU.REGIONS',
-        icon: 'office',
-        route: '/settings/regions',
-        roles: this.rootOnlyRoles
       }
 ];
 

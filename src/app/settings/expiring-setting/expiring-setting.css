@@ -3,13 +3,13 @@
   min-height: calc(100vh - 200px);
   box-sizing: border-box;
   background: #ffffff;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #e8dcc8;
   border-radius: 16px;
   padding: 14px;
   margin-top: 20px;
   box-shadow:
-    0 4px 6px rgba(15, 23, 42, 0.03),
-    0 12px 30px rgba(15, 23, 42, 0.06);
+    0 4px 6px rgba(29, 24, 18, 0.03),
+    0 12px 30px rgba(29, 24, 18, 0.06);
 }
 
 
@@ -27,7 +27,7 @@
 
 .expiring-header h2 {
   margin: 0;
-  color: #111827;
+  color: #1d1812;
   font-size: 18px;
   font-weight: 700;
   letter-spacing: -0.3px;
@@ -35,7 +35,7 @@
 
 .expiring-header p {
   margin: 6px 0 0;
-  color: #6b7280;
+  color: #7a6f60;
   font-size: 13px;
 }
 
@@ -50,8 +50,8 @@
   justify-content: center;
   height: 38px;
   padding: 0 18px;
-  background: #111827;
-  border: 1px solid #111827;
+  background: #1d1812;
+  border: 1px solid #1d1812;
   border-radius: 10px;
   color: #ffffff;
   font-size: 13px;
@@ -61,7 +61,7 @@
 }
 
 .refresh-btn:hover {
-  background: #1f2937;
+  background: #2b2118;
 }
 
 
@@ -82,19 +82,19 @@
   gap: 4px;
   min-width: 140px;
   padding: 12px 16px;
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
+  background: #faf6ef;
+  border: 1px solid #e8dcc8;
   border-radius: 12px;
 }
 
 .summary-label {
-  color: #6b7280;
+  color: #7a6f60;
   font-size: 12px;
   font-weight: 500;
 }
 
 .summary-value {
-  color: #111827;
+  color: #1d1812;
   font-size: 20px;
   font-weight: 700;
 }
@@ -116,9 +116,9 @@
   height: 36px;
   padding: 0 12px;
   background: #ffffff;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #e8dcc8;
   border-radius: 10px;
-  color: #374151;
+  color: #4a3f33;
   font-size: 13px;
   cursor: pointer;
 }
@@ -131,7 +131,7 @@
 .table-wrapper {
   width: 100%;
   overflow-x: auto;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #e8dcc8;
   border-radius: 12px;
 }
 
@@ -145,9 +145,9 @@
   position: sticky;
   top: 0;
   padding: 12px 14px;
-  background: #f9fafb;
-  border-bottom: 1px solid #e5e7eb;
-  color: #6b7280;
+  background: #faf6ef;
+  border-bottom: 1px solid #e8dcc8;
+  color: #7a6f60;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.4px;
@@ -158,13 +158,13 @@
 
 .table-wrapper td {
   padding: 12px 14px;
-  border-bottom: 1px solid #f3f4f6;
-  color: #374151;
+  border-bottom: 1px solid #f1e8d8;
+  color: #4a3f33;
   vertical-align: middle;
 }
 
 .table-wrapper tbody tr:hover {
-  background: #f9fafb;
+  background: #faf6ef;
 }
 
 /* A lapsed branch has to be spottable without reading the badge. */
@@ -184,27 +184,27 @@
 }
 
 .branch-name {
-  color: #111827;
+  color: #1d1812;
   font-weight: 600;
 }
 
 .branch-code {
-  color: #9ca3af;
+  color: #a89c8a;
   font-size: 11px;
 }
 
 .phone-cell {
-  color: #6b7280;
+  color: #7a6f60;
   white-space: nowrap;
 }
 
 .time-cell {
-  color: #6b7280;
+  color: #7a6f60;
   white-space: nowrap;
 }
 
 .amount-cell {
-  color: #111827;
+  color: #1d1812;
   font-weight: 600;
   white-space: nowrap;
 }
@@ -212,7 +212,7 @@
 .reason-cell {
   max-width: 220px;
   overflow: hidden;
-  color: #6b7280;
+  color: #7a6f60;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -225,9 +225,9 @@
 .level-badge {
   display: inline-block;
   padding: 3px 10px;
-  background: #f3f4f6;
+  background: #f1e8d8;
   border-radius: 999px;
-  color: #374151;
+  color: #4a3f33;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.3px;
@@ -245,8 +245,8 @@
 }
 
 .status-later {
-  background: #f3f4f6;
-  color: #374151;
+  background: #f1e8d8;
+  color: #4a3f33;
 }
 
 
@@ -256,7 +256,7 @@
 
 .empty-state {
   padding: 40px 0;
-  color: #9ca3af;
+  color: #a89c8a;
   font-size: 14px;
   text-align: center;
 }

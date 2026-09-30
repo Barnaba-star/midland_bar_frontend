@@ -18,7 +18,7 @@
      header until the title was cut off. */
   flex: 0 0 auto;
   padding: 0 0 14px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e8dcc8;
 }
 
 .header-top {
@@ -33,7 +33,7 @@
   min-width: 0;
   margin: 0;
   padding-top: 2px;
-  color: #0f172a;
+  color: #1d1812;
   font-size: 19px;
   font-weight: 700;
   line-height: 1.4;
@@ -50,7 +50,7 @@
   height: 3px;
   margin-top: 8px;
   border-radius: 999px;
-  background: linear-gradient(90deg, #4f46e5 0%, #818cf8 100%);
+  background: linear-gradient(90deg, #b86e00 0%, #f5a524 100%);
 }
 
 
@@ -68,14 +68,14 @@
   background: transparent;
   border: none;
   border-radius: 10px;
-  color: #64748b;
+  color: #7a6f60;
   cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease;
 }
 
 .icon-btn:hover {
-  background: #f1f5f9;
-  color: #0f172a;
+  background: #f3ece0;
+  color: #1d1812;
 }
 
 
@@ -95,7 +95,7 @@
 
 .field-label {
   margin: 0 0 10px;
-  color: #94a3b8;
+  color: #a89c8a;
   font-size: 10.5px;
   font-weight: 700;
   letter-spacing: 0.6px;
@@ -122,9 +122,9 @@
   gap: 2px;
   padding: 8px 14px;
   border-radius: 999px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #e8dcc8;
   background: #ffffff;
-  color: #111827;
+  color: #1d1812;
   font-family: inherit;
   font-size: 13px;
   font-weight: 600;
@@ -140,7 +140,7 @@
 .chip-count {
   font-size: 11px;
   font-weight: 600;
-  color: #6b7280;
+  color: #7a6f60;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
@@ -151,18 +151,18 @@
 }
 
 .age-chip:hover {
-  background: #f5f6fb;
+  background: #f6f0e6;
 }
 
 .age-chip.active {
-  background: #14315d;
-  border-color: #14315d;
+  background: #2b2118;
+  border-color: #2b2118;
   color: #ffffff;
 }
 
 .age-chip:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.28);
+  box-shadow: 0 0 0 3px rgba(184, 110, 0, 0.28);
 }
 
 
@@ -176,10 +176,10 @@
   gap: 9px;
   margin: 18px 0 0;
   padding: 12px 14px;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: #faf6ef;
+  border: 1px solid #e8dcc8;
   border-radius: 12px;
-  color: #475569;
+  color: #5c5042;
   font-size: 12.5px;
   line-height: 1.5;
 }
@@ -214,7 +214,7 @@
   min-height: auto;
   padding: 16px 0 0;
   margin-top: 18px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid #e8dcc8;
 }
 
 .btn {
@@ -249,13 +249,13 @@
 
 .btn-ghost {
   background: #ffffff;
-  border: 1px solid #e2e8f0;
-  color: #334155;
+  border: 1px solid #e8dcc8;
+  color: #4a3f33;
 }
 
 .btn-ghost:hover {
-  background: #f8fafc;
-  border-color: #cbd5e1;
+  background: #faf6ef;
+  border-color: #d8ccb8;
 }
 
 .btn-danger {
@@ -272,7 +272,7 @@
 
 .btn:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.28);
+  box-shadow: 0 0 0 3px rgba(184, 110, 0, 0.28);
 }
 
 .btn-danger:focus-visible {

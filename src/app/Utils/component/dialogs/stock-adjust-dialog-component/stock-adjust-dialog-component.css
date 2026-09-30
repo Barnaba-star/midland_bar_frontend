@@ -15,13 +15,13 @@
   margin: 0;
   font-size: 18px;
   font-weight: 700;
-  color: #172033;
+  color: #1d1812;
 }
 
 .adj-header p {
   margin: 4px 0 0;
   font-size: 13px;
-  color: #667085;
+  color: #7a6f60;
 }
 
 .adj-close {
@@ -29,7 +29,7 @@
   padding: 4px;
   border: none;
   border-radius: 8px;
-  background: #f2f4f7;
+  background: #f3ece0;
   cursor: pointer;
 }
 
@@ -45,10 +45,10 @@
   justify-content: center;
   gap: 6px;
   padding: 10px;
-  border: 2px solid #e4e7ec;
+  border: 2px solid #e8dcc8;
   border-radius: 10px;
   background: #ffffff;
-  color: #344054;
+  color: #4a3f33;
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
@@ -56,14 +56,14 @@
 
 .adj-modes button.active {
   border-color: var(--color-primary);
-  background: #f5f8ff;
+  background: #faf6ef;
   color: var(--color-primary);
 }
 
 .adj-hint {
   margin: 10px 0 12px;
   font-size: 12px;
-  color: #667085;
+  color: #7a6f60;
 }
 
 .adj-measures {
@@ -80,7 +80,7 @@
   gap: 4px;
   font-size: 12px;
   font-weight: 600;
-  color: #344054;
+  color: #4a3f33;
 }
 
 .adj-field {
@@ -91,7 +91,7 @@
 .adj-field input,
 .adj-field select {
   padding: 9px 10px;
-  border: 1px solid #e4e7ec;
+  border: 1px solid #e8dcc8;
   border-radius: 8px;
   font-size: 14px;
   outline: none;
@@ -113,9 +113,9 @@
   grid-template-columns: 2fr 1fr 1fr;
   gap: 10px;
   padding: 12px 14px;
-  border: 1px solid #e8edf3;
+  border: 1px solid #f1e8d8;
   border-radius: 10px;
-  background: #fbfcfe;
+  background: #faf6ef;
 }
 
 .adj-preview div {
@@ -126,12 +126,12 @@
 
 .adj-preview small {
   font-size: 11px;
-  color: #667085;
+  color: #7a6f60;
 }
 
 .adj-preview strong {
   font-size: 14px;
-  color: #172033;
+  color: #1d1812;
 }
 
 .adj-preview.loss {

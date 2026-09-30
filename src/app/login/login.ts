@@ -2,12 +2,12 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { IconRegistryService } from '../Utils/services/icon-registry.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { BranchChoice, BranchChoiceDialogComponent } from '../Utils/component/dialogs/branch-choice-dialog-component/branch-choice-dialog-component';
 import { SubscribeDialogComponent } from '../Utils/component/dialogs/subscribe-dialog-component/subscribe-dialog-component';
 import { ChangePasswordDialogComponent } from '../Utils/component/dialogs/change-password-dialog-component/change-password-dialog-component';
 import { CommonModule } from '@angular/common';
@@ -17,10 +17,12 @@ import { AlertService } from '../Utils/services/alert';
 import { Authentication } from '../Utils/services/authentication';
 import { environment } from '../Utils/enviroments/environment';
 import { ChangeDetectorRef } from '@angular/core';
+import { unlockStaffSell } from '../pos/bar-staff-sell/staff-sell-lock';
+import { landingFor } from './landing-for';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-login',
-  imports: [MatFormFieldModule, MatInputModule, MatCardModule, MatButtonModule, MatIconModule, ReactiveFormsModule, CommonModule, TranslatePipe],
+  imports: [MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, ReactiveFormsModule, CommonModule, TranslatePipe, RouterLink],
   templateUrl: './login.html',
   styleUrl: './login.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -54,16 +56,15 @@ private baseUrl: string = `${this.api}/authentication/login`;
 loginError: string = '';
 
 /**
- * ROOT/STAFF/DIRECTOR manage the system - they land on the Dashboard and
- * pick where to go (including Settings). CEO/MANAGER/CASHIER are
- * branch-operational roles - they skip the Dashboard entirely and go
- * straight into POS. A user holding any system-management role wins if they
- * somehow hold both kinds.
+ * Where each role starts:
+ *  - ROOT/STAFF/DIRECTOR manage the system: the Dashboard, to pick where to go.
+ *  - SUPERVISOR: straight to the Supervisor screen - receiving staff orders is
+ *    their whole job, whatever else they hold.
+ *  - CEO/MANAGER/CASHIER: the Dashboard too, which shows them POS and Staff
+ *    Sell - any of them opens Staff Sell for the staff, who are not users.
  */
 private goToLanding(): void {
-  const systemRoles = ['ROOT', 'STAFF', 'DIRECTOR'];
-  const landing = systemRoles.some(role => this.auth.hasRole(role)) ? '/dashboard' : '/pos';
-  this.route.navigate([landing]);
+  this.route.navigate([landingFor((role) => this.auth.hasRole(role))]);
 }
 
 /**
@@ -94,15 +95,16 @@ private forcePasswordChange(): void {
   });
 }
 
-onSubmit() {
+/** branchUID: the branch chosen by a user of several - sent on the second try, after CHOOSE_BRANCH. */
+onSubmit(branchUID?: string) {
   if (this.loginForm.valid) {
 
     this.loginError = '';
     this.submitting = true;
 
-    this.http.post<{ token: string }>(
+    this.http.post<{ token?: string; code?: string; branches?: BranchChoice[] }>(
       this.baseUrl,
-      this.loginForm.value,
+      branchUID ? { ...this.loginForm.value, branchUID } : this.loginForm.value,
       {
         withCredentials: true
       }
@@ -112,13 +114,35 @@ onSubmit() {
         this.paymentSent = false;
         this.submitting = false;
 
+        // Several branches: they choose where to work, then the login goes again for that branch.
+        if (res.code === 'CHOOSE_BRANCH') {
+          this.dialog.open(BranchChoiceDialogComponent, {
+            width: '460px',
+            maxWidth: '95vw',
+            autoFocus: false,
+            disableClose: true,
+            data: { branches: res.branches ?? [] },
+          }).afterClosed().subscribe((chosen?: string) => {
+            if (chosen) {
+              this.onSubmit(chosen);
+            }
+            this.cdr.detectChanges();
+          });
+          this.cdr.detectChanges();
+          return;
+        }
+
         // They are in, so the "nobody is using this screen" timer has done
         // its job. Left running it would walk them off the forced
         // password-change dialog a minute later.
         clearTimeout(this.idleTimer);
 
         // Save token
-        this.auth.setToken(res.token);
+        this.auth.setToken(res.token!);
+
+        // Signing in is a manager proving who they are, so a till left
+        // locked in Staff Sell (after a session ran out) opens again.
+        unlockStaffSell();
 
         // A brand new account is still on the password that was texted to it.
         // There is nothing to navigate to - the backend answers every other
@@ -167,6 +191,9 @@ onSubmit() {
           // Somebody decided this, so it should read as a decision rather
           // than as a fault the person might try to work around.
           this.loginError = this.translate.instant('LOGIN.ACCOUNT_BLOCKED');
+          this.subscriptionExpired = false;
+        } else if (body && body.code === 'BRANCH_NOT_ALLOWED') {
+          this.loginError = this.translate.instant('LOGIN.BRANCH_NOT_ALLOWED');
           this.subscriptionExpired = false;
         } else if (body && body.code === 'NO_ROLE_ASSIGNED') {
           // Credentials are fine; nobody has said what they may do yet.

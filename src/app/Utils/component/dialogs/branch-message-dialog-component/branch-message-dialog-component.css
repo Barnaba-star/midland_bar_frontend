@@ -18,7 +18,7 @@
   gap: 12px;
   flex: 0 0 auto;
   padding-bottom: 14px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e8dcc8;
 }
 
 .header-text {
@@ -28,7 +28,7 @@
 
 .dialog-title {
   margin: 6px 0 0;
-  color: #0f172a;
+  color: #1d1812;
   font-size: 16px;
   font-weight: 700;
   line-height: 1.4;
@@ -37,7 +37,7 @@
 
 .header-meta {
   margin: 3px 0 0;
-  color: #94a3b8;
+  color: #a89c8a;
   font-size: 12px;
 }
 
@@ -78,13 +78,13 @@
   border: none;
   border-radius: 10px;
   background: transparent;
-  color: #64748b;
+  color: #7a6f60;
   cursor: pointer;
 }
 
 .icon-btn:hover {
-  background: #f1f5f9;
-  color: #0f172a;
+  background: #f3ece0;
+  color: #1d1812;
 }
 
 
@@ -102,7 +102,7 @@
 }
 
 .status-label {
-  color: #94a3b8;
+  color: #a89c8a;
   font-size: 10.5px;
   font-weight: 700;
   letter-spacing: 0.6px;
@@ -111,10 +111,10 @@
 
 .status-option {
   padding: 5px 12px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e8dcc8;
   border-radius: 999px;
   background: #ffffff;
-  color: #64748b;
+  color: #7a6f60;
   font-family: inherit;
   font-size: 11.5px;
   font-weight: 600;
@@ -122,13 +122,13 @@
 }
 
 .status-option:hover {
-  background: #f8fafc;
+  background: #faf6ef;
 }
 
 .status-option.selected {
-  border-color: #c7d2fe;
-  background: #f5f3ff;
-  color: #3730a3;
+  border-color: #f3d9a8;
+  background: #fdf1dc;
+  color: #8f5500;
 }
 
 
@@ -176,21 +176,21 @@
 }
 
 .turn.from-branch .bubble {
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e8dcc8;
   border-bottom-left-radius: 4px;
-  background: #f8fafc;
-  color: #0f172a;
+  background: #faf6ef;
+  color: #1d1812;
 }
 
 .turn.from-us .bubble {
-  border: 1px solid #0f172a;
+  border: 1px solid #1d1812;
   border-bottom-right-radius: 4px;
-  background: #0f172a;
+  background: #1d1812;
   color: #ffffff;
 }
 
 .turn-meta {
-  color: #94a3b8;
+  color: #a89c8a;
   font-size: 10.5px;
 }
 
@@ -205,17 +205,17 @@
   gap: 10px;
   flex: 0 0 auto;
   padding-top: 14px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid #e8dcc8;
 }
 
 .reply-box textarea {
   flex: 1;
   min-width: 0;
   padding: 10px 13px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e8dcc8;
   border-radius: 12px;
   background: #ffffff;
-  color: #0f172a;
+  color: #1d1812;
   font-family: inherit;
   font-size: 13px;
   line-height: 1.5;
@@ -224,8 +224,8 @@
 
 .reply-box textarea:focus {
   outline: none;
-  border-color: #c7d2fe;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.18);
+  border-color: #f3d9a8;
+  box-shadow: 0 0 0 3px rgba(184, 110, 0, 0.18);
 }
 
 .send-btn {
@@ -234,9 +234,9 @@
   gap: 7px;
   height: 40px;
   padding: 0 16px;
-  border: 1px solid #0f172a;
+  border: 1px solid #1d1812;
   border-radius: 12px;
-  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  background: linear-gradient(180deg, #2b2118 0%, #1d1812 100%);
   color: #ffffff;
   font-family: inherit;
   font-size: 13px;
@@ -268,15 +268,15 @@
   flex: 0 0 auto;
   margin: 0;
   padding: 14px 0 0;
-  border-top: 1px solid #e5e7eb;
-  color: #94a3b8;
+  border-top: 1px solid #e8dcc8;
+  color: #a89c8a;
   font-size: 12px;
   text-align: center;
 }
 
 .state-note {
   padding: 40px 0;
-  color: #94a3b8;
+  color: #a89c8a;
   font-size: 13px;
   text-align: center;
 }

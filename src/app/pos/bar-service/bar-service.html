@@ -121,7 +121,7 @@
               <!-- Buying price -->
               <td>
                 <span class="price">
-                  Tshs {{ (service.buyingPrice || 0) | number:'1.2-2' }} @if (service.packUnit) { / {{ ('PRODUCT_FORM.UNIT_' + service.packUnit.toUpperCase()) | translate }} }
+                  Tshs {{ (service.buyingPrice || 0) | number:'1.2-2' }} @if (service.packUnit) { / {{ service.packUnit | unitLabel | translate }} }
                 </span>
               </td>
 

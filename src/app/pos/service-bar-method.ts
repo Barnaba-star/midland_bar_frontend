@@ -1,8 +1,9 @@
+import { silent } from '../Utils/inteceptor/silent-request';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../Utils/enviroments/environment';
-import { CommissionDTO, PayStockAndPurchaseDTO, SaleOpenedDTO, BarBookingDTO, BarSalesDTO, BarServiceDTO, BarStaffDTO, SpendDTO, StaffCommissionDTO, StoreDTO, StockReceiptDTO } from './BarModel';
+import { CommissionDTO, PayStockAndPurchaseDTO, SaleOpenedDTO, BarBookingDTO, BarSalesDTO, BarServiceDTO, BarStaffDTO, SpendDTO, StaffCommissionDTO, StoreDTO, StockReceiptDTO, SalesOpened, StaffSellStaff, StaffSalesRow, StaffOrder } from './BarModel';
 import { PageableParam, Response, ResponseList, ResponsePage } from '../Utils/models/responces';
 
 @Injectable({
@@ -129,6 +130,11 @@ deleteBarSales(barSalesUID:string):Observable<Response<any>>{
 
 saveOpenSale(saleOpenedDTO: SaleOpenedDTO ):Observable<Response<any>>{
   return this.http.post<Response<any>>(`${this.barURL}/saveOpenSale`, saleOpenedDTO);
+}
+
+/** Takes away a bill with nothing on it; the backend refuses one that has items. */
+deleteEmptyBill(billUid: string): Observable<Response<any>> {
+  return this.http.post<Response<any>>(`${this.barURL}/deleteEmptyBill/${billUid}`, {});
 }
 
 salesOpenedListByStatus(filter: string): Observable<Response<any>> {
@@ -316,6 +322,57 @@ findBillCodes(): Observable<ResponseList<any>> {
 /** Codes a new bill may be opened under right now. */
 findAvailableBillCodes(): Observable<ResponseList<string>> {
   return this.http.get<ResponseList<string>>(`${this.barURL}/findAvailableBillCodes`);
+}
+
+/** Staff Sell: who a staff code belongs to, and their unpaid bills. */
+findStaffSell(staffCode: string, quiet = false): Observable<Response<{ staff: StaffSellStaff; bills: SalesOpened[]; orders: StaffOrder[] }>> {
+  return this.http.get<Response<{ staff: StaffSellStaff; bills: SalesOpened[]; orders: StaffOrder[] }>>(`${this.barURL}/staffSell/${encodeURIComponent(staffCode)}`, quiet ? { context: silent() } : {});
+}
+
+/** Staff Sell: write an item onto the bill's order for the supervisor - not onto the bill. */
+addStaffOrderItem(dto: { salesOpenedUID: string; barServiceUID: string; quantity: number }): Observable<Response<StaffOrder>> {
+  return this.http.post<Response<StaffOrder>>(`${this.barURL}/staffOrders/addItem`, dto);
+}
+
+/** Staff Sell: take a line off an order not yet sent. */
+removeStaffOrderLine(orderUid: string, lineUid: string): Observable<Response<StaffOrder>> {
+  return this.http.post<Response<StaffOrder>>(`${this.barURL}/staffOrders/${orderUid}/removeLine/${lineUid}`, {});
+}
+
+/** Staff Sell: send what the staff member has written to the supervisor. Returns how many orders went. */
+sendStaffOrders(staffCode: string): Observable<Response<number>> {
+  return this.http.post<Response<number>>(`${this.barURL}/staffOrders/send/${encodeURIComponent(staffCode)}`, {});
+}
+
+/** Supervisor: orders waiting to be received, oldest first. */
+pendingStaffOrders(): Observable<Response<StaffOrder[]>> {
+  // Polled every few seconds: no spinner, no popups.
+  return this.http.get<Response<StaffOrder[]>>(`${this.barURL}/staffOrders/pending`, { context: silent() });
+}
+
+/** Supervisor: receive - the order goes on the bill and the drinks may leave. */
+receiveStaffOrder(orderUid: string): Observable<Response<StaffOrder>> {
+  return this.http.post<Response<StaffOrder>>(`${this.barURL}/staffOrders/${orderUid}/receive`, {});
+}
+
+/** Supervisor: reject, with the reason the staff member will see. */
+rejectStaffOrder(orderUid: string, reason: string): Observable<Response<StaffOrder>> {
+  return this.http.post<Response<StaffOrder>>(`${this.barURL}/staffOrders/${orderUid}/reject`, { reason });
+}
+
+/** Staff Sell: a manager's login, to hand the screen back to POS. */
+unlockStaffSell(dto: { username: string; password: string }): Observable<Response<boolean>> {
+  return this.http.post<Response<boolean>>(`${this.barURL}/staffSell/unlock`, dto);
+}
+
+/** Sales page: each staff member's takings for a day (yyyy-MM-dd) by payment method, and their unpaid bills. */
+staffSalesSummary(date: string): Observable<Response<StaffSalesRow[]>> {
+  return this.http.get<Response<StaffSalesRow[]>>(`${this.barURL}/staffSell/summary/${date}`);
+}
+
+/** Staff Sell: open a bill that belongs to the staff member, numbered from their code (K1-1, K1-2...). */
+openStaffBill(dto: { staffCode: string }): Observable<Response<SalesOpened>> {
+  return this.http.post<Response<SalesOpened>>(`${this.barURL}/staffSell/openBill`, dto);
 }
 
 /** Ring lines up on an open bill; stock, buckets and the seller's commission move with it. */

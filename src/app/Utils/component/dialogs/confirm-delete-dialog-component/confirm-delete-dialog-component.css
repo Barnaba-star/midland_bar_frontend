@@ -27,13 +27,13 @@
   margin: 0 0 10px;
   font-size: 18px;
   font-weight: 600;
-  color: #1f2937;
+  color: #2b2118;
 }
 
 .delete-dialog p {
   margin: 0 auto 18px;
   max-width: 350px;
-  color: #6b7280;
+  color: #7a6f60;
   line-height: 1.5;
 }
 
@@ -45,18 +45,18 @@
   padding: 12px;
   margin-bottom: 24px;
 
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
+  background: #faf6ef;
+  border: 1px solid #e8dcc8;
   border-radius: 8px;
 }
 
 .branch-info strong {
-  color: #111827;
+  color: #1d1812;
 }
 
 .branch-info span {
   font-size: 13px;
-  color: #6b7280;
+  color: #7a6f60;
 }
 
 .dialog-actions {
@@ -81,13 +81,13 @@
 }
 
 .cancel-btn {
-  border: 1px solid #d1d5db;
+  border: 1px solid #d8ccb8;
   background: white;
-  color: #374151;
+  color: #4a3f33;
 }
 
 .cancel-btn:hover {
-  background: #f3f4f6;
+  background: #f1e8d8;
 }
 
 .delete-confirm-btn {

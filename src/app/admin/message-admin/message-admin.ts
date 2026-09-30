@@ -1,3 +1,4 @@
+import { ADMIN_ROLES } from '../admin-role.guard';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
@@ -33,7 +34,7 @@ export class MessageAdmin implements OnInit {
   ) {}
 
   titleActions = [
-    { icon: 'announce', title: 'MESSAGE_ADMIN_PAGE.MANAGE_TAB', roles: ['ROOT', 'DIRECTOR'] }
+    { icon: 'announce', title: 'MESSAGE_ADMIN_PAGE.MANAGE_TAB', roles: ADMIN_ROLES }
   ];
 
   tab = '';

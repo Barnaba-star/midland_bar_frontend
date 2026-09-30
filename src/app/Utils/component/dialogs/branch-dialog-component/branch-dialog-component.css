@@ -17,7 +17,7 @@
 .dialog-header {
   flex: 0 0 auto;
   padding: 0 0 14px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e8dcc8;
 }
 
 .header-top {
@@ -35,7 +35,7 @@
 .dialog-title {
   margin: 0;
   padding-top: 2px;
-  color: #0f172a;
+  color: #1d1812;
   font-size: 19px;
   font-weight: 700;
   line-height: 1.4;
@@ -50,7 +50,7 @@
   height: 3px;
   margin-top: 8px;
   border-radius: 999px;
-  background: linear-gradient(90deg, #4f46e5 0%, #818cf8 100%);
+  background: linear-gradient(90deg, #b86e00 0%, #f5a524 100%);
 }
 
 /* The code is generated from the region, so it is shown, never typed. */
@@ -59,8 +59,8 @@
   margin-top: 10px;
   padding: 3px 9px;
   border-radius: 999px;
-  background: #f1f5f9;
-  color: #475569;
+  background: #f3ece0;
+  color: #5c5042;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 11px;
   font-weight: 700;
@@ -77,14 +77,14 @@
   background: transparent;
   border: none;
   border-radius: 10px;
-  color: #64748b;
+  color: #7a6f60;
   cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease;
 }
 
 .icon-btn:hover {
-  background: #f1f5f9;
-  color: #0f172a;
+  background: #f3ece0;
+  color: #1d1812;
 }
 
 
@@ -111,22 +111,22 @@
   align-items: center;
   gap: 12px;
   padding: 12px 14px;
-  border: 1px solid #e0e7ff;
+  border: 1px solid #fdf1dc;
   border-radius: 12px;
-  background: #f5f3ff;
+  background: #fdf1dc;
 }
 
 .category-note mat-icon {
   width: 22px;
   height: 22px;
   font-size: 22px;
-  color: #6366f1;
+  color: #d08a14;
   flex-shrink: 0;
 }
 
 .category-label {
   display: block;
-  color: #818cf8;
+  color: #f5a524;
   font-size: 10.5px;
   font-weight: 700;
   letter-spacing: 0.6px;
@@ -136,7 +136,7 @@
 .category-value {
   display: block;
   margin-top: 1px;
-  color: #3730a3;
+  color: #8f5500;
   font-size: 15px;
   font-weight: 700;
 }
@@ -164,7 +164,7 @@
 }
 
 .field-label {
-  color: #94a3b8;
+  color: #a89c8a;
   font-size: 10.5px;
   font-weight: 700;
   letter-spacing: 0.6px;
@@ -177,10 +177,10 @@
   height: 42px;
   padding: 0 14px;
   background: #ffffff;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e8dcc8;
   border-radius: 12px;
   box-sizing: border-box;
-  color: #0f172a;
+  color: #1d1812;
   font-family: inherit;
   font-size: 15px;
   font-weight: 600;
@@ -188,18 +188,18 @@
 
 .field-input:focus {
   outline: none;
-  border-color: #c7d2fe;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.18);
+  border-color: #f3d9a8;
+  box-shadow: 0 0 0 3px rgba(184, 110, 0, 0.18);
 }
 
 .field-input::placeholder {
-  color: #cbd5e1;
+  color: #d8ccb8;
   font-weight: 500;
 }
 
 .field-input:disabled {
-  background: #f8fafc;
-  color: #94a3b8;
+  background: #faf6ef;
+  color: #a89c8a;
 }
 
 .field-textarea {
@@ -212,7 +212,7 @@
 }
 
 .field-hint {
-  color: #94a3b8;
+  color: #a89c8a;
   font-size: 11.5px;
   line-height: 1.45;
 }
@@ -240,7 +240,7 @@
   height: 16px;
   font-size: 16px;
   margin-top: -8px;
-  color: #cbd5e1;
+  color: #d8ccb8;
   pointer-events: none;
 }
 
@@ -248,7 +248,7 @@
    chosen from the list is a region the branch code can be built from. */
 .region-picker .field-input.is-unset {
   font-weight: 500;
-  color: #475569;
+  color: #5c5042;
 }
 
 .region-picker .field-input {
@@ -267,9 +267,9 @@
   padding: 6px;
   list-style: none;
   background: #ffffff;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e8dcc8;
   border-radius: 12px;
-  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.14);
+  box-shadow: 0 12px 28px rgba(29, 24, 18, 0.14);
 }
 
 .region-option {
@@ -282,7 +282,7 @@
   border: none;
   border-radius: 9px;
   background: transparent;
-  color: #0f172a;
+  color: #1d1812;
   font-family: inherit;
   font-size: 13.5px;
   font-weight: 600;
@@ -291,7 +291,7 @@
 }
 
 .region-option:hover {
-  background: #f5f3ff;
+  background: #fdf1dc;
 }
 
 .region-name {
@@ -306,8 +306,8 @@
   flex-shrink: 0;
   padding: 2px 7px;
   border-radius: 999px;
-  background: #f1f5f9;
-  color: #64748b;
+  background: #f3ece0;
+  color: #7a6f60;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 10.5px;
   font-weight: 700;
@@ -315,7 +315,7 @@
 
 .region-none {
   padding: 14px;
-  color: #94a3b8;
+  color: #a89c8a;
   font-size: 13px;
   text-align: center;
 }
@@ -336,10 +336,10 @@
   gap: 8px;
   height: 40px;
   padding: 0 16px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e8dcc8;
   border-radius: 12px;
   background: #ffffff;
-  color: #64748b;
+  color: #7a6f60;
   font-family: inherit;
   font-size: 13px;
   font-weight: 600;
@@ -348,13 +348,13 @@
 }
 
 .status-option:hover {
-  background: #f8fafc;
+  background: #faf6ef;
 }
 
 .status-option.selected {
-  border-color: #c7d2fe;
-  background: #f5f3ff;
-  color: #3730a3;
+  border-color: #f3d9a8;
+  background: #fdf1dc;
+  color: #8f5500;
 }
 
 .status-dot {
@@ -368,7 +368,7 @@
 }
 
 .status-dot.inactive {
-  background: #d0d5dd;
+  background: #d8ccb8;
 }
 
 
@@ -409,7 +409,7 @@
   gap: 10px;
   padding: 16px 0 0;
   margin-top: 18px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid #e8dcc8;
 }
 
 .btn {
@@ -444,25 +444,25 @@
 
 .btn-ghost {
   background: #ffffff;
-  border: 1px solid #e2e8f0;
-  color: #334155;
+  border: 1px solid #e8dcc8;
+  color: #4a3f33;
 }
 
 .btn-ghost:hover {
-  background: #f8fafc;
-  border-color: #cbd5e1;
+  background: #faf6ef;
+  border-color: #d8ccb8;
 }
 
 .btn-primary {
-  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-  border: 1px solid #0f172a;
+  background: linear-gradient(180deg, #2b2118 0%, #1d1812 100%);
+  border: 1px solid #1d1812;
   color: #ffffff;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.18);
+  box-shadow: 0 1px 2px rgba(29, 24, 18, 0.18);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: linear-gradient(180deg, #334155 0%, #1e293b 100%);
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.22);
+  background: linear-gradient(180deg, #4a3f33 0%, #2b2118 100%);
+  box-shadow: 0 4px 12px rgba(29, 24, 18, 0.22);
 }
 
 .btn:disabled {
@@ -474,7 +474,7 @@
 
 .btn:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.28);
+  box-shadow: 0 0 0 3px rgba(184, 110, 0, 0.28);
 }
 
 

@@ -33,7 +33,7 @@
 .pay-content h2 {
   margin: 0 0 6px;
 
-  color: #101828;
+  color: #1d1812;
   font-size: 17px;
   font-weight: 600;
 }
@@ -41,7 +41,7 @@
 .pay-content p {
   margin: 0 0 18px;
 
-  color: #667085;
+  color: #7a6f60;
   font-size: 13px;
 }
 
@@ -49,10 +49,10 @@
   margin-bottom: 16px;
   padding: 12px 14px;
 
-  border: 1px solid #eef2f7;
+  border: 1px solid #f1e8d8;
   border-radius: 8px;
 
-  background: #f9fafb;
+  background: #faf6ef;
 
   text-align: left;
 }
@@ -68,11 +68,11 @@
 }
 
 .summary-line .label {
-  color: #667085;
+  color: #7a6f60;
 }
 
 .summary-line .value {
-  color: #101828;
+  color: #1d1812;
   font-weight: 500;
 }
 
@@ -80,11 +80,11 @@
   margin-top: 6px;
   padding-top: 12px;
 
-  border-top: 1px solid #eef2f7;
+  border-top: 1px solid #f1e8d8;
 }
 
 .summary-line.total .label {
-  color: #344054;
+  color: #4a3f33;
   font-weight: 600;
 }
 
@@ -104,7 +104,7 @@
 }
 
 .note-field span {
-  color: #667085;
+  color: #7a6f60;
   font-size: 11px;
   font-weight: 500;
 
@@ -117,13 +117,13 @@
 
   padding: 0 12px;
 
-  border: 1px solid #e4e7ec;
+  border: 1px solid #e8dcc8;
   border-radius: 6px;
 
   font-family: inherit;
   font-size: 13px;
 
-  color: #101828;
+  color: #1d1812;
 }
 
 .note-field input:focus {
@@ -163,15 +163,15 @@
 }
 
 .cancel-button {
-  border: 1px solid #e4e7ec;
+  border: 1px solid #e8dcc8;
 
   background: #ffffff;
 
-  color: #344054;
+  color: #4a3f33;
 }
 
 .cancel-button:hover {
-  background: #f9fafb;
+  background: #faf6ef;
 }
 
 .pay-button {

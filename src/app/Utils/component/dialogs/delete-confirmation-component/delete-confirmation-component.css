@@ -50,7 +50,7 @@
 .delete-content h2 {
   margin: 0;
 
-  color: #101828;
+  color: #1d1812;
 
   font-size: 18px;
   font-weight: 700;
@@ -61,7 +61,7 @@
 .delete-content p {
   margin: 8px 0 18px;
 
-  color: #667085;
+  color: #7a6f60;
 
   font-size: 13px;
 
@@ -85,11 +85,11 @@
 
   box-sizing: border-box;
 
-  border: 1px solid #eaecf0;
+  border: 1px solid #e8dcc8;
 
   border-radius: 8px;
 
-  background: #f9fafb;
+  background: #faf6ef;
 }
 
 
@@ -107,9 +107,9 @@
 
   background: #ffffff;
 
-  border: 1px solid #eaecf0;
+  border: 1px solid #e8dcc8;
 
-  color: #667085;
+  color: #7a6f60;
 }
 
 .item-preview-icon mat-icon {
@@ -131,7 +131,7 @@
 
 
 .item-label {
-  color: #98a2b3;
+  color: #a89c8a;
 
   font-size: 9px;
   font-weight: 600;
@@ -145,7 +145,7 @@
 .item-name {
   overflow: hidden;
 
-  color: #344054;
+  color: #4a3f33;
 
   font-size: 12px;
   font-weight: 650;
@@ -209,17 +209,17 @@
 ================================ */
 
 .cancel-button {
-  border: 1px solid #d0d5dd;
+  border: 1px solid #d8ccb8;
 
   background: #ffffff;
 
-  color: #344054;
+  color: #4a3f33;
 }
 
 .cancel-button:hover {
-  background: #f9fafb;
+  background: #faf6ef;
 
-  border-color: #98a2b3;
+  border-color: #a89c8a;
 }
 
 .cancel-button:active {

@@ -28,7 +28,7 @@
 .store-card {
   width: 100%;
   background: #ffffff;
-  border: 1px solid #e8edf3;
+  border: 1px solid #f1e8d8;
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 5px 20px rgba(16, 24, 40, 0.05);
@@ -42,8 +42,8 @@
 
   padding: 18px 20px;
 
-  background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);
-  border-bottom: 1px solid #edf0f4;
+  background: linear-gradient(135deg, #ffffff 0%, #fffaf1 100%);
+  border-bottom: 1px solid #f1e8d8;
 }
 
 .store-header-left {
@@ -62,7 +62,7 @@
   font-size: 18px;
   font-weight: 700;
   line-height: 1.25;
-  color: #172033;
+  color: #1d1812;
 
   white-space: nowrap;
   overflow: hidden;
@@ -73,7 +73,7 @@
   margin: 3px 0 0;
 
   font-size: 13px;
-  color: #8a94a6;
+  color: #a89c8a;
 
   white-space: nowrap;
   overflow: hidden;
@@ -90,7 +90,7 @@
 
   padding: 8px 12px;
 
-  border: 1px solid #e4e7ec;
+  border: 1px solid #e8dcc8;
   border-radius: 10px;
   background: #ffffff;
 }
@@ -103,7 +103,7 @@
   width: 18px;
   height: 18px;
   font-size: 18px;
-  color: #98a2b3;
+  color: #a89c8a;
 }
 
 .store-search input {
@@ -113,7 +113,7 @@
   outline: none;
   background: transparent;
   font-size: 13px;
-  color: #1d2939;
+  color: #1d1812;
 }
 
 .clear-search {
@@ -134,12 +134,12 @@
 .summary-number {
   font-size: 20px;
   font-weight: 700;
-  color: #172033;
+  color: #1d1812;
 }
 
 .summary-label {
   font-size: 11px;
-  color: #8a94a6;
+  color: #a89c8a;
 }
 
 /* =========================
@@ -159,26 +159,26 @@
 }
 
 .store-table thead th {
-  padding: 14px 16px;
+  padding: 9px 8px;
 
-  background: #f8fafc;
-  border-bottom: 1px solid #e9edf3;
+  background: #faf6ef;
+  border-bottom: 1px solid #eadfcc;
 
-  color: #667085;
-  font-size: 13px;
+  color: #7a6f60;
+  font-size: 10px;
   font-weight: 700;
   text-align: left;
   text-transform: uppercase;
-  letter-spacing: 0.4px;
+  letter-spacing: 0.3px;
   white-space: nowrap;
 }
 
 .store-table tbody td {
-  padding: 13px 16px;
+  padding: 9px 8px;
 
-  border-bottom: 1px solid #f0f2f5;
+  border-bottom: 1px solid #f1e8d8;
 
-  color: #344054;
+  color: #4a3f33;
   font-size: 12px;
   text-align: left;
   vertical-align: middle;
@@ -186,15 +186,48 @@
 }
 
 .store-table tbody tr:hover {
-  background: #f8faff;
+  background: #fffaf1;
 }
 
 .store-table tbody tr:last-child td {
   border-bottom: none;
 }
 
+/* Actions stay pinned right, so Add, Adjust and History never fall off the card. */
+.stock-list-table th:last-child,
+.stock-list-table td:last-child {
+  position: sticky;
+  right: 0;
+  z-index: 1;
+  background: #ffffff;
+  box-shadow: -6px 0 8px -6px rgba(16, 24, 40, 0.18);
+}
+
+.stock-list-table thead th:last-child {
+  background: #faf6ef;
+}
+
+.stock-list-table tbody tr:hover td:last-child {
+  background: #fffaf1;
+}
+
+.stock-list-table .row-actions {
+  gap: 4px;
+}
+
+.stock-list-table .row-action {
+  padding: 4px 7px;
+  font-size: 11px;
+}
+
+.stock-list-table .row-action mat-icon {
+  width: 15px;
+  height: 15px;
+  font-size: 15px;
+}
+
 .index-column {
-  color: #98a2b3 !important;
+  color: #a89c8a !important;
   font-weight: 600;
 }
 
@@ -205,18 +238,18 @@
 }
 
 .product-name {
-  color: #1d2939;
+  color: #1d1812;
   font-weight: 700;
 }
 
 .product-code {
-  color: #98a2b3;
+  color: #a89c8a;
   font-size: 11px;
   letter-spacing: 0.4px;
 }
 
 .muted {
-  color: #98a2b3;
+  color: #a89c8a;
 }
 
 .category-chip {
@@ -227,8 +260,8 @@
   padding: 4px 9px;
   border-radius: 999px;
 
-  background: #f3e8ff;
-  color: #7c3aed;
+  background: #fdf1dc;
+  color: #b86e00;
   font-weight: 600;
 }
 
@@ -245,7 +278,7 @@
 
 .on-hand {
   font-weight: 700;
-  color: #1d2939;
+  color: #1d1812;
 }
 
 .on-hand.low {
@@ -294,14 +327,14 @@
 }
 
 .stock-badge[data-state='NOT_COUNTED'] {
-  background: #f2f4f7;
-  color: #667085;
+  background: #f3ece0;
+  color: #7a6f60;
 }
 
 .no-match {
   padding: 28px 16px !important;
   text-align: center !important;
-  color: #98a2b3 !important;
+  color: #a89c8a !important;
 }
 
 /* =========================
@@ -316,10 +349,10 @@
   flex-wrap: wrap;
 
   padding: 14px 20px;
-  border-top: 1px solid #edf0f4;
+  border-top: 1px solid #f1e8d8;
 
   font-size: 13px;
-  color: #667085;
+  color: #7a6f60;
 }
 
 .page-size {
@@ -330,13 +363,13 @@
 
 .page-size select {
   padding: 4px 8px;
-  border: 1px solid #e4e7ec;
+  border: 1px solid #e8dcc8;
   border-radius: 8px;
   background: #ffffff;
 }
 
 .page-value strong {
-  color: #172033;
+  color: #1d1812;
 }
 
 .pagination-buttons {
@@ -353,11 +386,11 @@
   min-width: 34px;
   padding: 5px 10px;
 
-  border: 1px solid #e4e7ec;
+  border: 1px solid #e8dcc8;
   border-radius: 8px;
   background: #ffffff;
 
-  color: #344054;
+  color: #4a3f33;
   font-size: 12px;
   cursor: pointer;
 }
@@ -403,7 +436,7 @@
   flex-wrap: wrap;
 
   padding: 14px 20px;
-  border-bottom: 1px solid #edf0f4;
+  border-bottom: 1px solid #f1e8d8;
 }
 
 .date-filter label {
@@ -412,15 +445,15 @@
   gap: 4px;
 
   font-size: 12px;
-  color: #667085;
+  color: #7a6f60;
 }
 
 .date-filter input[type='date'] {
   padding: 7px 10px;
-  border: 1px solid #e4e7ec;
+  border: 1px solid #e8dcc8;
   border-radius: 8px;
   font-size: 13px;
-  color: #1d2939;
+  color: #1d1812;
 }
 
 .quick-ranges {
@@ -430,10 +463,10 @@
 
 .quick-ranges button {
   padding: 7px 12px;
-  border: 1px solid #e4e7ec;
+  border: 1px solid #e8dcc8;
   border-radius: 8px;
   background: #ffffff;
-  color: #344054;
+  color: #4a3f33;
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;

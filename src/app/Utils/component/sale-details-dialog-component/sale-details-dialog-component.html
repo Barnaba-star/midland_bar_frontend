@@ -310,6 +310,20 @@
 
   <!-- ================= FOOTER ================= -->
   <div class="dialog-footer">
+    @if (data.sale?.uid) {
+      <button type="button" class="row-action view" [disabled]="!data.services.length" (click)="print()">
+        <mat-icon>print</mat-icon>
+        <span>{{ 'RECEIPT.PRINT' | translate }}</span>
+      </button>
+    }
+
+    @if (payable) {
+      <button type="button" class="row-action edit" (click)="pay()">
+        <mat-icon>payments</mat-icon>
+        <span>{{ 'PAY_BILL.BTN' | translate }}</span>
+      </button>
+    }
+
     @if (data.showPayment) {
 
       <button

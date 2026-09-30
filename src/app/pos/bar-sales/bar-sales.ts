@@ -4,12 +4,13 @@ import { Authentication } from '../../Utils/services/authentication';
 import { MatIconModule } from '@angular/material/icon';
 import { FormField } from '../../Utils/models/form-field';
 import { ServiceBarMethod } from '../service-bar-method';
-import { SaleOpenedDTO, SalesOpened, BarSalesDTO } from '../BarModel';
+import { SaleOpenedDTO, SalesOpened, BarSalesDTO, StaffSalesRow } from '../BarModel';
 import { AlertService } from '../../Utils/services/alert';
 import { MatDialog } from '@angular/material/dialog';
 import { SaleItemDialogComponent, SaleItemResult } from '../../Utils/component/dialogs/sale-item-dialog-component/sale-item-dialog-component';
 import { PayBillDialogComponent, PayBillResult } from '../../Utils/component/dialogs/pay-bill-dialog-component/pay-bill-dialog-component';
 import { ReceiptDialogComponent } from '../../Utils/component/dialogs/receipt-dialog-component/receipt-dialog-component';
+import { ConfirmDeleteDialogComponent } from '../../Utils/component/dialogs/confirm-delete-dialog-component/confirm-delete-dialog-component';
 import { DialogComponent } from '../../Utils/component/dialog/dialog';
 import { FormsModule } from '@angular/forms';
 import { CommonModule, DecimalPipe } from '@angular/common';
@@ -142,6 +143,40 @@ export class BarSales implements OnInit{
     },
   ];
   salesOpenedList: SalesOpened[] = [];
+
+  /*
+   * Filter the open bills by whose they are: 'ALL', 'NONE' (opened here on
+   * the Sales page), or a staff code from Staff Sell (K1).
+   */
+  staffFilter = 'ALL';
+
+  /** The staff with open bills, for the filter chips - code, name and how many bills. */
+  get staffOptions(): { code: string; name: string; count: number }[] {
+    const byCode = new Map<string, { code: string; name: string; count: number }>();
+    for (const bill of this.salesOpenedList) {
+      if (!bill.staffCode) continue;
+      const entry = byCode.get(bill.staffCode) ?? { code: bill.staffCode, name: bill.staffName ?? '', count: 0 };
+      entry.count++;
+      byCode.set(bill.staffCode, entry);
+    }
+    return [...byCode.values()].sort((a, b) => a.code.localeCompare(b.code, undefined, { numeric: true }));
+  }
+
+  get unassignedCount(): number {
+    return this.salesOpenedList.filter((b) => !b.staffCode).length;
+  }
+
+  get visibleBills(): SalesOpened[] {
+    if (this.staffFilter === 'ALL') return this.salesOpenedList;
+    if (this.staffFilter === 'NONE') return this.salesOpenedList.filter((b) => !b.staffCode);
+    return this.salesOpenedList.filter((b) => b.staffCode === this.staffFilter);
+  }
+
+  setStaffFilter(filter: string): void {
+    this.staffFilter = filter;
+    this.cdr.markForCheck();
+  }
+
   openNewSales() {
     // Only codes set up in POS Setting that no unpaid bill is holding.
     this.barServce.findAvailableBillCodes().subscribe({
@@ -242,8 +277,9 @@ openSaleDetailsDialog() {
       data: {
         sale: this.selectedSale,
         services: this.selectedSaleServices,
-        // Paying has its own button and dialog (Lipa); this one only shows.
-        showPayment: false
+        showPayment: false,
+        // Lipa and Print live in here, not on the bill's card.
+        canPay: true
       },
 
       autoFocus: false
@@ -256,17 +292,8 @@ openSaleDetailsDialog() {
       return;
     }
 
-    if (result.action === 'PAYMENT') {
-
-      console.log(
-        'Payment method:',
-        result.paymentMethod
-      );
-
-      this.selectedPaymentMethod =
-        result.paymentMethod;
-
-      this.proceedToPayment();
+    if (result.action === 'PAY' && this.selectedSale) {
+      this.onPay(this.selectedSale);
     }
 
     this.cdr.markForCheck();
@@ -385,13 +412,6 @@ openSaleDetailsDialogForMore(sale: SalesOpened) {
     });
   }
 
-  /*
-   * The lines on each open bill, as recorded - loaded with the bills and
-   * refreshed after every add. Keyed by bill uid.
-   */
-  billLines: Record<string, any[]> = {};
-  /** Bills whose lines are shown; the rest show just a summary line. */
-  openDrafts: Record<string, boolean> = {};
   addingTo: string | null = null;
 
   saveBarSales(sale: SalesOpened) {
@@ -419,15 +439,6 @@ openSaleDetailsDialogForMore(sale: SalesOpened) {
               this.salesOpenedList = this.salesOpenedList.map((b) =>
                 b.uid === res.data.uid ? { ...b, ...res.data } : b,
               );
-              this.alertService.show(
-                'success',
-                this.translate.instant('SALES_FLOW.ADDED', {
-                  qty: result.quantity,
-                  name: result.service.serviceName,
-                  code: sale.salesCode,
-                }),
-              );
-              this.loadBillLines(sale);
             }
             this.cdr.detectChanges();
           },
@@ -473,10 +484,9 @@ openSaleDetailsDialogForMore(sale: SalesOpened) {
               if (paid?.data) {
                 // Paid bills leave the open list; the code is free again.
                 this.salesOpenedList = this.salesOpenedList.filter((b) => b.uid !== sale.uid);
-                const { [sale.uid!]: _, ...rest } = this.billLines;
-                this.billLines = rest;
                 this.alertService.show('success', this.translate.instant('PAY_BILL.DONE', { code: sale.salesCode }));
                 this.openReceipt(sale.uid!);
+                this.loadStaffSales();
               }
               this.cdr.detectChanges();
             },
@@ -501,26 +511,41 @@ openSaleDetailsDialogForMore(sale: SalesOpened) {
     });
   }
 
-  loadBillLines(sale: SalesOpened) {
-    if (!sale?.uid) {
+  deletingBill: string | null = null;
+
+  /** A bill opened by mistake, still at zero - asked once, then gone and its code free again. */
+  deleteEmptyBill(sale: SalesOpened) {
+    if (!sale?.uid || this.deletingBill) {
       return;
     }
-    this.barServce.findBarSalesList(sale.uid).subscribe({
-      next: (res) => {
-        this.billLines = { ...this.billLines, [sale.uid!]: res.data ?? [] };
-        this.cdr.detectChanges();
+    this.dialog.open(ConfirmDeleteDialogComponent, {
+      width: '450px',
+      data: {
+        title: this.translate.instant('SALES_PAGE.DELETE_BILL_TITLE'),
+        message: this.translate.instant('SALES_PAGE.DELETE_BILL_CONFIRM', { code: sale.salesCode }),
+        item: { ...sale, branchName: sale.salesCode, branchCode: '' },
       },
-      error: (err) => console.error('Error loading bill lines:', err),
+    }).afterClosed().subscribe((ok) => {
+      if (!ok) {
+        return;
+      }
+      this.deletingBill = sale.uid!;
+      this.cdr.detectChanges();
+      this.barServce.deleteEmptyBill(sale.uid!).subscribe({
+        next: (res) => {
+          this.deletingBill = null;
+          if (res?.data) {
+            this.salesOpenedList = this.salesOpenedList.filter((b) => b.uid !== sale.uid);
+            this.alertService.show('success', this.translate.instant('SALES_PAGE.BILL_DELETED', { code: sale.salesCode }));
+          }
+          this.cdr.detectChanges();
+        },
+        error: () => {
+          this.deletingBill = null;
+          this.cdr.detectChanges();
+        },
+      });
     });
-  }
-
-  toggleDraft(sale: SalesOpened) {
-    this.openDrafts = { ...this.openDrafts, [sale.uid!]: !this.openDrafts[sale.uid!] };
-    this.cdr.detectChanges();
-  }
-
-  lineCount(sale: SalesOpened): number {
-    return (this.billLines[sale.uid!] ?? []).reduce((sum, l) => sum + (Number(l.quantity) || 1), 0);
   }
 
   onSaleSelected(sale: SalesOpened) {
@@ -571,13 +596,65 @@ openSaleDetailsDialogForMore(sale: SalesOpened) {
     });
   }
 
+  /*
+   * Each staff member's day: what they took, split by payment method, and
+   * what they still hold unpaid. Loaded with the open bills and again after
+   * every payment.
+   */
+  staffSales: StaffSalesRow[] = [];
+  staffSalesDate = this.todayIso();
+
+  private todayIso(): string {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  }
+
+  loadStaffSales(): void {
+    this.barServce.staffSalesSummary(this.staffSalesDate || this.todayIso()).subscribe({
+      next: (res) => {
+        this.staffSales = res?.data ?? [];
+        this.cdr.markForCheck();
+      },
+      error: (err) => console.error('Error loading staff sales:', err),
+    });
+  }
+
+  onStaffSalesDate(value: string): void {
+    this.staffSalesDate = value || this.todayIso();
+    this.loadStaffSales();
+  }
+
+  /** Payment methods in a fixed order, only those with money in them. */
+  methodsOf(row: StaffSalesRow): { method: string; amount: number }[] {
+    const order = ['cash', 'mpesa', 'tigopesa', 'airtelmoney', 'halopesa', 'bank'];
+    const known = order.filter((m) => row.byMethod?.[m]).map((m) => ({ method: m, amount: row.byMethod[m] }));
+    const other = Object.keys(row.byMethod ?? {}).filter((m) => !order.includes(m)).map((m) => ({ method: m, amount: row.byMethod[m] }));
+    return [...known, ...other];
+  }
+
+  get staffSalesTotals(): { total: number; openAmount: number; byMethod: Record<string, number> } {
+    const byMethod: Record<string, number> = {};
+    let total = 0;
+    let openAmount = 0;
+    for (const row of this.staffSales) {
+      total += row.total || 0;
+      openAmount += row.openAmount || 0;
+      for (const [m, a] of Object.entries(row.byMethod ?? {})) byMethod[m] = (byMethod[m] || 0) + a;
+    }
+    return { total, openAmount, byMethod };
+  }
+
+  totalsRow(): StaffSalesRow {
+    const t = this.staffSalesTotals;
+    return { staffCode: null, staffName: null, total: t.total, paidBills: 0, byMethod: t.byMethod, openBills: 0, openAmount: t.openAmount };
+  }
+
   salesOpenedListToday() {
+    this.loadStaffSales();
     this.barServce.salesOpenedList().subscribe({
       next: (res) => {
         if (res) {
           this.salesOpenedList = res.data ?? [];
-          this.billLines = {};
-          this.salesOpenedList.forEach((bill) => this.loadBillLines(bill));
           this.cdr.detectChanges();
         }
       },

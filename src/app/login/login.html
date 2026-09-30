@@ -1,13 +1,61 @@
-<div class="login-container">
-  <div class="bg-blob blob-one"></div>
-  <div class="bg-blob blob-two"></div>
+<div class="login-page">
+  <!-- ================= LEFT: the bar, after hours (photo behind) ================= -->
+  <aside class="login-panel">
+    <a routerLink="/" class="panel-brand">
+      <img src="assets/images/midland.png" alt="Midland Bar" class="panel-logo">
+      <span class="panel-name">Midland <em>Bar</em></span>
+    </a>
 
-  <mat-card class="login-card">
-    <div class="brand">
-      <img src="assets/images/midland.png" alt="Midland Solutions" class="brand-logo">
+    <div class="panel-copy">
+      <span class="panel-eyebrow">
+        <span class="live-dot"></span>
+        {{ 'LOGIN.PANEL_EYEBROW' | translate }}
+      </span>
+      <h2 class="panel-title">
+        <span>{{ 'LOGIN.PANEL_LINE1' | translate }}</span>
+        <span class="amber">{{ 'LOGIN.PANEL_LINE2' | translate }}</span>
+      </h2>
+      <p class="panel-sub">{{ 'LOGIN.PANEL_SUB' | translate }}</p>
+    </div>
+
+    <ul class="panel-list" aria-hidden="true">
+      <li><mat-icon>receipt_long</mat-icon>{{ 'LOGIN.PANEL_POINT1' | translate }}</li>
+      <li><mat-icon>sports_bar</mat-icon>{{ 'LOGIN.PANEL_POINT2' | translate }}</li>
+      <li><mat-icon>donut_small</mat-icon>{{ 'LOGIN.PANEL_POINT3' | translate }}</li>
+    </ul>
+
+    <!-- The bar in three shots, edge to edge along the panel's foot -->
+    <div class="panel-photos" aria-hidden="true">
+      <figure>
+        <img src="assets/images/bar/beer-pour.jpg" alt="" decoding="async">
+        <figcaption>{{ 'LANDING.G_BEER' | translate }}</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/images/bar/mshikaki.jpg" alt="" decoding="async">
+        <figcaption>{{ 'LANDING.G_GRILL' | translate }}</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/images/bar/cocktails.jpg" alt="" decoding="async">
+        <figcaption>{{ 'LANDING.G_COCKTAILS' | translate }}</figcaption>
+      </figure>
+    </div>
+  </aside>
+
+  <!-- ================= RIGHT: the form, on a ticket ================= -->
+  <main class="login-side">
+    <a routerLink="/" class="back-link">
+      <mat-icon>arrow_back</mat-icon>
+      {{ 'LOGIN.BACK' | translate }}
+    </a>
+
+    <div class="login-ticket">
+      <div class="ticket-head">
+        <span class="ticket-code">{{ 'LOGIN.SIGN_IN' | translate }}</span>
+        <img src="assets/images/midland.png" alt="" class="ticket-logo">
+      </div>
       <h1 class="brand-title">{{ 'LOGIN.WELCOME_BACK' | translate }}</h1>
       <p class="brand-subtitle">{{ 'LOGIN.SUBTITLE' | translate }}</p>
-    </div>
+      <div class="ticket-rule"></div>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <mat-form-field appearance="outline" class="full-width">
@@ -60,5 +108,6 @@
         <span>{{ (submitting ? 'LOGIN.SIGNING_IN' : 'LOGIN.SIGN_IN') | translate }}</span>
       </button>
     </form>
-  </mat-card>
+    </div>
+  </main>
 </div>

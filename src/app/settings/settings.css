@@ -9,16 +9,16 @@
 .info-card{
     width: 80%;
     margin: 20px auto;
-    border: 1px solid #d6d6d6;
-    border-radius: 8px;
-    background: #fff;
+    border: 1px solid #d8ccb8;
+    border-radius: 16px;
+    background: #fffdf9;
     overflow: hidden;
     animation:fadeInUp .8s ease;
 }
 
 .info-row{
     padding: 18px 24px;
-    border-bottom: 1px dotted #bdbdbd;
+    border-bottom: 1px dotted #a89c8a;
 }
 
 .info-row:last-child{
@@ -27,38 +27,44 @@
 
 .info-row h3{
     margin: 0;
-    color: #14315d;
+    font-family: 'Bebas Neue', 'Oswald', Impact, sans-serif;
+    font-size: 34px;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    line-height: 1;
+    text-transform: uppercase;
+    color: #1d1812;
 }
 
 .info-row strong{
     display: block;
     margin-bottom: 8px;
-    color: #424242;
+    color: #2b2118;
 }
 
 .info-row p{
     margin: 0;
     line-height: 1.7;
-    color: #616161;
+    color: #7a6f60;
 }
 
 
 .info-header{
     padding:20px 25px;
-    border-bottom:1px solid #edf0f4;
-    background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);
+    border-bottom:1px solid #f1e8d8;
+    background: linear-gradient(135deg, #ffffff 0%, #fffaf1 100%);
 }
 
 .info-header h2{
     margin:0;
     font-size:18px;
     font-weight: 700;
-    color:#0a1c38;
+    color:#17110b;
 }
 
 .info-header p{
     margin-top:8px;
-    color:#666;
+    color:#7a6f60;
     line-height:1.6;
 }
 
@@ -98,23 +104,23 @@ app-form{
 }
 
 .btn-primary{
-    background:#14315d;
+    background:#2b2118;
     color:white;
 }
 
 .btn-primary:hover{
-    background:#0a1c38;
+    background:#17110b;
 }
 
 .info-card-data{
     width: 80%;
     margin: 60px auto;
-    border: 1px solid #d6d6d6;
+    border: 1px solid #d8ccb8;
     border-radius: 8px;
     height: 300px;
     background: #fff;
     overflow: hidden;
-    background-color: rgb(224, 214, 214);
+    background-color: #f1e8d8;
     animation:fadeInUp .4s ease;
 }
 
@@ -166,11 +172,11 @@ app-form{
   margin: 0;
   font-size: 24px;
   font-weight: 600;
-  color: #424242;
+  color: #2b2118;
 }
 
 .action-container p {
   margin-top: 1px;
-  color: #757575;
+  color: #7a6f60;
   font-size: 15px;
 }

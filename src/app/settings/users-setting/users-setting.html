@@ -369,6 +369,19 @@
               </button>
 
 
+              <!-- BRANCHES THEY WORK IN -->
+              @if (!user?.isRoot) {
+                <button
+                  type="button"
+                  class="action-button role-button"
+                  [matTooltip]="'USER_BRANCHES.TOOLTIP' | translate"
+                  (click)="openBranches(user)"
+                >
+                  <mat-icon>storefront</mat-icon>
+                  <span>{{ 'USER_BRANCHES.BUTTON' | translate }}</span>
+                </button>
+              }
+
               <!-- RESEND ACTIVATION CODE -->
               <button
                 *ngIf="user?.mustChangePassword"

@@ -115,7 +115,7 @@
   box-sizing: border-box;
 
   background: #fff;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e8dcc8;
   border-radius: 14px;
 
   overflow: hidden;
@@ -125,18 +125,18 @@
 .sale-card:hover {
   transform: translateY(-2px);
 
-  border-color: #cbd5e1;
+  border-color: #d8ccb8;
 
   box-shadow:
-    0 6px 15px rgba(15, 23, 42, 0.08),
-    0 12px 30px rgba(15, 23, 42, 0.06);
+    0 6px 15px rgba(29, 24, 18, 0.08),
+    0 12px 30px rgba(29, 24, 18, 0.06);
 }
 
 .sale-card.selected {
-  border-color: #14315d;
+  border-color: #2b2118;
 
   box-shadow:
-    0 5px 16px rgba(20, 49, 93, 0.14);
+    0 5px 16px rgba(43, 33, 24, 0.14);
 }
 
 
@@ -155,7 +155,7 @@
 
   background: #ffffff;
 
-  border-bottom: 1px solid #eef2f7;
+  border-bottom: 1px solid #f1e8d8;
 
   box-sizing: border-box;
 }
@@ -171,7 +171,7 @@
 }
 
 .sale-code span {
-  color: #94a3b8;
+  color: #a89c8a;
 
   font-size: 9px;
   font-weight: 700;
@@ -182,7 +182,7 @@
 }
 
 .sale-code strong {
-  color: #0f172a;
+  color: #1d1812;
 
   font-size: 15px;
   font-weight: 800;
@@ -275,12 +275,12 @@
 /* Vertical divider */
 
 .sale-info + .sale-info {
-  border-left: 1px solid #eef2f7;
+  border-left: 1px solid #f1e8d8;
 }
 
 
 .sale-info span {
-  color: #94a3b8;
+  color: #a89c8a;
 
   font-size: 10px;
   font-weight: 700;
@@ -302,14 +302,14 @@
 /* Bill */
 
 .bill-amount {
-  color: #14315d;
+  color: #2b2118;
 }
 
 
 /* Paid */
 
 .paid-amount {
-  color: #0f172a;
+  color: #1d1812;
 }
 
 
@@ -341,7 +341,7 @@
 
   background: #ffffff;
 
-  border: 1px solid #e5e7eb;
+  border: 1px solid #e8dcc8;
 
   border-radius: 14px;
 
@@ -386,7 +386,7 @@
 .details-header h3 {
   margin: 4px 0 0;
 
-  color: #334155;
+  color: #4a3f33;
 
   font-size: 14px;
   font-weight: 600;
@@ -491,9 +491,9 @@
 
   padding: 0 7px;
 
-  background: #eef2ff;
+  background: #fdf1dc;
 
-  color: #4338ca;
+  color: #8f5500;
 
   border-radius: 20px;
 
@@ -533,9 +533,9 @@
 
   padding: 12px;
 
-  background: #f8fafc;
+  background: #faf6ef;
 
-  border: 1px solid #edf0f3;
+  border: 1px solid #f1e8d8;
 
   border-radius: 9px;
 
@@ -544,7 +544,7 @@
 
 
 .service-item:hover {
-  background: #f1f5f9;
+  background: #f3ece0;
 }
 
 
@@ -636,7 +636,7 @@
 
 
 .total-section strong {
-  color: #14315d;
+  color: #2b2118;
 
   font-size: 20px;
 }
@@ -698,7 +698,7 @@
 
   background: #ffffff;
 
-  border: 1px dashed #d1d5db;
+  border: 1px dashed #d8ccb8;
 
   border-radius: 14px;
 
@@ -717,7 +717,7 @@
 
   font-size: 55px;
 
-  color: #c7cbd1;
+  color: #d8ccb8;
 
   margin-bottom: 10px;
 }
@@ -847,7 +847,7 @@
 }
 
 .payment-select:focus {
-  border-color: #7c3aed;
+  border-color: #b86e00;
   box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
 }
 
@@ -882,7 +882,7 @@
   box-sizing: border-box;
   padding: 10px 15px;
   margin-bottom: 10px;
-  background: #f8f9fa;
+  background: #faf6ef;
   border-radius: 8px;
 }
 
@@ -897,7 +897,7 @@
   padding: 8px 18px;
   border: none;
   border-radius: 6px;
-  background: #14315d;
+  background: #2b2118;
   color: white;
   font-size: 14px;
   font-weight: 500;
@@ -921,7 +921,7 @@
 
 
 .sale-info span {
-  color: #6b7280;
+  color: #7a6f60;
   font-size: 14px;
   font-weight: 500;
 }
@@ -978,18 +978,18 @@
 /* Add */
 .add-icon {
   color: #fff;
-  background: #14315d;
+  background: #2b2118;
 }
 
 .add-icon:hover {
-  background: #0a1c38;
+  background: #17110b;
   transform: translateY(-2px);
 }
 
 /* Load */
 .load-icon {
-  color: #14315d;
-  background: #eff6ff;
+  color: #2b2118;
+  background: #fdf1dc;
   border: 1px solid #bfdbfe;
 }
 
@@ -1021,7 +1021,7 @@
   margin: 0;
   font-size: 20px;
   font-weight: 700;
-  color: #1f2937;
+  color: #2b2118;
 }
 
 .add-bill-btn {
@@ -1031,7 +1031,7 @@
   padding: 10px 16px;
   border: none;
   border-radius: 8px;
-  background: #111827;
+  background: #1d1812;
   color: #fff;
   font-size: 14px;
   font-weight: 600;
@@ -1048,25 +1048,25 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: #14315d;
+  background: #2b2118;
   color: white;
   font-size: 17px;
 }
 
 .add-bill-btn:hover {
-  background: #14315d;
+  background: #2b2118;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(20, 49, 93, 0.25);
+  box-shadow: 0 4px 12px rgba(43, 33, 24, 0.25);
 }
 
 .add-bill-btn:hover span {
   background: #fff;
-  color: #14315d;
+  color: #2b2118;
 }
 .sales-list-container {
   width: 100%;
   padding: 20px;
-  background: #f7f8fa;
+  background: #f1e8d8;
   border-radius: 16px;
 }
 
@@ -1080,12 +1080,12 @@
     margin: 0;
     font-size: 20px;
     font-weight: 700;
-    color: #1f2937;
+    color: #2b2118;
   }
 
   p {
     margin: 5px 0 0;
-    color: #8a94a6;
+    color: #a89c8a;
     font-size: 13px;
   }
 }
@@ -1116,12 +1116,12 @@
 .sale-code {
   font-size: 15px;
   font-weight: 700;
-  color: #202936;
+  color: #2b2118;
 }
 
 .sale-date {
   margin-top: 5px;
-  color: #929bab;
+  color: #a89c8a;
   font-size: 12px;
 
   i {
@@ -1137,7 +1137,7 @@
 
 .label {
   display: block;
-  color: #9aa3b2;
+  color: #a89c8a;
   font-size: 11px;
   margin-bottom: 5px;
   text-transform: uppercase;
@@ -1145,12 +1145,12 @@
 }
 
 .method {
-  color: #374151;
+  color: #4a3f33;
   font-size: 13px;
   font-weight: 600;
 
   i {
-    color: #6b7280;
+    color: #7a6f60;
     margin-right: 5px;
   }
 }
@@ -1189,13 +1189,13 @@
 .amount {
   font-size: 16px;
   font-weight: 800;
-  color: #17202d;
+  color: #1d1812;
 }
 
 .bill {
   margin-top: 3px;
   font-size: 11px;
-  color: #9aa3b2;
+  color: #a89c8a;
 }
 
 .sale-action button {
@@ -1205,16 +1205,16 @@
   border: none;
   border-radius: 50%;
 
-  background: #f5f6f8;
-  color: #8992a1;
+  background: #f1e8d8;
+  color: #a89c8a;
 
   cursor: pointer;
 
   transition: all 0.2s ease;
 
   &:hover {
-    background: #e9edf3;
-    color: #374151;
+    background: #eadfcc;
+    color: #4a3f33;
   }
 }
 
@@ -1254,7 +1254,7 @@
   .amount-section {
     text-align: left;
     padding-top: 5px;
-    border-top: 1px solid #f0f1f3;
+    border-top: 1px solid #f1e8d8;
   }
 }
 .bills-header {
@@ -1268,13 +1268,13 @@
   background: linear-gradient(
     135deg,
     #ffffff 0%,
-    #f8fafc 100%
+    #faf6ef 100%
   );
 
-  border: 1px solid #e8edf3;
+  border: 1px solid #f1e8d8;
   border-radius: 14px;
 
-  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 4px 15px rgba(29, 24, 18, 0.04);
 
   p {
     display: flex;
@@ -1283,7 +1283,7 @@
 
     margin: 0;
 
-    color: #64748b;
+    color: #7a6f60;
     font-size: 14px;
     font-weight: 500;
   }
@@ -1307,17 +1307,17 @@
   font-size: 18px;
   font-weight: 800;
 
-  box-shadow: inset 0 0 0 1px rgba(20, 49, 93, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(43, 33, 24, 0.08);
 }
 
 .bill-text {
-  color: #334155;
+  color: #4a3f33;
   font-weight: 600;
   font-size: 14px;
 }
 
 .separator {
-  color: #cbd5e1;
+  color: #d8ccb8;
   font-size: 18px;
   margin: 0 3px;
 }
@@ -1329,7 +1329,7 @@
 
   padding: 6px 10px;
 
-  background: #f1f5f9;
+  background: #f3ece0;
   color: var(--color-primary);
 
   border-radius: 8px;
@@ -1338,7 +1338,7 @@
   font-weight: 600;
 
   i {
-    color: #64748b;
+    color: #7a6f60;
     font-size: 14px;
   }
 }
@@ -1368,7 +1368,7 @@
 
   background: #ffffff;
 
-  border: 1px solid #e5e9ef;
+  border: 1px solid #e8dcc8;
   border-radius: 12px;
 
   box-shadow: 0 4px 14px rgba(16, 24, 40, 0.06);
@@ -1396,13 +1396,13 @@
 
 .sales-table thead {
   height: 48px;
-  background: #f8fafc;
+  background: #faf6ef;
 }
 
 .sales-table thead th {
   padding: 0 15px;
 
-  color: #667085;
+  color: #7a6f60;
 
   font-size: 11px;
   font-weight: 700;
@@ -1414,7 +1414,7 @@
 
   white-space: nowrap;
 
-  border-bottom: 1px solid #e9edf3;
+  border-bottom: 1px solid #eadfcc;
 }
 
 .sales-table thead th:first-child {
@@ -1445,19 +1445,19 @@
 }
 
 .sales-table tbody tr:hover {
-  background: #f8fbff;
+  background: #faf6ef;
 
-  box-shadow: inset 3px 0 0 #14315d;
+  box-shadow: inset 3px 0 0 #2b2118;
 }
 
 .sales-table tbody td {
   padding: 9px 15px;
 
-  color: #475467;
+  color: #5c5042;
 
   vertical-align: middle;
 
-  border-bottom: 1px solid #edf0f3;
+  border-bottom: 1px solid #f1e8d8;
 }
 
 .sales-table tbody tr:last-child td {
@@ -1484,9 +1484,9 @@
   width: 27px;
   height: 27px;
 
-  background: #f2f4f7;
+  background: #f3ece0;
 
-  color: #667085;
+  color: #7a6f60;
 
   border-radius: 50%;
 
@@ -1517,7 +1517,7 @@
 
   background: #edf5ff;
 
-  color: #14315d;
+  color: #2b2118;
 
   border: 1px solid #d9e9ff;
 
@@ -1531,7 +1531,7 @@
 .sale-main strong {
   display: block;
 
-  color: #344054;
+  color: #4a3f33;
 
   font-size: 13px;
   font-weight: 650;
@@ -1550,7 +1550,7 @@
 
   gap: 7px;
 
-  color: #667085;
+  color: #7a6f60;
 
   font-size: 12px;
 
@@ -1558,7 +1558,7 @@
 }
 
 .sale-date i {
-  color: #98a2b3;
+  color: #a89c8a;
 
   font-size: 13px;
 }
@@ -1574,7 +1574,7 @@
 
   gap: 7px;
 
-  color: #475467;
+  color: #5c5042;
 
   font-size: 12px;
   font-weight: 500;
@@ -1590,9 +1590,9 @@
   width: 27px;
   height: 27px;
 
-  background: #f2f4f7;
+  background: #f3ece0;
 
-  color: #667085;
+  color: #7a6f60;
 
   border-radius: 6px;
 }
@@ -1659,7 +1659,7 @@
 }
 
 .amount-cell strong {
-  color: #1f2937;
+  color: #2b2118;
 
   font-size: 13px;
   font-weight: 700;
@@ -1671,7 +1671,7 @@
 ========================= */
 
 .bill-cell {
-  color: #667085;
+  color: #7a6f60;
 
   font-size: 12px;
 
@@ -1681,7 +1681,7 @@
 }
 
 .no-bill {
-  color: #98a2b3;
+  color: #a89c8a;
 
   font-size: 15px;
 }
@@ -1708,17 +1708,17 @@
 }
 
 .sales-table-wrapper::-webkit-scrollbar-track {
-  background: #f1f3f5;
+  background: #f1e8d8;
 }
 
 .sales-table-wrapper::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #d8ccb8;
 
   border-radius: 10px;
 }
 
 .sales-table-wrapper::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #a89c8a;
 }
 
 
@@ -1792,7 +1792,7 @@
   width: 100%;
   margin: 0;
 
-  color: #1f2937;
+  color: #2b2118;
   font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.3px;
@@ -1813,13 +1813,13 @@
 
   border-radius: 8px;
 
-  background: linear-gradient(135deg, #14315d, #7c3aed);
+  background: linear-gradient(135deg, #2b2118, #b86e00);
   color: #fff;
 
   font-size: 14px;
   font-weight: 700;
 
-  box-shadow: 0 4px 10px rgba(20, 49, 93, 0.20);
+  box-shadow: 0 4px 10px rgba(43, 33, 24, 0.20);
 }
 
 /* Select wrapper */
@@ -1841,12 +1841,12 @@
 
 
 
-  border: 1.5px solid #d1d5db;
+  border: 1.5px solid #d8ccb8;
   border-radius: 12px;
 
   background-color: #fff;
 
-  color: #111827;
+  color: #1d1812;
 
   font-size: 16px;
   font-weight: 600;
@@ -1859,17 +1859,17 @@
 
 /* Hover */
 .select-wrapper select:hover {
-  border-color: #14315d;
-  box-shadow: 0 4px 14px rgba(20, 49, 93, 0.10);
+  border-color: #2b2118;
+  box-shadow: 0 4px 14px rgba(43, 33, 24, 0.10);
 }
 
 /* Focus */
 .select-wrapper select:focus {
-  border-color: #14315d;
+  border-color: #2b2118;
 
   box-shadow:
-    0 0 0 4px rgba(20, 49, 93, 0.12),
-    0 6px 18px rgba(20, 49, 93, 0.10);
+    0 0 0 4px rgba(43, 33, 24, 0.12),
+    0 6px 18px rgba(43, 33, 24, 0.10);
 }
 
 /* Arrow container */
@@ -1891,7 +1891,7 @@
   border-radius: 9px;
 
   background: var(--color-primary-light);
-  color: #14315d;
+  color: #2b2118;
 
   font-size: 15px;
   font-weight: 900;
@@ -1939,12 +1939,12 @@
 
   background: #ffffff;
 
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e8dcc8;
 
   border-radius: 16px;
 
   box-shadow:
-    0 3px 10px rgba(15, 23, 42, 0.05);
+    0 3px 10px rgba(29, 24, 18, 0.05);
 }
 
 
@@ -1965,11 +1965,11 @@
   background:
     linear-gradient(
       135deg,
-      #f8fafc,
+      #faf6ef,
       #ffffff
     );
 
-  border-left: 4px solid #14315d;
+  border-left: 4px solid #2b2118;
 
   border-radius: 12px;
 
@@ -1989,9 +1989,9 @@
   align-items: center;
   justify-content: center;
 
-  color: #14315d;
+  color: #2b2118;
 
-  background: #eef2ff;
+  background: #fdf1dc;
 
   border-radius: 11px;
 }
@@ -2017,7 +2017,7 @@
 
   margin-bottom: 2px;
 
-  color: #14315d;
+  color: #2b2118;
 
   font-size: 10px;
 
@@ -2030,7 +2030,7 @@
 .report-header h3 {
   margin: 0;
 
-  color: #334155;
+  color: #4a3f33;
 
   font-size: 14px;
 
@@ -2043,7 +2043,7 @@
 .report-header p {
   margin: 3px 0 0;
 
-  color: #64748b;
+  color: #7a6f60;
 
   font-size: 13px;
 
@@ -2112,7 +2112,7 @@
 
   margin-bottom: 5px;
 
-  color: #475569;
+  color: #5c5042;
 
   font-size: 10px;
 
@@ -2123,7 +2123,7 @@
 
 
 .filter-label-icon {
-  color: #14315d;
+  color: #2b2118;
 
   font-size: 14px;
 }
@@ -2150,11 +2150,11 @@
 
   box-sizing: border-box;
 
-  color: #1e293b;
+  color: #2b2118;
 
   background: #ffffff;
 
-  border: 1px solid #cbd5e1;
+  border: 1px solid #d8ccb8;
 
   border-radius: 9px;
 
@@ -2173,16 +2173,16 @@
 
 
 .select-wrapper select:hover {
-  border-color: #818cf8;
+  border-color: #f5a524;
 }
 
 
 .select-wrapper select:focus {
-  border-color: #14315d;
+  border-color: #2b2118;
 
   box-shadow:
     0 0 0 3px
-    rgba(20, 49, 93, .10);
+    rgba(43, 33, 24, .10);
 }
 
 
@@ -2194,7 +2194,7 @@
 
   transform: translateY(-50%);
 
-  color: #64748b;
+  color: #7a6f60;
 
   font-size: 18px;
 
@@ -2217,12 +2217,12 @@
 
   background: #ffffff;
 
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e8dcc8;
 
   border-radius: 16px;
 
   box-shadow:
-    0 3px 10px rgba(15, 23, 42, 0.05);
+    0 3px 10px rgba(29, 24, 18, 0.05);
 }
 
 
@@ -2241,14 +2241,14 @@
 
   padding-bottom: 15px;
 
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid #f3ece0;
 }
 
 
 .summary-label {
   display: block;
 
-  color: #14315d;
+  color: #2b2118;
 
   font-size: 10px;
 
@@ -2261,7 +2261,7 @@
 .payment-summary-header h3 {
   margin: 4px 0 0;
 
-  color: #334155;
+  color: #4a3f33;
 
   font-size: 14px;
 
@@ -2280,9 +2280,9 @@
   align-items: center;
   justify-content: center;
 
-  color: #14315d;
+  color: #2b2118;
 
-  background: #eef2ff;
+  background: #fdf1dc;
 
   border-radius: 11px;
 }
@@ -2334,9 +2334,9 @@
 
   box-sizing: border-box;
 
-  background: #f8fafc;
+  background: #faf6ef;
 
-  border: 1px solid #f1f5f9;
+  border: 1px solid #f3ece0;
 
   border-radius: 11px;
 
@@ -2351,11 +2351,11 @@
 .payment-row:hover {
   background: #ffffff;
 
-  border-color: #e0e7ff;
+  border-color: #fdf1dc;
 
   box-shadow:
     0 5px 15px
-    rgba(20, 49, 93, .07);
+    rgba(43, 33, 24, .07);
 
   transform: translateY(-1px);
 }
@@ -2387,9 +2387,9 @@
   align-items: center;
   justify-content: center;
 
-  color: #14315d;
+  color: #2b2118;
 
-  background: #eef2ff;
+  background: #fdf1dc;
 
   border-radius: 9px;
 }
@@ -2411,7 +2411,7 @@
 .payment-method-info strong {
   display: block;
 
-  color: #1e293b;
+  color: #2b2118;
 
   font-size: 13px;
 
@@ -2426,7 +2426,7 @@
 
   margin-top: 2px;
 
-  color: #94a3b8;
+  color: #a89c8a;
 
   font-size: 11px;
 
@@ -2471,11 +2471,11 @@
   background:
     linear-gradient(
       135deg,
-      #eef2ff,
-      #f8fafc
+      #fdf1dc,
+      #faf6ef
     );
 
-  border: 1px solid #e0e7ff;
+  border: 1px solid #fdf1dc;
 
   border-radius: 12px;
 }
@@ -2494,7 +2494,7 @@
 
   color: #ffffff;
 
-  background: #14315d;
+  background: #2b2118;
 
   border-radius: 9px;
 }
@@ -2526,14 +2526,14 @@
 
   background: #ffffff;
 
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e8dcc8;
 
   border-radius: 16px;
 
   overflow: hidden;
 
   box-shadow:
-    0 3px 10px rgba(15, 23, 42, 0.04);
+    0 3px 10px rgba(29, 24, 18, 0.04);
 }
 
 
@@ -2554,14 +2554,14 @@
 
   background: #ffffff;
 
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid #f3ece0;
 }
 
 
 .table-label {
   display: block;
 
-  color: #14315d;
+  color: #2b2118;
 
   font-size: 10px;
 
@@ -2574,7 +2574,7 @@
 .table-header h3 {
   margin: 3px 0 0;
 
-  color: #334155;
+  color: #4a3f33;
 
   font-size: 14px;
 
@@ -2585,11 +2585,11 @@
 .transaction-count {
   padding: 6px 10px;
 
-  color: #475569;
+  color: #5c5042;
 
-  background: #f8fafc;
+  background: #faf6ef;
 
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e8dcc8;
 
   border-radius: 8px;
 
@@ -2632,16 +2632,16 @@
 ========================================================= */
 
 .sales-table thead {
-  background: #f8fafc;
+  background: #faf6ef;
 }
 
 
 .sales-table th {
   padding: 12px 14px;
 
-  color: #64748b;
+  color: #7a6f60;
 
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e8dcc8;
 
   font-size: 11px;
 
@@ -2673,16 +2673,16 @@
 
 
 .sales-table tbody tr:hover {
-  background: #f8fafc;
+  background: #faf6ef;
 }
 
 
 .sales-table td {
   padding: 13px 14px;
 
-  color: #334155;
+  color: #4a3f33;
 
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid #f3ece0;
 
   font-size: 13px;
 
@@ -2715,9 +2715,9 @@
   align-items: center;
   justify-content: center;
 
-  color: #475569;
+  color: #5c5042;
 
-  background: #f1f5f9;
+  background: #f3ece0;
 
   border-radius: 7px;
 
@@ -2737,7 +2737,7 @@
 
 
 .sale-info strong {
-  color: #1e293b;
+  color: #2b2118;
 
   font-size: 13px;
 
@@ -2756,14 +2756,14 @@
 
   gap: 7px;
 
-  color: #64748b;
+  color: #7a6f60;
 
   white-space: nowrap;
 }
 
 
 .sale-date i {
-  color: #14315d;
+  color: #2b2118;
 
   font-size: 13px;
 }
@@ -2793,9 +2793,9 @@
   align-items: center;
   justify-content: center;
 
-  color: #14315d;
+  color: #2b2118;
 
-  background: #eef2ff;
+  background: #fdf1dc;
 
   border-radius: 7px;
 }
@@ -2885,14 +2885,14 @@
 .bill-cell {
   text-align: right;
 
-  color: #475569;
+  color: #5c5042;
 
   white-space: nowrap;
 }
 
 
 .no-bill {
-  color: #cbd5e1;
+  color: #d8ccb8;
 
   font-size: 16px;
 }
@@ -2920,11 +2920,11 @@
 
   padding: 0;
 
-  color: #475569;
+  color: #5c5042;
 
-  background: #f8fafc;
+  background: #faf6ef;
 
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e8dcc8;
 
   border-radius: 8px;
 
@@ -2939,11 +2939,11 @@
 
 
 .sale-action-btn:hover {
-  color: #14315d;
+  color: #2b2118;
 
-  background: #eef2ff;
+  background: #fdf1dc;
 
-  border-color: #c7d2fe;
+  border-color: #f3d9a8;
 
   transform: translateY(-1px);
 }
@@ -3191,9 +3191,9 @@
 
   padding: 7px;
 
-  background: #f1f5f9;
+  background: #f3ece0;
 
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e8dcc8;
 
   border-radius: 12px;
 
@@ -3226,7 +3226,7 @@
 
   background: transparent;
 
-  color: #64748b;
+  color: #7a6f60;
 
   font-size: 12px;
 
@@ -3249,7 +3249,7 @@
 .filter-btn:hover {
   background: #ffffff;
 
-  color: #14315d;
+  color: #2b2118;
 }
 
 
@@ -3258,18 +3258,18 @@
 ===================================================== */
 
 .filter-btn.active {
-  background: #14315d;
+  background: #2b2118;
 
   color: #ffffff;
 
-  border-color: #14315d;
+  border-color: #2b2118;
 
   box-shadow:
-    0 4px 10px rgba(20, 49, 93, 0.22);
+    0 4px 10px rgba(43, 33, 24, 0.22);
 }
 
 .filter-btn.active:hover {
-  background: #4338ca;
+  background: #8f5500;
 
   color: #ffffff;
 }
@@ -3288,9 +3288,9 @@
 
   gap: 6px;
 
-  color: #475569;
+  color: #5c5042;
 
-  border-left: 1px solid #cbd5e1;
+  border-left: 1px solid #d8ccb8;
 }
 
 .date-filter-btn mat-icon {
@@ -3380,13 +3380,9 @@
   align-items: center;
   justify-content: center;
 
-  background: linear-gradient(
-    135deg,
-    #ffffff,
-    blue
-  );
+  background: linear-gradient(135deg, #ffc861, #f5a524);
 
-  color: white;
+  color: #1a1206;
 
   border: 3px solid rgba(255, 255, 255, 0.7);
 
@@ -3404,7 +3400,7 @@
 /* Customer text */
 
 .customer-label {
-  color: #1e293b;
+  color: #2b2118;
 
   font-size: 14px;
   font-weight: 800;
@@ -3437,7 +3433,7 @@
 
   background: linear-gradient(
     90deg,
-    #14315d,
+    #2b2118,
     white
   );
 
@@ -3451,7 +3447,7 @@
 /* Hover */
 
 .report-customer:hover .customer-label {
-  color: #4338ca;
+  color: #8f5500;
 
   transform: translateX(2px);
 }
@@ -3478,7 +3474,7 @@
 /* Small label */
 
 .date-label {
-  color: #94a3b8;
+  color: #a89c8a;
 
   font-size: 9px;
   font-weight: 800;
@@ -3517,7 +3513,7 @@
 
   margin-right: 7px;
 
-  color: #64748b;
+  color: #7a6f60;
 
   font-size: 17px;
 
@@ -3542,7 +3538,7 @@
 
   background: transparent;
 
-  color: #1e293b;
+  color: #2b2118;
 
   font-family: inherit;
 
@@ -3559,7 +3555,7 @@
 
 .date-input-wrapper input[type="date"]:invalid,
 .date-input-wrapper input[type="date"]:not(:valid) {
-  color: #64748b;
+  color: #7a6f60;
 }
 
 
@@ -3586,11 +3582,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 ===================================================== */
 
 .date-filter:hover .date-icon {
-  color: #14315d;
+  color: #2b2118;
 }
 
 .date-filter:hover .date-input-wrapper input {
-  color: #4338ca;
+  color: #8f5500;
 }
 
 
@@ -3602,30 +3598,30 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
   background: linear-gradient(
     135deg,
-    #eef2ff,
+    #fdf1dc,
     #ffffff
   );
 
-  border-color: #818cf8;
+  border-color: #f5a524;
 
   box-shadow:
-    0 4px 12px rgba(20, 49, 93, 0.10);
+    0 4px 12px rgba(43, 33, 24, 0.10);
 }
 
 
 .date-filter.active .date-icon {
-  color: #14315d;
+  color: #2b2118;
 }
 
 
 .date-filter.active .date-label {
-  color: #14315d;
+  color: #2b2118;
 }
 
 
 .date-filter.active
 .date-input-wrapper input {
-  color: #3730a3;
+  color: #8f5500;
 }
 
 
@@ -3635,7 +3631,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .date-input-wrapper:focus-within {
 
-  background: #eef2ff;
+  background: #fdf1dc;
 
   border-radius: 7px;
 }
@@ -3643,7 +3639,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .date-input-wrapper:focus-within
 .date-icon {
-  color: #14315d;
+  color: #2b2118;
 }
 
 
@@ -3679,15 +3675,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   background: linear-gradient(
     135deg,
     #ffffff 0%,
-    #f8fafc 100%
+    #faf6ef 100%
   );
 
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e8dcc8;
 
   border-radius: 14px;
 
   box-shadow:
-    0 4px 14px rgba(15, 23, 42, 0.06);
+    0 4px 14px rgba(29, 24, 18, 0.06);
 
   transition:
     transform 0.2s ease,
@@ -3701,10 +3697,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .grand-total:hover {
   transform: translateY(-2px);
 
-  border-color: #c7d2fe;
+  border-color: #f3d9a8;
 
   box-shadow:
-    0 8px 22px rgba(20, 49, 93, 0.12);
+    0 8px 22px rgba(43, 33, 24, 0.12);
 }
 
 
@@ -3726,14 +3722,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
   background: linear-gradient(
     135deg,
-    #14315d,
-    #0a1c38
+    #2b2118,
+    #17110b
   );
 
   color: #ffffff;
 
   box-shadow:
-    0 5px 12px rgba(20, 49, 93, 0.22);
+    0 5px 12px rgba(43, 33, 24, 0.22);
 }
 
 
@@ -3763,7 +3759,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* Label */
 
 .grand-total-label {
-  color: #94a3b8;
+  color: #a89c8a;
 
   font-size: 9px;
 
@@ -3780,7 +3776,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* Amount */
 
 .grand-total-amount {
-  color: #0f172a;
+  color: #1d1812;
 
   font-size: 18px;
 
@@ -3797,7 +3793,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* Currency */
 
 .grand-total-amount::first-letter {
-  color: #14315d;
+  color: #2b2118;
 }
 /* =====================================================
    SALE ACTION BAR
@@ -3901,41 +3897,41 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 ===================================================== */
 
 .add-btn {
-  color: #4338ca;
+  color: #8f5500;
 
   background: linear-gradient(
     135deg,
-    #eef2ff,
-    #e0e7ff
+    #fdf1dc,
+    #fdf1dc
   );
 
-  border-color: #c7d2fe;
+  border-color: #f3d9a8;
 }
 
 
 .add-btn .action-icon {
   color: #ffffff;
 
-  background: #14315d;
+  background: #2b2118;
 
   box-shadow:
-    0 3px 7px rgba(20, 49, 93, 0.25);
+    0 3px 7px rgba(43, 33, 24, 0.25);
 }
 
 
 .add-btn:hover {
   background: linear-gradient(
     135deg,
-    #e0e7ff,
-    #c7d2fe
+    #fdf1dc,
+    #f3d9a8
   );
 
-  border-color: #a5b4fc;
+  border-color: #f3d9a8;
 
   transform: translateY(-2px);
 
   box-shadow:
-    0 6px 14px rgba(20, 49, 93, 0.14);
+    0 6px 14px rgba(43, 33, 24, 0.14);
 }
 
 
@@ -4041,7 +4037,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 ===================================================== */
 
 .sale-action-btn:focus-visible {
-  outline: 3px solid rgba(20, 49, 93, 0.20);
+  outline: 3px solid rgba(43, 33, 24, 0.20);
 
   outline-offset: 2px;
 }
@@ -4084,122 +4080,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 
-/* =========================
-   DRAFT LINES - picked, not yet recorded
-========================= */
-
-.draft-lines {
-  margin: 10px 0 4px;
-  padding: 10px 12px;
-  border: 1px dashed #f5c26b;
-  border-radius: 10px;
-  background: #fffcf5;
-  text-align: left;
-}
-
-.draft-title {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin-bottom: 6px;
-  font-size: 12px;
-  font-weight: 700;
-  color: #b54708;
-}
-
-.draft-title small {
-  font-weight: 500;
-  color: #b54708;
-  opacity: 0.8;
-}
-
-.draft-line {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 4px 0;
-  font-size: 12px;
-  color: #344054;
-}
-
-.draft-qty {
-  min-width: 32px;
-  font-weight: 700;
-}
-
-.draft-name {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.draft-amount {
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.draft-remove {
-  display: flex;
-  padding: 0;
-  border: none;
-  background: none;
-  color: #98a2b3;
-  cursor: pointer;
-}
-
-.draft-remove mat-icon {
-  width: 16px;
-  height: 16px;
-  font-size: 16px;
-}
-
-.draft-total {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 6px;
-  padding-top: 6px;
-  border-top: 1px dashed #f5c26b;
-  font-size: 13px;
-  color: #172033;
-}
-
-
-/* The picked-lines box folds to one summary line; a tap opens it. */
-button.draft-title {
-  width: 100%;
-  margin-bottom: 0;
-  padding: 0;
-  border: none;
-  background: none;
-  font-family: inherit;
-  cursor: pointer;
-}
-
-.draft-summary {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  color: #172033;
-}
-
-.draft-summary mat-icon {
-  width: 18px;
-  height: 18px;
-  font-size: 18px;
-  color: #b54708;
-}
-
-.draft-note {
-  display: block;
-  margin: 6px 0 2px;
-  font-size: 11px;
-  color: #b54708;
-  opacity: 0.8;
-}
-
-
 /* Lipa - the main thing to do with a bill that has lines on it. */
 .sale-action-btn.pay-btn {
   background: #027a48;
@@ -4210,4 +4090,245 @@ button.draft-title {
 .sale-action-btn.pay-btn:disabled {
   opacity: 0.45;
   cursor: default;
+}
+
+/* ============ Filter open bills by staff (Staff Sell) ============ */
+
+.staff-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 14px;
+}
+
+.staff-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 12px;
+  border: 1px solid #e8dcc8;
+  border-radius: 999px;
+  background: #fffdf9;
+  color: #4a3f33;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.staff-chip b {
+  color: #b86e00;
+}
+
+.staff-chip.active {
+  border-color: #2b2118;
+  background: #2b2118;
+  color: #f6ecdc;
+}
+
+.staff-chip.active b {
+  color: #f5a524;
+}
+
+.chip-count {
+  min-width: 18px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: #f1e8d8;
+  color: #4a3f33;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.staff-chip.active .chip-count {
+  background: #f5a524;
+  color: #1a1206;
+}
+
+.sale-staff {
+  display: block;
+  margin-top: 2px;
+  color: #b86e00;
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+/* ============ Each staff member's day ============ */
+
+.staff-sales {
+  margin: 0 0 14px;
+  padding: 14px 16px;
+  border: 1px solid #e8dcc8;
+  border-radius: 16px;
+  background: #fffdf9;
+}
+
+.staff-sales-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.staff-sales-head h3 {
+  margin: 0;
+  font-family: 'Bebas Neue', 'Oswald', Impact, sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  line-height: 1;
+  text-transform: uppercase;
+  color: #1d1812;
+}
+
+.staff-sales-date {
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid #e8dcc8;
+  border-radius: 10px;
+  background: #faf6ef;
+  color: #2b2118;
+  font: inherit;
+  font-size: 13px;
+}
+
+.staff-sales-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.staff-sales-row {
+  display: grid;
+  grid-template-columns: minmax(140px, 1.1fr) minmax(110px, 0.7fr) 2.4fr auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: #faf6ef;
+  color: #2b2118;
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.staff-sales-row:hover {
+  border-color: #e8dcc8;
+}
+
+.staff-sales-row.active {
+  border-color: #f5a524;
+  background: #fdf1dc;
+}
+
+.staff-sales-row.totals {
+  background: #2b2118;
+  color: #f6ecdc;
+  cursor: default;
+}
+
+.ss-who b {
+  color: #b86e00;
+}
+
+.ss-total {
+  font-family: 'Bebas Neue', 'Oswald', Impact, sans-serif;
+  font-size: 22px;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+.totals .ss-total {
+  color: #f5a524;
+}
+
+.ss-methods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ss-method {
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #f1e8d8;
+  color: #4a3f33;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.totals .ss-method {
+  background: rgba(255, 236, 205, 0.12);
+  color: #f6ecdc;
+}
+
+.ss-none {
+  color: #a89c8a;
+  font-size: 12px;
+}
+
+.ss-open {
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #fff4e5;
+  color: #b54708;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.totals .ss-open {
+  background: rgba(245, 165, 36, 0.18);
+  color: #ffc861;
+}
+
+@media (max-width: 760px) {
+  .staff-sales-row {
+    grid-template-columns: 1fr auto;
+  }
+
+  .ss-methods {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Delete - only on a bill still at zero: a strong red button, centred between the code and the status. */
+.bill-delete-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0 8px;
+  padding: 7px 14px;
+  border: none;
+  border-radius: 8px;
+  background: #d92d20;
+  color: #ffffff;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(217, 45, 32, 0.35);
+  transition: background 0.15s;
+}
+
+.bill-delete-btn:hover {
+  background: #b42318;
+}
+
+.bill-delete-btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.bill-delete-btn mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
 }

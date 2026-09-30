@@ -115,6 +115,9 @@
                             {{ staff.middleName || '' }}
                             {{ staff.lastName || '' }}
                           </span>
+                          @if (staff.staffCode) {
+                            <small class="staff-code-tag">{{ 'STAFF_PAGE.CODE' | translate }} {{ staff.staffCode }}</small>
+                          }
                         </div>
                       </div>
                     </td>

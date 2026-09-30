@@ -5,7 +5,7 @@ import { filter } from 'rxjs/operators';
 import { SidenavItem } from '../Utils/component/main-sidenav-component/model';
 import { MainSidenav2 } from '../Utils/component/main-sidenav2/main-sidenav2';
 import { Authentication } from '../Utils/services/authentication';
-import { ADMIN_ROLES, adminLandingRoute } from './admin-role.guard';
+import { ADMIN_MANAGE_ROLES, ADMIN_ROLES, ADMIN_ROOT_ONLY_ROLES, adminLandingRoute } from './admin-role.guard';
 
 /**
  * The third area, beside POS and Settings.
@@ -45,6 +45,8 @@ export class Admin implements OnInit {
   isHome = true;
 
   private readonly adminRoles = ADMIN_ROLES;
+  private readonly rootOnlyRoles = ADMIN_ROOT_ONLY_ROLES;
+  private readonly manageRoles = ADMIN_MANAGE_ROLES;
 
   menuItems: SidenavItem[] = [
     {
@@ -58,6 +60,42 @@ export class Admin implements OnInit {
       icon: 'guidelines',
       route: '/admin/guidance',
       roles: this.adminRoles
+    },
+    {
+      label: 'SETTINGS_MENU.ERRORS',
+      icon: 'warning',
+      route: '/admin/errors',
+      roles: this.adminRoles
+    },
+    {
+      label: 'SETTINGS_MENU.AUDIT',
+      icon: 'history',
+      route: '/admin/audit',
+      roles: this.adminRoles
+    },
+    {
+      label: 'SETTINGS_MENU.EXPIRING',
+      icon: 'calender',
+      route: '/admin/expiring',
+      roles: this.adminRoles
+    },
+    {
+      label: 'SETTINGS_MENU.PAYMENTS',
+      icon: 'payment',
+      route: '/admin/payments',
+      roles: this.manageRoles
+    },
+    {
+      label: 'SETTINGS_MENU.PAYROLL',
+      icon: 'pay',
+      route: '/admin/payroll',
+      roles: this.manageRoles
+    },
+    {
+      label: 'SETTINGS_MENU.REGIONS',
+      icon: 'office',
+      route: '/admin/regions',
+      roles: this.rootOnlyRoles
     }
   ];
 

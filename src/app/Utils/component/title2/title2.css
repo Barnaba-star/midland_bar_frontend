@@ -14,7 +14,7 @@
   border-radius: var(--radius-md, 16px);
   background-color: var(--color-surface, #ffffff);
   box-shadow: var(--shadow-sm);
-  border: 1px solid var(--color-border, #e5e7eb);
+  border: 1px solid var(--color-border, #e8dcc8);
 
   gap: 10px;
   margin-bottom: 16px;
@@ -86,28 +86,31 @@
 
   border: none;
   border-radius: 50%;
-  background: var(--color-primary-light, #eef2ff);
+  background: var(--color-primary-light, #fdf1dc);
   cursor: pointer;
 
   transition: background 0.2s ease;
 }
 
 .back-button:hover {
-  background: #e0e4ff;
+  background: #f3d9a8;
 }
 
 .app-icon-back {
   width: 20px;
   height: 20px;
   font-size: 20px;
-  color: var(--color-primary, #4f46e5);
+  color: var(--color-primary, #b86e00);
 }
 
 .app-title {
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--color-text, #111827);
-  letter-spacing: -0.2px;
+  font-family: 'Bebas Neue', 'Oswald', Impact, sans-serif;
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--color-text, #1d1812);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
   white-space: nowrap;
 }
 
@@ -127,21 +130,21 @@
 .breadcrumb-item {
   font-size: 15px;
   font-weight: 600;
-  color: var(--color-text-muted, #6b7280);
+  color: var(--color-text-muted, #7a6f60);
   white-space: nowrap;
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 a.breadcrumb-item:hover {
-  color: var(--color-primary, #4f46e5);
+  color: var(--color-primary, #b86e00);
   text-decoration: underline;
 }
 
 .breadcrumb-item.current {
   font-size: 22px;
   font-weight: 700;
-  color: var(--color-text, #111827);
+  color: var(--color-text, #1d1812);
   letter-spacing: -0.2px;
 }
 
@@ -149,13 +152,13 @@ a.breadcrumb-item:hover {
   width: 16px;
   height: 16px;
   font-size: 16px;
-  color: var(--color-text-muted, #6b7280);
+  color: var(--color-text-muted, #7a6f60);
   flex-shrink: 0;
 }
 
 .action {
-  background-color: var(--color-bg, #f5f6fb);
-  border: 1px solid var(--color-border, #e5e7eb);
+  background-color: var(--color-bg, #f6f0e6);
+  border: 1px solid var(--color-border, #e8dcc8);
   border-radius: 999px;
   display: flex;
   gap: 8px;
@@ -171,7 +174,7 @@ a.breadcrumb-item:hover {
 .app-title-sm {
   font-size: 14px;
   font-weight: 600;
-  color: var(--color-text-muted, #6b7280);
+  color: var(--color-text-muted, #7a6f60);
   white-space: nowrap;
 }
 
@@ -179,7 +182,7 @@ a.breadcrumb-item:hover {
   width: 20px;
   height: 20px;
   font-size: 20px;
-  color: var(--color-text-muted, #6b7280);
+  color: var(--color-text-muted, #7a6f60);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -187,18 +190,18 @@ a.breadcrumb-item:hover {
 }
 
 .action:hover {
-  background-color: var(--color-primary-light, #eef2ff);
-  border-color: var(--color-primary, #4f46e5);
+  background-color: var(--color-primary-light, #fdf1dc);
+  border-color: var(--color-primary, #b86e00);
 }
 
 .action:hover .app-icon,
 .action:hover .app-title-sm {
-  color: var(--color-primary, #4f46e5);
+  color: var(--color-primary, #b86e00);
 }
 
 .action.active {
-  background-color: var(--color-primary, #4f46e5);
-  border-color: var(--color-primary, #4f46e5);
+  background-color: var(--color-primary, #b86e00);
+  border-color: var(--color-primary, #b86e00);
 }
 
 .action.active .app-icon,
@@ -211,7 +214,7 @@ a.breadcrumb-item:hover {
 }
 
 .action:focus-visible {
-  outline: 2px solid var(--color-primary, #4f46e5);
+  outline: 2px solid var(--color-primary, #b86e00);
   outline-offset: 2px;
 }
 
@@ -242,5 +245,5 @@ a.breadcrumb-item:hover {
 
 .action.active .action-badge {
   background: #ffffff;
-  color: var(--color-primary, #4f46e5);
+  color: var(--color-primary, #b86e00);
 }

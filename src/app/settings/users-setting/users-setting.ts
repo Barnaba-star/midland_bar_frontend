@@ -37,6 +37,7 @@ import { SelectStaffDialogComponent } from '../../Utils/component/dialogs/select
 import { ActivationCodeDialogComponent } from '../../Utils/component/dialogs/activation-code-dialog-component/activation-code-dialog-component';
 import { Service } from '../service';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { UserBranchesDialogComponent } from '../../Utils/component/dialogs/user-branches-dialog-component/user-branches-dialog-component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { SearchBoxComponent } from '../../Utils/component/search-box/search-box.component';
 
@@ -171,6 +172,24 @@ addUser(): void {
  * arrived, the code that went stale, or the one burned on wrong guesses.
  */
 resendingFor: string | null = null;
+
+/** Which branches this user may work in besides home - asked at their next login. */
+openBranches(user: any): void {
+  if (!user?.uid) {
+    return;
+  }
+  const name = [user.firstName, user.lastName].filter(Boolean).join(' ') || user.username;
+  this.dialog.open(UserBranchesDialogComponent, {
+    width: '520px',
+    maxWidth: '95vw',
+    autoFocus: false,
+    data: { userUID: user.uid, name },
+  }).afterClosed().subscribe((saved?: boolean) => {
+    if (saved) {
+      this.alert.show('success', this.translate.instant('USER_BRANCHES.SAVED', { name }));
+    }
+  });
+}
 
 resendCode(user: any): void {
 

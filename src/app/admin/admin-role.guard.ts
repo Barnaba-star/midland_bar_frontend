@@ -1,3 +1,4 @@
+import { landingFor } from '../login/landing-for';
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { Authentication } from '../Utils/services/authentication';
@@ -10,7 +11,7 @@ import { Authentication } from '../Utils/services/authentication';
  * STAFF is deliberately out: they register branches, they do not answer for
  * the platform.
  */
-export const ADMIN_ROLES = ['ROOT', 'DIRECTOR'];
+export const ADMIN_ROLES = ['ROOT', 'DIRECTOR', 'ADMIN'];
 
 const hasAnyRole = (auth: Authentication, roles: string[]): boolean =>
   roles.some(role => auth.hasRole(role));
@@ -26,5 +27,23 @@ export const adminLandingRoute = '/admin/messages';
 export const adminGuard: CanActivateFn = () => {
   const auth = inject(Authentication);
   const router = inject(Router);
-  return hasAnyRole(auth, ADMIN_ROLES) ? true : router.createUrlTree(['/pos']);
+  return hasAnyRole(auth, ADMIN_ROLES) ? true : router.createUrlTree([landingFor((role) => auth.hasRole(role))]);
+};
+
+/** ROOT only within Admin (Regions); anyone else goes back to Admin's landing. */
+export const ADMIN_ROOT_ONLY_ROLES = ['ROOT'];
+
+export const adminRootOnlyGuard: CanActivateFn = () => {
+  const auth = inject(Authentication);
+  const router = inject(Router);
+  return hasAnyRole(auth, ADMIN_ROOT_ONLY_ROLES) ? true : router.createUrlTree([adminLandingRoute]);
+};
+
+/** Payments and Payroll inside Admin: ROOT and DIRECTOR only. */
+export const ADMIN_MANAGE_ROLES = ['ROOT', 'DIRECTOR'];
+
+export const adminManageGuard: CanActivateFn = () => {
+  const auth = inject(Authentication);
+  const router = inject(Router);
+  return hasAnyRole(auth, ADMIN_MANAGE_ROLES) ? true : router.createUrlTree([adminLandingRoute]);
 };

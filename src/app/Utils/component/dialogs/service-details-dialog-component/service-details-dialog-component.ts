@@ -1,3 +1,4 @@
+import { UnitLabelPipe } from '../../../pipes/stock-packs.pipe';
 import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -6,7 +7,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-service-details-dialog-component',
-  imports: [MatIconModule, DecimalPipe, TranslatePipe],
+  imports: [MatIconModule, DecimalPipe, TranslatePipe, UnitLabelPipe],
   templateUrl: './service-details-dialog-component.html',
   styleUrl: './service-details-dialog-component.css',
   changeDetection: ChangeDetectionStrategy.OnPush

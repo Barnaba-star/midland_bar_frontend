@@ -1,3 +1,4 @@
+import { UnitLabelPipe } from '../../Utils/pipes/stock-packs.pipe';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { TitleAction, Title2 } from "../../Utils/component/title2/title2";
 import { Authentication } from '../../Utils/services/authentication';
@@ -15,7 +16,7 @@ import { EmptyStateComponent } from '../../Utils/component/empty-state/empty-sta
 @Component({
   selector: 'app-bar-service',
   imports: [
-    EmptyStateComponent,Title2, MatIconModule, TranslatePipe, MatTooltipModule, DecimalPipe],
+    EmptyStateComponent,Title2, MatIconModule, TranslatePipe, MatTooltipModule, DecimalPipe, UnitLabelPipe],
   templateUrl: './bar-service.html',
   styleUrl: './bar-service.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

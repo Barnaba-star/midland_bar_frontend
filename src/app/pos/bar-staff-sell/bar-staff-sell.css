@@ -1,0 +1,513 @@
+/* A module of its own: warm paper page, the bar's dark top bar. */
+.module {
+  min-height: 100vh;
+  background: #f6f0e6;
+  color: #1d1812;
+  font-family: var(--font-sans);
+}
+
+.module-bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 22px;
+  background: linear-gradient(180deg, #16130f 0%, #0e0c0a 100%);
+  color: #f6ecdc;
+}
+
+.exit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 38px;
+  padding: 0 14px 0 10px;
+  border: 1px solid rgba(255, 236, 205, 0.15);
+  border-radius: 999px;
+  background: transparent;
+  color: #f6ecdc;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.exit-btn:hover {
+  color: #f5a524;
+  border-color: rgba(245, 165, 36, 0.5);
+}
+
+.exit-btn mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
+.module-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+
+.module-logo {
+  width: 34px;
+  height: 34px;
+  padding: 3px;
+  border-radius: 9px;
+  background: #f6ecdc;
+  object-fit: contain;
+}
+
+.module-name {
+  font-family: 'Bebas Neue', 'Oswald', Impact, sans-serif;
+  font-size: 26px;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 600px) {
+  .module-bar {
+    padding: 12px 16px;
+  }
+}
+
+.staff-sell {
+  padding: 18px 22px 28px;
+  box-sizing: border-box;
+}
+
+/* ============ Code screen - a ticket, like the login ============ */
+
+.code-card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  width: 380px;
+  max-width: 100%;
+  margin: 32px auto;
+  padding: 28px 28px 48px;
+  background: #fbf6ec;
+  color: #1d1812;
+  box-shadow: 0 20px 44px rgba(29, 24, 18, 0.18);
+  /* torn bottom edge */
+  -webkit-mask: radial-gradient(circle 7px at 50% 100%, transparent 98%, #000) 0 0 / 18px 100%;
+          mask: radial-gradient(circle 7px at 50% 100%, transparent 98%, #000) 0 0 / 18px 100%;
+}
+
+.code-eyebrow {
+  color: #7a6f60;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.code-title {
+  margin: 0;
+  font-family: 'Bebas Neue', 'Oswald', Impact, sans-serif;
+  font-size: 40px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.code-hint {
+  margin: 0 0 6px;
+  color: #7a6f60;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.code-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px 16px;
+  border: 2px dashed #b9ad99;
+  border-radius: 12px;
+  background: #fffdf9;
+  color: #1d1812;
+  font-family: 'Bebas Neue', 'Oswald', Impact, sans-serif;
+  font-size: 44px;
+  letter-spacing: 0.3em;
+  text-align: center;
+  outline: none;
+}
+
+.code-input:focus {
+  border-color: #f5a524;
+  border-style: solid;
+}
+
+.code-input::placeholder {
+  color: #d8ccb8;
+}
+
+.code-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 48px;
+  margin-top: 4px;
+  border: none;
+  border-radius: 999px;
+  background: #f5a524;
+  color: #1a1206;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.code-btn:hover:not(:disabled) {
+  background: #ffc861;
+}
+
+.code-btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.code-btn mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
+/* ============ Staff bar ============ */
+
+.staff-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+  padding: 14px 18px;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #2a1f10 0%, #16130f 80%);
+  color: #f6ecdc;
+}
+
+.staff-who {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.staff-code {
+  padding: 6px 12px;
+  border-radius: 10px;
+  background: #f5a524;
+  color: #1a1206;
+  font-family: 'Bebas Neue', 'Oswald', Impact, sans-serif;
+  font-size: 26px;
+  letter-spacing: 0.08em;
+  line-height: 1;
+}
+
+.staff-name {
+  display: block;
+  font-family: 'Bebas Neue', 'Oswald', Impact, sans-serif;
+  font-size: 28px;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.staff-who small {
+  color: #a89c8a;
+  font-size: 12.5px;
+}
+
+.staff-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* ============ Bills ============ */
+
+.bill-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.bill-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid #e8dcc8;
+  border-radius: 16px;
+  background: #fffdf9;
+}
+
+.bill-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bill-code {
+  font-family: 'Bebas Neue', 'Oswald', Impact, sans-serif;
+  font-size: 28px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  color: #1d1812;
+}
+
+.bill-status {
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: #fdf1dc;
+  color: #b86e00;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.bill-amount {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  color: #7a6f60;
+  font-size: 12.5px;
+}
+
+.bill-amount strong {
+  color: #1d1812;
+  font-size: 18px;
+}
+
+.bill-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.bill-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 40px;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.bill-btn mat-icon {
+  width: 17px;
+  height: 17px;
+  font-size: 17px;
+}
+
+.bill-btn.add {
+  border: none;
+  background: #f5a524;
+  color: #1a1206;
+}
+
+.bill-btn.view {
+  border: 1px solid #e8dcc8;
+  background: #faf6ef;
+  color: #2b2118;
+}
+
+.bill-btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.bill-count {
+  min-width: 18px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: #2b2118;
+  color: #f6ecdc;
+  font-size: 11px;
+}
+
+@media (max-width: 600px) {
+  .staff-sell {
+    padding: 12px 16px 24px;
+  }
+
+  .code-card {
+    margin-top: 12px;
+  }
+}
+
+/* ============ Orders for the supervisor ============ */
+
+.send-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 8px;
+  background: #f5a524;
+  color: #1a1206;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.send-btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.send-btn mat-icon {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
+
+.order-block {
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-size: 12.5px;
+}
+
+.order-block.draft {
+  border: 1px dashed #f5a524;
+  background: #fffaf1;
+}
+
+.order-block.sent {
+  border: 1px solid #f3d9a8;
+  background: #fdf1dc;
+}
+
+.order-block.rejected {
+  border: 1px solid #fecaca;
+  background: #fef2f2;
+}
+
+.order-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #8f5500;
+}
+
+.rejected .order-tag {
+  color: #b42318;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.order-tag mat-icon {
+  width: 14px;
+  height: 14px;
+  font-size: 14px;
+}
+
+.order-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: 'Courier New', monospace;
+  color: #4a3f33;
+}
+
+.order-lines li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.rejected .order-lines {
+  color: #a89c8a;
+  text-decoration: line-through;
+}
+
+.line-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #b42318;
+  cursor: pointer;
+}
+
+.line-remove:hover {
+  background: #fef2f2;
+}
+
+.line-remove mat-icon {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
+
+/* Delete - only on a bill still at zero: a strong red button, centred between the code and the status. */
+.bill-delete-btn {
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0 8px;
+  padding: 7px 14px;
+  border: none;
+  border-radius: 8px;
+  background: #d92d20;
+  color: #ffffff;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(217, 45, 32, 0.35);
+  transition: background 0.15s;
+}
+
+.bill-delete-btn:hover {
+  background: #b42318;
+}
+
+.bill-delete-btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.bill-delete-btn mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}

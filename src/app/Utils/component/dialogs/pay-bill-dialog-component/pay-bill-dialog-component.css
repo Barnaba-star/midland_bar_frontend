@@ -15,13 +15,13 @@
   margin: 0;
   font-size: 18px;
   font-weight: 700;
-  color: #172033;
+  color: #1d1812;
 }
 
 .pay-header p {
   margin: 3px 0 0;
   font-size: 13px;
-  color: #8a94a6;
+  color: #a89c8a;
 }
 
 .pay-due {
@@ -32,12 +32,12 @@
 
 .pay-due small {
   font-size: 12px;
-  color: #667085;
+  color: #7a6f60;
 }
 
 .pay-due strong {
   font-size: 22px;
-  color: #172033;
+  color: #1d1812;
 }
 
 .pay-lines {
@@ -45,9 +45,9 @@
   margin-bottom: 14px;
   padding: 8px 12px;
   overflow-y: auto;
-  border: 1px solid #edf0f4;
+  border: 1px solid #f1e8d8;
   border-radius: 10px;
-  background: #fbfcfe;
+  background: #faf6ef;
 }
 
 .pay-line {
@@ -56,7 +56,7 @@
   gap: 12px;
   padding: 4px 0;
   font-size: 12px;
-  color: #344054;
+  color: #4a3f33;
 }
 
 .pay-rows {
@@ -71,14 +71,14 @@
   flex-wrap: wrap;
   gap: 10px;
   padding: 10px 12px;
-  border: 1px solid #e4e7ec;
+  border: 1px solid #e8dcc8;
   border-radius: 10px;
 }
 
 .pay-row select {
   height: 38px;
   padding: 0 10px;
-  border: 1px solid #e4e7ec;
+  border: 1px solid #e8dcc8;
   border-radius: 8px;
   font-size: 13px;
   font-weight: 600;
@@ -93,14 +93,14 @@
 .pay-amount small,
 .pay-change small {
   font-size: 11px;
-  color: #667085;
+  color: #7a6f60;
 }
 
 .pay-amount input {
   width: 130px;
   height: 38px;
   padding: 0 10px;
-  border: 1px solid #e4e7ec;
+  border: 1px solid #e8dcc8;
   border-radius: 8px;
   font-size: 15px;
   font-weight: 700;
@@ -141,7 +141,7 @@
   padding: 6px;
   border: none;
   border-radius: 8px;
-  background: #f2f4f7;
+  background: #f3ece0;
   cursor: pointer;
 }
 

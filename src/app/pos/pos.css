@@ -13,14 +13,18 @@
 
 .pos-home-intro h1 {
   margin: 0 0 6px;
-  font-size: 26px;
-  font-weight: 700;
-  color: var(--color-text, #172033);
+  font-family: 'Bebas Neue', 'Oswald', Impact, sans-serif;
+  font-size: clamp(40px, 5vw, 60px);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--color-text, #1d1812);
 }
 
 .pos-home-intro p {
   margin: 0;
-  color: var(--color-text-muted, #667085);
+  color: var(--color-text-muted, #7a6f60);
   font-size: 14px;
 }
 
@@ -39,13 +43,13 @@
    the day-on-day change ships an arrow and a number beside its colour. */
 
 .pos-home {
-  --viz-surface: #ffffff;
-  --viz-series: #2a78d6;        /* validated >= 3:1 on this surface */
-  --viz-good: #0ca30c;
-  --viz-bad: #d03b3b;
-  --viz-ink: #0f172a;
-  --viz-ink-soft: #64748b;
-  --viz-line: #e2e8f0;
+  --viz-surface: #fffdf9;
+  --viz-series: #b86e00;        /* amber, dark enough for >= 3:1 on this surface */
+  --viz-good: #1f8a4c;
+  --viz-bad: #c0392b;
+  --viz-ink: #1d1812;
+  --viz-ink-soft: #7a6f60;
+  --viz-line: #e8dcc8;
 }
 
 
@@ -66,8 +70,26 @@
   background: var(--viz-surface);
   border: 1px solid var(--viz-line);
   border-radius: 16px;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 1px 2px rgba(29, 24, 18, 0.04);
 }
+
+.dash-tile:first-child {
+  background: linear-gradient(145deg, #2a1f10 0%, #16130f 80%);
+  border-color: rgba(245, 165, 36, 0.35);
+}
+
+.dash-tile:first-child .tile-label,
+.dash-tile:first-child .tile-value small,
+.dash-tile:first-child .tile-change-note {
+  color: #a89c8a;
+}
+
+.dash-tile:first-child .tile-value {
+  color: #f5a524;
+}
+
+.dash-tile:first-child .tile-change.up { color: #6fd39a; }
+.dash-tile:first-child .tile-change.down { color: #ff8a7a; }
 
 /* Pending bills is the one tile that asks to be acted on. */
 .dash-tile.needs-action {
@@ -88,10 +110,15 @@
   align-items: baseline;
   gap: 5px;
   color: var(--viz-ink);
-  font-size: 26px;
-  font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: -0.5px;
+  font-family: 'Bebas Neue', 'Oswald', Impact, sans-serif;
+  font-size: 38px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+.tile-value small {
+  font-family: var(--font-sans);
 }
 
 .tile-value small {
@@ -137,7 +164,7 @@
   background: var(--viz-surface);
   border: 1px solid var(--viz-line);
   border-radius: 16px;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 1px 2px rgba(29, 24, 18, 0.04);
 }
 
 .panel-head {
@@ -215,7 +242,7 @@
   top: 0;
   transform: translateX(-50%);
   padding: 7px 11px;
-  background: #0f172a;
+  background: #1d1812;
   border-radius: 9px;
   color: #ffffff;
   font-size: 12px;
@@ -226,7 +253,7 @@
 
 .tip-date {
   display: block;
-  color: #cbd5e1;
+  color: #d8ccb8;
   font-size: 11px;
 }
 
@@ -261,7 +288,7 @@
 
 .bar-track {
   height: 10px;
-  background: #f1f5f9;
+  background: #f1e8d8;
   border-radius: 999px;
   overflow: hidden;
 }
@@ -327,7 +354,7 @@
 }
 
 .bar-value small {
-  color: #94a3b8;
+  color: #a89c8a;
   font-weight: 500;
 }
 
@@ -402,7 +429,7 @@
   height: 180px;
   padding-bottom: 22px;
   box-sizing: border-box;
-  color: #94a3b8;
+  color: #a89c8a;
   font-size: 10px;
   font-variant-numeric: tabular-nums;
   text-align: right;
@@ -422,7 +449,7 @@
 .x-axis span {
   position: absolute;
   transform: translateX(-50%);
-  color: #94a3b8;
+  color: #a89c8a;
   font-size: 10px;
   white-space: nowrap;
 }
@@ -433,7 +460,7 @@
 .axis-caption {
   display: block;
   margin-top: 8px;
-  color: #94a3b8;
+  color: #a89c8a;
   font-size: 10.5px;
 }
 
@@ -457,7 +484,7 @@
 
 .donut-track {
   fill: none;
-  stroke: #f1f5f9;
+  stroke: #f1e8d8;
   stroke-width: 13;
 }
 

@@ -37,6 +37,7 @@ import { ProfileDialogComponent } from '../dialogs/profile-dialog-component/prof
 import { ChangePasswordDialogComponent } from '../dialogs/change-password-dialog-component/change-password-dialog-component';
 import { SubscribeDialogComponent } from '../dialogs/subscribe-dialog-component/subscribe-dialog-component';
 import { SystemSettingService } from '../../services/system-setting';
+import { AlertService } from '../../services/alert';
 
 import { SidenavItem } from '../main-sidenav-component/model';
 
@@ -86,6 +87,7 @@ export class MainSidenav2 implements OnInit, OnDestroy {
   // answers with its own raw English text, which used to reach the customer.
   subscriptionAmount: number | null = null;
   private subscriptionPollSub?: Subscription;
+  private subscriptionPollPeriod = 0;
 
   fullName = '';
   email = '';
@@ -170,6 +172,7 @@ export class MainSidenav2 implements OnInit, OnDestroy {
     private globalSearch: GlobalSearchService,
     private dialog: MatDialog,
     private systemSettingService: SystemSettingService,
+    private alertService: AlertService,
     private cdr: ChangeDetectorRef,
   ) {
 
@@ -221,7 +224,8 @@ export class MainSidenav2 implements OnInit, OnDestroy {
 
 
     // Company logo
-    this.canManageLogo = this.authDetails.hasRole('ROOT');
+    this.canManageLogo = this.authDetails.hasRole('ROOT')
+      || (this.authDetails.getPermissions() || '').split(',').includes('MANAGE_SYSTEM_SETTINGS');
     this.loadSystemLogo();
 
 
@@ -387,8 +391,18 @@ export class MainSidenav2 implements OnInit, OnDestroy {
         this.branchCategory =
           res.data.branchCategory;
 
+        const previousStatus = this.subscriptionStatus;
+
         this.subscriptionStatus =
           res.data.subscriptionStatus || '';
+
+        // Only a change seen while watching a payment is news - on first load
+        // the previous status is empty and nothing has just happened.
+        if (previousStatus === 'PENDING' && this.subscriptionStatus === 'ACTIVE') {
+          this.alertService.show('success', this.translate.instant('MENU.SUBSCRIPTION_CONFIRMED'));
+        } else if (previousStatus === 'PENDING' && this.subscriptionStatus === 'FAILED') {
+          this.alertService.show('error', this.translate.instant('MENU.SUBSCRIPTION_FAILED'));
+        }
 
         this.subscriptionEndDate =
           res.data.closeSubscription || null;
@@ -451,14 +465,24 @@ export class MainSidenav2 implements OnInit, OnDestroy {
   // browser, so the only way this badge finds out the branch got paid (or
   // that an ACTIVE/FREE period quietly lapsed while someone was mid-session)
   // is by asking our backend again periodically. Runs for as long as the
-  // sidenav is alive - cleaned up in ngOnDestroy.
+  // sidenav is alive - cleaned up in ngOnDestroy. While a payment is
+  // PENDING the customer is standing there with the phone in hand, so it
+  // asks every few seconds and the badge flips as soon as the backend knows;
+  // otherwise once a minute is plenty.
   private startSubscriptionStatusPolling(): void {
 
-    if (this.subscriptionPollSub || !this.branchUID) {
+    if (!this.branchUID) {
       return;
     }
 
-    this.subscriptionPollSub = interval(60000)
+    const period = this.subscriptionStatus === 'PENDING' ? 5000 : 60000;
+    if (this.subscriptionPollSub && this.subscriptionPollPeriod === period) {
+      return;
+    }
+
+    this.subscriptionPollSub?.unsubscribe();
+    this.subscriptionPollPeriod = period;
+    this.subscriptionPollSub = interval(period)
       .subscribe(() => this.findBranchByUID(this.branchUID));
   }
 

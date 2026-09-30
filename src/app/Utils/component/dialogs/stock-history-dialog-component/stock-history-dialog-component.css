@@ -15,13 +15,13 @@
   margin: 0;
   font-size: 18px;
   font-weight: 700;
-  color: #172033;
+  color: #1d1812;
 }
 
 .history-header p {
   margin: 3px 0 0;
   font-size: 13px;
-  color: #8a94a6;
+  color: #a89c8a;
 }
 
 .close-btn {
@@ -29,14 +29,14 @@
   padding: 4px;
   border: none;
   border-radius: 8px;
-  background: #f2f4f7;
+  background: #f3ece0;
   cursor: pointer;
 }
 
 .history-empty {
   padding: 24px 0;
   text-align: center;
-  color: #98a2b3;
+  color: #a89c8a;
 }
 
 .history-table-wrap {
@@ -50,9 +50,9 @@
 
 .history-table th {
   padding: 10px 12px;
-  background: #f8fafc;
-  border-bottom: 1px solid #e9edf3;
-  color: #667085;
+  background: #faf6ef;
+  border-bottom: 1px solid #eadfcc;
+  color: #7a6f60;
   font-size: 13px;
   font-weight: 700;
   text-align: left;
@@ -62,8 +62,8 @@
 
 .history-table td {
   padding: 10px 12px;
-  border-bottom: 1px solid #f0f2f5;
-  color: #344054;
+  border-bottom: 1px solid #f1e8d8;
+  color: #4a3f33;
   font-size: 12px;
   text-align: left;
   white-space: nowrap;
@@ -71,13 +71,13 @@
 
 .history-table .note-row td {
   padding-top: 0;
-  color: #667085;
+  color: #7a6f60;
   font-style: italic;
   white-space: normal;
 }
 
 .muted {
-  color: #98a2b3;
+  color: #a89c8a;
 }
 
 .history-pages {
@@ -87,13 +87,13 @@
   gap: 8px;
   margin-top: 12px;
   font-size: 12px;
-  color: #667085;
+  color: #7a6f60;
 }
 
 .history-pages button {
   display: flex;
   padding: 2px;
-  border: 1px solid #e4e7ec;
+  border: 1px solid #e8dcc8;
   border-radius: 6px;
   background: #ffffff;
   cursor: pointer;
@@ -109,7 +109,7 @@
   margin: 22px 0 8px;
   font-size: 14px;
   font-weight: 700;
-  color: #172033;
+  color: #1d1812;
 }
 
 .history-table td.neg {

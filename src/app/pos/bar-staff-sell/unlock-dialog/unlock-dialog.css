@@ -1,0 +1,129 @@
+.unlock {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 22px;
+  background: #fbf6ec;
+  color: #1d1812;
+}
+
+.unlock-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.unlock-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: #2b2118;
+  color: #f5a524;
+}
+
+.unlock-head h3 {
+  margin: 0;
+  font-family: 'Bebas Neue', 'Oswald', Impact, sans-serif;
+  font-size: 28px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.unlock-head p {
+  margin: 4px 0 0;
+  color: #7a6f60;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.unlock-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #4a3f33;
+}
+
+.unlock-field input {
+  width: 100%;
+  box-sizing: border-box;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid #d8ccb8;
+  border-radius: 10px;
+  background: #fffdf9;
+  color: #1d1812;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  outline: none;
+}
+
+.unlock-field input:focus {
+  border-color: #f5a524;
+  box-shadow: 0 0 0 3px rgba(245, 165, 36, 0.2);
+}
+
+.pass-wrap {
+  position: relative;
+}
+
+.pass-wrap input {
+  padding-right: 44px;
+}
+
+.pass-toggle {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: none;
+  background: transparent;
+  color: #7a6f60;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.unlock-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.unlock-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 999px;
+  background: #f5a524;
+  color: #1a1206;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.unlock-btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.unlock-btn mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}

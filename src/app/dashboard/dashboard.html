@@ -1,8 +1,11 @@
-<div class="dashboard-shell">
+<div class="dash">
+  <div class="dash-light" aria-hidden="true"></div>
+
+  <!-- ================= TOP BAR ================= -->
   <header class="topbar">
-    <div class="topbar-brand">
-      <img src="assets/images/midland.png" alt="Midland Solutions" class="topbar-logo">
-      <span class="topbar-name">Midland Solutions</span>
+    <div class="brand">
+      <img src="assets/images/midland.png" alt="Midland Bar" class="brand-logo">
+      <span class="brand-name">Midland <em>Bar</em></span>
     </div>
 
     <div class="topbar-actions">
@@ -10,45 +13,46 @@
         <mat-icon>account_circle</mat-icon>
         <span>{{ fullName || ('DASHBOARD.WELCOME' | translate) }}</span>
       </div>
-      <button mat-icon-button (click)="logout()" [attr.aria-label]="'MENU.LOGOUT' | translate" [matTooltip]="'MENU.LOGOUT' | translate">
-        <mat-icon svgIcon="logout"></mat-icon>
+      <button type="button" class="logout-btn" (click)="logout()" [attr.aria-label]="'MENU.LOGOUT' | translate" [matTooltip]="'MENU.LOGOUT' | translate">
+        <mat-icon>logout</mat-icon>
       </button>
     </div>
   </header>
 
-  <main class="dashboard-container">
-    <div class="dashboard-intro">
-      <h1>{{ 'DASHBOARD.WELCOME' | translate }}{{ fullName ? ', ' + fullName : '' }}</h1>
+  <!-- ================= GREETING ================= -->
+  <main class="dash-main">
+    <section class="intro">
+      <span class="eyebrow">
+        <span class="live-dot"></span>
+        {{ today | date: 'EEEE, d MMMM y' }}
+      </span>
+      <h1>
+        <span>{{ 'DASHBOARD.WELCOME' | translate }},</span>
+        <span class="amber">{{ fullName || '—' }}</span>
+      </h1>
       <p>{{ 'DASHBOARD.INTRO_SUBTITLE' | translate }}</p>
-    </div>
+    </section>
 
-    <div class="card-grid">
-      <mat-card
-        class="custom-card"
-        *ngFor="let card of filteredCards"
-        (click)="goTo(card.route)"
-        tabindex="0"
-        (keyup.enter)="goTo(card.route)">
-
-        <div class="icon-badge">
-          <mat-icon [svgIcon]="card.icon"></mat-icon>
-        </div>
-
-        <mat-card-header>
-          <h4>{{ card.title | translate }}</h4>
-        </mat-card-header>
-
-        <mat-card-content>
-          <p class="description">
-            {{ card.description | translate }}
-          </p>
-        </mat-card-content>
-
-        <div class="card-cta">
-          <span>{{ 'DASHBOARD.OPEN' | translate }}</span>
-          <mat-icon>arrow_forward</mat-icon>
-        </div>
-      </mat-card>
-    </div>
+    <!-- ================= MODULES ================= -->
+    <section class="card-grid">
+      @for (card of filteredCards; track card.route; let i = $index) {
+        <button type="button" class="module" [class.module-lead]="i === 0" (click)="goTo(card.route)">
+          <div class="module-top">
+            <span class="module-no">{{ (i + 1).toString().padStart(2, '0') }}</span>
+            <span class="module-icon"><mat-icon>{{ card.glyph }}</mat-icon></span>
+          </div>
+          <h2 class="module-title">{{ card.title | translate }}</h2>
+          <p class="module-desc">{{ card.description | translate }}</p>
+          <span class="module-cta">
+            {{ 'DASHBOARD.OPEN' | translate }}
+            <mat-icon>arrow_forward</mat-icon>
+          </span>
+        </button>
+      }
+    </section>
   </main>
+
+  <footer class="dash-footer">
+    &copy; {{ today | date: 'y' }} Midland Solutions
+  </footer>
 </div>

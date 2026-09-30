@@ -1,7 +1,7 @@
 .info-card{
     width: 80%;
     margin: 20px auto;
-    border: 1px solid #d6d6d6;
+    border: 1px solid #d8ccb8;
     border-radius: 8px;
     background: #fff;
     overflow: hidden;
@@ -13,7 +13,7 @@
 .info-cardStepper{
     width: 95%;
     margin: 20px auto;
-    border: 1px solid #d6d6d6;
+    border: 1px solid #d8ccb8;
     border-radius: 8px;
     background: #fff;
     overflow: hidden;
@@ -26,8 +26,8 @@
   align-items: center;
   margin-bottom: 0px;
   padding: 12px 18px;
-  background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);
-  border: 1px solid #edf0f4;
+  background: linear-gradient(135deg, #ffffff 0%, #fffaf1 100%);
+  border: 1px solid #f1e8d8;
   border-radius: 12px;
   height: 80px;
 }
@@ -36,17 +36,17 @@
   margin: 0;
   font-size: 18px;
   font-weight: 700;
-  color: #172033;
+  color: #1d1812;
 }
 
 .table-header p {
   margin: 4px 0 0;
-  color: #666;
+  color: #7a6f60;
   font-size: 14px;
 }
 
 .record-badge {
-  background: #14315d;
+  background: #2b2118;
   color: white;
   padding: 6px 14px;
   border-radius: 20px;
@@ -56,7 +56,7 @@
 
 .info-row{
     padding: 18px 24px;
-    border-bottom: 1px dotted #bdbdbd;
+    border-bottom: 1px dotted #a89c8a;
 }
 
 .info-row:last-child{
@@ -65,38 +65,38 @@
 
 .info-row h3{
     margin: 0;
-    color: #14315d;
+    color: #2b2118;
 }
 
 .info-row strong{
     display: block;
     margin-bottom: 8px;
-    color: #424242;
+    color: #2b2118;
 }
 
 .info-row p{
     margin: 0;
     line-height: 1.7;
-    color: #616161;
+    color: #7a6f60;
 }
 
 
 .info-header{
     padding:20px 25px;
-    border-bottom:1px solid #edf0f4;
-    background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);
+    border-bottom:1px solid #f1e8d8;
+    background: linear-gradient(135deg, #ffffff 0%, #fffaf1 100%);
 }
 
 .info-header h2{
     margin:0;
     font-size:18px;
     font-weight: 700;
-    color:#0a1c38;
+    color:#17110b;
 }
 
 .info-header p{
     margin-top:8px;
-    color:#666;
+    color:#7a6f60;
     line-height:1.6;
 }
 
@@ -136,23 +136,23 @@ app-form{
 }
 
 .btn-primary{
-    background:#14315d;
+    background:#2b2118;
     color:white;
 }
 
 .btn-primary:hover{
-    background:#0a1c38;
+    background:#17110b;
 }
 
 .info-card-data{
     width: 80%;
     margin: 60px auto;
-    border: 1px solid #d6d6d6;
+    border: 1px solid #d8ccb8;
     border-radius: 8px;
     height: 300px;
     background: #fff;
     overflow: hidden;
-    background-color: rgb(224, 214, 214);
+    background-color: #f1e8d8;
     animation:fadeInUp .4s ease;
 }
 
@@ -204,12 +204,12 @@ app-form{
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-  color: #424242;
+  color: #2b2118;
 }
 
 .action-container p {
   margin-top: 1px;
-  color: #757575;
+  color: #7a6f60;
   font-size: 15px;
 }
 
@@ -252,7 +252,7 @@ app-form{
   gap: 5px;
   padding-left: 10px;
   padding-right: 10px;
-  background-color: #f8fafc;
+  background-color: #faf6ef;
   border-radius: 10px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease;
@@ -271,8 +271,8 @@ app-form{
   transform: translateY(-2px);
 
   box-shadow:
-    0 4px 10px rgba(15, 23, 42, 0.05),
-    0 16px 38px rgba(15, 23, 42, 0.10);
+    0 4px 10px rgba(29, 24, 18, 0.05),
+    0 16px 38px rgba(29, 24, 18, 0.10);
 }
 
 
@@ -295,11 +295,11 @@ app-form{
 
   box-sizing: border-box;
 
-  color: var(--color-text, #0a1c38);
+  color: var(--color-text, #17110b);
 
-  background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #fffaf1 100%);
 
-  border-bottom: 1px solid var(--color-border, #edf0f4);
+  border-bottom: 1px solid var(--color-border, #f1e8d8);
 
   overflow: hidden;
 }
@@ -326,7 +326,7 @@ app-form{
 
   border-radius: 50%;
 
-  background: rgba(20, 49, 93, 0.05);
+  background: rgba(43, 33, 24, 0.05);
 
   pointer-events: none;
 }
@@ -367,7 +367,7 @@ app-form{
 .info-card12 .table-header h2 {
   margin: 0 0 5px;
 
-  color: var(--color-text, #172033);
+  color: var(--color-text, #1d1812);
 
   font-size: 19px;
 
@@ -382,7 +382,7 @@ app-form{
 .info-card12 .table-header p {
   margin: 0;
 
-  color: var(--color-text-muted, #666);
+  color: var(--color-text-muted, #7a6f60);
 
   font-size: 12px;
 
@@ -425,7 +425,7 @@ app-form{
   border: 1px solid #cddcff;
   border-radius: 10px;
 
-  background: #eef2ff;
+  background: #fdf1dc;
   color: #1d4ed8;
 
   font-size: 13px;
@@ -436,7 +436,7 @@ app-form{
 }
 
 .add-branch-btn:hover {
-  background: #e0e7ff;
+  background: #fdf1dc;
 }
 
 .add-branch-btn mat-icon {
@@ -468,11 +468,11 @@ app-form{
 
   border-radius: 12px;
 
-  background: var(--color-primary-light, #eef2ff);
+  background: var(--color-primary-light, #fdf1dc);
 
-  border: 1px solid var(--color-border, #e5e7eb);
+  border: 1px solid var(--color-border, #e8dcc8);
 
-  color: var(--color-primary, #14315d);
+  color: var(--color-primary, #2b2118);
 
   font-size: 14px;
 
@@ -486,7 +486,7 @@ app-form{
 
   font-size: 19px;
 
-  color: var(--color-primary, #14315d);
+  color: var(--color-primary, #2b2118);
 }
 
 
@@ -525,7 +525,7 @@ app-form{
 ===================================================== */
 
 .info-card12 .branch-table thead {
-  background: #f8fafc;
+  background: #faf6ef;
 }
 
 
@@ -534,11 +534,11 @@ app-form{
 
   padding: 0 15px;
 
-  color: #667085;
+  color: #7a6f60;
 
-  background: #f8fafc;
+  background: #faf6ef;
 
-  border-bottom: 1px solid #e8edf3;
+  border-bottom: 1px solid #f1e8d8;
 
   text-align: left;
 
@@ -568,10 +568,10 @@ app-form{
 
 
 .info-card12 .branch-table tbody tr:hover {
-  background: #f8fbff;
+  background: #faf6ef;
 
   box-shadow:
-    inset 3px 0 0 #14315d;
+    inset 3px 0 0 #2b2118;
 }
 
 
@@ -584,9 +584,9 @@ app-form{
 
   padding: 8px 15px;
 
-  color: #344054;
+  color: #4a3f33;
 
-  border-bottom: 1px solid #edf1f5;
+  border-bottom: 1px solid #f1e8d8;
 
   font-size: 12px;
 
@@ -620,14 +620,14 @@ app-form{
   background:
     linear-gradient(
       135deg,
-      #eff6ff,
+      #fdf1dc,
       #dbeafe
     );
 
-  color: #14315d;
+  color: #2b2118;
 
   box-shadow:
-    0 2px 6px rgba(20, 49, 93, 0.10);
+    0 2px 6px rgba(43, 33, 24, 0.10);
 }
 
 
@@ -644,7 +644,7 @@ app-form{
 ===================================================== */
 
 .info-card12 .branch-details strong {
-  color: #1d2939;
+  color: #1d1812;
 
   font-size: 13px;
 
@@ -653,7 +653,7 @@ app-form{
 
 
 .info-card12 .branch-details span {
-  color: #98a2b3;
+  color: #a89c8a;
 
   font-size: 11px;
 }
@@ -668,9 +668,9 @@ app-form{
 
   border-radius: 6px;
 
-  background: #f2f4f7;
+  background: #f3ece0;
 
-  color: #475467;
+  color: #5c5042;
 
   font-family: "Courier New", monospace;
 
@@ -768,7 +768,7 @@ app-form{
 
   font-size: 16px;
 
-  color: #667085;
+  color: #7a6f60;
 }
 
 
@@ -793,7 +793,7 @@ app-form{
 
   margin: 0 auto 10px;
 
-  color: #cbd5e1;
+  color: #d8ccb8;
 
   font-size: 42px;
 }
@@ -804,14 +804,14 @@ app-form{
 
   margin-bottom: 5px;
 
-  color: #475467;
+  color: #5c5042;
 
   font-size: 14px;
 }
 
 
 .info-card12 .empty-row span {
-  color: #98a2b3;
+  color: #a89c8a;
 
   font-size: 12px;
 }
@@ -827,19 +827,19 @@ app-form{
 
 
 .info-card12 .branch-table-wrapper::-webkit-scrollbar-track {
-  background: #f8fafc;
+  background: #faf6ef;
 }
 
 
 .info-card12 .branch-table-wrapper::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #d8ccb8;
 
   border-radius: 10px;
 }
 
 
 .info-card12 .branch-table-wrapper::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #a89c8a;
 }
 
 
@@ -977,14 +977,14 @@ app-form{
 
   box-sizing: border-box;
 
-  border-top: 1px solid #edf1f5;
+  border-top: 1px solid #f1e8d8;
 
   background: #ffffff;
 }
 
 
 .pagination-info {
-  color: #667085;
+  color: #7a6f60;
 
   font-size: 11px;
 
@@ -993,7 +993,7 @@ app-form{
 
 
 .pagination-info strong {
-  color: #344054;
+  color: #4a3f33;
 
   font-weight: 700;
 }
@@ -1003,7 +1003,7 @@ app-form{
 .branch-pagination mat-paginator {
   background: transparent !important;
 
-  color: #667085 !important;
+  color: #7a6f60 !important;
 }
 
 
@@ -1026,7 +1026,7 @@ app-form{
 
   margin: 0;
 
-  color: var(--color-text, #172033);
+  color: var(--color-text, #1d1812);
 
   font-size: 20px;
   font-weight: 300;
@@ -1045,11 +1045,11 @@ app-form{
 
   border-radius: 50%;
 
-  background: var(--color-primary-light, #eef2ff);
+  background: var(--color-primary-light, #fdf1dc);
 
-  border: 1px solid var(--color-border, #e5e7eb);
+  border: 1px solid var(--color-border, #e8dcc8);
 
-  color: var(--color-primary, #14315d);
+  color: var(--color-primary, #2b2118);
 
   font-size: 13px;
   font-weight: 800;
@@ -1073,11 +1073,11 @@ app-form{
 
   box-sizing: border-box;
 
-  color: var(--color-text, #172033);
+  color: var(--color-text, #1d1812);
 
-  background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #fffaf1 100%);
 
-  border-bottom: 1px solid var(--color-border, #edf0f4);
+  border-bottom: 1px solid var(--color-border, #f1e8d8);
 
   border-radius: 18px 18px 0 0;
 
@@ -1101,7 +1101,7 @@ app-form{
 
   border-radius: 50%;
 
-  background: rgba(20, 49, 93, 0.05);
+  background: rgba(43, 33, 24, 0.05);
 
   pointer-events: none;
 }
@@ -1152,9 +1152,9 @@ app-form{
 
   border-radius: 14px;
 
-  background: var(--color-primary-light, #eef2ff);
+  background: var(--color-primary-light, #fdf1dc);
 
-  border: 1px solid var(--color-border, #e5e7eb);
+  border: 1px solid var(--color-border, #e8dcc8);
 
 }
 
@@ -1165,7 +1165,7 @@ app-form{
 
   font-size: 25px;
 
-  color: var(--color-primary, #14315d);
+  color: var(--color-primary, #2b2118);
 }
 
 
@@ -1173,7 +1173,7 @@ app-form{
 .branch-form-text h2 {
   margin: 0 0 5px;
 
-  color: var(--color-text, #172033);
+  color: var(--color-text, #1d1812);
 
   font-size: 19px;
 
@@ -1188,7 +1188,7 @@ app-form{
 .branch-form-text p {
   margin: 0;
 
-  color: var(--color-text-muted, #666);
+  color: var(--color-text-muted, #7a6f60);
 
   font-size: 12px;
 
@@ -1297,7 +1297,7 @@ app-form{
   align-items: center;
   justify-content: center;
 
-  border: 1px solid #e5e7eb;
+  border: 1px solid #e8dcc8;
   border-radius: 8px;
   background: #fff;
 
@@ -1333,11 +1333,11 @@ app-form{
 
 /* EDIT */
 .edit-btn {
-  color: #14315d;
+  color: #2b2118;
 }
 
 .edit-btn:hover {
-  background: #eff6ff;
+  background: #fdf1dc;
   border-color: #bfdbfe;
 }
 
@@ -1359,23 +1359,23 @@ app-form{
 
 /* MORE */
 .more-btn {
-  color: #6b7280;
+  color: #7a6f60;
 }
 
 .more-btn:hover {
-  background: #f3f4f6;
-  border-color: #d1d5db;
+  background: #f1e8d8;
+  border-color: #d8ccb8;
 }
 .action-btn:disabled {
-  background-color: #f1f1f1 !important;
-  color: #b5b5b5 !important;
-  border-color: #e0e0e0 !important;
+  background-color: #f1e8d8 !important;
+  color: #a89c8a !important;
+  border-color: #e8dcc8 !important;
   cursor: not-allowed;
   opacity: 0.65;
 }
 
 .action-btn:disabled mat-icon {
-  color: #b5b5b5 !important;
+  color: #a89c8a !important;
 }
 
 
@@ -1388,7 +1388,7 @@ app-form{
    panel is rendered in an overlay, outside this component's view. */
 ::ng-deep .branch-action-menu .menu-item-danger {
   color: #dc2626;
-  border-top: 1px solid #f1f5f9;
+  border-top: 1px solid #f3ece0;
 }
 
 ::ng-deep .branch-action-menu .menu-item-danger .mat-icon {

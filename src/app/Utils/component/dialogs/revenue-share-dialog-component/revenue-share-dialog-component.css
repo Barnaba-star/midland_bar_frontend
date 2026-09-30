@@ -18,7 +18,7 @@
      header until the title was cut off. */
   flex: 0 0 auto;
   padding: 0 0 14px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e8dcc8;
 }
 
 .header-top {
@@ -33,7 +33,7 @@
   min-width: 0;
   margin: 0;
   padding-top: 2px;
-  color: #0f172a;
+  color: #1d1812;
   font-size: 19px;
   font-weight: 700;
   line-height: 1.4;
@@ -50,7 +50,7 @@
   height: 3px;
   margin-top: 8px;
   border-radius: 999px;
-  background: linear-gradient(90deg, #4f46e5 0%, #818cf8 100%);
+  background: linear-gradient(90deg, #b86e00 0%, #f5a524 100%);
 }
 
 
@@ -73,7 +73,7 @@
 }
 
 .filter-label {
-  color: #94a3b8;
+  color: #a89c8a;
   font-size: 10.5px;
   font-weight: 700;
   letter-spacing: 0.6px;
@@ -85,9 +85,9 @@
   height: 36px;
   padding: 0 12px;
   background: #ffffff;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #e8dcc8;
   border-radius: 10px;
-  color: #374151;
+  color: #4a3f33;
   font-size: 13px;
   cursor: pointer;
 }
@@ -107,14 +107,14 @@
   background: transparent;
   border: none;
   border-radius: 10px;
-  color: #64748b;
+  color: #7a6f60;
   cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease;
 }
 
 .icon-btn:hover {
-  background: #f1f5f9;
-  color: #0f172a;
+  background: #f3ece0;
+  color: #1d1812;
 }
 
 
@@ -135,10 +135,10 @@
 .state-note {
   margin: 0;
   padding: 14px 15px;
-  background: #f8fafc;
-  border: 1px dashed #e2e8f0;
+  background: #faf6ef;
+  border: 1px dashed #e8dcc8;
   border-radius: 12px;
-  color: #94a3b8;
+  color: #a89c8a;
   font-size: 12.5px;
 }
 
@@ -155,7 +155,7 @@
 }
 
 .revenue-label {
-  color: #94a3b8;
+  color: #a89c8a;
   font-size: 10.5px;
   font-weight: 700;
   letter-spacing: 0.6px;
@@ -163,7 +163,7 @@
 }
 
 .revenue-value {
-  color: #0f172a;
+  color: #1d1812;
   font-size: 30px;
   font-weight: 700;
   letter-spacing: -0.6px;
@@ -171,14 +171,14 @@
 }
 
 .revenue-unit {
-  color: #64748b;
+  color: #7a6f60;
   font-size: 14px;
   font-weight: 600;
   letter-spacing: 0;
 }
 
 .revenue-meta {
-  color: #64748b;
+  color: #7a6f60;
   font-size: 12.5px;
 }
 
@@ -205,7 +205,7 @@
    heavier weight set them apart from the rows they follow. */
 .share-row-remainder {
   padding-top: 15px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid #e8dcc8;
 }
 
 .share-top {
@@ -216,7 +216,7 @@
 }
 
 .share-name {
-  color: #0f172a;
+  color: #1d1812;
   font-size: 13px;
   font-weight: 600;
   overflow-wrap: anywhere;
@@ -229,7 +229,7 @@
 .share-percent {
   flex: 1;
   min-width: 0;
-  color: #64748b;
+  color: #7a6f60;
   font-size: 12px;
   font-weight: 500;
   white-space: nowrap;
@@ -245,7 +245,7 @@
 .share-amount {
   flex: 0 0 auto;
   margin-left: auto;
-  color: #0f172a;
+  color: #1d1812;
   font-size: 13px;
   font-weight: 600;
   white-space: nowrap;
@@ -258,7 +258,7 @@
 .share-track {
   height: 7px;
   border-radius: 999px;
-  background: #f1f5f9;
+  background: #f3ece0;
   overflow: hidden;
 }
 
@@ -281,10 +281,10 @@
   gap: 5px;
   height: 24px;
   padding: 0 9px;
-  background: #f8fafc;
-  border: 1px solid #e5e7eb;
+  background: #faf6ef;
+  border: 1px solid #e8dcc8;
   border-radius: 999px;
-  color: #64748b;
+  color: #7a6f60;
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
@@ -299,21 +299,21 @@
 }
 
 .who-btn:hover {
-  background: #eef2ff;
-  border-color: #c7d2fe;
-  color: #4338ca;
+  background: #fdf1dc;
+  border-color: #f3d9a8;
+  color: #8f5500;
 }
 
 /* The open row is tinted so it is clear which list belongs to which share. */
 .who-btn-open {
-  background: #eef2ff;
-  border-color: #c7d2fe;
-  color: #4338ca;
+  background: #fdf1dc;
+  border-color: #f3d9a8;
+  color: #8f5500;
 }
 
 .who-btn:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.28);
+  box-shadow: 0 0 0 3px rgba(184, 110, 0, 0.28);
 }
 
 /* Indented and ruled off, so the list reads as belonging to the row above it. */
@@ -323,13 +323,13 @@
   gap: 2px;
   margin-left: 14px;
   padding-left: 12px;
-  border-left: 2px solid #eef2ff;
+  border-left: 2px solid #fdf1dc;
 }
 
 .recipient-note {
   margin: 0;
   padding: 8px 0;
-  color: #94a3b8;
+  color: #a89c8a;
   font-size: 12px;
 }
 
@@ -340,7 +340,7 @@
   justify-content: space-between;
   gap: 8px;
   padding: 8px 0;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid #f3ece0;
 }
 
 .recipient-row:last-child {
@@ -354,14 +354,14 @@
 }
 
 .recipient-name {
-  color: #0f172a;
+  color: #1d1812;
   font-size: 12.5px;
   font-weight: 600;
   overflow-wrap: anywhere;
 }
 
 .recipient-username {
-  color: #94a3b8;
+  color: #a89c8a;
   font-size: 11px;
   overflow-wrap: anywhere;
 }
@@ -380,7 +380,7 @@
 }
 
 .recipient-figure-label {
-  color: #94a3b8;
+  color: #a89c8a;
   font-size: 9.5px;
   font-weight: 700;
   letter-spacing: 0.5px;
@@ -389,7 +389,7 @@
 }
 
 .recipient-figure-value {
-  color: #334155;
+  color: #4a3f33;
   font-size: 12px;
   font-weight: 600;
   white-space: nowrap;
@@ -409,9 +409,9 @@
 
 /* Nothing left owing is not a call to action, so the pill drops its colour. */
 .recipient-outstanding-clear {
-  background: #f8fafc;
-  border-color: #e2e8f0;
-  color: #94a3b8;
+  background: #faf6ef;
+  border-color: #e8dcc8;
+  color: #a89c8a;
   font-weight: 600;
 }
 
@@ -434,8 +434,8 @@
   gap: 5px;
   height: 26px;
   padding: 0 11px;
-  background: #0f172a;
-  border: 1px solid #0f172a;
+  background: #1d1812;
+  border: 1px solid #1d1812;
   border-radius: 999px;
   color: #ffffff;
   font-size: 11px;
@@ -452,8 +452,8 @@
 }
 
 .pay-btn:hover:not(:disabled) {
-  background: #1e293b;
-  border-color: #1e293b;
+  background: #2b2118;
+  border-color: #2b2118;
 }
 
 .pay-btn:disabled {
@@ -463,7 +463,7 @@
 
 .pay-btn:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.28);
+  box-shadow: 0 0 0 3px rgba(184, 110, 0, 0.28);
 }
 
 /* Settled rows still say so in words - a tick on its own would not. */
@@ -501,7 +501,7 @@
   gap: 10px;
   min-height: auto;
   padding: 16px 0 0;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid #e8dcc8;
 }
 
 .btn {
@@ -528,20 +528,20 @@
 }
 
 .btn-primary {
-  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-  border: 1px solid #0f172a;
+  background: linear-gradient(180deg, #2b2118 0%, #1d1812 100%);
+  border: 1px solid #1d1812;
   color: #ffffff;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.18);
+  box-shadow: 0 1px 2px rgba(29, 24, 18, 0.18);
 }
 
 .btn-primary:hover {
-  background: linear-gradient(180deg, #334155 0%, #1e293b 100%);
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.22);
+  background: linear-gradient(180deg, #4a3f33 0%, #2b2118 100%);
+  box-shadow: 0 4px 12px rgba(29, 24, 18, 0.22);
 }
 
 .btn:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.28);
+  box-shadow: 0 0 0 3px rgba(184, 110, 0, 0.28);
 }
 
 

@@ -35,13 +35,13 @@
   margin: 0;
   font-size: 18px;
   font-weight: 700;
-  color: var(--color-text, #111827);
+  color: var(--color-text, #1d1812);
 }
 
 .dialog-subtitle {
   margin: 8px 0 18px;
   font-size: 13px;
-  color: var(--color-text-muted, #6b7280);
+  color: var(--color-text-muted, #7a6f60);
 }
 
 
@@ -55,10 +55,10 @@
 
   padding: 16px;
 
-  border: 1px solid var(--color-border, #e5e7eb);
+  border: 1px solid var(--color-border, #e8dcc8);
   border-radius: var(--radius-sm, 10px);
 
-  background: var(--color-bg, #f5f6fb);
+  background: var(--color-bg, #f6f0e6);
 }
 
 .credential {
@@ -71,13 +71,13 @@
 .credential-label {
   font-size: 12px;
   font-weight: 600;
-  color: var(--color-text-muted, #6b7280);
+  color: var(--color-text-muted, #7a6f60);
 }
 
 .credential-value {
   font-size: 15px;
   font-weight: 700;
-  color: var(--color-text, #111827);
+  color: var(--color-text, #1d1812);
 
   /* A username can be long; the code never is. */
   word-break: break-all;
@@ -88,7 +88,7 @@
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 24px;
   letter-spacing: 4px;
-  color: var(--color-primary, #14315d);
+  color: var(--color-primary, #2b2118);
   word-break: normal;
 }
 
@@ -109,7 +109,7 @@
 
   font-size: 12px;
   line-height: 1.5;
-  color: var(--color-text-muted, #6b7280);
+  color: var(--color-text-muted, #7a6f60);
 }
 
 .note mat-icon {
@@ -144,13 +144,13 @@
 }
 
 .copy-btn {
-  border: 1px solid var(--color-border, #e5e7eb);
+  border: 1px solid var(--color-border, #e8dcc8);
   background: var(--color-surface, #ffffff);
-  color: var(--color-text, #111827);
+  color: var(--color-text, #1d1812);
 }
 
 .copy-btn:hover {
-  background: var(--color-bg, #f5f6fb);
+  background: var(--color-bg, #f6f0e6);
 }
 
 .copy-btn mat-icon {
@@ -161,7 +161,7 @@
 
 .done-btn {
   border: none;
-  background: var(--color-primary, #14315d);
+  background: var(--color-primary, #2b2118);
   color: #ffffff;
 }
 

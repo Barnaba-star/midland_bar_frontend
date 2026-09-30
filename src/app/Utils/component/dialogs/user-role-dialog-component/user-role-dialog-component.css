@@ -20,16 +20,16 @@
     margin: 0;
     font-size: 18px;
     font-weight: 600;
-    color: #1f2937;
+    color: #2b2118;
   }
 
   p {
     margin: 6px 0 0;
     font-size: 13px;
-    color: #6b7280;
+    color: #7a6f60;
 
     strong {
-      color: #374151;
+      color: #4a3f33;
     }
   }
 }
@@ -47,15 +47,15 @@
   border-radius: 50%;
 
   background: transparent;
-  color: #6b7280;
+  color: #7a6f60;
 
   cursor: pointer;
 
   transition: all 0.2s ease;
 
   &:hover {
-    background: #f3f4f6;
-    color: #111827;
+    background: #f1e8d8;
+    color: #1d1812;
   }
 
   mat-icon {
@@ -81,7 +81,7 @@ mat-dialog-content {
   font-size: 14px;
   font-weight: 600;
 
-  color: #374151;
+  color: #4a3f33;
 }
 
 /* Select */
@@ -102,12 +102,12 @@ mat-dialog-content {
 .role-name {
   font-size: 14px;
   font-weight: 500;
-  color: #1f2937;
+  color: #2b2118;
 }
 
 .role-code {
   font-size: 11px;
-  color: #9ca3af;
+  color: #a89c8a;
 
   margin-left: 15px;
 }
@@ -117,7 +117,7 @@ mat-dialog-content {
   margin-top: -10px;
 
   font-size: 12px;
-  color: #9ca3af;
+  color: #a89c8a;
 }
 
 /* Footer */
@@ -141,11 +141,11 @@ mat-dialog-actions {
 
   padding: 0 18px;
 
-  border: 1px solid #d1d5db;
+  border: 1px solid #d8ccb8;
   border-radius: 8px;
 
   background: #ffffff;
-  color: #374151;
+  color: #4a3f33;
 
   font-size: 14px;
   font-weight: 500;
@@ -155,8 +155,8 @@ mat-dialog-actions {
   transition: all 0.2s ease;
 
   &:hover {
-    background: #f9fafb;
-    border-color: #9ca3af;
+    background: #faf6ef;
+    border-color: #a89c8a;
   }
 }
 
@@ -173,7 +173,7 @@ mat-dialog-actions {
   border: none;
   border-radius: 8px;
 
-  background: #14315d;
+  background: #2b2118;
   color: #ffffff;
 
   font-size: 14px;
@@ -184,7 +184,7 @@ mat-dialog-actions {
   transition: all 0.2s ease;
 
   &:hover {
-    background: #0a1c38;
+    background: #17110b;
   }
 
   mat-icon {
@@ -215,11 +215,11 @@ mat-dialog-actions {
 
   padding: 4px 6px 4px 12px;
 
-  border: 1px solid #d1d5db;
+  border: 1px solid #d8ccb8;
   border-radius: 999px;
 
-  background: #f9fafb;
-  color: #374151;
+  background: #faf6ef;
+  color: #4a3f33;
 
   font-size: 13px;
 }
@@ -236,7 +236,7 @@ mat-dialog-actions {
   border-radius: 50%;
 
   background: transparent;
-  color: #6b7280;
+  color: #7a6f60;
 
   cursor: pointer;
 

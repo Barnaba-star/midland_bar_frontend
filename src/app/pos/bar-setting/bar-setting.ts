@@ -1,3 +1,4 @@
+import { UnitLabelPipe } from '../../Utils/pipes/stock-packs.pipe';
 import { StockItemDialogComponent, StockItemResult } from '../../Utils/component/dialogs/stock-item-dialog-component/stock-item-dialog-component';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { TitleAction, Title2 } from "../../Utils/component/title2/title2";
@@ -89,7 +90,7 @@ const STOCK_UNIT_OPTIONS = [
 @Component({
   selector: 'app-bar-setting',
   imports: [
-    EmptyStateComponent,Title2, MatIconModule, RecordtableComponent, DecimalPipe, UpperCasePipe, CommonModule, FormsModule, MatMenuModule, MatPaginator, MatButtonModule, TranslatePipe, MatTooltipModule],
+    EmptyStateComponent,Title2, MatIconModule, RecordtableComponent, DecimalPipe, UpperCasePipe, CommonModule, FormsModule, MatMenuModule, MatPaginator, MatButtonModule, TranslatePipe, MatTooltipModule, UnitLabelPipe],
   templateUrl: './bar-setting.html',
   styleUrl: './bar-setting.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

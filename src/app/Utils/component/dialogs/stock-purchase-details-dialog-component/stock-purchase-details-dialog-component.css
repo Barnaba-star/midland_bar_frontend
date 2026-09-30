@@ -15,7 +15,7 @@
 
   padding: 20px 24px;
 
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e8dcc8;
 }
 
 .dialog-header h2 {
@@ -24,7 +24,7 @@
   font-size: 18px;
   font-weight: 700;
 
-  color: #111827;
+  color: #1d1812;
 }
 
 .dialog-header p {
@@ -32,7 +32,7 @@
 
   font-size: 14px;
 
-  color: #6b7280;
+  color: #7a6f60;
 }
 
 
@@ -46,7 +46,7 @@
   font-size: 16px;
   font-weight: 700;
 
-  color: #111827;
+  color: #1d1812;
 }
 
 
@@ -71,18 +71,18 @@
 
   padding: 14px;
 
-  border: 1px solid #e5e7eb;
+  border: 1px solid #e8dcc8;
 
   border-radius: 10px;
 
-  background: #f9fafb;
+  background: #faf6ef;
 }
 
 
 .label {
   font-size: 12px;
 
-  color: #6b7280;
+  color: #7a6f60;
 
   font-weight: 500;
 }
@@ -91,7 +91,7 @@
 .value {
   font-size: 14px;
 
-  color: #111827;
+  color: #1d1812;
 
   font-weight: 700;
 
@@ -168,7 +168,7 @@
 
   font-weight: 700;
 
-  color: #111827;
+  color: #1d1812;
 }
 
 
@@ -177,7 +177,7 @@
 
   font-size: 12px;
 
-  color: #6b7280;
+  color: #7a6f60;
 }
 
 
@@ -195,14 +195,14 @@
 .description-total span {
   font-size: 11px;
 
-  color: #6b7280;
+  color: #7a6f60;
 }
 
 
 .description-total strong {
   font-size: 15px;
 
-  color: #111827;
+  color: #1d1812;
 }
 
 
@@ -215,7 +215,7 @@
 
   overflow-x: auto;
 
-  border: 1px solid #e5e7eb;
+  border: 1px solid #e8dcc8;
 
   border-radius: 10px;
 }
@@ -231,7 +231,7 @@ table {
 
 
 thead {
-  background: #f9fafb;
+  background: #faf6ef;
 }
 
 
@@ -244,9 +244,9 @@ th {
 
   font-weight: 700;
 
-  color: #4b5563;
+  color: #7a6f60;
 
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e8dcc8;
 }
 
 
@@ -255,9 +255,9 @@ td {
 
   font-size: 13px;
 
-  color: #374151;
+  color: #4a3f33;
 
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid #f3ece0;
 }
 
 
@@ -267,14 +267,14 @@ tbody tr:last-child td {
 
 
 tbody tr:hover {
-  background: #f9fafb;
+  background: #faf6ef;
 }
 
 
 .description {
   font-weight: 500;
 
-  color: #111827;
+  color: #1d1812;
 }
 
 
@@ -283,7 +283,7 @@ tbody tr:hover {
 
   font-weight: 700;
 
-  color: #111827;
+  color: #1d1812;
 }
 
 
@@ -304,11 +304,11 @@ tbody tr:hover {
 
   text-align: center;
 
-  border: 1px dashed #d1d5db;
+  border: 1px dashed #d8ccb8;
 
   border-radius: 10px;
 
-  background: #f9fafb;
+  background: #faf6ef;
 }
 
 
@@ -319,7 +319,7 @@ tbody tr:hover {
 
   font-size: 42px;
 
-  color: #9ca3af;
+  color: #a89c8a;
 
   margin-bottom: 10px;
 }
@@ -330,7 +330,7 @@ tbody tr:hover {
 
   font-size: 15px;
 
-  color: #374151;
+  color: #4a3f33;
 }
 
 
@@ -339,7 +339,7 @@ tbody tr:hover {
 
   font-size: 13px;
 
-  color: #6b7280;
+  color: #7a6f60;
 }
 
 
@@ -387,11 +387,11 @@ tbody tr:hover {
 
   padding: 0 18px;
 
-  border: 1px solid #d1d5db;
+  border: 1px solid #d8ccb8;
   border-radius: 10px;
 
   background: #ffffff;
-  color: #374151;
+  color: #4a3f33;
 
   font-size: 14px;
   font-weight: 600;
@@ -416,9 +416,9 @@ tbody tr:hover {
 }
 
 .modern-close-btn:hover {
-  background: #f3f4f6;
-  border-color: #9ca3af;
-  color: #111827;
+  background: #f1e8d8;
+  border-color: #a89c8a;
+  color: #1d1812;
 
   box-shadow:
     0 4px 12px rgba(0, 0, 0, 0.08);

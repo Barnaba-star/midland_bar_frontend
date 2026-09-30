@@ -10,18 +10,18 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 12px;
-  background: #f8fafc;
-  border: 1px solid #e5e7eb;
+  background: #faf6ef;
+  border: 1px solid #e8dcc8;
   border-radius: 8px;
 }
 
 .detail-row span {
-  color: #64748b;
+  color: #7a6f60;
   font-size: 14px;
 }
 
 .detail-row strong {
-  color: #0f172a;
+  color: #1d1812;
   font-size: 14px;
 }
 
@@ -37,7 +37,7 @@ mat-dialog-content {
 
 mat-dialog-actions {
   padding: 16px 0 0 !important;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid #e8dcc8;
   margin-top: 8px;
 }
 
@@ -47,7 +47,7 @@ mat-dialog-actions button {
 }
 
 h2[mat-dialog-title] {
-  color: #0f172a;
+  color: #1d1812;
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 16px;

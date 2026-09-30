@@ -304,18 +304,18 @@ position: static;
 .content {
   flex: 1;
   padding: 0px;
-  background: #f8fafc;
+  background: #faf6ef;
 }
 
 .footer {
   height: 40px;
-  background: #d7d9de;
+  background: #d8ccb8;
   color: rgb(143, 137, 137);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 13px;
-  border-top: 1px solid #1e293b;
+  border-top: 1px solid #2b2118;
 }
 
 .logedUser {

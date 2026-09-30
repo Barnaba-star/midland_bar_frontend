@@ -28,7 +28,7 @@ mat-dialog-content {
   margin-bottom: 20px;
   box-sizing: border-box;
 
-  background: #f4f8ff;
+  background: #faf6ef;
   border: 1px solid #dce8ff;
   border-radius: 10px;
 }
@@ -105,7 +105,7 @@ mat-dialog-actions {
   box-sizing: border-box;
 
   font-size: 15px;
-  color: #1f2937;
+  color: #2b2118;
 }
 
 /* Input height */

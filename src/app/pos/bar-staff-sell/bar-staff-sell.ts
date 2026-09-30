@@ -1,0 +1,432 @@
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { Router } from '@angular/router';
+import { EmptyStateComponent } from '../../Utils/component/empty-state/empty-state';
+import { SaleItemDialogComponent, SaleItemResult } from '../../Utils/component/dialogs/sale-item-dialog-component/sale-item-dialog-component';
+import { SaleDetailsDialogComponent } from '../../Utils/component/sale-details-dialog-component/sale-details-dialog-component';
+import { PayBillDialogComponent, PayBillResult } from '../../Utils/component/dialogs/pay-bill-dialog-component/pay-bill-dialog-component';
+import { ReceiptDialogComponent } from '../../Utils/component/dialogs/receipt-dialog-component/receipt-dialog-component';
+import { ConfirmDeleteDialogComponent } from '../../Utils/component/dialogs/confirm-delete-dialog-component/confirm-delete-dialog-component';
+import { AlertService } from '../../Utils/services/alert';
+import { ServiceBarMethod } from '../service-bar-method';
+import { lockStaffSell, unlockStaffSell } from './staff-sell-lock';
+import { StaffSellUnlockDialog } from './unlock-dialog/unlock-dialog';
+import { landingFor } from '../../login/landing-for';
+import { Authentication } from '../../Utils/services/authentication';
+import { SalesOpened, StaffOrder, StaffSellStaff } from '../BarModel';
+
+/**
+ * Staff Sell, a module of its own beside POS, Settings and Admin. Staff are
+ * not users of the system: a manager signs in and opens this from POS, and
+ * the screen shows nothing but the code window until a staff member types
+ * theirs. The only way out is back to POS. A staff
+ * member types their code (K1, 001) and works their own bills - add to them,
+ * look inside, pay. Bills opened here belong to them and are numbered from
+ * their code (K1-1, K1-2...), so what sells on them is theirs, commission and
+ * all. Everything else is the Sales page's own calls and dialogs: the bills
+ * show there too.
+ *
+ * "Add Service" does not go on the bill: it is written onto the bill's order
+ * for the supervisor. Switching staff (or Send) hands it over; the supervisor
+ * receives it - only then is it on the bill and out of the store - or turns
+ * it back with a reason, which shows here.
+ */
+@Component({
+  selector: 'app-bar-staff-sell',
+  imports: [EmptyStateComponent, MatIconModule, FormsModule, DecimalPipe, TranslatePipe],
+  templateUrl: './bar-staff-sell.html',
+  styleUrl: './bar-staff-sell.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class BarStaffSell implements OnInit, OnDestroy {
+  @ViewChild('codeInput') codeInput?: ElementRef<HTMLInputElement>;
+
+  constructor(
+    private barService: ServiceBarMethod,
+    private dialog: MatDialog,
+    private alertService: AlertService,
+    private translate: TranslateService,
+    private cdr: ChangeDetectorRef,
+    private router: Router,
+    private auth: Authentication,
+  ) {}
+
+  code = '';
+  looking = false;
+  staff: StaffSellStaff | null = null;
+  bills: SalesOpened[] = [];
+  /** Lines on each bill, keyed by bill uid. */
+  billLines: Partial<Record<string, any[]>> = {};
+  busyBill: string | null = null;
+
+  opening = false;
+
+  /** Written orders on this staff member's bills: still writing, with the supervisor, or turned back. */
+  orders: StaffOrder[] = [];
+  sending = false;
+  /** While orders wait on the supervisor, look again now and then so the bill fills in as they are received. */
+  private poll: ReturnType<typeof setInterval> | null = null;
+
+  ngOnInit(): void {
+    // From here on the till stays in Staff Sell until a manager lets it out.
+    lockStaffSell();
+    setTimeout(() => this.codeInput?.nativeElement.focus());
+  }
+
+  /** A bill opened by mistake, still at zero - asked once, then gone and its code free again. */
+  deleteEmptyBill(bill: SalesOpened): void {
+    if (!bill.uid || this.busyBill) {
+      return;
+    }
+    this.dialog.open(ConfirmDeleteDialogComponent, {
+      width: '450px',
+      data: {
+        title: this.translate.instant('SALES_PAGE.DELETE_BILL_TITLE'),
+        message: this.translate.instant('SALES_PAGE.DELETE_BILL_CONFIRM', { code: bill.salesCode }),
+        item: { ...bill, branchName: bill.salesCode, branchCode: '' },
+      },
+    }).afterClosed().subscribe((ok) => {
+      if (!ok) {
+        return;
+      }
+      this.busyBill = bill.uid!;
+      this.cdr.markForCheck();
+      this.barService.deleteEmptyBill(bill.uid!).subscribe({
+        next: (res) => {
+          this.busyBill = null;
+          if (res?.data) {
+            this.bills = this.bills.filter((b) => b.uid !== bill.uid);
+            this.alertService.show('success', this.translate.instant('SALES_PAGE.BILL_DELETED', { code: bill.salesCode }));
+          }
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.busyBill = null;
+          this.cdr.markForCheck();
+        },
+      });
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.stopPoll();
+  }
+
+  ordersFor(bill: SalesOpened, status: StaffOrder['status']): StaffOrder[] {
+    return this.orders.filter((o) => o.salesOpenedUid === bill.uid && o.status === status);
+  }
+
+  hasOrders(bill: SalesOpened): boolean {
+    return this.orders.some((o) => o.salesOpenedUid === bill.uid);
+  }
+
+  /** Lines written but not sent yet, across all bills. */
+  get unsentCount(): number {
+    return this.orders.filter((o) => o.status === 'DRAFT').reduce((n, o) => n + o.lines.length, 0);
+  }
+
+  get waitingCount(): number {
+    return this.orders.filter((o) => o.status === 'SENT').length;
+  }
+
+  orderTotal(order: StaffOrder): number {
+    return order.lines.reduce((sum, l) => sum + (l.unitPrice || 0) * l.quantity, 0);
+  }
+
+  private setOrders(orders: StaffOrder[] | undefined): void {
+    this.orders = orders ?? [];
+    if (this.waitingCount > 0) {
+      this.startPoll();
+    } else {
+      this.stopPoll();
+    }
+  }
+
+  private startPoll(): void {
+    if (!this.poll) {
+      this.poll = setInterval(() => this.refresh(true), 8000);
+    }
+  }
+
+  private stopPoll(): void {
+    if (this.poll) {
+      clearInterval(this.poll);
+      this.poll = null;
+    }
+  }
+
+  /** Hand the screen back to the manager - only with a manager's login. */
+  exitToPos(): void {
+    this.dialog.open(StaffSellUnlockDialog, {
+      width: '420px',
+      maxWidth: '95vw',
+      autoFocus: true,
+    }).afterClosed().subscribe((ok?: boolean) => {
+      if (ok) {
+        unlockStaffSell();
+        // Home for whoever signed in: the Dashboard for a manager, POS for a cashier.
+        this.router.navigate([landingFor((role) => this.auth.hasRole(role))]);
+      }
+    });
+  }
+
+  /** Code in: who is it, and what are they holding. None held - open one. */
+  findStaff(): void {
+    const code = this.code.trim();
+    if (!code || this.looking) {
+      return;
+    }
+    this.looking = true;
+    this.barService.findStaffSell(code).subscribe({
+      next: (res) => {
+        this.looking = false;
+        if (!res?.data) {
+          // The backend's message ("No staff member has code ...") is shown by the interceptor.
+          this.cdr.markForCheck();
+          return;
+        }
+        this.staff = res.data.staff;
+        this.bills = res.data.bills ?? [];
+        this.setOrders(res.data.orders);
+        this.billLines = {};
+        this.bills.forEach((b) => this.loadLines(b));
+        this.cdr.markForCheck();
+        if (this.bills.length === 0) {
+          this.openBill();
+        }
+      },
+      error: () => {
+        this.looking = false;
+        this.cdr.markForCheck();
+      },
+    });
+  }
+
+  /** Hand what was written to the supervisor, then back to the code screen for the next staff member. */
+  switchStaff(): void {
+    if (this.unsentCount > 0) {
+      this.sendOrders(() => this.clearStaff());
+    } else {
+      this.clearStaff();
+    }
+  }
+
+  /** Send what this staff member has written to the supervisor, staying on their bills. */
+  sendOrders(then?: () => void): void {
+    if (!this.staff || this.sending) {
+      return;
+    }
+    this.sending = true;
+    this.cdr.markForCheck();
+    this.barService.sendStaffOrders(this.staff.staffCode).subscribe({
+      next: (res) => {
+        this.sending = false;
+        if (res?.data !== undefined && res?.data !== null) {
+          if (then) {
+            then();
+            return;
+          }
+          this.refresh();
+        }
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.sending = false;
+        this.cdr.markForCheck();
+      },
+    });
+  }
+
+  private clearStaff(): void {
+    this.stopPoll();
+    this.staff = null;
+    this.bills = [];
+    this.orders = [];
+    this.billLines = {};
+    this.code = '';
+    this.cdr.markForCheck();
+    setTimeout(() => this.codeInput?.nativeElement.focus());
+  }
+
+  /** Reload this staff member's bills - after a payment, or to pick up changes from the Sales page. */
+  refresh(quiet = false): void {
+    if (!this.staff) {
+      return;
+    }
+    this.barService.findStaffSell(this.staff.staffCode, quiet).subscribe({
+      next: (res) => {
+        if (res?.data) {
+          this.bills = res.data.bills ?? [];
+          this.setOrders(res.data.orders);
+          this.bills.forEach((b) => this.loadLines(b));
+        }
+        this.cdr.markForCheck();
+      },
+    });
+  }
+
+  /** A new bill for this staff member; its code comes from theirs (K1-1, K1-2...). */
+  openBill(): void {
+    if (!this.staff || this.opening) {
+      return;
+    }
+    this.opening = true;
+    this.cdr.markForCheck();
+    this.barService.openStaffBill({ staffCode: this.staff.staffCode }).subscribe({
+      next: (opened) => {
+        this.opening = false;
+        if (opened?.data) {
+          this.bills = [...this.bills, opened.data];
+          this.billLines = { ...this.billLines, [opened.data.uid!]: [] };
+        }
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.opening = false;
+        this.cdr.markForCheck();
+      },
+    });
+  }
+
+  addToBill(bill: SalesOpened): void {
+    if (!bill.uid || this.busyBill) {
+      return;
+    }
+    this.dialog.open(SaleItemDialogComponent, {
+      width: '560px',
+      maxWidth: '95vw',
+      autoFocus: false,
+      data: { billCode: bill.salesCode },
+    }).afterClosed().subscribe((result?: SaleItemResult) => {
+      if (!result) {
+        return;
+      }
+      this.busyBill = bill.uid!;
+      this.cdr.markForCheck();
+      // Onto the bill's order for the supervisor - not onto the bill.
+      this.barService.addStaffOrderItem({
+        salesOpenedUID: bill.uid!,
+        barServiceUID: result.service.uid,
+        quantity: result.quantity,
+      }).subscribe({
+        next: (res) => {
+          this.busyBill = null;
+          if (res?.data) {
+            this.orders = [...this.orders.filter((o) => o.uid !== res.data.uid), res.data];
+          }
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.busyBill = null;
+          this.cdr.markForCheck();
+        },
+      });
+    });
+  }
+
+  /** Take a line off an order not yet sent. */
+  removeLine(order: StaffOrder, lineUid: string): void {
+    this.barService.removeStaffOrderLine(order.uid, lineUid).subscribe({
+      next: (res) => {
+        if (res?.data) {
+          const rest = this.orders.filter((o) => o.uid !== order.uid);
+          this.orders = res.data.lines?.length ? [...rest, res.data] : rest;
+        }
+        this.cdr.markForCheck();
+      },
+    });
+  }
+
+  /** Look inside the bill; Lipa and Print live in there, as on the Sales page. */
+  viewBill(bill: SalesOpened): void {
+    if (!bill.uid) {
+      return;
+    }
+    this.barService.findBarSalesList(bill.uid).subscribe({
+      next: (res) => {
+        const services = res.data ?? [];
+        this.billLines = { ...this.billLines, [bill.uid!]: services };
+        this.cdr.markForCheck();
+        this.dialog.open(SaleDetailsDialogComponent, {
+          width: '650px',
+          maxWidth: '95vw',
+          maxHeight: '90vh',
+          panelClass: 'sale-details-dialog',
+          autoFocus: false,
+          data: { sale: bill, services, showPayment: false, canPay: true },
+        }).afterClosed().subscribe((result) => {
+          if (result?.action === 'PAY') {
+            this.pay(bill, services);
+          }
+        });
+      },
+    });
+  }
+
+  private pay(bill: SalesOpened, lines: any[]): void {
+    const total = lines.reduce((sum: number, l: any) => sum + (Number(l.lineTotal ?? l.price) || 0), 0);
+    if (!lines.length || total <= 0) {
+      this.alertService.show('error', this.translate.instant('PAY_BILL.EMPTY'));
+      return;
+    }
+    this.dialog.open(PayBillDialogComponent, {
+      width: '640px',
+      maxWidth: '95vw',
+      autoFocus: false,
+      data: { code: bill.salesCode, total, lines },
+    }).afterClosed().subscribe((result?: PayBillResult) => {
+      if (!result) {
+        return;
+      }
+      this.busyBill = bill.uid!;
+      this.cdr.markForCheck();
+      this.barService.payBill({ salesOpenedUID: bill.uid!, payments: result.payments }).subscribe({
+        next: (paid) => {
+          this.busyBill = null;
+          if (paid?.data) {
+            // Paid bills leave the list, as on the Sales page.
+            this.bills = this.bills.filter((b) => b.uid !== bill.uid);
+            const { [bill.uid!]: _, ...rest } = this.billLines;
+            this.billLines = rest;
+            this.alertService.show('success', this.translate.instant('PAY_BILL.DONE', { code: bill.salesCode }));
+            this.dialog.open(ReceiptDialogComponent, {
+              width: '400px',
+              maxWidth: '95vw',
+              autoFocus: false,
+              data: { billUid: bill.uid },
+            });
+          }
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.busyBill = null;
+          this.cdr.markForCheck();
+        },
+      });
+    });
+  }
+
+  private loadLines(bill: SalesOpened): void {
+    if (!bill.uid) {
+      return;
+    }
+    this.barService.findBarSalesList(bill.uid).subscribe({
+      next: (res) => {
+        this.billLines = { ...this.billLines, [bill.uid!]: res.data ?? [] };
+        this.cdr.markForCheck();
+      },
+    });
+  }
+
+  lineCount(bill: SalesOpened): number {
+    return (this.billLines[bill.uid!] ?? []).reduce((sum, l) => sum + (Number(l.quantity) || 1), 0);
+  }
+
+  get total(): number {
+    return this.bills.reduce((sum, b) => sum + (Number(b.bill) || 0), 0);
+  }
+}

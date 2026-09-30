@@ -120,8 +120,8 @@
   align-items: center;
   margin-bottom: 0px;
   padding: 12px 18px;
-  background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);
-  border: 1px solid #edf0f4;
+  background: linear-gradient(135deg, #ffffff 0%, #fffaf1 100%);
+  border: 1px solid #f1e8d8;
   border-radius: 12px;
   height: 80px;
 }
@@ -130,7 +130,7 @@
   margin: 0;
   font-size: 14px;
   font-weight: 600;
-  color: #334155;
+  color: #4a3f33;
 }
 
 .table-header p {
@@ -140,7 +140,7 @@
 }
 
 .record-badge {
-  background: #14315d;
+  background: #2b2118;
   color: white;
   padding: 6px 14px;
   border-radius: 20px;
@@ -161,7 +161,7 @@
     margin: 0;
     font-size: 14px;
     font-weight: 600;
-    color: #14315d;
+    color: #2b2118;
 }
 
 .info-row strong{
@@ -179,15 +179,15 @@
 
 .info-header{
     padding:20px 25px;
-    border-bottom:1px solid #edf0f4;
-    background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);
+    border-bottom:1px solid #f1e8d8;
+    background: linear-gradient(135deg, #ffffff 0%, #fffaf1 100%);
 }
 
 .info-header h2{
     margin:0;
     font-size:14px;
     font-weight: 600;
-    color:#334155;
+    color:#4a3f33;
 }
 
 .info-header p{
@@ -232,12 +232,12 @@ app-form{
 }
 
 .btn-primary{
-    background:#14315d;
+    background:#2b2118;
     color:white;
 }
 
 .btn-primary:hover{
-    background:#0a1c38;
+    background:#17110b;
 }
 
 .info-card-data{
@@ -362,23 +362,23 @@ app-form{
 }
 
 .back-btn {
-  background: #14315d;
+  background: #2b2118;
   color: #fff;
 }
 
 .back-btn:hover {
-  background: #0a1c38;
+  background: #17110b;
   box-shadow: 0 4px 10px rgba(201, 162, 39, 0.35);
 }
 
 .settings-btn {
-  background: #14315d;
+  background: #2b2118;
   color: #fff;
 }
 
 .settings-btn:hover {
-  background: #0a1c38;
-  box-shadow: 0 4px 10px rgba(20, 49, 93, 0.25);
+  background: #17110b;
+  box-shadow: 0 4px 10px rgba(43, 33, 24, 0.25);
 }
 
 
@@ -406,14 +406,14 @@ app-form{
   margin: 0;
   font-size: 14px;
   font-weight: 600;
-  color: #334155;
+  color: #4a3f33;
 }
 
 .commission-title p {
   margin: 8px 0 22px;
   font-size: 13px;
   line-height: 1.6;
-  color: #9ca3af;
+  color: #a89c8a;
 }
 
 
@@ -432,7 +432,7 @@ app-form{
   border: none;
   border-radius: 8px;
 
-  background: #14315d;
+  background: #2b2118;
   color: #ffffff;
 
   font-size: 13px;
@@ -440,15 +440,15 @@ app-form{
 
   cursor: pointer;
 
-  box-shadow: 0 4px 10px rgba(20, 49, 93, 0.22);
+  box-shadow: 0 4px 10px rgba(43, 33, 24, 0.22);
 
   transition: all 0.2s ease;
 }
 
 .add-commission-btn:hover {
-  background: #0a1c38;
+  background: #17110b;
   transform: translateY(-1px);
-  box-shadow: 0 6px 14px rgba(20, 49, 93, 0.3);
+  box-shadow: 0 6px 14px rgba(43, 33, 24, 0.3);
 }
 
 .add-commission-btn mat-icon {
@@ -490,7 +490,7 @@ app-form{
 
 .commission-table {
   width: 100%;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #e8dcc8;
   border-radius: 12px;
   overflow: hidden;
   background: #fff;
@@ -504,7 +504,7 @@ app-form{
   justify-items: start;
 
   min-height: 58px;
-  border-bottom: 1px solid #edf0f2;
+  border-bottom: 1px solid #f1e8d8;
 }
 
 .commission-row:last-child {
@@ -514,24 +514,24 @@ app-form{
 .commission-row > div {
   padding: 10px 16px;
   font-size: 14px;
-  color: #374151;
+  color: #4a3f33;
 }
 
 .commission-header {
-  background: #f5f7fa;
+  background: #f1e8d8;
   min-height: 50px;
 }
 
 .commission-header > div {
   font-size: 13px;
   font-weight: 600;
-  color: #6b7280;
+  color: #7a6f60;
   text-transform: uppercase;
   letter-spacing: 0.4px;
 }
 
 .commission-row:not(.commission-header):hover {
-  background: #fafbfc;
+  background: #faf6ef;
 }
 
 .commission-row input {
@@ -540,7 +540,7 @@ app-form{
   height: 38px;
   padding: 0 12px;
 
-  border: 1px solid #d9dee5;
+  border: 1px solid #e8dcc8;
   border-radius: 7px;
   outline: none;
 
@@ -552,17 +552,17 @@ app-form{
 }
 
 .commission-row input:focus {
-  border-color: #3f51b5;
+  border-color: #b86e00;
   box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.1);
 }
 
 .commission-row input::placeholder {
-  color: #a0a7b0;
+  color: #a89c8a;
 }
 
 .commission-row > div:last-child {
   font-weight: 600;
-  color: #3f51b5;
+  color: #b86e00;
 }
 .service-info-row {
   display: grid;
@@ -572,8 +572,8 @@ app-form{
   padding: 16px;
   margin-bottom: 10px;
 
-  background: #f8f9fb;
-  border: 1px solid #e5e7eb;
+  background: #faf6ef;
+  border: 1px solid #e8dcc8;
   border-radius: 12px;
 }
 
@@ -582,7 +582,7 @@ app-form{
   flex-direction: column;
   gap: 5px;
   padding: 8px 12px;
-  border-right: 1px solid #e5e7eb;
+  border-right: 1px solid #e8dcc8;
 }
 
 .service-info-item:last-child {
@@ -591,7 +591,7 @@ app-form{
 
 .service-info-item span {
   font-size: 12px;
-  color: #8a919c;
+  color: #a89c8a;
   font-weight: 500;
 }
 
@@ -649,7 +649,7 @@ app-form{
 .commission-card {
   background: #ffffff;
   border-radius: 14px;
-  border: 1px solid #e9edf3;
+  border: 1px solid #eadfcc;
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
   overflow: hidden;
 }
@@ -663,11 +663,11 @@ app-form{
   align-items: center;
   justify-content: space-between;
   padding: 20px 24px;
-  border-bottom: 1px solid #edf0f4;
+  border-bottom: 1px solid #f1e8d8;
   background: linear-gradient(
     135deg,
     #ffffff 0%,
-    #f8faff 100%
+    #fffaf1 100%
   );
 }
 
@@ -686,8 +686,8 @@ app-form{
   align-items: center;
   justify-content: center;
 
-  background: #eef4ff;
-  color: #14315d;
+  background: #fdf1dc;
+  color: #2b2118;
 }
 
 .commission-icon mat-icon {
@@ -698,13 +698,13 @@ app-form{
   margin: 0;
   font-size: 14px;
   font-weight: 600;
-  color: #334155;
+  color: #4a3f33;
 }
 
 .commission-title p {
   margin: 4px 0 0;
   font-size: 13px;
-  color: #8a94a6;
+  color: #a89c8a;
 }
 
 .commission-count {
@@ -715,19 +715,19 @@ app-form{
   min-width: 75px;
   padding: 7px 12px;
 
-  background: #f5f7fa;
+  background: #f1e8d8;
   border-radius: 9px;
 }
 
 .commission-count span {
   font-size: 14px;
   font-weight: 700;
-  color: #14315d;
+  color: #2b2118;
 }
 
 .commission-count small {
   font-size: 11px;
-  color: #8a94a6;
+  color: #a89c8a;
 }
 
 /* =========================
@@ -744,10 +744,10 @@ app-form{
 .commission-table thead th {
   padding: 14px 16px;
 
-  background: #f8fafc;
-  border-bottom: 1px solid #e9edf3;
+  background: #faf6ef;
+  border-bottom: 1px solid #eadfcc;
 
-  color: #667085;
+  color: #7a6f60;
   font-size: 11px;
   font-weight: 700;
 
@@ -759,7 +759,7 @@ app-form{
 
 .commission-table tbody td {
   padding: 15px 16px;
-  border-bottom: 1px solid #f0f2f5;
+  border-bottom: 1px solid #f1e8d8;
 
   vertical-align: middle;
   white-space: nowrap;
@@ -770,7 +770,7 @@ app-form{
 }
 
 .commission-table tbody tr:hover {
-  background: #f8faff;
+  background: #fffaf1;
 }
 
 .commission-table tbody tr:last-child td {
@@ -782,7 +782,7 @@ app-form{
 ========================= */
 
 .number-column {
-  color: #98a2b3;
+  color: #a89c8a;
   font-size: 13px;
   font-weight: 600;
 }
@@ -805,8 +805,8 @@ app-form{
 
   background: linear-gradient(
     135deg,
-    #14315d,
-    #0a1c38
+    #2b2118,
+    #17110b
   );
 
   color: white;
@@ -815,13 +815,13 @@ app-form{
 }
 
 .service-name {
-  color: #1d2939;
+  color: #1d1812;
   font-size: 14px;
   font-weight: 700;
 }
 
 .service-info small {
-  color: #98a2b3;
+  color: #a89c8a;
   font-size: 11px;
 }
 
@@ -830,7 +830,7 @@ app-form{
 ========================= */
 
 .price {
-  color: #172033;
+  color: #1d1812;
   font-size: 13px;
   font-weight: 700;
 }
@@ -855,8 +855,8 @@ app-form{
 
 /* Owner */
 .percentage.owner {
-  background: #eef4ff;
-  color: #14315d;
+  background: #fdf1dc;
+  color: #2b2118;
 }
 
 /* Staff */
@@ -873,8 +873,8 @@ app-form{
 
 /* Maintenance */
 .percentage.maintenance {
-  background: #f5f3ff;
-  color: #7c3aed;
+  background: #fdf1dc;
+  color: #b86e00;
 }
 
 /* Emergency */
@@ -885,8 +885,8 @@ app-form{
 
 /* Other */
 .percentage.other {
-  background: #f3f4f6;
-  color: #4b5563;
+  background: #f1e8d8;
+  color: #7a6f60;
 }
 
 /* =========================
@@ -921,12 +921,12 @@ app-form{
 }
 
 .commission-actions-cell button {
-  color: #14315d;
+  color: #2b2118;
   transition: all 0.2s ease;
 }
 
 .commission-actions-cell button:hover {
-  background: linear-gradient(135deg, #c9a227 0%, #14315d 100%);
+  background: linear-gradient(135deg, #c9a227 0%, #2b2118 100%);
   color: #ffffff;
   transform: scale(1.08);
 }
@@ -940,7 +940,7 @@ app-form{
 .user-management-card {
   width: 100%;
   background: #ffffff;
-  border: 1px solid #e7ebf0;
+  border: 1px solid #e8dcc8;
   border-radius: 16px;
   overflow: hidden;
 
@@ -964,10 +964,10 @@ app-form{
   background: linear-gradient(
     135deg,
     #ffffff 0%,
-    #f8faff 100%
+    #fffaf1 100%
   );
 
-  border-bottom: 1px solid #edf0f4;
+  border-bottom: 1px solid #f1e8d8;
 }
 
 .user-header-content {
@@ -988,8 +988,8 @@ app-form{
 
   border-radius: 12px;
 
-  background: #eef4ff;
-  color: #14315d;
+  background: #fdf1dc;
+  color: #2b2118;
 }
 
 .user-header-icon mat-icon {
@@ -1001,7 +1001,7 @@ app-form{
 .user-management-header h3 {
   margin: 0;
 
-  color: #334155;
+  color: #4a3f33;
 
   font-size: 14px;
   font-weight: 600;
@@ -1010,7 +1010,7 @@ app-form{
 .user-management-header p {
   margin: 4px 0 0;
 
-  color: #8a94a6;
+  color: #a89c8a;
 
   font-size: 13px;
 }
@@ -1031,18 +1031,18 @@ app-form{
 
   border-radius: 9px;
 
-  background: #f5f7fa;
+  background: #f1e8d8;
 }
 
 .count-number {
-  color: #14315d;
+  color: #2b2118;
 
   font-size: 14px;
   font-weight: 700;
 }
 
 .count-label {
-  color: #98a2b3;
+  color: #a89c8a;
 
   font-size: 11px;
 }
@@ -1064,7 +1064,7 @@ app-form{
   border: none;
   border-radius: 9px;
 
-  background: #14315d;
+  background: #2b2118;
   color: #ffffff;
 
   font-size: 13px;
@@ -1103,11 +1103,11 @@ app-form{
 .user-management-table thead th {
   padding: 9px 14px;
 
-  background: #f8fafc;
+  background: #faf6ef;
 
-  border-bottom: 1px solid #e9edf3;
+  border-bottom: 1px solid #eadfcc;
 
-  color: #667085;
+  color: #7a6f60;
 
   font-size: 11px;
   font-weight: 700;
@@ -1123,9 +1123,9 @@ app-form{
 .user-management-table tbody td {
   padding: 8px 14px;
 
-  border-bottom: 1px solid #f0f2f5;
+  border-bottom: 1px solid #f1e8d8;
 
-  color: #344054;
+  color: #4a3f33;
 
   font-size: 13px;
 
@@ -1140,7 +1140,7 @@ app-form{
 }
 
 .user-management-table tbody tr:hover {
-  background: #f8faff;
+  background: #fffaf1;
 }
 
 .user-management-table tbody tr:last-child td {
@@ -1155,7 +1155,7 @@ app-form{
 .serial-column {
   width: 50px;
 
-  color: #98a2b3 !important;
+  color: #a89c8a !important;
 
   font-size: 12px !important;
   font-weight: 600 !important;
@@ -1186,8 +1186,8 @@ app-form{
 
   background: linear-gradient(
     135deg,
-    #14315d,
-    #0a1c38
+    #2b2118,
+    #17110b
   );
 
   color: #ffffff;
@@ -1201,7 +1201,7 @@ app-form{
 }
 
 .username-text {
-  color: #1d2939;
+  color: #1d1812;
 
   font-size: 13px;
   font-weight: 600;
@@ -1213,7 +1213,7 @@ app-form{
 ========================= */
 
 .fullname-text {
-  color: #344054;
+  color: #4a3f33;
 
   font-size: 13px;
   font-weight: 600;
@@ -1233,7 +1233,7 @@ app-form{
 
   border-radius: 7px;
 
-  background: #f5f3ff;
+  background: #fdf1dc;
   color: #6941c6;
 
   font-size: 12px;
@@ -1257,7 +1257,7 @@ app-form{
   align-items: center;
   gap: 7px;
 
-  color: #475467;
+  color: #5c5042;
 
   font-size: 13px;
   font-weight: 600;
@@ -1267,7 +1267,7 @@ app-form{
   width: 18px;
   height: 18px;
 
-  color: #667085;
+  color: #7a6f60;
 
   font-size: 18px;
 }
@@ -1297,13 +1297,13 @@ app-form{
 
   padding: 15px 20px;
 
-  background: #fafbfc;
+  background: #faf6ef;
 
-  border-top: 1px solid #edf0f4;
+  border-top: 1px solid #f1e8d8;
 }
 
 .pagination-info {
-  color: #667085;
+  color: #7a6f60;
 
   font-size: 12px;
 
@@ -1311,7 +1311,7 @@ app-form{
 }
 
 .pagination-info strong {
-  color: #344054;
+  color: #4a3f33;
   font-weight: 700;
 }
 
@@ -1327,14 +1327,14 @@ app-form{
 }
 
 .pagination-controls .active-page {
-  background: #14315d;
+  background: #2b2118;
   color: #ffffff;
 
   border-radius: 7px;
 }
 
 .pagination-controls .active-page:hover {
-  background: #0a1c38;
+  background: #17110b;
 }
 
 
@@ -1347,7 +1347,7 @@ app-form{
   align-items: center;
   gap: 8px;
 
-  color: #667085;
+  color: #7a6f60;
 
   font-size: 12px;
 }
@@ -1357,21 +1357,21 @@ app-form{
 
   padding: 6px 9px;
 
-  border: 1px solid #d0d5dd;
+  border: 1px solid #d8ccb8;
   border-radius: 7px;
 
   outline: none;
 
   background: #ffffff;
-  color: #344054;
+  color: #4a3f33;
 
   cursor: pointer;
 }
 
 .page-size-wrapper select:focus {
-  border-color: #14315d;
+  border-color: #2b2118;
 
-  box-shadow: 0 0 0 2px rgba(20, 49, 93, 0.08);
+  box-shadow: 0 0 0 2px rgba(43, 33, 24, 0.08);
 }
 
 
@@ -1416,7 +1416,7 @@ app-form{
 .service-table-card {
   width: 100%;
   background: #fff;
-  border: 1px solid #e8ebf0;
+  border: 1px solid #e8dcc8;
   border-radius: 14px;
   overflow: hidden;
 }
@@ -1435,7 +1435,7 @@ app-form{
   align-items: center;
   justify-content: space-between;
 
-  border-bottom: 1px solid #eef0f4;
+  border-bottom: 1px solid #f1e8d8;
   box-sizing: border-box;
 }
 
@@ -1456,14 +1456,14 @@ app-form{
   flex-shrink: 0;
 
   border-radius: 10px;
-  background: #eff6ff;
-  color: #14315d;
+  background: #fdf1dc;
+  color: #2b2118;
 }
 
 .service-table-header h2 {
   margin: 0;
 
-  color: #334155;
+  color: #4a3f33;
   font-size: 14px;
   font-weight: 600;
 }
@@ -1471,7 +1471,7 @@ app-form{
 .service-table-header p {
   margin: 3px 0 0;
 
-  color: #94a3b8;
+  color: #a89c8a;
   font-size: 12px;
 }
 
@@ -1508,9 +1508,9 @@ app-form{
   height: 44px;
   padding: 0 14px;
 
-  background: #f8fafc;
+  background: #faf6ef;
 
-  color: #64748b;
+  color: #7a6f60;
 
   font-size: 11px;
   font-weight: 700;
@@ -1520,17 +1520,17 @@ app-form{
 
   white-space: nowrap;
 
-  border-bottom: 1px solid #eaeef3;
+  border-bottom: 1px solid #f1e8d8;
 }
 
 .service-table td {
   height: 64px;
   padding: 0 14px;
 
-  color: #475569;
+  color: #5c5042;
   font-size: 13px;
 
-  border-bottom: 1px solid #f0f2f5;
+  border-bottom: 1px solid #f1e8d8;
 }
 
 
@@ -1577,8 +1577,8 @@ app-form{
 
   border-radius: 9px;
 
-  background: #eff6ff;
-  color: #14315d;
+  background: #fdf1dc;
+  color: #2b2118;
 
   font-size: 13px;
   font-weight: 700;
@@ -1593,7 +1593,7 @@ app-form{
 }
 
 .service-name {
-  color: #1e293b;
+  color: #2b2118;
   font-size: 13px;
   font-weight: 650;
 }
@@ -1605,7 +1605,7 @@ app-form{
   text-overflow: ellipsis;
   white-space: nowrap;
 
-  color: #94a3b8;
+  color: #a89c8a;
   font-size: 11px;
 }
 
@@ -1621,10 +1621,10 @@ app-form{
 
   border-radius: 6px;
 
-  background: #f8fafc;
-  border: 1px solid #edf0f4;
+  background: #faf6ef;
+  border: 1px solid #f1e8d8;
 
-  color: #64748b;
+  color: #7a6f60;
 
   font-family: monospace;
   font-size: 11px;
@@ -1637,7 +1637,7 @@ app-form{
 ========================= */
 
 .price {
-  color: #172033;
+  color: #1d1812;
   font-size: 13px;
   font-weight: 700;
 
@@ -1656,7 +1656,7 @@ app-form{
 
   gap: 5px;
 
-  color: #64748b;
+  color: #7a6f60;
   white-space: nowrap;
 }
 
@@ -1665,7 +1665,7 @@ app-form{
   height: 16px;
 
   font-size: 16px;
-  color: #94a3b8;
+  color: #a89c8a;
 }
 
 
@@ -1722,19 +1722,19 @@ app-form{
 }
 
 .action-btn {
-  color: #94a3b8 !important;
+  color: #a89c8a !important;
 }
 
 .action-btn:hover {
-  color: #14315d !important;
+  color: #2b2118 !important;
 }
 
 ::ng-deep .service-menu-panel .mat-mdc-menu-item mat-icon {
-  color: #14315d;
+  color: #2b2118;
 }
 
 ::ng-deep .service-menu-panel .mat-mdc-menu-item:hover {
-  background: linear-gradient(135deg, #eef4ff 0%, #fdf6e3 100%);
+  background: linear-gradient(135deg, #fdf1dc 0%, #fdf6e3 100%);
 }
 
 ::ng-deep .service-menu-panel .mat-mdc-menu-item.delete-action mat-icon {
@@ -1742,7 +1742,7 @@ app-form{
 }
 
 ::ng-deep .service-menu-panel .mat-mdc-menu-item.delete-action:hover {
-  background: linear-gradient(135deg, #c9a227 0%, #14315d 100%);
+  background: linear-gradient(135deg, #c9a227 0%, #2b2118 100%);
 }
 
 ::ng-deep .service-menu-panel .mat-mdc-menu-item.delete-action:hover,
@@ -1761,7 +1761,7 @@ app-form{
 }
 
 .service-table tbody tr:hover {
-  background: #f8fafc;
+  background: #faf6ef;
 }
 
 
@@ -1777,7 +1777,7 @@ app-form{
   align-items: center;
   justify-content: space-between;
 
-  border-top: 1px solid #eef0f4;
+  border-top: 1px solid #f1e8d8;
 }
 
 
@@ -1813,13 +1813,13 @@ app-form{
   border: none;
   border-radius: 9px !important;
 
-  background: #14315d !important;
+  background: #2b2118 !important;
   color: #ffffff !important;
 
   font-size: 13px;
   font-weight: 600;
 
-  box-shadow: 0 2px 5px rgba(20, 49, 93, 0.20);
+  box-shadow: 0 2px 5px rgba(43, 33, 24, 0.20);
 
   transition:
     background 0.2s ease,
@@ -1836,24 +1836,24 @@ app-form{
 }
 
 .add-service-btn:hover {
-  background: #0a1c38 !important;
+  background: #17110b !important;
 
-  box-shadow: 0 4px 10px rgba(20, 49, 93, 0.25);
+  box-shadow: 0 4px 10px rgba(43, 33, 24, 0.25);
 
   transform: translateY(-1px);
 }
 
 .add-service-btn:active {
   transform: translateY(0);
-  box-shadow: 0 2px 5px rgba(20, 49, 93, 0.18);
+  box-shadow: 0 2px 5px rgba(43, 33, 24, 0.18);
 }
 /* Commission Pagination */
 mat-paginator {
   margin-top: 0;
-  border-top: 1px solid #eef0f3;
+  border-top: 1px solid #f1e8d8;
   background: #fff;
   border-radius: 0 0 12px 12px;
-  color: #667085;
+  color: #7a6f60;
 }
 
 /* Container ya paginator */
@@ -1866,7 +1866,7 @@ mat-paginator {
 /* Text - Items per page, range */
 ::ng-deep .mat-mdc-paginator-page-size-label,
 ::ng-deep .mat-mdc-paginator-range-label {
-  color: #667085;
+  color: #7a6f60;
   font-size: 13px;
   font-weight: 500;
 }
@@ -1877,7 +1877,7 @@ mat-paginator {
 }
 
 ::ng-deep .mat-mdc-select-value {
-  color: #344054;
+  color: #4a3f33;
   font-weight: 600;
 }
 
@@ -1901,7 +1901,7 @@ mat-paginator {
   .mat-mdc-paginator-navigation-first:hover:not(:disabled),
 ::ng-deep
   .mat-mdc-paginator-navigation-last:hover:not(:disabled) {
-  background: #f2f4f7;
+  background: #f3ece0;
 }
 
 /* Disabled buttons */
@@ -1947,9 +1947,9 @@ mat-paginator {
   padding: 14px 20px;
 
   background: #ffffff;
-  border-top: 1px solid #eaecf0;
+  border-top: 1px solid #e8dcc8;
 
-  color: #667085;
+  color: #7a6f60;
   font-size: 13px;
 
   box-sizing: border-box;
@@ -1961,13 +1961,13 @@ mat-paginator {
   align-items: center;
   gap: 5px;
 
-  color: #667085;
+  color: #7a6f60;
   font-size: 13px;
   white-space: nowrap;
 }
 
 .showing-info strong {
-  color: #344054;
+  color: #4a3f33;
   font-weight: 600;
 }
 
@@ -1991,11 +1991,11 @@ mat-paginator {
   align-items: center;
   justify-content: center;
 
-  border: 1px solid #d0d5dd !important;
+  border: 1px solid #d8ccb8 !important;
   border-radius: 8px !important;
 
   background: #ffffff;
-  color: #344054;
+  color: #4a3f33;
 
   transition: all 0.2s ease;
 }
@@ -2009,15 +2009,15 @@ mat-paginator {
 
 /* Hover */
 .pagination-btn:hover:not(:disabled) {
-  background: #f9fafb;
-  border-color: #98a2b3 !important;
+  background: #faf6ef;
+  border-color: #a89c8a !important;
 }
 
 /* Disabled */
 .pagination-btn:disabled {
   opacity: 0.45;
   cursor: not-allowed;
-  background: #f9fafb;
+  background: #faf6ef;
 }
 
 
@@ -2048,7 +2048,7 @@ mat-paginator {
 }
 
 .page-of {
-  color: #667085;
+  color: #7a6f60;
   font-size: 13px;
   font-weight: 500;
 
@@ -2109,10 +2109,10 @@ mat-paginator {
   gap: 5px;
   height: 28px;
   padding: 0 10px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e8dcc8;
   border-radius: 9px;
   background: #ffffff;
-  color: #475569;
+  color: #5c5042;
   font-family: inherit;
   font-size: 11.5px;
   font-weight: 600;
@@ -2122,8 +2122,8 @@ mat-paginator {
 }
 
 .user-action:hover:not(:disabled) {
-  background: #f8fafc;
-  border-color: #cbd5e1;
+  background: #faf6ef;
+  border-color: #d8ccb8;
 }
 
 /* Only the one that takes access away is coloured; giving it back is a
@@ -2195,7 +2195,7 @@ mat-paginator {
 .commission-list-card {
   width: 100%;
   background: #ffffff;
-  border: 1px solid #e8edf3;
+  border: 1px solid #f1e8d8;
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 5px 20px rgba(16, 24, 40, 0.05);
@@ -2212,8 +2212,8 @@ mat-paginator {
   justify-content: space-between;
   gap: 16px;
   padding: 18px 20px;
-  background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);
-  border-bottom: 1px solid #edf0f4;
+  background: linear-gradient(135deg, #ffffff 0%, #fffaf1 100%);
+  border-bottom: 1px solid #f1e8d8;
 }
 
 .split-header h3,
@@ -2221,14 +2221,14 @@ mat-paginator {
   margin: 0;
   font-size: 18px;
   font-weight: 700;
-  color: #172033;
+  color: #1d1812;
 }
 
 .split-header p,
 .commission-list-header p {
   margin: 3px 0 0;
   font-size: 13px;
-  color: #8a94a6;
+  color: #a89c8a;
 }
 
 .split-grid {
@@ -2247,7 +2247,7 @@ mat-paginator {
 .split-label {
   font-size: 12px;
   font-weight: 600;
-  color: #344054;
+  color: #4a3f33;
 }
 
 .split-input {
@@ -2255,7 +2255,7 @@ mat-paginator {
   align-items: center;
   gap: 6px;
   padding: 6px 10px;
-  border: 1px solid #e4e7ec;
+  border: 1px solid #e8dcc8;
   border-radius: 8px;
 }
 
@@ -2269,12 +2269,12 @@ mat-paginator {
   outline: none;
   font-size: 14px;
   font-weight: 600;
-  color: #172033;
+  color: #1d1812;
 }
 
 .split-field small {
   font-size: 11px;
-  color: #98a2b3;
+  color: #a89c8a;
 }
 
 .split-footer {
@@ -2283,12 +2283,12 @@ mat-paginator {
   justify-content: space-between;
   gap: 16px;
   padding: 14px 20px;
-  border-top: 1px solid #edf0f4;
+  border-top: 1px solid #f1e8d8;
 }
 
 .split-total {
   font-size: 13px;
-  color: #344054;
+  color: #4a3f33;
 }
 
 .split-total.full strong {
@@ -2311,7 +2311,7 @@ mat-paginator {
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
-  border: 1px solid #e4e7ec;
+  border: 1px solid #e8dcc8;
   border-radius: 10px;
 }
 
@@ -2326,7 +2326,7 @@ mat-paginator {
   width: 18px;
   height: 18px;
   font-size: 18px;
-  color: #98a2b3;
+  color: #a89c8a;
 }
 
 .commission-count {
@@ -2338,12 +2338,12 @@ mat-paginator {
 .commission-count span {
   font-size: 20px;
   font-weight: 700;
-  color: #172033;
+  color: #1d1812;
 }
 
 .commission-count small {
   font-size: 11px;
-  color: #8a94a6;
+  color: #a89c8a;
 }
 
 .commission-list-table {
@@ -2353,11 +2353,11 @@ mat-paginator {
 }
 
 .commission-list-table th {
-  padding: 12px 14px;
-  background: #f8fafc;
-  border-bottom: 1px solid #e9edf3;
-  color: #667085;
-  font-size: 13px;
+  padding: 8px 6px;
+  background: #faf6ef;
+  border-bottom: 1px solid #eadfcc;
+  color: #7a6f60;
+  font-size: 10px;
   font-weight: 700;
   text-align: left;
   text-transform: uppercase;
@@ -2365,16 +2365,56 @@ mat-paginator {
 }
 
 .commission-list-table td {
-  padding: 12px 14px;
-  border-bottom: 1px solid #f0f2f5;
-  color: #344054;
+  padding: 8px 6px;
+  border-bottom: 1px solid #f1e8d8;
+  color: #4a3f33;
   font-size: 12px;
   text-align: left;
   white-space: nowrap;
 }
 
 .commission-list-table tr.editing td {
-  background: #f5f8ff;
+  background: #faf6ef;
+}
+
+/*
+ * Seventeen columns do not fit the card, which clips at its edge - scroll the
+ * table sideways and keep Actions pinned right so Edit and Delete stay in reach.
+ */
+.commission-list-card .table-responsive {
+  overflow-x: auto;
+}
+
+.commission-list-table th:last-child,
+.commission-list-table td:last-child {
+  position: sticky;
+  right: 0;
+  z-index: 1;
+  background: #ffffff;
+  box-shadow: -6px 0 8px -6px rgba(16, 24, 40, 0.18);
+}
+
+.commission-list-table th:last-child {
+  background: #faf6ef;
+}
+
+.commission-list-table tr.editing td:last-child {
+  background: #faf6ef;
+}
+
+.commission-list-table .row-actions {
+  gap: 4px;
+}
+
+.commission-list-table .row-action {
+  padding: 4px 7px;
+  font-size: 11px;
+}
+
+.commission-list-table .row-action mat-icon {
+  width: 15px;
+  height: 15px;
+  font-size: 15px;
 }
 
 .svc {
@@ -2385,18 +2425,18 @@ mat-paginator {
 
 .svc-name {
   font-weight: 700;
-  color: #1d2939;
+  color: #1d1812;
 }
 
 .commission-page .muted {
-  color: #98a2b3;
+  color: #a89c8a;
 }
 
 .split-state {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
+  gap: 4px;
+  padding: 3px 8px;
   border-radius: 999px;
   background: #fffaeb;
   color: #b54708;
@@ -2418,7 +2458,7 @@ mat-paginator {
 .empty-row {
   padding: 28px 14px !important;
   text-align: center !important;
-  color: #98a2b3 !important;
+  color: #a89c8a !important;
 }
 
 .commission-pages {
@@ -2427,14 +2467,14 @@ mat-paginator {
   justify-content: flex-end;
   gap: 8px;
   padding: 12px 20px;
-  border-top: 1px solid #edf0f4;
+  border-top: 1px solid #f1e8d8;
   font-size: 12px;
 }
 
 .commission-pages .page-btn {
   display: flex;
   padding: 3px;
-  border: 1px solid #e4e7ec;
+  border: 1px solid #e8dcc8;
   border-radius: 6px;
   background: #ffffff;
   cursor: pointer;
@@ -2461,7 +2501,7 @@ mat-paginator {
 .bill-code-add input {
   flex: 1;
   padding: 8px 12px;
-  border: 1px solid #e4e7ec;
+  border: 1px solid #e8dcc8;
   border-radius: 10px;
   font-size: 13px;
   text-transform: uppercase;
@@ -2495,6 +2535,6 @@ mat-paginator {
 .source-note {
   display: block;
   margin-top: 4px;
-  color: #667085;
+  color: #7a6f60;
   font-size: 11px;
 }

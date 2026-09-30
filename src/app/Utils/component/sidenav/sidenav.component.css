@@ -30,15 +30,15 @@ mat-nav-list a.mat-mdc-list-item {
   justify-content: center !important;
   text-align: center;
   transition: background-color 0.3s;
-  color: #cbd5e1;
+  color: #d8ccb8;
   text-decoration: none;
   background-color: white;
   height: 90px;
   border-radius: 0;
   padding: 0;
   gap: 4px;
-  border-top: 1px solid #e2e8f0;  /* light grey */
-  border-bottom: 1px solid #e2e8f0;
+  border-top: 1px solid #e8dcc8;  /* light grey */
+  border-bottom: 1px solid #e8dcc8;
 }
 
 /* Active link style */
@@ -73,7 +73,7 @@ mat-nav-list a.active {
   object-fit: cover;
   border-radius: 4px;
   cursor: pointer;
-  background-color:  #7d8084;;
+  background-color:  #7a6f60;;
 }
 
 

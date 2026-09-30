@@ -1,13 +1,15 @@
 import { Routes } from '@angular/router';
 import { posFullAccessGuard } from './pos/pos-role.guard';
 import { settingsGuard, settingsManageGuard, settingsRootOnlyGuard } from './settings/settings-role.guard';
-import { adminGuard } from './admin/admin-role.guard';
+import { adminGuard, adminManageGuard, adminRootOnlyGuard } from './admin/admin-role.guard';
+import { staffSellLockGuard } from './pos/bar-staff-sell/staff-sell-lock';
+import { supervisorGuard } from './pos/bar-supervisor/supervisor-role.guard';
 
 export const routes: Routes = [
 
   {
     path: 'settings',
-    canActivate: [settingsGuard],
+    canActivate: [staffSellLockGuard, settingsGuard],
     loadComponent: () => import('./settings/settings').then(m => m.Settings),
     children: [
 
@@ -44,47 +46,13 @@ export const routes: Routes = [
         canActivate: [settingsRootOnlyGuard],
         loadComponent: () => import('./settings/storage-setting/storage-setting').then(m => m.StorageSetting)
       },
-      {
-        path: 'errors',
-        canActivate: [settingsManageGuard],
-        loadComponent: () => import('./settings/error-setting/error-setting').then(m => m.ErrorSetting)
-      },
-      {
-        path: 'audit',
-        canActivate: [settingsManageGuard],
-        loadComponent: () => import('./settings/audit-setting/audit-setting').then(m => m.AuditSetting)
-      },
-      {
-        path: 'payments',
-        canActivate: [settingsManageGuard],
-        loadComponent: () => import('./settings/payment-setting/payment-setting').then(m => m.PaymentSetting)
-      },
-      {
-        // STAFF see this one too - the backend narrows it to their own branches.
-        path: 'expiring',
-        canActivate: [settingsGuard],
-        loadComponent: () => import('./settings/expiring-setting/expiring-setting').then(m => m.ExpiringSetting)
-      },
-      {
-        // Who gets paid what this month, in the shape it goes to a bank.
-        // Same gate as Payments: it is the same money, listed by person.
-        path: 'payroll',
-        canActivate: [settingsManageGuard],
-        loadComponent: () => import('./settings/payroll-setting/payroll-setting').then(m => m.PayrollSetting)
-      },
-      {
-        // Regions are platform-wide settings, not a branch's own.
-        path: 'regions',
-        canActivate: [settingsRootOnlyGuard],
-        loadComponent: () => import('./settings/region-setting/region-setting').then(m => m.RegionSetting)
-      },
     ]
   },
   {
     // The third area. Settings is how the system is configured; this is the
     // running of it - what branches are telling us, and what we publish back.
     path: 'admin',
-    canActivate: [adminGuard],
+    canActivate: [staffSellLockGuard, adminGuard],
     loadComponent: () => import('./admin/admin').then(m => m.Admin),
     children: [
       {
@@ -94,6 +62,38 @@ export const routes: Routes = [
       {
         path: 'guidance',
         loadComponent: () => import('./admin/guidance-admin/guidance-admin').then(m => m.GuidanceAdmin)
+      },
+      {
+        // Moved here from Settings: watching the platform, not configuring it.
+        path: 'errors',
+        loadComponent: () => import('./settings/error-setting/error-setting').then(m => m.ErrorSetting)
+      },
+      {
+        path: 'audit',
+        loadComponent: () => import('./settings/audit-setting/audit-setting').then(m => m.AuditSetting)
+      },
+      {
+        path: 'expiring',
+        loadComponent: () => import('./settings/expiring-setting/expiring-setting').then(m => m.ExpiringSetting)
+      },
+      {
+        // Regions are platform-wide - still ROOT only.
+        path: 'regions',
+        canActivate: [adminRootOnlyGuard],
+        loadComponent: () => import('./settings/region-setting/region-setting').then(m => m.RegionSetting)
+      },
+      {
+        // Money in (subscriptions) - ROOT and DIRECTOR only, not the ADMIN role.
+        path: 'payments',
+        canActivate: [adminManageGuard],
+        loadComponent: () => import('./settings/payment-setting/payment-setting').then(m => m.PaymentSetting)
+      },
+      {
+        // Who gets paid what this month, in the shape it goes to a bank.
+        // Same gate as Payments: it is the same money, listed by person.
+        path: 'payroll',
+        canActivate: [adminManageGuard],
+        loadComponent: () => import('./settings/payroll-setting/payroll-setting').then(m => m.PayrollSetting)
       },
     ]
   },
@@ -107,11 +107,26 @@ export const routes: Routes = [
 },
 {
   path: 'dashboard',
+  canActivate: [staffSellLockGuard],
   loadComponent: () => import('./dashboard/dashboard').then(m => m.Dashboard)
+},
+{
+  // Where orders written at Staff Sell wait until the supervisor receives
+  // them - the SUPERVISOR's whole app, and a screen managers can open.
+  path: 'supervisor',
+  canActivate: [staffSellLockGuard, supervisorGuard],
+  loadComponent: () => import('./pos/bar-supervisor/bar-supervisor').then(m => m.BarSupervisor)
+},
+{
+  // A module of its own beside POS, Settings and Admin: a staff member types
+  // their code and works their own bills.
+  path: 'staff-sell',
+  loadComponent: () => import('./pos/bar-staff-sell/bar-staff-sell').then(m => m.BarStaffSell)
 },
 
    {
     path: 'pos',
+    canActivate: [staffSellLockGuard],
     loadComponent: () => import('./pos/pos').then(m => m.Pos),
     children: [
 

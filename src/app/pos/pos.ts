@@ -95,6 +95,13 @@ menuItems: SidenavItem[] = [
     roles: this.allRoles,
   },
   {
+    // Orders from Staff Sell waiting to be received before drinks leave.
+    label: 'MENU.SUPERVISOR',
+    icon: 'workflow',
+    route: '/supervisor',
+    roles: this.fullAccessRoles,
+  },
+  {
     label: this.reportLabel,
     icon: 'report',
     route: '/pos/barReports',

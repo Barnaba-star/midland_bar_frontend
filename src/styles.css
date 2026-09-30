@@ -1,18 +1,18 @@
 @import './styles/middle_container.scss';
 
 :root {
-  /* Brand palette sourced from the Midland Solutions logo (navy + gold) */
-  --color-primary: #14315d;
-  --color-primary-dark: #0a1c38;
-  --color-primary-light: #eaeff8;
-  --color-accent: #c9962e;
-  --color-accent-dark: #a67a1f;
-  --color-accent-light: #faf1de;
-  --color-bg: #f5f6fb;
-  --color-surface: #ffffff;
-  --color-text: #111827;
-  --color-text-muted: #6b7280;
-  --color-border: #e5e7eb;
+  /* Midland Bar: espresso and beer amber on warm paper, matching the landing page. */
+  --color-primary: #2b2118;
+  --color-primary-dark: #17110b;
+  --color-primary-light: #f5e9d4;
+  --color-accent: #f5a524;
+  --color-accent-dark: #c97f0a;
+  --color-accent-light: #fdf1dc;
+  --color-bg: #f6f0e6;
+  --color-surface: #fffdf9;
+  --color-text: #1d1812;
+  --color-text-muted: #7a6f60;
+  --color-border: #e8dcc8;
   --radius-sm: 10px;
   --radius-md: 16px;
   --radius-lg: 24px;
@@ -23,17 +23,17 @@
 }
 
 :root[data-theme="dark"] {
-  --color-primary: #4f7fdb;
-  --color-primary-dark: #b6cbf2;
-  --color-primary-light: #1b2536;
-  --color-accent: #d8ab52;
-  --color-accent-dark: #f0c877;
+  --color-primary: #d08a14;
+  --color-primary-dark: #ffc861;
+  --color-primary-light: #2a2115;
+  --color-accent: #f5a524;
+  --color-accent-dark: #ffc861;
   --color-accent-light: #2c2413;
-  --color-bg: #0f1420;
-  --color-surface: #171d2b;
-  --color-text: #e5e9f0;
-  --color-text-muted: #93a0b8;
-  --color-border: #2a3346;
+  --color-bg: #0e0c0a;
+  --color-surface: #16130f;
+  --color-text: #f6ecdc;
+  --color-text-muted: #a89c8a;
+  --color-border: #2e271e;
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
   --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.55);
@@ -238,21 +238,21 @@ body {
 }
 
 .row-action.view {
-  background: #eef4ff;
-  color: #14315d;
+  background: #f1e8d8;
+  color: #2b2118;
 }
 
 .row-action.view:hover {
-  border-color: #14315d;
+  border-color: #2b2118;
 }
 
 .row-action.edit {
-  background: #e8f5e9;
-  color: #198754;
+  background: #fdf1dc;
+  color: #8f5500;
 }
 
 .row-action.edit:hover {
-  border-color: #198754;
+  border-color: #b86e00;
 }
 
 .row-action.delete {

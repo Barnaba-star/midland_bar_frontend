@@ -1,8 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { IconRegistryService } from '../Utils/services/icon-registry.service';
 import { Router, RouterModule } from '@angular/router';
@@ -13,13 +11,16 @@ import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-dashboard',
-    imports: [CommonModule, MatCardModule, MatIconModule, MatButtonModule, MatTooltipModule, RouterModule, TranslatePipe],
+    imports: [CommonModule, MatIconModule, MatTooltipModule, RouterModule, TranslatePipe],
     templateUrl: './dashboard.html',
     styleUrls: ['./dashboard.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Dashboard {
 constructor(private iconRegistry: IconRegistryService, private route:Router, private visibility:Authentication){}
+
+/** For the date line under the greeting. */
+today = new Date();
 
 get fullName(): string {
   return this.visibility.getFullName() || this.visibility.getUsername();
@@ -40,7 +41,27 @@ cards = [
     // Open POS on its own home - the branch dashboard - rather than dropping
     // straight into one section of it.
     route: '/pos',
-    roles: ['ROOT', 'STAFF', 'DIRECTOR', 'REG OFFICER']
+    glyph: 'point_of_sale',
+    roles: ['ROOT', 'STAFF', 'DIRECTOR', 'REG OFFICER', 'CEO', 'MANAGER', 'CASHIER']
+  },
+  {
+    title: 'DASHBOARD.CARD_STAFF_SELL_TITLE',
+    icon: 'team',
+    glyph: 'badge',
+    img: '',
+    description: 'DASHBOARD.CARD_STAFF_SELL_DESC',
+    route: '/staff-sell',
+    roles: ['ROOT', 'STAFF', 'DIRECTOR', 'REG OFFICER', 'CEO', 'MANAGER', 'CASHIER']
+  },
+  {
+    title: 'DASHBOARD.CARD_SUPERVISOR_TITLE',
+    icon: 'team',
+    glyph: 'fact_check',
+    img: '',
+    description: 'DASHBOARD.CARD_SUPERVISOR_DESC',
+    route: '/supervisor',
+    // Not MANAGER: their Dashboard is POS and Staff Sell only.
+    roles: ['ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'SUPERVISOR']
   },
   {
     title: 'DASHBOARD.CARD_SETTING_TITLE',
@@ -48,6 +69,7 @@ cards = [
     img: 'assets/icons/personnel.svg',
     description: 'DASHBOARD.CARD_SETTING_DESC',
     route: '/settings',
+    glyph: 'tune',
     roles: ['ROOT', 'STAFF', 'DIRECTOR', 'REG OFFICER']
   },
   {
@@ -58,7 +80,8 @@ cards = [
     img: 'assets/icons/announce.svg',
     description: 'DASHBOARD.CARD_ADMIN_DESC',
     route: '/admin',
-    roles: ['ROOT', 'DIRECTOR']
+    glyph: 'campaign',
+    roles: ['ROOT', 'DIRECTOR', 'ADMIN']
   },
 
 ];

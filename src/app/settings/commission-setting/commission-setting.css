@@ -4,7 +4,7 @@
 
   background: #ffffff;
 
-  border: 1px solid #eef2f7;
+  border: 1px solid #f1e8d8;
   border-radius: 10px;
 
   overflow: hidden;
@@ -25,13 +25,13 @@
 
   padding: 16px 20px;
 
-  border-bottom: 1px solid #eef2f7;
+  border-bottom: 1px solid #f1e8d8;
 }
 
 .commission-header h3 {
   margin: 0;
 
-  color: #101828;
+  color: #1d1812;
   font-size: 15px;
   font-weight: 600;
 }
@@ -39,7 +39,7 @@
 .commission-header p {
   margin: 4px 0 0;
 
-  color: #667085;
+  color: #7a6f60;
   font-size: 12px;
 }
 
@@ -64,7 +64,7 @@
 }
 
 .period-field span {
-  color: #667085;
+  color: #7a6f60;
   font-size: 11px;
   font-weight: 500;
 
@@ -79,12 +79,12 @@
 
   min-width: 120px;
 
-  border: 1px solid #e4e7ec;
+  border: 1px solid #e8dcc8;
   border-radius: 6px;
 
   background: #ffffff;
 
-  color: #101828;
+  color: #1d1812;
   font-family: inherit;
   font-size: 13px;
 
@@ -108,9 +108,9 @@
 
   gap: 1px;
 
-  background: #eef2f7;
+  background: #f1e8d8;
 
-  border-bottom: 1px solid #eef2f7;
+  border-bottom: 1px solid #f1e8d8;
 }
 
 .summary-tile {
@@ -125,7 +125,7 @@
 }
 
 .summary-label {
-  color: #667085;
+  color: #7a6f60;
   font-size: 11px;
   font-weight: 500;
 
@@ -134,7 +134,7 @@
 }
 
 .summary-value {
-  color: #101828;
+  color: #1d1812;
   font-size: 22px;
   font-weight: 600;
 
@@ -142,11 +142,11 @@
 }
 
 .summary-tile.accent .summary-value {
-  color: #5b21b6;
+  color: #6b4000;
 }
 
 .summary-unit {
-  color: #98a2b3;
+  color: #a89c8a;
   font-size: 11px;
 }
 
@@ -171,9 +171,9 @@
 .commission-table thead th {
   padding: 10px 14px;
 
-  background: #f9fafb;
+  background: #faf6ef;
 
-  color: #667085;
+  color: #7a6f60;
   font-size: 11px;
   font-weight: 600;
 
@@ -183,16 +183,16 @@
 
   white-space: nowrap;
 
-  border-bottom: 1px solid #eef2f7;
+  border-bottom: 1px solid #f1e8d8;
 }
 
 .commission-table td {
   padding: 12px 14px;
 
-  color: #344054;
+  color: #4a3f33;
   font-size: 13px;
 
-  border-bottom: 1px solid #f4f6f9;
+  border-bottom: 1px solid #f1e8d8;
 
   vertical-align: middle;
 }
@@ -202,7 +202,7 @@
 }
 
 .index {
-  color: #98a2b3;
+  color: #a89c8a;
   font-size: 12px;
 }
 
@@ -213,17 +213,17 @@
 }
 
 .staff-row:hover {
-  background: #f9fafb;
+  background: #faf6ef;
 }
 
 .staff-row.expanded {
-  background: #f5f3ff;
+  background: #fdf1dc;
 }
 
 /* A staff member owed nothing this month is still shown - that zero is the
    signal their branches went quiet - but shouldn't compete for attention. */
 .staff-row:not(.has-earnings) .commission {
-  color: #98a2b3;
+  color: #a89c8a;
 }
 
 .staff-info {
@@ -245,9 +245,9 @@
 
   border-radius: 50%;
 
-  background: #ede9fe;
+  background: #fdf1dc;
 
-  color: #5b21b6;
+  color: #6b4000;
   font-size: 12px;
   font-weight: 600;
 }
@@ -258,13 +258,13 @@
 }
 
 .full-name {
-  color: #101828;
+  color: #1d1812;
   font-size: 13px;
   font-weight: 500;
 }
 
 .username {
-  color: #98a2b3;
+  color: #a89c8a;
   font-size: 11px;
 }
 
@@ -287,13 +287,13 @@
 }
 
 .paid-badge.none {
-  background: #f2f4f7;
+  background: #f3ece0;
 
-  color: #98a2b3;
+  color: #a89c8a;
 }
 
 .commission {
-  color: #5b21b6;
+  color: #6b4000;
   font-weight: 600;
 }
 
@@ -303,7 +303,7 @@
 
   font-size: 18px;
 
-  color: #98a2b3;
+  color: #a89c8a;
 }
 
 
@@ -328,7 +328,7 @@
 
   background: transparent;
 
-  color: #98a2b3;
+  color: #a89c8a;
   font-size: 10px;
   font-weight: 600;
 
@@ -342,7 +342,7 @@
 
   font-size: 12px;
 
-  border-bottom: 1px solid #f4f6f9;
+  border-bottom: 1px solid #f1e8d8;
 }
 
 .detail-table tr:last-child td {
@@ -352,7 +352,7 @@
 .branch-code {
   margin-left: 6px;
 
-  color: #98a2b3;
+  color: #a89c8a;
   font-size: 11px;
 }
 
@@ -365,7 +365,7 @@
 
   padding: 20px;
 
-  color: #98a2b3;
+  color: #a89c8a;
   font-size: 12px;
 }
 
@@ -379,7 +379,7 @@
 
   text-align: center !important;
 
-  color: #98a2b3 !important;
+  color: #a89c8a !important;
   font-size: 13px !important;
 }
 
@@ -393,7 +393,7 @@
 
   font-size: 32px;
 
-  color: #d0d5dd;
+  color: #d8ccb8;
 }
 
 .empty-state strong {
@@ -401,7 +401,7 @@
 
   margin-bottom: 4px;
 
-  color: #667085;
+  color: #7a6f60;
   font-size: 14px;
 }
 
@@ -449,7 +449,7 @@
 }
 
 .status-none {
-  color: #d0d5dd;
+  color: #d8ccb8;
 }
 
 .status-paid {
@@ -531,7 +531,7 @@
 
   margin-top: 3px;
 
-  color: #98a2b3;
+  color: #a89c8a;
   font-size: 10px;
 }
 
@@ -550,12 +550,12 @@
 
   padding: 0 10px;
 
-  border: 1px solid #e4e7ec;
+  border: 1px solid #e8dcc8;
   border-radius: 6px;
 
   background: #ffffff;
 
-  color: #475467;
+  color: #5c5042;
   font-family: inherit;
   font-size: 12px;
   font-weight: 500;

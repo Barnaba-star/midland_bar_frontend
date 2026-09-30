@@ -15,12 +15,12 @@
   align-items: center;
   justify-content: space-between;
 
-  border-bottom: 1px solid #edf0f4;
+  border-bottom: 1px solid #f1e8d8;
 
   background: linear-gradient(
     135deg,
     #ffffff,
-    #fafbff
+    #faf6ef
   );
 }
 
@@ -40,14 +40,14 @@
 
   border-radius: 11px;
 
-  background: #eef2ff;
-  color: #14315d;
+  background: #fdf1dc;
+  color: #2b2118;
 }
 
 .role-dialog-title h2 {
   margin: 0;
 
-  color: #172033;
+  color: #1d1812;
 
   font-size: 18px;
   font-weight: 750;
@@ -56,7 +56,7 @@
 .role-dialog-title p {
   margin: 3px 0 0;
 
-  color: #94a3b8;
+  color: #a89c8a;
 
   font-size: 11px;
 }
@@ -68,12 +68,12 @@
   width: 34px;
   height: 34px;
 
-  border: 1px solid #e5e7eb;
+  border: 1px solid #e8dcc8;
   border-radius: 9px;
 
   background: white;
 
-  color: #64748b;
+  color: #7a6f60;
 
   cursor: pointer;
 
@@ -112,12 +112,12 @@
 
   padding: 15px;
 
-  border: 1px solid #e8ebf2;
+  border: 1px solid #e8dcc8;
   border-radius: 13px;
 
   background: linear-gradient(
     135deg,
-    #fafbff,
+    #faf6ef,
     #ffffff
   );
 }
@@ -134,8 +134,8 @@
 
   background: linear-gradient(
     135deg,
-    #14315d,
-    #14315d
+    #2b2118,
+    #2b2118
   );
 
   color: white;
@@ -152,7 +152,7 @@
   margin: 0 0 5px;
 
   font-size: 16px;
-  color: #1e293b;
+  color: #2b2118;
 }
 
 .role-code {
@@ -160,9 +160,9 @@
 
   border-radius: 6px;
 
-  background: #f1f5f9;
+  background: #f3ece0;
 
-  color: #64748b;
+  color: #7a6f60;
 
   font-family: monospace;
 
@@ -219,14 +219,14 @@
 
   gap: 7px;
 
-  color: #334155;
+  color: #4a3f33;
 
   font-size: 13px;
   font-weight: 750;
 }
 
 .section-header .material-icons {
-  color: #14315d;
+  color: #2b2118;
   font-size: 17px;
 }
 
@@ -252,11 +252,11 @@
   flex-direction: column;
   justify-content: center;
 
-  border: 1px solid #edf0f4;
+  border: 1px solid #f1e8d8;
 
   border-radius: 10px;
 
-  background: #fafbfc;
+  background: #faf6ef;
 }
 
 .info-item.full {
@@ -266,7 +266,7 @@
 .label {
   margin-bottom: 5px;
 
-  color: #94a3b8;
+  color: #a89c8a;
 
   font-size: 9px;
   font-weight: 750;
@@ -275,14 +275,14 @@
 }
 
 .value {
-  color: #334155;
+  color: #4a3f33;
 
   font-size: 12px;
   font-weight: 600;
 }
 
 .value.code {
-  color: #14315d;
+  color: #2b2118;
 
   font-family: monospace;
 }
@@ -312,9 +312,9 @@
 
   border-radius: 8px;
 
-  background: #eef2ff;
+  background: #fdf1dc;
 
-  color: #14315d;
+  color: #2b2118;
 
   font-size: 11px;
   font-weight: 800;
@@ -342,7 +342,7 @@
 
   gap: 10px;
 
-  border: 1px solid #edf0f4;
+  border: 1px solid #f1e8d8;
 
   border-radius: 10px;
 
@@ -350,7 +350,7 @@
 }
 
 .permission-item:hover {
-  background: #fafbff;
+  background: #faf6ef;
 
   border-color: #d9defd;
 
@@ -383,7 +383,7 @@
 }
 
 .permission-name {
-  color: #334155;
+  color: #4a3f33;
 
   font-size: 11px;
   font-weight: 700;
@@ -395,7 +395,7 @@
   display: flex;
   gap: 6px;
 
-  color: #94a3b8;
+  color: #a89c8a;
 
   font-size: 9px;
 }
@@ -429,18 +429,18 @@
 
   gap: 7px;
 
-  border: 1px dashed #dbe1e8;
+  border: 1px dashed #e8dcc8;
 
   border-radius: 10px;
 
-  color: #94a3b8;
+  color: #a89c8a;
 
   font-size: 11px;
 }
 
 .empty-permissions .material-icons {
   font-size: 27px;
-  color: #cbd5e1;
+  color: #d8ccb8;
 }
 
 
@@ -452,9 +452,9 @@
   display: flex;
   justify-content: flex-end;
 
-  border-top: 1px solid #edf0f4;
+  border-top: 1px solid #f1e8d8;
 
-  background: #fafbfc;
+  background: #faf6ef;
 }
 
 .close-dialog-btn {
@@ -462,13 +462,13 @@
 
   padding: 0 17px;
 
-  border: 1px solid #dbe1e8;
+  border: 1px solid #e8dcc8;
 
   border-radius: 8px;
 
   background: white;
 
-  color: #475569;
+  color: #5c5042;
 
   font-size: 11px;
   font-weight: 650;
@@ -477,7 +477,7 @@
 }
 
 .close-dialog-btn:hover {
-  background: #f1f5f9;
+  background: #f3ece0;
 }
 
 

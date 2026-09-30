@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inje
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ServiceBarMethod } from '../../../../pos/service-bar-method';
 
 /**
@@ -27,6 +27,7 @@ export class ReceiptDialogComponent implements OnInit {
     private dialogRef: MatDialogRef<ReceiptDialogComponent>,
     private barService: ServiceBarMethod,
     private cdr: ChangeDetectorRef,
+    private translate: TranslateService,
   ) {}
 
   ngOnInit(): void {
@@ -52,6 +53,11 @@ export class ReceiptDialogComponent implements OnInit {
     if (!html) {
       return;
     }
+    // Two copies in one job - the customer's and the bar's - each on its own
+    // page, so a receipt printer cuts between them.
+    const copies = ['RECEIPT.CUSTOMER_COPY', 'RECEIPT.BAR_COPY']
+      .map((key) => `<div class="r-paper"><div class="r-center r-copy">${this.translate.instant(key)}</div>${html}</div>`)
+      .join('');
     const win = window.open('', '_blank', 'width=380,height=640');
     if (!win) {
       return;
@@ -61,6 +67,8 @@ export class ReceiptDialogComponent implements OnInit {
         * { box-sizing: border-box; }
         body { margin: 0; padding: 8px; font-family: 'Courier New', monospace; font-size: 12px; color: #000; }
         .r-paper { width: 280px; margin: 0 auto; }
+        .r-paper + .r-paper { page-break-before: always; break-before: page; }
+        .r-copy { margin-bottom: 4px; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; }
         .r-center { text-align: center; }
         .r-title { font-size: 16px; font-weight: 700; }
         .r-muted { color: #000; }
@@ -69,7 +77,7 @@ export class ReceiptDialogComponent implements OnInit {
         .r-total { font-size: 14px; font-weight: 700; }
         .r-sub { padding-left: 12px; font-size: 11px; }
         @page { margin: 4mm; }
-      </style></head><body><div class="r-paper">${html}</div></body></html>`);
+      </style></head><body>${copies}</body></html>`);
     win.document.close();
     win.focus();
     win.print();

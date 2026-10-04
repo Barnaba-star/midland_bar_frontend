@@ -8,6 +8,7 @@ import { TitleAction } from '../component/title/title.component';
 import { environment } from '../enviroments/environment';
 import { Observable } from 'rxjs';
 import { Response, ResponseList, ResponsePage } from '../models/responces';
+import { silent } from '../inteceptor/silent-request';
 
 
 
@@ -276,7 +277,8 @@ heartbeat(): Observable<any> {
     `${this.baseURL}/setting/heartbeat`,
     {},
     {
-      headers: this.createHeaders()
+      headers: this.createHeaders(),
+      context: silent()
     }
   );
 }

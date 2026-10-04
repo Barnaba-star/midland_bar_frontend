@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../Utils/enviroments/environment';
 import { Observable } from 'rxjs/internal/Observable';
 import { PageableParam, Response, ResponseList, ResponsePage } from '../../Utils/models/responces';
+import { silent } from '../../Utils/inteceptor/silent-request';
 import { AssignUserRoleDTO, UserAndAttachmentDTO, UserDTO } from './user-model';
 
 /** Where somebody's payroll money is sent. Both parts, or neither. */
@@ -73,7 +74,8 @@ findUserProfilePic(userUID:string):Observable<Response<any>>{
 }
 
 findBranchByUID(branchUID:string):Observable<Response<any>>{
-return this.http.get<Response<any>>(`${this.branchUrl}/findBranchByUID/${branchUID}`);
+// Header data, re-read on a timer for the subscription badge: no progress bar.
+return this.http.get<Response<any>>(`${this.branchUrl}/findBranchByUID/${branchUID}`, { context: silent() });
 }
 
 findUserPage(params: PageableParam): Observable<ResponsePage<any>> {

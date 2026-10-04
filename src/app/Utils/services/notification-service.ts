@@ -4,6 +4,7 @@ import { BehaviorSubject, interval, startWith, switchMap, catchError, of } from 
 import { environment } from '../enviroments/environment';
 import { Response } from '../models/responces';
 import { Authentication } from './authentication';
+import { silent } from '../inteceptor/silent-request';
 
 export interface AppNotification {
   uid: string;
@@ -105,7 +106,7 @@ export class NotificationService {
       return of(null);
     }
 
-    return this.http.get<Response<BackendNotification[]>>(`${this.baseUrl}/findMyNotifications`).pipe(
+    return this.http.get<Response<BackendNotification[]>>(`${this.baseUrl}/findMyNotifications`, { context: silent() }).pipe(
       switchMap((res) => {
 
         const mapped: AppNotification[] = (res.data || []).map((n) => ({

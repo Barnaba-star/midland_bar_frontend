@@ -28,6 +28,7 @@ import { AuthInterceptor } from './Utils/inteceptor/auth-interceptor';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { StatusInterceptor } from './Utils/inteceptor/status-interceptor';
 import { OfflineInterceptor } from './Utils/inteceptor/offline-interceptor';
+import { LoaderInterceptor } from './Utils/inteceptor/loader.interceptor';
 import { GlobalErrorHandler } from './Utils/handlers/global-error-handler';
 
 export const appConfig: ApplicationConfig = {
@@ -59,6 +60,8 @@ export const appConfig: ApplicationConfig = {
       withInterceptors([
         // Outermost: answers from the device and queues sales when there is no internet.
         OfflineInterceptor,
+        // The progress bar along the top while a request is out.
+        LoaderInterceptor,
         AuthInterceptor,
         StatusInterceptor
       ])

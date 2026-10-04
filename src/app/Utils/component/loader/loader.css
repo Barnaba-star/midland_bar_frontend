@@ -1,41 +1,37 @@
-.loader-overlay {
-
+.top-progress {
   position: fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-
-  background: rgba(255,255,255,.6);
-
-  display:flex;
-  justify-content:center;
-  align-items:center;
-
-  z-index:99999;
-
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 100000;
+  overflow: hidden;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--color-primary, #b86e00) 18%, transparent);
 }
 
-
-.spinner {
-
-  width:50px;
-  height:50px;
-
-  border:5px solid #ddd;
-  border-top-color:#b86e00;
-
-  border-radius:50%;
-
-  animation: spin 1s linear infinite;
-
+/* Indeterminate: a segment sweeping across, since a request has no known length. */
+.top-progress-bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 40%;
+  border-radius: 0 3px 3px 0;
+  background: linear-gradient(90deg, var(--color-accent, #c9962e), var(--color-primary, #b86e00));
+  box-shadow: 0 0 8px var(--color-primary, #b86e00);
+  animation: top-progress-sweep 1.1s ease-in-out infinite;
 }
 
+@keyframes top-progress-sweep {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(260%); }
+}
 
-@keyframes spin {
-
-  to{
-    transform:rotate(360deg);
+@media (prefers-reduced-motion: reduce) {
+  .top-progress-bar {
+    width: 100%;
+    animation: none;
+    opacity: 0.7;
   }
-
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -17,7 +17,8 @@ import { AlertService } from '../Utils/services/alert';
 import { Authentication } from '../Utils/services/authentication';
 import { environment } from '../Utils/enviroments/environment';
 import { ChangeDetectorRef } from '@angular/core';
-import { unlockStaffSell } from '../pos/bar-staff-sell/staff-sell-lock';
+import { lockStaffSell, unlockStaffSell } from '../pos/bar-staff-sell/staff-sell-lock';
+import { DeviceRegistration } from '../Utils/services/device-registration';
 import { landingFor } from './landing-for';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 @Component({
@@ -29,6 +30,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 })
 export class Login implements OnInit {
 private api = environment.baseApiUrl
+private device = inject(DeviceRegistration);
 private baseUrl: string = `${this.api}/authentication/login`;
 
   loginForm: FormGroup;
@@ -97,6 +99,13 @@ private forcePasswordChange(): void {
 
 /** branchUID: the branch chosen by a user of several - sent on the second try, after CHOOSE_BRANCH. */
 onSubmit(branchUID?: string) {
+  // Three digits in the username box is a staff code: the PIN goes in the
+  // password box, and they go straight to Staff Sell.
+  const typed = String(this.loginForm.value.username ?? '').trim();
+  if (!branchUID && /^\d{3}$/.test(typed) && this.loginForm.valid) {
+    this.staffSignIn(typed, String(this.loginForm.value.password ?? '').trim());
+    return;
+  }
   if (this.loginForm.valid) {
 
     this.loginError = '';
@@ -157,6 +166,10 @@ onSubmit(branchUID?: string) {
         // Start heartbeat
         this.auth.startHeartbeat();
 
+        // Someone of this branch signed in here: this device is the bar's,
+        // so staff can now sign in on it with their code.
+        this.device.register();
+
         this.goToLanding();
 
         this.cdr.detectChanges();
@@ -214,6 +227,47 @@ onSubmit(branchUID?: string) {
       }
     });
   }
+}
+
+/**
+ * A staff member: their 3-digit code and 4-digit PIN, on a device the branch
+ * has set up (a manager or cashier signed in on it before). They land in
+ * Staff Sell with their own bills, and the device stays there.
+ */
+private staffSignIn(staffCode: string, pin: string): void {
+  this.loginError = '';
+  const deviceToken = this.device.token();
+  if (!deviceToken) {
+    this.loginError = this.translate.instant('LOGIN.STAFF_DEVICE_NOT_REGISTERED');
+    this.cdr.detectChanges();
+    return;
+  }
+  this.submitting = true;
+  this.http.post<{ token?: string }>(`${this.api}/authentication/staffLogin`, { deviceToken, staffCode, pin }).subscribe({
+    next: (res) => {
+      this.submitting = false;
+      clearTimeout(this.idleTimer);
+      this.auth.setToken(res.token!);
+      // No heartbeat: a staff member is not an account to show as online.
+      lockStaffSell();
+      this.route.navigate(['/staff-sell']);
+      this.cdr.detectChanges();
+    },
+    error: (err) => {
+      const body = err?.error;
+      const code = body?.code;
+      this.loginError =
+        code === 'STAFF_LOCKED' ? this.translate.instant('LOGIN.STAFF_LOCKED', { minutes: body?.minutes ?? 15 })
+        : code === 'NO_PIN_SET' ? this.translate.instant('LOGIN.STAFF_NO_PIN')
+        : code === 'DEVICE_NOT_REGISTERED' ? this.translate.instant('LOGIN.STAFF_DEVICE_NOT_REGISTERED')
+        : code === 'SUBSCRIPTION_EXPIRED' ? this.translate.instant('LOGIN.EXPIRED_TITLE')
+        : code === 'INVALID_STAFF_LOGIN' ? this.translate.instant('LOGIN.STAFF_INVALID')
+        : this.translate.instant('LOGIN.STAFF_INVALID');
+      this.auth.removeToken();
+      this.submitting = false;
+      this.cdr.detectChanges();
+    },
+  });
 }
 
   // Set when login fails because the branch has lapsed, so the screen can

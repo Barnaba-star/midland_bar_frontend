@@ -24,6 +24,11 @@
             <span *ngIf="field.suffix" matSuffix>&nbsp;{{ field.suffix }}</span>
           </mat-form-field>
 
+          <mat-form-field *ngSwitchCase="'password'" appearance="outline" class="w-100">
+            <input matInput type="password" [attr.inputmode]="('' + field.pattern).startsWith('^[0-9]') ? 'numeric' : null" [attr.maxlength]="field.maxLength || null" [formControlName]="field.name" [placeholder]="(field.placeholder || field.label || '') | translate" autocomplete="new-password" />
+            <mat-hint *ngIf="field.hint">{{ field.hint | translate }}</mat-hint>
+          </mat-form-field>
+
           <!-- Number -->
           <mat-form-field *ngSwitchCase="'number'" appearance="outline" class="w-100">
              <span *ngIf="field.prefix" matPrefix>{{ field.prefix }}&nbsp;</span>

@@ -67,6 +67,32 @@ getUsername(): string {
   return username;
 }
 
+/** A staff member signed in with their staff code + PIN: Staff Sell only, their own bills. */
+isStaffSession(): boolean {
+  const token = this.getToken();
+  if (!token) {
+    return false;
+  }
+  try {
+    return this.jwtHelper.decodeToken(token)?.type === 'STAFF';
+  } catch {
+    return false;
+  }
+}
+
+/** That staff member's code (only in a staff session). */
+getStaffCode(): string {
+  const token = this.getToken();
+  if (!token) {
+    return '';
+  }
+  try {
+    return this.jwtHelper.decodeToken(token)?.staffCode ?? '';
+  } catch {
+    return '';
+  }
+}
+
 /** Main office (STAFF) helping in a customer's branch: they may look, not change anything. */
 isViewOnly(): boolean {
   const token = this.getToken();

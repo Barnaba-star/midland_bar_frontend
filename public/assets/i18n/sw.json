@@ -531,7 +531,12 @@
     "PANEL_POINT2": "Stock inapungua yenyewe kila mauzo",
     "PANEL_POINT3": "Kila shilingi inaenda kwenye fungu lake",
     "BACK": "Rudi mwanzo",
-    "BRANCH_NOT_ALLOWED": "Hujawekwa kufanya kazi kwenye branch hiyo."
+    "BRANCH_NOT_ALLOWED": "Hujawekwa kufanya kazi kwenye branch hiyo.",
+    "STAFF_HINT": "Wauzaji: weka code yako (tarakimu 3) hapa, na PIN yako (tarakimu 4) kama neno la siri",
+    "STAFF_INVALID": "Code au PIN si sahihi.",
+    "STAFF_LOCKED": "Umekosea PIN mara nyingi - code hii imefungwa kwa dakika {{minutes}}.",
+    "STAFF_NO_PIN": "Code hii bado haina PIN. Mwombe meneja akuwekee (Staff > Edit).",
+    "STAFF_DEVICE_NOT_REGISTERED": "Kifaa hiki bado hakijasajiliwa kwa wauzaji. Meneja au cashier wa bar aingie kwenye kifaa hiki mara moja kwanza."
   },
   "LANDING": {
     "HERO_BADGE": "POS ya Bar na Grill",
@@ -1596,8 +1601,17 @@
     "DELETE_HAS_OPEN": "Mhudumu huyu bado ana bill ambazo hazijalipwa au order ambazo hazijapokelewa. Zifunge kwanza.",
     "STAFF_CODE": "Code ya mhudumu",
     "STAFF_CODE_PH": "Namba 3, mfano 245",
-    "STAFF_CODE_HINT": "Code yake ya siri ya kuingia Staff Sell",
-    "STAFF_CODE_FORMAT": "Code lazima iwe namba 3 hasa (mfano 245)"
+    "STAFF_CODE_HINT": "Code yake ya Staff Sell na ya kuingia - siri ni PIN iliyo chini",
+    "STAFF_CODE_FORMAT": "Code lazima iwe namba 3 hasa (mfano 245)",
+    "PIN": "PIN",
+    "PIN_PH": "Tarakimu 4",
+    "PIN_HINT": "Siri yake ya kuingia kwa code - aijue yeye peke yake",
+    "PIN_FORMAT": "PIN lazima iwe tarakimu 4",
+    "NEW_PIN": "PIN mpya",
+    "NEW_PIN_PH": "Acha wazi kubaki na PIN ya sasa",
+    "NEW_PIN_HINT": "Tarakimu 4 - pia inafungua code iliyofungwa kwa makosa ya PIN",
+    "NO_PIN": "Hana PIN",
+    "NO_PIN_TIP": "Hawezi kuingia kwa code mpaka awekewe PIN - bonyeza Edit"
   },
   "STOCK_FORM": {
     "ADD_BTN": "Ongeza Stock",
@@ -1806,7 +1820,8 @@
     "SEND": "Tuma kwa supervisor",
     "ORDER_DRAFT": "Haijatumwa bado",
     "ORDER_SENT": "Inasubiri supervisor",
-    "ORDER_REJECTED": "Imekataliwa"
+    "ORDER_REJECTED": "Imekataliwa",
+    "SIGN_OUT": "Toka"
   },
   "SUPERVISOR_PAGE": {
     "OFFLINE_SEEN": "Nimekagua",

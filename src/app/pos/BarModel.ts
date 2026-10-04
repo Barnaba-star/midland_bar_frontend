@@ -3,6 +3,8 @@ export interface BarStaffDTO{
   uid?: string;
   /** K1, A2... - blank gives the next number (001, 002...). */
   staffCode?: string;
+  /** 4 digits, for signing in with the code; on an edit only when changing it. */
+  pin?: string;
   firstName?: string;
   middleName?:string;
   lastName?:string;

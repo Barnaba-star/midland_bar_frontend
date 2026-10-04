@@ -82,6 +82,11 @@ export class BarStaffSell implements OnInit, OnDestroy {
   ngOnInit(): void {
     // From here on the till stays in Staff Sell until a manager lets it out.
     lockStaffSell();
+    // Signed in with their own code + PIN: straight to their bills, no keypad.
+    if (this.ownSession) {
+      this.code = this.auth.getStaffCode();
+      this.findStaff();
+    }
     // The add-item list, loaded before the first tap.
     this.sellable.prefetch();
     // Orders and bills made offline have reached the server: read them again.
@@ -174,8 +179,25 @@ export class BarStaffSell implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * A staff member who signed in with their own code + PIN. They leave by
+   * signing out (back to the login screen), and cannot switch to someone else.
+   */
+  get ownSession(): boolean {
+    return this.auth.isStaffSession();
+  }
+
   /** Hand the screen back to the manager - only with a manager's login. */
   exitToPos(): void {
+    if (this.ownSession) {
+      // Written orders go to the supervisor before they leave.
+      if (this.unsentCount > 0) {
+        this.sendOrders(() => this.signOut());
+      } else {
+        this.signOut();
+      }
+      return;
+    }
     this.dialog.open(StaffSellUnlockDialog, {
       width: '420px',
       maxWidth: '95vw',
@@ -187,6 +209,12 @@ export class BarStaffSell implements OnInit, OnDestroy {
         this.router.navigate([landingFor((role) => this.auth.hasRole(role))]);
       }
     });
+  }
+
+  private signOut(): void {
+    this.auth.removeToken();
+    unlockStaffSell();
+    this.router.navigate(['/login']);
   }
 
   /** Staff codes are three digits: the third one sends it, no extra tap. */

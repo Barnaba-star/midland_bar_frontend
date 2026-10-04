@@ -62,6 +62,7 @@
         <mat-label>{{ 'COMMON.USERNAME' | translate }}</mat-label>
         <mat-icon matPrefix>person</mat-icon>
         <input matInput formControlName="username" type="text" autocomplete="username">
+        <mat-hint>{{ 'LOGIN.STAFF_HINT' | translate }}</mat-hint>
         <mat-error *ngIf="username?.hasError('required') && username?.touched">
           {{ 'LOGIN.USERNAME_REQUIRED' | translate }}
         </mat-error>

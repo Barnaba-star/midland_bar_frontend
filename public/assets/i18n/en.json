@@ -531,7 +531,12 @@
     "PANEL_POINT2": "Stock counts itself down with every sale",
     "PANEL_POINT3": "Every shilling lands in its own bucket",
     "BACK": "Back to home",
-    "BRANCH_NOT_ALLOWED": "You are not set up to work in that branch."
+    "BRANCH_NOT_ALLOWED": "You are not set up to work in that branch.",
+    "STAFF_HINT": "Bar staff: your 3-digit code here, your 4-digit PIN as the password",
+    "STAFF_INVALID": "Wrong staff code or PIN.",
+    "STAFF_LOCKED": "Too many wrong PINs - this code is locked for {{minutes}} minutes.",
+    "STAFF_NO_PIN": "This staff code has no PIN yet. Ask the manager to set one (Staff > Edit).",
+    "STAFF_DEVICE_NOT_REGISTERED": "This device is not set up for staff sign-in yet. A manager or cashier of the bar must sign in on it once first."
   },
   "LANDING": {
     "HERO_BADGE": "POS for bars and grills",
@@ -1596,8 +1601,17 @@
     "DELETE_HAS_OPEN": "This staff member still has unpaid bills or orders not yet received. Close them first.",
     "STAFF_CODE": "Staff code",
     "STAFF_CODE_PH": "3 digits, e.g. 245",
-    "STAFF_CODE_HINT": "Their secret code for the Staff Sell keypad",
-    "STAFF_CODE_FORMAT": "The code must be exactly 3 digits (e.g. 245)"
+    "STAFF_CODE_HINT": "Their code for Staff Sell and for signing in - the PIN below is the secret",
+    "STAFF_CODE_FORMAT": "The code must be exactly 3 digits (e.g. 245)",
+    "PIN": "PIN",
+    "PIN_PH": "4 digits",
+    "PIN_HINT": "Their secret for signing in with the code - only they should know it",
+    "PIN_FORMAT": "The PIN must be exactly 4 digits",
+    "NEW_PIN": "New PIN",
+    "NEW_PIN_PH": "Leave empty to keep the current PIN",
+    "NEW_PIN_HINT": "4 digits - also unlocks a code locked by wrong PINs",
+    "NO_PIN": "No PIN",
+    "NO_PIN_TIP": "Cannot sign in with the code until a PIN is set - Edit to add one"
   },
   "STOCK_FORM": {
     "ADD_BTN": "Add Stock",
@@ -1806,7 +1820,8 @@
     "SEND": "Send to supervisor",
     "ORDER_DRAFT": "Not sent yet",
     "ORDER_SENT": "Waiting for supervisor",
-    "ORDER_REJECTED": "Rejected"
+    "ORDER_REJECTED": "Rejected",
+    "SIGN_OUT": "Sign out"
   },
   "SUPERVISOR_PAGE": {
     "OFFLINE_SEEN": "Looked over",

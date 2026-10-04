@@ -4,8 +4,8 @@
        The only way out is back to POS, which is the manager's. -->
   <header class="module-bar">
     <button type="button" class="exit-btn" (click)="exitToPos()">
-      <mat-icon>arrow_back</mat-icon>
-      <span>{{ 'STAFF_SELL_PAGE.EXIT' | translate }}</span>
+      <mat-icon>{{ ownSession ? 'logout' : 'arrow_back' }}</mat-icon>
+      <span>{{ (ownSession ? 'STAFF_SELL_PAGE.SIGN_OUT' : 'STAFF_SELL_PAGE.EXIT') | translate }}</span>
     </button>
     <div class="module-brand">
       <img src="assets/images/midland.png" alt="" class="module-logo">
@@ -92,10 +92,12 @@
             <button type="button" class="row-action view" (click)="refresh()">
               <mat-icon>refresh</mat-icon>
             </button>
-            <button type="button" class="row-action view" [disabled]="sending" (click)="switchStaff()">
-              <mat-icon>logout</mat-icon>
-              <span>{{ 'STAFF_SELL_PAGE.SWITCH' | translate }}</span>
-            </button>
+            @if (!ownSession) {
+              <button type="button" class="row-action view" [disabled]="sending" (click)="switchStaff()">
+                <mat-icon>logout</mat-icon>
+                <span>{{ 'STAFF_SELL_PAGE.SWITCH' | translate }}</span>
+              </button>
+            }
           </div>
         </div>
 

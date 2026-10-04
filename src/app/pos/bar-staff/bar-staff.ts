@@ -127,6 +127,18 @@ export class BarStaff implements OnInit{
       autoComplete: 'off',
     },
     {
+      // Their secret for signing in with the code: code = who, PIN = proof.
+      name: 'pin',
+      type: 'password',
+      label: 'STAFF_FORM.PIN',
+      placeholder: 'STAFF_FORM.PIN_PH',
+      hint: 'STAFF_FORM.PIN_HINT',
+      required: true,
+      pattern: '^[0-9]{4}$',
+      patternMessage: 'STAFF_FORM.PIN_FORMAT',
+      maxLength: 4,
+    },
+    {
       name: 'firstName',
       type: 'text',
       label: 'STAFF_FORM.FIRST_NAME',
@@ -239,6 +251,15 @@ export class BarStaff implements OnInit{
       type: 'radio',
       options: GENDER_OPTIONS,
     },
+    {
+      name: 'newPin',
+      type: 'password',
+      label: 'STAFF_FORM.NEW_PIN',
+      placeholder: 'STAFF_FORM.NEW_PIN_PH',
+      hint: 'STAFF_FORM.NEW_PIN_HINT',
+      pattern: '^[0-9]{4}$',
+      maxLength: 4,
+    },
   ];
 
   barStaff: BarStaffEntity[] = [];
@@ -277,6 +298,7 @@ export class BarStaff implements OnInit{
   savedData(value: any): void {
     const barStaffDTO: BarStaffDTO = {
       staffCode: String(value.staffCode ?? '').trim(),
+      pin: String(value.pin ?? '').trim(),
       firstName: value.firstName,
       middleName: value.middleName,
       lastName: value.lastName,
@@ -567,6 +589,8 @@ loadStaffPage() {
           dateOfBirth: result.dateOfBirth,
           barCategory: result.barCategory,
           phoneNumber: result.phoneNumber,
+          // Left empty, the PIN stays as it is.
+          pin: String(result.newPin ?? '').trim() || undefined,
         };
         this.barService.saveBarStaff(barStaffDTO).subscribe({
           next: (res) => {

@@ -80,6 +80,10 @@ export const StatusInterceptor: HttpInterceptorFn = (
    */
   const ownsItsMessages =
     req.url.includes('/authentication/login') ||
+    // Staff code sign-in: the login screen words each refusal itself.
+    req.url.includes('/authentication/staffLogin') ||
+    // Registering this device for staff sign-in happens in the background.
+    req.url.includes('/bar/device/register') ||
     // The subscribe dialog shows the reason inside itself; a popup over it
     // said the same thing twice.
     req.url.includes('/authentication/paySubscription') ||

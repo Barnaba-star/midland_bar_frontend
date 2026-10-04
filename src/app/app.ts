@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { AlertComponent } from "./Utils/component/alert/alert";
 import { LoaderComponent } from "./Utils/component/loader/loader";
 import { IconRegistryService } from './Utils/services/icon-registry.service';
+import { TableLabelsService } from './Utils/services/table-labels';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +16,9 @@ import { IconRegistryService } from './Utils/services/icon-registry.service';
 export class App {
   protected readonly title = signal('angular-routes');
   constructor(
-    private iconRegistryService: IconRegistryService
-  ) {}
+    private iconRegistryService: IconRegistryService,
+    tableLabels: TableLabelsService,
+  ) {
+    tableLabels.start();
+  }
 }

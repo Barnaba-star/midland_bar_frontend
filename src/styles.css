@@ -331,6 +331,24 @@ body {
     row-gap: 10px;
   }
 
+  main.content [class*="header"]:has(> .header-right),
+  main.content [class*="filters"] {
+    flex-wrap: wrap !important;
+    row-gap: 10px;
+  }
+
+  main.content [class*="header"] > .header-right {
+    flex: 1 1 100%;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  main.content [class*="filters"] > * {
+    flex: 1 1 140px;
+    min-width: 0;
+  }
+
   main.content [class*="header-actions"] {
     flex: 1 1 100%;
     flex-wrap: wrap;
@@ -341,6 +359,120 @@ body {
   main.content [class*="-search"]:not(input) {
     flex: 1 1 200px;
     min-width: 0;
+  }
+
+  /* Tables become cards: each row a card, each cell a "heading: value"
+     line, so everything is readable without sliding sideways. The heading
+     comes from data-label, which TableLabelsService copies from the <th>.
+     A table that must stay a grid (the heatmap) carries .keep-table. */
+  main.content table:has(> thead):not(.keep-table),
+  .mat-mdc-dialog-surface table:has(> thead):not(.keep-table) {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+  }
+
+  main.content table:has(> thead):not(.keep-table) > thead,
+  .mat-mdc-dialog-surface table:has(> thead):not(.keep-table) > thead {
+    display: none !important;
+  }
+
+  main.content table:has(> thead):not(.keep-table) > tbody,
+  .mat-mdc-dialog-surface table:has(> thead):not(.keep-table) > tbody,
+  main.content table:has(> thead):not(.keep-table) > tfoot,
+  .mat-mdc-dialog-surface table:has(> thead):not(.keep-table) > tfoot {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  main.content table:has(> thead):not(.keep-table) > tbody > tr,
+  .mat-mdc-dialog-surface table:has(> thead):not(.keep-table) > tbody > tr,
+  main.content table:has(> thead):not(.keep-table) > tfoot > tr,
+  .mat-mdc-dialog-surface table:has(> thead):not(.keep-table) > tfoot > tr {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 0 10px !important;
+    padding: 6px 12px !important;
+    border: 1px solid var(--color-border, #e8dcc8) !important;
+    border-radius: 12px !important;
+    background: var(--color-surface, #ffffff) !important;
+    box-shadow: none !important;
+    height: auto !important;
+  }
+
+  main.content table:has(> thead):not(.keep-table) > tbody > tr > td,
+  .mat-mdc-dialog-surface table:has(> thead):not(.keep-table) > tbody > tr > td,
+  main.content table:has(> thead):not(.keep-table) > tfoot > tr > td,
+  .mat-mdc-dialog-surface table:has(> thead):not(.keep-table) > tfoot > tr > td {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    padding: 7px 0 !important;
+    border: 0 !important;
+    border-bottom: 1px dashed var(--color-border, #e8dcc8) !important;
+    text-align: right !important;
+    white-space: normal !important;
+    position: static !important;
+    height: auto !important;
+    box-shadow: none !important;
+    background: transparent !important;
+  }
+
+  main.content table:has(> thead):not(.keep-table) > tbody > tr > td:last-child,
+  .mat-mdc-dialog-surface table:has(> thead):not(.keep-table) > tbody > tr > td:last-child,
+  main.content table:has(> thead):not(.keep-table) > tfoot > tr > td:last-child,
+  .mat-mdc-dialog-surface table:has(> thead):not(.keep-table) > tfoot > tr > td:last-child {
+    border-bottom: 0 !important;
+  }
+
+  main.content table:has(> thead):not(.keep-table) > tbody > tr > td::before,
+  .mat-mdc-dialog-surface table:has(> thead):not(.keep-table) > tbody > tr > td::before,
+  main.content table:has(> thead):not(.keep-table) > tfoot > tr > td::before,
+  .mat-mdc-dialog-surface table:has(> thead):not(.keep-table) > tfoot > tr > td::before {
+    content: attr(data-label);
+    flex: 0 0 auto;
+    max-width: 45%;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-text-muted, #7a6f60);
+  }
+
+  /* No heading (an empty-state row spanning the table, or the "#" column
+     left blank): the cell's own content takes the whole line. */
+  main.content table:has(> thead):not(.keep-table) > tbody > tr > td[data-label=""]::before,
+  .mat-mdc-dialog-surface table:has(> thead):not(.keep-table) > tbody > tr > td[data-label=""]::before,
+  main.content table:has(> thead):not(.keep-table) > tbody > tr > td:not([data-label])::before,
+  .mat-mdc-dialog-surface table:has(> thead):not(.keep-table) > tbody > tr > td:not([data-label])::before {
+    content: none;
+  }
+
+  main.content table:has(> thead):not(.keep-table) > tbody > tr > td[data-label=""],
+  .mat-mdc-dialog-surface table:has(> thead):not(.keep-table) > tbody > tr > td[data-label=""],
+  main.content table:has(> thead):not(.keep-table) > tbody > tr > td:not([data-label]),
+  .mat-mdc-dialog-surface table:has(> thead):not(.keep-table) > tbody > tr > td:not([data-label]) {
+    justify-content: center;
+    text-align: center !important;
+  }
+
+  /* A cell's own block (name + email, buttons) sits on the right as a unit. */
+  main.content table:has(> thead):not(.keep-table) > tbody > tr > td > *,
+  .mat-mdc-dialog-surface table:has(> thead):not(.keep-table) > tbody > tr > td > * {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  main.content table:has(> thead):not(.keep-table) > tbody > tr > td > div,
+  .mat-mdc-dialog-surface table:has(> thead):not(.keep-table) > tbody > tr > td > div {
+    justify-content: flex-end;
   }
 
   /* Page bodies: no desktop gutter on a 390px screen. */

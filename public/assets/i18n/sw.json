@@ -1971,7 +1971,9 @@
     "STATUS_NONE": "Hakuna shift",
     "STATUS_OPEN": "Wazi",
     "STATUS_CLOSED": "Inasubiri cash-up",
-    "STATUS_CASHED_UP": "Cash-up imefanyika"
+    "STATUS_CASHED_UP": "Cash-up imefanyika",
+    "NONE_TITLE_BRANCH": "Hakuna shift iliyo wazi",
+    "NONE_TEXT_BRANCH": "Mauzo yataanza cashier akifungua shift. Bili zako ziko hapa kwa sasa."
   },
   "STOCK_TAKE": {
     "TITLE": "Hesabu ya stock",

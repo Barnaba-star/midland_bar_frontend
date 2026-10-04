@@ -230,22 +230,35 @@ onSubmit(branchUID?: string) {
 }
 
 /**
- * A staff member: their 3-digit code and 4-digit PIN, on a device the branch
- * has set up (a manager or cashier signed in on it before). They land in
- * Staff Sell with their own bills, and the device stays there.
+ * A staff member: their 3-digit code and 4-digit PIN, from any device - their
+ * own phone included. A device a manager or cashier has signed in on sends
+ * its branch ticket, which narrows the code to that branch; otherwise code +
+ * PIN are matched across branches, and if they fit two the person picks one.
+ * They land in Staff Sell with their own bills, and the device stays there.
  */
-private staffSignIn(staffCode: string, pin: string): void {
+private staffSignIn(staffCode: string, pin: string, branchUID?: string): void {
   this.loginError = '';
-  const deviceToken = this.device.token();
-  if (!deviceToken) {
-    this.loginError = this.translate.instant('LOGIN.STAFF_DEVICE_NOT_REGISTERED');
-    this.cdr.detectChanges();
-    return;
-  }
   this.submitting = true;
-  this.http.post<{ token?: string }>(`${this.api}/authentication/staffLogin`, { deviceToken, staffCode, pin }).subscribe({
+  const body = { deviceToken: this.device.token(), staffCode, pin, branchUID: branchUID ?? null };
+  this.http.post<{ token?: string; code?: string; branches?: BranchChoice[] }>(`${this.api}/authentication/staffLogin`, body).subscribe({
     next: (res) => {
       this.submitting = false;
+      if (res.code === 'CHOOSE_BRANCH') {
+        this.dialog.open(BranchChoiceDialogComponent, {
+          width: '460px',
+          maxWidth: '95vw',
+          autoFocus: false,
+          disableClose: true,
+          data: { branches: res.branches ?? [] },
+        }).afterClosed().subscribe((chosen?: string) => {
+          if (chosen) {
+            this.staffSignIn(staffCode, pin, chosen);
+          }
+          this.cdr.detectChanges();
+        });
+        this.cdr.detectChanges();
+        return;
+      }
       clearTimeout(this.idleTimer);
       this.auth.setToken(res.token!);
       // No heartbeat: a staff member is not an account to show as online.
@@ -259,9 +272,7 @@ private staffSignIn(staffCode: string, pin: string): void {
       this.loginError =
         code === 'STAFF_LOCKED' ? this.translate.instant('LOGIN.STAFF_LOCKED', { minutes: body?.minutes ?? 15 })
         : code === 'NO_PIN_SET' ? this.translate.instant('LOGIN.STAFF_NO_PIN')
-        : code === 'DEVICE_NOT_REGISTERED' ? this.translate.instant('LOGIN.STAFF_DEVICE_NOT_REGISTERED')
         : code === 'SUBSCRIPTION_EXPIRED' ? this.translate.instant('LOGIN.EXPIRED_TITLE')
-        : code === 'INVALID_STAFF_LOGIN' ? this.translate.instant('LOGIN.STAFF_INVALID')
         : this.translate.instant('LOGIN.STAFF_INVALID');
       this.auth.removeToken();
       this.submitting = false;

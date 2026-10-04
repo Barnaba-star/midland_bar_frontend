@@ -1971,7 +1971,9 @@
     "STATUS_NONE": "No shift",
     "STATUS_OPEN": "Open",
     "STATUS_CLOSED": "Awaiting cash-up",
-    "STATUS_CASHED_UP": "Cashed up"
+    "STATUS_CASHED_UP": "Cashed up",
+    "NONE_TITLE_BRANCH": "No shift is open",
+    "NONE_TEXT_BRANCH": "Selling starts when the cashier opens a shift. Your bills are here meanwhile."
   },
   "STOCK_TAKE": {
     "TITLE": "Stock count",

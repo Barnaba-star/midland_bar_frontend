@@ -33,6 +33,8 @@ export class ShiftBar implements OnInit {
    * shift isn't open but get no buttons, and nothing shows while it is open.
    */
   @Input() noticeOnly = false;
+  /** A staff member signed in on their own: the shift is the branch's (any cashier's), not this device's. */
+  @Input() branchWide = false;
   @Output() stateChange = new EventEmitter<ShiftState>();
 
   state: ShiftState | null = null;

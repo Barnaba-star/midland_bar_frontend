@@ -16,8 +16,8 @@
           <span class="shift-icon"><mat-icon>lock_clock</mat-icon></span>
           <div class="shift-text">
             <span class="shift-chip"><i></i>{{ 'SHIFT.STATUS_NONE' | translate }}</span>
-            <strong>{{ 'SHIFT.NONE_TITLE' | translate }}</strong>
-            <span>{{ (noticeOnly ? 'SHIFT.NONE_TEXT_STAFF' : 'SHIFT.NONE_TEXT') | translate }}</span>
+            <strong>{{ (branchWide ? 'SHIFT.NONE_TITLE_BRANCH' : 'SHIFT.NONE_TITLE') | translate }}</strong>
+            <span>{{ (branchWide ? 'SHIFT.NONE_TEXT_BRANCH' : noticeOnly ? 'SHIFT.NONE_TEXT_STAFF' : 'SHIFT.NONE_TEXT') | translate }}</span>
           </div>
         }
         @if (!noticeOnly) {

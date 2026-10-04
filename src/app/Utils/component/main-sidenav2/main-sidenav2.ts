@@ -28,7 +28,7 @@ import {
 import { interval, map, Observable, Subscription } from 'rxjs';
 
 import { UserService } from '../../../settings/users-setting/user-service';
-import { environment } from '../../enviroments/environment';
+import { UploadedImageService } from '../../services/uploaded-image';
 import { Authentication } from '../../services/authentication';
 import { IconRegistryService } from '../../services/icon-registry.service';
 import { NotificationService, AppNotification } from '../../services/notification-service';
@@ -187,6 +187,7 @@ export class MainSidenav2 implements OnInit, OnDestroy {
     private systemSettingService: SystemSettingService,
     private alertService: AlertService,
     private cdr: ChangeDetectorRef,
+    private uploadedImage: UploadedImageService,
   ) {
 
     this.notifications$ = this.notificationService.notifications$;
@@ -363,15 +364,10 @@ export class MainSidenav2 implements OnInit, OnDestroy {
 
         if (res.data?.imageName) {
 
-          this.profilePic =
-            `${environment.baseApiUrl}/uploads/${res.data.imageName}`;
-
-          console.log(
-            'Profile Path:',
-            this.profilePic
-          );
-
-          this.cdr.markForCheck();
+          this.uploadedImage.load(res.data.imageName).subscribe((url) => {
+            this.profilePic = url ?? this.profilePic;
+            this.cdr.markForCheck();
+          });
         }
 
       },
@@ -517,8 +513,10 @@ export class MainSidenav2 implements OnInit, OnDestroy {
       next: (res) => {
 
         if (res.data?.logoImage) {
-          this.logoUrl = `${environment.baseApiUrl}/uploads/${res.data.logoImage}`;
-          this.cdr.markForCheck();
+          this.uploadedImage.load(res.data.logoImage).subscribe((url) => {
+            this.logoUrl = url ?? this.logoUrl;
+            this.cdr.markForCheck();
+          });
         }
       },
 
@@ -547,7 +545,10 @@ export class MainSidenav2 implements OnInit, OnDestroy {
         input.value = '';
 
         if (res.data?.logoImage) {
-          this.logoUrl = `${environment.baseApiUrl}/uploads/${res.data.logoImage}`;
+          this.uploadedImage.load(res.data.logoImage).subscribe((url) => {
+            this.logoUrl = url ?? this.logoUrl;
+            this.cdr.markForCheck();
+          });
         }
 
         this.cdr.markForCheck();
@@ -901,9 +902,11 @@ export class MainSidenav2 implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result?.profilePic) {
-        this.profilePic = result.profilePic;
-        this.cdr.markForCheck();
+      if (result?.imageName) {
+        this.uploadedImage.load(result.imageName).subscribe((url) => {
+          this.profilePic = url ?? this.profilePic;
+          this.cdr.markForCheck();
+        });
       }
     });
   }

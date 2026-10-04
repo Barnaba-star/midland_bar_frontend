@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { UserService } from '../../../../settings/users-setting/user-service';
 import { AlertService } from '../../../services/alert';
-import { environment } from '../../../enviroments/environment';
 import { Authentication } from '../../../services/authentication';
 
 export interface ProfileDialogData {
@@ -223,12 +222,8 @@ export class ProfileDialogComponent {
 
         const imageName = res.data?.imageName;
 
-        this.dialogRef.close({
-          imageName,
-          profilePic: imageName
-            ? `${environment.baseApiUrl}/uploads/${imageName}`
-            : null,
-        });
+        // The caller fetches the picture itself (with the token) by name.
+        this.dialogRef.close({ imageName });
       },
 
       error: (error) => {

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
-import { catchError, forkJoin, of } from 'rxjs';
+import { catchError, forkJoin, of, switchMap } from 'rxjs';
 import { SystemSettingService } from '../../../services/system-setting';
-import { environment } from '../../../enviroments/environment';
+import { UploadedImageService } from '../../../services/uploaded-image';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -46,6 +46,7 @@ export class ReceiptDialogComponent implements OnInit {
     private dialogRef: MatDialogRef<ReceiptDialogComponent>,
     private barService: ServiceBarMethod,
     private systemSetting: SystemSettingService,
+    private uploadedImage: UploadedImageService,
     private cdr: ChangeDetectorRef,
   ) {}
 
@@ -57,12 +58,14 @@ export class ReceiptDialogComponent implements OnInit {
     }
     forkJoin({
       all: forkJoin(uids.map((uid) => this.barService.findBillReceipt(uid))),
-      logo: this.systemSetting.getLogo().pipe(catchError(() => of(null))),
+      logo: this.systemSetting.getLogo().pipe(
+        switchMap((res) => this.uploadedImage.load(res?.data?.logoImage)),
+        catchError(() => of(null)),
+      ),
     }).subscribe({
       next: ({ all, logo }) => {
         this.receipts = all.map((res) => res?.data).filter(Boolean);
-        const image = logo?.data?.logoImage;
-        this.logoUrl = image ? `${environment.baseApiUrl}/uploads/${image}` : null;
+        this.logoUrl = logo;
         this.loading = false;
         this.cdr.detectChanges();
         if (this.data.autoPrint) {

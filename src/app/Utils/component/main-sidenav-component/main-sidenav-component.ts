@@ -7,7 +7,7 @@ import { Authentication } from '../../services/authentication';
 import { SidenavItem } from './model';
 import { UserService } from '../../../settings/users-setting/user-service';
 import { error } from 'console';
-import { environment } from '../../enviroments/environment';
+import { UploadedImageService } from '../../services/uploaded-image';
 
 
 @Component({
@@ -36,7 +36,8 @@ export class MainSidenavComponent implements OnInit {
   constructor(
     private router: Router,
     private authDetails: Authentication,
-    private userService:UserService, private cdr:ChangeDetectorRef, private auth:Authentication
+    private userService:UserService, private cdr:ChangeDetectorRef, private auth:Authentication,
+    private uploadedImage:UploadedImageService
   ) {}
 
   ngOnInit(): void {
@@ -57,8 +58,10 @@ export class MainSidenavComponent implements OnInit {
  findUserProfilePic(userUID:string){
   this.userService.findUserProfilePic(userUID).subscribe({
     next:(res)=>{
-      this.profilePic = `${environment.baseApiUrl}/uploads/${res.data.imageName}`;
-      this.cdr.detectChanges();
+      this.uploadedImage.load(res.data?.imageName).subscribe((url) => {
+        this.profilePic = url ?? this.profilePic;
+        this.cdr.detectChanges();
+      });
 
       console.log('Profile Path:', this.profilePic);
 

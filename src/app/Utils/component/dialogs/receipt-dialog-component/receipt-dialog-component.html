@@ -31,7 +31,11 @@
           <img class="r-logo" [src]="logoUrl" alt="" />
         }
         <div class="r-center r-title">{{ receipt.branchName || 'Midland Bar' }}</div>
-        <div class="r-center r-muted">{{ (receipt.status === 'PAID' ? 'RECEIPT.TITLE' : 'RECEIPT.PROFORMA') | translate }}</div>
+        <!-- No "RECEIPT" heading on a paid slip (by request); an unpaid bill
+             still says so, so it is never taken for proof of payment. -->
+        @if (receipt.status !== 'PAID') {
+          <div class="r-center r-muted">{{ 'RECEIPT.PROFORMA' | translate }}</div>
+        }
         <div class="r-rule"></div>
 
         <div class="r-row"><span>{{ 'RECEIPT.BILL' | translate }}</span><span>{{ receipt.code }}</span></div>

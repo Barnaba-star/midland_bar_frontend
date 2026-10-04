@@ -26,6 +26,8 @@ import { TranslatePipe } from '@ngx-translate/core';
 export interface TitleAction {
   icon: string;
   title: string;
+  // Shown instead of title when set; title stays the action's key.
+  label?: string;
   disabled?: boolean;
   roles?: string[];
   badge?: number | string;

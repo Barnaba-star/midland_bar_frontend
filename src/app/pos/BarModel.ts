@@ -25,6 +25,8 @@ export interface BarStaffEntity{
   barCategory?:string;
   description?:string;
   gender?:string;
+  /** Roles of the staff member's login (Manage Staff only); empty = plain staff. */
+  roles?: string[];
 }
 export interface BarServiceDTO{
   uid? : string;
@@ -166,6 +168,8 @@ export interface SalesOpened{
 }
 
 export interface StaffCommissionDTO {
+   /** How it was paid out: cash, mpesa, tigopesa, airtelmoney, halopesa or bank. */
+   method?: string;
      uid?:string;
      amount?: number;
      filterDate?:string;
@@ -226,12 +230,16 @@ export interface UserTableData {
 }
 
 export interface SpendDTO {
+   /** How it was paid out: cash, mpesa, tigopesa, airtelmoney, halopesa or bank. */
+   method?: string;
    uid?: string;
    incomeExpensesUID?:string;
    amount?:number;
    description?:string;
 }
 export interface PayStockAndPurchaseDTO {
+   /** How it was paid out: cash, mpesa, tigopesa, airtelmoney, halopesa or bank. */
+   method?: string;
    uid?: string;
    amount?:number;
    description?:string;

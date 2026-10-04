@@ -1,0 +1,70 @@
+@if (state && !(noticeOnly && state === 'OPEN')) {
+  <div class="shift-bar" [class.none]="state === 'NONE' && !others.length" [class.running]="state === 'NONE' && others.length" [class.open]="state === 'OPEN'" [class.closed]="state === 'CLOSED'">
+    @switch (state) {
+      @case ('NONE') {
+        @if (others.length) {
+          <!-- CEO/manager: someone else has the till open. Seeing only - to sell, they open their own. -->
+          <span class="shift-icon"><mat-icon>storefront</mat-icon></span>
+          <div class="shift-text">
+            <span class="shift-chip"><i></i>{{ 'SHIFT.STATUS_OPEN' | translate }}</span>
+            @for (o of others; track $index) {
+              <strong>{{ 'SHIFT.OPEN_BY' | translate: { name: o.cashierName, time: (o.openedAt | date: 'dd MMM, HH:mm') } }}</strong>
+            }
+            <span>{{ (noticeOnly ? 'SHIFT.NONE_TEXT_STAFF' : 'SHIFT.OWN_TO_SELL') | translate }}</span>
+          </div>
+        } @else {
+          <span class="shift-icon"><mat-icon>lock_clock</mat-icon></span>
+          <div class="shift-text">
+            <span class="shift-chip"><i></i>{{ 'SHIFT.STATUS_NONE' | translate }}</span>
+            <strong>{{ 'SHIFT.NONE_TITLE' | translate }}</strong>
+            <span>{{ (noticeOnly ? 'SHIFT.NONE_TEXT_STAFF' : 'SHIFT.NONE_TEXT') | translate }}</span>
+          </div>
+        }
+        @if (!noticeOnly) {
+          <button type="button" class="shift-btn go" [disabled]="busy" (click)="open()">
+            <mat-icon>play_arrow</mat-icon>{{ 'SHIFT.OPEN_BTN' | translate }}
+          </button>
+        }
+      }
+      @case ('OPEN') {
+        <span class="shift-icon"><mat-icon>schedule</mat-icon></span>
+        <div class="shift-text">
+          <span class="shift-chip"><i></i>{{ 'SHIFT.STATUS_OPEN' | translate }}</span>
+          <strong>{{ 'SHIFT.OPEN_SINCE' | translate: { time: (openedAt | date: 'dd MMM, HH:mm') } }}</strong>
+          @if (confirmingClose) {
+            <span>{{ 'SHIFT.CLOSE_CONFIRM' | translate }}</span>
+          } @else {
+            @for (o of others; track $index) {
+              <span>{{ 'SHIFT.OPEN_BY' | translate: { name: o.cashierName, time: (o.openedAt | date: 'HH:mm') } }}</span>
+            }
+          }
+        </div>
+        @if (confirmingClose) {
+          <button type="button" class="shift-btn ghost" (click)="confirmingClose = false">{{ 'COMMON.CANCEL' | translate }}</button>
+          <button type="button" class="shift-btn stop" [disabled]="busy" (click)="close()">
+            <mat-icon>check</mat-icon>{{ 'SHIFT.CONFIRM_YES' | translate }}
+          </button>
+        } @else {
+          <button type="button" class="shift-btn stop" [disabled]="busy" (click)="close()">
+            <mat-icon>stop</mat-icon>{{ 'SHIFT.CLOSE_BTN' | translate }}
+          </button>
+        }
+      }
+      @case ('CLOSED') {
+        <span class="shift-icon"><mat-icon>fact_check</mat-icon></span>
+        <div class="shift-text">
+          <span class="shift-chip"><i></i>{{ 'SHIFT.STATUS_CLOSED' | translate }}</span>
+          <strong>{{ 'SHIFT.CLOSED_TITLE' | translate }}</strong>
+          <span>{{ (noticeOnly ? 'SHIFT.CLOSED_TEXT_STAFF' : 'SHIFT.CLOSED_TEXT') | translate }}</span>
+        </div>
+        @if (showCashUpLink && !noticeOnly) {
+          <button type="button" class="shift-btn go" (click)="goToCashUp()">
+            <mat-icon>point_of_sale</mat-icon>{{ 'SHIFT.GO_CASHUP' | translate }}
+          </button>
+        }
+      }
+    }
+    <!-- The page's own controls (Sales: bills count and Open bill), on the right. -->
+    <div class="shift-extra"><ng-content></ng-content></div>
+  </div>
+}

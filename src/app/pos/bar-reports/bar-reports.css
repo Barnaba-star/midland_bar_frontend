@@ -7542,3 +7542,180 @@
   text-align: center !important;
   color: #a89c8a !important;
 }
+
+/* =====================================================
+   Income & Other tables: tighter cells, one "Action"
+   heading over both buttons, room at the right edge
+===================================================== */
+
+.income-table-wrapper {
+  padding-right: 16px;
+  box-sizing: border-box;
+}
+
+.income-table {
+  min-width: 880px;
+}
+
+.income-table th,
+.income-table td {
+  padding: 12px 10px;
+}
+
+.income-table th:first-child,
+.income-table td:first-child {
+  padding-left: 18px;
+}
+
+.income-table td:last-child {
+  padding-right: 18px;
+}
+
+/* Long pot names ("Others · Entertainment (music, DJ, football)") wrap instead of widening the table. */
+.income-table td:nth-child(2) {
+  min-width: 170px;
+  max-width: 230px;
+  white-space: normal;
+}
+
+.income-table td:nth-child(2) .income-name strong {
+  line-height: 1.35;
+}
+
+/* The description may wrap; the numbers and buttons never do. */
+.income-table td:nth-child(3) {
+  min-width: 170px;
+  max-width: 230px;
+  white-space: normal;
+  line-height: 1.4;
+}
+
+.income-table .action-column,
+.income-table .action-details {
+  width: 1%;
+  white-space: nowrap;
+  text-align: center !important;
+}
+
+.income-table td.action-column {
+  padding-right: 4px;
+}
+
+.income-table td.action-details {
+  padding-left: 4px;
+}
+
+.income-table .spend-btn,
+.income-table .details-btn {
+  min-width: 0;
+  height: 34px;
+  padding: 0 11px;
+  gap: 5px;
+}
+
+.income-table .spend-btn mat-icon,
+.income-table .details-btn mat-icon {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
+
+.income-table .name-icon {
+  flex-shrink: 0;
+}
+
+
+/* How a payout goes out: the same methods a bill is paid by. */
+.method-select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e3dccb;
+  border-radius: 10px;
+  background: #ffffff;
+  font: inherit;
+  font-size: 14px;
+}
+
+/* Stock & Purchase Pay dialog: never taller than the dialog allows - the middle
+   scrolls and the Cancel / Pay buttons stay in view at the bottom. */
+.stock-payment-dialog {
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.stock-payment-dialog .stock-dialog-actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  flex-shrink: 0;
+}
+
+/* Stock & Purchase table: tighter cells and buttons, room at the right edge,
+   so Pay and Details are not cut off. */
+.stock-table-wrapper {
+  padding-right: 16px;
+  box-sizing: border-box;
+}
+
+.stock-table {
+  min-width: 900px;
+}
+
+.stock-table th,
+.stock-table td {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.stock-table td:last-child,
+.stock-table th:last-child {
+  padding-right: 18px;
+}
+
+.stock-table td.actions-cell {
+  display: table-cell;
+  width: 1%;
+  white-space: nowrap;
+}
+
+.stock-table td.actions-cell .action-btn {
+  width: auto;
+  min-width: 0;
+  height: 34px;
+  padding: 0 12px;
+  margin-right: 6px;
+  gap: 5px;
+}
+
+.stock-table td.actions-cell .action-btn:last-child {
+  margin-right: 0;
+}
+
+.stock-table td.actions-cell .action-btn {
+  vertical-align: middle;
+}
+
+/* Handover shortages in Staff Expenses */
+.loss-amount {
+  color: #c0392b;
+  font-weight: 700;
+}
+
+.loss-none {
+  color: var(--color-text-muted);
+}
+
+.remaining-amount.owes {
+  color: #c0392b;
+}
+
+.status-owes {
+  background: color-mix(in srgb, #c0392b 14%, transparent);
+  color: #c0392b;
+}
+
+.summary-card.loss .summary-icon {
+  color: #c0392b;
+}

@@ -231,3 +231,85 @@
   gap: 8px;
   margin-top: 20px;
 }
+
+/* ---- A-Z grid: the touch screen's way in ---- */
+.letter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(58px, 1fr));
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.letter-btn {
+  position: relative;
+  height: 58px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 24px;
+  font-weight: 800;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background 0.12s ease, transform 0.12s ease;
+}
+
+.letter-btn small {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+
+.letter-btn:not(:disabled):active {
+  transform: scale(0.96);
+}
+
+.letter-btn:not(:disabled):hover {
+  background: color-mix(in srgb, var(--color-accent) 18%, var(--color-surface));
+  border-color: var(--color-accent);
+}
+
+.letter-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+/* Back to the letters, with the one picked */
+.letter-back {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: 48px;
+  margin-bottom: 8px;
+  padding: 0 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--color-accent) 10%, var(--color-surface));
+  color: var(--color-text);
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.letter-current {
+  margin-left: auto;
+  min-width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: var(--color-accent);
+  color: #1d1812;
+  font-size: 18px;
+}
+
+/* Bigger rows to tap on a touch screen */
+@media (pointer: coarse) {
+  .result {
+    min-height: 60px;
+  }
+}

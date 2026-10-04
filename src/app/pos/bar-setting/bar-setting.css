@@ -2538,3 +2538,38 @@ mat-paginator {
   color: #7a6f60;
   font-size: 11px;
 }
+
+/* Services still without a commission split */
+.commission-missing-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--color-accent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-accent) 16%, var(--color-surface));
+  color: var(--color-text);
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.commission-missing-btn mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+  color: var(--color-accent-dark);
+}
+
+.commission-missing-btn.active,
+.commission-missing-btn:hover {
+  background: var(--color-accent);
+  color: #1d1812;
+}
+
+.commission-missing-btn.active mat-icon,
+.commission-missing-btn:hover mat-icon {
+  color: #1d1812;
+}

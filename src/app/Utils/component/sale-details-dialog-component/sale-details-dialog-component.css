@@ -574,3 +574,122 @@
   box-shadow:
     0 0 0 3px rgba(37, 99, 235, 0.10);
 }
+
+/* Taking an item off an open bill */
+.line-remove-btn {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  margin-left: 8px;
+  border: 1px solid color-mix(in srgb, #c0392b 45%, transparent);
+  border-radius: 8px;
+  background: transparent;
+  color: #c0392b;
+  cursor: pointer;
+}
+
+.line-remove-btn:hover {
+  background: #c0392b;
+  color: #fff;
+}
+
+.line-remove-form {
+  margin: -4px 0 10px;
+  padding: 12px;
+  border: 1px solid color-mix(in srgb, #c0392b 40%, var(--color-border));
+  border-radius: 10px;
+  background: color-mix(in srgb, #c0392b 6%, var(--color-surface));
+  color: var(--color-text);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.line-remove-fields {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.line-remove-fields label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.lr-qty {
+  flex: 0 0 auto;
+}
+
+.lr-qty input {
+  width: 80px;
+}
+
+.lr-qty small {
+  font-size: 11px;
+}
+
+.lr-reason {
+  flex: 1 1 220px;
+}
+
+.line-remove-fields input {
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 14px;
+}
+
+.lr-note {
+  margin: 0;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.lr-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.lr-cancel,
+.lr-confirm {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.lr-cancel {
+  border: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text);
+}
+
+.lr-confirm {
+  border: none;
+  background: #c0392b;
+  color: #fff;
+}
+
+.lr-confirm mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
+.lr-confirm:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

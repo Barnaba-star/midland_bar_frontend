@@ -8,8 +8,9 @@
 @switch (selectedSales) {
   @case ('SALES.ADD') {
     <div class="action-container">
-      <div class="bills-header">
-        <p>
+      <!-- Selling needs the login's shift open; the bills count and Open bill share its row. -->
+      <app-shift-bar (stateChange)="shiftState = $event">
+        <p class="bills-inline">
           <span class="bill-count">{{ visibleBills.length }}</span>
           <span class="bill-text">{{ 'SALES_PAGE.BILLS_IN_PROGRESS' | translate }}</span>
           <span class="separator">•</span>
@@ -18,61 +19,11 @@
             {{ getSelectedDate() }}
           </span>
         </p>
-
-        <button class="add-bill-btn" (click)="openNewSales()">
+        <button class="add-bill-btn" [disabled]="shiftState !== 'OPEN'" (click)="openNewSales()">
           <span>+</span>
           {{ 'SALES_PAGE.OPEN_BILL' | translate }}
         </button>
-      </div>
-      <!-- ================= EACH STAFF MEMBER'S DAY ================= -->
-      @if (staffSales.length) {
-        <section class="staff-sales">
-          <div class="staff-sales-head">
-            <h3>{{ 'SALES_PAGE.STAFF_SALES_TITLE' | translate }}</h3>
-            <input type="date" class="staff-sales-date" [value]="staffSalesDate" (change)="onStaffSalesDate($any($event.target).value)" />
-          </div>
-
-          <div class="staff-sales-list">
-            @for (row of staffSales; track row.staffCode ?? '') {
-              <button type="button" class="staff-sales-row"
-                [class.active]="staffFilter === (row.staffCode ?? 'NONE')"
-                (click)="setStaffFilter(row.staffCode ?? 'NONE')">
-                <span class="ss-who">
-                  @if (row.staffCode) {
-                    <b>{{ row.staffCode }}</b> {{ row.staffName }}
-                  } @else {
-                    {{ 'SALES_PAGE.FILTER_NONE' | translate }}
-                  }
-                </span>
-                <span class="ss-total">Tshs {{ row.total | number }}</span>
-                <span class="ss-methods">
-                  @for (m of methodsOf(row); track m.method) {
-                    <span class="ss-method">{{ 'PAY_BILL.METHOD_' + m.method | translate }} <b>{{ m.amount | number }}</b></span>
-                  } @empty {
-                    <span class="ss-none">{{ 'SALES_PAGE.STAFF_SALES_NOTHING_PAID' | translate }}</span>
-                  }
-                </span>
-                @if (row.openBills) {
-                  <span class="ss-open">{{ 'SALES_PAGE.STAFF_SALES_OPEN' | translate: { n: row.openBills } }} · {{ row.openAmount | number }}</span>
-                }
-              </button>
-            }
-
-            <div class="staff-sales-row totals">
-              <span class="ss-who">{{ 'SALES_PAGE.STAFF_SALES_ALL' | translate }}</span>
-              <span class="ss-total">Tshs {{ staffSalesTotals.total | number }}</span>
-              <span class="ss-methods">
-                @for (m of methodsOf(totalsRow()); track m.method) {
-                  <span class="ss-method">{{ 'PAY_BILL.METHOD_' + m.method | translate }} <b>{{ m.amount | number }}</b></span>
-                }
-              </span>
-              @if (staffSalesTotals.openAmount) {
-                <span class="ss-open">{{ 'SALES_PAGE.STAFF_SALES_UNPAID' | translate }} · {{ staffSalesTotals.openAmount | number }}</span>
-              }
-            </div>
-          </div>
-        </section>
-      }
+      </app-shift-bar>
 
       <!-- ================= WHOSE BILLS ================= -->
       @if (staffOptions.length) {
@@ -91,6 +42,21 @@
             <button type="button" class="staff-chip" [class.active]="staffFilter === 'NONE'" (click)="setStaffFilter('NONE')">
               {{ 'SALES_PAGE.FILTER_NONE' | translate }}
               <span class="chip-count">{{ unassignedCount }}</span>
+            </button>
+          }
+
+          <!-- A staff member handing in their money: every bill of theirs, printed in one go. -->
+          @if (staffFilter !== 'ALL' && staffFilter !== 'NONE') {
+            <!-- Handed in less than the bills came to: the shortage comes off their commission. -->
+            <button type="button" class="print-all-btn loss" [disabled]="shiftState !== 'OPEN'" (click)="recordStaffLoss()">
+              <mat-icon>money_off</mat-icon>
+              {{ 'STAFF_LOSS.BUTTON' | translate }}
+            </button>
+          }
+          @if (staffFilter !== 'ALL' && visibleBills.length) {
+            <button type="button" class="print-all-btn" (click)="printStaffBills()">
+              <mat-icon>print</mat-icon>
+              {{ 'SALES_PAGE.PRINT_ALL' | translate: { count: visibleBills.length } }}
             </button>
           }
         </div>
@@ -128,6 +94,16 @@
                     {{ sale.paymentStatus }}
                   </div>
                 </div>
+
+                <!-- Only on this device, never saved: who the customer is, for whoever serves them. -->
+                <label class="bill-nickname">
+                  <mat-icon>sell</mat-icon>
+                  <input type="text" maxlength="40"
+                         [value]="nicknames.get(sale.uid)"
+                         (input)="nicknames.set(sale.uid, $any($event.target).value)"
+                         [placeholder]="'BILL_NICKNAME.PH' | translate"
+                         [attr.aria-label]="'BILL_NICKNAME.LABEL' | translate" />
+                </label>
 
                 <!-- ================= BODY ================= -->
                 <div class="sale-body">

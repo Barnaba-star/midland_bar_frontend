@@ -1,0 +1,130 @@
+.sl {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px;
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.sl-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sl-head h3 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.sl-head p {
+  margin: 2px 0 0;
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.sl-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: color-mix(in srgb, #c0392b 14%, var(--color-surface));
+  color: #c0392b;
+}
+
+.sl-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.sl-field input {
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 15px;
+}
+
+.sl-field input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.sl-field small {
+  font-size: 11px;
+}
+
+.sl-loss {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, #c0392b 40%, var(--color-border));
+  background: color-mix(in srgb, #c0392b 8%, var(--color-surface));
+  color: #c0392b;
+}
+
+.sl-loss strong {
+  font-size: 18px;
+}
+
+.sl-loss.none {
+  border-color: var(--color-border);
+  background: transparent;
+  color: var(--color-text-muted);
+}
+
+.sl-hint {
+  margin: 0;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.sl-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.sl-cancel,
+.sl-save {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.sl-cancel {
+  border: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text);
+}
+
+.sl-save {
+  border: none;
+  background: #c0392b;
+  color: #fff;
+}
+
+.sl-save mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
+.sl-save:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

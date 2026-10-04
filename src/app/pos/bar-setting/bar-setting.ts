@@ -1,3 +1,4 @@
+import { OtherSplit } from '../other-split/other-split';
 import { UnitLabelPipe } from '../../Utils/pipes/stock-packs.pipe';
 import { StockItemDialogComponent, StockItemResult } from '../../Utils/component/dialogs/stock-item-dialog-component/stock-item-dialog-component';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
@@ -90,7 +91,7 @@ const STOCK_UNIT_OPTIONS = [
 @Component({
   selector: 'app-bar-setting',
   imports: [
-    EmptyStateComponent,Title2, MatIconModule, RecordtableComponent, DecimalPipe, UpperCasePipe, CommonModule, FormsModule, MatMenuModule, MatPaginator, MatButtonModule, TranslatePipe, MatTooltipModule, UnitLabelPipe],
+    OtherSplit, EmptyStateComponent,Title2, MatIconModule, RecordtableComponent, DecimalPipe, UpperCasePipe, CommonModule, FormsModule, MatMenuModule, MatPaginator, MatButtonModule, TranslatePipe, MatTooltipModule, UnitLabelPipe],
   templateUrl: './bar-setting.html',
   styleUrl: './bar-setting.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -100,11 +101,28 @@ export class BarSetting implements OnInit{
 // here so `Math.min(...)` in bar-setting.html resolves.
 protected readonly Math = Math;
 
-changePage(arg0: number) {
-throw new Error('Method not implemented.');
+/** The Users table's pager (Next, Previous, a page number). */
+changePage(page: number) {
+  if (page < 0 || page >= this.totalPages || page === this.page) {
+    return;
+  }
+  this.page = page;
+  this.reloadPagedTab();
 }
-changePageSize($event: Event) {
-throw new Error('Method not implemented.');
+
+changePageSize(event: Event) {
+  this.size = Number((event.target as HTMLSelectElement).value) || 5;
+  this.page = 0;
+  this.reloadPagedTab();
+}
+
+/** Users and Services share page/size/totalPages - reload whichever tab is open. */
+private reloadPagedTab() {
+  if (this.selectedSetting === 'SALON.SERVICE') {
+    this.findBarServicePage();
+  } else {
+    this.findUserPageByBranch();
+  }
 }
 
   barServiceInfo:Boolean=false;
@@ -141,6 +159,12 @@ throw new Error('Method not implemented.');
       roles: ['ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'MANAGER', 'CASHIER']
     },
     {
+      // Only the CEO decides what the Other commission pays for.
+      icon: 'pay',
+      title: 'SALON.OTHER_SPLIT',
+      roles: ['CEO']
+    },
+    {
       icon: 'more',
       title: 'SALON.BILL_CODES',
       roles: ['ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'MANAGER', 'CASHIER']
@@ -153,6 +177,10 @@ throw new Error('Method not implemented.');
 
   onAction(action: string) {
   this.selectedSetting = action;
+  // Users and Services share one pager: each tab starts on its first page.
+  if (action === 'SALON.STAFF' || action === 'SALON.SERVICE') {
+    this.page = 0;
+  }
   if (action === 'SALON.BILL_CODES') {
     this.loadBillCodes();
   }
@@ -589,13 +617,34 @@ editingService: any = null;
 splitDraft: Record<string, number> = {};
 savingCommission = false;
 
+/** Services still without a split - they come first in the list and cannot be sold until set. */
+commissionMissingCount = 0;
+/** Show only those. */
+commissionMissingOnly = false;
+
+toggleCommissionMissing() {
+  this.commissionMissingOnly = !this.commissionMissingOnly;
+  this.commissionPage = 0;
+  this.findCommissionPage();
+}
+
 findCommissionPage() {
   this.editingService = null;
   const params: PageableParam = {
     page: this.commissionPage,
     size: this.commissionSize,
     searchParam: this.commissionSearch || undefined,
+    filter: this.commissionMissingOnly ? 'MISSING' : undefined,
   };
+  this.barService.countServicesWithoutCommission().subscribe({
+    next: (res) => {
+      this.commissionMissingCount = Number(res?.data) || 0;
+      if (!this.commissionMissingCount && this.commissionMissingOnly) {
+        this.commissionMissingOnly = false;
+      }
+      this.cdr.detectChanges();
+    },
+  });
   this.barService.findServiceCommissionPage(params).subscribe({
     next: (res) => {
       this.serviceCommissions = res.data ?? [];
@@ -945,16 +994,16 @@ private showActivationCode(data: any, phone?: string): void {
 private getAssignableRoleNames(): string[] {
 
   if (this.visibility.hasRole('ROOT')) {
-    return ['ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'MANAGER', 'CASHIER'];
+    return ['ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'MANAGER', 'SUPERVISOR', 'CASHIER'];
   }
   if (this.visibility.hasRole('DIRECTOR')) {
-    return ['STAFF', 'MANAGER', 'CEO', 'CASHIER'];
+    return ['STAFF', 'MANAGER', 'CEO', 'SUPERVISOR', 'CASHIER'];
   }
   if (this.visibility.hasRole('CEO')) {
-    return ['CASHIER', 'MANAGER'];
+    return ['CASHIER', 'MANAGER', 'SUPERVISOR'];
   }
   if (this.visibility.hasRole('STAFF')) {
-    return ['CEO', 'CASHIER', 'MANAGER'];
+    return ['CEO', 'CASHIER', 'MANAGER', 'SUPERVISOR'];
   }
 
   return [];

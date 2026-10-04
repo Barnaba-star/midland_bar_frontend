@@ -1,0 +1,304 @@
+<div class="cu">
+  <!-- ================= MY OPEN SHIFT ================= -->
+  @if (canClose) {
+    <section class="cu-card">
+      <div class="cu-head">
+        <div class="cu-head-icon"><mat-icon>point_of_sale</mat-icon></div>
+        <div>
+          <h3>{{ 'CASH_UP.MY_SHIFT' | translate }}</h3>
+          @if (shiftState === 'CLOSED' && from) {
+            <p>{{ 'CASH_UP.PERIOD' | translate: { from: (from | date: 'dd MMM, HH:mm'), to: (to | date: 'dd MMM, HH:mm'), bills: billCount } }}</p>
+          }
+        </div>
+      </div>
+
+      @if (loadingShift) {
+        <p class="muted">{{ 'OTHER_SPLIT.LOADING' | translate }}</p>
+      } @else if (shiftState !== 'CLOSED') {
+        <!-- Open a shift to sell, close it to count it here. -->
+        <app-shift-bar [area]="area" [showCashUpLink]="false" (stateChange)="onShiftState($event)"></app-shift-bar>
+      } @else {
+        <table class="cu-table">
+          <thead>
+            <tr>
+              <th>{{ 'CASH_UP.COL_METHOD' | translate }}</th>
+              <th class="num">{{ 'CASH_UP.COL_TAKINGS' | translate }}</th>
+              <th class="num">{{ 'CASH_UP.COL_PAYOUTS' | translate }}</th>
+              <th class="num">{{ 'CASH_UP.COL_EXPECTED' | translate }}</th>
+              <th class="num">{{ 'CASH_UP.COL_COUNTED' | translate }}</th>
+              <th class="num">{{ 'CASH_UP.COL_VARIANCE' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (l of lines; track l.method) {
+              <tr>
+                <td>
+                  <strong>{{ 'PAY_BILL.METHOD_' + l.method | translate }}</strong>
+                  @if (l.bills) { <small class="muted">{{ 'CASH_UP.BILLS' | translate: { count: l.bills } }}</small> }
+                </td>
+                <td class="num">{{ l.takings | number }}</td>
+                <td class="num">
+                  @if (l.payouts) { <span class="neg">−{{ l.payouts | number }}</span> } @else { <span class="muted">-</span> }
+                </td>
+                <td class="num"><strong>{{ l.expected | number }}</strong></td>
+                <td class="num">
+                  <input type="number" min="0" step="1" [(ngModel)]="l.counted" [name]="'c-' + l.method"
+                         [placeholder]="'CASH_UP.COUNT_PH' | translate" />
+                </td>
+                <td class="num">
+                  @if (variance(l) !== null) {
+                    <span class="pill" [class.short]="variance(l)! < 0" [class.over]="variance(l)! > 0" [class.even]="variance(l) === 0">
+                      {{ variance(l)! > 0 ? '+' : '' }}{{ variance(l) | number }}
+                    </span>
+                  } @else {
+                    <span class="muted">-</span>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+          <tfoot>
+            <tr>
+              <td>{{ 'OTHER_SPLIT.TOTAL' | translate }}</td>
+              <td class="num">{{ takingsTotal | number }}</td>
+              <td class="num">@if (payoutsTotal) { <span class="neg">−{{ payoutsTotal | number }}</span> } @else { - }</td>
+              <td class="num">{{ expectedTotal | number }}</td>
+              <td class="num">{{ countedTotal | number }}</td>
+              <td class="num">
+                @if (anyCounted) {
+                  <span class="pill" [class.short]="countedTotal - expectedTotal < 0" [class.over]="countedTotal - expectedTotal > 0" [class.even]="countedTotal === expectedTotal">
+                    {{ countedTotal - expectedTotal > 0 ? '+' : '' }}{{ countedTotal - expectedTotal | number }}
+                  </span>
+                } @else {
+                  <span class="muted">-</span>
+                }
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+
+        <!-- Payouts recorded in the system during this shift: read from those records, not typed here. -->
+        <div class="cu-payouts">
+          <div class="cu-payouts-head">
+            <mat-icon>lock</mat-icon>
+            <strong>{{ 'CASH_UP.PAYOUTS_TITLE' | translate }}</strong>
+            <span class="muted">{{ 'CASH_UP.PAYOUTS_DESC' | translate }}</span>
+          </div>
+          @if (payouts.length === 0) {
+            <p class="muted">{{ 'CASH_UP.PAYOUTS_NONE' | translate }}</p>
+          } @else {
+            @for (o of payouts; track $index) {
+              <div class="cu-payout">
+                <span class="muted">{{ o.paidAt | date: 'HH:mm' }}</span>
+                <span><strong>{{ o.pot | potName }}</strong>@if (o.paidTo) { · {{ o.paidTo }} }</span>
+                <span class="muted">{{ 'PAY_BILL.METHOD_' + o.method | translate }} · {{ o.description }}</span>
+                <span class="num neg">−{{ o.amount | number }}</span>
+              </div>
+            }
+            <div class="cu-payout total">
+              <span></span><span>{{ 'OTHER_SPLIT.TOTAL' | translate }}</span><span></span>
+              <span class="num neg">−{{ payoutsTotal | number }}</span>
+            </div>
+          }
+        </div>
+
+        <div class="cu-foot">
+          <textarea rows="2" maxlength="500" [(ngModel)]="note" name="note" [placeholder]="'CASH_UP.NOTE_PH' | translate"></textarea>
+          @if (!confirming) {
+            <button type="button" class="btn-close" [disabled]="!ready" (click)="submit()">
+              <mat-icon>lock_clock</mat-icon>{{ (submitting ? 'CASH_UP.CLOSING' : 'CASH_UP.CLOSE_BTN') | translate }}
+            </button>
+          }
+        </div>
+        @if (confirming) {
+          <div class="cu-confirm">
+            <mat-icon>help</mat-icon>
+            <span>{{ 'CASH_UP.CONFIRM' | translate: { expected: (expectedTotal | number), counted: (countedTotal | number) } }}</span>
+            <button type="button" class="btn-ghost" (click)="confirming = false">{{ 'COMMON.CANCEL' | translate }}</button>
+            <button type="button" class="btn-close" (click)="submit()"><mat-icon>check</mat-icon>{{ 'CASH_UP.CONFIRM_BTN' | translate }}</button>
+          </div>
+        }
+        <p class="muted small">{{ 'CASH_UP.HINT' | translate }}</p>
+      }
+    </section>
+  }
+
+  <!-- ================= SHIFTS ================= -->
+  <section class="cu-card">
+    <div class="cu-head">
+      <div class="cu-head-icon alt"><mat-icon>schedule</mat-icon></div>
+      <div>
+        <h3>{{ 'SHIFT.LIST_TITLE' | translate }}</h3>
+        <p>{{ 'SHIFT.LIST_DESC' | translate }}</p>
+      </div>
+    </div>
+    @if (shifts.length === 0) {
+      <p class="muted">{{ 'SHIFT.EMPTY' | translate }}</p>
+    } @else {
+      <div class="cu-scroll">
+        <table class="cu-table">
+          <thead>
+            <tr>
+              <th>{{ 'CASH_UP.COL_CASHIER' | translate }}</th>
+              <th>{{ 'SHIFT.COL_OPENED' | translate }}</th>
+              <th>{{ 'SHIFT.COL_CLOSED' | translate }}</th>
+              <th>{{ 'SHIFT.COL_DURATION' | translate }}</th>
+              <th>{{ 'SHIFT.COL_STATUS' | translate }}</th>
+              <th class="num">{{ 'CASH_UP.COL_EXPECTED' | translate }}</th>
+              <th class="num">{{ 'CASH_UP.COL_COUNTED' | translate }}</th>
+              <th class="num">{{ 'CASH_UP.COL_VARIANCE' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (s of shifts; track s.uid) {
+              <tr>
+                <td><strong>{{ s.cashierName || s.cashierEmail }}</strong></td>
+                <td>{{ s.openedAt | date: 'dd MMM, HH:mm' }}</td>
+                <td>@if (s.closedAt) { {{ s.closedAt | date: 'dd MMM, HH:mm' }} } @else { <span class="muted">-</span> }</td>
+                <td>{{ duration(s.minutes) }}</td>
+                <td><span class="shift-status" [attr.data-status]="s.status">{{ 'SHIFT.STATUS_' + s.status | translate }}</span></td>
+                <td class="num">@if (s.expectedTotal !== null) { {{ s.expectedTotal | number }} } @else { <span class="muted">-</span> }</td>
+                <td class="num">@if (s.countedTotal !== null) { {{ s.countedTotal | number }} } @else { <span class="muted">-</span> }</td>
+                <td class="num">
+                  @if (s.variance !== null) {
+                    <span class="pill" [class.short]="s.variance < 0" [class.over]="s.variance > 0" [class.even]="s.variance === 0">
+                      {{ s.variance > 0 ? '+' : '' }}{{ s.variance | number }}
+                    </span>
+                  } @else {
+                    <span class="muted">-</span>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+
+  <!-- ================= TAKEN OFF BILLS ================= -->
+  <section class="cu-card">
+    <div class="cu-head between">
+      <div class="cu-head-left">
+        <div class="cu-head-icon alt"><mat-icon>remove_shopping_cart</mat-icon></div>
+        <div>
+          <h3>{{ 'BILL_EDIT.LIST_TITLE' | translate }}</h3>
+          <p>{{ 'BILL_EDIT.LIST_DESC' | translate }}</p>
+        </div>
+      </div>
+      @if (voids.length) {
+        <span class="pill short">−{{ voidsTotal | number }}</span>
+      }
+    </div>
+    @if (voids.length === 0) {
+      <p class="muted">{{ 'BILL_EDIT.EMPTY' | translate }}</p>
+    } @else {
+      <div class="cu-scroll">
+        <table class="cu-table">
+          <thead>
+            <tr>
+              <th>{{ 'BILL_EDIT.COL_WHEN' | translate }}</th>
+              <th>{{ 'RECEIPT.BILL' | translate }}</th>
+              <th>{{ 'BILL_EDIT.COL_ITEM' | translate }}</th>
+              <th class="num">{{ 'OTHER_SPLIT.TOTAL' | translate }}</th>
+              <th>{{ 'BILL_EDIT.COL_BY' | translate }}</th>
+              <th>{{ 'BILL_EDIT.COL_REASON' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (v of voids; track v.uid) {
+              <tr>
+                <td>{{ v.voidedAt | date: 'dd MMM, HH:mm' }}</td>
+                <td><strong>{{ v.salesCode }}</strong>@if (v.staffName) { <small class="muted"> · {{ v.staffName }}</small> }</td>
+                <td>{{ v.quantity }} × {{ v.serviceName }}</td>
+                <td class="num"><span class="neg">−{{ v.amount | number }}</span></td>
+                <td>{{ v.voidedByName || v.voidedBy }}</td>
+                <td>{{ v.reason }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+
+  <!-- ================= CLOSED CASH-UPS ================= -->
+  <section class="cu-card">
+    <div class="cu-head between">
+      <div class="cu-head-left">
+        <div class="cu-head-icon alt"><mat-icon>history</mat-icon></div>
+        <div>
+          <h3>{{ 'CASH_UP.HISTORY' | translate }}</h3>
+          <p>{{ 'CASH_UP.HISTORY_DESC' | translate }}</p>
+        </div>
+      </div>
+      <div class="cu-filters">
+        @for (f of filters; track f.key) {
+          <button type="button" [class.active]="filter === f.key" (click)="loadHistory(f.key)">{{ f.label | translate }}</button>
+        }
+      </div>
+    </div>
+
+    @if (history.length === 0) {
+      <p class="muted empty">{{ 'CASH_UP.EMPTY' | translate }}</p>
+    } @else {
+      <div class="cu-sum">
+        <span>{{ 'CASH_UP.COUNT_LABEL' | translate: { count: history.length } }}</span>
+        <span class="pill" [class.short]="historyVariance < 0" [class.over]="historyVariance > 0" [class.even]="historyVariance === 0">
+          {{ 'CASH_UP.NET_VARIANCE' | translate }}: {{ historyVariance > 0 ? '+' : '' }}{{ historyVariance | number }}
+        </span>
+      </div>
+      <table class="cu-table">
+        <thead>
+          <tr>
+            <th>{{ 'CASH_UP.COL_CASHIER' | translate }}</th>
+            <th>{{ 'CASH_UP.COL_SHIFT' | translate }}</th>
+            <th class="num">{{ 'CASH_UP.COL_BILLS' | translate }}</th>
+            <th class="num">{{ 'CASH_UP.COL_EXPECTED' | translate }}</th>
+            <th class="num">{{ 'CASH_UP.COL_COUNTED' | translate }}</th>
+            <th class="num">{{ 'CASH_UP.COL_VARIANCE' | translate }}</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (c of history; track c.uid) {
+            <tr class="row" (click)="toggle(c)">
+              <td><strong>{{ c.cashierName || c.cashierEmail }}</strong></td>
+              <td>{{ c.periodFrom | date: 'dd MMM HH:mm' }} → {{ c.periodTo | date: 'HH:mm' }}</td>
+              <td class="num">{{ c.billCount }}</td>
+              <td class="num">{{ c.expectedTotal | number }}</td>
+              <td class="num">{{ c.countedTotal | number }}</td>
+              <td class="num">
+                <span class="pill" [class.short]="c.variance < 0" [class.over]="c.variance > 0" [class.even]="c.variance === 0">
+                  {{ c.variance > 0 ? '+' : '' }}{{ c.variance | number }}
+                </span>
+              </td>
+              <td class="num"><mat-icon class="chev">{{ openUid === c.uid ? 'expand_less' : 'expand_more' }}</mat-icon></td>
+            </tr>
+            @if (openUid === c.uid) {
+              <tr class="detail">
+                <td colspan="7">
+                  <div class="detail-box">
+                    @for (l of openLines; track l.method) {
+                      <div class="detail-line">
+                        <span>{{ 'PAY_BILL.METHOD_' + l.method | translate }}</span>
+                        <span>{{ 'CASH_UP.COL_TAKINGS' | translate }}: {{ l.takings | number }}@if (l.payouts) { <span class="neg"> −{{ l.payouts | number }}</span> } = {{ l.expected | number }}</span>
+                        <span>{{ 'CASH_UP.COL_COUNTED' | translate }}: {{ l.counted | number }}</span>
+                        <span class="pill" [class.short]="l.variance < 0" [class.over]="l.variance > 0" [class.even]="l.variance === 0">
+                          {{ l.variance > 0 ? '+' : '' }}{{ l.variance | number }}
+                        </span>
+                      </div>
+                    }
+                    @if (c.note) {
+                      <p class="detail-note"><mat-icon>sticky_note_2</mat-icon>{{ c.note }}</p>
+                    }
+                  </div>
+                </td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    }
+  </section>
+</div>

@@ -125,3 +125,21 @@ mat-form-field {
   display: block;
 }
 
+
+
+/* How it was paid: a plain select, styled like the other fields. */
+select.method-select {
+  height: 52px;
+  padding: 0 14px;
+  border: 1px solid #d9cfbd;
+  border-radius: 10px;
+  background: #ffffff;
+  font: inherit;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+select.method-select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}

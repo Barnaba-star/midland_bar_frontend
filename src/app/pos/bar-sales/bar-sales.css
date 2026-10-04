@@ -4154,149 +4154,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   font-weight: 600;
 }
 
-/* ============ Each staff member's day ============ */
-
-.staff-sales {
-  margin: 0 0 14px;
-  padding: 14px 16px;
-  border: 1px solid #e8dcc8;
-  border-radius: 16px;
-  background: #fffdf9;
-}
-
-.staff-sales-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 10px;
-}
-
-.staff-sales-head h3 {
-  margin: 0;
-  font-family: 'Bebas Neue', 'Oswald', Impact, sans-serif;
-  font-size: 24px;
-  font-weight: 400;
-  letter-spacing: 0.03em;
-  line-height: 1;
-  text-transform: uppercase;
-  color: #1d1812;
-}
-
-.staff-sales-date {
-  height: 34px;
-  padding: 0 10px;
-  border: 1px solid #e8dcc8;
-  border-radius: 10px;
-  background: #faf6ef;
-  color: #2b2118;
-  font: inherit;
-  font-size: 13px;
-}
-
-.staff-sales-list {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.staff-sales-row {
-  display: grid;
-  grid-template-columns: minmax(140px, 1.1fr) minmax(110px, 0.7fr) 2.4fr auto;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid transparent;
-  border-radius: 12px;
-  background: #faf6ef;
-  color: #2b2118;
-  font: inherit;
-  font-size: 13px;
-  text-align: left;
-  cursor: pointer;
-}
-
-.staff-sales-row:hover {
-  border-color: #e8dcc8;
-}
-
-.staff-sales-row.active {
-  border-color: #f5a524;
-  background: #fdf1dc;
-}
-
-.staff-sales-row.totals {
-  background: #2b2118;
-  color: #f6ecdc;
-  cursor: default;
-}
-
-.ss-who b {
-  color: #b86e00;
-}
-
-.ss-total {
-  font-family: 'Bebas Neue', 'Oswald', Impact, sans-serif;
-  font-size: 22px;
-  letter-spacing: 0.02em;
-  line-height: 1;
-}
-
-.totals .ss-total {
-  color: #f5a524;
-}
-
-.ss-methods {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.ss-method {
-  padding: 3px 8px;
-  border-radius: 999px;
-  background: #f1e8d8;
-  color: #4a3f33;
-  font-size: 12px;
-  white-space: nowrap;
-}
-
-.totals .ss-method {
-  background: rgba(255, 236, 205, 0.12);
-  color: #f6ecdc;
-}
-
-.ss-none {
-  color: #a89c8a;
-  font-size: 12px;
-}
-
-.ss-open {
-  padding: 3px 8px;
-  border-radius: 999px;
-  background: #fff4e5;
-  color: #b54708;
-  font-size: 12px;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.totals .ss-open {
-  background: rgba(245, 165, 36, 0.18);
-  color: #ffc861;
-}
-
-@media (max-width: 760px) {
-  .staff-sales-row {
-    grid-template-columns: 1fr auto;
-  }
-
-  .ss-methods {
-    grid-column: 1 / -1;
-  }
-}
-
 /* Delete - only on a bill still at zero: a strong red button, centred between the code and the status. */
 .bill-delete-btn {
   display: inline-flex;
@@ -4331,4 +4188,171 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   font-size: 16px;
   width: 16px;
   height: 16px;
+}
+
+/* Bills count beside the shift, in the shift bar's row: a compact stat
+   that follows the theme (the standalone header's hard colours don't). */
+app-shift-bar .bills-inline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 0;
+}
+
+app-shift-bar .bill-count {
+  min-width: 38px;
+  height: 38px;
+  font-size: 16px;
+  background: var(--color-primary);
+  color: var(--color-surface);
+  box-shadow: none;
+}
+
+app-shift-bar .bill-text {
+  color: var(--color-text);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+app-shift-bar .separator {
+  color: var(--color-border);
+  margin: 0;
+}
+
+app-shift-bar .bill-date {
+  background: color-mix(in srgb, var(--color-accent) 12%, var(--color-surface));
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+app-shift-bar .bill-date i {
+  color: var(--color-text-muted);
+}
+
+/* Inside the shift bar the button sits in a row, not as a tall card. */
+app-shift-bar .add-bill-btn {
+  width: auto;
+  height: 40px;
+  padding: 0 16px 0 6px;
+  border-radius: 10px;
+  background: var(--color-accent);
+  color: #1d1812;
+}
+
+app-shift-bar .add-bill-btn span {
+  width: 28px;
+  height: 28px;
+  background: rgba(29, 24, 18, 0.15);
+  color: #1d1812;
+}
+
+app-shift-bar .add-bill-btn:not(:disabled):hover {
+  background: var(--color-accent-dark);
+  box-shadow: var(--shadow-sm);
+}
+
+app-shift-bar .add-bill-btn:not(:disabled):hover span {
+  background: #1d1812;
+  color: var(--color-accent);
+}
+
+.add-bill-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* A nickname for the customer - kept on this device only. */
+.bill-nickname {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 8px 0;
+  padding: 0 10px;
+  height: 36px;
+  border: 1px dashed var(--color-border);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--color-accent) 6%, var(--color-surface));
+  color: var(--color-text-muted);
+  cursor: text;
+}
+
+.bill-nickname:focus-within {
+  border-style: solid;
+  border-color: var(--color-accent);
+}
+
+.bill-nickname mat-icon {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
+
+.bill-nickname input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.bill-nickname input::placeholder {
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
+
+/* Print every bill of the chosen staff member - sits at the end of the chips. */
+.print-all-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--color-accent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-accent) 14%, var(--color-surface));
+  color: var(--color-text);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.print-all-btn mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
+.print-all-btn:hover {
+  background: var(--color-accent);
+  color: #1d1812;
+}
+
+.print-all-btn.loss {
+  margin-left: 0;
+  border-color: color-mix(in srgb, #c0392b 55%, transparent);
+  background: transparent;
+  color: #c0392b;
+}
+
+.print-all-btn.loss:not(:disabled):hover {
+  background: #c0392b;
+  color: #fff;
+}
+
+.print-all-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* The handover buttons sit together at the end of the chips. */
+.staff-filter .print-all-btn:first-of-type {
+  margin-left: auto;
 }

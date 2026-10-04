@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { SellableItems } from '../../Utils/services/sellable-items';
+import { OfflineService } from '../../Utils/offline/offline.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { BillNicknames } from '../../Utils/services/bill-nicknames';
+import { ShiftBar } from '../shift-bar/shift-bar';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild, inject, DestroyRef } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -8,8 +13,6 @@ import { Router } from '@angular/router';
 import { EmptyStateComponent } from '../../Utils/component/empty-state/empty-state';
 import { SaleItemDialogComponent, SaleItemResult } from '../../Utils/component/dialogs/sale-item-dialog-component/sale-item-dialog-component';
 import { SaleDetailsDialogComponent } from '../../Utils/component/sale-details-dialog-component/sale-details-dialog-component';
-import { PayBillDialogComponent, PayBillResult } from '../../Utils/component/dialogs/pay-bill-dialog-component/pay-bill-dialog-component';
-import { ReceiptDialogComponent } from '../../Utils/component/dialogs/receipt-dialog-component/receipt-dialog-component';
 import { ConfirmDeleteDialogComponent } from '../../Utils/component/dialogs/confirm-delete-dialog-component/confirm-delete-dialog-component';
 import { AlertService } from '../../Utils/services/alert';
 import { ServiceBarMethod } from '../service-bar-method';
@@ -37,7 +40,7 @@ import { SalesOpened, StaffOrder, StaffSellStaff } from '../BarModel';
  */
 @Component({
   selector: 'app-bar-staff-sell',
-  imports: [EmptyStateComponent, MatIconModule, FormsModule, DecimalPipe, TranslatePipe],
+  imports: [ShiftBar, EmptyStateComponent, MatIconModule, FormsModule, DecimalPipe, TranslatePipe],
   templateUrl: './bar-staff-sell.html',
   styleUrl: './bar-staff-sell.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -59,6 +62,11 @@ export class BarStaffSell implements OnInit, OnDestroy {
   looking = false;
   staff: StaffSellStaff | null = null;
   bills: SalesOpened[] = [];
+  /** This device's nicknames for open bills - never saved to the backend. */
+  readonly nicknames = inject(BillNicknames);
+  private offline = inject(OfflineService);
+  private sellable = inject(SellableItems);
+  private destroyRef = inject(DestroyRef);
   /** Lines on each bill, keyed by bill uid. */
   billLines: Partial<Record<string, any[]>> = {};
   busyBill: string | null = null;
@@ -74,7 +82,13 @@ export class BarStaffSell implements OnInit, OnDestroy {
   ngOnInit(): void {
     // From here on the till stays in Staff Sell until a manager lets it out.
     lockStaffSell();
-    setTimeout(() => this.codeInput?.nativeElement.focus());
+    // The add-item list, loaded before the first tap.
+    this.sellable.prefetch();
+    // Orders and bills made offline have reached the server: read them again.
+    this.offline.synced.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.refresh(true));
+    if (!this.touch) {
+      setTimeout(() => this.codeInput?.nativeElement.focus());
+    }
   }
 
   /** A bill opened by mistake, still at zero - asked once, then gone and its code free again. */
@@ -100,6 +114,7 @@ export class BarStaffSell implements OnInit, OnDestroy {
           this.busyBill = null;
           if (res?.data) {
             this.bills = this.bills.filter((b) => b.uid !== bill.uid);
+            this.nicknames.remove(bill.uid);
             this.alertService.show('success', this.translate.instant('SALES_PAGE.BILL_DELETED', { code: bill.salesCode }));
           }
           this.cdr.markForCheck();
@@ -174,6 +189,47 @@ export class BarStaffSell implements OnInit, OnDestroy {
     });
   }
 
+  /** Staff codes are three digits: the third one sends it, no extra tap. */
+  private static readonly CODE_LENGTH = 3;
+  /** The on-screen keypad, in phone order. */
+  readonly keypad = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'C', '0', '<'];
+  /** A touch screen: the code box is read-only so the device keyboard stays away - the keypad types. */
+  readonly touch = typeof window !== 'undefined' && !!window.matchMedia?.('(pointer: coarse)').matches;
+
+  press(digit: string): void {
+    if (this.looking || this.code.length >= 10) {
+      return;
+    }
+    this.code += digit;
+    this.afterCodeChange();
+  }
+
+  backspace(): void {
+    this.code = this.code.slice(0, -1);
+    this.cdr.markForCheck();
+  }
+
+  clearCode(): void {
+    this.code = '';
+    this.cdr.markForCheck();
+  }
+
+  /** Typed on a real keyboard: digits only, and the third sends it too. */
+  onCodeTyped(value: string): void {
+    const digits = String(value ?? '').replace(/\D/g, '');
+    if (digits !== value) {
+      this.code = digits;
+    }
+    this.afterCodeChange();
+  }
+
+  private afterCodeChange(): void {
+    this.cdr.markForCheck();
+    if (this.code.length === BarStaffSell.CODE_LENGTH) {
+      this.findStaff();
+    }
+  }
+
   /** Code in: who is it, and what are they holding. None held - open one. */
   findStaff(): void {
     const code = this.code.trim();
@@ -185,7 +241,9 @@ export class BarStaffSell implements OnInit, OnDestroy {
       next: (res) => {
         this.looking = false;
         if (!res?.data) {
-          // The backend's message ("No staff member has code ...") is shown by the interceptor.
+          // The backend's message ("No staff member has code ...") is shown by the
+          // interceptor; the box empties for another try.
+          this.code = '';
           this.cdr.markForCheck();
           return;
         }
@@ -249,7 +307,9 @@ export class BarStaffSell implements OnInit, OnDestroy {
     this.billLines = {};
     this.code = '';
     this.cdr.markForCheck();
-    setTimeout(() => this.codeInput?.nativeElement.focus());
+    if (!this.touch) {
+      setTimeout(() => this.codeInput?.nativeElement.focus());
+    }
   }
 
   /** Reload this staff member's bills - after a payment, or to pick up changes from the Sales page. */
@@ -298,6 +358,9 @@ export class BarStaffSell implements OnInit, OnDestroy {
     }
     this.dialog.open(SaleItemDialogComponent, {
       width: '560px',
+      // No opening animation: at a busy till it has to be there at once.
+      enterAnimationDuration: 0,
+      exitAnimationDuration: 0,
       maxWidth: '95vw',
       autoFocus: false,
       data: { billCode: bill.salesCode },
@@ -341,7 +404,10 @@ export class BarStaffSell implements OnInit, OnDestroy {
     });
   }
 
-  /** Look inside the bill; Lipa and Print live in there, as on the Sales page. */
+  /**
+   * Look inside the bill and print it. Staff only sell here: paying (and
+   * taking items off) happens at POS > Sales when they hand the money over.
+   */
   viewBill(bill: SalesOpened): void {
     if (!bill.uid) {
       return;
@@ -357,56 +423,9 @@ export class BarStaffSell implements OnInit, OnDestroy {
           maxHeight: '90vh',
           panelClass: 'sale-details-dialog',
           autoFocus: false,
-          data: { sale: bill, services, showPayment: false, canPay: true },
-        }).afterClosed().subscribe((result) => {
-          if (result?.action === 'PAY') {
-            this.pay(bill, services);
-          }
-        });
+          data: { sale: bill, services, showPayment: false, canPay: false },
+        }).afterClosed().subscribe(() => this.cdr.markForCheck());
       },
-    });
-  }
-
-  private pay(bill: SalesOpened, lines: any[]): void {
-    const total = lines.reduce((sum: number, l: any) => sum + (Number(l.lineTotal ?? l.price) || 0), 0);
-    if (!lines.length || total <= 0) {
-      this.alertService.show('error', this.translate.instant('PAY_BILL.EMPTY'));
-      return;
-    }
-    this.dialog.open(PayBillDialogComponent, {
-      width: '640px',
-      maxWidth: '95vw',
-      autoFocus: false,
-      data: { code: bill.salesCode, total, lines },
-    }).afterClosed().subscribe((result?: PayBillResult) => {
-      if (!result) {
-        return;
-      }
-      this.busyBill = bill.uid!;
-      this.cdr.markForCheck();
-      this.barService.payBill({ salesOpenedUID: bill.uid!, payments: result.payments }).subscribe({
-        next: (paid) => {
-          this.busyBill = null;
-          if (paid?.data) {
-            // Paid bills leave the list, as on the Sales page.
-            this.bills = this.bills.filter((b) => b.uid !== bill.uid);
-            const { [bill.uid!]: _, ...rest } = this.billLines;
-            this.billLines = rest;
-            this.alertService.show('success', this.translate.instant('PAY_BILL.DONE', { code: bill.salesCode }));
-            this.dialog.open(ReceiptDialogComponent, {
-              width: '400px',
-              maxWidth: '95vw',
-              autoFocus: false,
-              data: { billUid: bill.uid },
-            });
-          }
-          this.cdr.markForCheck();
-        },
-        error: () => {
-          this.busyBill = null;
-          this.cdr.markForCheck();
-        },
-      });
     });
   }
 

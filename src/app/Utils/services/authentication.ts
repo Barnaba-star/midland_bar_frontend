@@ -42,6 +42,9 @@ setToken(token: string): void {
 
 
 removeToken(): void {
+  // Signed out (or thrown out): the 30-second heartbeat would otherwise go on
+  // without a token and come back "session expired" over the login screen.
+  this.stopHeartbeat();
   this.cookieService.delete('bar_jwt_token', '/');
   this.clearRoleCaches();
 }
@@ -61,6 +64,19 @@ getUsername(): string {
   const username = decodedToken.sub;
   console.log('Username:', username);
   return username;
+}
+
+/** Main office (STAFF) helping in a customer's branch: they may look, not change anything. */
+isViewOnly(): boolean {
+  const token = this.getToken();
+  if (!token) {
+    return false;
+  }
+  try {
+    return this.jwtHelper.decodeToken(token)?.viewOnly === true;
+  } catch {
+    return false;
+  }
 }
 
 getFullName(): string {

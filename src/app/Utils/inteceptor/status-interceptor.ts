@@ -1,3 +1,5 @@
+import { Authentication } from '../services/authentication';
+import { OFFLINE_AWARE } from '../offline/offline.service';
 import { SILENT_REQUEST } from './silent-request';
 import {
   HttpHandlerFn,
@@ -38,12 +40,16 @@ const serialiseBody = (body: unknown): string | undefined => {
   }
 };
 
+/** A "session expired" dialog is already up - the other requests that failed with it stay quiet. */
+let sessionExpiredShown = false;
+
 export const StatusInterceptor: HttpInterceptorFn = (
   req: HttpRequest<any>,
   next: HttpHandlerFn
 ) => {
 
   const dialog = inject(MatDialog);
+  const authService = inject(Authentication);
   const errorLogService = inject(ErrorLogService);
   const router = inject(Router);
 
@@ -159,6 +165,11 @@ export const StatusInterceptor: HttpInterceptorFn = (
         console.error('🔥 Backend Error Object:', error);
 
         const status = error?.status;
+
+        // No connection, and the offline layer answers this one from the device.
+        if (status === 0 && req.context.get(OFFLINE_AWARE)) {
+          return;
+        }
 
         /*
          * ======================================================
@@ -373,6 +384,17 @@ export const StatusInterceptor: HttpInterceptorFn = (
 
         if (ownsItsMessages) {
           return;
+        }
+
+        // 401: nobody signed in (a request left over from before Logout) is
+        // not news; a session that really expired is said once, not once per
+        // request that was in flight. AuthInterceptor takes them to sign in.
+        if (status === 401) {
+          if (!authService.getToken() || sessionExpiredShown) {
+            return;
+          }
+          sessionExpiredShown = true;
+          setTimeout(() => (sessionExpiredShown = false), 5000);
         }
 
         const dialogData: StatusDialogData = {

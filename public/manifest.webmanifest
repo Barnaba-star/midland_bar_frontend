@@ -1,0 +1,13 @@
+{
+  "name": "Midland Bar",
+  "short_name": "MSCL-BAR",
+  "description": "Midland Bar point of sale",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0e0c0a",
+  "theme_color": "#2b2118",
+  "icons": [
+    { "src": "midland.png", "sizes": "1254x1254", "type": "image/png", "purpose": "any" }
+  ]
+}

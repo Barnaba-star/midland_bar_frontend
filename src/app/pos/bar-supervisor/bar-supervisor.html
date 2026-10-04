@@ -24,6 +24,35 @@
   </header>
 
   <main class="sup-main">
+    <!-- Went onto bills while there was no internet: no one checked them then. -->
+    @if (offlineOrders.length) {
+      <section class="sup-offline">
+        <div class="sup-offline-head">
+          <mat-icon>wifi_off</mat-icon>
+          <div>
+            <strong>{{ 'SUPERVISOR_PAGE.OFFLINE_TITLE' | translate: { n: offlineOrders.length } }}</strong>
+            <span>{{ 'SUPERVISOR_PAGE.OFFLINE_TEXT' | translate }}</span>
+          </div>
+        </div>
+        @for (order of offlineOrders; track order.uid) {
+          <div class="sup-offline-row">
+            <span class="ticket-bill">{{ order.salesCode }}</span>
+            <span><b>{{ order.staffCode }}</b> {{ order.staffName }}</span>
+            <span class="sup-offline-items">
+              @for (line of order.lines; track line.uid) {
+                <span>{{ line.quantity }}× {{ line.serviceName }}</span>
+              }
+            </span>
+            <span class="sup-offline-time">{{ order.decidedAt | date: 'dd MMM, HH:mm' }}</span>
+            <span class="amt">{{ total(order) | number }}</span>
+            <button type="button" class="bar-btn" [disabled]="busy[order.uid]" (click)="reviewOffline(order)">
+              <mat-icon>done_all</mat-icon>{{ 'SUPERVISOR_PAGE.OFFLINE_SEEN' | translate }}
+            </button>
+          </div>
+        }
+      </section>
+    }
+
     @if (!loaded) {
       <p class="sup-note">{{ 'COMMON.LOADING' | translate }}</p>
     } @else if (orders.length === 0) {

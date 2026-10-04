@@ -97,7 +97,8 @@ export class ProfileDialogComponent {
         || this.accountName.trim() !== this.savedAccountName.trim();
   }
 
-  saveBankDetails(): void {
+  /** then: what to do once they are saved - Save at the bottom carries on to the picture. */
+  saveBankDetails(then?: () => void): void {
 
     const uid = this.auth.getUserUID();
     if (!uid || this.savingAccount) {
@@ -132,6 +133,7 @@ export class ProfileDialogComponent {
           this.savedBankName = bank;
           this.savedAccountName = holder;
           this.alertService.show('success', this.translate.instant('PROFILE_DIALOG.ACCOUNT_SAVED'));
+          then?.();
         } else if (res?.data === 'INCOMPLETE') {
           this.accountError = this.translate.instant('PROFILE_DIALOG.ACCOUNT_INCOMPLETE');
         } else {
@@ -186,7 +188,20 @@ export class ProfileDialogComponent {
     this.cdr.markForCheck();
   }
 
+  /**
+   * Save at the bottom saves everything changed: the bank details (they used
+   * to need the small button beside them - Save here said "updated" while
+   * leaving them unsaved), then the picture.
+   */
   save(): void {
+    if (this.accountChanged) {
+      this.saveBankDetails(() => this.savePicture());
+      return;
+    }
+    this.savePicture();
+  }
+
+  private savePicture(): void {
 
     if (!this.selectedFile) {
       this.close();

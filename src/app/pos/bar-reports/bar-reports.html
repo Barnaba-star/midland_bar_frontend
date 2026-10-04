@@ -1,5 +1,5 @@
 <app-title2
-  titleHeader="MENU.REPORT"
+  [titleHeader]="isManagerOnly ? 'MENU.EXPENSES' : 'MENU.REPORT'"
   [actions]="getTitled(titleActions)"
   [activeAction]="selectedReport"
   (customButtonClick)="onAction($event)"
@@ -546,6 +546,7 @@
                 </strong>
               </div>
 
+
               <div class="revenue-summary-row total">
                 <span>{{ 'COMMISSION_BREAKDOWN.TOTAL_REVENUE' | translate }}</span>
 
@@ -745,6 +746,22 @@
                 </div>
               </div>
 
+              <!-- Handover shortages -->
+              @if (getLossCommission()) {
+                <div class="summary-card loss">
+                  <div class="summary-icon">
+                    <mat-icon>money_off</mat-icon>
+                  </div>
+
+                  <div class="summary-info">
+                    <span>{{ 'STAFF_LOSS.COL_LOSS' | translate }}</span>
+                    <strong>
+                      −{{ getLossCommission() | number }}
+                    </strong>
+                  </div>
+                </div>
+              }
+
               <!-- Remaining -->
               <div class="summary-card remaining">
                 <div class="summary-icon">
@@ -879,8 +896,9 @@
                     <th>{{ 'REPORTS_PAGE.COL_CATEGORY' | translate }}</th>
                     <th>{{ 'COMMON.DATE' | translate }}</th>
                     <th>{{ 'COMMON.TOTAL' | translate }}</th>
+                    <th>{{ 'STAFF_LOSS.COL_LOSS' | translate }}</th>
                     <th>{{ 'COMMON.PAID' | translate }}</th>
-                    <th>{{ 'COMMON.REMAINING' | translate }}</th>
+                    <th>{{ 'STAFF_LOSS.COL_OWED' | translate }}</th>
                     <th>{{ 'REPORTS_PAGE.COL_PAYMENT' | translate }}</th>
                     <th class="actions-header">{{ 'COMMON.ACTION' | translate }}</th>
                   </tr>
@@ -936,14 +954,23 @@
                         {{ report.totalAmount | number: '1.2-2' }}
                       </td>
 
+                      <!-- HANDOVER SHORTAGE -->
+                      <td class="amount-cell">
+                        @if (report.lossAmount) {
+                          <span class="loss-amount">−{{ report.lossAmount | number }}</span>
+                        } @else {
+                          <span class="loss-none">-</span>
+                        }
+                      </td>
+
                       <!-- PAID -->
                       <td class="amount-cell paid-amount">
                         Tshs
                         {{ report.paidAmount | number: '1.2-2' }}
                       </td>
 
-                      <!-- REMAINING -->
-                      <td class="amount-cell remaining-amount">
+                      <!-- OWED: commission less shortages and payments; below zero = they owe -->
+                      <td class="amount-cell remaining-amount" [class.owes]="report.remainingAmount < 0">
                         Tshs
                         {{ report.remainingAmount | number: '1.2-2' }}
                       </td>
@@ -956,6 +983,7 @@
                             'status-paid': report.status === 'PAID',
                             'status-pending': report.status === 'NOT PAID',
                             'status-partially': report.status === 'PARTIAL',
+                            'status-owes': report.status === 'OWES',
                           }"
                         >
                           {{ report.status | uppercase }}
@@ -964,9 +992,11 @@
 
                       <!-- ACTION -->
                       <td class="actions-cell">
+                        @if (canPayStaff) {
                         <button
                           type="button"
                           class="action-btn pay-btn"
+                          [disabled]="report.remainingAmount <= 0"
                           cdkOverlayOrigin
                           #payOrigin="cdkOverlayOrigin"
                           (click)="openPaymentOverlay(report, payOrigin)"
@@ -974,6 +1004,7 @@
                           <i class="bi bi-cash-coin"></i>
                           <span>{{ 'COMMON.PAY' | translate }}</span>
                         </button>
+                        }
                       </td>
 
                     </tr>
@@ -1100,6 +1131,16 @@
         class="amount-input"
         [placeholder]="'REPORTS_PAGE.AMOUNT_PLACEHOLDER' | translate"
       />
+    </div>
+
+    <!-- How it is paid out -->
+    <div class="form-group description-group">
+      <label>{{ 'SPEND_DIALOG.METHOD' | translate }}</label>
+      <select class="description-input method-select" [(ngModel)]="paymentMethod">
+        @for (m of payoutMethods; track m) {
+          <option [value]="m">{{ 'PAY_BILL.METHOD_' + m | translate }}</option>
+        }
+      </select>
     </div>
 
     <!-- Description -->
@@ -1431,14 +1472,14 @@
 
           <div class="transaction-count">
             <span>
-              {{ incomeExpenses.length }}
+              {{ incomeRows.length }}
             </span>
 
             {{ 'COMMON.RECORDS' | translate }}
           </div>
         </div>
 
-        @if (incomeExpenses.length > 0) {
+        @if (incomeRows.length > 0) {
           <div class="income-table-wrapper">
             <table class="income-table">
               <thead>
@@ -1456,12 +1497,12 @@
                   <th class="amount-column">{{ 'REPORTS_PAGE.COL_EXPENSES' | translate }}</th>
 
                   <th class="amount-column">{{ 'REPORTS_PAGE.COL_BALANCE' | translate }}</th>
-                  <th class="action-column">{{ 'COMMON.ACTION' | translate }}</th>
+                  <th class="action-column" colspan="2">{{ 'COMMON.ACTION' | translate }}</th>
                 </tr>
               </thead>
 
               <tbody>
-                @for (item of incomeExpenses; track item.uid; let i = $index) {
+                @for (item of incomeRows; track item.uid; let i = $index) {
                   <tr>
                     <!-- NUMBER -->
                     <td>
@@ -1478,7 +1519,7 @@
                         </div>
 
                         <strong>
-                          {{ item.name }}
+                          {{ item.otherGroup ? ('OTHER_SPLIT.GROUP_NAME' | translate) : (item.name | potName) }}
                         </strong>
                       </div>
                     </td>
@@ -1486,7 +1527,319 @@
                     <!-- DESCRIPTION -->
                     <td>
                       <span class="description">
-                        {{ item.descriptions || '—' }}
+                        {{ item.otherGroup ? ('OTHER_SPLIT.GROUP_DESC' | translate: { count: item.parts }) : ('OTHER_SPLIT.POT_DESC_OF' | translate: { name: (item.name | potName) }) }}
+                      </span>
+                    </td>
+
+                    <!-- WEEK -->
+                    <td>
+                      <div class="week-date">
+                        <mat-icon> calendar_month </mat-icon>
+
+                        <span>
+                          {{ item.weekStartDate }}
+                        </span>
+                      </div>
+                    </td>
+
+                    <!-- INCOME -->
+                    <td class="amount-column">
+                      <span class="income-amount">
+                        + Tshs
+                        {{ item.income | number: '1.2-2' }}
+                      </span>
+                    </td>
+
+                    <!-- EXPENSE -->
+                    <td class="amount-column">
+                      <span class="expense-amount">
+                        - Tshs
+                        {{ item.expenses | number: '1.2-2' }}
+                      </span>
+                    </td>
+
+                    <!-- BALANCE -->
+                    <td class="amount-column">
+                      <strong
+                        class="balance-amount"
+                        [class.negative]="(item.income || 0) - (item.expenses || 0) < 0"
+                      >
+                        Tshs
+                        {{ (item.income || 0) - (item.expenses || 0) | number: '1.2-2' }}
+                      </strong>
+                    </td>
+                    @if (!breakdownTab(item)) {
+                    <td class="action-column">
+                      @if (canSpend) {
+                      <button
+                        type="button"
+                        class="spend-btn"
+                        (click)="spendIncomeExpense(item)"
+                        [disabled]="item.name === 'Staff'"
+                      >
+                        <mat-icon>shopping_cart</mat-icon>
+
+                        <span>{{ 'REPORTS_PAGE.SPEND_BTN' | translate }}</span>
+                      </button>
+                      }
+                    </td>
+
+                    <td class="action-details">
+                      <button
+                        type="button"
+                        class="details-btn"
+                        (click)="detailsForIncomeExpenses(item)"
+                      >
+                        <mat-icon svgIcon="more"></mat-icon>
+
+                        <span>{{ 'COMMON.DETAILS' | translate }}</span>
+                      </button>
+                    </td>
+                    } @else {
+                      <!-- Other, Staff and Stock Purchase have tabs of their own: paid and broken down there. -->
+                      <td class="action-column" colspan="2">
+                        <button type="button" class="details-btn" (click)="onAction(breakdownTab(item)!)">
+                          <mat-icon>call_split</mat-icon>
+                          <span>{{ 'OTHER_SPLIT.VIEW_BREAKDOWN' | translate }}</span>
+                        </button>
+                      </td>
+                    }
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        } @else {
+          <!-- EMPTY -->
+
+          <app-empty-state
+            icon="payment2"
+            title="REPORTS_PAGE.EMPTY_FINANCIAL_TITLE"
+            text="REPORTS_PAGE.EMPTY_FINANCIAL_TEXT"
+          />
+        }
+      </div>
+    </div>
+  }
+
+  @case ('REPORTS.CASHUP') {
+    <div class="action-container">
+      <app-cash-up area="bar" />
+    </div>
+  }
+
+  @case ('REPORTS.VARIANCE') {
+    <div class="action-container">
+      <app-stock-take area="bar" />
+    </div>
+  }
+
+  @case ('REPORTS.PROFIT') {
+    <div class="action-container">
+      <app-insights area="bar" />
+    </div>
+  }
+
+  @case ('REPORTS.LEDGER') {
+    <div class="action-container">
+      <app-pots-ledger area="bar" />
+    </div>
+  }
+
+  @case ('REPORTS.OTHER') {
+    <div class="action-container income-expenses-page">
+      <!-- ================= HEADER ================= -->
+      <div class="income-header">
+        <div class="income-title">
+          <div class="income-title-icon">
+            <mat-icon>call_split</mat-icon>
+          </div>
+
+          <div>
+            <span class="section-label"> {{ 'REPORTS_PAGE.FINANCIAL_REPORT_LABEL' | translate }} </span>
+
+            <h2>{{ 'OTHER_SPLIT.EXPENSE_TITLE' | translate }}</h2>
+
+            <p>{{ 'OTHER_SPLIT.EXPENSE_DESC' | translate }}</p>
+          </div>
+        </div>
+
+        <!-- ================= FILTERS ================= -->
+
+        <div class="income-filters">
+          <button
+            type="button"
+            class="income-filter-btn"
+            [class.active]="filterWeek === 'THIS_WEEK'"
+            (click)="selectIncomeExpenseFilter('THIS_WEEK')"
+          >
+            <mat-icon>date_range</mat-icon>
+            {{ 'COMMON.THIS_WEEK' | translate }}
+          </button>
+
+          <button
+            type="button"
+            class="income-filter-btn"
+            [class.active]="filterWeek === 'LAST_WEEK'"
+            (click)="selectIncomeExpenseFilter('LAST_WEEK')"
+          >
+            <mat-icon>history</mat-icon>
+            {{ 'COMMON.LAST_WEEK' | translate }}
+          </button>
+
+          <button
+            type="button"
+            class="income-filter-btn"
+            [class.active]="filterWeek === 'THIS_MONTH'"
+            (click)="selectIncomeExpenseFilter('THIS_MONTH')"
+          >
+            <mat-icon>calendar_month</mat-icon>
+            {{ 'COMMON.THIS_MONTH' | translate }}
+          </button>
+
+          <button
+            type="button"
+            class="income-filter-btn"
+            [class.active]="filterWeek === 'LAST_MONTH'"
+            (click)="selectIncomeExpenseFilter('LAST_MONTH')"
+          >
+            <mat-icon>event_repeat</mat-icon>
+            {{ 'COMMON.LAST_MONTH' | translate }}
+          </button>
+
+          <button
+            type="button"
+            class="income-filter-btn"
+            [class.active]="filterWeek === 'THIS_YEAR'"
+            (click)="selectIncomeExpenseFilter('THIS_YEAR')"
+          >
+            <mat-icon>calendar_today</mat-icon>
+            {{ 'COMMON.THIS_YEAR' | translate }}
+          </button>
+
+          <button
+            type="button"
+            class="income-filter-btn"
+            [class.active]="filterWeek === 'LAST_YEAR'"
+            (click)="selectIncomeExpenseFilter('LAST_YEAR')"
+          >
+            <mat-icon>history_toggle_off</mat-icon>
+            {{ 'COMMON.LAST_YEAR' | translate }}
+          </button>
+        </div>
+      </div>
+
+      <!-- ================= SUMMARY CARDS ================= -->
+
+      <div class="income-summary">
+        <!-- TOTAL INCOME -->
+        <div class="income-card income-card-green">
+          <div class="income-card-icon">
+            <mat-icon>trending_up</mat-icon>
+          </div>
+
+          <div class="income-card-content">
+            <span> {{ 'REPORTS_PAGE.TOTAL_INCOME_LABEL' | translate }} </span>
+
+            <strong> Tshs {{ otherTotal('income') | number: '1.2-2' }} </strong>
+          </div>
+        </div>
+
+        <!-- TOTAL EXPENSES -->
+        <div class="income-card income-card-red">
+          <div class="income-card-icon">
+            <mat-icon>trending_down</mat-icon>
+          </div>
+
+          <div class="income-card-content">
+            <span> {{ 'REPORTS_PAGE.TOTAL_EXPENSES_LABEL' | translate }} </span>
+
+            <strong> Tshs {{ otherTotal('expenses') | number: '1.2-2' }} </strong>
+          </div>
+        </div>
+
+        <!-- PROFIT -->
+        <div class="income-card income-card-blue">
+          <div class="income-card-icon">
+            <mat-icon>account_balance_wallet</mat-icon>
+          </div>
+
+          <div class="income-card-content">
+            <span> {{ 'REPORTS_PAGE.NET_BALANCE_LABEL' | translate }} </span>
+
+            <strong> Tshs {{ otherTotal('balance') | number: '1.2-2' }} </strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= TABLE ================= -->
+
+      <div class="income-table-container">
+        <div class="table-header">
+          <div>
+            <span class="table-label"> {{ 'REPORTS_PAGE.TRANSACTIONS_LABEL' | translate }} </span>
+
+            <h3>{{ 'OTHER_SPLIT.EXPENSE_TABLE_TITLE' | translate }}</h3>
+          </div>
+
+          <div class="transaction-count">
+            <span>
+              {{ otherPots.length }}
+            </span>
+
+            {{ 'COMMON.RECORDS' | translate }}
+          </div>
+        </div>
+
+        @if (otherPots.length > 0) {
+          <div class="income-table-wrapper">
+            <table class="income-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+
+                  <th>{{ 'COMMON.NAME' | translate }}</th>
+
+                  <th>{{ 'COMMON.DESCRIPTION' | translate }}</th>
+
+                  <th>{{ 'REPORTS_PAGE.COL_WEEK' | translate }}</th>
+
+                  <th class="amount-column">{{ 'REPORTS_PAGE.COL_INCOME' | translate }}</th>
+
+                  <th class="amount-column">{{ 'REPORTS_PAGE.COL_EXPENSES' | translate }}</th>
+
+                  <th class="amount-column">{{ 'REPORTS_PAGE.COL_BALANCE' | translate }}</th>
+                  <th class="action-column" colspan="2">{{ 'COMMON.ACTION' | translate }}</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                @for (item of otherPots; track item.uid; let i = $index) {
+                  <tr>
+                    <!-- NUMBER -->
+                    <td>
+                      <span class="row-number">
+                        {{ i + 1 }}
+                      </span>
+                    </td>
+
+                    <!-- NAME -->
+                    <td>
+                      <div class="income-name">
+                        <div class="name-icon">
+                          <mat-icon> payments </mat-icon>
+                        </div>
+
+                        <strong>
+                          {{ item.name === 'Other' ? ('OTHER_SPLIT.REPORT_NOT_SPLIT' | translate) : (item.name | potName: 'item') }}
+                        </strong>
+                      </div>
+                    </td>
+
+                    <!-- DESCRIPTION -->
+                    <td>
+                      <span class="description">
+                        {{ 'OTHER_SPLIT.POT_DESC_OF' | translate: { name: (item.name === 'Other' ? ('COMMISSION_BREAKDOWN.OTHERS' | translate) : (item.name | potName: 'item')) } }}
                       </span>
                     </td>
 
@@ -1528,16 +1881,17 @@
                       </strong>
                     </td>
                     <td class="action-column">
+                      @if (canSpend) {
                       <button
                         type="button"
                         class="spend-btn"
                         (click)="spendIncomeExpense(item)"
-                        [disabled]="item.name === 'Staff'"
                       >
                         <mat-icon>shopping_cart</mat-icon>
 
-                        <span>{{ 'REPORTS_PAGE.SPEND_BTN' | translate }}</span>
+                        <span>{{ 'OTHER_SPLIT.PAY_BTN' | translate }}</span>
                       </button>
+                      }
                     </td>
 
                     <td class="action-details">
@@ -1561,8 +1915,8 @@
 
           <app-empty-state
             icon="payment2"
-            title="REPORTS_PAGE.EMPTY_FINANCIAL_TITLE"
-            text="REPORTS_PAGE.EMPTY_FINANCIAL_TEXT"
+            title="OTHER_SPLIT.EMPTY_REPORT_TITLE"
+            text="OTHER_SPLIT.EMPTY_REPORT_TEXT"
           />
         }
       </div>
@@ -1800,6 +2154,7 @@
                       </td>
 
                       <td class="actions-cell">
+                        @if (canPayStock) {
                         <button
                           type="button"
                           class="action-btn pay-btn"
@@ -1810,6 +2165,7 @@
                           <i class="bi bi-cash-coin"></i>
                           <span>{{ 'COMMON.PAY' | translate }}</span>
                         </button>
+                        }
 
                         <button
                           type="button"
@@ -2107,6 +2463,15 @@
           </div>
 
         </div>
+        <div class="description-field">
+  <label>{{ 'SPEND_DIALOG.METHOD' | translate }}</label>
+  <select class="method-select" [(ngModel)]="stockPaymentMethod">
+    @for (m of payoutMethods; track m) {
+      <option [value]="m">{{ 'PAY_BILL.METHOD_' + m | translate }}</option>
+    }
+  </select>
+</div>
+
         <div class="description-field">
 
   <label>

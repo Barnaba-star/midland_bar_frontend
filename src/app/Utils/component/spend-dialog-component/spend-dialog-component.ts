@@ -1,3 +1,5 @@
+import { PotNamePipe } from '../../pipes/pot-name.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogActions, MatDialogContent } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -8,13 +10,15 @@ import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-spend-dialog-component',
-  imports: [MatDialogActions,  MatFormField, MatSelectModule, MatDialogContent, DecimalPipe, ReactiveFormsModule,
+  imports: [PotNamePipe, TranslatePipe, MatDialogActions,  MatFormField, MatSelectModule, MatDialogContent, DecimalPipe, ReactiveFormsModule,
     MatFormFieldModule, MatIcon],
   templateUrl: './spend-dialog-component.html',
   styleUrl: './spend-dialog-component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SpendDialogComponent {
+  /** The same methods a bill is paid by. */
+  readonly methods = ['cash', 'mpesa', 'tigopesa', 'airtelmoney', 'halopesa', 'bank'];
 
   spendForm: FormGroup;
 
@@ -32,6 +36,7 @@ export class SpendDialogComponent {
           Validators.max(data.income - data.expenses)
         ]
       ],
+      method: ['cash', Validators.required],
       description: [
         '',
         [

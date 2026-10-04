@@ -762,3 +762,22 @@
   font-weight: 700;
   letter-spacing: 0.04em;
 }
+
+/* Role column: a login role, or plain Staff */
+.staff-table .role-badge {
+  margin: 2px 4px 2px 0;
+  background: #e7f1ff;
+  color: #0d6efd;
+}
+
+.staff-table .staff-role-badge {
+  background: #f1f1f1;
+  color: #555;
+}
+
+/* Delete is off for staff who still hold a login role */
+.row-action.delete:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}

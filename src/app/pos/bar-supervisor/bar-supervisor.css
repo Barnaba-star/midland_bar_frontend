@@ -339,3 +339,54 @@
     animation: none;
   }
 }
+
+/* Orders that went onto bills while offline - for the supervisor to look over. */
+.sup-offline {
+  margin: 0 0 18px;
+  padding: 14px;
+  border: 1px dashed var(--color-accent);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sup-offline-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sup-offline-head > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sup-offline-head span {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.sup-offline-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--color-surface) 70%, transparent);
+}
+
+.sup-offline-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  flex: 1 1 200px;
+}
+
+.sup-offline-time {
+  opacity: 0.75;
+  font-size: 13px;
+}

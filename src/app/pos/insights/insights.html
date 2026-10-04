@@ -1,0 +1,148 @@
+<div class="ins">
+  <div class="ins-top">
+    <div>
+      <h3>{{ 'INSIGHTS.TITLE' | translate }}</h3>
+      <p>{{ 'INSIGHTS.SUBTITLE' | translate }}</p>
+    </div>
+    <div class="ins-filters">
+      @for (f of filters; track f.key) {
+        <button type="button" [class.active]="filter === f.key" (click)="load(f.key)">{{ f.label | translate }}</button>
+      }
+    </div>
+  </div>
+
+  @if (loading) {
+    <p class="muted">{{ 'OTHER_SPLIT.LOADING' | translate }}</p>
+  } @else if (!data || products.length === 0) {
+    <section class="ins-card"><p class="muted">{{ 'INSIGHTS.EMPTY' | translate }}</p></section>
+  } @else {
+    <!-- ================= KPIs ================= -->
+    <div class="ins-kpis">
+      <div class="kpi"><small>{{ 'INSIGHTS.REVENUE' | translate }}</small><strong>{{ data.revenue | number }}</strong><span>{{ 'INSIGHTS.UNITS_SOLD' | translate: { units: (data.units | number) } }}</span></div>
+      <div class="kpi"><small>{{ 'INSIGHTS.COST' | translate }}</small><strong>{{ data.cost | number }}</strong><span>{{ 'INSIGHTS.AT_BUYING_PRICE' | translate }}</span></div>
+      <div class="kpi good"><small>{{ 'INSIGHTS.PROFIT' | translate }}</small><strong>{{ data.profit | number }}</strong><span>{{ 'INSIGHTS.GROSS' | translate }}</span></div>
+      <div class="kpi"><small>{{ 'INSIGHTS.MARGIN' | translate }}</small><strong>{{ data.marginPercent ?? '-' }}{{ data.marginPercent !== null ? '%' : '' }}</strong><span>{{ 'INSIGHTS.MARGIN_HINT' | translate }}</span></div>
+    </div>
+    @if (hasUnknownCost) {
+      <p class="ins-note"><mat-icon>info</mat-icon>{{ 'INSIGHTS.UNKNOWN_COST_NOTE' | translate }}</p>
+    }
+
+    <div class="ins-grid">
+      <!-- ================= BEST SELLERS ================= -->
+      <section class="ins-card">
+        <h4><mat-icon>local_fire_department</mat-icon>{{ 'INSIGHTS.BEST_SELLERS' | translate }}</h4>
+        @for (p of bestSellers; track p.uid; let i = $index) {
+          <div class="bar-row">
+            <span class="rank">{{ i + 1 }}</span>
+            <div class="bar-main">
+              <div class="bar-label"><strong>{{ p.serviceName }}</strong><span>{{ p.units | number }} · Tshs {{ p.revenue | number }}</span></div>
+              <div class="bar-track"><i [style.width.%]="(p.units / maxUnits) * 100"></i></div>
+            </div>
+          </div>
+        }
+      </section>
+
+      <!-- ================= SLOW MOVERS ================= -->
+      <section class="ins-card">
+        <h4><mat-icon>hourglass_bottom</mat-icon>{{ 'INSIGHTS.SLOW_MOVERS' | translate }}</h4>
+        <p class="muted small">{{ 'INSIGHTS.SLOW_DESC' | translate }}</p>
+        @if ((data.slowMovers ?? []).length === 0) {
+          <p class="muted">{{ 'INSIGHTS.SLOW_NONE' | translate }}</p>
+        } @else {
+          @for (s of data.slowMovers; track s.uid) {
+            <div class="slow-row">
+              <div><strong>{{ s.serviceName }}</strong>
+                <small class="muted">{{ s.lastSold ? ('INSIGHTS.LAST_SOLD' | translate: { date: (s.lastSold | date: 'dd MMM') }) : ('INSIGHTS.NEVER_SOLD' | translate) }}</small>
+              </div>
+              <div class="num"><span>{{ s.stock | number }}</span><small class="muted">Tshs {{ s.stockValue | number }}</small></div>
+            </div>
+          }
+          <div class="slow-total">{{ 'INSIGHTS.IDLE_VALUE' | translate }}: <strong>Tshs {{ data.idleStockValue | number }}</strong></div>
+        }
+      </section>
+    </div>
+
+    <!-- ================= MARGIN PER PRODUCT ================= -->
+    <section class="ins-card">
+      <div class="card-head">
+        <h4><mat-icon>trending_up</mat-icon>{{ 'INSIGHTS.MARGIN_TABLE' | translate }}</h4>
+        <div class="ins-sort">
+          <span class="muted">{{ 'INSIGHTS.SORT_BY' | translate }}</span>
+          <button type="button" [class.active]="sort === 'profit'" (click)="setSort('profit')">{{ 'INSIGHTS.PROFIT' | translate }}</button>
+          <button type="button" [class.active]="sort === 'marginPercent'" (click)="setSort('marginPercent')">{{ 'INSIGHTS.MARGIN' | translate }}</button>
+          <button type="button" [class.active]="sort === 'revenue'" (click)="setSort('revenue')">{{ 'INSIGHTS.REVENUE' | translate }}</button>
+          <button type="button" [class.active]="sort === 'units'" (click)="setSort('units')">{{ 'INSIGHTS.UNITS' | translate }}</button>
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table class="ins-table">
+          <thead>
+            <tr>
+              <th>{{ 'STOCK_TAKE.COL_PRODUCT' | translate }}</th>
+              <th class="num">{{ 'INSIGHTS.UNITS' | translate }}</th>
+              <th class="num">{{ 'INSIGHTS.REVENUE' | translate }}</th>
+              <th class="num">{{ 'INSIGHTS.COST' | translate }}</th>
+              <th class="num">{{ 'INSIGHTS.PROFIT' | translate }}</th>
+              <th class="num">{{ 'INSIGHTS.MARGIN' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (p of sorted; track p.uid) {
+              <tr>
+                <td><strong>{{ p.serviceName }}</strong> <small class="muted">{{ p.serviceCode }}</small></td>
+                <td class="num">{{ p.units | number }}</td>
+                <td class="num">{{ p.revenue | number }}</td>
+                <td class="num">@if (p.costKnown) { {{ p.cost | number }} } @else { <span class="muted" [title]="'INSIGHTS.NO_COST_TIP' | translate">?</span> }</td>
+                <td class="num">@if (p.costKnown) { <strong [class.neg]="p.profit < 0">{{ p.profit | number }}</strong> } @else { <span class="muted">-</span> }</td>
+                <td class="num">
+                  @if (p.marginPercent !== null) {
+                    <span class="pill" [class.low]="p.marginPercent < 20" [class.mid]="p.marginPercent >= 20 && p.marginPercent < 35" [class.high]="p.marginPercent >= 35">{{ p.marginPercent }}%</span>
+                  } @else { <span class="muted">-</span> }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ================= PEAK HOURS ================= -->
+    <section class="ins-card">
+      <h4><mat-icon>schedule</mat-icon>{{ 'INSIGHTS.PEAK_TITLE' | translate }}</h4>
+      @if (shownHours.length === 0) {
+        <p class="muted">{{ 'INSIGHTS.PEAK_EMPTY' | translate }}</p>
+      } @else {
+        <div class="peak-chips">
+          @for (t of topHours; track t.hour; let i = $index) {
+            <span class="chip" [class.first]="i === 0"><mat-icon>bolt</mat-icon>{{ hourLabel(t.hour) }} - {{ hourLabel((t.hour + 1) % 24) }} · Tshs {{ t.amount | number }}</span>
+          }
+          @if (topDay) {
+            <span class="chip day"><mat-icon>event</mat-icon>{{ 'INSIGHTS.BUSIEST_DAY' | translate }}: {{ ('INSIGHTS.DAY_' + topDay.day) | translate }}</span>
+          }
+        </div>
+        <div class="table-scroll">
+          <table class="heat">
+            <thead>
+              <tr>
+                <th></th>
+                @for (h of shownHours; track h) { <th>{{ h }}</th> }
+              </tr>
+            </thead>
+            <tbody>
+              @for (d of days; track d) {
+                <tr>
+                  <th class="day-label">{{ ('INSIGHTS.DAY_' + d) | translate }}</th>
+                  @for (h of shownHours; track h) {
+                    <td [style.--heat]="heat(d, h)" [class.on]="amountAt(d, h) > 0"
+                        [title]="amountAt(d, h) ? (('INSIGHTS.DAY_' + d) | translate) + ' ' + hourLabel(h) + ': Tshs ' + (amountAt(d, h) | number) : ''"></td>
+                  }
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        <p class="muted small">{{ 'INSIGHTS.PEAK_HINT' | translate }}</p>
+      }
+    </section>
+  }
+</div>

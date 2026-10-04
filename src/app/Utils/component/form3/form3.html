@@ -39,10 +39,13 @@
                 [autocomplete]="field.autoComplete || 'off'"
               />
               <span *ngIf="field.suffix" matSuffix> &nbsp;{{ field.suffix }} </span>
-              <mat-hint *ngIf="field.hint"> {{ field.hint }} </mat-hint>
+              <mat-hint *ngIf="field.hint"> {{ field.hint | translate }} </mat-hint>
+              <mat-error *ngIf="form.get(field.name)?.hasError('pattern') && field.patternMessage">
+                {{ field.patternMessage | translate }}
+              </mat-error>
               <mat-error
                 *ngIf="
-                  field.required && form.get(field.name)?.invalid && form.get(field.name)?.touched
+                  field.required && form.get(field.name)?.hasError('required') && form.get(field.name)?.touched
                 "
               >
                 {{ 'COMMON.FIELD_REQUIRED' | translate: { field: ((field.label || 'COMMON.THIS_FIELD') | translate) } }}

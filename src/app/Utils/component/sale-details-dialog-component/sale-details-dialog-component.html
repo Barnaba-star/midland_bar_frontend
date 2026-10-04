@@ -170,7 +170,42 @@
 
             </div>
 
+            <!-- Wrong item on an open bill: take it off (with a reason), then add the right one. -->
+            @if (canEdit && removingUid !== service.uid) {
+              <button type="button" class="line-remove-btn" (click)="startRemove(service)"
+                      [title]="'BILL_EDIT.REMOVE' | translate" [attr.aria-label]="'BILL_EDIT.REMOVE' | translate">
+                <mat-icon>remove_circle_outline</mat-icon>
+              </button>
+            }
+
           </div>
+
+          @if (removingUid === service.uid) {
+            <div class="line-remove-form">
+              <strong>{{ 'BILL_EDIT.TITLE' | translate: { name: service.serviceName } }}</strong>
+              <div class="line-remove-fields">
+                @if ((service.quantity || 1) > 1) {
+                  <label class="lr-qty">
+                    <span>{{ 'BILL_EDIT.HOW_MANY' | translate }}</span>
+                    <input type="number" min="1" [max]="service.quantity" step="1" [(ngModel)]="removeQty" name="removeQty" />
+                    <small>/ {{ service.quantity }}</small>
+                  </label>
+                }
+                <label class="lr-reason">
+                  <span>{{ 'BILL_EDIT.REASON' | translate }}</span>
+                  <input type="text" maxlength="300" [(ngModel)]="removeReason" name="removeReason"
+                         [placeholder]="'BILL_EDIT.REASON_PH' | translate" />
+                </label>
+              </div>
+              <p class="lr-note">{{ 'BILL_EDIT.NOTE' | translate }}</p>
+              <div class="lr-actions">
+                <button type="button" class="lr-cancel" (click)="cancelRemove()">{{ 'COMMON.CANCEL' | translate }}</button>
+                <button type="button" class="lr-confirm" [disabled]="!removeReason.trim() || removing" (click)="confirmRemove(service)">
+                  <mat-icon>remove_circle</mat-icon>{{ 'BILL_EDIT.CONFIRM' | translate }}
+                </button>
+              </div>
+            </div>
+          }
 
         }
 

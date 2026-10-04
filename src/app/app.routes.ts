@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { posFullAccessGuard } from './pos/pos-role.guard';
+import { posFullAccessGuard, posNoCashierGuard } from './pos/pos-role.guard';
 import { settingsGuard, settingsManageGuard, settingsRootOnlyGuard } from './settings/settings-role.guard';
 import { adminGuard, adminManageGuard, adminRootOnlyGuard } from './admin/admin-role.guard';
 import { staffSellLockGuard } from './pos/bar-staff-sell/staff-sell-lock';
@@ -137,6 +137,7 @@ export const routes: Routes = [
       },
       {
         path: 'barStaff',
+        canActivate: [posNoCashierGuard],
         loadComponent:()=>import('./pos/bar-staff/bar-staff').then(m=>m.BarStaff)
       },
        {
@@ -153,16 +154,18 @@ export const routes: Routes = [
       },
        {
         path: 'barStore',
+        canActivate: [posNoCashierGuard],
         loadComponent:()=>import('./pos/bar-store/bar-store').then(m=>m.BarStore)
       },
       {
-        // No guard: raising a question and reading the guidance are open to
-        // every POS role.
+        // Open to every POS role except CASHIER, who only works the till.
         path: 'barSupport',
+        canActivate: [posNoCashierGuard],
         loadComponent:()=>import('./pos/bar-support/bar-support').then(m=>m.BarSupport)
       },
       {
         path: 'barHelp',
+        canActivate: [posNoCashierGuard],
         loadComponent:()=>import('./pos/bar-help/bar-help').then(m=>m.BarHelp)
       },
 

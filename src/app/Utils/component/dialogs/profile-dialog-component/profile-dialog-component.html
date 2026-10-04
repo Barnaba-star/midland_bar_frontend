@@ -145,7 +145,7 @@
     <button
       type="button"
       class="save-btn"
-      [disabled]="!selectedFile || uploading"
+      [disabled]="(!selectedFile && !accountChanged) || uploading || savingAccount"
       (click)="save()"
     >
       @if (uploading) {

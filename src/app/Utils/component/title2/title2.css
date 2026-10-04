@@ -32,7 +32,8 @@
 .left {
   justify-content: flex-start;
   gap: 10px;
-  flex: 3;
+  /* Only as wide as the title needs - the tabs get the rest of the bar. */
+  flex: 0 0 auto;
 }
 
 .right {
@@ -40,7 +41,7 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  flex: 7;
+  flex: 1 1 auto;
   min-width: 0;
 }
 
@@ -48,6 +49,10 @@
   display: flex;
   align-items: center;
   gap: 8px;
+
+  /* Room at both ends so the first and last tab are never cut at the edge. */
+  padding: 0 14px 0 6px;
+  scroll-padding-inline: 14px;
 
   overflow-x: auto;
   scrollbar-width: none;
@@ -246,4 +251,31 @@ a.breadcrumb-item:hover {
 .action.active .action-badge {
   background: #ffffff;
   color: var(--color-primary, #b86e00);
+}
+
+/* Wide screens: tabs that do not fit on one line drop to a second one
+   instead of being cut at the right edge. Phones keep the sideways scroll. */
+@media (min-width: 901px) {
+  .main-toolbar {
+    height: auto;
+    min-height: 72px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .left,
+  .right {
+    height: auto;
+  }
+
+  .actions-list {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    row-gap: 8px;
+    overflow-x: visible;
+  }
+
+  .scroll-fade {
+    display: none;
+  }
 }

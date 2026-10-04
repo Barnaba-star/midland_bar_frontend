@@ -55,6 +55,10 @@ findCommissionList():Observable<ResponseList<any>>{
 findServiceCommissionPage(params: PageableParam): Observable<ResponsePage<any>> {
   return this.http.post<ResponsePage<any>>(`${this.barURL}/findServiceCommissionPage`, params);
 }
+/** Services on sale with no commission split yet. */
+countServicesWithoutCommission(): Observable<Response<number>> {
+  return this.http.get<Response<number>>(`${this.barURL}/countServicesWithoutCommission`);
+}
 findCommissionPage(params: PageableParam): Observable<ResponsePage<any>> {
     return this.http.post<ResponsePage<any>>(`${this.barURL}/findCommissionPage`, params);
 }
@@ -397,5 +401,29 @@ payBill(dto: { salesOpenedUID: string; payments: { method: string; amount: numbe
 /** Lines, payments, totals and who took the money - for the printed receipt. */
 findBillReceipt(billUid: string): Observable<Response<any>> {
   return this.http.get<Response<any>>(`${this.barURL}/findBillReceipt/${billUid}`);
+}
+
+/** Take some or all of one line off an unpaid bill - undone everywhere, recorded with the reason. */
+removeBillLine(dto: { barSalesUID: string; quantity?: number; reason: string }): Observable<Response<any>> {
+  return this.http.post<Response<any>>(`${this.barURL}/removeBillLine`, dto);
+}
+
+/** What was taken off bills in a period. */
+billLineVoids(filter: string): Observable<ResponseList<any>> {
+  return this.http.get<ResponseList<any>>(`${this.barURL}/billLineVoids/${filter}`);
+}
+
+/** A staff member's handover shortage - off their commission and the cashier's expected cash. */
+recordStaffLoss(dto: { staffCode: string; expectedAmount: number; handedAmount: number; note?: string }): Observable<Response<any>> {
+  return this.http.post<Response<any>>(`${this.barURL}/staffLoss`, dto);
+}
+
+/** Staff Sell orders that went onto bills offline and still need the supervisor to look them over. */
+offlineUnreviewedOrders(): Observable<Response<StaffOrder[]>> {
+  return this.http.get<Response<StaffOrder[]>>(`${this.barURL}/staffOrders/offlineUnreviewed`, { context: silent() });
+}
+
+reviewStaffOrder(orderUid: string): Observable<Response<StaffOrder>> {
+  return this.http.post<Response<StaffOrder>>(`${this.barURL}/staffOrders/${orderUid}/review`, {});
 }
 }

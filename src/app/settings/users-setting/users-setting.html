@@ -178,6 +178,7 @@
           <th>{{ 'USERS_SETTING_PAGE.COL_USERNAME' | translate }}</th>
           <th>{{ 'USERS_SETTING_PAGE.COL_CONTACT' | translate }}</th>
           <th>{{ 'USERS_SETTING_PAGE.COL_GENDER' | translate }}</th>
+          <th>{{ 'USERS_SETTING_PAGE.COL_ROLE' | translate }}</th>
           <th>{{ 'USERS_SETTING_PAGE.COL_BRANCH' | translate }}</th>
           <th>{{ 'USERS_SETTING_PAGE.COL_STATUS' | translate }}</th>
           <th>{{ 'USERS_SETTING_PAGE.COL_CREATED' | translate }}</th>
@@ -263,6 +264,16 @@
 
           </td>
 
+
+          <!-- ROLE: what the user is (several if they hold several) -->
+          <td>
+            <div class="role-list" *ngIf="user?.roles?.length; else noRole">
+              <span class="role-badge" *ngFor="let role of user.roles">{{ role }}</span>
+            </div>
+            <ng-template #noRole>
+              <span class="not-available">{{ 'USERS_SETTING_PAGE.NO_ROLE' | translate }}</span>
+            </ng-template>
+          </td>
 
           <!-- BRANCH -->
           <td>

@@ -1,10 +1,16 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { SellableItems } from '../../Utils/services/sellable-items';
+import { OfflineService } from '../../Utils/offline/offline.service';
+import { StaffLossDialog } from '../../Utils/component/dialogs/staff-loss-dialog/staff-loss-dialog';
+import { BillNicknames } from '../../Utils/services/bill-nicknames';
+import { ShiftBar, ShiftState } from '../shift-bar/shift-bar';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TitleAction, Title2 } from '../../Utils/component/title2/title2';
 import { Authentication } from '../../Utils/services/authentication';
 import { MatIconModule } from '@angular/material/icon';
 import { FormField } from '../../Utils/models/form-field';
 import { ServiceBarMethod } from '../service-bar-method';
-import { SaleOpenedDTO, SalesOpened, BarSalesDTO, StaffSalesRow } from '../BarModel';
+import { SaleOpenedDTO, SalesOpened, BarSalesDTO } from '../BarModel';
 import { AlertService } from '../../Utils/services/alert';
 import { MatDialog } from '@angular/material/dialog';
 import { SaleItemDialogComponent, SaleItemResult } from '../../Utils/component/dialogs/sale-item-dialog-component/sale-item-dialog-component';
@@ -37,6 +43,7 @@ interface PaymentSummaryDisplay {
 @Component({
   selector: 'app-bar-sales',
   imports: [
+    ShiftBar,
     EmptyStateComponent,
     MatIconModule,
     Title2,
@@ -68,6 +75,16 @@ export class BarSales implements OnInit{
     private translate: TranslateService,
   ) {}
   ngOnInit(): void {
+    // Have what selling needs on the device before the internet drops.
+    this.offline.warmUp();
+    // The add-item list, loaded before the first tap.
+    this.sellable.prefetch();
+    // Sales made offline have reached the server: show its list again.
+    this.offline.synced.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      if (this.selectedSales === 'SALES.ADD') {
+        this.salesOpenedListToday();
+      }
+    });
     this.selectedSales='SALES.MANAGE'
         this.salesOpenedListByStatus();
         this.saleDetails = null;
@@ -149,6 +166,13 @@ export class BarSales implements OnInit{
    * the Sales page), or a staff code from Staff Sell (K1).
    */
   staffFilter = 'ALL';
+  /** Open bill is off until the login's shift is open. */
+  shiftState: ShiftState | null = null;
+  /** This device's nicknames for open bills - never saved to the backend. */
+  readonly nicknames = inject(BillNicknames);
+  private offline = inject(OfflineService);
+  private sellable = inject(SellableItems);
+  private destroyRef = inject(DestroyRef);
 
   /** The staff with open bills, for the filter chips - code, name and how many bills. */
   get staffOptions(): { code: string; name: string; count: number }[] {
@@ -288,6 +312,9 @@ openSaleDetailsDialog() {
 
   dialogRef.afterClosed().subscribe(result => {
 
+    // An item may have been taken off: the card's total changed in place.
+    this.cdr.markForCheck();
+
     if (!result) {
       return;
     }
@@ -420,6 +447,9 @@ openSaleDetailsDialogForMore(sale: SalesOpened) {
     }
     const dialogRef = this.dialog.open(SaleItemDialogComponent, {
       width: '560px',
+      // No opening animation: at a busy till it has to be there at once.
+      enterAnimationDuration: 0,
+      exitAnimationDuration: 0,
       maxWidth: '95vw',
       autoFocus: false,
       data: { billCode: sale.salesCode },
@@ -484,9 +514,9 @@ openSaleDetailsDialogForMore(sale: SalesOpened) {
               if (paid?.data) {
                 // Paid bills leave the open list; the code is free again.
                 this.salesOpenedList = this.salesOpenedList.filter((b) => b.uid !== sale.uid);
+                this.nicknames.remove(sale.uid);
                 this.alertService.show('success', this.translate.instant('PAY_BILL.DONE', { code: sale.salesCode }));
                 this.openReceipt(sale.uid!);
-                this.loadStaffSales();
               }
               this.cdr.detectChanges();
             },
@@ -499,6 +529,37 @@ openSaleDetailsDialogForMore(sale: SalesOpened) {
         });
       },
       error: (err) => console.error('Error loading bill lines:', err),
+    });
+  }
+
+  /** Every bill under the chosen staff chip, with a summary, in one receipt dialog and one print job. */
+  printStaffBills(): void {
+    const bills = this.visibleBills;
+    if (!bills.length) {
+      return;
+    }
+    const opt = this.staffOptions.find((o) => o.code === this.staffFilter);
+    const title = opt ? `${opt.code} · ${opt.name}` : this.translate.instant('SALES_PAGE.FILTER_NONE');
+    this.dialog.open(ReceiptDialogComponent, {
+      width: '400px',
+      maxWidth: '95vw',
+      autoFocus: false,
+      data: { billUids: bills.map((b) => b.uid!), title },
+    });
+  }
+
+  /** The chosen staff member handed in less than their bills: record the shortage. */
+  recordStaffLoss(): void {
+    const opt = this.staffOptions.find((o) => o.code === this.staffFilter);
+    if (!opt) {
+      return;
+    }
+    const expected = this.visibleBills.reduce((sum, b) => sum + (Number(b.bill) || 0), 0);
+    this.dialog.open(StaffLossDialog, {
+      width: '420px',
+      maxWidth: '95vw',
+      autoFocus: false,
+      data: { staffCode: opt.code, staffName: opt.name, expected },
     });
   }
 
@@ -536,6 +597,7 @@ openSaleDetailsDialogForMore(sale: SalesOpened) {
           this.deletingBill = null;
           if (res?.data) {
             this.salesOpenedList = this.salesOpenedList.filter((b) => b.uid !== sale.uid);
+            this.nicknames.remove(sale.uid);
             this.alertService.show('success', this.translate.instant('SALES_PAGE.BILL_DELETED', { code: sale.salesCode }));
           }
           this.cdr.detectChanges();
@@ -596,65 +658,13 @@ openSaleDetailsDialogForMore(sale: SalesOpened) {
     });
   }
 
-  /*
-   * Each staff member's day: what they took, split by payment method, and
-   * what they still hold unpaid. Loaded with the open bills and again after
-   * every payment.
-   */
-  staffSales: StaffSalesRow[] = [];
-  staffSalesDate = this.todayIso();
-
-  private todayIso(): string {
-    const d = new Date();
-    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-  }
-
-  loadStaffSales(): void {
-    this.barServce.staffSalesSummary(this.staffSalesDate || this.todayIso()).subscribe({
-      next: (res) => {
-        this.staffSales = res?.data ?? [];
-        this.cdr.markForCheck();
-      },
-      error: (err) => console.error('Error loading staff sales:', err),
-    });
-  }
-
-  onStaffSalesDate(value: string): void {
-    this.staffSalesDate = value || this.todayIso();
-    this.loadStaffSales();
-  }
-
-  /** Payment methods in a fixed order, only those with money in them. */
-  methodsOf(row: StaffSalesRow): { method: string; amount: number }[] {
-    const order = ['cash', 'mpesa', 'tigopesa', 'airtelmoney', 'halopesa', 'bank'];
-    const known = order.filter((m) => row.byMethod?.[m]).map((m) => ({ method: m, amount: row.byMethod[m] }));
-    const other = Object.keys(row.byMethod ?? {}).filter((m) => !order.includes(m)).map((m) => ({ method: m, amount: row.byMethod[m] }));
-    return [...known, ...other];
-  }
-
-  get staffSalesTotals(): { total: number; openAmount: number; byMethod: Record<string, number> } {
-    const byMethod: Record<string, number> = {};
-    let total = 0;
-    let openAmount = 0;
-    for (const row of this.staffSales) {
-      total += row.total || 0;
-      openAmount += row.openAmount || 0;
-      for (const [m, a] of Object.entries(row.byMethod ?? {})) byMethod[m] = (byMethod[m] || 0) + a;
-    }
-    return { total, openAmount, byMethod };
-  }
-
-  totalsRow(): StaffSalesRow {
-    const t = this.staffSalesTotals;
-    return { staffCode: null, staffName: null, total: t.total, paidBills: 0, byMethod: t.byMethod, openBills: 0, openAmount: t.openAmount };
-  }
-
   salesOpenedListToday() {
-    this.loadStaffSales();
     this.barServce.salesOpenedList().subscribe({
       next: (res) => {
         if (res) {
           this.salesOpenedList = res.data ?? [];
+          // The branch's whole open list: a nickname whose bill is not in it was paid elsewhere.
+          this.nicknames.keepOnly(this.salesOpenedList.map((b) => b.uid));
           this.cdr.detectChanges();
         }
       },

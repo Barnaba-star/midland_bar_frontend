@@ -8,7 +8,7 @@ import { MainSidenav2 } from '../Utils/component/main-sidenav2/main-sidenav2';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslatePipe } from '@ngx-translate/core';
-import { POS_FULL_ACCESS_ROLES } from './pos-role.guard';
+import { CASHIER_HOME, POS_FULL_ACCESS_ROLES, isCashierOnly } from './pos-role.guard';
 import { ServiceBarMethod } from './service-bar-method';
 import { EmptyStateComponent } from '../Utils/component/empty-state/empty-state';
 
@@ -49,16 +49,18 @@ isHome = true;
 // decides which of these a given role sees in the POS sidenav.
 //   CEO     -> everything, including Setting
 //   MANAGER -> everything except Setting; Report shows as "Matumizi"
-//   CASHIER -> same as MANAGER
+//   CASHIER -> same as MANAGER, minus Home, Staff, Store, Messages and Help;
+//              Report is named "Expenses & Cash-up" and they pay out there
 // ROOT/STAFF/DIRECTOR keep full access like CEO.
 private readonly fullAccessRoles = POS_FULL_ACCESS_ROLES;
 private readonly allRoles = [...POS_FULL_ACCESS_ROLES, 'MANAGER', 'CASHIER'];
+private readonly noCashierRoles = [...POS_FULL_ACCESS_ROLES, 'MANAGER'];
 
-// MANAGER/CASHIER see the Report section under the name "Matumizi"
-// (Expenses). Anyone holding a full-access role sees it as "Report".
+// MANAGER and CASHIER see the Report section as "Expenses & Cash-up". Anyone
+// holding a full-access role sees it as "Report".
 private readonly reportLabel = this.fullAccessRoles.some(role => this.visibility.hasRole(role))
   ? 'MENU.REPORT'
-  : 'MENU.EXPENSES';
+  : 'MENU.EXPENSES_CASHUP';
 
 menuItems: SidenavItem[] = [
   {
@@ -68,13 +70,13 @@ menuItems: SidenavItem[] = [
     // but did nothing, so there was no way back to it once you had opened a
     // section.
     route: '/pos',
-    roles: this.allRoles
+    roles: this.noCashierRoles
   },
   {
     label: 'MENU.STAFF',
     icon: 'person',
     route: '/pos/barStaff',
-    roles: this.allRoles
+    roles: this.noCashierRoles
   },
   {
     label: 'MENU.SERVICE',
@@ -86,20 +88,13 @@ menuItems: SidenavItem[] = [
     label: 'MENU.STORE',
     icon: 'store',
     route: '/pos/barStore',
-    roles: this.allRoles
+    roles: this.noCashierRoles
   },
    {
     label: 'MENU.SALES',
     icon: 'payment2',
      route:'/pos/barSales',
     roles: this.allRoles,
-  },
-  {
-    // Orders from Staff Sell waiting to be received before drinks leave.
-    label: 'MENU.SUPERVISOR',
-    icon: 'workflow',
-    route: '/supervisor',
-    roles: this.fullAccessRoles,
   },
   {
     label: this.reportLabel,
@@ -119,13 +114,13 @@ menuItems: SidenavItem[] = [
     label: 'MENU.SUPPORT',
     icon: 'announce',
     route: '/pos/barSupport',
-    roles: this.allRoles
+    roles: this.noCashierRoles
   },
   {
     label: 'MENU.HELP',
     icon: 'guidelines',
     route: '/pos/barHelp',
-    roles: this.allRoles
+    roles: this.noCashierRoles
   }
 ];
 
@@ -136,6 +131,14 @@ return this.visibility.filteredMenuItems(menu);
   private checkIfHome() {
     const wasHome = this.isHome;
     this.isHome = this.route.firstChild === null;
+
+    // CASHIER has no POS home: bare /pos (the dashboard card, "go home",
+    // a guard bouncing them back) goes straight to the till.
+    if (this.isHome && isCashierOnly(this.visibility)) {
+      this.isHome = false;
+      this.router.navigateByUrl(CASHIER_HOME, { replaceUrl: true });
+      return;
+    }
 
     // This component owns the router-outlet, so it is never destroyed while
     // moving between POS sections - ngOnInit runs once and once only. Without

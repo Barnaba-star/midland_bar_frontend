@@ -511,3 +511,100 @@
   width: 16px;
   height: 16px;
 }
+
+/* A nickname for the customer - kept on this device only. */
+.bill-nickname {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 8px 0;
+  padding: 0 10px;
+  height: 36px;
+  border: 1px dashed var(--color-border);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--color-accent) 6%, var(--color-surface));
+  color: var(--color-text-muted);
+  cursor: text;
+}
+
+.bill-nickname:focus-within {
+  border-style: solid;
+  border-color: var(--color-accent);
+}
+
+.bill-nickname mat-icon {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
+
+.bill-nickname input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.bill-nickname input::placeholder {
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
+
+/* ---- Code keypad: 0-9 for a touch screen ---- */
+.code-input {
+  letter-spacing: 0.5em;
+}
+
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 6px 0 4px;
+}
+
+.key {
+  height: 64px;
+  border: 1px solid #e8dcc8;
+  border-radius: 14px;
+  background: #fffdf9;
+  color: #1d1812;
+  font-family: 'Bebas Neue', 'Oswald', Impact, sans-serif;
+  font-size: 34px;
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  transition: background 0.1s ease, transform 0.1s ease;
+}
+
+.key:not(:disabled):active {
+  transform: scale(0.95);
+  background: #fdf1dc;
+}
+
+.key:not(:disabled):hover {
+  border-color: #f5a524;
+}
+
+.key-fn {
+  background: #f6f0e6;
+  color: #7a6f60;
+  font-size: 26px;
+  display: grid;
+  place-items: center;
+}
+
+.key-fn mat-icon {
+  width: 26px;
+  height: 26px;
+  font-size: 26px;
+}
+
+.key:disabled {
+  opacity: 0.45;
+  cursor: default;
+}

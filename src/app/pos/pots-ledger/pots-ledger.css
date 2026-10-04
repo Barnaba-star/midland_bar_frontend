@@ -1,0 +1,27 @@
+:host { display: block; }
+.pl-card { padding: 22px; border: 1px solid #e8dcc8; border-radius: 18px; background: #fff; box-shadow: 0 4px 15px rgba(29, 24, 18, .05); text-align: left; }
+.pl-head { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 16px; }
+.pl-icon { display: grid; place-items: center; flex-shrink: 0; width: 44px; height: 44px; border-radius: 12px; background: var(--color-primary); color: #fff; }
+.pl-head h3 { margin: 0 0 4px; font-size: 18px; }
+.pl-head p, .muted { margin: 0; color: #7a6f60; font-size: 13px; }
+.small { margin-top: 10px; font-size: 12px; }
+.pl-kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
+.kpi { padding: 14px; border: 1px solid #f1e8d8; border-radius: 14px; background: #fcfaf5; }
+.kpi small { display: block; color: #7a6f60; font-size: 11px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; }
+.kpi strong { font-size: 20px; font-variant-numeric: tabular-nums; }
+.kpi.good strong { color: #027a48; }
+.table-scroll { overflow-x: auto; }
+.pl-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.pl-table th { padding: 10px; border-bottom: 1px solid #f1e8d8; color: #7a6f60; font-size: 11px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; text-align: left; }
+.pl-table td { padding: 10px; border-bottom: 1px solid #f6f0e4; vertical-align: middle; }
+.pl-table tfoot td { border-top: 2px solid #e8dcc8; border-bottom: none; font-weight: 800; }
+.num { text-align: right !important; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.neg { color: #b42318; }
+.clickable { cursor: pointer; }
+.clickable:hover td { background: #fcfaf5; }
+.chev { vertical-align: middle; font-size: 18px; width: 18px; height: 18px; color: #a69e8a; }
+.sub td { background: #faf7f0; font-size: 13px; }
+.sub td:first-child { padding-left: 28px; }
+.used { display: inline-block; width: 80px; height: 7px; margin-right: 6px; border-radius: 999px; background: #f1ead9; overflow: hidden; vertical-align: middle; }
+.used i { display: block; height: 100%; background: var(--color-primary); }
+@media (max-width: 720px) { .pl-card { padding: 16px; } .pl-kpis { grid-template-columns: 1fr; } }

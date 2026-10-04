@@ -1,7 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Insights } from '../insights/insights';
+import { PotsLedger } from '../pots-ledger/pots-ledger';
+import { CashUp } from '../cash-up/cash-up';
+import { StockTake } from '../stock-take/stock-take';
+import { PotNamePipe } from '../../Utils/pipes/pot-name.pipe';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Authentication } from '../../Utils/services/authentication';
 import { POS_FULL_ACCESS_ROLES } from '../pos-role.guard';
-import { TitleAction } from '../../Utils/component/title/title.component';
+import { TitleAction } from '../../Utils/component/title2/title2';
 import { Title2 } from "../../Utils/component/title2/title2";
 import { MatIcon } from "@angular/material/icon";
 import { PageableParam } from '../../Utils/models/responces';
@@ -33,7 +39,7 @@ import { StockPacksPipe } from '../../Utils/pipes/stock-packs.pipe';
 @Component({
   selector: 'app-bar-reports',
   standalone: true,
-  imports: [StockPacksPipe, 
+  imports: [Insights, PotsLedger, CashUp, StockTake, PotNamePipe, StockPacksPipe, 
     EmptyStateComponent,Title2, MatIcon, CommonModule, FormsModule, CdkConnectedOverlay, CdkOverlayOrigin, MatFormField, MatLabel, FormsModule,
     MatDatepickerModule,
     MatFormFieldModule,
@@ -51,12 +57,38 @@ export class BarReports implements OnInit{
   constructor(
     private visibility: Authentication, private barService:ServiceBarMethod, private cdr:ChangeDetectorRef, private alert:AlertService, private dialog:MatDialog
   ) { }
+  // Spending from a pot needs SAVE_EXPENSES (ROOT passes every check).
+  // MANAGER sees Income & Expenses and Other but has no Pay button there.
+  get canSpend(): boolean {
+    return this.canDo('SAVE_EXPENSES');
+  }
+
+  // Paying a staff member's commission and a stock purchase: CASHIER yes,
+  // MANAGER no - the cashier pays out on the manager's word.
+  get canPayStaff(): boolean {
+    return this.canDo('PAY_STAFF');
+  }
+
+  get canPayStock(): boolean {
+    return this.canDo('SAVE_STOCK_AND_PURCHASE');
+  }
+
+  private canDo(permission: string): boolean {
+    return this.visibility.hasRole('ROOT')
+      || (this.visibility.getPermissions() || '').split(',').includes(permission);
+  }
+
+  private route = inject(ActivatedRoute);
+
   ngOnInit(): void {
     // Open on the first tab this role can actually see: CEO and above land
     // on Service as before, MANAGER/CASHIER (who can't see Service) land on
     // Staff.
     const visible = this.getTitled(this.titleActions).map(action => action.title);
-    const defaultTab = ['REPORTS.SERVICE', 'REPORTS.STAFF'].find(tab => visible.includes(tab)) ?? visible[0];
+    // ?tab=REPORTS.CASHUP - the shift bar's "Go to Cash-up" lands straight on it.
+    const asked = this.route.snapshot.queryParamMap.get('tab');
+    const defaultTab = (asked && visible.includes(asked) ? asked : null)
+      ?? ['REPORTS.SERVICE', 'REPORTS.STAFF'].find(tab => visible.includes(tab)) ?? visible[0];
     if (defaultTab) {
       this.onAction(defaultTab);
     }
@@ -64,8 +96,10 @@ export class BarReports implements OnInit{
   selectedReport = '';
   // Who sees which tab inside Report ("Matumizi" for MANAGER/CASHIER):
   //   CEO     -> every tab
-  //   MANAGER -> Staff report + Store + Stock & Purchase
-  //   CASHIER -> Staff report + Store
+  //   MANAGER -> Stock & Purchase, Income & Expenses, Other, Staff report,
+  //              Cash-up, Variance (no Store, no Profit); sees but can't pay
+  //   CASHIER -> the same minus Variance, and pays out: every payment
+  //              leaves the cashier's drawer so it comes off their cash-up
   // Frontend visibility only - the backend @PreAuthorize checks are the
   // real security boundary.
   private readonly fullAccessRoles = POS_FULL_ACCESS_ROLES;
@@ -73,17 +107,23 @@ export class BarReports implements OnInit{
          {
       icon: 'stock',
       title: 'REPORTS.STOCK',
-      roles: [...this.fullAccessRoles, 'MANAGER']
+      roles: [...this.fullAccessRoles, 'MANAGER', 'CASHIER']
     },
        {
       icon: 'payment2',
       title: 'REPORTS.INCOME',
-      roles: this.fullAccessRoles
+      roles: [...this.fullAccessRoles, 'MANAGER', 'CASHIER']
+    },
+    {
+      // What the Other commission collected for each of the CEO's items, and paying out of them.
+      icon: 'pay',
+      title: 'REPORTS.OTHER',
+      roles: [...this.fullAccessRoles, 'MANAGER', 'CASHIER']
     },
       {
       icon: 'store',
       title: 'REPORTS.STORE',
-      roles: [...this.fullAccessRoles, 'MANAGER', 'CASHIER']
+      roles: this.fullAccessRoles
     },
     {
       icon: 'person2',
@@ -95,11 +135,64 @@ export class BarReports implements OnInit{
       title: 'REPORTS.SERVICE',
       roles: this.fullAccessRoles
     },
+    {
+      // Closing a shift: what the cashier took against what they counted.
+      icon: 'pay',
+      title: 'REPORTS.CASHUP',
+      roles: [...this.fullAccessRoles, 'MANAGER', 'CASHIER']
+    },
+    {
+      // Counting the store at one go, and what went missing.
+      icon: 'stock',
+      title: 'REPORTS.VARIANCE',
+      roles: [...this.fullAccessRoles, 'MANAGER']
+    },
+    {
+      // What each product earns over its cost, what sells, and when.
+      icon: 'report',
+      title: 'REPORTS.PROFIT',
+      roles: this.fullAccessRoles
+    },
+    {
+      // Every pot's balance since the start.
+      icon: 'payment2',
+      title: 'REPORTS.LEDGER',
+      roles: this.fullAccessRoles
+    },
 
   ];
 
+  // A MANAGER or CASHIER (with no higher role) sees the section as
+  // "Expenses & Cash-up", with its tabs named and ordered for that: the same
+  // tabs as CEO's, under other names. Tabs a role can't see are left out.
+  private static readonly MANAGER_TABS: [string, string][] = [
+    ['REPORTS.STAFF', 'REPORTS.MGR_STAFF_EXPENSES'],
+    ['REPORTS.VARIANCE', 'REPORTS.MGR_STOCK_UP'],
+    ['REPORTS.CASHUP', 'REPORTS.CASHUP'],
+    ['REPORTS.OTHER', 'REPORTS.MGR_OTHER_EXPENSES'],
+    ['REPORTS.INCOME', 'REPORTS.MGR_SERVICE_EXPENSES'],
+    ['REPORTS.STOCK', 'REPORTS.MGR_STOCK_PURCHASE'],
+  ];
+  private managerTabs?: TitleAction[];
+
+  // Also names the page: "Expenses" for MANAGER/CASHIER, "Report" for CEO and above.
+  get isManagerOnly(): boolean {
+    return (this.visibility.hasRole('MANAGER') || this.visibility.hasRole('CASHIER'))
+      && !this.fullAccessRoles.some(role => this.visibility.hasRole(role));
+  }
+
   getTitled(title: TitleAction[]): TitleAction[] {
-    return this.visibility.filteredTitleActions(title);
+    const visible: TitleAction[] = this.visibility.filteredTitleActions(title);
+    if (!this.isManagerOnly) {
+      return visible;
+    }
+    // Built once: the template asks on every change detection.
+    return this.managerTabs ??= BarReports.MANAGER_TABS
+      .map(([key, label]): TitleAction | null => {
+        const action = visible.find(a => a.title === key);
+        return action ? { ...action, label } : null;
+      })
+      .filter((action): action is TitleAction => action !== null);
   }
 
 
@@ -135,6 +228,12 @@ export class BarReports implements OnInit{
       this.selectIncomeExpenseFilter('THIS_WEEK');
 
       break;
+
+        case 'REPORTS.OTHER':
+
+          this.selectIncomeExpenseFilter('THIS_WEEK');
+
+          break;
       case 'REPORTS.STOCK':
       this.getStockAndPurchaseByFilter('THIS_WEEK');
 
@@ -729,6 +828,13 @@ getPaidCommission(): number {
   );
 }
 
+getLossCommission(): number {
+  return this.commissionReports.reduce(
+    (total, item) => total + Number(item.lossAmount || 0),
+    0
+  );
+}
+
 getRemainingCommission(): number {
   return this.commissionReports.reduce(
     (total, item) => total + Number(item.remainingAmount || 0),
@@ -786,6 +892,10 @@ filterDate:string=''
 remainingAmount:number=0
 weekDate: string = new Date().toISOString().split('T')[0];
 descriptions:string=''
+/** How the staff payment goes out - the cash-up takes it off this method. */
+paymentMethod = 'cash';
+/** The methods a payout may go by - the same as a bill's. */
+readonly payoutMethods = ['cash', 'mpesa', 'tigopesa', 'airtelmoney', 'halopesa', 'bank'];
 
 
 
@@ -803,6 +913,7 @@ openPaymentOverlay(report: any, origin: CdkOverlayOrigin): void {
 
   // Reset description kila unapofungua overlay
   this.descriptions = '';
+  this.paymentMethod = 'cash';
 }
 
 closePaymentOverlay(): void {
@@ -819,7 +930,8 @@ submitPayment(): void {
     amount: this.paymentAmount,
     filter: this.selectedRange,
     weekDate: this.weekDate,
-    descriptions: this.descriptions.trim()
+    descriptions: this.descriptions.trim(),
+    method: this.paymentMethod
   };
 
   console.log('Staff Commissions', staffCommissionDTO);
@@ -1155,6 +1267,65 @@ selectIncomeExpenseFilter(filter: string): void {
 }
 
 
+/** The tab that breaks a pot down, when it has one: Other, Staff (commissions) and Stock Purchase. */
+breakdownTab(item: any): string | null {
+  if (item.otherGroup) {
+    return 'REPORTS.OTHER';
+  }
+  if (item.name === 'Staff') {
+    return 'REPORTS.STAFF';
+  }
+  if (item.name === 'Stock Purchase') {
+    return 'REPORTS.STOCK';
+  }
+  return null;
+}
+
+/**
+ * Income & Expenses rows: every bucket as it is, but Other as one line per week -
+ * its items are broken down only in the Other Expense Report.
+ */
+get incomeRows(): any[] {
+  const isOther = (name: string) => name === 'Other' || String(name || '').startsWith('Other · ');
+  const rows: any[] = [];
+  const byWeek = new Map<string, any>();
+  for (const item of this.incomeExpenses) {
+    if (!isOther(item.name)) {
+      rows.push(item);
+      continue;
+    }
+    const week = String(item.weekStartDate);
+    let group = byWeek.get(week);
+    if (!group) {
+      group = { uid: 'other-' + week, otherGroup: true, name: 'Other', weekStartDate: item.weekStartDate, income: 0, expenses: 0, parts: 0 };
+      byWeek.set(week, group);
+      rows.push(group);
+    }
+    group.income += Number(item.income || 0);
+    group.expenses += Number(item.expenses || 0);
+    if (String(item.name).startsWith('Other · ')) {
+      group.parts++;
+    }
+  }
+  return rows;
+}
+
+/** The Other pots: one per item of the CEO's split ("Other · Internet"), and the plain "Other" from before it. */
+get otherPots(): any[] {
+  return this.incomeExpenses.filter((i) =>
+    String(i.name || '').startsWith('Other · ')
+    // The plain pot only while it holds something - once split into the items it reads 0 and 0.
+    || (i.name === 'Other' && (Number(i.income || 0) !== 0 || Number(i.expenses || 0) !== 0)));
+}
+
+otherTotal(kind: 'income' | 'expenses' | 'balance'): number {
+  return this.otherPots.reduce((sum, i) => {
+    const income = Number(i.income || 0);
+    const spent = Number(i.expenses || 0);
+    return sum + (kind === 'income' ? income : kind === 'expenses' ? spent : income - spent);
+  }, 0);
+}
+
 getTotalIncome(): number {
 
   return this.incomeExpenses.reduce(
@@ -1200,7 +1371,8 @@ spendIncomeExpense(item: any): void {
       const spendDTO:SpendDTO={
         description:result.description,
         amount:result.amount,
-        uid:result.uid
+        uid:result.uid,
+        method:result.method
       }
       this.barService.addSpend(spendDTO).subscribe({
         next:(res)=>{
@@ -1355,6 +1527,7 @@ selectedStockPurchase: any = null;
 stockPaymentAmount: number | null = null;
 
 stockPaymentDescription:string='';
+stockPaymentMethod = 'cash';
 
 stockPaymentDialogRef?: MatDialogRef<any>;
 @ViewChild('stockPaymentDialog')
@@ -1466,6 +1639,8 @@ payStockPurchase(stock: any): void {
 
   this.stockPaymentDescription = '';
 
+  this.stockPaymentMethod = 'cash';
+
   this.stockPaymentDialogRef = this.dialog.open(
     this.stockPaymentDialog,
     {
@@ -1521,7 +1696,8 @@ submitStockPayment(): void {
     uid:request.stockAndPurchaseUid,
     weekDate:request.weekDate,
     description:request.description,
-    amount:request.amount
+    amount:request.amount,
+    method:this.stockPaymentMethod
   }
 
   this.barService.payStockAndPurchase(payStockAndPurchaseDTO).subscribe({

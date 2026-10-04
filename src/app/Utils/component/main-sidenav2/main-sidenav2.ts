@@ -1,3 +1,4 @@
+import { ConnectivityBadge } from '../../offline/connectivity-badge';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -40,13 +41,14 @@ import { SystemSettingService } from '../../services/system-setting';
 import { AlertService } from '../../services/alert';
 
 import { SidenavItem } from '../main-sidenav-component/model';
+import { POS_FULL_ACCESS_ROLES, isCashierOnly } from '../../../pos/pos-role.guard';
 
 
 @Component({
   selector: 'app-main-sidenav2',
   standalone: true,
 
-  imports: [
+  imports: [ConnectivityBadge, 
     MatIconModule,
     MatDividerModule,
     MatTooltipModule,
@@ -130,6 +132,17 @@ export class MainSidenav2 implements OnInit, OnDestroy {
   @Input() logoUrl = 'assets/images/login.png';
 
   canManageLogo = false;
+
+  // CASHIER only works the till: the header leaves out Notifications,
+  // Settings, Help and Subscribe for them.
+  isCashier = false;
+
+  // Notifications and the Settings shortcut are for CEO and above: hidden
+  // from CASHIER and from a MANAGER who holds no higher role.
+  hideAdminIcons = false;
+
+  /** STAFF in a customer's branch: view only (the token allows nothing else). */
+  viewOnly = false;
 
 
   // ============================================================
@@ -227,6 +240,12 @@ export class MainSidenav2 implements OnInit, OnDestroy {
     this.canManageLogo = this.authDetails.hasRole('ROOT')
       || (this.authDetails.getPermissions() || '').split(',').includes('MANAGE_SYSTEM_SETTINGS');
     this.loadSystemLogo();
+
+    this.isCashier = isCashierOnly(this.authDetails);
+    const isManagerOnly = this.authDetails.hasRole('MANAGER')
+      && !POS_FULL_ACCESS_ROLES.some(role => this.authDetails.hasRole(role));
+    this.hideAdminIcons = this.isCashier || isManagerOnly;
+    this.viewOnly = this.authDetails.isViewOnly();
 
 
     // Language

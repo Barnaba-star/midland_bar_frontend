@@ -1,10 +1,10 @@
 <div class="dialog-container">
 
   <div class="dialog-header">
-    <h2>Spend {{ data.name }}</h2>
+    <h2>{{ 'OTHER_SPLIT.SPEND_TITLE' | translate: { name: (data.name | potName) } }}</h2>
 
     <p class="subtitle">
-      Enter the amount and provide a description for this expense.
+      {{ 'SPEND_DIALOG.SUBTITLE' | translate }}
     </p>
   </div>
 
@@ -19,7 +19,7 @@
         </div>
 
         <div class="balance-label">
-          <span>Available Amount</span>
+          <span>{{ 'SPEND_DIALOG.AVAILABLE' | translate }}</span>
 
           <strong>
             {{ data.income - data.expenses | number:'1.2-2' }}
@@ -38,7 +38,7 @@
     <div class="col-12 form-group">
 
       <label class="field-label">
-        Amount
+        {{ 'SPEND_DIALOG.AMOUNT' | translate }}
       </label>
 
       <mat-form-field appearance="outline" class="w-100">
@@ -49,10 +49,26 @@
           matInput
           type="number"
           formControlName="amount"
-          placeholder="Enter amount"
+          [placeholder]="'SPEND_DIALOG.AMOUNT_PH' | translate"
         />
 
       </mat-form-field>
+
+    </div>
+
+
+    <!-- How it was paid: the cash-up takes it off that method -->
+    <div class="col-12 form-group">
+
+      <label class="field-label">
+        {{ 'SPEND_DIALOG.METHOD' | translate }}
+      </label>
+
+      <select class="inputData method-select" formControlName="method">
+        @for (m of methods; track m) {
+          <option [value]="m">{{ 'PAY_BILL.METHOD_' + m | translate }}</option>
+        }
+      </select>
 
     </div>
 
@@ -61,7 +77,7 @@
     <div class="col-12 form-group">
 
       <label class="field-label">
-        Description
+        {{ 'SPEND_DIALOG.DESCRIPTION' | translate }}
       </label>
 
       <mat-form-field appearance="outline" class="w-100">
@@ -72,7 +88,7 @@
           matInput
           rows="4"
           formControlName="description"
-          placeholder="What was this money spent on?"
+          [placeholder]="'SPEND_DIALOG.DESCRIPTION_PH' | translate"
         ></textarea>
 
       </mat-form-field>
@@ -94,7 +110,7 @@
       type="button"
       (click)="cancel()"
     >
-      Cancel
+      {{ 'COMMON.CANCEL' | translate }}
     </button>
 
     <button
@@ -105,7 +121,7 @@
       (click)="submit()"
     >
       <mat-icon>shopping_cart</mat-icon>
-      Spend
+      {{ 'SPEND_DIALOG.SUBMIT' | translate }}
     </button>
 
   </mat-dialog-actions>

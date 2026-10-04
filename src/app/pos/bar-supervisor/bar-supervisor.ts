@@ -75,7 +75,37 @@ export class BarSupervisor implements OnInit, OnDestroy {
     this.audio?.close().catch(() => undefined);
   }
 
+  /** Orders that went straight onto bills while there was no internet - to look over. */
+  offlineOrders: StaffOrder[] = [];
+
+  reviewOffline(order: StaffOrder): void {
+    if (this.busy[order.uid]) {
+      return;
+    }
+    this.busy = { ...this.busy, [order.uid]: true };
+    this.barService.reviewStaffOrder(order.uid).subscribe({
+      next: (res) => {
+        this.busy = { ...this.busy, [order.uid]: false };
+        if (res?.data) {
+          this.offlineOrders = this.offlineOrders.filter((o) => o.uid !== order.uid);
+        }
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.busy = { ...this.busy, [order.uid]: false };
+        this.cdr.markForCheck();
+      },
+    });
+  }
+
   load(): void {
+    this.barService.offlineUnreviewedOrders().subscribe({
+      next: (res) => {
+        this.offlineOrders = res?.data ?? [];
+        this.cdr.markForCheck();
+      },
+      error: () => {},
+    });
     this.barService.pendingStaffOrders().subscribe({
       next: (res) => {
         const incoming = (res?.data ?? []).filter((o) => !this.decided.has(o.uid));

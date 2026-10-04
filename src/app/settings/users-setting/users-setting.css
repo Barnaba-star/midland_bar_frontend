@@ -995,3 +995,10 @@
     padding: 0 4px;
   }
 }
+
+/* Role column in the users table */
+.role-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}

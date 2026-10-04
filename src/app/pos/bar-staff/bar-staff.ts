@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { TitleAction, Title2 } from '../../Utils/component/title2/title2';
 import { Authentication } from '../../Utils/services/authentication';
 import { MatIconModule } from '@angular/material/icon';
@@ -109,12 +109,22 @@ export class BarStaff implements OnInit{
     }
   }
 
+  // No staff code field: the backend gives each new staff member a random
+  // three-digit code, shown in the tables below.
+  @ViewChild('staffForm') staffForm?: Form3;
+
   staffFields: FormField[] = [
     {
+      // The staff member's own code - typed on the Staff Sell keypad, so three digits.
       name: 'staffCode',
       type: 'text',
       label: 'STAFF_FORM.STAFF_CODE',
       placeholder: 'STAFF_FORM.STAFF_CODE_PH',
+      hint: 'STAFF_FORM.STAFF_CODE_HINT',
+      required: true,
+      pattern: '^[0-9]{3}$',
+      patternMessage: 'STAFF_FORM.STAFF_CODE_FORMAT',
+      autoComplete: 'off',
     },
     {
       name: 'firstName',
@@ -174,12 +184,6 @@ export class BarStaff implements OnInit{
   ];
 
   editStaffFields: FormField[] = [
-    {
-      name: 'staffCode',
-      type: 'text',
-      label: 'STAFF_FORM.STAFF_CODE',
-      placeholder: 'STAFF_FORM.STAFF_CODE_PH',
-    },
     {
       name: 'firstName',
       type: 'text',
@@ -241,6 +245,10 @@ export class BarStaff implements OnInit{
   barStaffEdited: BarStaffEntity[] = [];
   staffColumns = [
     {
+      field: 'staffCode',
+      header: 'STAFF_PAGE.CODE',
+    },
+    {
       field: 'firstName',
       header: 'STAFF_FORM.FIRST_NAME',
     },
@@ -268,7 +276,7 @@ export class BarStaff implements OnInit{
 
   savedData(value: any): void {
     const barStaffDTO: BarStaffDTO = {
-      staffCode: value.staffCode,
+      staffCode: String(value.staffCode ?? '').trim(),
       firstName: value.firstName,
       middleName: value.middleName,
       lastName: value.lastName,
@@ -284,6 +292,8 @@ export class BarStaff implements OnInit{
         console.log('Bar staff saved successfully:', response);
         if (response.data) {
           this.alertService.show('success', this.translate.instant('STAFF_FORM.SAVED'));
+          // Saved: now the form may empty (a refused code left it as typed).
+          this.staffForm?.reset();
           this.barStaff.push(response.data);
           this.cdr.detectChanges();
           console.log('Saved Bar Staff:', this.barStaff);
@@ -312,7 +322,6 @@ export class BarStaff implements OnInit{
       console.log('Updated form data:', result);
       const staffEdited: BarStaffDTO = {
         uid: this.staffUID,
-        staffCode: result.staffCode,
         firstName: result.firstName,
         middleName: result.middleName,
         lastName: result.lastName,
@@ -348,7 +357,7 @@ export class BarStaff implements OnInit{
 
     this.translate.get([
       'STAFF_PAGE.DELETE_TITLE',
-      'COMMON.CONFIRM_DELETE',
+      'STAFF_PAGE.DELETE_MESSAGE',
       'COMMON.DELETE',
       'COMMON.CANCEL',
     ]).subscribe(translations => {
@@ -358,7 +367,7 @@ export class BarStaff implements OnInit{
         disableClose: true,
         data: {
           title: translations['STAFF_PAGE.DELETE_TITLE'],
-          message: translations['COMMON.CONFIRM_DELETE'],
+          message: translations['STAFF_PAGE.DELETE_MESSAGE'],
           itemName: `${event.firstName || ''} ${event.lastName || ''}`.trim(),
           confirmText: translations['COMMON.DELETE'],
           cancelText: translations['COMMON.CANCEL'],
@@ -383,6 +392,8 @@ export class BarStaff implements OnInit{
           this.barStaffEdited = [];
           this.cdr.detectChanges();
           console.log('Remaining staff:', this.barStaff);
+        } else {
+          this.showDeleteRefused(response.message);
         }
       },
 
@@ -548,7 +559,6 @@ loadStaffPage() {
         // console.log('Edited Data', result);
         const barStaffDTO: BarStaffDTO = {
           uid: this.staffPageUID,
-          staffCode: result.staffCode,
           firstName: result.firstName,
           middleName: result.middleName,
           lastName: result.lastName,
@@ -566,7 +576,8 @@ loadStaffPage() {
                 (staff) => staff.uid === this.staffPageUID,
               );
               if (index != -1) {
-                this.barStaffDataSource.data[index] = res.data;
+                // The save answers with the bare staff row; keep the login roles the table had.
+                this.barStaffDataSource.data[index] = { ...res.data, roles: this.barStaffDataSource.data[index].roles };
                 this.barStaffDataSource.data = [...this.barStaffDataSource.data];
                 this.alertService.show('success', this.translate.instant('STAFF_FORM.UPDATED'));
                 this.cdr.detectChanges();
@@ -588,7 +599,7 @@ loadStaffPage() {
 
     this.translate.get([
       'STAFF_PAGE.DELETE_TITLE',
-      'COMMON.CONFIRM_DELETE',
+      'STAFF_PAGE.DELETE_MESSAGE',
       'COMMON.DELETE',
       'COMMON.CANCEL',
     ]).subscribe(translations => {
@@ -598,7 +609,7 @@ loadStaffPage() {
         disableClose: true,
         data: {
           title: translations['STAFF_PAGE.DELETE_TITLE'],
-          message: translations['COMMON.CONFIRM_DELETE'],
+          message: translations['STAFF_PAGE.DELETE_MESSAGE'],
           itemName: `${event.firstName || ''} ${event.lastName || ''}`.trim(),
           confirmText: translations['COMMON.DELETE'],
           cancelText: translations['COMMON.CANCEL'],
@@ -613,6 +624,14 @@ loadStaffPage() {
     });
   }
 
+  /** "Delete" only makes the staff member inactive; the backend refuses while they have open bills. */
+  private showDeleteRefused(message?: string) {
+    const key = message?.includes('unpaid bills') ? 'STAFF_FORM.DELETE_HAS_OPEN'
+      : message?.includes('login role') ? 'STAFF_PAGE.DELETE_HAS_ROLE'
+      : 'STAFF_FORM.DELETE_FAILED';
+    this.alertService.show('error', this.translate.instant(key));
+  }
+
   onConfirmDeleteStaffPage() {
     this.barService.deleteBarStaff(this.staffPageUID).subscribe({
       next: (res) => {
@@ -625,6 +644,8 @@ loadStaffPage() {
             this.cdr.detectChanges();
             this.alertService.show('success', this.translate.instant('STAFF_FORM.DELETED'))
           }
+        } else {
+          this.showDeleteRefused(res.message);
         }
       },
       error: (error) => {

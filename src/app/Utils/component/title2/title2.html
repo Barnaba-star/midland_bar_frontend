@@ -87,7 +87,7 @@
           </mat-icon>
 
           <span class="app-title-sm">
-            {{action.title | translate}}
+            {{(action.label || action.title) | translate}}
           </span>
 
           @if (action.badge !== undefined && action.badge !== null) {

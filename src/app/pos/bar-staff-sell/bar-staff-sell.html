@@ -14,6 +14,7 @@
   </header>
 
     <div class="staff-sell">
+      <app-shift-bar [noticeOnly]="true"></app-shift-bar>
 
       @if (!staff) {
         <!-- ============ WHO IS SELLING ============ -->
@@ -22,19 +23,41 @@
           <h2 class="code-title">{{ 'STAFF_SELL_PAGE.CODE_TITLE' | translate }}</h2>
           <p class="code-hint">{{ 'STAFF_SELL_PAGE.CODE_HINT' | translate }}</p>
 
+          <!-- The code is a secret: shown as dots. On a touch screen the keypad
+               below is the only way in, so the device keyboard never pops up. -->
           <input
             #codeInput
             class="code-input"
             name="code"
+            type="password"
+            inputmode="numeric"
             [(ngModel)]="code"
+            (ngModelChange)="onCodeTyped($event)"
+            [readOnly]="touch"
             autocomplete="off"
-            autocapitalize="characters"
             spellcheck="false"
             maxlength="10"
-            placeholder="K1"
-            autofocus
+            placeholder="•••"
             [attr.aria-label]="'STAFF_SELL_PAGE.CODE_TITLE' | translate"
           />
+
+          <div class="keypad" role="group" [attr.aria-label]="'STAFF_SELL_PAGE.CODE_TITLE' | translate">
+            @for (k of keypad; track k) {
+              @switch (k) {
+                @case ('C') {
+                  <button type="button" class="key key-fn" (click)="clearCode()" [disabled]="looking || !code">C</button>
+                }
+                @case ('<') {
+                  <button type="button" class="key key-fn" (click)="backspace()" [disabled]="looking || !code" [attr.aria-label]="'COMMON.DELETE' | translate">
+                    <mat-icon>backspace</mat-icon>
+                  </button>
+                }
+                @default {
+                  <button type="button" class="key" (click)="press(k)" [disabled]="looking">{{ k }}</button>
+                }
+              }
+            }
+          </div>
 
           <button type="submit" class="code-btn" [disabled]="!code.trim() || looking">
             {{ (looking ? 'COMMON.LOADING' : 'STAFF_SELL_PAGE.CONTINUE') | translate }}
@@ -97,6 +120,16 @@
                   }
                   <span class="bill-status">{{ bill.paymentStatus }}</span>
                 </div>
+
+                <!-- Only on this device, never saved: who the customer is. -->
+                <label class="bill-nickname">
+                  <mat-icon>sell</mat-icon>
+                  <input type="text" maxlength="40"
+                         [value]="nicknames.get(bill.uid)"
+                         (input)="nicknames.set(bill.uid, $any($event.target).value)"
+                         [placeholder]="'BILL_NICKNAME.PH' | translate"
+                         [attr.aria-label]="'BILL_NICKNAME.LABEL' | translate" />
+                </label>
 
                 <div class="bill-amount">
                   <span>{{ 'SALES_PAGE.BILL' | translate }}</span>

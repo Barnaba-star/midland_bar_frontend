@@ -2,10 +2,10 @@
 
   <!-- HEADER -->
   <div class="dialog-header">
-    <h2>{{ data.name }}</h2>
+    <h2>{{ data.name | potName }}</h2>
 
     <p class="subtitle">
-      {{ data.descriptions }}
+      {{ 'OTHER_SPLIT.POT_DESC_OF' | translate: { name: (data.name | potName) } }}
     </p>
   </div>
 
@@ -80,12 +80,12 @@
 
         <div class="detail-row">
           <span>{{ 'COMMON.NAME' | translate }}</span>
-          <strong>{{ data.name }}</strong>
+          <strong>{{ data.name | potName }}</strong>
         </div>
 
         <div class="detail-row">
           <span>{{ 'COMMON.DESCRIPTION' | translate }}</span>
-          <strong>{{ data.descriptions }}</strong>
+          <strong>{{ 'OTHER_SPLIT.POT_DESC_OF' | translate: { name: (data.name | potName) } }}</strong>
         </div>
 
         <div class="detail-row">
@@ -208,7 +208,7 @@
           </h3>
 
           <p>
-            {{ 'INCOME_EXPENSE_DIALOG.NO_SPENDING_TEXT' | translate: { name: data.name } }}
+            {{ 'INCOME_EXPENSE_DIALOG.NO_SPENDING_TEXT' | translate: { name: (data.name | potName) } }}
           </p>
 
         </div>

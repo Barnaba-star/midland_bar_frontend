@@ -263,3 +263,10 @@ body {
 .row-action.delete:hover {
   border-color: #dc2626;
 }
+
+/* A receipt being printed straight away: fetched and printed, never shown. */
+.receipt-auto-print {
+  visibility: hidden !important;
+  position: fixed !important;
+  left: -10000px !important;
+}

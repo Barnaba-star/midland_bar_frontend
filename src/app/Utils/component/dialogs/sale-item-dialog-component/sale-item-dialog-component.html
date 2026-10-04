@@ -20,6 +20,7 @@
         type="text"
         autocomplete="off"
         [(ngModel)]="search"
+        (ngModelChange)="letter = null"
         (keydown.enter)="onSearchEnter()"
         [placeholder]="'SALE_ITEM.SEARCH_PH' | translate"
       />
@@ -28,11 +29,28 @@
     <div class="results">
       @if (loading) {
         <p class="hint">…</p>
-      } @else if (!search.trim()) {
-        <p class="hint">{{ 'SALE_ITEM.TYPE_HINT' | translate }}</p>
+      } @else if (!search.trim() && !letter) {
+        <!-- Touch screen: tap the first letter of the drink or dish. -->
+        <p class="hint">{{ 'SALE_ITEM.PICK_LETTER' | translate }}</p>
+        <div class="letter-grid">
+          @for (l of letters; track l) {
+            @let n = letterCounts[l] || 0;
+            <button type="button" class="letter-btn" [disabled]="!n" (click)="pickLetter(l)">
+              <span>{{ l }}</span>
+              @if (n) { <small>{{ n }}</small> }
+            </button>
+          }
+        </div>
       } @else if (matches.length === 0) {
         <p class="hint">{{ 'SALE_ITEM.NO_MATCH' | translate: { term: search } }}</p>
       } @else {
+        @if (letter && !search.trim()) {
+          <button type="button" class="letter-back" (click)="backToLetters()">
+            <mat-icon>arrow_back</mat-icon>
+            <span>{{ 'SALE_ITEM.ALL_LETTERS' | translate }}</span>
+            <strong class="letter-current">{{ letter }}</strong>
+          </button>
+        }
         @for (s of matches; track s.uid) {
           @let st = s | stockPacks;
           @let left = available(s);

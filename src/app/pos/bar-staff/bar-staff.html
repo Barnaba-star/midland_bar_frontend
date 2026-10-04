@@ -22,6 +22,8 @@
       }
       @if (barStaff.length === 0) {
         <app-form3
+          #staffForm
+          [resetOnSubmit]="false"
           [formTitle]="'STAFF_PAGE.FORM_TITLE_ADD' | translate"
           [fields]="staffFields"
           (submitForm)="savedData($event)"
@@ -84,11 +86,12 @@
               <thead>
                 <tr>
                   <th>#</th>
+                  <th>{{ 'STAFF_PAGE.CODE' | translate }}</th>
                   <th>{{ 'STAFF_PAGE.COL_STAFF_MEMBER' | translate }}</th>
                   <th>{{ 'STAFF_PAGE.COL_PHONE' | translate }}</th>
                   <th>{{ 'STAFF_PAGE.COL_GENDER' | translate }}</th>
                   <th>{{ 'STAFF_PAGE.COL_DOB' | translate }}</th>
-                  <th>{{ 'STAFF_PAGE.COL_CATEGORY' | translate }}</th>
+                  <th>{{ 'STAFF_PAGE.COL_ROLE' | translate }}</th>
                   <th>{{ 'COMMON.STATUS' | translate }}</th>
                   <th>{{ 'COMMON.ACTIONS' | translate }}</th>
                 </tr>
@@ -100,6 +103,15 @@
                     <!-- Number -->
                     <td class="index-column">
                       {{ (pageParam.page || 0) * (pageParam.size || 10) + i + 1 }}
+                    </td>
+
+                    <!-- Code -->
+                    <td>
+                      @if (staff.staffCode) {
+                        <span class="staff-code-tag">{{ staff.staffCode }}</span>
+                      } @else {
+                        <span class="empty-value">--</span>
+                      }
                     </td>
 
                     <!-- Staff -->
@@ -115,9 +127,6 @@
                             {{ staff.middleName || '' }}
                             {{ staff.lastName || '' }}
                           </span>
-                          @if (staff.staffCode) {
-                            <small class="staff-code-tag">{{ 'STAFF_PAGE.CODE' | translate }} {{ staff.staffCode }}</small>
-                          }
                         </div>
                       </div>
                     </td>
@@ -159,15 +168,20 @@
                       }
                     </td>
 
-                    <!-- Category -->
+                    <!-- Role: the roles of their login, or plain Staff -->
                     <td>
-                      @if (staff.barCategory) {
-                        <span class="category-badge" [attr.data-category]="staff.barCategory">
-                          <mat-icon>{{ categoryIcons[staff.barCategory] || 'badge' }}</mat-icon>
-                          {{ categoryLabel(staff.barCategory) | translate }}
-                        </span>
+                      @if (staff.roles?.length) {
+                        @for (role of staff.roles; track role) {
+                          <span class="category-badge role-badge">
+                            <mat-icon>verified_user</mat-icon>
+                            {{ role }}
+                          </span>
+                        }
                       } @else {
-                        <span class="empty-value">--</span>
+                        <span class="category-badge staff-role-badge">
+                          <mat-icon>badge</mat-icon>
+                          {{ 'STAFF_PAGE.ROLE_STAFF' | translate }}
+                        </span>
                       }
                     </td>
 
@@ -199,10 +213,17 @@
                           <span>{{ 'COMMON.EDIT' | translate }}</span>
                         </button>
 
-                        <button type="button" class="row-action delete" (click)="onDeleteBarStaffPage(staff)">
-                          <mat-icon>delete_outline</mat-icon>
-                          <span>{{ 'COMMON.DELETE' | translate }}</span>
-                        </button>
+                        <!-- Someone with a login role would sign in again: the CEO removes the role first. -->
+                        <span [matTooltip]="staff.roles?.length ? ('STAFF_PAGE.DELETE_HAS_ROLE' | translate) : ''">
+                          <button
+                            type="button"
+                            class="row-action delete"
+                            [disabled]="!!staff.roles?.length"
+                            (click)="onDeleteBarStaffPage(staff)">
+                            <mat-icon>delete_outline</mat-icon>
+                            <span>{{ 'COMMON.DELETE' | translate }}</span>
+                          </button>
+                        </span>
                       </div>
                     </td>
                   </tr>
@@ -210,7 +231,7 @@
 
                 @if (barStaffDataSource.data.length === 0 && filtering) {
                   <tr>
-                    <td colspan="8" class="no-match">
+                    <td colspan="9" class="no-match">
                       {{ 'STAFF_PAGE.NO_MATCH' | translate }}
                     </td>
                   </tr>

@@ -32,77 +32,79 @@
         <mat-icon>search</mat-icon>
       </button>
 
-      <!-- NOTIFICATIONS -->
-      <div class="notifications-wrapper">
+      @if (!hideAdminIcons) {
+        <!-- NOTIFICATIONS -->
+        <div class="notifications-wrapper">
 
-        <button
-          type="button"
-          class="icon-btn"
-          [matTooltip]="'NOTIFICATIONS.TITLE' | translate"
-          (click)="toggleNotifications()"
-        >
-          <mat-icon>notifications</mat-icon>
+          <button
+            type="button"
+            class="icon-btn"
+            [matTooltip]="'NOTIFICATIONS.TITLE' | translate"
+            (click)="toggleNotifications()"
+          >
+            <mat-icon>notifications</mat-icon>
 
-          @if ((unreadCount$ | async); as unreadCount) {
-            @if (unreadCount > 0) {
-              <span class="notification-badge">{{ unreadCount }}</span>
+            @if ((unreadCount$ | async); as unreadCount) {
+              @if (unreadCount > 0) {
+                <span class="notification-badge">{{ unreadCount }}</span>
+              }
             }
-          }
-        </button>
+          </button>
 
-        @if (notificationsOpen) {
+          @if (notificationsOpen) {
 
-          <div class="notifications-panel">
+            <div class="notifications-panel">
 
-            <div class="notifications-panel-header">
-              <span>{{ 'NOTIFICATIONS.TITLE' | translate }}</span>
+              <div class="notifications-panel-header">
+                <span>{{ 'NOTIFICATIONS.TITLE' | translate }}</span>
 
-              <button
-                type="button"
-                class="mark-all-read-btn"
-                (click)="markAllNotificationsRead()"
-              >
-                {{ 'NOTIFICATIONS.MARK_ALL_READ' | translate }}
-              </button>
-            </div>
-
-            <div class="notifications-list">
-
-              @for (notification of (notifications$ | async); track notification.uid) {
-
-                <div
-                  class="notification-item"
-                  [class.unread]="!notification.read"
-                  (click)="onNotificationClick(notification)"
+                <button
+                  type="button"
+                  class="mark-all-read-btn"
+                  (click)="markAllNotificationsRead()"
                 >
-                  <mat-icon class="notification-icon">{{ notification.icon }}</mat-icon>
+                  {{ 'NOTIFICATIONS.MARK_ALL_READ' | translate }}
+                </button>
+              </div>
 
-                  <div class="notification-body">
-                    <span class="notification-title">{{ notification.titleKey | translate }}</span>
-                    <span class="notification-message">{{ notification.messageKey | translate: notification.messageParams }}</span>
+              <div class="notifications-list">
+
+                @for (notification of (notifications$ | async); track notification.uid) {
+
+                  <div
+                    class="notification-item"
+                    [class.unread]="!notification.read"
+                    (click)="onNotificationClick(notification)"
+                  >
+                    <mat-icon class="notification-icon">{{ notification.icon }}</mat-icon>
+
+                    <div class="notification-body">
+                      <span class="notification-title">{{ notification.titleKey | translate }}</span>
+                      <span class="notification-message">{{ notification.messageKey | translate: notification.messageParams }}</span>
+                    </div>
+
+                    @if (!notification.read) {
+                      <span class="notification-dot"></span>
+                    }
                   </div>
 
-                  @if (!notification.read) {
-                    <span class="notification-dot"></span>
-                  }
-                </div>
+                } @empty {
 
-              } @empty {
+                  <div class="notifications-empty">
+                    <mat-icon>notifications_none</mat-icon>
+                    <span>{{ 'NOTIFICATIONS.EMPTY' | translate }}</span>
+                  </div>
 
-                <div class="notifications-empty">
-                  <mat-icon>notifications_none</mat-icon>
-                  <span>{{ 'NOTIFICATIONS.EMPTY' | translate }}</span>
-                </div>
+                }
 
-              }
+              </div>
 
             </div>
 
-          </div>
+          }
 
-        }
-
-      </div>
+        </div>
+      }
 
       <!-- FULLSCREEN -->
       <button
@@ -132,25 +134,32 @@
         <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
       </button>
 
-      <!-- SETTINGS SHORTCUT -->
-      <button
-        type="button"
-        class="icon-btn"
-        [matTooltip]="'MENU.SETTING' | translate"
-        (click)="goToSettings()"
-      >
-        <mat-icon>settings</mat-icon>
-      </button>
+      @if (!hideAdminIcons) {
+        <!-- SETTINGS SHORTCUT -->
+        <button
+          type="button"
+          class="icon-btn"
+          [matTooltip]="'MENU.SETTING' | translate"
+          (click)="goToSettings()"
+        >
+          <mat-icon>settings</mat-icon>
+        </button>
+      }
 
-      <!-- HELP -->
-      <button
-        type="button"
-        class="icon-btn"
-        [matTooltip]="'HELP.TITLE' | translate"
-        (click)="openHelp()"
-      >
-        <mat-icon>help_outline</mat-icon>
-      </button>
+      @if (!isCashier) {
+        <!-- HELP -->
+        <button
+          type="button"
+          class="icon-btn"
+          [matTooltip]="'HELP.TITLE' | translate"
+          (click)="openHelp()"
+        >
+          <mat-icon>help_outline</mat-icon>
+        </button>
+      }
+
+      <!-- ONLINE / OFFLINE, and sales waiting to reach the server -->
+      <app-connectivity-badge></app-connectivity-badge>
 
       <!-- REFRESH -->
       <button
@@ -182,6 +191,12 @@
       <span>{{ branchName }}</span>
       @if (subscriptionStatus) {
         <span [class]="subscriptionDotClass"></span>
+      }
+      @if (viewOnly) {
+        <!-- Main office helping in this branch: looking, not changing. -->
+        <span class="view-only-tag" [matTooltip]="'BRANCH_CHOICE.VIEW_ONLY_TIP' | translate">
+          <mat-icon>visibility</mat-icon>{{ 'BRANCH_CHOICE.VIEW_ONLY' | translate }}
+        </span>
       }
     </div>
   </div>
@@ -321,24 +336,26 @@
             }
 
 
-            <!-- SUBSCRIBE -->
-            <div
-              class="profileItems"
-              (click)="openSubscribeDialog()"
-            >
+            @if (!isCashier) {
+              <!-- SUBSCRIBE -->
+              <div
+                class="profileItems"
+                (click)="openSubscribeDialog()"
+              >
 
-              <span>
-                {{ 'COMMON.SUBSCRIBE' | translate }}
-              </span>
+                <span>
+                  {{ 'COMMON.SUBSCRIBE' | translate }}
+                </span>
 
-              <mat-icon>
-                payments
-              </mat-icon>
+                <mat-icon>
+                  payments
+                </mat-icon>
 
-            </div>
+              </div>
 
 
-            <mat-divider></mat-divider>
+              <mat-divider></mat-divider>
+            }
 
 
             <!-- PASSWORD -->

@@ -62,3 +62,27 @@
   gap: 8px;
   margin-top: 16px;
 }
+
+/* Several bills: they scroll inside the dialog, with a gap between papers. */
+.r-stack.many {
+  max-height: 65vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.r-summary {
+  border: 1px dashed currentColor;
+  padding: 8px;
+}
+
+/* The branch's logo at the top of the slip, in black and white like the printer */
+.r-logo {
+  display: block;
+  margin: 0 auto 6px;
+  max-width: 100px;
+  max-height: 70px;
+  object-fit: contain;
+  filter: grayscale(1) contrast(1.3);
+}

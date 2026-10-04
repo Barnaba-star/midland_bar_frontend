@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslatePipe } from '@ngx-translate/core';
-import { ServiceBarMethod } from '../../../../pos/service-bar-method';
+import { SellableItems } from '../../../services/sellable-items';
 import { StockPacksPipe } from '../../../pipes/stock-packs.pipe';
 
 /** What the dialog hands back: one service and how many of it. */
@@ -14,8 +14,9 @@ export interface SaleItemResult {
 }
 
 /**
- * Adding to a bill: type the first letter or two, pick the drink, say how
- * many. The seller is whoever is logged in, so there is no staff to choose.
+ * Adding to a bill, made for a touch screen: tap the first letter (C), tap
+ * the drink (Castle Lite), say how many. Typing a name still works. The
+ * seller is whoever is logged in, so there is no staff to choose.
  */
 @Component({
   selector: 'app-sale-item-dialog-component',
@@ -31,22 +32,32 @@ export class SaleItemDialogComponent implements OnInit, AfterViewInit {
   services: any[] = [];
   loading = true;
   search = '';
+  /** The letter tapped in the A-Z grid; its services are listed. */
+  letter: string | null = null;
   selected: any = null;
+  /** A touch screen: no auto-focus on text boxes, which would pop the on-screen keyboard up. */
+  private readonly touch = typeof window !== 'undefined' && !!window.matchMedia?.('(pointer: coarse)').matches;
+  readonly letters = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ', '#'];
   quantity = 1;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { billCode?: string },
     private dialogRef: MatDialogRef<SaleItemDialogComponent, SaleItemResult>,
-    private barService: ServiceBarMethod,
+    private sellable: SellableItems,
     private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
-    this.barService.findBarServiceList().subscribe({
-      next: (res) => {
-        // Stock items (beef, goat meat) are sold through the services made
-        // from them, never on their own.
-        this.services = (res.data ?? []).filter((s: any) => s.kind !== 'STOCK_ITEM');
+    // The list already in memory shows at once; a fresh copy (prices, stock)
+    // replaces it behind the scenes.
+    const known = this.sellable.current();
+    if (known) {
+      this.services = known;
+      this.loading = false;
+    }
+    this.sellable.refresh().subscribe({
+      next: (items) => {
+        this.services = items;
         this.loading = false;
         this.cdr.detectChanges();
       },
@@ -58,7 +69,37 @@ export class SaleItemDialogComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    setTimeout(() => this.searchInput?.nativeElement.focus());
+    if (!this.touch) {
+      setTimeout(() => this.searchInput?.nativeElement.focus());
+    }
+  }
+
+  /** The A-Z grid key a name falls under: its first letter, or # for a digit or symbol. */
+  private keyOf(service: any): string {
+    const first = String(service?.serviceName ?? '').trim().charAt(0).toUpperCase();
+    return first >= 'A' && first <= 'Z' ? first : '#';
+  }
+
+  /** How many services sit under each letter - empty letters are greyed out. */
+  get letterCounts(): Record<string, number> {
+    const counts: Record<string, number> = {};
+    for (const s of this.services) {
+      const k = this.keyOf(s);
+      counts[k] = (counts[k] || 0) + 1;
+    }
+    return counts;
+  }
+
+  pickLetter(letter: string): void {
+    this.letter = letter;
+    this.search = '';
+    this.cdr.detectChanges();
+  }
+
+  backToLetters(): void {
+    this.letter = null;
+    this.search = '';
+    this.cdr.detectChanges();
   }
 
   /**
@@ -69,7 +110,13 @@ export class SaleItemDialogComponent implements OnInit, AfterViewInit {
   get matches(): any[] {
     const term = this.search.trim().toLowerCase();
     if (!term) {
-      return [];
+      // A tapped letter: every service under it, A to Z.
+      if (!this.letter) {
+        return [];
+      }
+      return this.services
+        .filter((s) => this.keyOf(s) === this.letter)
+        .sort((a, b) => String(a.serviceName).localeCompare(String(b.serviceName)));
     }
     const starts: any[] = [];
     const contains: any[] = [];
@@ -89,13 +136,17 @@ export class SaleItemDialogComponent implements OnInit, AfterViewInit {
     this.selected = service;
     this.quantity = 1;
     this.cdr.detectChanges();
-    setTimeout(() => this.quantityInput?.nativeElement.select());
+    if (!this.touch) {
+      setTimeout(() => this.quantityInput?.nativeElement.select());
+    }
   }
 
   changeService(): void {
     this.selected = null;
     this.cdr.detectChanges();
-    setTimeout(() => this.searchInput?.nativeElement.focus());
+    if (!this.touch) {
+      setTimeout(() => this.searchInput?.nativeElement.focus());
+    }
   }
 
   step(by: number): void {

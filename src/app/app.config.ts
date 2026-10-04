@@ -1,11 +1,13 @@
 import {
   ApplicationConfig,
   ErrorHandler,
+  isDevMode,
   provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection
 } from '@angular/core';
 
 import { provideRouter } from '@angular/router';
+import { provideServiceWorker } from '@angular/service-worker';
 
 import {
   provideHttpClient,
@@ -25,6 +27,7 @@ import { routes } from './app.routes';
 import { AuthInterceptor } from './Utils/inteceptor/auth-interceptor';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { StatusInterceptor } from './Utils/inteceptor/status-interceptor';
+import { OfflineInterceptor } from './Utils/inteceptor/offline-interceptor';
 import { GlobalErrorHandler } from './Utils/handlers/global-error-handler';
 
 export const appConfig: ApplicationConfig = {
@@ -40,6 +43,13 @@ export const appConfig: ApplicationConfig = {
 
     provideRouter(routes),
 
+    // Keeps the app's own files on the device so it opens without internet.
+    // Production builds only - ng serve has no service worker.
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
+
     provideClientHydration(
       withEventReplay()
     ),
@@ -47,6 +57,8 @@ export const appConfig: ApplicationConfig = {
   provideHttpClient(
       withFetch(),
       withInterceptors([
+        // Outermost: answers from the device and queues sales when there is no internet.
+        OfflineInterceptor,
         AuthInterceptor,
         StatusInterceptor
       ])

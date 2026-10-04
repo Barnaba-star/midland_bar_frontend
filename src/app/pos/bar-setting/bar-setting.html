@@ -604,6 +604,12 @@
     </div>
   }
 
+  @case ('SALON.OTHER_SPLIT') {
+    <div class="action-container123">
+      <app-other-split area="bar" />
+    </div>
+  }
+
   @case ('SALON.COMMISSION') {
     <div class="action-container123 commission-page">
 
@@ -665,6 +671,14 @@
             <mat-icon>search</mat-icon>
             <input type="search" [placeholder]="'SERVICE_PAGE.SEARCH_PH' | translate" (input)="onCommissionSearch($event)" />
           </div>
+
+          <!-- Services with no split yet: listed first; this shows only them. -->
+          @if (commissionMissingCount) {
+            <button type="button" class="commission-missing-btn" [class.active]="commissionMissingOnly" (click)="toggleCommissionMissing()">
+              <mat-icon>{{ commissionMissingOnly ? 'close' : 'warning_amber' }}</mat-icon>
+              {{ (commissionMissingOnly ? 'COMMISSION_FORM.SHOW_ALL' : 'COMMISSION_FORM.MISSING_BTN') | translate: { n: commissionMissingCount } }}
+            </button>
+          }
 
           <div class="commission-count">
             <span>{{ commissionTotalElements }}</span>

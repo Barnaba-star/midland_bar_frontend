@@ -1,0 +1,85 @@
+<div class="other-card">
+  <div class="other-head">
+    <div class="other-head-icon"><mat-icon>call_split</mat-icon></div>
+    <div>
+      <h3>{{ 'OTHER_SPLIT.TITLE' | translate }}</h3>
+      <p>{{ 'OTHER_SPLIT.SUBTITLE' | translate }}</p>
+    </div>
+  </div>
+
+  @if (loading) {
+    <p class="other-muted">{{ 'OTHER_SPLIT.LOADING' | translate }}</p>
+  } @else {
+    <!-- Quick picks -->
+    <div class="other-suggest">
+      <span class="other-muted">{{ 'OTHER_SPLIT.SUGGEST' | translate }}</span>
+      @for (s of suggestions; track s) {
+        <button type="button" class="chip" (click)="addSuggestion(s)">
+          <mat-icon>add</mat-icon>{{ s | translate }}
+        </button>
+      }
+      <button type="button" class="chip chip-all" (click)="addAllSuggestions()">
+        <mat-icon>playlist_add</mat-icon>{{ 'OTHER_SPLIT.ADD_ALL' | translate }}
+      </button>
+    </div>
+
+    @if (items.length === 0) {
+      <div class="other-empty">
+        <mat-icon>info</mat-icon>
+        <span>{{ 'OTHER_SPLIT.EMPTY' | translate }}</span>
+      </div>
+    } @else {
+      <div class="other-rows">
+        <div class="other-row other-row-head">
+          <span>{{ 'OTHER_SPLIT.COL_ITEM' | translate }}</span>
+          <span>{{ 'OTHER_SPLIT.COL_SHARE' | translate }}</span>
+          <span class="right">{{ 'OTHER_SPLIT.COL_EXAMPLE' | translate: { amount: (example | number) } }}</span>
+          <span></span>
+        </div>
+        @for (item of items; track $index; let i = $index) {
+          <div class="other-row">
+            @if (isPicked(item)) {
+              <div class="name-fixed">{{ item.name | translate }}</div>
+            } @else {
+              <input type="text" maxlength="60" [(ngModel)]="item.name" [name]="'n' + i"
+                     [placeholder]="'OTHER_SPLIT.NAME_PH' | translate" />
+            }
+            <div class="pct">
+              <input type="number" min="1" max="100" step="1" [(ngModel)]="item.percent" [name]="'p' + i" />
+              <span>%</span>
+            </div>
+            <span class="right amount">Tshs {{ shareOf(item) | number: '1.0-0' }}</span>
+            <button type="button" class="row-remove" (click)="removeRow(i)" [attr.aria-label]="'COMMON.DELETE' | translate">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        }
+      </div>
+    }
+
+    <div class="other-foot">
+      <button type="button" class="btn-add" (click)="addRow()">
+        <mat-icon>add</mat-icon>{{ 'OTHER_SPLIT.ADD_ROW' | translate }}
+      </button>
+
+      @if (items.length > 0) {
+        <div class="other-total" [class.ok]="total === 100" [class.bad]="total !== 100">
+          {{ 'OTHER_SPLIT.TOTAL' | translate }}: <strong>{{ total }}%</strong>
+          @if (total !== 100) {
+            <small>{{ (total < 100 ? 'OTHER_SPLIT.LEFT' : 'OTHER_SPLIT.OVER') | translate: { pct: (total < 100 ? 100 - total : total - 100) } }}</small>
+          }
+        </div>
+      }
+
+      <button type="button" class="btn-save" [disabled]="!canSave" (click)="save()">
+        <mat-icon>save</mat-icon>{{ (saving ? 'OTHER_SPLIT.SAVING' : 'OTHER_SPLIT.SAVE') | translate }}
+      </button>
+    </div>
+
+    <ul class="other-notes">
+      <li>{{ 'OTHER_SPLIT.NOTE_FORWARD' | translate }}</li>
+      <li>{{ 'OTHER_SPLIT.NOTE_REPORT' | translate }}</li>
+      <li>{{ 'OTHER_SPLIT.NOTE_CLEAR' | translate }}</li>
+    </ul>
+  }
+</div>

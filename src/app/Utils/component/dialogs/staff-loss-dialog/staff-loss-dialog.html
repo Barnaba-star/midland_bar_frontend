@@ -1,0 +1,39 @@
+<div class="sl">
+  <div class="sl-head">
+    <span class="sl-icon"><mat-icon>money_off</mat-icon></span>
+    <div>
+      <h3>{{ 'STAFF_LOSS.TITLE' | translate }}</h3>
+      <p>{{ data.staffCode }} · {{ data.staffName }}</p>
+    </div>
+  </div>
+
+  <label class="sl-field">
+    <span>{{ 'STAFF_LOSS.EXPECTED' | translate }}</span>
+    <input type="number" min="0" step="1" [(ngModel)]="expected" name="expected" />
+    <small>{{ 'STAFF_LOSS.EXPECTED_HINT' | translate }}</small>
+  </label>
+
+  <label class="sl-field">
+    <span>{{ 'STAFF_LOSS.HANDED' | translate }}</span>
+    <input type="number" min="0" step="1" [(ngModel)]="handed" name="handed" autofocus />
+  </label>
+
+  <div class="sl-loss" [class.none]="loss === 0">
+    <span>{{ 'STAFF_LOSS.LOSS' | translate }}</span>
+    <strong>Tshs {{ loss | number }}</strong>
+  </div>
+
+  <label class="sl-field">
+    <span>{{ 'STAFF_LOSS.NOTE' | translate }}</span>
+    <input type="text" maxlength="300" [(ngModel)]="note" name="note" [placeholder]="'STAFF_LOSS.NOTE_PH' | translate" />
+  </label>
+
+  <p class="sl-hint">{{ 'STAFF_LOSS.HINT' | translate }}</p>
+
+  <div class="sl-actions">
+    <button type="button" class="sl-cancel" (click)="close()">{{ 'COMMON.CANCEL' | translate }}</button>
+    <button type="button" class="sl-save" [disabled]="!ready" (click)="save()">
+      <mat-icon>save</mat-icon>{{ 'STAFF_LOSS.SAVE' | translate }}
+    </button>
+  </div>
+</div>

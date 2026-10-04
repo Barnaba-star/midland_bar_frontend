@@ -62,6 +62,12 @@ export class Form3 implements OnInit, OnDestroy {
   @Input() showAddButton: boolean = false;
   @Input() showDeleteButton: boolean = false;
   @Input() initialData: any = {};
+  /**
+   * Off: the form keeps what was typed after Submit, so a refusal from the
+   * server (a code already taken) does not wipe it - the page calls reset()
+   * once it has saved.
+   */
+  @Input() resetOnSubmit = true;
 
   previewUrls: { [key: string]: string } = {};
 
@@ -78,6 +84,9 @@ export class Form3 implements OnInit, OnDestroy {
     const group: { [key: string]: any } = {};
     this.fields.forEach((field) => {
       const validators = field.required ? [Validators.required] : [];
+      if (field.pattern) {
+        validators.push(Validators.pattern(field.pattern));
+      }
       const initialValue =
         this.initialData?.[field.name] ?? (field.type === 'checkbox-group' ? [] : '');
 
@@ -109,6 +118,11 @@ export class Form3 implements OnInit, OnDestroy {
     this.form = this.fb.group(group);
   }
 
+  /** Empty the form - for pages that keep it until the save went through. */
+  reset() {
+    this.form.reset();
+  }
+
   getFormValue() {
     return this.form.value;
   }
@@ -132,7 +146,9 @@ export class Form3 implements OnInit, OnDestroy {
 
       this.submitForm.emit(formValue);
 
-      this.form.reset();
+      if (this.resetOnSubmit) {
+        this.form.reset();
+      }
     } else {
       this.form.markAllAsTouched();
     }

@@ -1,0 +1,75 @@
+<section class="pl-card">
+  <div class="pl-head">
+    <div class="pl-icon"><mat-icon>account_balance</mat-icon></div>
+    <div>
+      <h3>{{ 'LEDGER.TITLE' | translate }}</h3>
+      <p>{{ 'LEDGER.SUBTITLE' | translate }}</p>
+    </div>
+  </div>
+
+  @if (loading) {
+    <p class="muted">{{ 'OTHER_SPLIT.LOADING' | translate }}</p>
+  } @else if (rows.length === 0) {
+    <p class="muted">{{ 'LEDGER.EMPTY' | translate }}</p>
+  } @else {
+    <div class="pl-kpis">
+      <div class="kpi"><small>{{ 'LEDGER.COLLECTED' | translate }}</small><strong>{{ totals.collected | number }}</strong></div>
+      <div class="kpi"><small>{{ 'LEDGER.SPENT' | translate }}</small><strong class="neg">{{ totals.spent | number }}</strong></div>
+      <div class="kpi good"><small>{{ 'LEDGER.BALANCE' | translate }}</small><strong>{{ totals.balance | number }}</strong></div>
+    </div>
+
+    <div class="table-scroll">
+      <table class="pl-table">
+        <thead>
+          <tr>
+            <th>{{ 'LEDGER.COL_POT' | translate }}</th>
+            <th class="num">{{ 'LEDGER.COLLECTED' | translate }}</th>
+            <th class="num">{{ 'LEDGER.SPENT' | translate }}</th>
+            <th class="num">{{ 'LEDGER.BALANCE' | translate }}</th>
+            <th>{{ 'LEDGER.COL_USED' | translate }}</th>
+            <th class="num">{{ 'LEDGER.COL_WEEK' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (p of rows; track p.name) {
+            <tr [class.clickable]="p.name === 'Other'" (click)="p.name === 'Other' && (otherOpen = !otherOpen)">
+              <td>
+                <strong>{{ p.name === 'Other' ? ('OTHER_SPLIT.GROUP_NAME' | translate) : (p.name | potName) }}</strong>
+                @if (p.name === 'Other') {
+                  <mat-icon class="chev">{{ otherOpen ? 'expand_less' : 'expand_more' }}</mat-icon>
+                }
+              </td>
+              <td class="num">{{ p.collected | number }}</td>
+              <td class="num"><span [class.neg]="p.spent > 0">{{ p.spent | number }}</span></td>
+              <td class="num"><strong [class.neg]="p.balance < 0">{{ p.balance | number }}</strong></td>
+              <td><div class="used"><i [style.width.%]="usedPercent(p)"></i></div><small class="muted">{{ usedPercent(p) }}%</small></td>
+              <td class="num"><span class="muted">+{{ p.weekCollected | number }}</span>@if (p.weekSpent) { <span class="neg"> −{{ p.weekSpent | number }}</span> }</td>
+            </tr>
+            @if (p.name === 'Other' && otherOpen) {
+              @for (o of otherItems; track o.name) {
+                <tr class="sub">
+                  <td>{{ o.name === 'Other' ? ('OTHER_SPLIT.REPORT_NOT_SPLIT' | translate) : (o.name | potName: 'item') }}</td>
+                  <td class="num">{{ o.collected | number }}</td>
+                  <td class="num"><span [class.neg]="o.spent > 0">{{ o.spent | number }}</span></td>
+                  <td class="num">{{ o.balance | number }}</td>
+                  <td><div class="used"><i [style.width.%]="usedPercent(o)"></i></div></td>
+                  <td class="num"><span class="muted">+{{ o.weekCollected | number }}</span></td>
+                </tr>
+              }
+            }
+          }
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>{{ 'OTHER_SPLIT.TOTAL' | translate }}</td>
+            <td class="num">{{ totals.collected | number }}</td>
+            <td class="num neg">{{ totals.spent | number }}</td>
+            <td class="num">{{ totals.balance | number }}</td>
+            <td></td><td></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <p class="muted small">{{ 'LEDGER.HINT' | translate }}</p>
+  }
+</section>

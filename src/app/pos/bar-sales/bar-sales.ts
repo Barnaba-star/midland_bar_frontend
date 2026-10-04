@@ -85,11 +85,8 @@ export class BarSales implements OnInit{
         this.salesOpenedListToday();
       }
     });
-    this.selectedSales='SALES.MANAGE'
-        this.salesOpenedListByStatus();
-        this.saleDetails = null;
-        this.selectedSaleServices = [];
-        this.selectedFilter = 'DAY';
+    // Selling is what this page is opened for: start on New Sale, not History.
+    this.onAction('SALES.ADD');
   }
   selectedSales = '';
   saleOpenedUID: string = '';

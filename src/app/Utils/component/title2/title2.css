@@ -279,3 +279,65 @@ a.breadcrumb-item:hover {
     display: none;
   }
 }
+
+/* Phones: the title on its own line, every tab below it on as many lines as
+   it takes - a tab hidden off the edge behind a fade was a tab nobody found. */
+@media (max-width: 600px) {
+  .main-toolbar {
+    flex-wrap: wrap;
+    white-space: normal;
+    height: auto;
+    min-height: 0;
+    padding: 10px;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .left {
+    flex: 1 1 100%;
+    min-width: 0;
+    height: auto;
+  }
+
+  .app-title {
+    font-size: 26px;
+    white-space: normal;
+  }
+
+  .breadcrumb-item.current {
+    font-size: 18px;
+  }
+
+  .right {
+    flex: 1 1 100%;
+    height: auto;
+    justify-content: flex-start;
+  }
+
+  .actions-list {
+    flex-wrap: wrap;
+    overflow: visible;
+    padding: 0;
+    gap: 6px;
+  }
+
+  .scroll-fade {
+    display: none;
+  }
+
+  .action {
+    height: 36px;
+    padding: 0 12px;
+    gap: 6px;
+  }
+
+  .app-title-sm {
+    font-size: 13px;
+  }
+
+  .action .app-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+  }
+}

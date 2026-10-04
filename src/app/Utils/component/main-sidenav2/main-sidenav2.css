@@ -1506,3 +1506,66 @@
   height: 14px;
   font-size: 14px;
 }
+
+
+/* ========================================================= */
+/* PHONE: the whole header fits the screen                    */
+/* ========================================================= */
+/* Wider than the phone, the header pushed every page out to ~540px, so the
+   browser zoomed the lot out and tables, dialogs and titles looked cut in
+   half. Fullscreen and refresh do nothing useful on a phone, so they go. */
+@media (max-width: 500px) {
+
+  .sidebar-header {
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding: 0 8px;
+    gap: 6px;
+  }
+
+  .sidebar-header .left {
+    min-width: 0;
+    padding: 0 6px;
+  }
+
+  .quick-actions {
+    gap: 0;
+  }
+
+  .icon-btn-fullscreen,
+  .icon-btn-refresh,
+  .header-divider {
+    display: none;
+  }
+
+  .sidebar-header .right {
+    gap: 6px;
+  }
+
+  .language-toggle {
+    transform: none;
+    padding: 2px;
+  }
+
+  .language-toggle span {
+    padding: 3px 6px;
+    font-size: 11px;
+  }
+
+  .logedUser {
+    min-width: 0;
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+
+  /* Opened under the header across the screen, not hanging off an icon. */
+  .notifications-panel {
+    position: fixed;
+    top: 64px;
+    left: 8px;
+    right: 8px;
+    width: auto;
+    max-width: none;
+    transform: none;
+  }
+}
+

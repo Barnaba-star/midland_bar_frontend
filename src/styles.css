@@ -270,3 +270,83 @@ body {
   position: fixed !important;
   left: -10000px !important;
 }
+
+
+/* =====================================================
+   PHONES
+
+   Pages and dialogs were laid out for a desktop: a dialog opened at 640px
+   was squeezed to 80vw with its content cut at the side, and pages kept
+   desktop side padding. Here every dialog takes the screen's width less a
+   small margin, centred, and scrolls inside itself if it is tall.
+===================================================== */
+
+@media (max-width: 600px) {
+
+  .cdk-overlay-pane.mat-mdc-dialog-panel {
+    width: calc(100vw - 16px) !important;
+    max-width: calc(100vw - 16px) !important;
+    min-width: 0 !important;
+    margin: 0 auto;
+  }
+
+  .mat-mdc-dialog-panel .mat-mdc-dialog-container,
+  .mat-mdc-dialog-panel .mat-mdc-dialog-surface {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .mat-mdc-dialog-panel .mat-mdc-dialog-surface {
+    max-height: calc(100dvh - 24px);
+    overflow-y: auto;
+  }
+
+  .mat-mdc-dialog-panel .mat-mdc-dialog-content {
+    max-height: none;
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+
+  /* A wide table slides sideways under the finger instead of being cut at
+     the card's edge (cards clip their corners with overflow: hidden). */
+  main.content :has(> table),
+  .mat-mdc-dialog-surface :has(> table) {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Card headers (title, search box, count chip in one row) wrap onto a
+     second line instead of pushing the count off the screen. */
+  main.content [class*="card-header"],
+  main.content [class*="list-header"],
+  main.content [class*="toolbar"]:not(mat-toolbar),
+  main.content [class*="header"]:has(> [class*="search"]) {
+    flex-wrap: wrap !important;
+    row-gap: 10px;
+  }
+
+  main.content [class*="header"]:has(> [class*="header-actions"]) {
+    flex-wrap: wrap !important;
+    row-gap: 10px;
+  }
+
+  main.content [class*="header-actions"] {
+    flex: 1 1 100%;
+    flex-wrap: wrap;
+    min-width: 0;
+    gap: 8px;
+  }
+
+  main.content [class*="-search"]:not(input) {
+    flex: 1 1 200px;
+    min-width: 0;
+  }
+
+  /* Page bodies: no desktop gutter on a 390px screen. */
+  main.content .action-container {
+    padding-left: 0;
+    padding-right: 0;
+    height: auto;
+  }
+}

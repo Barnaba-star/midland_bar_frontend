@@ -1,0 +1,17 @@
+# Midland Bar frontend - Angular 20 with server-side rendering.
+FROM node:22-alpine AS build
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci
+COPY . .
+RUN npm run build -- --configuration production
+
+FROM node:22-alpine
+WORKDIR /app
+ENV NODE_ENV=production
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/node_modules ./node_modules
+COPY package.json ./
+# The SSR server listens on PORT (Railway sets it).
+EXPOSE 4000
+CMD ["node", "dist/angular-routes/server/server.mjs"]

@@ -821,11 +821,12 @@
     "SEARCH_PLACEHOLDER": "Search users...",
     "NOT_SIGNED_IN": "NOT SIGNED IN",
     "BTN_RESEND_CODE": "Resend code",
-    "TOOLTIP_RESEND_CODE": "Send a new one-time sign-in code by SMS",
-    "CODE_SENT": "A new code has been sent by SMS.",
+    "TOOLTIP_RESEND_CODE": "Issue a new one-time sign-in code (shown here, and sent by SMS)",
+    "CODE_SENT": "A new code has been issued.",
     "CODE_ALREADY_ACTIVATED": "This person has already set their own password.",
     "CODE_NO_PHONE": "This account has no phone number, so no code can be sent.",
-    "CODE_FAILED": "Could not send the code. Please try again."
+    "CODE_FAILED": "Could not send the code. Please try again.",
+    "CODE_SHOWN_ONLY": "This account has no phone number: the code is shown here only."
   },
   "USER_PROFILE_DIALOG": {
     "PERSONAL_INFO": "Personal Information",
@@ -1337,7 +1338,9 @@
     "ALSO_SENT": "Also sent by SMS to {{phone}}.",
     "SHOWN_ONCE": "Shown only here. If it is lost, send a new one from the user list.",
     "COPY": "Copy",
-    "COPIED": "Copied"
+    "COPIED": "Copied",
+    "RESENT_TITLE": "New sign-in code",
+    "RESENT_SUBTITLE": "The old code no longer works. Give them this one to sign in; they will set their own password straight away."
   },
   "BRANCH_DIALOG": {
     "ADD_TITLE": "Register a branch",

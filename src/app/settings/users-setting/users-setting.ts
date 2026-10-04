@@ -206,17 +206,25 @@ resendCode(user: any): void {
       this.resendingFor = null;
 
       // The backend answers in codes; the wording is ours, and translated.
-      const outcome = res?.data;
+      const outcome = res?.data?.outcome;
 
-      if (outcome === 'SENT') {
-        this.alert.show('success', this.translate.instant('USERS_SETTING_PAGE.CODE_SENT'));
+      if ((outcome === 'SENT' || outcome === 'SHOWN') && res.data?.activationCode) {
+        this.alert.show(
+          outcome === 'SENT' ? 'success' : 'warning',
+          this.translate.instant(outcome === 'SENT' ? 'USERS_SETTING_PAGE.CODE_SENT' : 'USERS_SETTING_PAGE.CODE_SHOWN_ONLY'),
+        );
+        // The same dialog as on registration, so the code can be read out
+        // at the counter instead of waiting on the text.
+        this.showActivationCode(
+          { user: { username: res.data.username }, activationCode: res.data.activationCode, validHours: res.data.validHours },
+          outcome === 'SENT' ? (user.phone || user.phoneNumber) : undefined,
+          true,
+        );
         // The clock restarted, so the row's own reading of it has to move
         // with it rather than wait for a refresh.
         user.activationExpiresAt = new Date().toISOString();
-      } else if (outcome === 'ALREADY_ACTIVATED' || res?.message === 'ALREADY_ACTIVATED') {
+      } else if (outcome === 'ALREADY_ACTIVATED') {
         this.alert.show('warning', this.translate.instant('USERS_SETTING_PAGE.CODE_ALREADY_ACTIVATED'));
-      } else if (outcome === 'NO_PHONE' || res?.message === 'NO_PHONE') {
-        this.alert.show('warning', this.translate.instant('USERS_SETTING_PAGE.CODE_NO_PHONE'));
       } else {
         this.alert.show('error', this.translate.instant('USERS_SETTING_PAGE.CODE_FAILED'));
       }
@@ -238,7 +246,7 @@ resendCode(user: any): void {
  * standing at the counter can sign in straight away instead of waiting on a
  * text. It is the only moment the code is readable - it is stored hashed.
  */
-private showActivationCode(data: any, phone?: string): void {
+private showActivationCode(data: any, phone?: string, resent = false): void {
 
   if (!data?.activationCode) {
     return;
@@ -253,6 +261,7 @@ private showActivationCode(data: any, phone?: string): void {
       activationCode: data.activationCode,
       validHours: data.validHours ?? 72,
       phone,
+      resent,
     },
   });
 }

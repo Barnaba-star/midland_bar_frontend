@@ -4,11 +4,11 @@
     <div class="header-icon">
       <mat-icon>check_circle</mat-icon>
     </div>
-    <h2>{{ 'ACTIVATION_CODE_DIALOG.TITLE' | translate }}</h2>
+    <h2>{{ (data.resent ? 'ACTIVATION_CODE_DIALOG.RESENT_TITLE' : 'ACTIVATION_CODE_DIALOG.TITLE') | translate }}</h2>
   </div>
 
   <p class="dialog-subtitle">
-    {{ 'ACTIVATION_CODE_DIALOG.SUBTITLE' | translate }}
+    {{ (data.resent ? 'ACTIVATION_CODE_DIALOG.RESENT_SUBTITLE' : 'ACTIVATION_CODE_DIALOG.SUBTITLE') | translate }}
   </p>
 
 

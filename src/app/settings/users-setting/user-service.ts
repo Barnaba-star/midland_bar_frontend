@@ -48,8 +48,8 @@ saveBankDetails(userUID:string, details:BankDetails):Observable<Response<string>
 }
 
 /** A fresh one-time code by SMS, for an account that has not signed in yet. */
-resendActivationCode(userUID:string):Observable<Response<string>>{
-  return this.http.post<Response<string>>(`${this.userURL}/resendActivationCode/${userUID}`, {});
+resendActivationCode(userUID:string):Observable<Response<{ outcome: string; username: string; activationCode?: string; validHours?: number }>>{
+  return this.http.post<Response<{ outcome: string; username: string; activationCode?: string; validHours?: number }>>(`${this.userURL}/resendActivationCode/${userUID}`, {});
 }
 
 findBranchList():Observable<ResponseList<any>>{

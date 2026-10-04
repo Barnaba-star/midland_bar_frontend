@@ -821,11 +821,12 @@
     "SEARCH_PLACEHOLDER": "Tafuta watumiaji...",
     "NOT_SIGNED_IN": "HAJAINGIA",
     "BTN_RESEND_CODE": "Tuma namba",
-    "TOOLTIP_RESEND_CODE": "Tuma namba mpya ya kuingia mara ya kwanza kwa SMS",
-    "CODE_SENT": "Namba mpya imetumwa kwa SMS.",
+    "TOOLTIP_RESEND_CODE": "Toa namba mpya ya kuingia (inaonekana hapa, na inatumwa kwa SMS)",
+    "CODE_SENT": "Namba mpya imetolewa.",
     "CODE_ALREADY_ACTIVATED": "Huyu tayari ameshaweka neno lake la siri.",
     "CODE_NO_PHONE": "Akaunti hii haina namba ya simu, hivyo namba haiwezi kutumwa.",
-    "CODE_FAILED": "Imeshindwa kutuma namba. Tafadhali jaribu tena."
+    "CODE_FAILED": "Imeshindwa kutuma namba. Tafadhali jaribu tena.",
+    "CODE_SHOWN_ONLY": "Akaunti hii haina namba ya simu: namba inaonekana hapa tu."
   },
   "USER_PROFILE_DIALOG": {
     "PERSONAL_INFO": "Taarifa Binafsi",
@@ -1337,7 +1338,9 @@
     "ALSO_SENT": "Pia imetumwa kwa SMS kwenda {{phone}}.",
     "SHOWN_ONCE": "Inaonekana hapa tu. Ikipotea, tuma nyingine kutoka kwenye orodha ya watumiaji.",
     "COPY": "Nakili",
-    "COPIED": "Imenakiliwa"
+    "COPIED": "Imenakiliwa",
+    "RESENT_TITLE": "Namba mpya ya kuingia",
+    "RESENT_SUBTITLE": "Namba ya zamani haifanyi kazi tena. Mpe hii ili aingie; ataweka neno lake la siri mara moja."
   },
   "BRANCH_DIALOG": {
     "ADD_TITLE": "Sajili tawi",

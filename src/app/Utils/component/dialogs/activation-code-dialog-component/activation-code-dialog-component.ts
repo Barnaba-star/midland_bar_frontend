@@ -9,6 +9,8 @@ export interface ActivationCodeDialogData {
   validHours: number;
   /** Where the text was sent, shown so it is obvious which phone to check. */
   phone?: string;
+  /** A replacement code from Resend, not a newly registered account. */
+  resent?: boolean;
 }
 
 /**

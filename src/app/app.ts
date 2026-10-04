@@ -4,6 +4,7 @@ import { AlertComponent } from "./Utils/component/alert/alert";
 import { LoaderComponent } from "./Utils/component/loader/loader";
 import { IconRegistryService } from './Utils/services/icon-registry.service';
 import { TableLabelsService } from './Utils/services/table-labels';
+import { AppUpdates } from './Utils/services/app-updates';
 
 @Component({
   selector: 'app-root',
@@ -18,7 +19,9 @@ export class App {
   constructor(
     private iconRegistryService: IconRegistryService,
     tableLabels: TableLabelsService,
+    appUpdates: AppUpdates,
   ) {
     tableLabels.start();
+    appUpdates.start();
   }
 }

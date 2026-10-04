@@ -115,37 +115,49 @@ export class ReceiptDialogComponent implements OnInit {
     // straight to the default printer, with no print dialog.
     const frame = document.createElement('iframe');
     frame.setAttribute('aria-hidden', 'true');
-    frame.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden';
+    // Laid out at the roll's width (off screen) so the slip can be measured;
+    // sized in vw, it then scales to whatever paper the print really uses.
+    frame.style.cssText = `position:fixed;left:-10000px;top:0;width:${ReceiptDialogComponent.PAPER_MM}mm;height:10px;border:0;visibility:hidden`;
     document.body.appendChild(frame);
     const win = frame.contentWindow;
     if (!win) {
       frame.remove();
       return;
     }
+    // The slip's sizes, in mm on the 58mm roll, as shares of the paper width.
+    const PX = (ReceiptDialogComponent.PAPER_MM / 25.4) * 96; // 58mm in CSS px (~219)
+    const SIDE = ReceiptDialogComponent.SIDE_MM;
+    const vw = (mm: number) => `${((mm / ReceiptDialogComponent.PAPER_MM) * 100).toFixed(3)}vw`;
     win.document.open();
     win.document.write(`<!doctype html><html><head><title>${this.data.title ?? this.receipts[0]?.code ?? 'Receipt'}</title>
       <style>
+        /*
+         * Every size is a share of the paper's width (vw): on the 58mm roll it
+         * is the slip as designed (12px type), and where the paper is wider -
+         * a phone's print dialog ignores @page and prints on A4 or whatever
+         * its printer app reports - the slip grows to fill it instead of
+         * sitting small in the middle. 1vw = 1% of the printed width.
+         */
         * { box-sizing: border-box; }
-        /* A receipt roll, not an A4 sheet: the full 58mm width, each copy only as long as it is (set below). */
-        html, body { margin: 0; padding: 0; width: ${ReceiptDialogComponent.PAPER_MM}mm; }
-        body { font-family: 'Courier New', monospace; font-size: 12px; color: #000; }
-        .r-paper { width: 100%; margin: 0; padding: 3mm ${ReceiptDialogComponent.SIDE_MM}mm; position: relative; overflow: hidden; }
+        html, body { margin: 0; padding: 0; width: 100%; }
+        body { font-family: 'Courier New', monospace; font-size: calc(100vw * 12 / ${PX}); color: #000; }
+        .r-paper { width: 100%; margin: 0; padding: ${vw(3)} ${vw(SIDE)}; position: relative; overflow: hidden; }
         .r-paper > *:not(.r-wm) { position: relative; z-index: 1; }
         .r-wm {
           position: absolute; inset: -30% -60%; z-index: 0; pointer-events: none;
-          display: flex; flex-wrap: wrap; align-content: space-around; justify-content: center; gap: 5mm 6mm;
+          display: flex; flex-wrap: wrap; align-content: space-around; justify-content: center; gap: ${vw(5)} ${vw(6)};
           transform: rotate(-30deg);
         }
-        .r-logo { display: block; margin: 0 auto 2mm; max-width: 26mm; max-height: 18mm; object-fit: contain; filter: grayscale(1) contrast(1.3); }
-        .r-wm span { font-size: 15px; font-weight: 700; letter-spacing: 1px; white-space: nowrap; color: #000; opacity: ${ReceiptDialogComponent.WATERMARK_OPACITY}; }
+        .r-logo { display: block; margin: 0 auto ${vw(2)}; max-width: ${vw(26)}; max-height: ${vw(18)}; object-fit: contain; filter: grayscale(1) contrast(1.3); }
+        .r-wm span { font-size: 1.25em; font-weight: 700; letter-spacing: 0.08em; white-space: nowrap; color: #000; opacity: ${ReceiptDialogComponent.WATERMARK_OPACITY}; }
         .r-paper + .r-paper { page-break-before: always; break-before: page; }
         .r-center { text-align: center; }
-        .r-title { font-size: 16px; font-weight: 700; }
+        .r-title { font-size: 1.333em; font-weight: 700; }
         .r-muted { color: #000; }
-        .r-rule { border-top: 1px dashed #000; margin: 6px 0; }
-        .r-row { display: flex; justify-content: space-between; gap: 8px; }
-        .r-total { font-size: 14px; font-weight: 700; }
-        .r-sub { padding-left: 10px; font-size: 11px; }
+        .r-rule { border-top: 1px dashed #000; margin: 0.5em 0; }
+        .r-row { display: flex; justify-content: space-between; gap: 0.667em; }
+        .r-total { font-size: 1.167em; font-weight: 700; }
+        .r-sub { padding-left: 0.833em; font-size: 0.917em; }
       </style><style id="page-size"></style></head><body>${copies}</body></html>`);
     win.document.close();
     // The logo has to be in before the page is measured and printed; a logo
@@ -163,8 +175,14 @@ export class ReceiptDialogComponent implements OnInit {
     // Never shorter than it is wide: a page wider than tall is landscape, and
     // the printer turns the slip on its side.
     const lengthMm = Math.max(Math.ceil(tallestPx * 25.4 / 96) + 4, ReceiptDialogComponent.PAPER_MM + 12);
-    win.document.getElementById('page-size')!.textContent =
-      `@page { size: ${ReceiptDialogComponent.PAPER_MM}mm ${lengthMm}mm; margin: 0; }`;
+    // A computer prints on the roll at exactly this size (and, with
+    // --kiosk-printing, straight to it). A phone or tablet does not honour a
+    // page size - its print dialog lays the page on the paper its printer app
+    // reports (often A4) and shrinks a 58mm page into the middle - so there
+    // the page size is left to the paper, and the vw-sized slip fills it.
+    win.document.getElementById('page-size')!.textContent = isHandheld()
+      ? `@page { margin: 0; }`
+      : `@page { size: ${ReceiptDialogComponent.PAPER_MM}mm ${lengthMm}mm; margin: 0; }`;
     const done = () => setTimeout(() => frame.remove(), 500);
     win.addEventListener('afterprint', done, { once: true });
     win.focus();
@@ -175,6 +193,15 @@ export class ReceiptDialogComponent implements OnInit {
 
   close(): void {
     this.dialogRef.close();
+  }
+}
+
+/** A phone or tablet - where the system print dialog picks the paper, not the page. */
+function isHandheld(): boolean {
+  try {
+    return matchMedia('(pointer: coarse)').matches || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+  } catch {
+    return false;
   }
 }
 

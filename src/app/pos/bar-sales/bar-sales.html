@@ -38,6 +38,12 @@
               <span class="chip-count">{{ opt.count }}</span>
             </button>
           }
+          @for (opt of openerOptions; track opt.key) {
+            <button type="button" class="staff-chip" [class.active]="staffFilter === opt.key" (click)="setStaffFilter(opt.key)">
+              {{ opt.name }}
+              <span class="chip-count">{{ opt.count }}</span>
+            </button>
+          }
           @if (unassignedCount) {
             <button type="button" class="staff-chip" [class.active]="staffFilter === 'NONE'" (click)="setStaffFilter('NONE')">
               {{ 'SALES_PAGE.FILTER_NONE' | translate }}
@@ -46,7 +52,7 @@
           }
 
           <!-- A staff member handing in their money: every bill of theirs, printed in one go. -->
-          @if (staffFilter !== 'ALL' && staffFilter !== 'NONE') {
+          @if (staffChipChosen) {
             <!-- Handed in less than the bills came to: the shortage comes off their commission. -->
             <button type="button" class="print-all-btn loss" [disabled]="shiftState !== 'OPEN'" (click)="recordStaffLoss()">
               <mat-icon>money_off</mat-icon>
@@ -72,8 +78,8 @@
                 <div class="sale-header">
                   <div class="sale-code">
                     <strong>{{ sale.salesCode }}</strong>
-                    @if (sale.staffCode) {
-                      <span class="sale-staff">{{ sale.staffCode }} · {{ sale.staffName }}</span>
+                    @if (billOwner(sale)) {
+                      <span class="sale-staff">{{ billOwner(sale) }}</span>
                     }
                   </div>
 
@@ -705,6 +711,9 @@
                     <strong>
                       {{ sale.salesCode }}
                     </strong>
+                    @if (billOwner(sale)) {
+                      <small class="sale-owner">{{ billOwner(sale) }}</small>
+                    }
 
                   </div>
 

@@ -159,8 +159,9 @@ export class BarSales implements OnInit{
   salesOpenedList: SalesOpened[] = [];
 
   /*
-   * Filter the open bills by whose they are: 'ALL', 'NONE' (opened here on
-   * the Sales page), or a staff code from Staff Sell (K1).
+   * Filter the open bills by whose they are: 'ALL', a staff code from Staff
+   * Sell (K1), 'U:<login>' for bills a manager/CEO/root opened here on the
+   * Sales page, or 'NONE' for old bills nobody is recorded against.
    */
   staffFilter = 'ALL';
   /** Open bill is off until the login's shift is open. */
@@ -183,13 +184,43 @@ export class BarSales implements OnInit{
     return [...byCode.values()].sort((a, b) => a.code.localeCompare(b.code, undefined, { numeric: true }));
   }
 
+  /** Whoever opened bills here at the till (no staff member on them), for their own chips. */
+  get openerOptions(): { key: string; name: string; count: number }[] {
+    const byLogin = new Map<string, { key: string; name: string; count: number }>();
+    for (const bill of this.salesOpenedList) {
+      if (bill.staffCode || !bill.openedBy) continue;
+      const key = 'U:' + bill.openedBy;
+      const entry = byLogin.get(key) ?? { key, name: bill.openedByName || bill.openedBy, count: 0 };
+      entry.count++;
+      byLogin.set(key, entry);
+    }
+    return [...byLogin.values()].sort((a, b) => a.name.localeCompare(b.name));
+  }
+
   get unassignedCount(): number {
-    return this.salesOpenedList.filter((b) => !b.staffCode).length;
+    return this.salesOpenedList.filter((b) => !b.staffCode && !b.openedBy).length;
+  }
+
+  /** The name a bill goes by: its staff member, else whoever opened it at the till. */
+  billOwner(bill: SalesOpened): string {
+    if (bill.staffCode) {
+      return `${bill.staffCode} · ${bill.staffName ?? ''}`;
+    }
+    return bill.openedByName || bill.openedBy || '';
+  }
+
+  /** A staff member's chip is chosen (not ALL / NONE / someone who opened bills at the till). */
+  get staffChipChosen(): boolean {
+    return this.staffFilter !== 'ALL' && this.staffFilter !== 'NONE' && !this.staffFilter.startsWith('U:');
   }
 
   get visibleBills(): SalesOpened[] {
     if (this.staffFilter === 'ALL') return this.salesOpenedList;
-    if (this.staffFilter === 'NONE') return this.salesOpenedList.filter((b) => !b.staffCode);
+    if (this.staffFilter === 'NONE') return this.salesOpenedList.filter((b) => !b.staffCode && !b.openedBy);
+    if (this.staffFilter.startsWith('U:')) {
+      const login = this.staffFilter.slice(2);
+      return this.salesOpenedList.filter((b) => !b.staffCode && b.openedBy === login);
+    }
     return this.salesOpenedList.filter((b) => b.staffCode === this.staffFilter);
   }
 
@@ -536,7 +567,8 @@ openSaleDetailsDialogForMore(sale: SalesOpened) {
       return;
     }
     const opt = this.staffOptions.find((o) => o.code === this.staffFilter);
-    const title = opt ? `${opt.code} · ${opt.name}` : this.translate.instant('SALES_PAGE.FILTER_NONE');
+    const opener = this.openerOptions.find((o) => o.key === this.staffFilter);
+    const title = opt ? `${opt.code} · ${opt.name}` : opener ? opener.name : this.translate.instant('SALES_PAGE.FILTER_NONE');
     this.dialog.open(ReceiptDialogComponent, {
       width: '400px',
       maxWidth: '95vw',

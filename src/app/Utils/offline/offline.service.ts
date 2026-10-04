@@ -390,6 +390,7 @@ export class OfflineService {
     const bill = {
       uid: clientUid, salesCode: body.salesCode, bill: 0, paidAmount: 0, paymentStatus: 'PENDING', status: 'ACTIVE',
       createdAt: toLocalIso(at).slice(0, 10), staffCode: null, staffName: null, offline: true,
+      openedBy: this.user(), openedByName: this.auth.getFullName?.() || this.user(),
     };
     await this.enqueue({ id, kind: 'OPEN_BILL', user: this.user(), url, body: { ...body, clientUid }, at, meta: { bill } });
     return bill;

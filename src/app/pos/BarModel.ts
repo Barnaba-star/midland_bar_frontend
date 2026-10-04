@@ -161,6 +161,9 @@ export interface SalesOpened{
     staffUid?: string;
     staffName?: string;
     staffCode?: string;
+    /** Who opened it at the till (sign-in name, full name) - whose a bill with no staff member is. */
+    openedBy?: string;
+    openedByName?: string;
     paymentMethod?: string;
     paidAmount?:number;
     paymentStatus?:string;

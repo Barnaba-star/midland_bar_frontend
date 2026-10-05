@@ -356,8 +356,10 @@ body {
     gap: 8px;
   }
 
+  /* Grows to fill a header row; "auto", not a fixed basis, so in a column
+     (a stacked card) it does not turn into a 200px-tall box. */
   main.content [class*="-search"]:not(input) {
-    flex: 1 1 200px;
+    flex: 1 1 auto;
     min-width: 0;
   }
 

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../Utils/enviroments/environment';
-import { CommissionDTO, PayStockAndPurchaseDTO, SaleOpenedDTO, BarBookingDTO, BarSalesDTO, BarServiceDTO, BarStaffDTO, SpendDTO, StaffCommissionDTO, StoreDTO, StockReceiptDTO, SalesOpened, StaffSellStaff, StaffSalesRow, StaffOrder } from './BarModel';
+import { CommissionDTO, PayStockAndPurchaseDTO, SaleOpenedDTO, BarBookingDTO, BarSalesDTO, BarServiceDTO, BarStaffDTO, SpendDTO, StaffCommissionDTO, StoreDTO, StockReceiptDTO, SalesOpened, StaffSellStaff, StaffSalesRow, StaffOrder, PaymentNoteRow } from './BarModel';
 import { PageableParam, Response, ResponseList, ResponsePage } from '../Utils/models/responces';
 
 @Injectable({
@@ -399,6 +399,11 @@ payBill(dto: { salesOpenedUID: string; payments: { method: string; amount: numbe
 }
 
 /** Lines, payments, totals and who took the money - for the printed receipt. */
+/** Bills noted "paid by phone" between two days (yyyy-MM-dd, inclusive). */
+findPaymentNotes(from: string, to: string): Observable<ResponseList<PaymentNoteRow>> {
+  return this.http.get<ResponseList<PaymentNoteRow>>(`${this.barURL}/paymentNotes`, { params: { from, to } });
+}
+
 /** "Paid by phone, from this name" on an unpaid bill; an empty method clears it. */
 savePaymentNote(billUid: string, body: { method: string; payerName: string; reference: string }): Observable<Response<SalesOpened>> {
   return this.http.post<Response<SalesOpened>>(`${this.barURL}/bills/${billUid}/paymentNote`, body);

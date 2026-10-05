@@ -159,7 +159,8 @@
   },
   "SALES": {
     "ADD": "Mauzo Mapya",
-    "MANAGE": "Historia ya Mauzo"
+    "MANAGE": "Historia ya Mauzo",
+    "PHONE_PAYMENTS": "Malipo ya Simu"
   },
   "REPORTS": {
     "STAFF": "Ripoti ya Watumishi",
@@ -2151,5 +2152,30 @@
     "SAVED": "Imeandikwa kwenye bili {{code}}.",
     "REMOVED": "Maelezo yameondolewa kwenye bili {{code}}.",
     "CHECK": "Imeandikwa imelipwa: {{note}} - hakikisha pesa imeingia."
+  },
+  "PHONE_PAYMENTS": {
+    "TITLE": "Malipo ya Simu",
+    "SUBTITLE": "Bili zote zilizoandikwa kuwa zimelipwa kwa simu - linganisha kila jina na ujumbe wa M-Pesa / Tigo Pesa.",
+    "RANGE_TODAY": "Leo",
+    "RANGE_YESTERDAY": "Jana",
+    "RANGE_WEEK": "Wiki hii",
+    "RANGE_MONTH": "Mwezi huu",
+    "ALL": "Njia zote",
+    "COUNT": "Bili {{n}}",
+    "PENDING_N": "{{n}} bado hazijapokelewa",
+    "SEARCH_PH": "Tafuta jina, namba ya muamala au bili",
+    "EMPTY": "Hakuna bili iliyoandikwa kulipwa kwa simu katika kipindi hiki.",
+    "COL_NAME": "Jina",
+    "COL_METHOD": "Njia",
+    "COL_REF": "Namba ya muamala",
+    "COL_BILL": "Bili",
+    "COL_AMOUNT": "Kiasi",
+    "COL_STAFF": "Mhudumu",
+    "COL_STATUS": "Cashier",
+    "COL_TIME": "Muda",
+    "PAID": "Imepokelewa",
+    "NOT_YET": "Bado",
+    "FROM": "Kuanzia",
+    "TO": "Hadi"
   }
 }

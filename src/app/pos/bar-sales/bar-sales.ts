@@ -1,3 +1,4 @@
+import { PaymentNotes } from '../payment-notes/payment-notes';
 import { PaymentNoteDialog } from '../../Utils/component/dialogs/payment-note-dialog/payment-note-dialog';
 import { SellableItems } from '../../Utils/services/sellable-items';
 import { OfflineService } from '../../Utils/offline/offline.service';
@@ -60,7 +61,8 @@ interface PaymentSummaryDisplay {
     MatDatepickerModule,
     MatNativeDateModule,
     MatInputModule,
-    TranslatePipe
+    TranslatePipe,
+    PaymentNotes
 ],
   templateUrl: './bar-sales.html',
   styleUrl: './bar-sales.css',
@@ -100,6 +102,12 @@ export class BarSales implements OnInit{
     {
       icon: 'history',
       title: 'SALES.MANAGE',
+      roles: ['ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'MANAGER', 'CASHIER'],
+    },
+    {
+      // The names bills were noted as paid from (M-Pesa, Tigo Pesa...) - for the manager to check.
+      icon: 'payment2',
+      title: 'SALES.PHONE_PAYMENTS',
       roles: ['ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'MANAGER', 'CASHIER'],
     },
   ];

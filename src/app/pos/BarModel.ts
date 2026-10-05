@@ -176,6 +176,22 @@ export interface SalesOpened{
     bill?:number;
 }
 
+/** One bill noted "paid by phone" - Sales > Phone payments. */
+export interface PaymentNoteRow {
+    billUid: string;
+    salesCode: string;
+    method: string;
+    payerName: string;
+    reference?: string | null;
+    notedAt: string;
+    notedBy?: string;
+    amount: number;
+    owner?: string | null;
+    paymentStatus: string;
+    paidMethod?: string | null;
+    paidAt?: string | null;
+}
+
 export interface StaffCommissionDTO {
    /** How it was paid out: cash, mpesa, tigopesa, airtelmoney, halopesa or bank. */
    method?: string;

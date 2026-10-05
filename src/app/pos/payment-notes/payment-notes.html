@@ -1,0 +1,89 @@
+<div class="action-container pn-page">
+  <div class="pn-card">
+    <div class="pn-card-header">
+      <div>
+        <h3>{{ 'PHONE_PAYMENTS.TITLE' | translate }}</h3>
+        <p>{{ 'PHONE_PAYMENTS.SUBTITLE' | translate }}</p>
+      </div>
+    </div>
+
+    <!-- Period -->
+    <div class="pn-filters">
+      @for (r of ranges; track r) {
+        <button type="button" class="pn-range" [class.on]="range === r" (click)="setRange(r)">{{ 'PHONE_PAYMENTS.RANGE_' + r | translate }}</button>
+      }
+      <label class="pn-date">
+        <span>{{ 'PHONE_PAYMENTS.FROM' | translate }}</span>
+        <input type="date" [(ngModel)]="from" (change)="customDates()" />
+      </label>
+      <label class="pn-date">
+        <span>{{ 'PHONE_PAYMENTS.TO' | translate }}</span>
+        <input type="date" [(ngModel)]="to" (change)="customDates()" />
+      </label>
+    </div>
+
+    <!-- A total per method; tapping one shows only it -->
+    <div class="pn-totals">
+      <div class="pn-total grand">
+        <small>{{ 'PHONE_PAYMENTS.ALL' | translate }}</small>
+        <strong>Tshs {{ grandTotal | number }}</strong>
+        <span>{{ 'PHONE_PAYMENTS.COUNT' | translate: { n: rows.length } }}</span>
+      </div>
+      @for (t of totals; track t.method) {
+        <button type="button" class="pn-total" [class.on]="method === t.method" (click)="pickMethod(t.method)">
+          <small>{{ 'PAY_BILL.METHOD_' + t.method | translate }}</small>
+          <strong>Tshs {{ t.amount | number }}</strong>
+          <span>{{ 'PHONE_PAYMENTS.COUNT' | translate: { n: t.count } }}@if (t.pending) { · {{ 'PHONE_PAYMENTS.PENDING_N' | translate: { n: t.pending } }} }</span>
+        </button>
+      }
+    </div>
+
+    <label class="pn-search">
+      <mat-icon>search</mat-icon>
+      <input type="search" [(ngModel)]="search" [placeholder]="'PHONE_PAYMENTS.SEARCH_PH' | translate" />
+    </label>
+
+    @if (loading) {
+      <p class="pn-empty">…</p>
+    } @else if (!visible.length) {
+      <p class="pn-empty">{{ 'PHONE_PAYMENTS.EMPTY' | translate }}</p>
+    } @else {
+      <div class="pn-table-wrap">
+        <table class="pn-table">
+          <thead>
+            <tr>
+              <th>{{ 'PHONE_PAYMENTS.COL_NAME' | translate }}</th>
+              <th>{{ 'PHONE_PAYMENTS.COL_METHOD' | translate }}</th>
+              <th>{{ 'PHONE_PAYMENTS.COL_REF' | translate }}</th>
+              <th>{{ 'PHONE_PAYMENTS.COL_BILL' | translate }}</th>
+              <th class="num">{{ 'PHONE_PAYMENTS.COL_AMOUNT' | translate }}</th>
+              <th>{{ 'PHONE_PAYMENTS.COL_STAFF' | translate }}</th>
+              <th>{{ 'PHONE_PAYMENTS.COL_STATUS' | translate }}</th>
+              <th>{{ 'PHONE_PAYMENTS.COL_TIME' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (r of visible; track r.billUid) {
+              <tr>
+                <td class="name">{{ r.payerName }}</td>
+                <td><span class="pn-method-tag">{{ 'PAY_BILL.METHOD_' + r.method | translate }}</span></td>
+                <td class="mono">{{ r.reference || '-' }}</td>
+                <td class="mono">{{ r.salesCode }}</td>
+                <td class="num">{{ r.amount | number }}</td>
+                <td>{{ r.owner || '-' }}</td>
+                <td>
+                  @if (r.paymentStatus === 'PAID') {
+                    <span class="pn-status paid">{{ 'PHONE_PAYMENTS.PAID' | translate }}</span>
+                  } @else {
+                    <span class="pn-status pending">{{ 'PHONE_PAYMENTS.NOT_YET' | translate }}</span>
+                  }
+                </td>
+                <td>{{ r.notedAt | date: 'dd MMM HH:mm' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+</div>

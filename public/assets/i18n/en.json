@@ -159,7 +159,8 @@
   },
   "SALES": {
     "ADD": "New Sales",
-    "MANAGE": "History"
+    "MANAGE": "History",
+    "PHONE_PAYMENTS": "Phone payments"
   },
   "REPORTS": {
     "STAFF": "Staff Report",
@@ -2151,5 +2152,30 @@
     "SAVED": "Noted on bill {{code}}.",
     "REMOVED": "Note removed from bill {{code}}.",
     "CHECK": "Noted as paid: {{note}} - check it came in."
+  },
+  "PHONE_PAYMENTS": {
+    "TITLE": "Phone payments",
+    "SUBTITLE": "Every bill noted as paid by phone - check each name against the M-Pesa / Tigo Pesa messages.",
+    "RANGE_TODAY": "Today",
+    "RANGE_YESTERDAY": "Yesterday",
+    "RANGE_WEEK": "This week",
+    "RANGE_MONTH": "This month",
+    "ALL": "All methods",
+    "COUNT": "{{n}} bills",
+    "PENDING_N": "{{n}} not yet taken",
+    "SEARCH_PH": "Search name, reference or bill",
+    "EMPTY": "No bills noted as paid by phone in this period.",
+    "COL_NAME": "Name",
+    "COL_METHOD": "Method",
+    "COL_REF": "Reference",
+    "COL_BILL": "Bill",
+    "COL_AMOUNT": "Amount",
+    "COL_STAFF": "Staff",
+    "COL_STATUS": "Cashier",
+    "COL_TIME": "Noted",
+    "PAID": "Taken",
+    "NOT_YET": "Not yet",
+    "FROM": "From",
+    "TO": "To"
   }
 }

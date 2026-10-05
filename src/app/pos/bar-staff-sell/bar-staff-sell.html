@@ -112,8 +112,61 @@
             text="STAFF_SELL_PAGE.NO_BILLS_TEXT"
           />
         } @else {
+          <!-- Many bills: pick one from the list rather than scroll through all of them. -->
+          <div class="bill-picker" [class.open]="pickerOpen">
+            <button type="button" class="picker-toggle" (click)="togglePicker()" [attr.aria-expanded]="pickerOpen">
+              <mat-icon>receipt_long</mat-icon>
+              @if (selectedBill; as sb) {
+                <span class="picker-label"><b>{{ sb.salesCode }}</b>@if (nicknames.get(sb.uid)) { · {{ nicknames.get(sb.uid) }} }</span>
+              } @else {
+                <span class="picker-label">{{ 'STAFF_SELL_PAGE.PICK_BILL' | translate }} <small>({{ bills.length }})</small></span>
+              }
+              <mat-icon class="picker-caret">{{ pickerOpen ? 'expand_less' : 'expand_more' }}</mat-icon>
+            </button>
+
+            @if (pickerOpen) {
+              <div class="picker-panel" role="listbox">
+                @if (bills.length > 6) {
+                  <label class="picker-search">
+                    <mat-icon>search</mat-icon>
+                    <input type="text" [(ngModel)]="pickerSearch" name="pickerSearch" autocomplete="off"
+                           [placeholder]="'STAFF_SELL_PAGE.PICK_SEARCH' | translate" />
+                  </label>
+                }
+                @for (b of pickerBills; track b.uid) {
+                  <button type="button" class="picker-row" role="option" [attr.aria-selected]="b.uid === selectedUid"
+                          [class.on]="b.uid === selectedUid" (click)="selectBill(b)">
+                    <span class="picker-code">{{ b.salesCode }}</span>
+                    <span class="picker-nick">{{ nicknames.get(b.uid) }}</span>
+                    <span class="picker-flags">
+                      @if (countOf(b, 'DRAFT')) {
+                        <span class="flag draft" [attr.title]="'STAFF_SELL_PAGE.ORDER_DRAFT' | translate"><mat-icon>edit</mat-icon>{{ countOf(b, 'DRAFT') }}</span>
+                      }
+                      @if (countOf(b, 'SENT')) {
+                        <span class="flag sent" [attr.title]="'STAFF_SELL_PAGE.ORDER_SENT' | translate"><mat-icon>hourglass_top</mat-icon></span>
+                      }
+                      @if (countOf(b, 'REJECTED')) {
+                        <span class="flag rejected" [attr.title]="'STAFF_SELL_PAGE.ORDER_REJECTED' | translate"><mat-icon>block</mat-icon></span>
+                      }
+                      @if (b.paymentNoteMethod) {
+                        <span class="flag phone"><mat-icon>phone_iphone</mat-icon></span>
+                      }
+                    </span>
+                    <span class="picker-amount">{{ (b.bill || 0) | number }}</span>
+                  </button>
+                } @empty {
+                  <p class="picker-empty">{{ 'STAFF_SELL_PAGE.PICK_NONE' | translate }}</p>
+                }
+              </div>
+            }
+          </div>
+
+          @if (!selectedBill && !pickerOpen) {
+            <p class="picker-hint">{{ 'STAFF_SELL_PAGE.PICK_HINT' | translate }}</p>
+          }
+
           <div class="bill-grid">
-            @for (bill of bills; track bill.uid) {
+            @for (bill of shownBills; track bill.uid) {
               <div class="bill-card">
                 <div class="bill-head">
                   <strong class="bill-code">{{ bill.salesCode }}</strong>
@@ -125,6 +178,9 @@
                     </button>
                   }
                   <span class="bill-status">{{ bill.paymentStatus }}</span>
+                  <button type="button" class="bill-close" (click)="closeBill()" [attr.aria-label]="'COMMON.CLOSE' | translate">
+                    <mat-icon>close</mat-icon>
+                  </button>
                 </div>
 
                 <!-- Only on this device, never saved: who the customer is. -->
@@ -194,6 +250,13 @@
                 }
 
                 <!-- What is already on the bill shows only in View inside; its count rides on that button. -->
+
+                @if (countOf(bill, 'DRAFT')) {
+                  <button type="button" class="bill-send" [disabled]="sending" (click)="sendOrders()">
+                    <mat-icon>send</mat-icon>
+                    {{ 'STAFF_SELL_PAGE.SEND' | translate }} ({{ unsentCount }})
+                  </button>
+                }
 
                 <div class="bill-actions">
                   <button type="button" class="bill-btn add" [disabled]="busyBill === bill.uid" (click)="addToBill(bill)">

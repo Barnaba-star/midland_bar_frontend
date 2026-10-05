@@ -1822,7 +1822,11 @@
     "ORDER_DRAFT": "Not sent yet",
     "ORDER_SENT": "Waiting for supervisor",
     "ORDER_REJECTED": "Rejected",
-    "SIGN_OUT": "Sign out"
+    "SIGN_OUT": "Sign out",
+    "PICK_BILL": "Choose a bill",
+    "PICK_SEARCH": "Search number or customer nickname",
+    "PICK_NONE": "No matching bill",
+    "PICK_HINT": "Tap \"Choose a bill\" to open one. Once sent to the supervisor it goes back into the list."
   },
   "SUPERVISOR_PAGE": {
     "OFFLINE_SEEN": "Looked over",

@@ -180,6 +180,54 @@ export class BarStaffSell implements OnInit, OnDestroy {
     return this.orders.some((o) => o.salesOpenedUid === bill.uid);
   }
 
+  // ---- One bill at a time: picked from a list, closed again once sent ----
+
+  /** The bill open below the picker; null = only the picker shows. */
+  selectedUid: string | null = null;
+  pickerOpen = false;
+  pickerSearch = '';
+
+  get selectedBill(): SalesOpened | null {
+    return this.bills.find((b) => b.uid === this.selectedUid) ?? null;
+  }
+
+  /** What the card area shows: the chosen bill, or nothing. */
+  get shownBills(): SalesOpened[] {
+    const b = this.selectedBill;
+    return b ? [b] : [];
+  }
+
+  /** The picker's rows, narrowed by bill number or nickname. */
+  get pickerBills(): SalesOpened[] {
+    const q = this.pickerSearch.trim().toLowerCase();
+    if (!q) {
+      return this.bills;
+    }
+    return this.bills.filter((b) =>
+      (b.salesCode ?? '').toLowerCase().includes(q) || this.nicknames.get(b.uid).toLowerCase().includes(q));
+  }
+
+  togglePicker(): void {
+    this.pickerOpen = !this.pickerOpen;
+    if (!this.pickerOpen) {
+      this.pickerSearch = '';
+    }
+  }
+
+  selectBill(bill: SalesOpened): void {
+    this.selectedUid = bill.uid ?? null;
+    this.pickerOpen = false;
+    this.pickerSearch = '';
+  }
+
+  closeBill(): void {
+    this.selectedUid = null;
+  }
+
+  countOf(bill: SalesOpened, status: StaffOrder['status']): number {
+    return this.ordersFor(bill, status).reduce((n, o) => n + (status === 'DRAFT' ? o.lines.length : 1), 0);
+  }
+
   /** Lines written but not sent yet, across all bills. */
   get unsentCount(): number {
     return this.orders.filter((o) => o.status === 'DRAFT').reduce((n, o) => n + o.lines.length, 0);
@@ -353,6 +401,8 @@ export class BarStaffSell implements OnInit, OnDestroy {
             then();
             return;
           }
+          // Sent: the bill goes back into the list.
+          this.closeBill();
           this.refresh();
         }
         this.cdr.markForCheck();
@@ -386,6 +436,10 @@ export class BarStaffSell implements OnInit, OnDestroy {
       next: (res) => {
         if (res?.data) {
           this.bills = res.data.bills ?? [];
+          // Paid or deleted elsewhere: nothing to keep open.
+          if (this.selectedUid && !this.bills.some((b) => b.uid === this.selectedUid)) {
+            this.selectedUid = null;
+          }
           this.setOrders(res.data.orders);
           this.bills.forEach((b) => this.loadLines(b));
         }
@@ -407,6 +461,8 @@ export class BarStaffSell implements OnInit, OnDestroy {
         if (opened?.data) {
           this.bills = [...this.bills, opened.data];
           this.billLines = { ...this.billLines, [opened.data.uid!]: [] };
+          // A new bill is opened to sell on: straight to it.
+          this.selectBill(opened.data);
         }
         this.cdr.markForCheck();
       },

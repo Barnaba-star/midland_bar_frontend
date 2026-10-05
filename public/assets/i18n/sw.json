@@ -1822,7 +1822,11 @@
     "ORDER_DRAFT": "Haijatumwa bado",
     "ORDER_SENT": "Inasubiri supervisor",
     "ORDER_REJECTED": "Imekataliwa",
-    "SIGN_OUT": "Toka"
+    "SIGN_OUT": "Toka",
+    "PICK_BILL": "Chagua bill",
+    "PICK_SEARCH": "Tafuta namba au jina la mteja",
+    "PICK_NONE": "Hakuna bill inayolingana",
+    "PICK_HINT": "Gusa \"Chagua bill\" kufungua bill moja. Ukituma kwa supervisor, inarudi kwenye orodha."
   },
   "SUPERVISOR_PAGE": {
     "OFFLINE_SEEN": "Nimekagua",

@@ -133,6 +133,20 @@
                          [attr.aria-label]="'BILL_NICKNAME.LABEL' | translate" />
                 </label>
 
+                <!-- Paid by phone: how and from whose name, for the cashier to check at handover. -->
+                @if (bill.paymentNoteMethod) {
+                  <button type="button" class="pay-note on" (click)="openPaymentNote(bill)">
+                    <mat-icon>phone_iphone</mat-icon>
+                    <span class="pay-note-text"><b>{{ 'PAY_BILL.METHOD_' + bill.paymentNoteMethod | translate }}</b> · {{ bill.paymentNotePayer }}@if (bill.paymentNoteRef) { · {{ bill.paymentNoteRef }} }</span>
+                    <mat-icon class="pay-note-edit">edit</mat-icon>
+                  </button>
+                } @else {
+                  <button type="button" class="pay-note" (click)="openPaymentNote(bill)">
+                    <mat-icon>phone_iphone</mat-icon>
+                    <span class="pay-note-text">{{ 'PAYMENT_NOTE.ADD' | translate }}</span>
+                  </button>
+                }
+
                 <div class="bill-amount">
                   <span>{{ 'SALES_PAGE.BILL' | translate }}</span>
                   <strong>Tshs {{ (bill.bill || 0) | number }}</strong>

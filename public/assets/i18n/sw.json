@@ -2136,5 +2136,20 @@
     "NO_OPEN_SHIFT": "Fungua shift yako kabla ya kuuza.",
     "BILL_NOT_FOUND": "Bill haipo kwenye kifaa hiki.",
     "ITEM_NOT_CACHED": "Bei ya bidhaa hii bado haipo kwenye kifaa - fungua orodha ya bidhaa ukiwa online."
+  },
+  "PAYMENT_NOTE": {
+    "TITLE": "Amelipa kwa simu",
+    "ADD": "Amelipa kwa simu? Andika jina",
+    "METHOD": "Amelipa kwa njia gani",
+    "PAYER": "Jina lililolipa",
+    "PAYER_PH": "Kama linavyoonekana kwenye ujumbe wa M-Pesa / Tigo Pesa",
+    "REF": "Namba ya muamala (si lazima)",
+    "REF_PH": "mf. 8H2K4LMN",
+    "HINT": "Ni maelezo kwa cashier tu - bili inabaki haijalipwa mpaka cashier apokee malipo wakati wa kukabidhi.",
+    "SAVE": "Hifadhi",
+    "REMOVE": "Ondoa",
+    "SAVED": "Imeandikwa kwenye bili {{code}}.",
+    "REMOVED": "Maelezo yameondolewa kwenye bili {{code}}.",
+    "CHECK": "Imeandikwa imelipwa: {{note}} - hakikisha pesa imeingia."
   }
 }

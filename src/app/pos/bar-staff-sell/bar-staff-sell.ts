@@ -1,3 +1,4 @@
+import { PaymentNoteDialog } from '../../Utils/component/dialogs/payment-note-dialog/payment-note-dialog';
 import { SellableItems } from '../../Utils/services/sellable-items';
 import { OfflineService } from '../../Utils/offline/offline.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -94,6 +95,23 @@ export class BarStaffSell implements OnInit, OnDestroy {
     if (!this.touch) {
       setTimeout(() => this.codeInput?.nativeElement.focus());
     }
+  }
+
+  /** "Paid by phone, from this name" - noted on the bill for the cashier; marks nothing paid. */
+  openPaymentNote(bill: SalesOpened): void {
+    this.dialog.open(PaymentNoteDialog, {
+      width: '440px',
+      maxWidth: '95vw',
+      autoFocus: false,
+      data: { bill },
+    }).afterClosed().subscribe((updated?: SalesOpened) => {
+      if (updated) {
+        bill.paymentNoteMethod = updated.paymentNoteMethod ?? null;
+        bill.paymentNotePayer = updated.paymentNotePayer ?? null;
+        bill.paymentNoteRef = updated.paymentNoteRef ?? null;
+        this.cdr.markForCheck();
+      }
+    });
   }
 
   /** A bill opened by mistake, still at zero - asked once, then gone and its code free again. */

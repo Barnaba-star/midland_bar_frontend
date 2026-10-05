@@ -2136,5 +2136,20 @@
     "NO_OPEN_SHIFT": "Open your shift before selling.",
     "BILL_NOT_FOUND": "Bill not found on this device.",
     "ITEM_NOT_CACHED": "That item's price is not on this device yet - open the item list once online."
+  },
+  "PAYMENT_NOTE": {
+    "TITLE": "Paid by phone",
+    "ADD": "Paid by phone? Note the name",
+    "METHOD": "How they paid",
+    "PAYER": "Name the money came from",
+    "PAYER_PH": "As it shows on the M-Pesa / Tigo Pesa message",
+    "REF": "Transaction reference (optional)",
+    "REF_PH": "e.g. 8H2K4LMN",
+    "HINT": "Only a note for the cashier - the bill stays unpaid until the cashier takes the payment at handover.",
+    "SAVE": "Save",
+    "REMOVE": "Remove",
+    "SAVED": "Noted on bill {{code}}.",
+    "REMOVED": "Note removed from bill {{code}}.",
+    "CHECK": "Noted as paid: {{note}} - check it came in."
   }
 }

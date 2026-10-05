@@ -111,6 +111,20 @@
                          [attr.aria-label]="'BILL_NICKNAME.LABEL' | translate" />
                 </label>
 
+                <!-- Paid by phone: how and from whose name, for the cashier to check at handover. -->
+                @if (sale.paymentNoteMethod) {
+                  <button type="button" class="pay-note on" (click)="openPaymentNote(sale)">
+                    <mat-icon>phone_iphone</mat-icon>
+                    <span class="pay-note-text"><b>{{ 'PAY_BILL.METHOD_' + sale.paymentNoteMethod | translate }}</b> · {{ sale.paymentNotePayer }}@if (sale.paymentNoteRef) { · {{ sale.paymentNoteRef }} }</span>
+                    <mat-icon class="pay-note-edit">edit</mat-icon>
+                  </button>
+                } @else {
+                  <button type="button" class="pay-note" (click)="openPaymentNote(sale)">
+                    <mat-icon>phone_iphone</mat-icon>
+                    <span class="pay-note-text">{{ 'PAYMENT_NOTE.ADD' | translate }}</span>
+                  </button>
+                }
+
                 <!-- ================= BODY ================= -->
                 <div class="sale-body">
                   <div class="sale-info">

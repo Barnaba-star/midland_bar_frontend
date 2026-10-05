@@ -1,0 +1,45 @@
+<div class="pn">
+  <div class="pn-head">
+    <span class="pn-icon"><mat-icon>phone_iphone</mat-icon></span>
+    <div>
+      <h3>{{ 'PAYMENT_NOTE.TITLE' | translate }}</h3>
+      <p>{{ 'SALES_PAGE.BILL' | translate }} {{ data.bill.salesCode }}</p>
+    </div>
+  </div>
+
+  <div class="pn-field">
+    <span>{{ 'PAYMENT_NOTE.METHOD' | translate }}</span>
+    <div class="pn-methods" role="radiogroup">
+      @for (m of methods; track m) {
+        <button type="button" class="pn-method" role="radio" [attr.aria-checked]="method === m" [class.on]="method === m" (click)="method = m">
+          {{ 'PAY_BILL.METHOD_' + m | translate }}
+        </button>
+      }
+    </div>
+  </div>
+
+  <label class="pn-field">
+    <span>{{ 'PAYMENT_NOTE.PAYER' | translate }}</span>
+    <input type="text" maxlength="80" [(ngModel)]="payer" name="payer" autocomplete="off" [placeholder]="'PAYMENT_NOTE.PAYER_PH' | translate" />
+  </label>
+
+  <label class="pn-field">
+    <span>{{ 'PAYMENT_NOTE.REF' | translate }}</span>
+    <input type="text" maxlength="40" [(ngModel)]="reference" name="reference" autocomplete="off" [placeholder]="'PAYMENT_NOTE.REF_PH' | translate" />
+  </label>
+
+  <p class="pn-hint">{{ 'PAYMENT_NOTE.HINT' | translate }}</p>
+
+  <div class="pn-actions">
+    @if (hasNote) {
+      <button type="button" class="pn-remove" [disabled]="saving" (click)="remove()">
+        <mat-icon>delete_outline</mat-icon>{{ 'PAYMENT_NOTE.REMOVE' | translate }}
+      </button>
+    }
+    <span class="pn-spacer"></span>
+    <button type="button" class="pn-cancel" (click)="close()">{{ 'COMMON.CANCEL' | translate }}</button>
+    <button type="button" class="pn-save" [disabled]="!ready" (click)="save()">
+      <mat-icon>save</mat-icon>{{ 'PAYMENT_NOTE.SAVE' | translate }}
+    </button>
+  </div>
+</div>

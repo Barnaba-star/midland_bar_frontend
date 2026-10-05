@@ -37,10 +37,12 @@ export class PayBillDialogComponent {
   error = '';
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { code: string; total: number; lines: any[] },
+    /** method: start on this one (a bill noted "paid by phone"); note: that note, shown to check against. */
+    @Inject(MAT_DIALOG_DATA) public data: { code: string; total: number; lines: any[]; method?: string; note?: string },
     private dialogRef: MatDialogRef<PayBillDialogComponent, PayBillResult>,
   ) {
-    this.rows = [{ method: 'cash', amount: data.total, tendered: null }];
+    const start = data.method && PAYMENT_METHODS.includes(data.method) ? data.method : 'cash';
+    this.rows = [{ method: start, amount: data.total, tendered: null }];
   }
 
   get paid(): number {

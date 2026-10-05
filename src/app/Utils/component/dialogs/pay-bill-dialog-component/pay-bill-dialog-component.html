@@ -10,6 +10,14 @@
     </div>
   </div>
 
+  @if (data.note) {
+    <!-- The staff member noted this bill as paid by phone: check it came in. -->
+    <div class="pay-note-check">
+      <mat-icon>phone_iphone</mat-icon>
+      <span>{{ 'PAYMENT_NOTE.CHECK' | translate: { note: data.note } }}</span>
+    </div>
+  }
+
   <!-- What is on the bill -->
   <div class="pay-lines">
     @for (l of data.lines; track $index) {

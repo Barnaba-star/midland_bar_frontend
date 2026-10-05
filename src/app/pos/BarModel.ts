@@ -166,6 +166,10 @@ export interface SalesOpened{
     /** Who opened it at the till (sign-in name, full name) - whose a bill with no staff member is. */
     openedBy?: string;
     openedByName?: string;
+    /** "Paid by phone": how, from whose name, the reference - noted for the cashier, not a payment. */
+    paymentNoteMethod?: string | null;
+    paymentNotePayer?: string | null;
+    paymentNoteRef?: string | null;
     paymentMethod?: string;
     paidAmount?:number;
     paymentStatus?:string;

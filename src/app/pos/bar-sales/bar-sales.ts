@@ -1,3 +1,4 @@
+import { PaymentNoteDialog } from '../../Utils/component/dialogs/payment-note-dialog/payment-note-dialog';
 import { SellableItems } from '../../Utils/services/sellable-items';
 import { OfflineService } from '../../Utils/offline/offline.service';
 import { StaffLossDialog } from '../../Utils/component/dialogs/staff-loss-dialog/staff-loss-dialog';
@@ -529,7 +530,16 @@ openSaleDetailsDialogForMore(sale: SalesOpened) {
           width: '640px',
           maxWidth: '95vw',
           autoFocus: false,
-          data: { code: sale.salesCode, total, lines },
+          data: {
+            code: sale.salesCode,
+            total,
+            lines,
+            // Noted "paid by phone" at Staff Sell: start on that method, and show the note to check.
+            method: sale.paymentNoteMethod || undefined,
+            note: sale.paymentNoteMethod
+              ? `${this.translate.instant('PAY_BILL.METHOD_' + sale.paymentNoteMethod)} · ${sale.paymentNotePayer}${sale.paymentNoteRef ? ' · ' + sale.paymentNoteRef : ''}`
+              : undefined,
+          },
         });
         dialogRef.afterClosed().subscribe((result?: PayBillResult) => {
           if (!result) {
@@ -557,6 +567,23 @@ openSaleDetailsDialogForMore(sale: SalesOpened) {
         });
       },
       error: (err) => console.error('Error loading bill lines:', err),
+    });
+  }
+
+  /** "Paid by phone, from this name" - noted on the bill for the cashier; marks nothing paid. */
+  openPaymentNote(bill: SalesOpened): void {
+    this.dialog.open(PaymentNoteDialog, {
+      width: '440px',
+      maxWidth: '95vw',
+      autoFocus: false,
+      data: { bill },
+    }).afterClosed().subscribe((updated?: SalesOpened) => {
+      if (updated) {
+        bill.paymentNoteMethod = updated.paymentNoteMethod ?? null;
+        bill.paymentNotePayer = updated.paymentNotePayer ?? null;
+        bill.paymentNoteRef = updated.paymentNoteRef ?? null;
+        this.cdr.markForCheck();
+      }
     });
   }
 

@@ -1,0 +1,148 @@
+.pn {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px;
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.pn-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pn-head h3 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.pn-head p {
+  margin: 2px 0 0;
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.pn-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: color-mix(in srgb, #0f766e 14%, var(--color-surface));
+  color: #0f766e;
+}
+
+.pn-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.pn-field input {
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 15px;
+  text-transform: uppercase;
+}
+
+.pn-field input::placeholder {
+  text-transform: none;
+}
+
+.pn-field input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.pn-methods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pn-method {
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-bg, transparent);
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pn-method.on {
+  border-color: #0f766e;
+  background: #0f766e;
+  color: #fff;
+}
+
+.pn-hint {
+  margin: 0;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.pn-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pn-spacer {
+  flex: 1;
+}
+
+.pn-cancel,
+.pn-save,
+.pn-remove {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pn-cancel {
+  border: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text);
+}
+
+.pn-remove {
+  border: 1px solid color-mix(in srgb, #c0392b 40%, var(--color-border));
+  background: transparent;
+  color: #c0392b;
+}
+
+.pn-save {
+  border: none;
+  background: #0f766e;
+  color: #fff;
+}
+
+.pn-save mat-icon,
+.pn-remove mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
+.pn-save:disabled,
+.pn-remove:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

@@ -399,6 +399,11 @@ payBill(dto: { salesOpenedUID: string; payments: { method: string; amount: numbe
 }
 
 /** Lines, payments, totals and who took the money - for the printed receipt. */
+/** "Paid by phone, from this name" on an unpaid bill; an empty method clears it. */
+savePaymentNote(billUid: string, body: { method: string; payerName: string; reference: string }): Observable<Response<SalesOpened>> {
+  return this.http.post<Response<SalesOpened>>(`${this.barURL}/bills/${billUid}/paymentNote`, body);
+}
+
 findBillReceipt(billUid: string): Observable<Response<any>> {
   return this.http.get<Response<any>>(`${this.barURL}/findBillReceipt/${billUid}`);
 }

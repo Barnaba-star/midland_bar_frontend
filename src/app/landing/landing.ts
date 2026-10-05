@@ -13,6 +13,53 @@ import { TranslatePipe } from '@ngx-translate/core';
 })
 export class Landing {
   currentYear = new Date().getFullYear();
+  /** The phone menu, folded away until tapped. */
+  menuOpen = false;
+  readonly contactEmail = 'barnabachristopher@gmail.com';
+  readonly contactHref = `mailto:${this.contactEmail}?subject=${encodeURIComponent('Baronix')}`;
+
+  /** The top menu: each title jumps to its section. */
+  readonly navLinks = [
+    { href: '#kuhusu', label: 'LANDING.NAV_ABOUT' },
+    { href: '#huduma', label: 'LANDING.NAV_SERVICES' },
+    { href: '#anza', label: 'LANDING.NAV_START' },
+    { href: '#bei', label: 'LANDING.NAV_PRICE' },
+    { href: '#maswali', label: 'LANDING.NAV_FAQ' },
+    { href: '#wasiliana', label: 'LANDING.NAV_CONTACT' },
+  ];
+
+  readonly aboutPoints = [
+    { icon: 'travel_explore', title: 'LANDING.ABOUT_P1_T', desc: 'LANDING.ABOUT_P1_D' },
+    { icon: 'sports_bar', title: 'LANDING.ABOUT_P2_T', desc: 'LANDING.ABOUT_P2_D' },
+    { icon: 'storefront', title: 'LANDING.ABOUT_P3_T', desc: 'LANDING.ABOUT_P3_D' },
+  ];
+
+  /** Smaller services, after the photo cards. */
+  readonly more = [
+    { icon: 'wifi_off', title: 'LANDING.M1_T', desc: 'LANDING.M1_D' },
+    { icon: 'smartphone', title: 'LANDING.M2_T', desc: 'LANDING.M2_D' },
+    { icon: 'print', title: 'LANDING.M3_T', desc: 'LANDING.M3_D' },
+    { icon: 'bolt', title: 'LANDING.M4_T', desc: 'LANDING.M4_D' },
+  ];
+
+  readonly startSteps = [
+    { no: '1', icon: 'mail', title: 'LANDING.S1_T', desc: 'LANDING.S1_D' },
+    { no: '2', icon: 'tune', title: 'LANDING.S2_T', desc: 'LANDING.S2_D' },
+    { no: '3', icon: 'badge', title: 'LANDING.S3_T', desc: 'LANDING.S3_D' },
+    { no: '4', icon: 'insights', title: 'LANDING.S4_T', desc: 'LANDING.S4_D' },
+  ];
+
+  readonly roles = [
+    { icon: 'workspace_premium', title: 'LANDING.R_OWNER_T', desc: 'LANDING.R_OWNER_D' },
+    { icon: 'manage_accounts', title: 'LANDING.R_MANAGER_T', desc: 'LANDING.R_MANAGER_D' },
+    { icon: 'point_of_sale', title: 'LANDING.R_CASHIER_T', desc: 'LANDING.R_CASHIER_D' },
+    { icon: 'fact_check', title: 'LANDING.R_SUPERVISOR_T', desc: 'LANDING.R_SUPERVISOR_D' },
+    { icon: 'room_service', title: 'LANDING.R_WAITER_T', desc: 'LANDING.R_WAITER_D' },
+  ];
+
+  readonly priceIncludes = ['LANDING.PRICE_INC1', 'LANDING.PRICE_INC2', 'LANDING.PRICE_INC3', 'LANDING.PRICE_INC4'];
+
+  readonly faqs = [1, 2, 3, 4, 5, 6, 7].map((n) => ({ q: `LANDING.Q${n}`, a: `LANDING.A${n}` }));
 
   readonly menu = ['Castle Lite', 'Kilimanjaro', 'Mshikaki', 'Nyama choma', 'Safari Lager', 'Kuku choma', 'Ndizi choma', 'Konyagi', 'Mbuzi choma', 'Soda'];
 

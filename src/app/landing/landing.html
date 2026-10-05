@@ -10,10 +10,22 @@
         <img src="assets/images/baronix-mark.svg" alt="" class="brand-mark">
         <span class="brand-name">Baron<em>ix</em></span>
       </div>
-      <button type="button" class="nav-cta" (click)="goToLogin()">
-        {{ 'LOGIN.SIGN_IN' | translate }}
-        <mat-icon>login</mat-icon>
-      </button>
+      <!-- Every title on the page, one tap away. On a phone they fold into Menyu. -->
+      <ul class="nav-links" [class.open]="menuOpen" id="landing-menu">
+        @for (l of navLinks; track l.href) {
+          <li><a [href]="l.href" (click)="menuOpen = false">{{ l.label | translate }}</a></li>
+        }
+      </ul>
+      <div class="nav-right">
+        <button type="button" class="nav-cta" (click)="goToLogin()">
+          {{ 'LOGIN.SIGN_IN' | translate }}
+          <mat-icon>login</mat-icon>
+        </button>
+        <button type="button" class="nav-toggle" (click)="menuOpen = !menuOpen"
+                [attr.aria-expanded]="menuOpen" aria-controls="landing-menu" [attr.aria-label]="'LANDING.NAV_MENU' | translate">
+          <mat-icon>{{ menuOpen ? 'close' : 'menu' }}</mat-icon>
+        </button>
+      </div>
     </nav>
 
     <!-- ================= HERO ================= -->
@@ -34,7 +46,7 @@
             {{ 'LANDING.GET_STARTED' | translate }}
             <mat-icon>arrow_forward</mat-icon>
           </button>
-          <a href="#night" class="btn-ghost">
+          <a href="#huduma" class="btn-ghost">
             {{ 'LANDING.SEE_HOW' | translate }}
             <mat-icon>south</mat-icon>
           </a>
@@ -58,6 +70,28 @@
       }
     </div>
   </div>
+
+  <!-- ================= ABOUT ================= -->
+  <section class="about" id="kuhusu">
+    <div class="about-inner">
+      <div class="about-copy">
+        <span class="eyebrow">{{ 'LANDING.ABOUT_EYEBROW' | translate }}</span>
+        <h2>{{ 'LANDING.ABOUT_TITLE' | translate }}</h2>
+        <p>{{ 'LANDING.ABOUT_DESC' | translate }}</p>
+      </div>
+      <ul class="about-points">
+        @for (a of aboutPoints; track a.title) {
+          <li>
+            <mat-icon>{{ a.icon }}</mat-icon>
+            <div>
+              <strong>{{ a.title | translate }}</strong>
+              <span>{{ a.desc | translate }}</span>
+            </div>
+          </li>
+        }
+      </ul>
+    </div>
+  </section>
 
   <!-- ================= THE BAR ================= -->
   <section class="gallery">
@@ -85,7 +119,7 @@
   </section>
 
   <!-- ================= HOW A NIGHT RUNS ================= -->
-  <section class="night" id="night">
+  <section class="night" id="huduma">
     <div class="section-head">
       <span class="eyebrow">{{ 'LANDING.NIGHT_EYEBROW' | translate }}</span>
       <h2>{{ 'LANDING.NIGHT_TITLE' | translate }}</h2>
@@ -174,18 +208,112 @@
         </article>
       }
     </div>
+
+    <h3 class="more-title">{{ 'LANDING.MORE_TITLE' | translate }}</h3>
+    <div class="info-grid four">
+      @for (m of more; track m.title) {
+        <article class="info-card">
+          <mat-icon>{{ m.icon }}</mat-icon>
+          <h3>{{ m.title | translate }}</h3>
+          <p>{{ m.desc | translate }}</p>
+        </article>
+      }
+    </div>
+  </section>
+
+  <!-- ================= GETTING STARTED ================= -->
+  <section class="info-section" id="anza">
+    <div class="section-head">
+      <span class="eyebrow">{{ 'LANDING.START_EYEBROW' | translate }}</span>
+      <h2>{{ 'LANDING.START_TITLE' | translate }}</h2>
+    </div>
+    <ol class="info-grid four start-steps">
+      @for (st of startSteps; track st.no) {
+        <li class="info-card">
+          <span class="start-no">{{ st.no }}</span>
+          <mat-icon>{{ st.icon }}</mat-icon>
+          <h3>{{ st.title | translate }}</h3>
+          <p>{{ st.desc | translate }}</p>
+        </li>
+      }
+    </ol>
+  </section>
+
+  <!-- ================= WHO SEES WHAT ================= -->
+  <section class="info-section alt" id="watumiaji">
+    <div class="section-head">
+      <span class="eyebrow">{{ 'LANDING.ROLES_EYEBROW' | translate }}</span>
+      <h2>{{ 'LANDING.ROLES_TITLE' | translate }}</h2>
+    </div>
+    <div class="info-grid five">
+      @for (r of roles; track r.title) {
+        <article class="info-card">
+          <mat-icon>{{ r.icon }}</mat-icon>
+          <h3>{{ r.title | translate }}</h3>
+          <p>{{ r.desc | translate }}</p>
+        </article>
+      }
+    </div>
+  </section>
+
+  <!-- ================= PRICING ================= -->
+  <section class="info-section" id="bei">
+    <div class="price-inner">
+      <div class="price-copy">
+        <span class="eyebrow">{{ 'LANDING.PRICE_EYEBROW' | translate }}</span>
+        <h2>{{ 'LANDING.PRICE_TITLE' | translate }}</h2>
+        <p>{{ 'LANDING.PRICE_DESC' | translate }}</p>
+      </div>
+      <div class="price-card">
+        <span class="price-badge">{{ 'LANDING.PRICE_BADGE' | translate }}</span>
+        <span class="price-then">{{ 'LANDING.PRICE_THEN' | translate }}</span>
+        <strong class="price-inc">{{ 'LANDING.PRICE_INC' | translate }}</strong>
+        <ul>
+          @for (i of priceIncludes; track i) {
+            <li><mat-icon>check_circle</mat-icon>{{ i | translate }}</li>
+          }
+        </ul>
+        <a class="btn-amber" [href]="contactHref">
+          {{ 'LANDING.PRICE_CTA' | translate }}
+          <mat-icon>mail</mat-icon>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FAQ ================= -->
+  <section class="info-section alt" id="maswali">
+    <div class="section-head">
+      <span class="eyebrow">{{ 'LANDING.FAQ_EYEBROW' | translate }}</span>
+      <h2>{{ 'LANDING.FAQ_TITLE' | translate }}</h2>
+    </div>
+    <div class="faq">
+      @for (f of faqs; track f.q) {
+        <details>
+          <summary>{{ f.q | translate }}<mat-icon>expand_more</mat-icon></summary>
+          <p>{{ f.a | translate }}</p>
+        </details>
+      }
+    </div>
   </section>
 
   <!-- ================= LAST CALL ================= -->
-  <section class="last-call">
+  <section class="last-call" id="wasiliana">
     <div class="last-call-inner">
-      <span class="eyebrow">{{ 'LANDING.CTA_EYEBROW' | translate }}</span>
+      <span class="eyebrow">{{ 'LANDING.CONTACT_EYEBROW' | translate }}</span>
       <h2>{{ 'LANDING.CTA_TITLE' | translate }}</h2>
-      <p>{{ 'LANDING.CTA_SUBTITLE' | translate }}</p>
-      <button type="button" class="btn-amber" (click)="goToLogin()">
-        {{ 'LANDING.GET_STARTED' | translate }}
-        <mat-icon>arrow_forward</mat-icon>
-      </button>
+      <p>{{ 'LANDING.CONTACT_DESC' | translate }}</p>
+      <div class="contact-actions">
+        <a class="btn-amber" [href]="contactHref">
+          {{ 'LANDING.CONTACT_EMAIL' | translate }}
+          <mat-icon>mail</mat-icon>
+        </a>
+        <button type="button" class="btn-ghost" (click)="goToLogin()">
+          {{ 'LANDING.CONTACT_HAVE' | translate }}
+          <mat-icon>login</mat-icon>
+        </button>
+      </div>
+      <a class="contact-email" [href]="contactHref">{{ contactEmail }}</a>
     </div>
   </section>
 

@@ -549,3 +549,8 @@ body {
 .serving-tag.warm {
   background: #c2410c;
 }
+
+/* Landing menu links jump to their section smoothly. */
+html {
+  scroll-behavior: smooth;
+}

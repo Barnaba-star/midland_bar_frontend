@@ -506,7 +506,7 @@
   },
   "LOGIN": {
     "WELCOME_BACK": "Welcome back",
-    "SUBTITLE": "Sign in to continue to Midland Bar",
+    "SUBTITLE": "Sign in to continue to Baronix",
     "USERNAME_REQUIRED": "Username is required",
     "PASSWORD_REQUIRED": "Password is required",
     "SHOW_PASSWORD": "Show password",
@@ -872,7 +872,7 @@
     "MARK_ALL_READ": "Mark all as read",
     "EMPTY": "No notifications yet",
     "WELCOME_TITLE": "Welcome",
-    "WELCOME_MESSAGE": "Welcome to Midland Solutions. This is where system notifications will appear.",
+    "WELCOME_MESSAGE": "Welcome to Baronix. This is where system notifications will appear.",
     "NEW_SALE_TITLE": "New Sale",
     "NEW_SALE_MESSAGE": "Sale {{code}} was completed — Tshs {{amount}}."
   },

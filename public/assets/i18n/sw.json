@@ -506,7 +506,7 @@
   },
   "LOGIN": {
     "WELCOME_BACK": "Karibu tena",
-    "SUBTITLE": "Ingia uendelee na Midland Bar",
+    "SUBTITLE": "Ingia uendelee na Baronix",
     "USERNAME_REQUIRED": "Jina la mtumiaji linahitajika",
     "PASSWORD_REQUIRED": "Nenosiri linahitajika",
     "SHOW_PASSWORD": "Onyesha nenosiri",
@@ -872,7 +872,7 @@
     "MARK_ALL_READ": "Weka zote kama zimesomwa",
     "EMPTY": "Bado hakuna arifa",
     "WELCOME_TITLE": "Karibu",
-    "WELCOME_MESSAGE": "Karibu kwenye Midland Solutions. Hapa ndipo arifa za mfumo zitaonekana.",
+    "WELCOME_MESSAGE": "Karibu kwenye Baronix. Hapa ndipo arifa za mfumo zitaonekana.",
     "NEW_SALE_TITLE": "Mauzo Mapya",
     "NEW_SALE_MESSAGE": "Mauzo {{code}} yamekamilika — Tshs {{amount}}."
   },

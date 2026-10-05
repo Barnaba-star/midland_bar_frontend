@@ -56,9 +56,7 @@
 .module-logo {
   width: 34px;
   height: 34px;
-  padding: 3px;
   border-radius: 9px;
-  background: #f6ecdc;
   object-fit: contain;
 }
 

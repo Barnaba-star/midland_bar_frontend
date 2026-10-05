@@ -11,7 +11,7 @@
           @if (logoUrl) {
             <img class="r-logo" [src]="logoUrl" alt="" />
           }
-          <div class="r-center r-title">{{ receipts[0].branchName || 'Midland Bar' }}</div>
+          <div class="r-center r-title">{{ receipts[0].branchName || 'Baronix' }}</div>
           <div class="r-center r-muted">{{ 'RECEIPT.HANDOVER' | translate }}</div>
           @if (data.title) {
             <div class="r-center"><strong>{{ data.title }}</strong></div>
@@ -30,7 +30,7 @@
         @if (logoUrl) {
           <img class="r-logo" [src]="logoUrl" alt="" />
         }
-        <div class="r-center r-title">{{ receipt.branchName || 'Midland Bar' }}</div>
+        <div class="r-center r-title">{{ receipt.branchName || 'Baronix' }}</div>
         <!-- No "RECEIPT" heading on a paid slip (by request); an unpaid bill
              still says so, so it is never taken for proof of payment. -->
         @if (receipt.status !== 'PAID') {

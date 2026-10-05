@@ -106,7 +106,7 @@ export class ReceiptDialogComponent implements OnInit {
     // handover): the summary, then each bill once, each on its own page.
     // The branch's name, faint and slanted, repeated across the whole slip
     // behind the text - seen from a distance, it says whose receipt it is.
-    const branch = escapeHtml(this.receipts[0]?.branchName || 'Midland Bar');
+    const branch = escapeHtml(this.receipts[0]?.branchName || 'Baronix');
     const watermark = `<div class="r-wm" aria-hidden="true">${Array(ReceiptDialogComponent.WATERMARK_REPEAT).fill(`<span>${branch}</span>`).join('')}</div>`;
     const paper = (html: string) => `<div class="r-paper">${watermark}${html}</div>`;
     const copies = this.many ? pages.map(paper).join('') : [pages[0], pages[0]].map(paper).join('');

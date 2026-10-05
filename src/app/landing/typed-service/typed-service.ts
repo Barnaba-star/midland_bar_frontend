@@ -63,7 +63,7 @@ export class TypedService implements OnInit {
   readonly bullets = input.required<string[]>();
 
   /** Milliseconds between words: quick enough to read along, slow enough to see it write. */
-  private static readonly WORD_MS = 55;
+  private static readonly WORD_MS = 90;
 
   private host = inject(ElementRef<HTMLElement>);
   private destroyRef = inject(DestroyRef);

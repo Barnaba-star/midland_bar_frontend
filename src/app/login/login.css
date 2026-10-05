@@ -493,3 +493,25 @@ input.mat-input-element:-webkit-autofill {
   font-size: 12.5px;
   line-height: 1.5;
 }
+
+/* How bar staff sign in: code as username, PIN as password. */
+.staff-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 14px 0 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--color-primary, #b86e00) 8%, transparent);
+  color: var(--color-text-muted, #7a6f60);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.staff-tip mat-icon {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+  color: var(--color-primary, #b86e00);
+}

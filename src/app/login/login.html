@@ -62,7 +62,6 @@
         <mat-label>{{ 'COMMON.USERNAME' | translate }}</mat-label>
         <mat-icon matPrefix>person</mat-icon>
         <input matInput formControlName="username" type="text" autocomplete="username">
-        <mat-hint>{{ 'LOGIN.STAFF_HINT' | translate }}</mat-hint>
         <mat-error *ngIf="username?.hasError('required') && username?.touched">
           {{ 'LOGIN.USERNAME_REQUIRED' | translate }}
         </mat-error>
@@ -108,6 +107,12 @@
         <mat-icon *ngIf="submitting" class="spinner">autorenew</mat-icon>
         <span>{{ (submitting ? 'LOGIN.SIGNING_IN' : 'LOGIN.SIGN_IN') | translate }}</span>
       </button>
+
+      <!-- Its own line, not a field hint: two lines of hint ran over the password box. -->
+      <p class="staff-tip">
+        <mat-icon>badge</mat-icon>
+        <span>{{ 'LOGIN.STAFF_HINT' | translate }}</span>
+      </p>
     </form>
     </div>
   </main>

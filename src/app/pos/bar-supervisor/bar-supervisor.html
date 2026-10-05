@@ -40,7 +40,7 @@
             <span><b>{{ order.staffCode }}</b> {{ order.staffName }}</span>
             <span class="sup-offline-items">
               @for (line of order.lines; track line.uid) {
-                <span>{{ line.quantity }}× {{ line.serviceName }}</span>
+                <span>{{ line.quantity }}× {{ line.serviceName }} @if (line.serving) { <span class="serving-tag" [class.warm]="line.serving === 'WARM'">{{ (line.serving === 'WARM' ? 'SALE_ITEM.WARM' : 'SALE_ITEM.COLD') | translate }}</span> }</span>
               }
             </span>
             <span class="sup-offline-time">{{ order.decidedAt | date: 'dd MMM, HH:mm' }}</span>
@@ -81,7 +81,7 @@
               @for (line of order.lines; track line.uid) {
                 <li>
                   <span class="qty">{{ line.quantity }}×</span>
-                  <span class="name">{{ line.serviceName }}</span>
+                  <span class="name">{{ line.serviceName }} @if (line.serving) { <span class="serving-tag" [class.warm]="line.serving === 'WARM'">{{ (line.serving === 'WARM' ? 'SALE_ITEM.WARM' : 'SALE_ITEM.COLD') | translate }}</span> }</span>
                   <span class="amt">{{ line.quantity * line.unitPrice | number }}</span>
                 </li>
               }

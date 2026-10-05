@@ -346,4 +346,6 @@ export interface StaffOrderLine {
     serviceName: string;
     quantity: number;
     unitPrice: number;
+    /** COLD / WARM as the customer asked; null = not said. */
+    serving?: 'COLD' | 'WARM' | null;
 }

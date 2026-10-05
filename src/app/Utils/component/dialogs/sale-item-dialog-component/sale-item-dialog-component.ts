@@ -11,6 +11,8 @@ import { StockPacksPipe } from '../../../pipes/stock-packs.pipe';
 export interface SaleItemResult {
   service: any;
   quantity: number;
+  /** A drink at Staff Sell: how the customer wants it, for the supervisor to have ready. */
+  serving?: 'COLD' | 'WARM' | null;
 }
 
 /**
@@ -39,9 +41,11 @@ export class SaleItemDialogComponent implements OnInit, AfterViewInit {
   private readonly touch = typeof window !== 'undefined' && !!window.matchMedia?.('(pointer: coarse)').matches;
   readonly letters = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ', '#'];
   quantity = 1;
+  /** Cold or warm, when asked (Staff Sell) and the item is a drink; null = not said. */
+  serving: 'COLD' | 'WARM' | null = null;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { billCode?: string },
+    @Inject(MAT_DIALOG_DATA) public data: { billCode?: string; askServing?: boolean },
     private dialogRef: MatDialogRef<SaleItemDialogComponent, SaleItemResult>,
     private sellable: SellableItems,
     private cdr: ChangeDetectorRef,
@@ -135,6 +139,7 @@ export class SaleItemDialogComponent implements OnInit, AfterViewInit {
   choose(service: any): void {
     this.selected = service;
     this.quantity = 1;
+    this.serving = null;
     this.cdr.detectChanges();
     if (!this.touch) {
       setTimeout(() => this.quantityInput?.nativeElement.select());
@@ -147,6 +152,16 @@ export class SaleItemDialogComponent implements OnInit, AfterViewInit {
     if (!this.touch) {
       setTimeout(() => this.searchInput?.nativeElement.focus());
     }
+  }
+
+  /** Staff Sell, a drink: ask whether the customer wants it cold or warm. */
+  get asksServing(): boolean {
+    return !!this.data?.askServing && !!this.selected && this.selected.category !== 'FOOD';
+  }
+
+  /** Tap the chosen one again to take it back. */
+  setServing(v: 'COLD' | 'WARM'): void {
+    this.serving = this.serving === v ? null : v;
   }
 
   step(by: number): void {
@@ -193,7 +208,11 @@ export class SaleItemDialogComponent implements OnInit, AfterViewInit {
     if (!this.selected || !this.validQuantity || this.overStock) {
       return;
     }
-    this.dialogRef.close({ service: this.selected, quantity: Number(this.quantity) });
+    this.dialogRef.close({
+      service: this.selected,
+      quantity: Number(this.quantity),
+      serving: this.asksServing ? this.serving : null,
+    });
   }
 
   cancel(): void {

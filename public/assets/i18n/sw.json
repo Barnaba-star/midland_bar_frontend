@@ -1686,7 +1686,10 @@
     "OVER_STOCK": "Vimebaki {{left}} tu stoo",
     "LEFT_AFTER": "Vitabaki {{left}} stoo",
     "ADD_TO_BILL": "Ongeza kwenye bill",
-    "CAN_SELL": "Zinaweza kuuzwa {{n}}"
+    "CAN_SELL": "Zinaweza kuuzwa {{n}}",
+    "SERVING": "Mteja anataka kiwe",
+    "COLD": "Baridi",
+    "WARM": "Moto"
   },
   "SALES_FLOW": {
     "CODE": "Code ya bill",

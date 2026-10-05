@@ -1686,7 +1686,10 @@
     "OVER_STOCK": "Only {{left}} left in the store",
     "LEFT_AFTER": "{{left}} will be left in the store",
     "ADD_TO_BILL": "Add to bill",
-    "CAN_SELL": "{{n}} can be sold"
+    "CAN_SELL": "{{n}} can be sold",
+    "SERVING": "Customer wants it",
+    "COLD": "Cold",
+    "WARM": "Warm"
   },
   "SALES_FLOW": {
     "CODE": "Bill code",

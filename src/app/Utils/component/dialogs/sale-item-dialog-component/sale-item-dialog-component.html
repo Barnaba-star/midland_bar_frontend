@@ -94,6 +94,19 @@
       <button type="button" class="link-btn" (click)="changeService()">{{ 'SALE_ITEM.CHANGE' | translate }}</button>
     </div>
 
+    @if (asksServing) {
+      <!-- What the customer said: the supervisor has it ready, cold or warm. -->
+      <label class="qty-label">{{ 'SALE_ITEM.SERVING' | translate }}</label>
+      <div class="serving-row" role="radiogroup">
+        <button type="button" class="serving-btn cold" role="radio" [attr.aria-checked]="serving === 'COLD'" [class.on]="serving === 'COLD'" (click)="setServing('COLD')">
+          <mat-icon>ac_unit</mat-icon>{{ 'SALE_ITEM.COLD' | translate }}
+        </button>
+        <button type="button" class="serving-btn warm" role="radio" [attr.aria-checked]="serving === 'WARM'" [class.on]="serving === 'WARM'" (click)="setServing('WARM')">
+          <mat-icon>wb_sunny</mat-icon>{{ 'SALE_ITEM.WARM' | translate }}
+        </button>
+      </div>
+    }
+
     <label class="qty-label">{{ 'SALE_ITEM.HOW_MANY' | translate }}</label>
     <div class="qty-row">
       <button type="button" class="qty-btn" (click)="step(-1)" [disabled]="quantity <= 1">

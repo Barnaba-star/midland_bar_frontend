@@ -484,7 +484,7 @@ export class BarStaffSell implements OnInit, OnDestroy {
       exitAnimationDuration: 0,
       maxWidth: '95vw',
       autoFocus: false,
-      data: { billCode: bill.salesCode },
+      data: { billCode: bill.salesCode, askServing: true },
     }).afterClosed().subscribe((result?: SaleItemResult) => {
       if (!result) {
         return;
@@ -496,6 +496,7 @@ export class BarStaffSell implements OnInit, OnDestroy {
         salesOpenedUID: bill.uid!,
         barServiceUID: result.service.uid,
         quantity: result.quantity,
+        serving: result.serving ?? null,
       }).subscribe({
         next: (res) => {
           this.busyBill = null;

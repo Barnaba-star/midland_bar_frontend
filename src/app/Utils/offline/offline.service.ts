@@ -554,11 +554,13 @@ export class OfflineService {
       drafts.splice(drafts.findIndex((d) => d.uid === draft.uid), 1, draft);
     }
     const quantity = Number(body.quantity) || 1;
-    const same = draft.lines.findIndex((l: any) => l.barServiceUid === svc.uid);
+    // Cold and warm of the same drink stay apart, as on the server.
+    const serving = body.serving === 'COLD' || body.serving === 'WARM' ? body.serving : null;
+    const same = draft.lines.findIndex((l: any) => l.barServiceUid === svc.uid && (l.serving ?? null) === serving);
     if (same >= 0) {
       draft.lines[same] = { ...draft.lines[same], quantity: draft.lines[same].quantity + quantity, unitPrice: svc.price };
     } else {
-      draft.lines.push({ uid: `local-${this.newId()}`, barServiceUid: svc.uid, serviceName: svc.serviceName, quantity, unitPrice: svc.price });
+      draft.lines.push({ uid: `local-${this.newId()}`, barServiceUid: svc.uid, serviceName: svc.serviceName, quantity, unitPrice: svc.price, serving });
     }
     await this.saveDrafts(drafts);
     return draft;
@@ -598,7 +600,7 @@ export class OfflineService {
       const total = lines.reduce((s: number, l: any) => s + l.lineTotal, 0);
       await this.enqueue({
         id: opId, kind: 'STAFF_ORDER', user: this.user(), url: `${BAR()}/staffOrders/offline`,
-        body: { salesOpenedUID: d.salesOpenedUid, items: d.lines.map((l: any) => ({ barServiceUID: l.barServiceUid, quantity: l.quantity })) },
+        body: { salesOpenedUID: d.salesOpenedUid, items: d.lines.map((l: any) => ({ barServiceUID: l.barServiceUid, quantity: l.quantity, serving: l.serving ?? null })) },
         at: Date.now(), meta: { lines, total, salesCode: d.salesCode },
       });
     }

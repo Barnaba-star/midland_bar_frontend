@@ -335,7 +335,7 @@ findStaffSell(staffCode: string, quiet = false): Observable<Response<{ staff: St
 }
 
 /** Staff Sell: write an item onto the bill's order for the supervisor - not onto the bill. */
-addStaffOrderItem(dto: { salesOpenedUID: string; barServiceUID: string; quantity: number }): Observable<Response<StaffOrder>> {
+addStaffOrderItem(dto: { salesOpenedUID: string; barServiceUID: string; quantity: number; serving?: string | null }): Observable<Response<StaffOrder>> {
   return this.http.post<Response<StaffOrder>>(`${this.barURL}/staffOrders/addItem`, dto);
 }
 

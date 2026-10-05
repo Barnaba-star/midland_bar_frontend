@@ -219,7 +219,7 @@
                     <ul class="order-lines">
                       @for (line of order.lines; track line.uid) {
                         <li>
-                          <span>{{ line.quantity }} × {{ line.serviceName }}</span>
+                          <span>{{ line.quantity }} × {{ line.serviceName }} @if (line.serving) { <span class="serving-tag" [class.warm]="line.serving === 'WARM'">{{ (line.serving === 'WARM' ? 'SALE_ITEM.WARM' : 'SALE_ITEM.COLD') | translate }}</span> }</span>
                           <button type="button" class="line-remove" (click)="removeLine(order, line.uid)" [attr.aria-label]="'COMMON.DELETE' | translate">
                             <mat-icon>close</mat-icon>
                           </button>
@@ -233,7 +233,7 @@
                     <span class="order-tag"><mat-icon>hourglass_top</mat-icon>{{ 'STAFF_SELL_PAGE.ORDER_SENT' | translate }}</span>
                     <ul class="order-lines">
                       @for (line of order.lines; track line.uid) {
-                        <li><span>{{ line.quantity }} × {{ line.serviceName }}</span><span>{{ line.quantity * line.unitPrice | number }}</span></li>
+                        <li><span>{{ line.quantity }} × {{ line.serviceName }} @if (line.serving) { <span class="serving-tag" [class.warm]="line.serving === 'WARM'">{{ (line.serving === 'WARM' ? 'SALE_ITEM.WARM' : 'SALE_ITEM.COLD') | translate }}</span> }</span><span>{{ line.quantity * line.unitPrice | number }}</span></li>
                       }
                     </ul>
                   </div>
@@ -243,7 +243,7 @@
                     <span class="order-tag"><mat-icon>block</mat-icon>{{ 'STAFF_SELL_PAGE.ORDER_REJECTED' | translate }}: {{ order.rejectReason }}</span>
                     <ul class="order-lines">
                       @for (line of order.lines; track line.uid) {
-                        <li><span>{{ line.quantity }} × {{ line.serviceName }}</span></li>
+                        <li><span>{{ line.quantity }} × {{ line.serviceName }} @if (line.serving) { <span class="serving-tag" [class.warm]="line.serving === 'WARM'">{{ (line.serving === 'WARM' ? 'SALE_ITEM.WARM' : 'SALE_ITEM.COLD') | translate }}</span> }</span></li>
                       }
                     </ul>
                   </div>

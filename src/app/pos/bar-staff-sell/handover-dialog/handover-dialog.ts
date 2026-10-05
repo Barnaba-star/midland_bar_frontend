@@ -93,7 +93,9 @@ export class StaffHandoverDialog implements OnInit {
         this.sending = false;
         if (res?.data) {
           this.alert.show('success', this.translate.instant('STAFF_HANDOVER.SENT_OK', { count: res.data }));
-          this.load();
+          // Sent: done here - back to the bills.
+          this.close();
+          return;
         }
         this.cdr.markForCheck();
       },

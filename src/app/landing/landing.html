@@ -113,22 +113,15 @@
       <h2>{{ 'LANDING.SV_TITLE' | translate }}</h2>
       <p>{{ 'LANDING.SV_DESC' | translate }}</p>
     </div>
-    <div class="service-grid">
-      @for (sv of services; track sv.title; let first = $first) {
-        <article class="service" [class.service-lead]="first">
-          <div class="service-head">
-            <span class="service-icon"><mat-icon>{{ sv.icon }}</mat-icon></span>
-            <div>
-              <h3>{{ sv.title | translate }}</h3>
-              <p>{{ sv.desc | translate }}</p>
-            </div>
-          </div>
-          <ul>
-            @for (b of sv.bullets; track b) {
-              <li><mat-icon>check</mat-icon><span>{{ b | translate }}</span></li>
-            }
-          </ul>
-        </article>
+    <!-- No cards: each service writes itself out, word after word, as it comes into view. -->
+    <div class="service-list">
+      @for (sv of services; track sv.title; let i = $index) {
+        <app-typed-service
+          [no]="(i + 1 < 10 ? '0' : '') + (i + 1)"
+          [icon]="sv.icon"
+          [title]="sv.title | translate"
+          [desc]="sv.desc | translate"
+          [bullets]="[sv.bullets[0] | translate, sv.bullets[1] | translate, sv.bullets[2] | translate, sv.bullets[3] | translate]" />
       }
     </div>
   </section>

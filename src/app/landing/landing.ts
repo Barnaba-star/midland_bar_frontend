@@ -4,10 +4,11 @@ import { DecimalPipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
+import { TypedService } from './typed-service/typed-service';
 
 @Component({
   selector: 'app-landing',
-  imports: [MatIconModule, DecimalPipe, TranslatePipe, RouterLink],
+  imports: [MatIconModule, DecimalPipe, TranslatePipe, RouterLink, TypedService],
   templateUrl: './landing.html',
   styleUrl: './landing.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

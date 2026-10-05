@@ -1,0 +1,121 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 28px 0;
+  border-top: 1px dashed rgba(255, 236, 205, 0.14);
+}
+
+.ts-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.ts-no {
+  font-family: 'Bebas Neue', 'Oswald', Impact, sans-serif;
+  font-size: 40px;
+  line-height: 1;
+  color: rgba(245, 165, 36, 0.35);
+  min-width: 44px;
+}
+
+.ts-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: rgba(245, 165, 36, 0.14);
+  color: #f5a524;
+}
+
+h3 {
+  margin: 0;
+  font-family: 'Bebas Neue', 'Oswald', Impact, sans-serif;
+  font-size: clamp(28px, 3vw, 36px);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  text-transform: uppercase;
+  color: #f6ecdc;
+}
+
+.ts-desc {
+  margin: 0;
+  padding-left: 58px;
+  color: #f5a524;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+ul {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0 0 0 58px;
+  list-style: none;
+}
+
+li {
+  display: flex;
+  gap: 8px;
+  color: #e3d8c6;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+li mat-icon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  font-size: 18px;
+  color: #f5a524;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+li.on mat-icon {
+  opacity: 1;
+}
+
+/* A word not yet written keeps its place (no jumping lines) but is invisible. */
+.w {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.w.on {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.12s ease;
+}
+
+.caret {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin: 0 2px 0 -3px;
+  vertical-align: -0.12em;
+  background: #f5a524;
+  animation: blink 0.8s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+@media (max-width: 600px) {
+  .ts-no {
+    display: none;
+  }
+
+  .ts-desc,
+  ul {
+    padding-left: 0;
+  }
+}

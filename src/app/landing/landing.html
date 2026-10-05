@@ -1,19 +1,25 @@
 <div class="page">
 
   <!-- ================= STAGE: the pub behind nav and hero ================= -->
-  <div class="stage">
+  <div class="stage" [class.compact]="!home">
     <div class="stage-photo" aria-hidden="true"></div>
 
     <!-- ================= NAV ================= -->
     <nav class="nav">
-      <div class="brand">
+      <a class="brand" [routerLink]="[]" aria-label="Baronix">
         <img src="assets/images/baronix-mark.svg" alt="" class="brand-mark">
         <span class="brand-name">Baron<em>ix</em></span>
-      </div>
+      </a>
       <!-- Every title on the page, one tap away. On a phone they fold into Menyu. -->
       <ul class="nav-links" [class.open]="menuOpen" id="landing-menu">
-        @for (l of navLinks; track l.href) {
-          <li><a [href]="l.href" (click)="menuOpen = false">{{ l.label | translate }}</a></li>
+        @for (l of navLinks; track l.label) {
+          <li>
+            @if (l.id) {
+              <a [routerLink]="[]" [fragment]="l.id" [class.active]="view === l.id">{{ l.label | translate }}</a>
+            } @else {
+              <a [routerLink]="[]" [class.active]="home">{{ l.label | translate }}</a>
+            }
+          </li>
         }
       </ul>
       <div class="nav-right">
@@ -29,6 +35,7 @@
     </nav>
 
     <!-- ================= HERO ================= -->
+    @if (home) {
     <header class="hero">
       <div class="hero-copy">
         <span class="eyebrow">
@@ -46,7 +53,7 @@
             {{ 'LANDING.GET_STARTED' | translate }}
             <mat-icon>arrow_forward</mat-icon>
           </button>
-          <a href="#huduma" class="btn-ghost">
+          <a [routerLink]="[]" fragment="huduma" class="btn-ghost">
             {{ 'LANDING.SEE_HOW' | translate }}
             <mat-icon>south</mat-icon>
           </a>
@@ -58,9 +65,11 @@
         </ul>
       </div>
     </header>
+    }
   </div>
 
   <!-- ================= MENU MARQUEE ================= -->
+  @if (home) {
   <div class="marquee" aria-hidden="true">
     <div class="marquee-track">
       @for (round of [0, 1]; track round) {
@@ -70,9 +79,11 @@
       }
     </div>
   </div>
+  }
 
   <!-- ================= ABOUT ================= -->
-  <section class="about" id="kuhusu">
+  @if (show('kuhusu')) {
+  <section class="about">
     <div class="about-inner">
       <div class="about-copy">
         <span class="eyebrow">{{ 'LANDING.ABOUT_EYEBROW' | translate }}</span>
@@ -92,9 +103,11 @@
       </ul>
     </div>
   </section>
+  }
 
   <!-- ================= SERVICES ================= -->
-  <section class="services" id="huduma">
+  @if (show('huduma')) {
+  <section class="services">
     <div class="section-head">
       <span class="eyebrow">{{ 'LANDING.SV_EYEBROW' | translate }}</span>
       <h2>{{ 'LANDING.SV_TITLE' | translate }}</h2>
@@ -119,8 +132,10 @@
       }
     </div>
   </section>
+  }
 
   <!-- ================= THE BAR ================= -->
+  @if (home) {
   <section class="gallery">
     <div class="gallery-head">
       <div>
@@ -144,8 +159,10 @@
       }
     </div>
   </section>
+  }
 
   <!-- ================= HOW A NIGHT RUNS ================= -->
+  @if (home) {
   <section class="night">
     <div class="section-head">
       <span class="eyebrow">{{ 'LANDING.NIGHT_EYEBROW' | translate }}</span>
@@ -173,8 +190,10 @@
       }
     </ol>
   </section>
+  }
 
   <!-- ================= THE SPLIT ================= -->
+  @if (home) {
   <section class="split">
     <div class="split-inner">
       <div class="split-copy">
@@ -205,9 +224,11 @@
       </div>
     </div>
   </section>
+  }
 
   <!-- ================= GETTING STARTED ================= -->
-  <section class="info-section" id="anza">
+  @if (show('anza')) {
+  <section class="info-section">
     <div class="section-head">
       <span class="eyebrow">{{ 'LANDING.START_EYEBROW' | translate }}</span>
       <h2>{{ 'LANDING.START_TITLE' | translate }}</h2>
@@ -223,9 +244,11 @@
       }
     </ol>
   </section>
+  }
 
   <!-- ================= WHO SEES WHAT ================= -->
-  <section class="info-section alt" id="watumiaji">
+  @if (show('watumiaji')) {
+  <section class="info-section alt">
     <div class="section-head">
       <span class="eyebrow">{{ 'LANDING.ROLES_EYEBROW' | translate }}</span>
       <h2>{{ 'LANDING.ROLES_TITLE' | translate }}</h2>
@@ -240,9 +263,11 @@
       }
     </div>
   </section>
+  }
 
   <!-- ================= PRICING ================= -->
-  <section class="info-section" id="bei">
+  @if (show('bei')) {
+  <section class="info-section">
     <div class="price-inner">
       <div class="price-copy">
         <span class="eyebrow">{{ 'LANDING.PRICE_EYEBROW' | translate }}</span>
@@ -265,9 +290,11 @@
       </div>
     </div>
   </section>
+  }
 
   <!-- ================= FAQ ================= -->
-  <section class="info-section alt" id="maswali">
+  @if (show('maswali')) {
+  <section class="info-section alt">
     <div class="section-head">
       <span class="eyebrow">{{ 'LANDING.FAQ_EYEBROW' | translate }}</span>
       <h2>{{ 'LANDING.FAQ_TITLE' | translate }}</h2>
@@ -281,9 +308,11 @@
       }
     </div>
   </section>
+  }
 
   <!-- ================= LAST CALL ================= -->
-  <section class="last-call" id="wasiliana">
+  @if (show('wasiliana')) {
+  <section class="last-call">
     <div class="last-call-inner">
       <span class="eyebrow">{{ 'LANDING.CONTACT_EYEBROW' | translate }}</span>
       <h2>{{ 'LANDING.CTA_TITLE' | translate }}</h2>
@@ -301,6 +330,7 @@
       <a class="contact-email" [href]="contactHref">{{ contactEmail }}</a>
     </div>
   </section>
+  }
 
   <footer class="footer">
     <div class="brand">

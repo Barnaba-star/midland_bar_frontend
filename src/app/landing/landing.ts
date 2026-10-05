@@ -1,32 +1,65 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DecimalPipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-landing',
-  imports: [MatIconModule, DecimalPipe, TranslatePipe],
+  imports: [MatIconModule, DecimalPipe, TranslatePipe, RouterLink],
   templateUrl: './landing.html',
   styleUrl: './landing.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Landing {
+export class Landing implements OnInit {
   currentYear = new Date().getFullYear();
   /** The phone menu, folded away until tapped. */
   menuOpen = false;
   readonly contactEmail = 'barnabachristopher@gmail.com';
   readonly contactHref = `mailto:${this.contactEmail}?subject=${encodeURIComponent('Baronix')}`;
 
-  /** The top menu: each title jumps to its section. */
-  readonly navLinks = [
-    { href: '#kuhusu', label: 'LANDING.NAV_ABOUT' },
-    { href: '#huduma', label: 'LANDING.NAV_SERVICES' },
-    { href: '#anza', label: 'LANDING.NAV_START' },
-    { href: '#bei', label: 'LANDING.NAV_PRICE' },
-    { href: '#maswali', label: 'LANDING.NAV_FAQ' },
-    { href: '#wasiliana', label: 'LANDING.NAV_CONTACT' },
+  /**
+   * The top menu works like tabs: a title shows its section alone
+   * (/#huduma shows only the services); Mwanzo shows the whole page.
+   * The title rides in the URL, so the phone's back button steps back.
+   */
+  readonly navLinks: { id: string | null; label: string }[] = [
+    { id: null, label: 'LANDING.NAV_HOME' },
+    { id: 'kuhusu', label: 'LANDING.NAV_ABOUT' },
+    { id: 'huduma', label: 'LANDING.NAV_SERVICES' },
+    { id: 'anza', label: 'LANDING.NAV_START' },
+    { id: 'bei', label: 'LANDING.NAV_PRICE' },
+    { id: 'maswali', label: 'LANDING.NAV_FAQ' },
+    { id: 'wasiliana', label: 'LANDING.NAV_CONTACT' },
   ];
+
+  /** The section on its own, or 'home' for the whole page. */
+  view = 'home';
+  private readonly views = new Set(['kuhusu', 'huduma', 'anza', 'bei', 'maswali', 'wasiliana']);
+  private route = inject(ActivatedRoute);
+  private cdr = inject(ChangeDetectorRef);
+  private destroyRef = inject(DestroyRef);
+
+  get home(): boolean {
+    return this.view === 'home';
+  }
+
+  /** On the whole page everything shows; on a tab only its own section (who-sees-what goes with About). */
+  show(id: string): boolean {
+    return this.home || this.view === id || (id === 'watumiaji' && this.view === 'kuhusu');
+  }
+
+  ngOnInit(): void {
+    this.route.fragment.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((f) => {
+      this.view = f && this.views.has(f) ? f : 'home';
+      this.menuOpen = false;
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0 });
+      }
+      this.cdr.markForCheck();
+    });
+  }
 
   readonly aboutPoints = [
     { icon: 'travel_explore', title: 'LANDING.ABOUT_P1_T', desc: 'LANDING.ABOUT_P1_D' },

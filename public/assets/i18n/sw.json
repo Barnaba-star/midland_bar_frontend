@@ -731,7 +731,8 @@
     "SV8_B1": "Kila tawi na stock, wafanyakazi na ripoti zake",
     "SV8_B2": "Mwenye matawi mengi anachagua tawi anapoingia",
     "SV8_B3": "Kila mtu anaingia kwa akaunti yake, na kila tawi linaona data zake tu",
-    "SV8_B4": "Kitu kikiondolewa kwenye bill, kinaandikwa pamoja na sababu"
+    "SV8_B4": "Kitu kikiondolewa kwenye bill, kinaandikwa pamoja na sababu",
+    "NAV_HOME": "Mwanzo"
   },
   "DASHBOARD": {
     "WELCOME": "Karibu",

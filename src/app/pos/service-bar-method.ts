@@ -379,6 +379,16 @@ staffHandover(staffCode: string): Observable<Response<StaffHandover>> {
   return this.http.get<Response<StaffHandover>>(`${this.barURL}/staffSell/handover/${encodeURIComponent(staffCode)}`);
 }
 
+/** Staff Sell: the staff member is ready to hand over; their unpaid bills are marked for the cashier. */
+sendStaffHandover(staffCode: string): Observable<Response<number>> {
+  return this.http.post<Response<number>>(`${this.barURL}/staffSell/handover/${encodeURIComponent(staffCode)}/send`, {});
+}
+
+/** Sales: the cashier took one method's money - every listed bill in it is paid, or none if any changed. */
+receiveStaffHandover(dto: { staffCode: string; method: string; bills: { uid: string; amount: number }[] }): Observable<Response<{ method: string; bills: number; amount: number }>> {
+  return this.http.post<Response<{ method: string; bills: number; amount: number }>>(`${this.barURL}/staffSell/handover/receive`, dto);
+}
+
 /** Staff Sell: open a bill that belongs to the staff member, numbered from their code (K1-1, K1-2...). */
 openStaffBill(dto: { staffCode: string }): Observable<Response<SalesOpened>> {
   return this.http.post<Response<SalesOpened>>(`${this.barURL}/staffSell/openBill`, dto);

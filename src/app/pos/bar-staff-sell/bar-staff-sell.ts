@@ -107,8 +107,8 @@ export class BarStaffSell implements OnInit, OnDestroy {
       width: '460px',
       maxWidth: '95vw',
       autoFocus: false,
-      data: { staffCode: this.staff.staffCode },
-    });
+      data: { staffCode: this.staff.staffCode, mode: 'staff' },
+    }).afterClosed().subscribe(() => this.refresh());
   }
 
   /** "Paid by phone, from this name" - noted on the bill for the cashier; marks nothing paid. */

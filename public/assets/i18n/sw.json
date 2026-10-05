@@ -2190,6 +2190,16 @@
     "PAID_TITLE": "Zilizokwisha lipwa",
     "SINCE": "Tangu",
     "NO_PAID": "Bado hakuna bill iliyolipwa.",
-    "HINT": "Bill isiyo na alama ya \"amelipa kwa simu\" inahesabiwa kama cash. Andika jina la aliyelipa kwa simu kwenye bill ili ihesabiwe upande wa simu."
+    "HINT": "Bill isiyo na alama ya \"amelipa kwa simu\" inahesabiwa kama cash. Andika jina la aliyelipa kwa simu kwenye bill ili ihesabiwe upande wa simu.",
+    "SEND": "Tuma kwa makabidhiano",
+    "SEND_AGAIN": "Tuma tena",
+    "SENT_OK": "Bill {{count}} zimetumwa kwa cashier",
+    "SENT_AT": "Ametuma kwa makabidhiano saa",
+    "RECEIVED": "Nimepokea",
+    "CONFIRM": "Ndiyo, nimepokea",
+    "RECEIVED_OK": "Umepokea Tshs {{amount}} ({{method}}) · bill {{count}} zimelipwa",
+    "CASHIER_HINT": "Bonyeza \"Nimepokea\" baada ya kuhesabu pesa za njia hiyo: bill zote za njia hiyo zinalipwa kwa mara moja. Kama bill imebadilika tangu ufungue, hakuna kinacholipwa hadi uonyeshe upya.",
+    "BUTTON_CASHIER": "Muhtasari wa makabidhiano",
+    "SENT_BADGE": "Ametuma"
   }
 }

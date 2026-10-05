@@ -35,9 +35,22 @@
         <ul class="ho-rows">
           @for (m of summary.open.byMethod; track m.method) {
             @if (m.bills > 0) {
-              <li>
+              <li [class.ho-receivable]="cashier">
                 <span>{{ label(m.method) | translate }} <small>({{ m.bills }})</small></span>
                 <b>{{ m.amount | number }}</b>
+                @if (cashier) {
+                  @if (confirming === m.method) {
+                    <span class="ho-confirm">
+                      <button type="button" class="ho-no" (click)="confirming = null">{{ 'COMMON.CANCEL' | translate }}</button>
+                      <button type="button" class="ho-yes" (click)="receive(m)">{{ 'STAFF_HANDOVER.CONFIRM' | translate }}</button>
+                    </span>
+                  } @else {
+                    <button type="button" class="ho-receive" [disabled]="!!receiving || loading" (click)="confirming = m.method">
+                      <mat-icon>done_all</mat-icon>
+                      {{ (receiving === m.method ? 'COMMON.LOADING' : 'STAFF_HANDOVER.RECEIVED') | translate }}
+                    </button>
+                  }
+                }
               </li>
             }
           }
@@ -82,10 +95,19 @@
       }
     </section>
 
-    <p class="ho-hint">{{ 'STAFF_HANDOVER.HINT' | translate }}</p>
+    @if (summary.sentAt) {
+      <p class="ho-sent"><mat-icon>send</mat-icon>{{ 'STAFF_HANDOVER.SENT_AT' | translate }} {{ summary.sentAt | date: 'HH:mm' }}</p>
+    }
+    <p class="ho-hint">{{ (cashier ? 'STAFF_HANDOVER.CASHIER_HINT' : 'STAFF_HANDOVER.HINT') | translate }}</p>
   }
 
   <div class="ho-actions">
     <button type="button" class="ho-close" (click)="close()">{{ 'COMMON.CLOSE' | translate }}</button>
+    @if (!cashier && summary && summary.open.bills.length) {
+      <button type="button" class="ho-send" [disabled]="sending || loading" (click)="send()">
+        <mat-icon>send</mat-icon>
+        {{ (summary.sentAt ? 'STAFF_HANDOVER.SEND_AGAIN' : 'STAFF_HANDOVER.SEND') | translate }}
+      </button>
+    }
   </div>
 </div>

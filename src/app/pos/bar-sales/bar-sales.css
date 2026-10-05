@@ -4141,6 +4141,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   text-align: center;
 }
 
+.chip-sent {
+  width: 15px;
+  height: 15px;
+  font-size: 15px;
+  color: #0f766e;
+}
+
 .staff-chip.active .chip-count {
   background: #f5a524;
   color: #1a1206;

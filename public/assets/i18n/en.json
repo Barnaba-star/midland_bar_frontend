@@ -2190,6 +2190,16 @@
     "PAID_TITLE": "Already paid",
     "SINCE": "Since",
     "NO_PAID": "No bills paid yet.",
-    "HINT": "A bill without a \"paid by phone\" note counts as cash. Note the payer's name on the bill to count it as phone money."
+    "HINT": "A bill without a \"paid by phone\" note counts as cash. Note the payer's name on the bill to count it as phone money.",
+    "SEND": "Send for handover",
+    "SEND_AGAIN": "Send again",
+    "SENT_OK": "{{count}} bill(s) sent to the cashier",
+    "SENT_AT": "Sent for handover at",
+    "RECEIVED": "Received",
+    "CONFIRM": "Yes, received",
+    "RECEIVED_OK": "Received Tshs {{amount}} ({{method}}) · {{count}} bill(s) paid",
+    "CASHIER_HINT": "Press \"Received\" after counting that method's money: all its bills are paid at once. If a bill changed since you opened this, nothing is paid until you refresh.",
+    "BUTTON_CASHIER": "Handover summary",
+    "SENT_BADGE": "Sent"
   }
 }

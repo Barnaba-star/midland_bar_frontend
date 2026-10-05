@@ -167,6 +167,8 @@ export interface SalesOpened{
     openedBy?: string;
     openedByName?: string;
     /** "Paid by phone": how, from whose name, the reference - noted for the cashier, not a payment. */
+    /** When the staff member sent this bill for handover from Staff Sell. */
+    handoverSentAt?: string | null;
     paymentNoteMethod?: string | null;
     paymentNotePayer?: string | null;
     paymentNoteRef?: string | null;
@@ -300,10 +302,12 @@ export interface StaffHandoverMethod {
 export interface StaffHandover {
     staff: StaffSellStaff;
     since: string;
+    /** When the staff member last sent their bills for handover; null = not sent. */
+    sentAt?: string | null;
     open: {
         byMethod: StaffHandoverMethod[];
         total: number;
-        bills: { uid: string; salesCode: string; amount: number; method: string; payer?: string | null }[];
+        bills: { uid: string; salesCode: string; amount: number; method: string; payer?: string | null; sentAt?: string | null }[];
     };
     paid: { byMethod: StaffHandoverMethod[]; total: number };
 }

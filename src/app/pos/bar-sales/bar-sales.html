@@ -35,6 +35,9 @@
           @for (opt of staffOptions; track opt.code) {
             <button type="button" class="staff-chip" [class.active]="staffFilter === opt.code" (click)="setStaffFilter(opt.code)">
               <b>{{ opt.code }}</b> {{ opt.name }}
+              @if (opt.sent) {
+                <mat-icon class="chip-sent" [attr.title]="'STAFF_HANDOVER.SENT_BADGE' | translate">send</mat-icon>
+              }
               <span class="chip-count">{{ opt.count }}</span>
             </button>
           }
@@ -53,6 +56,10 @@
 
           <!-- A staff member handing in their money: every bill of theirs, printed in one go. -->
           @if (staffChipChosen) {
+            <button type="button" class="print-all-btn handover" [disabled]="shiftState !== 'OPEN'" (click)="openStaffHandover()">
+              <mat-icon>account_balance_wallet</mat-icon>
+              {{ 'STAFF_HANDOVER.BUTTON_CASHIER' | translate }}
+            </button>
             <!-- Handed in less than the bills came to: the shortage comes off their commission. -->
             <button type="button" class="print-all-btn loss" [disabled]="shiftState !== 'OPEN'" (click)="recordStaffLoss()">
               <mat-icon>money_off</mat-icon>

@@ -3,6 +3,7 @@ import { PaymentNoteDialog } from '../../Utils/component/dialogs/payment-note-di
 import { SellableItems } from '../../Utils/services/sellable-items';
 import { OfflineService } from '../../Utils/offline/offline.service';
 import { StaffLossDialog } from '../../Utils/component/dialogs/staff-loss-dialog/staff-loss-dialog';
+import { StaffHandoverDialog } from '../bar-staff-sell/handover-dialog/handover-dialog';
 import { BillNicknames } from '../../Utils/services/bill-nicknames';
 import { ShiftBar, ShiftState } from '../shift-bar/shift-bar';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnInit, inject } from '@angular/core';
@@ -182,12 +183,14 @@ export class BarSales implements OnInit{
   private destroyRef = inject(DestroyRef);
 
   /** The staff with open bills, for the filter chips - code, name and how many bills. */
-  get staffOptions(): { code: string; name: string; count: number }[] {
-    const byCode = new Map<string, { code: string; name: string; count: number }>();
+  get staffOptions(): { code: string; name: string; count: number; sent: boolean }[] {
+    const byCode = new Map<string, { code: string; name: string; count: number; sent: boolean }>();
     for (const bill of this.salesOpenedList) {
       if (!bill.staffCode) continue;
-      const entry = byCode.get(bill.staffCode) ?? { code: bill.staffCode, name: bill.staffName ?? '', count: 0 };
+      const entry = byCode.get(bill.staffCode) ?? { code: bill.staffCode, name: bill.staffName ?? '', count: 0, sent: false };
       entry.count++;
+      // Sent from Staff Sell: they are ready to hand over.
+      entry.sent ||= !!bill.handoverSentAt;
       byCode.set(bill.staffCode, entry);
     }
     return [...byCode.values()].sort((a, b) => a.code.localeCompare(b.code, undefined, { numeric: true }));
@@ -609,6 +612,24 @@ openSaleDetailsDialogForMore(sale: SalesOpened) {
       maxWidth: '95vw',
       autoFocus: false,
       data: { billUids: bills.map((b) => b.uid!), title },
+    });
+  }
+
+  /** Handover: the chosen staff member's money by method; "Received" pays a method's bills at once. */
+  openStaffHandover(): void {
+    const opt = this.staffOptions.find((o) => o.code === this.staffFilter);
+    if (!opt) {
+      return;
+    }
+    this.dialog.open(StaffHandoverDialog, {
+      width: '500px',
+      maxWidth: '95vw',
+      autoFocus: false,
+      data: { staffCode: opt.code, mode: 'cashier' },
+    }).afterClosed().subscribe((paid?: boolean) => {
+      if (paid) {
+        this.salesOpenedListToday();
+      }
     });
   }
 

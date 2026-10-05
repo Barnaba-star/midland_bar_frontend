@@ -160,6 +160,89 @@
 .ho-actions {
   display: flex;
   justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ho-rows li.ho-receivable {
+  flex-wrap: wrap;
+}
+
+.ho-rows li.ho-receivable > span:first-child {
+  flex: 1;
+}
+
+.ho-receive,
+.ho-yes,
+.ho-no,
+.ho-send {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ho-receive mat-icon,
+.ho-send mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
+.ho-receive {
+  border: 1px solid #0f766e;
+  background: transparent;
+  color: #0f766e;
+}
+
+.ho-yes,
+.ho-send {
+  border: none;
+  background: #0f766e;
+  color: #fff;
+}
+
+.ho-send {
+  height: 40px;
+  padding: 0 16px;
+}
+
+.ho-no {
+  border: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text);
+}
+
+.ho-confirm {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.ho-receive:disabled,
+.ho-send:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ho-sent {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f766e;
+}
+
+.ho-sent mat-icon {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
 }
 
 .ho-close {

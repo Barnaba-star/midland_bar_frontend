@@ -2,17 +2,22 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit }
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { AlertService } from '../../../Utils/services/alert';
 import { ServiceBarMethod } from '../../service-bar-method';
-import { StaffHandover } from '../../BarModel';
+import { StaffHandover, StaffHandoverMethod } from '../../BarModel';
 
 /** Methods the bill dialogs know a label for; anything else shows as typed. */
 const KNOWN_METHODS = ['cash', 'mpesa', 'tigopesa', 'airtelmoney', 'halopesa', 'bank'];
 
 /**
- * Staff Sell summary: how much of the staff member's unpaid bills is cash
+ * Handover summary: how much of the staff member's unpaid bills is cash
  * to hand over and how much came by phone (from "paid by phone" notes),
  * plus what the cashier has already taken this shift, by method.
+ *
+ * - staff (Staff Sell): checks it, then sends it to the cashier;
+ * - cashier (Sales): "Received" on a method pays all that method's bills.
+ * Closes with true when bills were paid, so the Sales list reloads.
  */
 @Component({
   selector: 'app-staff-handover-dialog',
@@ -24,13 +29,24 @@ const KNOWN_METHODS = ['cash', 'mpesa', 'tigopesa', 'airtelmoney', 'halopesa', '
 export class StaffHandoverDialog implements OnInit {
   summary: StaffHandover | null = null;
   loading = true;
+  sending = false;
+  /** The method waiting on "yes" before its bills are paid, and the one being paid. */
+  confirming: string | null = null;
+  receiving: string | null = null;
+  private changed = false;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { staffCode: string },
-    private dialogRef: MatDialogRef<StaffHandoverDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: { staffCode: string; mode?: 'staff' | 'cashier' },
+    private dialogRef: MatDialogRef<StaffHandoverDialog, boolean>,
     private barService: ServiceBarMethod,
+    private alert: AlertService,
+    private translate: TranslateService,
     private cdr: ChangeDetectorRef,
   ) {}
+
+  get cashier(): boolean {
+    return this.data.mode === 'cashier';
+  }
 
   ngOnInit(): void {
     this.load();
@@ -69,7 +85,57 @@ export class StaffHandoverDialog implements OnInit {
     return KNOWN_METHODS.includes(method) ? 'PAY_BILL.METHOD_' + method : method;
   }
 
+  /** Staff: "I am ready" - the cashier sees these bills marked as sent. */
+  send(): void {
+    this.sending = true;
+    this.barService.sendStaffHandover(this.data.staffCode).subscribe({
+      next: (res) => {
+        this.sending = false;
+        if (res?.data) {
+          this.alert.show('success', this.translate.instant('STAFF_HANDOVER.SENT_OK', { count: res.data }));
+          this.load();
+        }
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.sending = false;
+        this.cdr.markForCheck();
+      },
+    });
+  }
+
+  /** Cashier: every bill in this method, paid by it, exactly as listed here. */
+  receive(row: StaffHandoverMethod): void {
+    if (!this.summary || this.receiving) {
+      return;
+    }
+    const bills = this.summary.open.bills
+      .filter(b => b.method === row.method && b.amount > 0)
+      .map(b => ({ uid: b.uid, amount: b.amount }));
+    this.receiving = row.method;
+    this.confirming = null;
+    this.barService.receiveStaffHandover({ staffCode: this.data.staffCode, method: row.method, bills }).subscribe({
+      next: (res) => {
+        this.receiving = null;
+        if (res?.data) {
+          this.changed = true;
+          this.alert.show('success', this.translate.instant('STAFF_HANDOVER.RECEIVED_OK', {
+            amount: res.data.amount.toLocaleString(),
+            method: this.translate.instant(this.label(row.method)),
+            count: res.data.bills,
+          }));
+        }
+        // Paid or refused (bills changed), show what is there now.
+        this.load();
+      },
+      error: () => {
+        this.receiving = null;
+        this.load();
+      },
+    });
+  }
+
   close(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(this.changed);
   }
 }

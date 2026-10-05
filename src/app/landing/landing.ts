@@ -34,13 +34,23 @@ export class Landing {
     { icon: 'storefront', title: 'LANDING.ABOUT_P3_T', desc: 'LANDING.ABOUT_P3_D' },
   ];
 
-  /** Smaller services, after the photo cards. */
-  readonly more = [
-    { icon: 'wifi_off', title: 'LANDING.M1_T', desc: 'LANDING.M1_D' },
-    { icon: 'smartphone', title: 'LANDING.M2_T', desc: 'LANDING.M2_D' },
-    { icon: 'print', title: 'LANDING.M3_T', desc: 'LANDING.M3_D' },
-    { icon: 'bolt', title: 'LANDING.M4_T', desc: 'LANDING.M4_D' },
-  ];
+  /** What Baronix does, one card per service, each with what it really covers. */
+  readonly services = [
+    { icon: 'account_balance_wallet', key: 'SV1' },
+    { icon: 'point_of_sale', key: 'SV2' },
+    { icon: 'fact_check', key: 'SV3' },
+    { icon: 'inventory_2', key: 'SV4' },
+    { icon: 'groups', key: 'SV5' },
+    { icon: 'payments', key: 'SV6' },
+    { icon: 'query_stats', key: 'SV7' },
+    { icon: 'storefront', key: 'SV8' },
+  ].map((s) => ({
+    icon: s.icon,
+    title: `LANDING.${s.key}_T`,
+    desc: `LANDING.${s.key}_D`,
+    bullets: [1, 2, 3, 4].map((n) => `LANDING.${s.key}_B${n}`),
+  }));
+
 
   readonly startSteps = [
     { no: '1', icon: 'mail', title: 'LANDING.S1_T', desc: 'LANDING.S1_D' },
@@ -80,13 +90,6 @@ export class Landing {
     { no: '04', icon: 'donut_small', photo: 'assets/images/bar/bar-crowd.jpg', title: 'LANDING.STEP4_TITLE', desc: 'LANDING.STEP4_DESC' },
   ];
 
-  readonly features = [
-    { icon: 'inventory_2', photo: 'assets/images/bar/taps.jpg', title: 'LANDING.F1_TITLE', desc: 'LANDING.F1_DESC', wide: true },
-    { icon: 'print', photo: 'assets/images/bar/cashier.jpg', title: 'LANDING.F2_TITLE', desc: 'LANDING.F2_DESC', wide: false },
-    { icon: 'badge', photo: 'assets/images/bar/bartender.jpg', title: 'LANDING.F3_TITLE', desc: 'LANDING.F3_DESC', wide: false },
-    { icon: 'query_stats', photo: 'assets/images/bar/laptop.jpg', title: 'LANDING.F4_TITLE', desc: 'LANDING.F4_DESC', wide: false },
-    { icon: 'storefront', photo: 'assets/images/bar/bar-counter.jpg', title: 'LANDING.F5_TITLE', desc: 'LANDING.F5_DESC', wide: false },
-  ];
 
   /** The food split, shown on a 10,000 sale - pct is the share, so pct x 100 is the shillings. */
   readonly buckets = [

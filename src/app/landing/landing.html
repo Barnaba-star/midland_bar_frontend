@@ -93,6 +93,33 @@
     </div>
   </section>
 
+  <!-- ================= SERVICES ================= -->
+  <section class="services" id="huduma">
+    <div class="section-head">
+      <span class="eyebrow">{{ 'LANDING.SV_EYEBROW' | translate }}</span>
+      <h2>{{ 'LANDING.SV_TITLE' | translate }}</h2>
+      <p>{{ 'LANDING.SV_DESC' | translate }}</p>
+    </div>
+    <div class="service-grid">
+      @for (sv of services; track sv.title; let first = $first) {
+        <article class="service" [class.service-lead]="first">
+          <div class="service-head">
+            <span class="service-icon"><mat-icon>{{ sv.icon }}</mat-icon></span>
+            <div>
+              <h3>{{ sv.title | translate }}</h3>
+              <p>{{ sv.desc | translate }}</p>
+            </div>
+          </div>
+          <ul>
+            @for (b of sv.bullets; track b) {
+              <li><mat-icon>check</mat-icon><span>{{ b | translate }}</span></li>
+            }
+          </ul>
+        </article>
+      }
+    </div>
+  </section>
+
   <!-- ================= THE BAR ================= -->
   <section class="gallery">
     <div class="gallery-head">
@@ -119,7 +146,7 @@
   </section>
 
   <!-- ================= HOW A NIGHT RUNS ================= -->
-  <section class="night" id="huduma">
+  <section class="night">
     <div class="section-head">
       <span class="eyebrow">{{ 'LANDING.NIGHT_EYEBROW' | translate }}</span>
       <h2>{{ 'LANDING.NIGHT_TITLE' | translate }}</h2>
@@ -176,48 +203,6 @@
           }
         </ul>
       </div>
-    </div>
-  </section>
-
-  <!-- ================= FEATURES ================= -->
-  <section class="features">
-    <div class="section-head">
-      <span class="eyebrow">{{ 'LANDING.FEATURES_EYEBROW' | translate }}</span>
-      <h2>{{ 'LANDING.FEATURES_TITLE' | translate }}</h2>
-    </div>
-
-    <div class="feature-grid">
-      @for (f of features; track f.title) {
-        <article class="feature" [class.feature-wide]="f.wide">
-          <div class="feature-photo">
-            <img [src]="f.photo" alt="" loading="lazy" decoding="async">
-            <mat-icon>{{ f.icon }}</mat-icon>
-          </div>
-          <div class="feature-body">
-            <h3>{{ f.title | translate }}</h3>
-            <p>{{ f.desc | translate }}</p>
-            @if (f.wide) {
-              <div class="ladder" aria-hidden="true">
-                <span>Kilo</span><mat-icon>chevron_right</mat-icon>
-                <span>Nusu</span><mat-icon>chevron_right</mat-icon>
-                <span>Portion</span><mat-icon>chevron_right</mat-icon>
-                <span>Mshikaki</span>
-              </div>
-            }
-          </div>
-        </article>
-      }
-    </div>
-
-    <h3 class="more-title">{{ 'LANDING.MORE_TITLE' | translate }}</h3>
-    <div class="info-grid four">
-      @for (m of more; track m.title) {
-        <article class="info-card">
-          <mat-icon>{{ m.icon }}</mat-icon>
-          <h3>{{ m.title | translate }}</h3>
-          <p>{{ m.desc | translate }}</p>
-        </article>
-      }
     </div>
   </section>
 

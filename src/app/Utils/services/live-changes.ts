@@ -17,6 +17,8 @@ export class LiveChanges {
   private auth = inject(Authentication);
   private zone = inject(NgZone);
   private topics = new Subject<string>();
+  /** Named events with a body, e.g. "pending": the supervisor's queue as JSON. */
+  private events = new Subject<{ event: string; data: string }>();
   private abort: AbortController | null = null;
   private retryMs = 1000;
   private retryTimer: ReturnType<typeof setTimeout> | null = null;
@@ -48,9 +50,30 @@ export class LiveChanges {
     share(),
   );
 
-  /** One topic's nudges, bursts folded into one (a pay touches several bills). */
+  /**
+   * One topic's nudges, bursts folded into one (a pay touches several bills).
+   * "resync" (back after a drop - nudges may have been missed) always passes.
+   */
   on(...topics: string[]): Observable<string> {
-    return this.shared$.pipe(filter((t) => topics.includes(t)), debounceTime(150));
+    return this.shared$.pipe(filter((t) => t === 'resync' || topics.includes(t)), debounceTime(150));
+  }
+
+  /** The supervisor's queue as it stands, sent with every order change - no fetch, no delay. */
+  pending<T>(): Observable<T[]> {
+    return new Observable<T[]>((sub) => {
+      const keepOpen = this.shared$.subscribe();
+      const s = this.events.pipe(filter((e) => e.event === 'pending')).subscribe((e) => {
+        try {
+          sub.next(JSON.parse(e.data) as T[]);
+        } catch {
+          // A broken body: the screen's poll still catches up.
+        }
+      });
+      return () => {
+        s.unsubscribe();
+        keepOpen.unsubscribe();
+      };
+    });
   }
 
   private connect(): void {
@@ -76,10 +99,7 @@ export class LiveChanges {
           }
           this.retryMs = 1000;
           if (this.connectedOnce) {
-            this.zone.run(() => {
-              this.topics.next('orders');
-              this.topics.next('bills');
-            });
+            this.zone.run(() => this.topics.next('resync'));
           }
           this.connectedOnce = true;
           const reader = res.body.getReader();
@@ -109,14 +129,22 @@ export class LiveChanges {
   }
 
   private handle(block: string): void {
-    const data = block
-      .split('\n')
+    const lines = block.split('\n');
+    const event = lines.find((l) => l.startsWith('event:'))?.slice(6).trim() || 'change';
+    const data = lines
       .filter((l) => l.startsWith('data:'))
-      .map((l) => l.slice(5).trim())
-      .join('');
-    if (data && data !== 'hello') {
-      this.zone.run(() => this.topics.next(data));
+      .map((l) => l.slice(5).replace(/^ /, ''))
+      .join('\n');
+    if (!data || data === 'hello') {
+      return;
     }
+    this.zone.run(() => {
+      if (event === 'change') {
+        this.topics.next(data.trim());
+      } else {
+        this.events.next({ event, data });
+      }
+    });
   }
 
   private scheduleReconnect(): void {

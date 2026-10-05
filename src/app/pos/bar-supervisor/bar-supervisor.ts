@@ -71,8 +71,10 @@ export class BarSupervisor implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.load();
     this.timer = setInterval(() => this.load(), POLL_MS);
-    // A staff member pressed Send: on screen now, not at the next poll.
-    this.live = this.liveChanges.on('orders').subscribe(() => this.load());
+    // A staff member pressed Send: the queue arrives with the nudge - shown now, no fetch.
+    this.live = this.liveChanges.pending<StaffOrder>().subscribe((orders) => this.showPending(orders));
+    // Back after a dropped connection: whatever was missed.
+    this.live.add(this.liveChanges.on('resync').subscribe(() => this.load()));
   }
 
   ngOnDestroy(): void {
@@ -115,25 +117,28 @@ export class BarSupervisor implements OnInit, OnDestroy {
       error: () => {},
     });
     this.barService.pendingStaffOrders().subscribe({
-      next: (res) => {
-        const incoming = (res?.data ?? []).filter((o) => !this.decided.has(o.uid));
-        const known = new Set(this.orders.map((o) => o.uid));
-        const arrived = this.loaded ? incoming.filter((o) => !known.has(o.uid)) : [];
-        this.fresh = new Set(arrived.map((o) => o.uid));
-        // Keep a card that is mid-decision even if a poll races it.
-        this.orders = incoming.filter((o) => !this.busy[o.uid] || known.has(o.uid));
-        this.now = Date.now();
-        this.loaded = true;
-        if (arrived.length) {
-          this.beep();
-        }
-        this.cdr.markForCheck();
-      },
+      next: (res) => this.showPending(res?.data ?? []),
       error: () => {
         this.loaded = true;
         this.cdr.markForCheck();
       },
     });
+  }
+
+  /** The queue as the server has it - from a poll or pushed live. */
+  private showPending(pending: StaffOrder[]): void {
+    const incoming = pending.filter((o) => !this.decided.has(o.uid));
+    const known = new Set(this.orders.map((o) => o.uid));
+    const arrived = this.loaded ? incoming.filter((o) => !known.has(o.uid)) : [];
+    this.fresh = new Set(arrived.map((o) => o.uid));
+    // Keep a card that is mid-decision even if a poll races it.
+    this.orders = incoming.filter((o) => !this.busy[o.uid] || known.has(o.uid));
+    this.now = Date.now();
+    this.loaded = true;
+    if (arrived.length) {
+      this.beep();
+    }
+    this.cdr.markForCheck();
   }
 
   total(order: StaffOrder): number {

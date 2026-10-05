@@ -2204,6 +2204,7 @@
     "RECEIVED_OK": "Received Tshs {{amount}} ({{method}}) · {{count}} bill(s) paid",
     "CASHIER_HINT": "Press \"Received\" after counting that method's money: all its bills are paid at once. If a bill changed since you opened this, nothing is paid until you refresh.",
     "BUTTON_CASHIER": "Handover summary",
-    "SENT_BADGE": "Sent"
+    "SENT_BADGE": "Sent",
+    "CONFIRM_Q": "Received Tshs {{amount}} for {{count}} bill(s)?"
   }
 }

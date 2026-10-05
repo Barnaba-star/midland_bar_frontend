@@ -2204,6 +2204,7 @@
     "RECEIVED_OK": "Umepokea Tshs {{amount}} ({{method}}) · bill {{count}} zimelipwa",
     "CASHIER_HINT": "Bonyeza \"Nimepokea\" baada ya kuhesabu pesa za njia hiyo: bill zote za njia hiyo zinalipwa kwa mara moja. Kama bill imebadilika tangu ufungue, hakuna kinacholipwa hadi uonyeshe upya.",
     "BUTTON_CASHIER": "Muhtasari wa makabidhiano",
-    "SENT_BADGE": "Ametuma"
+    "SENT_BADGE": "Ametuma",
+    "CONFIRM_Q": "Umepokea Tshs {{amount}} kwa bill {{count}}?"
   }
 }

@@ -29,53 +29,63 @@
 
     <section class="ho-section">
       <h4>{{ 'STAFF_HANDOVER.OPEN_TITLE' | translate }}</h4>
-      @if (summary.open.bills.length === 0) {
+      @if (groups.length === 0) {
         <p class="ho-muted">{{ 'STAFF_HANDOVER.NO_OPEN' | translate }}</p>
       } @else {
-        <ul class="ho-rows">
-          @for (m of summary.open.byMethod; track m.method) {
-            @if (m.bills > 0) {
-              <li [class.ho-receivable]="cashier">
-                <span>{{ label(m.method) | translate }} <small>({{ m.bills }})</small></span>
-                <b>{{ m.amount | number }}</b>
-                @if (cashier) {
-                  @if (confirming === m.method) {
+        <!-- One group per method: tap to see its bills; the cashier receives a whole group at once. -->
+        <div class="ho-groups">
+          @for (g of groups; track g.method) {
+            <div class="ho-group" [class.open]="expanded.has(g.method)" [class.phone]="g.method !== 'cash'">
+              <button type="button" class="ho-group-head" (click)="toggle(g.method)" [attr.aria-expanded]="expanded.has(g.method)">
+                <mat-icon>{{ g.method === 'cash' ? 'payments' : 'phone_iphone' }}</mat-icon>
+                <span class="ho-group-name">{{ label(g.method) | translate }} <small>({{ g.bills.length }})</small></span>
+                <b>{{ g.amount | number }}</b>
+                <mat-icon class="ho-caret">{{ expanded.has(g.method) ? 'expand_less' : 'expand_more' }}</mat-icon>
+              </button>
+
+              @if (expanded.has(g.method)) {
+                <ul class="ho-bills">
+                  @for (b of g.bills; track b.uid) {
+                    <li>
+                      <span class="ho-code">{{ b.salesCode }}</span>
+                      <span class="ho-method" [class.phone]="b.method !== 'cash'">@if (b.payer) { {{ b.payer }} }</span>
+                      <b>{{ b.amount | number }}</b>
+                    </li>
+                  }
+                </ul>
+              }
+
+              @if (cashier) {
+                <div class="ho-group-action">
+                  @if (confirming === g.method) {
+                    <span class="ho-confirm-text">{{ 'STAFF_HANDOVER.CONFIRM_Q' | translate: { amount: (g.amount | number), count: g.bills.length } }}</span>
                     <span class="ho-confirm">
                       <button type="button" class="ho-no" (click)="confirming = null">{{ 'COMMON.CANCEL' | translate }}</button>
-                      <button type="button" class="ho-yes" (click)="receive(m)">{{ 'STAFF_HANDOVER.CONFIRM' | translate }}</button>
+                      <button type="button" class="ho-yes" (click)="receive(g)">{{ 'STAFF_HANDOVER.CONFIRM' | translate }}</button>
                     </span>
                   } @else {
-                    <button type="button" class="ho-receive" [disabled]="!!receiving || loading" (click)="confirming = m.method">
+                    <button type="button" class="ho-receive" [disabled]="!!receiving || !fromServer" (click)="confirming = g.method">
                       <mat-icon>done_all</mat-icon>
-                      {{ (receiving === m.method ? 'COMMON.LOADING' : 'STAFF_HANDOVER.RECEIVED') | translate }}
+                      {{ (receiving === g.method ? 'COMMON.LOADING' : 'STAFF_HANDOVER.RECEIVED') | translate }}
                     </button>
                   }
-                }
-              </li>
-            }
+                </div>
+              }
+            </div>
           }
-          <li class="ho-total">
-            <span>{{ 'STAFF_HANDOVER.TOTAL' | translate }} <small>({{ summary.open.bills.length }})</small></span>
-            <b>{{ summary.open.total | number }}</b>
-          </li>
-        </ul>
-
-        <ul class="ho-bills">
-          @for (b of summary.open.bills; track b.uid) {
-            <li>
-              <span class="ho-code">{{ b.salesCode }}</span>
-              <span class="ho-method" [class.phone]="b.method !== 'cash'">
-                {{ label(b.method) | translate }}@if (b.payer) { · {{ b.payer }} }
-              </span>
-              <b>{{ b.amount | number }}</b>
-            </li>
-          }
-        </ul>
+        </div>
+        <div class="ho-open-total">
+          <span>{{ 'STAFF_HANDOVER.TOTAL' | translate }} <small>({{ summary.open.bills.length }})</small></span>
+          <b>{{ summary.open.total | number }}</b>
+        </div>
       }
     </section>
 
     <section class="ho-section">
       <h4>{{ 'STAFF_HANDOVER.PAID_TITLE' | translate }}</h4>
+      @if (!fromServer) {
+        <p class="ho-muted">{{ 'COMMON.LOADING' | translate }}</p>
+      } @else {
       <p class="ho-muted">{{ 'STAFF_HANDOVER.SINCE' | translate }} {{ summary.since | date: 'dd/MM HH:mm' }}</p>
       @if (summary.paid.byMethod.length === 0) {
         <p class="ho-muted">{{ 'STAFF_HANDOVER.NO_PAID' | translate }}</p>
@@ -92,6 +102,7 @@
             <b>{{ summary.paid.total | number }}</b>
           </li>
         </ul>
+      }
       }
     </section>
 

@@ -111,7 +111,7 @@ export class BarStaffSell implements OnInit, OnDestroy {
       width: '460px',
       maxWidth: '95vw',
       autoFocus: false,
-      data: { staffCode: this.staff.staffCode, mode: 'staff' },
+      data: { staffCode: this.staff.staffCode, mode: 'staff', staffName: this.staff.name, bills: this.bills },
     }).afterClosed().subscribe(() => this.refresh());
   }
 

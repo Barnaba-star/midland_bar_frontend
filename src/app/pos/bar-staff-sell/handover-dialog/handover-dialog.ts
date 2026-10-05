@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { AlertService } from '../../../Utils/services/alert';
 import { ServiceBarMethod } from '../../service-bar-method';
-import { StaffHandover, StaffHandoverMethod } from '../../BarModel';
+import { SalesOpened, StaffHandover } from '../../BarModel';
 
 /** Methods the bill dialogs know a label for; anything else shows as typed. */
 const KNOWN_METHODS = ['cash', 'mpesa', 'tigopesa', 'airtelmoney', 'halopesa', 'bank'];
@@ -35,8 +35,19 @@ export class StaffHandoverDialog implements OnInit {
   receiving: string | null = null;
   private changed = false;
 
+  /** False while showing the bills the screen already had - the server's figures are on their way. */
+  fromServer = false;
+  /** Methods whose bills are listed open. */
+  expanded = new Set<string>();
+
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { staffCode: string; mode?: 'staff' | 'cashier' },
+    @Inject(MAT_DIALOG_DATA) public data: {
+      staffCode: string;
+      mode?: 'staff' | 'cashier';
+      /** The screen's own copy of the staff member's unpaid bills: shown at once, then checked. */
+      staffName?: string;
+      bills?: SalesOpened[];
+    },
     private dialogRef: MatDialogRef<StaffHandoverDialog, boolean>,
     private barService: ServiceBarMethod,
     private alert: AlertService,
@@ -49,14 +60,63 @@ export class StaffHandoverDialog implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.data.bills) {
+      this.summary = this.fromScreen(this.data.bills);
+    }
     this.load();
+  }
+
+  /** A first look from the bills on screen, so nothing waits on the network to open. */
+  private fromScreen(bills: SalesOpened[]): StaffHandover {
+    const open = bills
+      .filter((b) => (b.bill || 0) > 0)
+      .map((b) => ({
+        uid: b.uid!,
+        salesCode: b.salesCode ?? '',
+        amount: b.bill || 0,
+        method: b.paymentNoteMethod ? b.paymentNoteMethod.toLowerCase() : 'cash',
+        payer: b.paymentNotePayer,
+        sentAt: b.handoverSentAt,
+      }));
+    const sent = open.map((b) => b.sentAt).filter((t): t is string => !!t).sort();
+    return {
+      staff: { uid: '', staffCode: this.data.staffCode, name: this.data.staffName ?? '' },
+      since: '',
+      sentAt: sent.length ? sent[sent.length - 1] : null,
+      open: { byMethod: [], total: open.reduce((n, b) => n + b.amount, 0), bills: open },
+      paid: { byMethod: [], total: 0 },
+    };
+  }
+
+  /** Unpaid bills grouped by how they are to be paid - cash first. */
+  get groups(): { method: string; amount: number; bills: StaffHandover['open']['bills'] }[] {
+    const by = new Map<string, StaffHandover['open']['bills']>();
+    for (const b of this.summary?.open.bills ?? []) {
+      if (b.amount > 0) {
+        by.set(b.method, [...(by.get(b.method) ?? []), b]);
+      }
+    }
+    return [...by.entries()]
+      .sort(([a], [b]) => (a === 'cash' ? -1 : b === 'cash' ? 1 : a.localeCompare(b)))
+      .map(([method, bills]) => ({ method, bills, amount: bills.reduce((n, b) => n + b.amount, 0) }));
+  }
+
+  toggle(method: string): void {
+    const next = new Set(this.expanded);
+    if (!next.delete(method)) {
+      next.add(method);
+    }
+    this.expanded = next;
   }
 
   load(): void {
     this.loading = true;
     this.barService.staffHandover(this.data.staffCode).subscribe({
       next: (res) => {
-        this.summary = res?.data ?? null;
+        if (res?.data) {
+          this.summary = res.data;
+          this.fromServer = true;
+        }
         this.loading = false;
         this.cdr.markForCheck();
       },
@@ -69,16 +129,12 @@ export class StaffHandoverDialog implements OnInit {
 
   /** Cash still to hand over, from unpaid bills with no phone note. */
   get openCash(): number {
-    return this.summary?.open.byMethod.find(m => m.method === 'cash')?.amount ?? 0;
+    return this.groups.find((g) => g.method === 'cash')?.amount ?? 0;
   }
 
-  /** Unpaid bills noted as paid by phone, per method. */
-  get openPhone() {
-    return (this.summary?.open.byMethod ?? []).filter(m => m.method !== 'cash' && m.amount > 0);
-  }
-
+  /** Unpaid bills noted as paid by phone, all methods together. */
   get openPhoneTotal(): number {
-    return this.openPhone.reduce((sum, m) => sum + m.amount, 0);
+    return this.groups.filter((g) => g.method !== 'cash').reduce((sum, g) => sum + g.amount, 0);
   }
 
   label(method: string): string {
@@ -107,8 +163,9 @@ export class StaffHandoverDialog implements OnInit {
   }
 
   /** Cashier: every bill in this method, paid by it, exactly as listed here. */
-  receive(row: StaffHandoverMethod): void {
-    if (!this.summary || this.receiving) {
+  receive(row: { method: string }): void {
+    // Only on the server's figures - the screen's copy may be behind.
+    if (!this.summary || this.receiving || !this.fromServer) {
       return;
     }
     const bills = this.summary.open.bills

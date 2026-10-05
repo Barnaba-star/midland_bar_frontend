@@ -633,7 +633,8 @@ openSaleDetailsDialogForMore(sale: SalesOpened) {
       width: '500px',
       maxWidth: '95vw',
       autoFocus: false,
-      data: { staffCode: opt.code, mode: 'cashier' },
+      // The bills already on screen: the summary opens on them at once, then checks with the server.
+      data: { staffCode: opt.code, mode: 'cashier', staffName: opt.name, bills: this.visibleBills },
     }).afterClosed().subscribe((paid?: boolean) => {
       if (paid) {
         this.salesOpenedListToday();

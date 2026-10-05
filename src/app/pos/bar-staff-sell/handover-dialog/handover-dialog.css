@@ -255,3 +255,97 @@
   font-weight: 600;
   cursor: pointer;
 }
+
+/* ---------- One group per payment method ---------- */
+.ho-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ho-group {
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.ho-group.open {
+  border-color: color-mix(in srgb, var(--color-accent) 55%, var(--color-border));
+}
+
+.ho-group-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 54px;
+  padding: 0 12px;
+  border: none;
+  background: transparent;
+  color: var(--color-text);
+  font: inherit;
+  font-size: 15px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ho-group-head > mat-icon:first-child {
+  color: var(--color-accent);
+}
+
+.ho-group.phone .ho-group-head > mat-icon:first-child,
+.ho-group.phone .ho-group-head b {
+  color: #0f766e;
+}
+
+.ho-group-name {
+  flex: 1;
+  font-weight: 600;
+}
+
+.ho-group-name small {
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
+
+.ho-group-head b {
+  font-size: 17px;
+  font-variant-numeric: tabular-nums;
+}
+
+.ho-caret {
+  color: var(--color-text-muted);
+}
+
+.ho-group .ho-bills {
+  margin: 0;
+  padding: 0 12px 6px;
+  border-top: 1px dashed var(--color-border);
+}
+
+.ho-group-action {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 12px 12px;
+}
+
+.ho-confirm-text {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.ho-open-total {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 2px 0;
+  font-weight: 700;
+}
+
+.ho-open-total small {
+  color: var(--color-text-muted);
+  font-weight: 400;
+}

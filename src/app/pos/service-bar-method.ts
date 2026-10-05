@@ -121,8 +121,9 @@ findBarSalesListActiveTrue(): Observable<ResponseList<any>> {
   return this.http.get<ResponseList<any>>( `${this.barURL}/findBarSalesListActiveTrue`);
 }
 
-salesOpenedList(): Observable<ResponseList<any>> {
-  return this.http.get<ResponseList<any>>( `${this.barURL}/salesOpenedList`);
+/** quiet: a live refresh - no spinner, no popups. */
+salesOpenedList(quiet = false): Observable<ResponseList<any>> {
+  return this.http.get<ResponseList<any>>( `${this.barURL}/salesOpenedList`, quiet ? { context: silent() } : {});
 }
 
 findBarSalesPage(params: PageableParam): Observable<ResponsePage<any>> {

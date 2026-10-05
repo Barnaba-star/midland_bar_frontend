@@ -4,6 +4,7 @@ import { SellableItems } from '../../Utils/services/sellable-items';
 import { OfflineService } from '../../Utils/offline/offline.service';
 import { StaffLossDialog } from '../../Utils/component/dialogs/staff-loss-dialog/staff-loss-dialog';
 import { StaffHandoverDialog } from '../bar-staff-sell/handover-dialog/handover-dialog';
+import { LiveChanges } from '../../Utils/services/live-changes';
 import { BillNicknames } from '../../Utils/services/bill-nicknames';
 import { ShiftBar, ShiftState } from '../shift-bar/shift-bar';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnInit, inject } from '@angular/core';
@@ -87,6 +88,12 @@ export class BarSales implements OnInit{
     this.offline.synced.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       if (this.selectedSales === 'SALES.ADD') {
         this.salesOpenedListToday();
+      }
+    });
+    // A bill opened, sold on, received from the supervisor or paid anywhere in the branch: show it at once.
+    this.liveChanges.on('bills').pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      if (this.selectedSales === 'SALES.ADD') {
+        this.salesOpenedListToday(true);
       }
     });
     // Selling is what this page is opened for: start on New Sale, not History.
@@ -181,6 +188,7 @@ export class BarSales implements OnInit{
   private offline = inject(OfflineService);
   private sellable = inject(SellableItems);
   private destroyRef = inject(DestroyRef);
+  private liveChanges = inject(LiveChanges);
 
   /** The staff with open bills, for the filter chips - code, name and how many bills. */
   get staffOptions(): { code: string; name: string; count: number; sent: boolean }[] {
@@ -743,8 +751,8 @@ openSaleDetailsDialogForMore(sale: SalesOpened) {
     });
   }
 
-  salesOpenedListToday() {
-    this.barServce.salesOpenedList().subscribe({
+  salesOpenedListToday(quiet = false) {
+    this.barServce.salesOpenedList(quiet).subscribe({
       next: (res) => {
         if (res) {
           this.salesOpenedList = res.data ?? [];

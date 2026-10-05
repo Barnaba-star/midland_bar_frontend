@@ -9,8 +9,11 @@ import { FormField } from '../../Utils/models/form-field';
 import { Authentication } from '../../Utils/services/authentication';
 import { ServiceBarMethod } from '../service-bar-method';
 import { StaffOrder } from '../BarModel';
+import { LiveChanges } from '../../Utils/services/live-changes';
+import { Subscription } from 'rxjs';
 
-const POLL_MS = 5000;
+/** A fallback only: the live stream brings new orders at once. */
+const POLL_MS = 15000;
 const SOUND_KEY = 'bar_supervisor_sound';
 
 /**
@@ -33,6 +36,7 @@ export class BarSupervisor implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private router: Router,
     private cdr: ChangeDetectorRef,
+    private liveChanges: LiveChanges,
   ) {}
 
   orders: StaffOrder[] = [];
@@ -51,6 +55,7 @@ export class BarSupervisor implements OnInit, OnDestroy {
   now = Date.now();
 
   private timer: ReturnType<typeof setInterval> | null = null;
+  private live: Subscription | null = null;
   private audio: AudioContext | null = null;
 
   /** A SUPERVISOR has only this screen; managers and above came from POS and can go back. */
@@ -66,12 +71,15 @@ export class BarSupervisor implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.load();
     this.timer = setInterval(() => this.load(), POLL_MS);
+    // A staff member pressed Send: on screen now, not at the next poll.
+    this.live = this.liveChanges.on('orders').subscribe(() => this.load());
   }
 
   ngOnDestroy(): void {
     if (this.timer) {
       clearInterval(this.timer);
     }
+    this.live?.unsubscribe();
     this.audio?.close().catch(() => undefined);
   }
 

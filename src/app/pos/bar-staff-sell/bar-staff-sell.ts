@@ -20,6 +20,7 @@ import { ServiceBarMethod } from '../service-bar-method';
 import { lockStaffSell, unlockStaffSell } from './staff-sell-lock';
 import { StaffSellUnlockDialog } from './unlock-dialog/unlock-dialog';
 import { StaffHandoverDialog } from './handover-dialog/handover-dialog';
+import { LiveChanges } from '../../Utils/services/live-changes';
 import { landingFor } from '../../login/landing-for';
 import { Authentication } from '../../Utils/services/authentication';
 import { SalesOpened, StaffOrder, StaffSellStaff } from '../BarModel';
@@ -69,6 +70,7 @@ export class BarStaffSell implements OnInit, OnDestroy {
   private offline = inject(OfflineService);
   private sellable = inject(SellableItems);
   private destroyRef = inject(DestroyRef);
+  private liveChanges = inject(LiveChanges);
   /** Lines on each bill, keyed by bill uid. */
   billLines: Partial<Record<string, any[]>> = {};
   busyBill: string | null = null;
@@ -93,6 +95,8 @@ export class BarStaffSell implements OnInit, OnDestroy {
     this.sellable.prefetch();
     // Orders and bills made offline have reached the server: read them again.
     this.offline.synced.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.refresh(true));
+    // The supervisor received or rejected, or a bill moved at the till: show it at once.
+    this.liveChanges.on('orders', 'bills').pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.refresh(true));
     if (!this.touch) {
       setTimeout(() => this.codeInput?.nativeElement.focus());
     }
@@ -200,7 +204,8 @@ export class BarStaffSell implements OnInit, OnDestroy {
 
   private startPoll(): void {
     if (!this.poll) {
-      this.poll = setInterval(() => this.refresh(true), 8000);
+      // A fallback only: the live stream brings the supervisor's answer at once.
+      this.poll = setInterval(() => this.refresh(true), 20000);
     }
   }
 

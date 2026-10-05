@@ -544,7 +544,7 @@ export class BarStaffSell implements OnInit, OnDestroy {
           maxHeight: '90vh',
           panelClass: 'sale-details-dialog',
           autoFocus: false,
-          data: { sale: bill, services, showPayment: false, canPay: false },
+          data: { sale: bill, services, showPayment: false, canPay: false, previewReceipt: true },
         }).afterClosed().subscribe(() => this.cdr.markForCheck());
       },
     });

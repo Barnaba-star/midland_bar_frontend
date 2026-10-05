@@ -38,6 +38,8 @@ export class SaleDetailsDialogComponent {
       showPayment: boolean;
       /** An open bill: offer Lipa here instead of on its card. */
       canPay?: boolean;
+      /** Print shows the receipt first (as after paying on Sales), Print pressed there - Staff Sell. */
+      previewReceipt?: boolean;
     },
     private dialog: MatDialog,
     private barService: ServiceBarMethod,
@@ -123,6 +125,15 @@ export class SaleDetailsDialogComponent {
    */
   print() {
     if (!this.data.sale?.uid) {
+      return;
+    }
+    if (this.data.previewReceipt) {
+      this.dialog.open(ReceiptDialogComponent, {
+        width: '400px',
+        maxWidth: '95vw',
+        autoFocus: false,
+        data: { billUid: this.data.sale.uid },
+      });
       return;
     }
     this.dialog.open(ReceiptDialogComponent, {

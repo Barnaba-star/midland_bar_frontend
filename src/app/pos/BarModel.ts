@@ -290,6 +290,24 @@ export interface StaffSellStaff {
     category?: string;
 }
 
+/** Staff Sell summary: unpaid bills split cash / phone, and what is paid this shift. */
+export interface StaffHandoverMethod {
+    method: string;
+    amount: number;
+    bills: number;
+}
+
+export interface StaffHandover {
+    staff: StaffSellStaff;
+    since: string;
+    open: {
+        byMethod: StaffHandoverMethod[];
+        total: number;
+        bills: { uid: string; salesCode: string; amount: number; method: string; payer?: string | null }[];
+    };
+    paid: { byMethod: StaffHandoverMethod[]; total: number };
+}
+
 /** One staff member's day on the Sales page. Null staffCode = bills opened on the Sales page itself. */
 export interface StaffSalesRow {
     staffCode: string | null;

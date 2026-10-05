@@ -1,0 +1,174 @@
+.ho {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px;
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.ho-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ho-head h3 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.ho-head p {
+  margin: 2px 0 0;
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.ho-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-accent) 16%, var(--color-surface));
+  color: var(--color-accent);
+}
+
+.ho-refresh {
+  margin-left: auto;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.ho-tiles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.ho-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+}
+
+.ho-tile span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.ho-tile mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
+.ho-tile strong {
+  font-size: 20px;
+}
+
+.ho-tile.cash {
+  border-color: color-mix(in srgb, var(--color-accent) 50%, var(--color-border));
+}
+
+.ho-tile.cash strong {
+  color: var(--color-accent);
+}
+
+.ho-tile.phone strong {
+  color: #0f766e;
+}
+
+.ho-section h4 {
+  margin: 0 0 6px;
+  font-size: 14px;
+}
+
+.ho-rows,
+.ho-bills {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ho-rows li,
+.ho-bills li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px dashed var(--color-border);
+  font-size: 14px;
+}
+
+.ho-rows small {
+  color: var(--color-text-muted);
+}
+
+.ho-total {
+  font-weight: 700;
+  border-bottom: none !important;
+}
+
+.ho-bills {
+  margin-top: 8px;
+}
+
+.ho-bills li {
+  font-size: 13px;
+}
+
+.ho-code {
+  font-weight: 700;
+  min-width: 56px;
+}
+
+.ho-method {
+  flex: 1;
+  color: var(--color-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ho-method.phone {
+  color: #0f766e;
+}
+
+.ho-muted,
+.ho-hint {
+  margin: 0;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.ho-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.ho-close {
+  height: 40px;
+  padding: 0 18px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-text);
+  font-weight: 600;
+  cursor: pointer;
+}

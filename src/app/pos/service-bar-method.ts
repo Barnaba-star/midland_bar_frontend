@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../Utils/enviroments/environment';
-import { CommissionDTO, PayStockAndPurchaseDTO, SaleOpenedDTO, BarBookingDTO, BarSalesDTO, BarServiceDTO, BarStaffDTO, SpendDTO, StaffCommissionDTO, StoreDTO, StockReceiptDTO, SalesOpened, StaffSellStaff, StaffSalesRow, StaffOrder, PaymentNoteRow } from './BarModel';
+import { CommissionDTO, PayStockAndPurchaseDTO, SaleOpenedDTO, BarBookingDTO, BarSalesDTO, BarServiceDTO, BarStaffDTO, SpendDTO, StaffCommissionDTO, StoreDTO, StockReceiptDTO, SalesOpened, StaffSellStaff, StaffSalesRow, StaffOrder, PaymentNoteRow, StaffHandover } from './BarModel';
 import { PageableParam, Response, ResponseList, ResponsePage } from '../Utils/models/responces';
 
 @Injectable({
@@ -372,6 +372,11 @@ unlockStaffSell(dto: { username: string; password: string }): Observable<Respons
 /** Sales page: each staff member's takings for a day (yyyy-MM-dd) by payment method, and their unpaid bills. */
 staffSalesSummary(date: string): Observable<Response<StaffSalesRow[]>> {
   return this.http.get<Response<StaffSalesRow[]>>(`${this.barURL}/staffSell/summary/${date}`);
+}
+
+/** Staff Sell: the staff member's cash and phone money to hand over, and what is paid this shift. */
+staffHandover(staffCode: string): Observable<Response<StaffHandover>> {
+  return this.http.get<Response<StaffHandover>>(`${this.barURL}/staffSell/handover/${encodeURIComponent(staffCode)}`);
 }
 
 /** Staff Sell: open a bill that belongs to the staff member, numbered from their code (K1-1, K1-2...). */

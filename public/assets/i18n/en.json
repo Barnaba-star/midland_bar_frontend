@@ -2177,5 +2177,19 @@
     "NOT_YET": "Not yet",
     "FROM": "From",
     "TO": "To"
+  },
+  "STAFF_HANDOVER": {
+    "BUTTON": "Summary",
+    "TITLE": "Handover summary",
+    "REFRESH": "Refresh",
+    "CASH": "Cash to hand over",
+    "PHONE": "Paid by phone",
+    "OPEN_TITLE": "Unpaid bills",
+    "NO_OPEN": "You have no unpaid bills.",
+    "TOTAL": "Total",
+    "PAID_TITLE": "Already paid",
+    "SINCE": "Since",
+    "NO_PAID": "No bills paid yet.",
+    "HINT": "A bill without a \"paid by phone\" note counts as cash. Note the payer's name on the bill to count it as phone money."
   }
 }

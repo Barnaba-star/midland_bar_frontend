@@ -2177,5 +2177,19 @@
     "NOT_YET": "Bado",
     "FROM": "Kuanzia",
     "TO": "Hadi"
+  },
+  "STAFF_HANDOVER": {
+    "BUTTON": "Muhtasari",
+    "TITLE": "Muhtasari wa makabidhiano",
+    "REFRESH": "Onyesha upya",
+    "CASH": "Cash ya kukabidhi",
+    "PHONE": "Imelipwa kwa simu",
+    "OPEN_TITLE": "Bill ambazo hazijalipwa",
+    "NO_OPEN": "Huna bill ambayo haijalipwa.",
+    "TOTAL": "Jumla",
+    "PAID_TITLE": "Zilizokwisha lipwa",
+    "SINCE": "Tangu",
+    "NO_PAID": "Bado hakuna bill iliyolipwa.",
+    "HINT": "Bill isiyo na alama ya \"amelipa kwa simu\" inahesabiwa kama cash. Andika jina la aliyelipa kwa simu kwenye bill ili ihesabiwe upande wa simu."
   }
 }

@@ -1,0 +1,91 @@
+<div class="ho">
+  <div class="ho-head">
+    <span class="ho-icon"><mat-icon>account_balance_wallet</mat-icon></span>
+    <div>
+      <h3>{{ 'STAFF_HANDOVER.TITLE' | translate }}</h3>
+      @if (summary) {
+        <p>{{ summary.staff.staffCode }} · {{ summary.staff.name }}</p>
+      }
+    </div>
+    <button type="button" class="ho-refresh" [disabled]="loading" (click)="load()" [attr.aria-label]="'STAFF_HANDOVER.REFRESH' | translate">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
+
+  @if (loading && !summary) {
+    <p class="ho-muted">{{ 'COMMON.LOADING' | translate }}</p>
+  } @else if (summary) {
+    <!-- What to hand over now: the two numbers a staff member asks for. -->
+    <div class="ho-tiles">
+      <div class="ho-tile cash">
+        <span><mat-icon>payments</mat-icon>{{ 'STAFF_HANDOVER.CASH' | translate }}</span>
+        <strong>Tshs {{ openCash | number }}</strong>
+      </div>
+      <div class="ho-tile phone">
+        <span><mat-icon>phone_iphone</mat-icon>{{ 'STAFF_HANDOVER.PHONE' | translate }}</span>
+        <strong>Tshs {{ openPhoneTotal | number }}</strong>
+      </div>
+    </div>
+
+    <section class="ho-section">
+      <h4>{{ 'STAFF_HANDOVER.OPEN_TITLE' | translate }}</h4>
+      @if (summary.open.bills.length === 0) {
+        <p class="ho-muted">{{ 'STAFF_HANDOVER.NO_OPEN' | translate }}</p>
+      } @else {
+        <ul class="ho-rows">
+          @for (m of summary.open.byMethod; track m.method) {
+            @if (m.bills > 0) {
+              <li>
+                <span>{{ label(m.method) | translate }} <small>({{ m.bills }})</small></span>
+                <b>{{ m.amount | number }}</b>
+              </li>
+            }
+          }
+          <li class="ho-total">
+            <span>{{ 'STAFF_HANDOVER.TOTAL' | translate }} <small>({{ summary.open.bills.length }})</small></span>
+            <b>{{ summary.open.total | number }}</b>
+          </li>
+        </ul>
+
+        <ul class="ho-bills">
+          @for (b of summary.open.bills; track b.uid) {
+            <li>
+              <span class="ho-code">{{ b.salesCode }}</span>
+              <span class="ho-method" [class.phone]="b.method !== 'cash'">
+                {{ label(b.method) | translate }}@if (b.payer) { · {{ b.payer }} }
+              </span>
+              <b>{{ b.amount | number }}</b>
+            </li>
+          }
+        </ul>
+      }
+    </section>
+
+    <section class="ho-section">
+      <h4>{{ 'STAFF_HANDOVER.PAID_TITLE' | translate }}</h4>
+      <p class="ho-muted">{{ 'STAFF_HANDOVER.SINCE' | translate }} {{ summary.since | date: 'dd/MM HH:mm' }}</p>
+      @if (summary.paid.byMethod.length === 0) {
+        <p class="ho-muted">{{ 'STAFF_HANDOVER.NO_PAID' | translate }}</p>
+      } @else {
+        <ul class="ho-rows">
+          @for (m of summary.paid.byMethod; track m.method) {
+            <li>
+              <span>{{ label(m.method) | translate }} <small>({{ m.bills }})</small></span>
+              <b>{{ m.amount | number }}</b>
+            </li>
+          }
+          <li class="ho-total">
+            <span>{{ 'STAFF_HANDOVER.TOTAL' | translate }}</span>
+            <b>{{ summary.paid.total | number }}</b>
+          </li>
+        </ul>
+      }
+    </section>
+
+    <p class="ho-hint">{{ 'STAFF_HANDOVER.HINT' | translate }}</p>
+  }
+
+  <div class="ho-actions">
+    <button type="button" class="ho-close" (click)="close()">{{ 'COMMON.CLOSE' | translate }}</button>
+  </div>
+</div>

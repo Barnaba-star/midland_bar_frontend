@@ -19,6 +19,7 @@ import { AlertService } from '../../Utils/services/alert';
 import { ServiceBarMethod } from '../service-bar-method';
 import { lockStaffSell, unlockStaffSell } from './staff-sell-lock';
 import { StaffSellUnlockDialog } from './unlock-dialog/unlock-dialog';
+import { StaffHandoverDialog } from './handover-dialog/handover-dialog';
 import { landingFor } from '../../login/landing-for';
 import { Authentication } from '../../Utils/services/authentication';
 import { SalesOpened, StaffOrder, StaffSellStaff } from '../BarModel';
@@ -95,6 +96,19 @@ export class BarStaffSell implements OnInit, OnDestroy {
     if (!this.touch) {
       setTimeout(() => this.codeInput?.nativeElement.focus());
     }
+  }
+
+  /** Summary: cash to hand over, phone money, and what is already paid this shift. */
+  openHandover(): void {
+    if (!this.staff) {
+      return;
+    }
+    this.dialog.open(StaffHandoverDialog, {
+      width: '460px',
+      maxWidth: '95vw',
+      autoFocus: false,
+      data: { staffCode: this.staff.staffCode },
+    });
   }
 
   /** "Paid by phone, from this name" - noted on the bill for the cashier; marks nothing paid. */

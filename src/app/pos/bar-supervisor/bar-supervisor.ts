@@ -59,9 +59,22 @@ export class BarSupervisor implements OnInit, OnDestroy {
   private audio: AudioContext | null = null;
 
   /** A SUPERVISOR has only this screen; managers and above came from POS and can go back. */
+  /** Someone whose whole app is this queue (COUNTER, CHEF, an older SUPERVISOR) - no way back to POS. */
   get onlySupervisor(): boolean {
-    return this.auth.hasRole('SUPERVISOR')
+    return ['COUNTER', 'CHEF', 'SUPERVISOR'].some((r) => this.auth.hasRole(r))
       && !['ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'MANAGER'].some((r) => this.auth.hasRole(r));
+  }
+
+  /** The counter sees drink orders, the kitchen food orders (the server sends only theirs); the title says which. */
+  get pageTitle(): string {
+    const counter = this.auth.hasRole('COUNTER'), chef = this.auth.hasRole('CHEF');
+    if (this.onlySupervisor && counter && !chef) {
+      return 'SUPERVISOR_PAGE.TITLE_COUNTER';
+    }
+    if (this.onlySupervisor && chef && !counter) {
+      return 'SUPERVISOR_PAGE.TITLE_CHEF';
+    }
+    return 'SUPERVISOR_PAGE.TITLE';
   }
 
   get userName(): string {

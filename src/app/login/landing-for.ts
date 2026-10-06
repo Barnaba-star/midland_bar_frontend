@@ -13,7 +13,9 @@ export function landingFor(hasRole: (role: string) => boolean): string {
   if (['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN'].some(hasRole)) {
     return '/dashboard';
   }
-  if (hasRole('SUPERVISOR')) {
+  // Those who receive waiters' orders - the COUNTER (drinks), the CHEF
+  // (food), and a SUPERVISOR from before - go straight to their queue.
+  if (['COUNTER', 'CHEF', 'SUPERVISOR'].some(hasRole) && !['CEO', 'MANAGER'].some(hasRole)) {
     return '/supervisor';
   }
   // Cashier-only: a user who also holds CEO/MANAGER starts on the Dashboard.

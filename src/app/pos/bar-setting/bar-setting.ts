@@ -994,16 +994,16 @@ private showActivationCode(data: any, phone?: string): void {
 private getAssignableRoleNames(): string[] {
 
   if (this.visibility.hasRole('ROOT')) {
-    return ['ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'MANAGER', 'SUPERVISOR', 'CASHIER'];
+    return ['ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'MANAGER', 'COUNTER', 'CHEF', 'CASHIER'];
   }
   if (this.visibility.hasRole('DIRECTOR')) {
-    return ['STAFF', 'MANAGER', 'CEO', 'SUPERVISOR', 'CASHIER'];
+    return ['STAFF', 'MANAGER', 'CEO', 'COUNTER', 'CHEF', 'CASHIER'];
   }
   if (this.visibility.hasRole('CEO')) {
-    return ['CASHIER', 'MANAGER', 'SUPERVISOR'];
+    return ['CASHIER', 'MANAGER', 'COUNTER', 'CHEF'];
   }
   if (this.visibility.hasRole('STAFF')) {
-    return ['CEO', 'CASHIER', 'MANAGER', 'SUPERVISOR'];
+    return ['CEO', 'CASHIER', 'MANAGER', 'COUNTER', 'CHEF'];
   }
 
   return [];

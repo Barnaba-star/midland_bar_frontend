@@ -61,7 +61,7 @@ cards = [
     description: 'DASHBOARD.CARD_SUPERVISOR_DESC',
     route: '/supervisor',
     // Not MANAGER: their Dashboard is POS and Staff Sell only.
-    roles: ['ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'SUPERVISOR']
+    roles: ['ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'MANAGER', 'COUNTER', 'CHEF', 'SUPERVISOR']
   },
   {
     title: 'DASHBOARD.CARD_SETTING_TITLE',

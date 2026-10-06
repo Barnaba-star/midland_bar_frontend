@@ -137,7 +137,7 @@
     "SUPPORT": "Ujumbe",
     "HELP": "Msaada",
     "STAFF_SELL": "Mauzo ya Wahudumu",
-    "SUPERVISOR": "Supervisor"
+    "SUPERVISOR": "Oda za Wahudumu"
   },
   "SALON": {
     "OFFICE": "Ofisi",
@@ -550,7 +550,7 @@
     "NIGHT_EYEBROW": "Kazi za meneja",
     "NIGHT_TITLE": "Kazi ambazo ungemlipa meneja — BaronixTZ inazifanya",
     "STEP1_TITLE": "Inakagua kila oda",
-    "STEP1_DESC": "Mhudumu anaandika oda kwa code yake; supervisor anaipokea kabla kinywaji hakijatoka counter. Hakuna kinachotoka bila kuandikwa.",
+    "STEP1_DESC": "Mhudumu anaandika oda kwa code yake; counter au jikoni linaipokea kabla haijatoka. Hakuna kinachotoka bila kuandikwa.",
     "STEP2_TITLE": "Inalinda stock",
     "STEP2_DESC": "Kreti inaingia, chupa inatoka kwa mauzo. Hesabu ya stoo inaonyesha kilichopotea na thamani yake — mapema, si mwisho wa mwezi.",
     "STEP3_TITLE": "Inapokea makabidhiano",
@@ -578,7 +578,7 @@
     "F2_TITLE": "Wahudumu kwa code yao",
     "F2_DESC": "Kila mhudumu anauza kwa code na PIN yake kwenye simu yake; bill na commission zinaenda kwake.",
     "F3_TITLE": "Kila mtu na ruhusa yake",
-    "F3_DESC": "Mhudumu, supervisor, cashier, meneja au mmiliki — kila mmoja anaona kile anachohitaji tu.",
+    "F3_DESC": "Mhudumu, counter, chef, cashier, meneja au mmiliki — kila mmoja anaona kile anachohitaji tu.",
     "F4_TITLE": "Ripoti za kila siku",
     "F4_DESC": "Mauzo, faida, makabidhiano na mafungu ya pesa — kwa siku, wiki au mwezi.",
     "F5_TITLE": "Matawi mengi",
@@ -627,7 +627,7 @@
     "M3_T": "Bill na risiti",
     "M3_D": "Print bill kabla ya kulipa na risiti baada ya kulipa, kwenye printer ya 58mm.",
     "M4_T": "Taarifa papo hapo",
-    "M4_D": "Oda ikitumwa inatokea kwa supervisor hapo hapo; bill ikilipwa kila skrini inasasishwa.",
+    "M4_D": "Oda ikitumwa inafika counter au jikoni hapo hapo; bill ikilipwa kila skrini inasasishwa.",
     "START_EYEBROW": "Inavyofanya kazi",
     "START_TITLE": "Kuanza ni hatua nne",
     "S1_T": "Wasiliana nasi",
@@ -635,7 +635,7 @@
     "S2_T": "Tunaweka bar yako",
     "S2_D": "Bidhaa, bei, mgawanyo wa pesa na code za bill zinawekwa tayari.",
     "S3_T": "Wafanyakazi wanaingia",
-    "S3_D": "Kila mhudumu anapata code na PIN yake; cashier, supervisor na meneja wanapata akaunti zao.",
+    "S3_D": "Kila mhudumu anapata code na PIN yake; cashier, counter, chef na meneja wanapata akaunti zao.",
     "S4_T": "Unasimamia ukiwa popote",
     "S4_D": "Ripoti, makabidhiano na stock zinakufikia kwenye simu yako kila siku.",
     "ROLES_EYEBROW": "Kwa kila mtu",
@@ -646,8 +646,8 @@
     "R_MANAGER_D": "Stock, hesabu ya stoo, wafanyakazi na upungufu.",
     "R_CASHIER_T": "Cashier",
     "R_CASHIER_D": "Kupokea malipo, makabidhiano ya wahudumu na cash-up ya zamu.",
-    "R_SUPERVISOR_T": "Supervisor",
-    "R_SUPERVISOR_D": "Kupokea au kukataa oda kabla vinywaji havijatoka counter.",
+    "R_SUPERVISOR_T": "Counter na Chef",
+    "R_SUPERVISOR_D": "Kupokea au kukataa oda — vinywaji counter, chakula jikoni — kabla hazijatoka.",
     "R_WAITER_T": "Mhudumu",
     "R_WAITER_D": "Bill zake, oda zake na pesa anazotakiwa kukabidhi — kwenye simu yake.",
     "PRICE_EYEBROW": "Bei",
@@ -670,7 +670,7 @@
     "Q3": "Printer gani inafaa?",
     "A3": "Printer ya risiti ya 58mm inayounganishwa na simu au kompyuta. Risiti inaweza pia kuonekana kwenye skrini bila kuchapishwa.",
     "Q4": "Mhudumu anaweza kutoa kinywaji bila kuandika?",
-    "A4": "Kila oda inapita kwa supervisor kabla kinywaji hakijatoka, na stock inahesabiwa — kinachokosekana kinaonekana kwenye ripoti ya upotevu wa stock.",
+    "A4": "Kila oda inapita counter au jikoni kabla haijatoka, na stock inahesabiwa — kinachokosekana kinaonekana kwenye ripoti ya upotevu wa stock.",
     "Q5": "Data zangu ziko salama?",
     "A5": "Zinahifadhiwa kwenye server za cloud kupitia muunganisho uliosimbwa (HTTPS). Kila mtu anaingia kwa akaunti yake, na kila tawi linaona data zake tu.",
     "Q6": "Naweza kusimamia bar zaidi ya moja?",
@@ -767,8 +767,8 @@
     "CARD_ADMIN_DESC": "Soma matawi yanachosema, na uwachapishie maelekezo.",
     "CARD_STAFF_SELL_TITLE": "Mauzo ya Wahudumu",
     "CARD_STAFF_SELL_DESC": "Mhudumu anaandika code yake, anaona bill zake na kuuza - commission inaenda kwake.",
-    "CARD_SUPERVISOR_TITLE": "Supervisor",
-    "CARD_SUPERVISOR_DESC": "Pokea oda za wahudumu kabla vinywaji havijatoka kaunta."
+    "CARD_SUPERVISOR_TITLE": "Oda za Wahudumu",
+    "CARD_SUPERVISOR_DESC": "Pokea oda za wahudumu kabla hazijatoka — vinywaji counter, chakula jikoni."
   },
   "SETTINGS_MENU": {
     "ROLE": "Jukumu",
@@ -1972,21 +1972,21 @@
     "UNLOCK_TITLE": "Toka Staff Sell",
     "UNLOCK_HINT": "Weka login ya manager ili kutoka hapa. Wahudumu hawawezi kurudi POS bila hiyo.",
     "UNLOCK_BTN": "Toka",
-    "SEND": "Tuma kwa supervisor",
+    "SEND": "Tuma oda",
     "ORDER_DRAFT": "Haijatumwa bado",
-    "ORDER_SENT": "Inasubiri supervisor",
+    "ORDER_SENT": "Inasubiri counter/jikoni",
     "ORDER_REJECTED": "Imekataliwa",
     "SIGN_OUT": "Toka",
     "PICK_BILL": "Chagua bill",
     "PICK_SEARCH": "Tafuta namba au jina la mteja",
     "PICK_NONE": "Hakuna bill inayolingana",
-    "PICK_HINT": "Gusa \"Chagua bill\" kufungua bill moja. Ukituma kwa supervisor, inarudi kwenye orodha."
+    "PICK_HINT": "Gusa \"Chagua bill\" kufungua bill moja. Ukituma oda, inarudi kwenye orodha."
   },
   "SUPERVISOR_PAGE": {
     "OFFLINE_SEEN": "Nimekagua",
     "OFFLINE_TEXT": "Hizi ziliingia kwenye bill wakati hakuna internet, bila wewe kuziona.",
     "OFFLINE_TITLE": "Zilizouzwa offline - zikague ({{n}})",
-    "TITLE": "Supervisor",
+    "TITLE": "Oda za Wahudumu",
     "TOTAL": "Jumla",
     "RECEIVE": "Pokea",
     "REJECT": "Kataa",
@@ -1996,7 +1996,9 @@
     "EMPTY_TITLE": "Hakuna oda inayosubiri",
     "EMPTY_TEXT": "Oda za wahudumu zitajitokeza hapa wakitumwa. Pokea ndipo vinywaji vitoke.",
     "SOUND_ON": "Washa sauti",
-    "SOUND_OFF": "Zima sauti"
+    "SOUND_OFF": "Zima sauti",
+    "TITLE_COUNTER": "Counter · Oda za vinywaji",
+    "TITLE_CHEF": "Jikoni · Oda za chakula"
   },
   "BRANCH_CHOICE": {
     "DEFAULT": "Default",

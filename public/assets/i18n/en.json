@@ -137,7 +137,7 @@
     "SUPPORT": "Messages",
     "HELP": "Help",
     "STAFF_SELL": "Staff Sell",
-    "SUPERVISOR": "Supervisor"
+    "SUPERVISOR": "Waiters' orders"
   },
   "SALON": {
     "OFFICE": "Office",
@@ -550,7 +550,7 @@
     "NIGHT_EYEBROW": "A manager's job",
     "NIGHT_TITLE": "The work you'd pay a manager for — BaronixTZ does it",
     "STEP1_TITLE": "Checks every order",
-    "STEP1_DESC": "Waiters write orders with their own code; the supervisor receives them before a drink leaves the counter. Nothing leaves unwritten.",
+    "STEP1_DESC": "Waiters write orders with their own code; the counter or kitchen receives them before anything leaves. Nothing leaves unwritten.",
     "STEP2_TITLE": "Guards the stock",
     "STEP2_DESC": "Crates come in, bottles go out as sales. A stock count shows what went missing and what it was worth — early, not at month end.",
     "STEP3_TITLE": "Takes the handover",
@@ -578,7 +578,7 @@
     "F2_TITLE": "Waiters with their own code",
     "F2_DESC": "Each waiter sells with their own code and PIN on their own phone; bills and commission go to them.",
     "F3_TITLE": "Everyone with their own access",
-    "F3_DESC": "Waiter, supervisor, cashier, manager or owner — each sees only what they need.",
+    "F3_DESC": "Waiter, counter, chef, cashier, manager or owner — each sees only what they need.",
     "F4_TITLE": "Daily reports",
     "F4_DESC": "Sales, profit, handovers and money pots — by day, week or month.",
     "F5_TITLE": "Many branches",
@@ -627,7 +627,7 @@
     "M3_T": "Bills and receipts",
     "M3_D": "Print the bill before paying and the receipt after, on a 58mm printer.",
     "M4_T": "Live updates",
-    "M4_D": "An order sent reaches the supervisor at once; a bill paid updates every screen.",
+    "M4_D": "An order sent reaches the counter or kitchen at once; a bill paid updates every screen.",
     "START_EYEBROW": "How it works",
     "START_TITLE": "Getting started takes four steps",
     "S1_T": "Contact us",
@@ -635,7 +635,7 @@
     "S2_T": "We set up your bar",
     "S2_D": "Products, prices, the money split and bill codes are ready for you.",
     "S3_T": "Your staff sign in",
-    "S3_D": "Each waiter gets a code and PIN; cashier, supervisor and manager get their own accounts.",
+    "S3_D": "Each waiter gets a code and PIN; cashier, counter, chef and manager get their own accounts.",
     "S4_T": "You manage from anywhere",
     "S4_D": "Reports, handovers and stock reach your phone every day.",
     "ROLES_EYEBROW": "For everyone",
@@ -646,8 +646,8 @@
     "R_MANAGER_D": "Stock, stock counts, staff and shortages.",
     "R_CASHIER_T": "Cashier",
     "R_CASHIER_D": "Taking payments, waiters' handovers and the shift cash-up.",
-    "R_SUPERVISOR_T": "Supervisor",
-    "R_SUPERVISOR_D": "Receiving or rejecting orders before drinks leave the counter.",
+    "R_SUPERVISOR_T": "Counter and Chef",
+    "R_SUPERVISOR_D": "Receive or reject orders — drinks at the counter, food in the kitchen — before they leave.",
     "R_WAITER_T": "Waiter",
     "R_WAITER_D": "Their bills, their orders and the money to hand over — on their own phone.",
     "PRICE_EYEBROW": "Pricing",
@@ -670,7 +670,7 @@
     "Q3": "Which printer works?",
     "A3": "A 58mm receipt printer connected to a phone or computer. Receipts can also be shown on screen without printing.",
     "Q4": "Can a waiter serve a drink without writing it down?",
-    "A4": "Every order goes through the supervisor before a drink leaves, and stock is counted — anything missing shows up in the stock variance report.",
+    "A4": "Every order goes through the counter or kitchen before it leaves, and stock is counted — anything missing shows up in the stock variance report.",
     "Q5": "Is my data safe?",
     "A5": "It is stored on cloud servers over an encrypted connection (HTTPS). Everyone signs in with their own account, and each branch sees only its own data.",
     "Q6": "Can I manage more than one bar?",
@@ -767,8 +767,8 @@
     "CARD_ADMIN_DESC": "Read what branches are saying, and publish guidance back to them.",
     "CARD_STAFF_SELL_TITLE": "Staff Sell",
     "CARD_STAFF_SELL_DESC": "A staff member enters their code, sees their bills and sells - the commission is theirs.",
-    "CARD_SUPERVISOR_TITLE": "Supervisor",
-    "CARD_SUPERVISOR_DESC": "Receive staff orders before drinks leave the counter."
+    "CARD_SUPERVISOR_TITLE": "Waiters' orders",
+    "CARD_SUPERVISOR_DESC": "Receive waiters' orders before they leave — drinks at the counter, food in the kitchen."
   },
   "SETTINGS_MENU": {
     "ROLE": "Role",
@@ -1972,21 +1972,21 @@
     "UNLOCK_TITLE": "Leave Staff Sell",
     "UNLOCK_HINT": "Enter a manager's login to leave. Staff cannot get back into POS without it.",
     "UNLOCK_BTN": "Leave",
-    "SEND": "Send to supervisor",
+    "SEND": "Send order",
     "ORDER_DRAFT": "Not sent yet",
-    "ORDER_SENT": "Waiting for supervisor",
+    "ORDER_SENT": "Waiting for counter/kitchen",
     "ORDER_REJECTED": "Rejected",
     "SIGN_OUT": "Sign out",
     "PICK_BILL": "Choose a bill",
     "PICK_SEARCH": "Search number or customer nickname",
     "PICK_NONE": "No matching bill",
-    "PICK_HINT": "Tap \"Choose a bill\" to open one. Once sent to the supervisor it goes back into the list."
+    "PICK_HINT": "Tap \"Choose a bill\" to open one. Once the order is sent it goes back into the list."
   },
   "SUPERVISOR_PAGE": {
     "OFFLINE_SEEN": "Looked over",
     "OFFLINE_TEXT": "These went onto bills while there was no internet, without you.",
     "OFFLINE_TITLE": "Sold offline - to look over ({{n}})",
-    "TITLE": "Supervisor",
+    "TITLE": "Waiters' orders",
     "TOTAL": "Total",
     "RECEIVE": "Receive",
     "REJECT": "Reject",
@@ -1996,7 +1996,9 @@
     "EMPTY_TITLE": "No orders waiting",
     "EMPTY_TEXT": "Staff orders pop up here as they are sent. Receive them and the drinks may leave.",
     "SOUND_ON": "Sound on",
-    "SOUND_OFF": "Sound off"
+    "SOUND_OFF": "Sound off",
+    "TITLE_COUNTER": "Counter · Drink orders",
+    "TITLE_CHEF": "Kitchen · Food orders"
   },
   "BRANCH_CHOICE": {
     "DEFAULT": "Default",

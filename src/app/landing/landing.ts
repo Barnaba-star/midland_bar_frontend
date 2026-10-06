@@ -165,9 +165,26 @@ export class Landing implements OnInit, OnDestroy {
     return this.view === 'home';
   }
 
-  /** Mwanzo is the hero alone; a tab shows only its own section (who-sees-what goes with About). */
+  /** Kuhusu in two steps: A (about BaronixTZ), then B (who sees what). */
+  aboutStep: 'a' | 'b' = 'a';
+
+  setAboutStep(step: 'a' | 'b'): void {
+    this.aboutStep = step;
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0 });
+    }
+    this.cdr.markForCheck();
+  }
+
+  /** Mwanzo is the hero alone; a tab shows only its own section (Kuhusu one step at a time). */
   show(id: string): boolean {
-    return this.view === id || (id === 'watumiaji' && this.view === 'kuhusu');
+    if (id === 'kuhusu') {
+      return this.view === 'kuhusu' && this.aboutStep === 'a';
+    }
+    if (id === 'watumiaji') {
+      return this.view === 'kuhusu' && this.aboutStep === 'b';
+    }
+    return this.view === id;
   }
 
   ngOnInit(): void {
@@ -179,6 +196,7 @@ export class Landing implements OnInit, OnDestroy {
       if (this.view === 'huduma') {
         this.showService(0, true);
       }
+      this.aboutStep = 'a';
       this.menuOpen = false;
       if (typeof window !== 'undefined') {
         window.scrollTo({ top: 0 });

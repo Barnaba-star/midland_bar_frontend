@@ -210,6 +210,24 @@
   </section>
   }
 
+  <!-- Kuhusu, step by step - and Bei zetu from either step, for the reader who skips. -->
+  @if (view === 'kuhusu') {
+    <div class="step-nav">
+      @if (aboutStep === 'a') {
+        <button type="button" class="sv-btn next" (click)="setAboutStep('b')">
+          {{ 'LANDING.NEXT' | translate }}: {{ 'LANDING.ROLES_TITLE' | translate }}<mat-icon>arrow_forward</mat-icon>
+        </button>
+      } @else {
+        <button type="button" class="sv-btn" (click)="setAboutStep('a')">
+          <mat-icon>arrow_back</mat-icon>{{ 'LANDING.ABOUT_EYEBROW' | translate }}
+        </button>
+      }
+      <a class="sv-btn" [routerLink]="[]" fragment="bei">
+        <mat-icon>sell</mat-icon>{{ 'LANDING.PRICES_BTN' | translate }}
+      </a>
+    </div>
+  }
+
   <!-- ================= PRICING ================= -->
   @if (show('bei')) {
   <section class="info-section">

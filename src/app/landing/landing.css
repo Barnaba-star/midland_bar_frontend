@@ -665,6 +665,33 @@ a.sv-btn {
   }
 }
 
+/* ---------- Kuhusu: step buttons ---------- */
+
+.step-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 8px clamp(16px, 5vw, 80px) 64px;
+  max-width: 1180px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.info-section.alt + .step-nav,
+.about + .step-nav {
+  background: transparent;
+}
+
+@media (max-width: 600px) {
+  .step-nav {
+    flex-direction: column;
+  }
+
+  .step-nav .sv-btn {
+    justify-content: center;
+  }
+}
+
 /* ---------- Foot of each tab: start now, or the next title ---------- */
 
 .tab-flow {

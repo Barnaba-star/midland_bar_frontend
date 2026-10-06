@@ -746,7 +746,8 @@
     "SV8_B1": "Each branch with its own stock, staff and reports.",
     "SV8_B2": "Someone with several branches picks the branch at sign-in.",
     "SV8_B3": "Everyone signs in with their own account; each branch sees only its own data.",
-    "SV8_B4": "Anything taken off a bill is recorded with a reason."
+    "SV8_B4": "Anything taken off a bill is recorded with a reason.",
+    "PRICES_BTN": "Our pricing"
   },
   "DASHBOARD": {
     "WELCOME": "Welcome",

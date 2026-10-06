@@ -345,6 +345,167 @@
   color: var(--cream);
 }
 
+/* ---------- Hero: "BaronixTZ ➜" and its answers, one at a time ---------- */
+
+.hero-name {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 16px 0 18px;
+  font-family: var(--display);
+  font-size: clamp(52px, 7vw, 96px);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.45);
+}
+
+.hero-arrow {
+  width: 1em;
+  height: 1em;
+  font-size: 0.7em;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  color: var(--amber);
+  animation: nudge 1.6s ease-in-out infinite;
+}
+
+@keyframes nudge {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(10px); }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.what {
+  position: relative;
+  max-width: 600px;
+  min-height: 190px;
+}
+
+.what-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 22px 24px 26px;
+  border: 1px solid rgba(245, 165, 36, 0.4);
+  border-left: 4px solid var(--amber);
+  border-radius: 16px;
+  background: rgba(14, 12, 10, 0.72);
+  backdrop-filter: blur(6px);
+  overflow: hidden;
+  animation: what-in 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes what-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+
+.what-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.what-icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(245, 165, 36, 0.16);
+  color: var(--amber);
+}
+
+.what-count {
+  font-family: var(--display);
+  font-size: 20px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.what-title {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(30px, 3.4vw, 42px);
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--cream);
+}
+
+.what-title small {
+  color: var(--amber);
+  font-size: 0.7em;
+}
+
+.what-desc {
+  margin: 0;
+  color: #d8ccb8;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+/* How long until the next answer. */
+.what-bar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 100%;
+  background: var(--amber);
+  transform-origin: left;
+  animation: what-time linear both;
+}
+
+.what.paused .what-bar {
+  animation-play-state: paused;
+}
+
+@keyframes what-time {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.what-dots {
+  display: flex;
+  gap: 8px;
+  margin: 14px 0 26px;
+}
+
+.what-dot {
+  width: 9px;
+  height: 9px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: rgba(246, 236, 220, 0.25);
+  cursor: pointer;
+  transition: width 0.25s ease, background 0.25s ease;
+}
+
+.what-dot.on {
+  width: 26px;
+  background: var(--amber);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-arrow,
+  .what-card {
+    animation: none;
+  }
+}
+
 /* ---------- Responsive ---------- */
 
 @media (max-width: 960px) {

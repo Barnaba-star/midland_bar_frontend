@@ -42,12 +42,37 @@
           <span class="live-dot"></span>
           {{ 'LANDING.HERO_BADGE' | translate }}
         </span>
-        <h1 class="hero-title">
-          <span>{{ 'LANDING.HERO_LINE1' | translate }}</span>
-          <span>{{ 'LANDING.HERO_LINE2' | translate }}</span>
-          <span class="amber">{{ 'LANDING.HERO_LINE3' | translate }}</span>
+        <!-- Someone heard the name: "BaronixTZ ➜" and the answers, one at a time. -->
+        <h1 class="hero-name">
+          <span>BaronixTZ</span>
+          <mat-icon class="hero-arrow" aria-hidden="true">arrow_forward</mat-icon>
+          <span class="sr-only">{{ 'LANDING.WHAT_ASK' | translate }}</span>
         </h1>
-        <p class="hero-sub">{{ 'LANDING.HERO_SUBTITLE' | translate }}</p>
+
+        <div class="what" [class.paused]="whatPaused"
+             (mouseenter)="holdWhat(true)" (mouseleave)="holdWhat(false)"
+             (focusin)="holdWhat(true)" (focusout)="holdWhat(false)"
+             (touchstart)="holdWhat(true)" (touchend)="holdWhat(false)"
+             aria-live="polite">
+          @for (w of [what]; track whatIndex) {
+            <div class="what-card">
+              <div class="what-top">
+                <span class="what-icon"><mat-icon>{{ w.icon }}</mat-icon></span>
+                <span class="what-count">{{ whatIndex + 1 < 10 ? '0' : '' }}{{ whatIndex + 1 }} / {{ whats.length }}</span>
+              </div>
+              <p class="what-title"><small>{{ 'LANDING.WHAT_PREFIX' | translate }}</small> {{ w.title | translate }}</p>
+              <p class="what-desc">{{ w.desc | translate }}</p>
+              <span class="what-bar" [style.animation-duration.ms]="whatMs"></span>
+            </div>
+          }
+        </div>
+        <div class="what-dots" role="tablist">
+          @for (w of whats; track w.title; let i = $index) {
+            <button type="button" class="what-dot" role="tab" [class.on]="i === whatIndex" [attr.aria-selected]="i === whatIndex"
+                    [attr.aria-label]="w.title | translate" (click)="showWhat(i)"></button>
+          }
+        </div>
+
         <div class="hero-actions">
           <button type="button" class="btn-amber" (click)="goToLogin()">
             {{ 'LANDING.GET_STARTED' | translate }}

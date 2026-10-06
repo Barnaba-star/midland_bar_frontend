@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnDestroy, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -12,7 +12,7 @@ import { TypedService } from './typed-service/typed-service';
   styleUrl: './landing.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Landing implements OnInit {
+export class Landing implements OnInit, OnDestroy {
   currentYear = new Date().getFullYear();
   /** The phone menu, folded away until tapped. */
   menuOpen = false;
@@ -34,6 +34,55 @@ export class Landing implements OnInit {
     { id: 'wasiliana', label: 'LANDING.NAV_CONTACT' },
   ];
 
+  // ---- "BaronixTZ ➜ ..." - what it is, one answer at a time ----
+
+  /** Each answer stays this long before the next one comes. */
+  readonly whatMs = 6000;
+  readonly whats = [
+    'shield_person', 'storefront', 'nightlight', 'visibility', 'inventory_2',
+    'account_balance_wallet', 'insights', 'fact_check', 'badge', 'emoji_events',
+  ].map((icon, i) => ({ icon, title: `LANDING.WHAT${i + 1}_T`, desc: `LANDING.WHAT${i + 1}_D` }));
+  whatIndex = 0;
+  /** Held while a finger or pointer is on it, so the reader can finish. */
+  whatPaused = false;
+  private whatTimer: ReturnType<typeof setInterval> | null = null;
+
+  get what() {
+    return this.whats[this.whatIndex];
+  }
+
+  showWhat(i: number): void {
+    this.whatIndex = (i + this.whats.length) % this.whats.length;
+    this.restartWhatTimer();
+    this.cdr.markForCheck();
+  }
+
+  holdWhat(paused: boolean): void {
+    this.whatPaused = paused;
+    this.cdr.markForCheck();
+  }
+
+  private restartWhatTimer(): void {
+    if (this.whatTimer) {
+      clearInterval(this.whatTimer);
+    }
+    if (typeof window === 'undefined') {
+      return;
+    }
+    this.whatTimer = setInterval(() => {
+      if (!this.whatPaused && this.home) {
+        this.whatIndex = (this.whatIndex + 1) % this.whats.length;
+        this.cdr.markForCheck();
+      }
+    }, this.whatMs);
+  }
+
+  ngOnDestroy(): void {
+    if (this.whatTimer) {
+      clearInterval(this.whatTimer);
+    }
+  }
+
   /** The section on its own, or 'home' for the whole page. */
   view = 'home';
   private readonly views = new Set(['kuhusu', 'huduma', 'anza', 'bei', 'maswali', 'wasiliana']);
@@ -51,6 +100,7 @@ export class Landing implements OnInit {
   }
 
   ngOnInit(): void {
+    this.restartWhatTimer();
     this.route.fragment.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((f) => {
       this.view = f && this.views.has(f) ? f : 'home';
       this.menuOpen = false;

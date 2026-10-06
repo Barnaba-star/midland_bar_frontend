@@ -178,6 +178,8 @@
 
 .stage {
   position: relative;
+  /* Above the sections after it, so the phone menu drops over them, not under. */
+  z-index: 10;
   isolation: isolate;
   display: flex;
   flex-direction: column;
@@ -634,6 +636,16 @@
 
 .sv-btn:hover {
   border-color: var(--amber);
+}
+
+.sv-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+  border-color: var(--line);
+}
+
+a.sv-btn {
+  text-decoration: none;
 }
 
 .sv-btn.next {

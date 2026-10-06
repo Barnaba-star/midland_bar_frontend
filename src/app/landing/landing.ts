@@ -207,9 +207,14 @@ export class Landing implements OnInit, OnDestroy {
     return this.services[this.svIndex];
   }
 
+  /** The last service: no wrapping round - the way on is About. */
+  get svLast(): boolean {
+    return this.svIndex === this.services.length - 1;
+  }
+
   showService(i: number, instant = false): void {
     this.svInstant = instant;
-    this.svIndex = (i + this.services.length) % this.services.length;
+    this.svIndex = Math.max(0, Math.min(i, this.services.length - 1));
     this.restartSvTimer();
     this.cdr.markForCheck();
   }
@@ -226,9 +231,10 @@ export class Landing implements OnInit, OnDestroy {
       return;
     }
     this.svTimer = setInterval(() => {
-      if (!this.svPaused && this.view === 'huduma') {
+      // Stops on the last one, where the button leads on to About.
+      if (!this.svPaused && this.view === 'huduma' && !this.svLast) {
         this.svInstant = false;
-        this.svIndex = (this.svIndex + 1) % this.services.length;
+        this.svIndex = this.svIndex + 1;
         this.cdr.markForCheck();
       }
     }, this.svMs);

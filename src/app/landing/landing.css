@@ -352,7 +352,7 @@
 .ask-line {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
+  align-items: center;
   gap: 4px 18px;
   margin: 18px 0 0;
   font-family: var(--display);
@@ -373,12 +373,20 @@
   color: var(--amber);
 }
 
+.ask-tail {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
 .hero-arrow {
+  flex-shrink: 0;
   width: auto;
   height: auto;
-  font-size: clamp(36px, 5vw, 72px);
+  font-size: clamp(32px, 4.4vw, 64px);
+  line-height: 1;
   color: var(--amber);
-  align-self: center;
   animation: nudge 1.6s ease-in-out infinite;
 }
 

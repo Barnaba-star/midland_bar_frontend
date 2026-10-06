@@ -47,8 +47,11 @@
              (touchstart)="holdWhat(true)" (touchend)="holdWhat(false)">
           <h1 class="ask-line">
             <span class="ask-name">Baronix<em>TZ</em></span>
-            <mat-icon class="hero-arrow" aria-hidden="true">arrow_forward</mat-icon>
-            <span class="ask-q">{{ askTyped }}<i class="ask-caret" [class.done]="askDone"></i></span>
+            <!-- The arrow and its question travel together: if the line wraps, both move down. -->
+            <span class="ask-tail">
+              <mat-icon class="hero-arrow" aria-hidden="true">arrow_forward</mat-icon>
+              <span class="ask-q">{{ askTyped }}<i class="ask-caret" [class.done]="askDone"></i></span>
+            </span>
           </h1>
 
           <div class="ask-answer" aria-live="polite">

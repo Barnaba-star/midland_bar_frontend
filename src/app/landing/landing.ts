@@ -37,7 +37,7 @@ export class Landing implements OnInit, OnDestroy {
   // ---- "BaronixTZ ➜ <question>" and its answer, one pair at a time ----
 
   /** Each question + answer stays this long before the next pair comes. */
-  readonly whatMs = 7000;
+  readonly whatMs = 11000;
   /** Milliseconds per letter while a question writes itself out. */
   private static readonly ASK_CHAR_MS = 32;
   readonly whats = Array.from({ length: 10 }, (_, i) => ({

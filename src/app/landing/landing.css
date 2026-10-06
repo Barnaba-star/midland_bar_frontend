@@ -698,7 +698,7 @@ a.sv-btn {
   flex-direction: column;
   gap: 14px;
   max-width: 760px;
-  min-height: clamp(230px, 24vw, 300px);
+  min-height: clamp(330px, 32vw, 420px);
 }
 
 /* No boxes: the words sit on the photo, in a hand-written face - the customer
@@ -716,8 +716,9 @@ a.sv-btn {
 
 .bubble p {
   margin: 2px 0 0;
-  font-family: 'Kalam', 'Poppins', cursive;
-  font-weight: 700;
+  font-family: 'Patrick Hand', 'Poppins', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.01em;
   line-height: 1.35;
   text-shadow: 0 2px 18px rgba(0, 0, 0, 0.85), 0 1px 3px rgba(0, 0, 0, 0.6);
 }
@@ -764,6 +765,260 @@ a.sv-btn {
 .bubble.baronix p {
   font-size: clamp(21px, 2.4vw, 32px);
   color: #fff3d6;
+}
+
+/* ---------- A little picture under each answer (sample figures) ---------- */
+
+.vis {
+  margin-top: 12px;
+  padding: 12px 14px;
+  max-width: 440px;
+  border-radius: 14px;
+  background: rgba(14, 12, 10, 0.55);
+  backdrop-filter: blur(4px);
+  font-family: 'Poppins', sans-serif;
+  color: var(--cream);
+  animation: bubble-in 0.45s ease 0.15s both;
+}
+
+.vis mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+  color: var(--amber);
+}
+
+/* 1 - all under watch */
+.vis-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  align-items: center;
+}
+
+.vis-status span,
+.vis-status small {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.vis-status .ok {
+  color: #4ade80;
+}
+
+.vis-status small {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* 2 - the bar in your pocket */
+.vis-phone {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.vis-screen {
+  width: 150px;
+  padding: 10px 12px;
+  border: 2px solid rgba(246, 236, 220, 0.35);
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.vis-screen small {
+  display: block;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.vis-screen strong {
+  display: block;
+  margin: 2px 0 6px;
+  font-size: 15px;
+  color: #4ade80;
+}
+
+.vis-spark {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 36px;
+}
+
+.vis-spark i,
+.vis-col i {
+  flex: 1;
+  border-radius: 3px 3px 0 0;
+  background: var(--amber);
+  transform-origin: bottom;
+  animation: grow-up 0.6s ease both;
+}
+
+.vis-pin {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* 3 - record, check, confirm, report */
+.vis-flow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.vis-flow span {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  min-width: 64px;
+  font-size: 12px;
+  font-weight: 600;
+  animation: bubble-in 0.4s ease var(--d) both;
+}
+
+.vis-flow span mat-icon {
+  width: 26px;
+  height: 26px;
+  font-size: 26px;
+}
+
+.vis-flow .arrow {
+  color: var(--muted);
+}
+
+/* 4 - stock levels, one running out */
+.vis-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  height: 120px;
+}
+
+.vis-col {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  flex: 1;
+  height: 100%;
+}
+
+.vis-col i {
+  width: 100%;
+  flex: none;
+}
+
+.vis-col small {
+  margin-top: 4px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.vis-col.low i {
+  background: #ef4444;
+}
+
+.vis-col em {
+  position: absolute;
+  top: 0;
+  font-style: normal;
+  font-size: 11px;
+  font-weight: 700;
+  color: #ef4444;
+  white-space: nowrap;
+  animation: blink 1s steps(1) infinite;
+}
+
+@keyframes grow-up {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+
+/* 5 - profit and loss per product */
+.vis-pl {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.vis-pl-row {
+  display: grid;
+  grid-template-columns: 96px 1fr 60px;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.vis-pl-row small {
+  color: var(--cream);
+}
+
+.vis-pl-row span {
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(246, 236, 220, 0.12);
+  overflow: hidden;
+}
+
+.vis-pl-row i {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: #4ade80;
+  transform-origin: left;
+  animation: grow-right 0.7s ease both;
+}
+
+.vis-pl-row.loss i {
+  background: #ef4444;
+}
+
+.vis-pl-row b {
+  color: #4ade80;
+}
+
+.vis-pl-row.loss b {
+  color: #ef4444;
+}
+
+@keyframes grow-right {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* 6 - five jobs in one */
+.vis-roles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.vis-roles span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(245, 165, 36, 0.14);
+  font-size: 13px;
+  font-weight: 600;
+  animation: bubble-in 0.4s ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vis, .vis-spark i, .vis-col i, .vis-pl-row i, .vis-flow span, .vis-roles span, .vis-col em {
+    animation: none;
+  }
 }
 
 .answer-in {

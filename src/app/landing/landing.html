@@ -67,6 +67,68 @@
                     <span class="who">Baronix<em>TZ</em></span>
                     @if (answerShown) {
                       <p class="answer-in">{{ w.a | translate }}</p>
+                      <!-- A little picture for each answer (sample figures, to show the idea). -->
+                      <div class="vis" aria-hidden="true">
+                        @switch (whatIndex) {
+                          @case (0) {
+                            <div class="vis-status">
+                              <span><mat-icon>receipt_long</mat-icon>{{ 'LANDING.VIS_ORDERS' | translate }}<mat-icon class="ok">check_circle</mat-icon></span>
+                              <span><mat-icon>inventory_2</mat-icon>{{ 'LANDING.VIS_STOCK' | translate }}<mat-icon class="ok">check_circle</mat-icon></span>
+                              <span><mat-icon>payments</mat-icon>{{ 'LANDING.VIS_MONEY' | translate }}<mat-icon class="ok">check_circle</mat-icon></span>
+                              <small><mat-icon>schedule</mat-icon>{{ 'LANDING.VIS_EVERY_SHIFT' | translate }}</small>
+                            </div>
+                          }
+                          @case (1) {
+                            <div class="vis-phone">
+                              <div class="vis-screen">
+                                <small>{{ 'LANDING.VIS_TODAY_SALES' | translate }}</small>
+                                <strong>Tshs 1,250,000</strong>
+                                <div class="vis-spark">
+                                  @for (h of visSpark; track $index) { <i [style.height.%]="h" [style.animation-delay.ms]="$index * 80"></i> }
+                                </div>
+                              </div>
+                              <span class="vis-pin"><mat-icon>location_on</mat-icon>{{ 'LANDING.VIS_ANYWHERE' | translate }}</span>
+                            </div>
+                          }
+                          @case (2) {
+                            <div class="vis-flow">
+                              <span style="--d:0ms"><mat-icon>edit_note</mat-icon>{{ 'LANDING.VIS_RECORD' | translate }}</span><mat-icon class="arrow">east</mat-icon>
+                              <span style="--d:250ms"><mat-icon>fact_check</mat-icon>{{ 'LANDING.VIS_CHECK' | translate }}</span><mat-icon class="arrow">east</mat-icon>
+                              <span style="--d:500ms"><mat-icon>verified</mat-icon>{{ 'LANDING.VIS_CONFIRM' | translate }}</span><mat-icon class="arrow">east</mat-icon>
+                              <span style="--d:750ms"><mat-icon>insights</mat-icon>{{ 'LANDING.VIS_REPORT' | translate }}</span>
+                            </div>
+                          }
+                          @case (3) {
+                            <div class="vis-bars">
+                              @for (b of visStock; track b.name) {
+                                <div class="vis-col" [class.low]="b.low">
+                                  @if (b.low) { <em>{{ 'LANDING.VIS_LOW' | translate }}</em> }
+                                  <i [style.height.%]="b.pct" [style.animation-delay.ms]="$index * 90"></i>
+                                  <small>{{ b.name }}</small>
+                                </div>
+                              }
+                            </div>
+                          }
+                          @case (4) {
+                            <div class="vis-pl">
+                              @for (r of visProfit; track r.name) {
+                                <div class="vis-pl-row" [class.loss]="!r.up">
+                                  <small>{{ r.name }}</small>
+                                  <span><i [style.width.%]="r.pct" [style.animation-delay.ms]="$index * 110"></i></span>
+                                  <b>{{ (r.up ? 'LANDING.VIS_PROFIT' : 'LANDING.VIS_LOSS') | translate }}</b>
+                                </div>
+                              }
+                            </div>
+                          }
+                          @case (5) {
+                            <div class="vis-roles">
+                              @for (r of visRoles; track r.label) {
+                                <span [style.animation-delay.ms]="$index * 120"><mat-icon>{{ r.icon }}</mat-icon>{{ r.label | translate }}</span>
+                              }
+                            </div>
+                          }
+                        }
+                      </div>
                     } @else {
                       <p class="typing" [attr.aria-label]="'LANDING.CHAT_TYPING' | translate"><i></i><i></i><i></i></p>
                     }

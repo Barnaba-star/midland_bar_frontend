@@ -78,6 +78,22 @@ export class Landing implements OnInit, OnDestroy {
     return this.whats[this.whatIndex];
   }
 
+  /** Sample figures for the little charts under the answers - an illustration, not real data. */
+  readonly visStock = [
+    { name: 'Castle', pct: 82 }, { name: 'Safari', pct: 64 }, { name: 'Kili', pct: 12, low: true },
+    { name: 'Soda', pct: 70 }, { name: 'Nyama', pct: 48 },
+  ];
+  readonly visProfit = [
+    { name: 'Castle Lite', pct: 78, up: true }, { name: 'Nyama choma', pct: 92, up: true },
+    { name: 'Konyagi', pct: 40, up: true }, { name: 'Soda', pct: 22, up: false },
+  ];
+  readonly visSpark = [30, 45, 38, 60, 52, 74, 88];
+  readonly visRoles = [
+    { icon: 'military_tech', label: 'LANDING.VIS_PREFECT' }, { icon: 'bolt', label: 'LANDING.VIS_EXEC' },
+    { icon: 'hub', label: 'LANDING.VIS_COORD' }, { icon: 'lightbulb', label: 'LANDING.VIS_ADVISER' },
+    { icon: 'menu_book', label: 'LANDING.VIS_MEMORY' },
+  ];
+
   showWhat(i: number): void {
     this.bgPrev = this.bgIndex;
     this.whatIndex = (i + this.whats.length) % this.whats.length;

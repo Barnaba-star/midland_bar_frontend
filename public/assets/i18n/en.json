@@ -745,7 +745,12 @@
     "ASK5_Q": "Do you know the profit and loss on each product?",
     "ASK5_A": "BaronixTZ tells you and advises you on the profit and loss of every product.",
     "ASK6_Q": "Why BaronixTZ?",
-    "ASK6_A": "It is the prefect, the executive, the coordinator, the adviser and the memory of your bar and lounge."
+    "ASK6_A": "It is the prefect, the executive, the coordinator, the adviser and the memory of your bar and lounge.",
+    "START_FREE": "Start free for 30 days",
+    "SEE_SERVICES": "See our services",
+    "NEXT": "Next",
+    "BACK_HOME": "Back to Home",
+    "FLOW_HINT": "Ready to start?"
   },
   "DASHBOARD": {
     "WELCOME": "Welcome",

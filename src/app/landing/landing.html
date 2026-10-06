@@ -88,13 +88,14 @@
           </div>
         </div>
 
+        <!-- A visitor is a prospect: the main button asks them to start; Ingia stays top right for those with an account. -->
         <div class="hero-actions">
-          <button type="button" class="btn-amber" (click)="goToLogin()">
-            {{ 'LANDING.GET_STARTED' | translate }}
+          <a [routerLink]="[]" fragment="wasiliana" class="btn-amber">
+            {{ 'LANDING.START_FREE' | translate }}
             <mat-icon>arrow_forward</mat-icon>
-          </button>
+          </a>
           <a [routerLink]="[]" fragment="huduma" class="btn-ghost">
-            {{ 'LANDING.SEE_HOW' | translate }}
+            {{ 'LANDING.SEE_SERVICES' | translate }}
             <mat-icon>east</mat-icon>
           </a>
         </div>
@@ -262,6 +263,36 @@
       <a class="contact-email" [href]="contactHref">{{ contactEmail }}</a>
     </div>
   </section>
+  }
+
+  <!-- The foot of every tab: start now, or walk on to the next title. -->
+  @if (!home) {
+    <nav class="tab-flow">
+      @if (view !== 'wasiliana') {
+        <div class="tab-flow-start">
+          <span>{{ 'LANDING.FLOW_HINT' | translate }}</span>
+          <a [routerLink]="[]" fragment="wasiliana" class="btn-amber">
+            {{ 'LANDING.START_FREE' | translate }}
+            <mat-icon>arrow_forward</mat-icon>
+          </a>
+        </div>
+      } @else {
+        <span></span>
+      }
+      @if (nextTab; as next) {
+        <a class="tab-flow-next" [routerLink]="[]" [fragment]="next.id">
+          <small>{{ 'LANDING.NEXT' | translate }}</small>
+          <strong>{{ next.label | translate }}</strong>
+          <mat-icon>arrow_forward</mat-icon>
+        </a>
+      } @else {
+        <a class="tab-flow-next" [routerLink]="[]">
+          <small>{{ 'LANDING.NEXT' | translate }}</small>
+          <strong>{{ 'LANDING.BACK_HOME' | translate }}</strong>
+          <mat-icon>home</mat-icon>
+        </a>
+      }
+    </nav>
   }
 
   @if (!home) {

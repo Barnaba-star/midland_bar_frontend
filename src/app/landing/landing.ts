@@ -147,6 +147,17 @@ export class Landing implements OnInit, OnDestroy {
   private cdr = inject(ChangeDetectorRef);
   private destroyRef = inject(DestroyRef);
 
+  /** The order a visitor walks the tabs in, "Ifuatayo →" at the foot of each. */
+  private readonly tabOrder = ['kuhusu', 'huduma', 'anza', 'bei', 'maswali', 'wasiliana'];
+
+  /** The tab after this one, with its menu title; null on the last. */
+  get nextTab(): { id: string; label: string } | null {
+    const i = this.tabOrder.indexOf(this.view);
+    const id = i >= 0 ? this.tabOrder[i + 1] : undefined;
+    const link = id ? this.navLinks.find((l) => l.id === id) : undefined;
+    return link && id ? { id, label: link.label } : null;
+  }
+
   get home(): boolean {
     return this.view === 'home';
   }

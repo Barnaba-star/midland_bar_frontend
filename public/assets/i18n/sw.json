@@ -745,7 +745,12 @@
     "ASK5_Q": "Je, wajua faida na hasara kwa kila bidhaa?",
     "ASK5_A": "BaronixTZ atakujulisha na kukushauri faida na hasara kwa kila bidhaa.",
     "ASK6_Q": "Kwa nini BaronixTZ?",
-    "ASK6_A": "Ni kiranja, mtendaji, mratibu, mshauri na kumbukumbu ya bar na lounge yako."
+    "ASK6_A": "Ni kiranja, mtendaji, mratibu, mshauri na kumbukumbu ya bar na lounge yako.",
+    "START_FREE": "Anza bure siku 30",
+    "SEE_SERVICES": "Ona huduma zetu",
+    "NEXT": "Ifuatayo",
+    "BACK_HOME": "Rudi Mwanzo",
+    "FLOW_HINT": "Uko tayari kuanza?"
   },
   "DASHBOARD": {
     "WELCOME": "Karibu",

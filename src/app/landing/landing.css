@@ -34,9 +34,9 @@
   align-items: center;
   gap: 8px;
   color: var(--amber);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.04em;
 }
 
 .live-dot {

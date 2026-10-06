@@ -55,7 +55,7 @@
           </button>
           <a [routerLink]="[]" fragment="huduma" class="btn-ghost">
             {{ 'LANDING.SEE_HOW' | translate }}
-            <mat-icon>south</mat-icon>
+            <mat-icon>east</mat-icon>
           </a>
         </div>
         <ul class="hero-meta">
@@ -68,18 +68,6 @@
     }
   </div>
 
-  <!-- ================= MENU MARQUEE ================= -->
-  @if (home) {
-  <div class="marquee" aria-hidden="true">
-    <div class="marquee-track">
-      @for (round of [0, 1]; track round) {
-        @for (m of menu; track m) {
-          <span>{{ m }}</span><i></i>
-        }
-      }
-    </div>
-  </div>
-  }
 
   <!-- ================= ABOUT ================= -->
   @if (show('kuhusu')) {
@@ -127,97 +115,8 @@
   </section>
   }
 
-  <!-- ================= THE BAR ================= -->
-  @if (home) {
-  <section class="gallery">
-    <div class="gallery-head">
-      <div>
-        <span class="eyebrow">{{ 'LANDING.GALLERY_EYEBROW' | translate }}</span>
-        <h2>{{ 'LANDING.GALLERY_TITLE' | translate }}</h2>
-      </div>
-      <p>{{ 'LANDING.GALLERY_DESC' | translate }}</p>
-    </div>
-    <div class="mosaic">
-      @for (g of gallery; track g.src) {
-        <figure [class]="'tile tile-' + g.key">
-          <img [src]="g.src" [alt]="g.caption | translate" loading="lazy" decoding="async">
-          <figcaption>
-            <mat-icon>{{ g.icon }}</mat-icon>
-            <span>
-              <strong>{{ g.caption | translate }}</strong>
-              <small>{{ g.note | translate }}</small>
-            </span>
-          </figcaption>
-        </figure>
-      }
-    </div>
-  </section>
-  }
 
-  <!-- ================= HOW A NIGHT RUNS ================= -->
-  @if (home) {
-  <section class="night">
-    <div class="section-head">
-      <span class="eyebrow">{{ 'LANDING.NIGHT_EYEBROW' | translate }}</span>
-      <h2>{{ 'LANDING.NIGHT_TITLE' | translate }}</h2>
-    </div>
 
-    <!-- The night as a rail of bill numbers, one stop over each photo -->
-    <div class="rail" aria-hidden="true">
-      @for (s of steps; track s.no) {
-        <span class="rail-stop"><b>{{ s.no }}</b></span>
-      }
-    </div>
-
-    <ol class="steps">
-      @for (s of steps; track s.no) {
-        <li class="step">
-          <img [src]="s.photo" alt="" loading="lazy" decoding="async">
-          <div class="step-body">
-            <span class="step-no">{{ s.no }}</span>
-            <mat-icon>{{ s.icon }}</mat-icon>
-            <h3>{{ s.title | translate }}</h3>
-            <p>{{ s.desc | translate }}</p>
-          </div>
-        </li>
-      }
-    </ol>
-  </section>
-  }
-
-  <!-- ================= THE SPLIT ================= -->
-  @if (home) {
-  <section class="split">
-    <div class="split-inner">
-      <div class="split-copy">
-        <span class="eyebrow">{{ 'LANDING.SPLIT_EYEBROW' | translate }}</span>
-        <h2>{{ 'LANDING.SPLIT_TITLE' | translate }}</h2>
-        <p>{{ 'LANDING.SPLIT_DESC' | translate }}</p>
-      </div>
-
-      <div class="split-card">
-        <div class="split-head">
-          <span>1 × Portion ng'ombe</span>
-          <strong>Tshs 10,000</strong>
-        </div>
-        <div class="split-bar" aria-hidden="true">
-          @for (b of buckets; track b.key) {
-            <span [style.flex]="b.pct" [style.background]="b.color"></span>
-          }
-        </div>
-        <ul class="split-list">
-          @for (b of buckets; track b.key) {
-            <li>
-              <i [style.background]="b.color"></i>
-              <span>{{ b.label | translate }}</span>
-              <strong>{{ b.pct * 100 | number }}</strong>
-            </li>
-          }
-        </ul>
-      </div>
-    </div>
-  </section>
-  }
 
   <!-- ================= GETTING STARTED ================= -->
   @if (show('anza')) {
@@ -325,6 +224,7 @@
   </section>
   }
 
+  @if (!home) {
   <footer class="footer">
     <div class="brand">
       <img src="assets/images/baronix-mark.svg" alt="" class="brand-mark small">
@@ -332,4 +232,5 @@
     </div>
     <span>&copy; {{ currentYear }} Baronix. {{ 'LANDING.ALL_RIGHTS_RESERVED' | translate }}</span>
   </footer>
+  }
 </div>

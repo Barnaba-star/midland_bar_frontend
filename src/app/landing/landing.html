@@ -46,10 +46,6 @@
     @if (home) {
     <header class="hero">
       <div class="hero-copy">
-        <span class="eyebrow">
-          <span class="live-dot"></span>
-          {{ 'LANDING.HERO_BADGE' | translate }}
-        </span>
         <!-- Someone heard the name: "BaronixTZ ➜ <a question>", and the answer below it, pair after pair. -->
         <div class="ask" (mouseenter)="holdWhat(true)" (mouseleave)="holdWhat(false)"
              (touchstart)="holdWhat(true)" (touchend)="holdWhat(false)">
@@ -61,6 +57,7 @@
               <span class="ask-q">{{ askTyped }}<i class="ask-caret" [class.done]="askDone"></i></span>
             </span>
           </h1>
+          <p class="page-title">{{ 'LANDING.HERO_BADGE' | translate }}</p>
 
           <div class="ask-answer" aria-live="polite">
             @if (askDone) {
@@ -106,12 +103,19 @@
   </div>
 
 
+  <!-- Every tab opens with BaronixTZ, biggest, then the tab's own title; nothing below is bigger than that title. -->
+  @if (!home) {
+    <header class="page-head">
+      <p class="page-brand">Baronix<em>TZ</em></p>
+      <h1 class="page-title">{{ 'LANDING.TAB_' + view | translate }}</h1>
+    </header>
+  }
+
   <!-- ================= ABOUT ================= -->
   @if (show('kuhusu')) {
   <section class="about">
     <div class="about-inner">
       <div class="about-copy">
-        <span class="eyebrow">{{ 'LANDING.ABOUT_EYEBROW' | translate }}</span>
         <h2>{{ 'LANDING.ABOUT_TITLE' | translate }}</h2>
         <p>{{ 'LANDING.ABOUT_DESC' | translate }}</p>
       </div>
@@ -175,7 +179,6 @@
   @if (show('anza')) {
   <section class="info-section">
     <div class="section-head">
-      <span class="eyebrow">{{ 'LANDING.START_EYEBROW' | translate }}</span>
       <h2>{{ 'LANDING.START_TITLE' | translate }}</h2>
     </div>
     <ol class="info-grid four start-steps">
@@ -195,7 +198,6 @@
   @if (show('watumiaji')) {
   <section class="info-section alt">
     <div class="section-head">
-      <span class="eyebrow">{{ 'LANDING.ROLES_EYEBROW' | translate }}</span>
       <h2>{{ 'LANDING.ROLES_TITLE' | translate }}</h2>
     </div>
     <div class="info-grid five">
@@ -233,7 +235,6 @@
   <section class="info-section">
     <div class="price-inner">
       <div class="price-copy">
-        <span class="eyebrow">{{ 'LANDING.PRICE_EYEBROW' | translate }}</span>
         <h2>{{ 'LANDING.PRICE_TITLE' | translate }}</h2>
         <p>{{ 'LANDING.PRICE_DESC' | translate }}</p>
       </div>
@@ -259,7 +260,6 @@
   @if (show('maswali')) {
   <section class="info-section alt">
     <div class="section-head">
-      <span class="eyebrow">{{ 'LANDING.FAQ_EYEBROW' | translate }}</span>
       <h2>{{ 'LANDING.FAQ_TITLE' | translate }}</h2>
     </div>
     <div class="faq">
@@ -277,7 +277,6 @@
   @if (show('wasiliana')) {
   <section class="last-call">
     <div class="last-call-inner">
-      <span class="eyebrow">{{ 'LANDING.CONTACT_EYEBROW' | translate }}</span>
       <h2>{{ 'LANDING.CTA_TITLE' | translate }}</h2>
       <p>{{ 'LANDING.CONTACT_DESC' | translate }}</p>
       <div class="contact-actions">

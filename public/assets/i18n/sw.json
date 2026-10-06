@@ -747,7 +747,13 @@
     "SV8_B2": "Mwenye matawi mengi anachagua tawi anapoingia.",
     "SV8_B3": "Kila mtu anaingia kwa akaunti yake, na kila tawi linaona data zake tu.",
     "SV8_B4": "Kitu kikiondolewa kwenye bill, kinaandikwa pamoja na sababu.",
-    "PRICES_BTN": "Bei zetu"
+    "PRICES_BTN": "Bei zetu",
+    "TAB_kuhusu": "Kuhusu BaronixTZ",
+    "TAB_huduma": "Huduma za BaronixTZ ndani ya bar",
+    "TAB_anza": "Inavyofanya kazi",
+    "TAB_bei": "Bei zetu",
+    "TAB_maswali": "Maswali",
+    "TAB_wasiliana": "Wasiliana nasi"
   },
   "DASHBOARD": {
     "WELCOME": "Karibu",

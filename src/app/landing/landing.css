@@ -665,25 +665,10 @@ a.sv-btn {
   }
 }
 
-/* ---------- Head of every page: BaronixTZ first and biggest, then the tab's title ---------- */
+/* ---------- Head of every tab: its title, biggest on the page ---------- */
 
 .page-head {
   padding: 48px clamp(16px, 5vw, 80px) 0;
-}
-
-.page-brand {
-  margin: 0;
-  font-family: var(--display);
-  font-size: clamp(48px, 7vw, 104px);
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.01em;
-  color: var(--cream);
-}
-
-.page-brand em {
-  font-style: normal;
-  color: var(--amber);
 }
 
 .page-title {
@@ -693,6 +678,15 @@ a.sv-btn {
   font-weight: 500;
   line-height: 1.1;
   color: var(--amber);
+}
+
+/* A tab's title stands alone at the top: the biggest words on the page. */
+.page-title-tab {
+  margin: 0;
+  font-size: clamp(36px, 5.2vw, 76px);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--cream);
 }
 
 /* Sections under the page head start closer, their own headings now second rank. */

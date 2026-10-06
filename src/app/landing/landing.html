@@ -103,11 +103,10 @@
   </div>
 
 
-  <!-- Every tab opens with BaronixTZ, biggest, then the tab's own title; nothing below is bigger than that title. -->
+  <!-- Every tab opens with its own title, biggest on the page; nothing below is bigger. -->
   @if (!home) {
     <header class="page-head">
-      <p class="page-brand">Baronix<em>TZ</em></p>
-      <h1 class="page-title">{{ 'LANDING.TAB_' + view | translate }}</h1>
+      <h1 class="page-title page-title-tab">{{ 'LANDING.TAB_' + view | translate }}</h1>
     </header>
   }
 

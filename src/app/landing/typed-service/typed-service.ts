@@ -18,6 +18,7 @@ interface Line {
  */
 @Component({
   selector: 'app-typed-service',
+  host: { '[class.big]': 'big()' },
   imports: [MatIconModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -61,6 +62,8 @@ export class TypedService implements OnInit {
   readonly title = input.required<string>();
   readonly desc = input.required<string>();
   readonly bullets = input.required<string[]>();
+  /** Shown on its own, filling the page (the Huduma tab), not in a list. */
+  readonly big = input(false);
 
   /** Milliseconds between words: quick enough to read along, slow enough to see it write. */
   private static readonly WORD_MS = 90;

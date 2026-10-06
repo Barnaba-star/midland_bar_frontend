@@ -750,7 +750,8 @@
     "SEE_SERVICES": "Ona huduma zetu",
     "NEXT": "Ifuatayo",
     "BACK_HOME": "Rudi Mwanzo",
-    "FLOW_HINT": "Uko tayari kuanza?"
+    "FLOW_HINT": "Uko tayari kuanza?",
+    "PREV": "Iliyotangulia"
   },
   "DASHBOARD": {
     "WELCOME": "Karibu",

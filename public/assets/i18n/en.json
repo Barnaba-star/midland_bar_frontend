@@ -750,7 +750,8 @@
     "SEE_SERVICES": "See our services",
     "NEXT": "Next",
     "BACK_HOME": "Back to Home",
-    "FLOW_HINT": "Ready to start?"
+    "FLOW_HINT": "Ready to start?",
+    "PREV": "Previous"
   },
   "DASHBOARD": {
     "WELCOME": "Welcome",

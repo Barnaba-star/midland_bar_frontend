@@ -90,13 +90,9 @@
 
         <!-- A visitor is a prospect: the main button asks them to start; Ingia stays top right for those with an account. -->
         <div class="hero-actions">
-          <a [routerLink]="[]" fragment="wasiliana" class="btn-amber">
-            {{ 'LANDING.START_FREE' | translate }}
-            <mat-icon>arrow_forward</mat-icon>
-          </a>
-          <a [routerLink]="[]" fragment="huduma" class="btn-ghost">
+          <a [routerLink]="[]" fragment="huduma" class="btn-amber">
             {{ 'LANDING.SEE_SERVICES' | translate }}
-            <mat-icon>east</mat-icon>
+            <mat-icon>arrow_forward</mat-icon>
           </a>
         </div>
         <ul class="hero-meta">
@@ -136,22 +132,31 @@
 
   <!-- ================= SERVICES ================= -->
   @if (show('huduma')) {
-  <section class="services">
-    <div class="section-head">
-      <span class="eyebrow">{{ 'LANDING.SV_EYEBROW' | translate }}</span>
-      <h2>{{ 'LANDING.SV_TITLE' | translate }}</h2>
-      <p>{{ 'LANDING.SV_DESC' | translate }}</p>
-    </div>
-    <!-- No cards: each service writes itself out, word after word, as it comes into view. -->
-    <div class="service-list">
-      @for (sv of services; track sv.title; let i = $index) {
-        <app-typed-service
-          [no]="(i + 1 < 10 ? '0' : '') + (i + 1)"
-          [icon]="sv.icon"
-          [title]="sv.title | translate"
-          [desc]="sv.desc | translate"
-          [bullets]="[sv.bullets[0] | translate, sv.bullets[1] | translate, sv.bullets[2] | translate, sv.bullets[3] | translate]" />
-      }
+  <section class="services solo" (mouseenter)="holdService(true)" (mouseleave)="holdService(false)"
+           (touchstart)="holdService(true)" (touchend)="holdService(false)">
+    <!-- Straight in with the service itself, writing itself out; the next comes after a while, or with Ifuatayo. -->
+    @for (sv of [service]; track svIndex) {
+      <app-typed-service
+        [big]="true"
+        [no]="(svIndex + 1 < 10 ? '0' : '') + (svIndex + 1)"
+        [icon]="sv.icon"
+        [title]="sv.title | translate"
+        [desc]="sv.desc | translate"
+        [bullets]="[sv.bullets[0] | translate, sv.bullets[1] | translate, sv.bullets[2] | translate, sv.bullets[3] | translate]" />
+    }
+
+    <div class="sv-nav">
+      <button type="button" class="sv-btn" (click)="showService(svIndex - 1)">
+        <mat-icon>arrow_back</mat-icon>{{ 'LANDING.PREV' | translate }}
+      </button>
+      <div class="sv-dots">
+        @for (sv of services; track sv.title; let i = $index) {
+          <button type="button" class="what-dot" [class.on]="i === svIndex" [attr.aria-label]="sv.title | translate" (click)="showService(i)"></button>
+        }
+      </div>
+      <button type="button" class="sv-btn next" (click)="showService(svIndex + 1)">
+        {{ 'LANDING.NEXT' | translate }}<mat-icon>arrow_forward</mat-icon>
+      </button>
     </div>
   </section>
   }

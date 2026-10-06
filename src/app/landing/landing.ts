@@ -138,6 +138,9 @@ export class Landing implements OnInit, OnDestroy {
     if (this.askTimer) {
       clearInterval(this.askTimer);
     }
+    if (this.svTimer) {
+      clearInterval(this.svTimer);
+    }
   }
 
   /** The section on its own, or 'home' for the whole page. */
@@ -173,6 +176,9 @@ export class Landing implements OnInit, OnDestroy {
     this.restartWhatTimer();
     this.route.fragment.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((f) => {
       this.view = f && this.views.has(f) ? f : 'home';
+      if (this.view === 'huduma') {
+        this.showService(0);
+      }
       this.menuOpen = false;
       if (typeof window !== 'undefined') {
         window.scrollTo({ top: 0 });
@@ -186,6 +192,43 @@ export class Landing implements OnInit, OnDestroy {
     { icon: 'sports_bar', title: 'LANDING.ABOUT_P2_T', desc: 'LANDING.ABOUT_P2_D' },
     { icon: 'storefront', title: 'LANDING.ABOUT_P3_T', desc: 'LANDING.ABOUT_P3_D' },
   ];
+
+  // ---- Huduma tab: one service at a time, writing itself, then the next ----
+
+  /** Each service stays this long: time to write itself out and be read. */
+  readonly svMs = 18000;
+  svIndex = 0;
+  svPaused = false;
+  private svTimer: ReturnType<typeof setInterval> | null = null;
+
+  get service() {
+    return this.services[this.svIndex];
+  }
+
+  showService(i: number): void {
+    this.svIndex = (i + this.services.length) % this.services.length;
+    this.restartSvTimer();
+    this.cdr.markForCheck();
+  }
+
+  holdService(paused: boolean): void {
+    this.svPaused = paused;
+  }
+
+  private restartSvTimer(): void {
+    if (this.svTimer) {
+      clearInterval(this.svTimer);
+    }
+    if (typeof window === 'undefined') {
+      return;
+    }
+    this.svTimer = setInterval(() => {
+      if (!this.svPaused && this.view === 'huduma') {
+        this.svIndex = (this.svIndex + 1) % this.services.length;
+        this.cdr.markForCheck();
+      }
+    }, this.svMs);
+  }
 
   /** What Baronix does, one card per service, each with what it really covers. */
   readonly services = [

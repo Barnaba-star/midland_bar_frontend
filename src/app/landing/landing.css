@@ -584,6 +584,76 @@
   }
 }
 
+/* ---------- Huduma tab: one service on its own ---------- */
+
+.services.solo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: calc(100vh - 210px);
+  padding: 56px clamp(16px, 5vw, 80px) 40px;
+}
+
+.services.solo app-typed-service {
+  max-width: 1100px;
+  animation: sv-in 0.5s ease both;
+}
+
+@keyframes sv-in {
+  from { opacity: 0; transform: translateX(24px); }
+  to { opacity: 1; transform: none; }
+}
+
+.sv-nav {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-top: 44px;
+}
+
+.sv-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.sv-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 18px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--cream);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.sv-btn:hover {
+  border-color: var(--amber);
+}
+
+.sv-btn.next {
+  border-color: var(--amber);
+  background: var(--amber);
+  color: #1a1206;
+}
+
+.sv-btn mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .services.solo app-typed-service {
+    animation: none;
+  }
+}
+
 /* ---------- Foot of each tab: start now, or the next title ---------- */
 
 .tab-flow {

@@ -119,3 +119,52 @@ li.on mat-icon {
     padding-left: 0;
   }
 }
+
+/* One service on its own: billboard size. */
+:host(.big) {
+  gap: 20px;
+  padding: 0;
+  border-top: none;
+}
+
+:host(.big) .ts-no {
+  font-size: clamp(48px, 6vw, 88px);
+  min-width: 0;
+}
+
+:host(.big) .ts-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+}
+
+:host(.big) .ts-icon mat-icon {
+  width: 30px;
+  height: 30px;
+  font-size: 30px;
+}
+
+:host(.big) h3 {
+  font-size: clamp(38px, 5.4vw, 80px);
+}
+
+:host(.big) .ts-desc {
+  padding-left: 0;
+  font-size: clamp(18px, 1.9vw, 26px);
+}
+
+:host(.big) ul {
+  gap: 14px;
+  padding-left: 0;
+}
+
+:host(.big) li {
+  font-size: clamp(16px, 1.5vw, 21px);
+}
+
+:host(.big) li mat-icon {
+  width: 24px;
+  height: 24px;
+  font-size: 24px;
+  margin-top: 1px;
+}

@@ -6,9 +6,9 @@
 
     <!-- ================= NAV ================= -->
     <nav class="nav">
-      <a class="brand" [routerLink]="[]" aria-label="Baronix">
+      <a class="brand" [routerLink]="[]" aria-label="BaronixTZ">
         <img src="assets/images/baronix-mark.svg" alt="" class="brand-mark">
-        <span class="brand-name">Baron<em>ix</em></span>
+        <span class="brand-name">Baronix<em>TZ</em></span>
       </a>
       <!-- Every title on the page, one tap away. On a phone they fold into Menyu. -->
       <ul class="nav-links" [class.open]="menuOpen" id="landing-menu">
@@ -42,35 +42,38 @@
           <span class="live-dot"></span>
           {{ 'LANDING.HERO_BADGE' | translate }}
         </span>
-        <!-- Someone heard the name: "BaronixTZ ➜" and the answers, one at a time. -->
-        <h1 class="hero-name">
-          <span>BaronixTZ</span>
-          <mat-icon class="hero-arrow" aria-hidden="true">arrow_forward</mat-icon>
-          <span class="sr-only">{{ 'LANDING.WHAT_ASK' | translate }}</span>
-        </h1>
+        <!-- Someone heard the name: "BaronixTZ ➜ <a question>", and the answer below it, pair after pair. -->
+        <div class="ask" (mouseenter)="holdWhat(true)" (mouseleave)="holdWhat(false)"
+             (touchstart)="holdWhat(true)" (touchend)="holdWhat(false)">
+          <h1 class="ask-line">
+            <span class="ask-name">Baronix<em>TZ</em></span>
+            <mat-icon class="hero-arrow" aria-hidden="true">arrow_forward</mat-icon>
+            <span class="ask-q">{{ askTyped }}<i class="ask-caret" [class.done]="askDone"></i></span>
+          </h1>
 
-        <div class="what" [class.paused]="whatPaused"
-             (mouseenter)="holdWhat(true)" (mouseleave)="holdWhat(false)"
-             (focusin)="holdWhat(true)" (focusout)="holdWhat(false)"
-             (touchstart)="holdWhat(true)" (touchend)="holdWhat(false)"
-             aria-live="polite">
-          @for (w of [what]; track whatIndex) {
-            <div class="what-card">
-              <div class="what-top">
-                <span class="what-icon"><mat-icon>{{ w.icon }}</mat-icon></span>
-                <span class="what-count">{{ whatIndex + 1 < 10 ? '0' : '' }}{{ whatIndex + 1 }} / {{ whats.length }}</span>
-              </div>
-              <p class="what-title"><small>{{ 'LANDING.WHAT_PREFIX' | translate }}</small> {{ w.title | translate }}</p>
-              <p class="what-desc">{{ w.desc | translate }}</p>
-              <span class="what-bar" [style.animation-duration.ms]="whatMs"></span>
+          <div class="ask-answer" aria-live="polite">
+            @if (askDone) {
+              @for (w of [what]; track whatIndex) {
+                <div class="ask-a">
+                  <p class="ask-a-main">{{ w.a | translate }}</p>
+                  <p class="ask-a-line">{{ w.l | translate }}</p>
+                </div>
+              }
+            }
+          </div>
+
+          <div class="ask-progress">
+            <span class="ask-count">{{ whatIndex + 1 < 10 ? '0' : '' }}{{ whatIndex + 1 }}<small> / {{ whats.length }}</small></span>
+            <div class="what-dots" role="tablist">
+              @for (w of whats; track w.q; let i = $index) {
+                <button type="button" class="what-dot" role="tab" [class.on]="i === whatIndex" [attr.aria-selected]="i === whatIndex"
+                        [attr.aria-label]="w.q | translate" (click)="showWhat(i)"></button>
+              }
             </div>
-          }
-        </div>
-        <div class="what-dots" role="tablist">
-          @for (w of whats; track w.title; let i = $index) {
-            <button type="button" class="what-dot" role="tab" [class.on]="i === whatIndex" [attr.aria-selected]="i === whatIndex"
-                    [attr.aria-label]="w.title | translate" (click)="showWhat(i)"></button>
-          }
+            @for (w of [what]; track whatIndex) {
+              <span class="ask-time" [class.paused]="whatPaused"><i [style.animation-duration.ms]="whatMs"></i></span>
+            }
+          </div>
         </div>
 
         <div class="hero-actions">
@@ -253,9 +256,9 @@
   <footer class="footer">
     <div class="brand">
       <img src="assets/images/baronix-mark.svg" alt="" class="brand-mark small">
-      <span class="brand-name">Baron<em>ix</em></span>
+      <span class="brand-name">Baronix<em>TZ</em></span>
     </div>
-    <span>&copy; {{ currentYear }} Baronix. {{ 'LANDING.ALL_RIGHTS_RESERVED' | translate }}</span>
+    <span>&copy; {{ currentYear }} BaronixTZ. {{ 'LANDING.ALL_RIGHTS_RESERVED' | translate }}</span>
   </footer>
   }
 </div>

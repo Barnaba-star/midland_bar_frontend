@@ -13,7 +13,7 @@
 }
 
 .ts-no {
-  font-family: 'Bebas Neue', 'Oswald', Impact, sans-serif;
+  font-family: 'Oswald', 'Bebas Neue', Impact, sans-serif;
   font-size: 40px;
   line-height: 1;
   color: rgba(245, 165, 36, 0.35);
@@ -33,12 +33,12 @@
 
 h3 {
   margin: 0;
-  font-family: 'Bebas Neue', 'Oswald', Impact, sans-serif;
+  font-family: 'Oswald', 'Bebas Neue', Impact, sans-serif;
   font-size: clamp(28px, 3vw, 36px);
   font-weight: 400;
-  letter-spacing: 0.02em;
-  line-height: 1;
-  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.05;
   color: #f6ecdc;
 }
 

@@ -12,7 +12,7 @@
   --muted: #a89c8a;
   --amber: #f5a524;
   --amber-2: #ffc861;
-  --display: 'Bebas Neue', 'Oswald', Impact, sans-serif;
+  --display: 'Oswald', 'Bebas Neue', Impact, sans-serif;
 
   min-height: 100vh;
   background: var(--ink);
@@ -111,9 +111,8 @@
   box-sizing: border-box;
   align-items: center;
   justify-content: space-between;
-  max-width: 1180px;
   margin: 0 auto;
-  padding: 22px 24px;
+  padding: 22px clamp(16px, 5vw, 80px);
 }
 
 .brand {
@@ -150,9 +149,11 @@
 }
 
 .brand-name {
-  font-family: var(--display);
+  font-family: 'Oswald', var(--display);
+  font-weight: 700;
+  text-transform: none;
   font-size: 26px;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.01em;
   line-height: 1;
 }
 
@@ -188,7 +189,7 @@
   inset: 0;
   z-index: -1;
   background:
-    linear-gradient(90deg, rgba(14, 12, 10, 0.95) 0%, rgba(14, 12, 10, 0.8) 42%, rgba(14, 12, 10, 0.25) 100%),
+    linear-gradient(90deg, rgba(14, 12, 10, 0.94) 0%, rgba(14, 12, 10, 0.78) 50%, rgba(14, 12, 10, 0.55) 100%),
     linear-gradient(0deg, rgba(14, 12, 10, 0.9) 0%, rgba(14, 12, 10, 0) 30%),
     url('/assets/images/bar/pub-hall.jpg') center / cover no-repeat;
 }
@@ -201,13 +202,12 @@
   align-items: center;
   width: 100%;
   box-sizing: border-box;
-  max-width: 1180px;
   margin: 0 auto;
-  padding: 40px 24px 96px;
+  padding: 32px clamp(16px, 5vw, 80px) 72px;
 }
 
 .hero-copy {
-  max-width: 780px;
+  width: 100%;
 }
 
 .hero-title {
@@ -219,7 +219,6 @@
   font-weight: 400;
   line-height: 0.9;
   letter-spacing: 0.01em;
-  text-transform: uppercase;
   text-shadow: 0 4px 30px rgba(0, 0, 0, 0.45);
 }
 
@@ -290,7 +289,6 @@
   font-weight: 400;
   line-height: 0.95;
   letter-spacing: 0.01em;
-  text-transform: uppercase;
 }
 
 /* ---------- Last call, over a sundowner toast ---------- */
@@ -345,30 +343,42 @@
   color: var(--cream);
 }
 
-/* ---------- Hero: "BaronixTZ ➜" and its answers, one at a time ---------- */
+/* ---------- Hero: "BaronixTZ ➜ <question>" and the answer, across the whole page ---------- */
 
-.hero-name {
+.ask {
+  width: 100%;
+}
+
+.ask-line {
   display: flex;
-  align-items: center;
-  gap: 14px;
-  margin: 16px 0 18px;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 18px;
+  margin: 18px 0 0;
   font-family: var(--display);
-  font-size: clamp(52px, 7vw, 96px);
-  font-weight: 400;
-  line-height: 0.9;
-  letter-spacing: 0.01em;
-  text-transform: uppercase;
-  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.45);
+  font-weight: 600;
+  line-height: 1.05;
+}
+
+.ask-name {
+  font-size: clamp(48px, 7.5vw, 112px);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--cream);
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+.ask-name em {
+  font-style: normal;
+  color: var(--amber);
 }
 
 .hero-arrow {
-  width: 1em;
-  height: 1em;
-  font-size: 0.7em;
-  line-height: 1;
-  display: grid;
-  place-items: center;
+  width: auto;
+  height: auto;
+  font-size: clamp(36px, 5vw, 72px);
   color: var(--amber);
+  align-self: center;
   animation: nudge 1.6s ease-in-out infinite;
 }
 
@@ -377,110 +387,88 @@
   50% { transform: translateX(10px); }
 }
 
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
-}
-
-.what {
-  position: relative;
-  max-width: 600px;
-  min-height: 190px;
-}
-
-.what-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 22px 24px 26px;
-  border: 1px solid rgba(245, 165, 36, 0.4);
-  border-left: 4px solid var(--amber);
-  border-radius: 16px;
-  background: rgba(14, 12, 10, 0.72);
-  backdrop-filter: blur(6px);
-  overflow: hidden;
-  animation: what-in 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-
-@keyframes what-in {
-  from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: none; }
-}
-
-.what-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.what-icon {
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  background: rgba(245, 165, 36, 0.16);
+.ask-q {
+  font-size: clamp(26px, 3.6vw, 54px);
+  font-weight: 500;
   color: var(--amber);
 }
 
-.what-count {
-  font-family: var(--display);
-  font-size: 20px;
-  letter-spacing: 0.06em;
-  color: var(--muted);
+.ask-caret {
+  display: inline-block;
+  width: 3px;
+  height: 0.9em;
+  margin-left: 4px;
+  vertical-align: -0.08em;
+  background: var(--amber);
+  animation: blink 0.8s steps(1) infinite;
 }
 
-.what-title {
+.ask-caret.done {
+  opacity: 0;
+  animation: none;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+/* The answer: big, on the photo itself - no box, like a billboard. */
+.ask-answer {
+  min-height: clamp(150px, 16vw, 230px);
+  margin: 22px 0 8px;
+}
+
+.ask-a {
+  animation: ask-in 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes ask-in {
+  from { opacity: 0; transform: translateY(24px); filter: blur(4px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+
+.ask-a-main {
   margin: 0;
+  max-width: 22ch;
   font-family: var(--display);
-  font-size: clamp(30px, 3.4vw, 42px);
-  line-height: 1;
-  text-transform: uppercase;
+  font-size: clamp(36px, 5.6vw, 88px);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.01em;
   color: var(--cream);
+  text-shadow: 0 6px 40px rgba(0, 0, 0, 0.6);
 }
 
-.what-title small {
-  color: var(--amber);
-  font-size: 0.7em;
-}
-
-.what-desc {
-  margin: 0;
-  color: #d8ccb8;
-  font-size: 15px;
+.ask-a-line {
+  margin: 14px 0 0;
+  max-width: 60ch;
+  color: #e3d8c6;
+  font-size: clamp(15px, 1.4vw, 19px);
   line-height: 1.55;
 }
 
-/* How long until the next answer. */
-.what-bar {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  height: 3px;
-  width: 100%;
-  background: var(--amber);
-  transform-origin: left;
-  animation: what-time linear both;
+.ask-progress {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin: 10px 0 30px;
 }
 
-.what.paused .what-bar {
-  animation-play-state: paused;
+.ask-count {
+  font-family: var(--display);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--amber);
 }
 
-@keyframes what-time {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
+.ask-count small {
+  color: var(--muted);
+  font-size: 0.75em;
 }
 
 .what-dots {
   display: flex;
   gap: 8px;
-  margin: 14px 0 26px;
 }
 
 .what-dot {
@@ -499,10 +487,52 @@
   background: var(--amber);
 }
 
+/* How long until the next pair. */
+.ask-time {
+  flex: 1;
+  max-width: 260px;
+  height: 2px;
+  background: rgba(246, 236, 220, 0.15);
+  overflow: hidden;
+}
+
+.ask-time i {
+  display: block;
+  height: 100%;
+  background: var(--amber);
+  transform-origin: left;
+  animation: ask-time linear both;
+}
+
+.ask-time.paused i {
+  animation-play-state: paused;
+}
+
+@keyframes ask-time {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hero-arrow,
-  .what-card {
+  .ask-a,
+  .ask-caret {
     animation: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .ask-time {
+    display: none;
   }
 }
 
@@ -667,7 +697,6 @@
   font-size: clamp(40px, 5.4vw, 68px);
   font-weight: 400;
   line-height: 0.95;
-  text-transform: uppercase;
 }
 
 .about-copy p,
@@ -736,7 +765,6 @@
   font-size: 34px;
   font-weight: 400;
   letter-spacing: 0.02em;
-  text-transform: uppercase;
 }
 
 .info-grid {

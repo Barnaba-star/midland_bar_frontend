@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnDe
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { TypedService } from './typed-service/typed-service';
 
 @Component({
@@ -34,18 +34,26 @@ export class Landing implements OnInit, OnDestroy {
     { id: 'wasiliana', label: 'LANDING.NAV_CONTACT' },
   ];
 
-  // ---- "BaronixTZ ➜ ..." - what it is, one answer at a time ----
+  // ---- "BaronixTZ ➜ <question>" and its answer, one pair at a time ----
 
-  /** Each answer stays this long before the next one comes. */
-  readonly whatMs = 6000;
-  readonly whats = [
-    'shield_person', 'storefront', 'nightlight', 'visibility', 'inventory_2',
-    'account_balance_wallet', 'insights', 'fact_check', 'badge', 'emoji_events',
-  ].map((icon, i) => ({ icon, title: `LANDING.WHAT${i + 1}_T`, desc: `LANDING.WHAT${i + 1}_D` }));
+  /** Each question + answer stays this long before the next pair comes. */
+  readonly whatMs = 7000;
+  /** Milliseconds per letter while a question writes itself out. */
+  private static readonly ASK_CHAR_MS = 32;
+  readonly whats = Array.from({ length: 10 }, (_, i) => ({
+    q: `LANDING.ASK${i + 1}_Q`,
+    a: `LANDING.ASK${i + 1}_A`,
+    l: `LANDING.ASK${i + 1}_L`,
+  }));
   whatIndex = 0;
   /** Held while a finger or pointer is on it, so the reader can finish. */
   whatPaused = false;
+  /** How much of the question is written so far; the answer comes once it is all there. */
+  askTyped = '';
+  askDone = false;
   private whatTimer: ReturnType<typeof setInterval> | null = null;
+  private askTimer: ReturnType<typeof setInterval> | null = null;
+  private translate = inject(TranslateService);
 
   get what() {
     return this.whats[this.whatIndex];
@@ -53,12 +61,42 @@ export class Landing implements OnInit, OnDestroy {
 
   showWhat(i: number): void {
     this.whatIndex = (i + this.whats.length) % this.whats.length;
+    this.typeQuestion();
     this.restartWhatTimer();
-    this.cdr.markForCheck();
   }
 
   holdWhat(paused: boolean): void {
     this.whatPaused = paused;
+    this.cdr.markForCheck();
+  }
+
+  /** The question after the arrow writes itself, letter by letter; then the answer appears. */
+  private typeQuestion(): void {
+    if (this.askTimer) {
+      clearInterval(this.askTimer);
+      this.askTimer = null;
+    }
+    const full = this.translate.instant(this.what.q) as string;
+    const still = typeof window === 'undefined' || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    if (still || !full || full === this.what.q) {
+      this.askTyped = full;
+      this.askDone = true;
+      this.cdr.markForCheck();
+      return;
+    }
+    this.askTyped = '';
+    this.askDone = false;
+    let n = 0;
+    this.askTimer = setInterval(() => {
+      n++;
+      this.askTyped = full.slice(0, n);
+      if (n >= full.length) {
+        this.askDone = true;
+        clearInterval(this.askTimer!);
+        this.askTimer = null;
+      }
+      this.cdr.markForCheck();
+    }, Landing.ASK_CHAR_MS);
     this.cdr.markForCheck();
   }
 
@@ -72,7 +110,7 @@ export class Landing implements OnInit, OnDestroy {
     this.whatTimer = setInterval(() => {
       if (!this.whatPaused && this.home) {
         this.whatIndex = (this.whatIndex + 1) % this.whats.length;
-        this.cdr.markForCheck();
+        this.typeQuestion();
       }
     }, this.whatMs);
   }
@@ -80,6 +118,9 @@ export class Landing implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.whatTimer) {
       clearInterval(this.whatTimer);
+    }
+    if (this.askTimer) {
+      clearInterval(this.askTimer);
     }
   }
 
@@ -100,6 +141,8 @@ export class Landing implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    // The first question waits for the words to load, then writes itself; again on a language switch.
+    this.translate.stream(this.whats[0].q).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.typeQuestion());
     this.restartWhatTimer();
     this.route.fragment.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((f) => {
       this.view = f && this.views.has(f) ? f : 'home';

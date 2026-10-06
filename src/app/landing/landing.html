@@ -2,6 +2,14 @@
 
   <!-- ================= STAGE: the pub behind nav and hero ================= -->
   <div class="stage" [class.compact]="!home">
+    <!-- Bar photos taking turns behind the hero, one per question, cross-fading. -->
+    <div class="stage-slides" aria-hidden="true">
+      @for (img of bgImages; track img; let i = $index) {
+        @if (bgInPage(i)) {
+          <div class="slide" [class.on]="i === bgIndex" [style.background-image]="'url(' + img + ')'"></div>
+        }
+      }
+    </div>
     <div class="stage-photo" aria-hidden="true"></div>
 
     <!-- ================= NAV ================= -->

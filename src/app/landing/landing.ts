@@ -37,7 +37,7 @@ export class Landing implements OnInit, OnDestroy {
   // ---- "BaronixTZ ➜ <question>" and its answer, one pair at a time ----
 
   /** Each question + answer stays this long before the next pair comes. */
-  readonly whatMs = 11000;
+  readonly whatMs = 15000;
   /** Milliseconds per letter while a question writes itself out. */
   private static readonly ASK_CHAR_MS = 32;
   readonly whats = Array.from({ length: 6 }, (_, i) => ({
@@ -45,6 +45,21 @@ export class Landing implements OnInit, OnDestroy {
     a: `LANDING.ASK${i + 1}_A`,
   }));
   whatIndex = 0;
+
+  /** The photo behind the hero changes with each question, fading from one to the next. */
+  readonly bgImages = ['pub-hall', 'bar-glow', 'pendant-bar', 'shelf', 'sunset-toast', 'bar-counter']
+    .map((n) => `assets/images/bar/${n}.jpg`);
+  private bgPrev = -1;
+
+  get bgIndex(): number {
+    return this.whatIndex % this.bgImages.length;
+  }
+
+  /** Only the photo showing, the one fading out and the next one are in the page - the rest load when their turn comes. */
+  bgInPage(i: number): boolean {
+    const n = this.bgImages.length;
+    return i === this.bgIndex || i === this.bgPrev || i === (this.bgIndex + 1) % n;
+  }
   /** Held while a finger or pointer is on it, so the reader can finish. */
   whatPaused = false;
   /** How much of the question is written so far; the answer comes once it is all there. */
@@ -59,6 +74,7 @@ export class Landing implements OnInit, OnDestroy {
   }
 
   showWhat(i: number): void {
+    this.bgPrev = this.bgIndex;
     this.whatIndex = (i + this.whats.length) % this.whats.length;
     this.typeQuestion();
     this.restartWhatTimer();
@@ -108,6 +124,7 @@ export class Landing implements OnInit, OnDestroy {
     }
     this.whatTimer = setInterval(() => {
       if (!this.whatPaused && this.home) {
+        this.bgPrev = this.bgIndex;
         this.whatIndex = (this.whatIndex + 1) % this.whats.length;
         this.typeQuestion();
       }

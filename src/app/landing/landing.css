@@ -190,8 +190,43 @@
   z-index: -1;
   background:
     linear-gradient(90deg, rgba(14, 12, 10, 0.94) 0%, rgba(14, 12, 10, 0.78) 50%, rgba(14, 12, 10, 0.55) 100%),
-    linear-gradient(0deg, rgba(14, 12, 10, 0.9) 0%, rgba(14, 12, 10, 0) 30%),
-    url('/assets/images/bar/pub-hall.jpg') center / cover no-repeat;
+    linear-gradient(0deg, rgba(14, 12, 10, 0.9) 0%, rgba(14, 12, 10, 0) 30%);
+}
+
+/* The photos under the veil: one shows, the last one fades out, each drifting closer slowly. */
+.stage-slides {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+  background: var(--ink);
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transform: scale(1.04);
+  transition: opacity 1.6s ease, transform 16s linear;
+}
+
+.slide.on {
+  opacity: 1;
+  transform: scale(1.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slide {
+    transition: opacity 0.6s ease;
+    transform: none;
+  }
+
+  .slide.on {
+    transform: none;
+  }
 }
 
 /* ---------- Hero ---------- */
@@ -554,8 +589,7 @@
 @media (max-width: 960px) {
   .stage-photo {
     background:
-      linear-gradient(180deg, rgba(14, 12, 10, 0.92) 0%, rgba(14, 12, 10, 0.75) 55%, rgba(14, 12, 10, 0.92) 100%),
-      url('/assets/images/bar/pub-hall.jpg') center / cover no-repeat;
+      linear-gradient(180deg, rgba(14, 12, 10, 0.92) 0%, rgba(14, 12, 10, 0.75) 55%, rgba(14, 12, 10, 0.92) 100%);
   }
 }
 

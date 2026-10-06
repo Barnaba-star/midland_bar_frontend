@@ -701,29 +701,34 @@ a.sv-btn {
   min-height: clamp(230px, 24vw, 300px);
 }
 
+/* No boxes: the words sit on the photo, in a hand-written face - the customer
+   on the right, BaronixTZ (with its mark) on the left. */
 .bubble {
   max-width: 88%;
-  padding: 14px 18px;
-  border-radius: 20px;
+  padding: 2px 0;
   animation: bubble-in 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 
 @keyframes bubble-in {
-  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: none; }
 }
 
 .bubble p {
-  margin: 4px 0 0;
-  font-family: var(--display);
-  line-height: 1.4;
+  margin: 2px 0 0;
+  font-family: 'Kalam', 'Poppins', cursive;
+  font-weight: 700;
+  line-height: 1.35;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.85), 0 1px 3px rgba(0, 0, 0, 0.6);
 }
 
 .bubble .who {
-  font-size: 12px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.04em;
-  opacity: 0.75;
+  opacity: 0.8;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8);
 }
 
 .bubble .who em {
@@ -731,41 +736,34 @@ a.sv-btn {
   color: var(--amber);
 }
 
-/* The customer, on the right, in a light bubble. */
 .bubble.customer {
   align-self: flex-end;
-  border-bottom-right-radius: 6px;
-  background: var(--cream);
-  color: #1a1206;
+  text-align: right;
+  color: #e3d8c6;
 }
 
 .bubble.customer p {
-  font-size: clamp(16px, 1.7vw, 22px);
-  font-weight: 600;
+  font-size: clamp(19px, 2vw, 27px);
 }
 
-/* BaronixTZ, on the left, with its mark - the one who helps. */
 .bubble.baronix {
   align-self: flex-start;
   display: flex;
   gap: 12px;
   align-items: flex-start;
-  border: 1px solid rgba(245, 165, 36, 0.45);
-  border-bottom-left-radius: 6px;
-  background: rgba(14, 12, 10, 0.78);
-  backdrop-filter: blur(6px);
   color: var(--cream);
 }
 
 .bubble.baronix .avatar {
   flex-shrink: 0;
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
+  margin-top: 2px;
 }
 
 .bubble.baronix p {
-  font-size: clamp(17px, 1.9vw, 25px);
-  font-weight: 600;
+  font-size: clamp(21px, 2.4vw, 32px);
+  color: #fff3d6;
 }
 
 .answer-in {

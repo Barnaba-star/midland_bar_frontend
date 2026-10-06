@@ -257,9 +257,11 @@
 }
 
 .ticket-logo {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
+  /* The crowned B on its own (BrandWord [mark]); it sizes with the font. */
+  display: inline-flex;
+  align-items: center;
+  font-size: 38px;
+  line-height: 1;
 }
 
 .brand-title {

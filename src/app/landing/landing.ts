@@ -1,3 +1,4 @@
+import { BrandWord } from '../Utils/component/brand-word/brand-word';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnDestroy, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatIconModule } from '@angular/material/icon';
@@ -7,7 +8,7 @@ import { TypedService } from './typed-service/typed-service';
 
 @Component({
   selector: 'app-landing',
-  imports: [MatIconModule, TranslatePipe, RouterLink, TypedService],
+  imports: [BrandWord, MatIconModule, TranslatePipe, RouterLink, TypedService],
   templateUrl: './landing.html',
   styleUrl: './landing.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

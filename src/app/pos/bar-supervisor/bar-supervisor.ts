@@ -1,3 +1,4 @@
+import { BrandWord } from '../../Utils/component/brand-word/brand-word';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
@@ -24,7 +25,7 @@ const SOUND_KEY = 'bar_supervisor_sound';
  */
 @Component({
   selector: 'app-bar-supervisor',
-  imports: [MatIconModule, DecimalPipe, DatePipe, TranslatePipe],
+  imports: [BrandWord, MatIconModule, DecimalPipe, DatePipe, TranslatePipe],
   templateUrl: './bar-supervisor.html',
   styleUrl: './bar-supervisor.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

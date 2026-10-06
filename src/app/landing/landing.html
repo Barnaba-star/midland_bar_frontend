@@ -15,8 +15,7 @@
     <!-- ================= NAV ================= -->
     <nav class="nav">
       <a class="brand" [routerLink]="[]" aria-label="BaronixTZ">
-        <img src="assets/images/baronix-b.svg" alt="" class="brand-mark">
-        <span class="brand-name">Baronix<em>TZ</em></span>
+        <span class="brand-name"><app-brand-word /></span>
       </a>
       <!-- Every title on the page, one tap away. On a phone they fold into Menyu. -->
       <ul class="nav-links" [class.open]="menuOpen" id="landing-menu">
@@ -49,7 +48,7 @@
         <!-- Someone heard the name: "BaronixTZ ➜ <a question>", and the answer below it, pair after pair. -->
         <div class="ask" (mouseenter)="holdWhat(true)" (mouseleave)="holdWhat(false)"
              (touchstart)="holdWhat(true)" (touchend)="holdWhat(false)">
-          <h1 class="chat-name">Baronix<em>TZ</em></h1>
+          <h1 class="chat-name"><app-brand-word /></h1>
           <p class="chat-head"><span class="live-dot"></span>{{ 'LANDING.CHAT_HEAD' | translate }}</p>
 
           <!-- A chat: the customer asks BaronixTZ, and BaronixTZ answers like a person who will help. -->
@@ -62,9 +61,8 @@
 
               @if (askDone) {
                 <div class="bubble baronix">
-                  <img src="assets/images/baronix-b.svg" alt="" class="avatar">
                   <div>
-                    <span class="who">Baronix<em>TZ</em></span>
+                    <span class="who"><app-brand-word /></span>
                     @if (answerShown) {
                       <p class="answer-in">{{ w.a | translate }}</p>
                       <!-- A little picture for each answer (sample figures, to show the idea). -->
@@ -418,8 +416,7 @@
   @if (!home) {
   <footer class="footer">
     <div class="brand">
-      <img src="assets/images/baronix-b.svg" alt="" class="brand-mark small">
-      <span class="brand-name">Baronix<em>TZ</em></span>
+      <span class="brand-name"><app-brand-word /></span>
     </div>
     <span>&copy; {{ currentYear }} BaronixTZ. {{ 'LANDING.ALL_RIGHTS_RESERVED' | translate }}</span>
   </footer>

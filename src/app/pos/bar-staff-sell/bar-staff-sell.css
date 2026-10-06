@@ -54,10 +54,11 @@
 }
 
 .module-logo {
-  width: 34px;
-  height: 34px;
-  border-radius: 9px;
-  object-fit: contain;
+  /* The crowned B on its own (BrandWord [mark]); it sizes with the font. */
+  display: inline-flex;
+  align-items: center;
+  font-size: 30px;
+  line-height: 1;
 }
 
 .module-name {

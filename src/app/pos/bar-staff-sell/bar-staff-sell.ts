@@ -1,3 +1,4 @@
+import { BrandWord } from '../../Utils/component/brand-word/brand-word';
 import { PaymentNoteDialog } from '../../Utils/component/dialogs/payment-note-dialog/payment-note-dialog';
 import { SellableItems } from '../../Utils/services/sellable-items';
 import { OfflineService } from '../../Utils/offline/offline.service';
@@ -43,7 +44,7 @@ import { SalesOpened, StaffOrder, StaffSellStaff } from '../BarModel';
  */
 @Component({
   selector: 'app-bar-staff-sell',
-  imports: [ShiftBar, EmptyStateComponent, MatIconModule, FormsModule, DecimalPipe, TranslatePipe],
+  imports: [BrandWord, ShiftBar, EmptyStateComponent, MatIconModule, FormsModule, DecimalPipe, TranslatePipe],
   templateUrl: './bar-staff-sell.html',
   styleUrl: './bar-staff-sell.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -7,7 +7,7 @@
       </button>
     }
     <div class="sup-brand">
-      <img src="assets/images/baronix-b.svg" alt="" class="sup-logo">
+      <span class="sup-logo"><app-brand-word [mark]="true" /></span>
       <span class="sup-name">{{ pageTitle | translate }}</span>
       @if (orders.length) {
         <span class="sup-count">{{ orders.length }}</span>

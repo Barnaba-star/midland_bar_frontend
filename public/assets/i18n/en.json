@@ -540,11 +540,11 @@
     "STAFF_DEVICE_NOT_REGISTERED": "This device is not set up for staff sign-in yet. A manager or cashier of the bar must sign in on it once first."
   },
   "LANDING": {
-    "HERO_BADGE": "Bar management, as a service",
-    "HERO_LINE1": "Your bar's manager",
-    "HERO_LINE2": "is on duty",
-    "HERO_LINE3": "every night.",
-    "HERO_SUBTITLE": "No need to look for a manager from far away. Baronix runs your bar: it checks every order before a drink leaves the counter, counts the stock, takes each waiter's handover and sets aside money for TRA, rent and new stock — and you see it all on your phone, wherever you are.",
+    "HERO_BADGE": "Bar Online Management & Supervision",
+    "HERO_LINE1": "BaronixTZ:",
+    "HERO_LINE2": "the answer to",
+    "HERO_LINE3": "running a bar.",
+    "HERO_SUBTITLE": "BaronixTZ — Bar Online Management & Supervision — manages and supervises your bar online. Once you join, Baronix takes over the managing: it checks every order, counts the stock, takes the waiters' handovers and sets aside money for costs — and you see it all on your phone, wherever you are.",
     "GET_STARTED": "Sign in to Baronix",
     "SEE_HOW": "See how Baronix manages",
     "NIGHT_EYEBROW": "A manager's job",

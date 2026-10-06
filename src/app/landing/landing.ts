@@ -42,7 +42,7 @@ export class Landing implements OnInit, OnDestroy {
   private static readonly ASK_CHAR_MS = 32;
   /** How long BaronixTZ shows "typing…" before its answer. */
   private static readonly TYPING_MS = 1100;
-  readonly whats = Array.from({ length: 6 }, (_, i) => ({
+  readonly whats = Array.from({ length: 10 }, (_, i) => ({
     q: `LANDING.ASK${i + 1}_Q`,
     a: `LANDING.ASK${i + 1}_A`,
   }));
@@ -88,6 +88,11 @@ export class Landing implements OnInit, OnDestroy {
     { name: 'Konyagi', pct: 40, up: true }, { name: 'Soda', pct: 22, up: false },
   ];
   readonly visSpark = [30, 45, 38, 60, 52, 74, 88];
+  readonly visHandover = [
+    { label: 'LANDING.VIS_CASH', amount: '45,000', pct: 100 },
+    { label: 'Tigo Pesa', amount: '12,000', pct: 27 },
+    { label: 'M-Pesa', amount: '8,000', pct: 18 },
+  ];
   readonly visRoles = [
     { icon: 'military_tech', label: 'LANDING.VIS_PREFECT' }, { icon: 'bolt', label: 'LANDING.VIS_EXEC' },
     { icon: 'hub', label: 'LANDING.VIS_COORD' }, { icon: 'lightbulb', label: 'LANDING.VIS_ADVISER' },

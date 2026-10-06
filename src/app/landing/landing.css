@@ -1015,7 +1015,54 @@ a.sv-btn {
   animation: bubble-in 0.4s ease both;
 }
 
+.vis .ok-icon { color: #4ade80; }
+.vis .warn-icon { color: #ef4444; }
+
+/* 10 - four steps and the free month */
+.vis-steps {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.vis-steps span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px 5px 5px;
+  border-radius: 999px;
+  background: rgba(246, 236, 220, 0.1);
+  font-size: 13px;
+  font-weight: 600;
+  animation: bubble-in 0.4s ease both;
+}
+
+.vis-steps b {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--amber);
+  color: #1a1206;
+  font-size: 12px;
+}
+
+.vis-free {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-style: normal;
+  font-size: 14px;
+  font-weight: 700;
+  color: #4ade80;
+}
+
+.vis-free mat-icon { color: #4ade80; }
+
 @media (prefers-reduced-motion: reduce) {
+  .vis-steps span { animation: none; }
   .vis, .vis-spark i, .vis-col i, .vis-pl-row i, .vis-flow span, .vis-roles span, .vis-col em {
     animation: none;
   }

@@ -127,6 +127,40 @@
                               }
                             </div>
                           }
+                          @case (6) {
+                            <div class="vis-flow">
+                              <span style="--d:0ms"><mat-icon>room_service</mat-icon>{{ 'LANDING.VIS_WAITER' | translate }}</span><mat-icon class="arrow">east</mat-icon>
+                              <span style="--d:300ms"><mat-icon>local_bar</mat-icon>{{ 'LANDING.VIS_COUNTER' | translate }}</span>
+                              <span style="--d:450ms"><mat-icon>restaurant</mat-icon>{{ 'LANDING.VIS_KITCHEN' | translate }}</span><mat-icon class="arrow">east</mat-icon>
+                              <span style="--d:700ms"><mat-icon class="ok-icon">task_alt</mat-icon>{{ 'LANDING.VIS_CONFIRM' | translate }}</span>
+                            </div>
+                          }
+                          @case (7) {
+                            <div class="vis-pl">
+                              @for (h of visHandover; track h.label) {
+                                <div class="vis-pl-row">
+                                  <small>{{ h.label | translate }}</small>
+                                  <span><i [style.width.%]="h.pct" [style.animation-delay.ms]="$index * 110"></i></span>
+                                  <b>{{ h.amount }}</b>
+                                </div>
+                              }
+                            </div>
+                          }
+                          @case (8) {
+                            <div class="vis-flow">
+                              <span style="--d:0ms"><mat-icon class="warn-icon">wifi_off</mat-icon>{{ 'LANDING.VIS_OFFLINE' | translate }}</span><mat-icon class="arrow">east</mat-icon>
+                              <span style="--d:300ms"><mat-icon>point_of_sale</mat-icon>{{ 'LANDING.VIS_TODAY_SALES' | translate }}</span><mat-icon class="arrow">east</mat-icon>
+                              <span style="--d:600ms"><mat-icon class="ok-icon">cloud_done</mat-icon>{{ 'LANDING.VIS_SAVED' | translate }}</span>
+                            </div>
+                          }
+                          @case (9) {
+                            <div class="vis-steps">
+                              @for (st of ['LANDING.VIS_S1', 'LANDING.VIS_S2', 'LANDING.VIS_S3', 'LANDING.VIS_S4']; track st) {
+                                <span [style.animation-delay.ms]="$index * 150"><b>{{ $index + 1 }}</b>{{ st | translate }}</span>
+                              }
+                              <em class="vis-free"><mat-icon>card_giftcard</mat-icon>{{ 'LANDING.VIS_FREE' | translate }}</em>
+                            </div>
+                          }
                         }
                       </div>
                     } @else {

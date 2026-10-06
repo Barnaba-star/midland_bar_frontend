@@ -352,15 +352,12 @@ input.mat-input-element:-webkit-autofill {
 @media (max-width: 900px) {
   .login-page {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto 1fr;
+    grid-template-rows: 1fr;
   }
 
+  /* On a phone the form comes first: no photo panel to scroll past (the ticket carries the logo). */
   .login-panel {
-    justify-content: flex-start;
-    gap: 20px;
-    padding: 20px 16px 0;
-    border-right: none;
-    border-bottom: 1px solid var(--line);
+    display: none;
   }
 
   .panel-title {

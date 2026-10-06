@@ -57,9 +57,10 @@
           <div class="ask-answer" aria-live="polite">
             @if (askDone) {
               @for (w of [what]; track whatIndex) {
+                @let answer = w.a | translate;
                 <div class="ask-a">
-                  <p class="ask-a-main">{{ w.a | translate }}</p>
-                  <p class="ask-a-line">{{ w.l | translate }}</p>
+                  <!-- The answers are whole sentences: a long one sits a size smaller. -->
+                  <p class="ask-a-main" [class.long]="answer.length > 80">{{ answer }}</p>
                 </div>
               }
             }

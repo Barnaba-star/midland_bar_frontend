@@ -437,14 +437,19 @@
 
 .ask-a-main {
   margin: 0;
-  max-width: 22ch;
+  max-width: 26ch;
   font-family: var(--display);
-  font-size: clamp(36px, 5.6vw, 88px);
+  font-size: clamp(30px, 4.6vw, 72px);
   font-weight: 700;
   line-height: 1.02;
   letter-spacing: -0.01em;
   color: var(--cream);
   text-shadow: 0 6px 40px rgba(0, 0, 0, 0.6);
+}
+
+.ask-a-main.long {
+  max-width: 32ch;
+  font-size: clamp(26px, 3.6vw, 56px);
 }
 
 .ask-a-line {

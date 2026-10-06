@@ -40,10 +40,9 @@ export class Landing implements OnInit, OnDestroy {
   readonly whatMs = 11000;
   /** Milliseconds per letter while a question writes itself out. */
   private static readonly ASK_CHAR_MS = 32;
-  readonly whats = Array.from({ length: 10 }, (_, i) => ({
+  readonly whats = Array.from({ length: 6 }, (_, i) => ({
     q: `LANDING.ASK${i + 1}_Q`,
     a: `LANDING.ASK${i + 1}_A`,
-    l: `LANDING.ASK${i + 1}_L`,
   }));
   whatIndex = 0;
   /** Held while a finger or pointer is on it, so the reader can finish. */

@@ -12,7 +12,7 @@
   --muted: #a89c8a;
   --amber: #f5a524;
   --amber-2: #ffc861;
-  --display: 'Oswald', 'Bebas Neue', Impact, sans-serif;
+  --display: 'Poppins', 'Oswald', sans-serif;
 
   min-height: 100vh;
   background: var(--ink);
@@ -148,8 +148,8 @@
 }
 
 .brand-name {
-  font-family: 'Oswald', var(--display);
-  font-weight: 700;
+  font-family: 'Poppins', 'Oswald', sans-serif;
+  font-weight: 800;
   text-transform: none;
   font-size: 26px;
   letter-spacing: 0.01em;
@@ -397,8 +397,8 @@
 }
 
 .ask-name {
-  font-size: clamp(48px, 7.5vw, 112px);
-  font-weight: 700;
+  font-size: clamp(38px, 5.6vw, 84px);
+  font-weight: 800;
   letter-spacing: -0.01em;
   color: var(--cream);
   text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
@@ -420,7 +420,7 @@
   flex-shrink: 0;
   width: auto;
   height: auto;
-  font-size: clamp(32px, 4.4vw, 64px);
+  font-size: clamp(26px, 3.4vw, 48px);
   line-height: 1;
   color: var(--amber);
   animation: nudge 1.6s ease-in-out infinite;
@@ -432,7 +432,7 @@
 }
 
 .ask-q {
-  font-size: clamp(26px, 3.6vw, 54px);
+  font-size: clamp(20px, 2.6vw, 38px);
   font-weight: 500;
   color: var(--amber);
 }
@@ -473,19 +473,19 @@
 
 .ask-a-main {
   margin: 0;
-  max-width: 26ch;
+  max-width: 34ch;
   font-family: var(--display);
-  font-size: clamp(24px, 3vw, 44px);
+  font-size: clamp(20px, 2.4vw, 34px);
   font-weight: 700;
-  line-height: 1.02;
+  line-height: 1.15;
   letter-spacing: -0.01em;
   color: var(--cream);
   text-shadow: 0 6px 40px rgba(0, 0, 0, 0.6);
 }
 
 .ask-a-main.long {
-  max-width: 32ch;
-  font-size: clamp(20px, 2.5vw, 36px);
+  max-width: 42ch;
+  font-size: clamp(18px, 2vw, 28px);
 }
 
 .ask-a-line {

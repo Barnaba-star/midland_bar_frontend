@@ -69,7 +69,10 @@
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>{{ 'COMMON.PASSWORD' | translate }}</mat-label>
         <mat-icon matPrefix>lock</mat-icon>
-        <input matInput formControlName="password" [type]="showPassword ? 'text' : 'password'" autocomplete="current-password">
+        <!-- A staff code (3 digits) above: the PIN box opens the number pad, and no saved password is filled in. -->
+        <input matInput formControlName="password" [type]="showPassword ? 'text' : 'password'"
+               [attr.inputmode]="staffMode ? 'numeric' : null"
+               [attr.autocomplete]="staffMode ? 'off' : 'current-password'">
         <button mat-icon-button matSuffix type="button" (click)="showPassword = !showPassword" [attr.aria-label]="(showPassword ? 'LOGIN.HIDE_PASSWORD' : 'LOGIN.SHOW_PASSWORD') | translate">
           <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>

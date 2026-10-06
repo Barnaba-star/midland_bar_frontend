@@ -12,6 +12,9 @@
   <meta name="theme-color" content="#2b2118">
   <!-- Installable, and opens without internet once loaded (service worker in production builds). -->
   <link rel="manifest" href="manifest.webmanifest">
+  <!-- Open the line to the API while the page loads: the first sign-in skips the handshake. -->
+  <link rel="preconnect" href="https://api.baronixtz.com" crossorigin>
+  <link rel="dns-prefetch" href="https://api.baronixtz.com">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">

@@ -98,6 +98,11 @@ private forcePasswordChange(): void {
   });
 }
 
+/** Three digits in the username box: a staff member signing in with their code and PIN. */
+get staffMode(): boolean {
+  return /^\d{3}$/.test(String(this.loginForm?.value?.username ?? '').trim());
+}
+
 /** branchUID: the branch chosen by a user of several - sent on the second try, after CHOOSE_BRANCH. */
 onSubmit(branchUID?: string) {
   // Three digits in the username box is a staff code: the PIN goes in the

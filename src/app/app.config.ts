@@ -6,7 +6,7 @@ import {
   provideZonelessChangeDetection
 } from '@angular/core';
 
-import { provideRouter } from '@angular/router';
+import { PreloadAllModules, provideRouter, withPreloading } from '@angular/router';
 import { provideServiceWorker } from '@angular/service-worker';
 
 import {
@@ -42,7 +42,9 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideNativeDateAdapter(),
 
-    provideRouter(routes),
+    // Every page's code is fetched in the background once the app is up, so
+    // after signing in Staff Sell, POS... open without a wait.
+    provideRouter(routes, withPreloading(PreloadAllModules)),
 
     // Keeps the app's own files on the device so it opens without internet.
     // Production builds only - ng serve has no service worker.

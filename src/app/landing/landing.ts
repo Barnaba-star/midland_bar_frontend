@@ -177,7 +177,7 @@ export class Landing implements OnInit, OnDestroy {
     this.route.fragment.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((f) => {
       this.view = f && this.views.has(f) ? f : 'home';
       if (this.view === 'huduma') {
-        this.showService(0);
+        this.showService(0, true);
       }
       this.menuOpen = false;
       if (typeof window !== 'undefined') {
@@ -199,13 +199,16 @@ export class Landing implements OnInit, OnDestroy {
   readonly svMs = 18000;
   svIndex = 0;
   svPaused = false;
+  /** Opening the tab: the first service is already written out, to read at once. */
+  svInstant = false;
   private svTimer: ReturnType<typeof setInterval> | null = null;
 
   get service() {
     return this.services[this.svIndex];
   }
 
-  showService(i: number): void {
+  showService(i: number, instant = false): void {
+    this.svInstant = instant;
     this.svIndex = (i + this.services.length) % this.services.length;
     this.restartSvTimer();
     this.cdr.markForCheck();
@@ -224,6 +227,7 @@ export class Landing implements OnInit, OnDestroy {
     }
     this.svTimer = setInterval(() => {
       if (!this.svPaused && this.view === 'huduma') {
+        this.svInstant = false;
         this.svIndex = (this.svIndex + 1) % this.services.length;
         this.cdr.markForCheck();
       }
@@ -232,20 +236,35 @@ export class Landing implements OnInit, OnDestroy {
 
   /** What Baronix does, one card per service, each with what it really covers. */
   readonly services = [
-    { icon: 'account_balance_wallet', key: 'SV1' },
-    { icon: 'point_of_sale', key: 'SV2' },
-    { icon: 'fact_check', key: 'SV3' },
-    { icon: 'inventory_2', key: 'SV4' },
-    { icon: 'groups', key: 'SV5' },
-    { icon: 'payments', key: 'SV6' },
-    { icon: 'query_stats', key: 'SV7' },
-    { icon: 'storefront', key: 'SV8' },
+    { icon: 'account_balance_wallet', key: 'SV1', n: 2 },
+    { icon: 'point_of_sale', key: 'SV2', n: 3 },
+    { icon: 'fact_check', key: 'SV3', n: 3 },
+    { icon: 'inventory_2', key: 'SV4', n: 4 },
+    { icon: 'groups', key: 'SV5', n: 3 },
+    { icon: 'payments', key: 'SV6', n: 4 },
+    { icon: 'query_stats', key: 'SV7', n: 4 },
+    { icon: 'storefront', key: 'SV8', n: 4 },
   ].map((s) => ({
     icon: s.icon,
     title: `LANDING.${s.key}_T`,
     desc: `LANDING.${s.key}_D`,
-    bullets: [1, 2, 3, 4].map((n) => `LANDING.${s.key}_B${n}`),
+    bullets: Array.from({ length: s.n }, (_, j) => `LANDING.${s.key}_B${j + 1}`),
   }));
+
+  /** A service's points in the current language (one array per language, so the typing is not reset every check). */
+  private bulletCache = new Map<string, string[]>();
+  bulletTexts(i: number): string[] {
+    const key = `${this.translate.currentLang}:${i}`;
+    let texts = this.bulletCache.get(key);
+    if (!texts) {
+      texts = this.services[i].bullets.map((k) => this.translate.instant(k) as string);
+      if (texts.some((t, j) => t === this.services[i].bullets[j])) {
+        return texts; // still loading: keys, not words - try again next check
+      }
+      this.bulletCache.set(key, texts);
+    }
+    return texts;
+  }
 
 
   readonly startSteps = [

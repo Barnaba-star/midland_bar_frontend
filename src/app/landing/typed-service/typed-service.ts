@@ -64,6 +64,8 @@ export class TypedService implements OnInit {
   readonly bullets = input.required<string[]>();
   /** Shown on its own, filling the page (the Huduma tab), not in a list. */
   readonly big = input(false);
+  /** Already written out - no typing (the first service when the tab opens). */
+  readonly instant = input(false);
 
   /** Milliseconds between words: quick enough to read along, slow enough to see it write. */
   private static readonly WORD_MS = 90;
@@ -116,7 +118,8 @@ export class TypedService implements OnInit {
   }
 
   ngOnInit(): void {
-    const still = typeof window === 'undefined'
+    const still = this.instant()
+      || typeof window === 'undefined'
       || typeof IntersectionObserver === 'undefined'
       || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
     if (still) {

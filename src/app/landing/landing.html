@@ -138,11 +138,12 @@
     @for (sv of [service]; track svIndex) {
       <app-typed-service
         [big]="true"
+        [instant]="svInstant"
         [no]="(svIndex + 1 < 10 ? '0' : '') + (svIndex + 1)"
         [icon]="sv.icon"
         [title]="sv.title | translate"
         [desc]="sv.desc | translate"
-        [bullets]="[sv.bullets[0] | translate, sv.bullets[1] | translate, sv.bullets[2] | translate, sv.bullets[3] | translate]" />
+        [bullets]="bulletTexts(svIndex)" />
     }
 
     <div class="sv-nav">

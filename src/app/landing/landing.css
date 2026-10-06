@@ -135,7 +135,7 @@
   border-radius: 8px;
 }
 
-/* Baronix's mark: the crowned pint (assets/images/baronix-mark.svg). */
+/* Baronix's mark: the crowned pint (assets/images/baronix-face.svg). */
 .brand-mark {
   display: block;
   width: 38px;
@@ -716,9 +716,8 @@ a.sv-btn {
 
 .bubble p {
   margin: 2px 0 0;
-  font-family: 'Patrick Hand', 'Poppins', sans-serif;
-  font-weight: 400;
-  letter-spacing: 0.01em;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
   line-height: 1.35;
   text-shadow: 0 2px 18px rgba(0, 0, 0, 0.85), 0 1px 3px rgba(0, 0, 0, 0.6);
 }
@@ -770,12 +769,9 @@ a.sv-btn {
 /* ---------- A little picture under each answer (sample figures) ---------- */
 
 .vis {
-  margin-top: 12px;
-  padding: 12px 14px;
+  margin-top: 14px;
   max-width: 440px;
-  border-radius: 14px;
-  background: rgba(14, 12, 10, 0.55);
-  backdrop-filter: blur(4px);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.85);
   font-family: 'Poppins', sans-serif;
   color: var(--cream);
   animation: bubble-in 0.45s ease 0.15s both;
@@ -822,17 +818,15 @@ a.sv-btn {
 }
 
 .vis-screen {
-  width: 150px;
-  padding: 10px 12px;
-  border: 2px solid rgba(246, 236, 220, 0.35);
-  border-radius: 16px;
-  background: rgba(0, 0, 0, 0.35);
+  width: 170px;
 }
 
 .vis-screen small {
-  display: block;
-  font-size: 10px;
-  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #e3d8c6;
 }
 
 .vis-screen strong {
@@ -966,7 +960,7 @@ a.sv-btn {
 .vis-pl-row span {
   height: 10px;
   border-radius: 999px;
-  background: rgba(246, 236, 220, 0.12);
+  background: rgba(246, 236, 220, 0.18);
   overflow: hidden;
 }
 

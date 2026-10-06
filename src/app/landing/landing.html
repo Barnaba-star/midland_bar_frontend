@@ -49,22 +49,28 @@
         <!-- Someone heard the name: "BaronixTZ ➜ <a question>", and the answer below it, pair after pair. -->
         <div class="ask" (mouseenter)="holdWhat(true)" (mouseleave)="holdWhat(false)"
              (touchstart)="holdWhat(true)" (touchend)="holdWhat(false)">
-          <h1 class="ask-line">
-            <span class="ask-name">Baronix<em>TZ</em></span>
-            <!-- The arrow and its question travel together: if the line wraps, both move down. -->
-            <span class="ask-tail">
-              <mat-icon class="hero-arrow" aria-hidden="true">arrow_forward</mat-icon>
-              <span class="ask-q">{{ askTyped }}<i class="ask-caret" [class.done]="askDone"></i></span>
-            </span>
-          </h1>
+          <h1 class="chat-name">Baronix<em>TZ</em></h1>
+          <p class="chat-head"><span class="live-dot"></span>{{ 'LANDING.CHAT_HEAD' | translate }}</p>
 
-          <div class="ask-answer" aria-live="polite">
-            @if (askDone) {
-              @for (w of [what]; track whatIndex) {
-                @let answer = w.a | translate;
-                <div class="ask-a">
-                  <!-- The answers are whole sentences: a long one sits a size smaller. -->
-                  <p class="ask-a-main" [class.long]="answer.length > 80">{{ answer }}</p>
+          <!-- A chat: the customer asks BaronixTZ, and BaronixTZ answers like a person who will help. -->
+          <div class="chat" aria-live="polite">
+            @for (w of [what]; track whatIndex) {
+              <div class="bubble customer">
+                <span class="who">{{ 'LANDING.CHAT_CUSTOMER' | translate }}</span>
+                <p>{{ askTyped }}<i class="ask-caret" [class.done]="askDone"></i></p>
+              </div>
+
+              @if (askDone) {
+                <div class="bubble baronix">
+                  <img src="assets/images/baronix-mark.svg" alt="" class="avatar">
+                  <div>
+                    <span class="who">Baronix<em>TZ</em></span>
+                    @if (answerShown) {
+                      <p class="answer-in">{{ w.a | translate }}</p>
+                    } @else {
+                      <p class="typing" [attr.aria-label]="'LANDING.CHAT_TYPING' | translate"><i></i><i></i><i></i></p>
+                    }
+                  </div>
                 </div>
               }
             }

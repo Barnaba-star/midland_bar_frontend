@@ -40,6 +40,8 @@ export class Landing implements OnInit, OnDestroy {
   readonly whatMs = 15000;
   /** Milliseconds per letter while a question writes itself out. */
   private static readonly ASK_CHAR_MS = 32;
+  /** How long BaronixTZ shows "typing…" before its answer. */
+  private static readonly TYPING_MS = 1100;
   readonly whats = Array.from({ length: 6 }, (_, i) => ({
     q: `LANDING.ASK${i + 1}_Q`,
     a: `LANDING.ASK${i + 1}_A`,
@@ -65,6 +67,9 @@ export class Landing implements OnInit, OnDestroy {
   /** How much of the question is written so far; the answer comes once it is all there. */
   askTyped = '';
   askDone = false;
+  /** The answer bubble, after a moment of "typing…" once the question is in. */
+  answerShown = false;
+  private answerTimer: ReturnType<typeof setTimeout> | null = null;
   private whatTimer: ReturnType<typeof setInterval> | null = null;
   private askTimer: ReturnType<typeof setInterval> | null = null;
   private translate = inject(TranslateService);
@@ -91,11 +96,17 @@ export class Landing implements OnInit, OnDestroy {
       clearInterval(this.askTimer);
       this.askTimer = null;
     }
+    if (this.answerTimer) {
+      clearTimeout(this.answerTimer);
+      this.answerTimer = null;
+    }
+    this.answerShown = false;
     const full = this.translate.instant(this.what.q) as string;
     const still = typeof window === 'undefined' || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
     if (still || !full || full === this.what.q) {
       this.askTyped = full;
       this.askDone = true;
+      this.answerShown = true;
       this.cdr.markForCheck();
       return;
     }
@@ -109,6 +120,12 @@ export class Landing implements OnInit, OnDestroy {
         this.askDone = true;
         clearInterval(this.askTimer!);
         this.askTimer = null;
+        // BaronixTZ "types" for a moment, then answers - like a person in a chat.
+        this.answerTimer = setTimeout(() => {
+          this.answerShown = true;
+          this.answerTimer = null;
+          this.cdr.markForCheck();
+        }, Landing.TYPING_MS);
       }
       this.cdr.markForCheck();
     }, Landing.ASK_CHAR_MS);
@@ -137,6 +154,9 @@ export class Landing implements OnInit, OnDestroy {
     }
     if (this.askTimer) {
       clearInterval(this.askTimer);
+    }
+    if (this.answerTimer) {
+      clearTimeout(this.answerTimer);
     }
     if (this.svTimer) {
       clearInterval(this.svTimer);

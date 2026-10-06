@@ -665,6 +665,150 @@ a.sv-btn {
   }
 }
 
+/* ---------- Mwanzo as a chat: the customer asks, BaronixTZ answers ---------- */
+
+.chat-name {
+  margin: 12px 0 6px;
+  font-family: var(--display);
+  font-size: clamp(38px, 5.6vw, 84px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--cream);
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+.chat-name em {
+  font-style: normal;
+  color: var(--amber);
+}
+
+.chat-head {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 18px;
+  color: var(--amber);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 760px;
+  min-height: clamp(230px, 24vw, 300px);
+}
+
+.bubble {
+  max-width: 88%;
+  padding: 14px 18px;
+  border-radius: 20px;
+  animation: bubble-in 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes bubble-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+
+.bubble p {
+  margin: 4px 0 0;
+  font-family: var(--display);
+  line-height: 1.4;
+}
+
+.bubble .who {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  opacity: 0.75;
+}
+
+.bubble .who em {
+  font-style: normal;
+  color: var(--amber);
+}
+
+/* The customer, on the right, in a light bubble. */
+.bubble.customer {
+  align-self: flex-end;
+  border-bottom-right-radius: 6px;
+  background: var(--cream);
+  color: #1a1206;
+}
+
+.bubble.customer p {
+  font-size: clamp(16px, 1.7vw, 22px);
+  font-weight: 600;
+}
+
+/* BaronixTZ, on the left, with its mark - the one who helps. */
+.bubble.baronix {
+  align-self: flex-start;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  border: 1px solid rgba(245, 165, 36, 0.45);
+  border-bottom-left-radius: 6px;
+  background: rgba(14, 12, 10, 0.78);
+  backdrop-filter: blur(6px);
+  color: var(--cream);
+}
+
+.bubble.baronix .avatar {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+}
+
+.bubble.baronix p {
+  font-size: clamp(17px, 1.9vw, 25px);
+  font-weight: 600;
+}
+
+.answer-in {
+  animation: bubble-in 0.4s ease both;
+}
+
+/* "typing…" - three dots that bounce. */
+.typing {
+  display: flex;
+  gap: 6px;
+  padding: 8px 0 4px;
+}
+
+.typing i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--amber);
+  animation: dot 1s ease-in-out infinite;
+}
+
+.typing i:nth-child(2) { animation-delay: 0.15s; }
+.typing i:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes dot {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+  30% { transform: translateY(-6px); opacity: 1; }
+}
+
+@media (max-width: 600px) {
+  .bubble {
+    max-width: 94%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bubble,
+  .answer-in,
+  .typing i {
+    animation: none;
+  }
+}
+
 /* ---------- Head of every tab: its title, biggest on the page ---------- */
 
 .page-head {

@@ -2410,7 +2410,6 @@
     "APPLE": "App ni ya simu za Android kwa sasa. Kwenye iPhone tumia website hii kama kawaida.",
     "BUTTON": "Pakua kwa Android",
     "VERSION": "Toleo {{v}}",
-    "OLDER": "Simu ya zamani? Pakua toleo hili ({{mb}} MB)",
     "S1_T": "Pakua",
     "S1_D": "Gusa kitufe cha Pakua. Faili (APK) litaingia kwenye Downloads za simu.",
     "S2_T": "Ruhusu kusakinisha",
@@ -2420,6 +2419,7 @@
     "S4_T": "Ingia",
     "S4_D": "Fungua BaronixTZ uingie kwa jina na neno la siri lako, au code na PIN kwa mhudumu.",
     "BACK": "Rudi Mwanzo",
-    "NAV": "Pakua App"
+    "NAV": "Pakua App",
+    "ALL_PHONES": "Inafanya kazi kwenye simu zote za Android, mpya na za zamani"
   }
 }

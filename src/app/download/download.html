@@ -19,10 +19,7 @@
         {{ 'DOWNLOAD.BUTTON' | translate }}
         <span class="size">{{ main.mb }} MB</span>
       </a>
-      <p class="meta">
-        {{ 'DOWNLOAD.VERSION' | translate: { v: version } }} ·
-        <a [href]="older.href" download>{{ 'DOWNLOAD.OLDER' | translate: { mb: older.mb } }}</a>
-      </p>
+      <p class="meta">{{ 'DOWNLOAD.VERSION' | translate: { v: version } }} · {{ 'DOWNLOAD.ALL_PHONES' | translate }}</p>
     </div>
 
     <ol class="steps">

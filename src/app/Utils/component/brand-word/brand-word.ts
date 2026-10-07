@@ -2,16 +2,16 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 /**
  * The BaronixTZ logo, which is the word itself - the same as the Android
- * app's: a big crowned B, then "aronix" and an amber "TZ" level with the
+ * app's: a big B, then "aronix" and an amber "TZ" level with the
  * middle of the B. The T is drawn, not typed: a heavy bar that runs on over
  * the Z to end with it, on a straight stem of the same weight. The x's "/"
- * stroke is long, rising far above the letter and running down below the
- * line, thinning to a point at each end; the r's arm runs on over the o
- * to a point by the n.
+ * stroke rises far above the letter to a point and, below the line, bends
+ * left and runs under the word to a point by the B. The r is gold, its arm
+ * running on over the o to a point by the n.
  *
- * The B takes the colour of the text around it, the crown stays amber; it
- * sizes with the font. With [mark]="true" only the crowned B is drawn, at
- * cap height - for headers that show a page title beside it.
+ * The B takes the colour of the text around it and sizes with the font.
+ * With [mark]="true" only the B is drawn, at cap height - for headers that
+ * show a page title beside it.
  *
  * Measurements are Poppins ExtraBold's (the logo always uses it), in em:
  * an inline box's content area starts 1.05em above the baseline (the
@@ -22,11 +22,10 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { role: 'img', 'aria-label': 'BaronixTZ', '[class.bw-mark]': 'mark()' },
   template: `
-    <svg class="bw-b" viewBox="18 5 30 48" aria-hidden="true">
-      <path d="M22 15.5 20.6 9l4.9 3.4L32 6.5l6.5 5.9L43.4 9 42 15.5z" fill="#f5a524"/>
+    <svg class="bw-b" viewBox="18 19 30 34" aria-hidden="true">
       <path fill="currentColor" fill-rule="evenodd"
             d="M19 19h15.5c6.4 0 10.5 3.4 10.5 8.6 0 3.2-1.6 5.6-4.3 6.9 3.7 1.2 5.8 4 5.8 7.8 0 6-4.6 9.7-11.6 9.7H19zm8 6.6v6.5h6.8c2.4 0 3.8-1.2 3.8-3.2s-1.4-3.3-3.8-3.3zm0 12.4v7.4h7.8c2.7 0 4.3-1.4 4.3-3.7s-1.6-3.7-4.3-3.7z"/>
-    </svg>@if (!mark()) {<span class="bw-rest" aria-hidden="true"><span class="bw-line">a<span class="bw-r">r<svg class="bw-rs" viewBox="425 -705 795 353"><path d="M430 -566C520 -640 750 -700 900 -700C1050 -700 1150 -660 1215 -600C1130 -625 1030 -640 900 -640C750 -640 560 -610 480 -500C455 -460 438 -400 430 -357Z"/></svg></span>oni<span class="bw-x">x<svg class="bw-xs" viewBox="-275 -1011 1110 1561"><path d="M10 0L-268.6 550L225 0L619 -561L827.4 -1011L404 -561Z"/></svg></span><span class="bw-tz"><i class="bw-bar"></i><span class="bw-t">T<i class="bw-stem"></i></span><em>Z</em></span></span></span>}
+    </svg>@if (!mark()) {<span class="bw-rest" aria-hidden="true"><span class="bw-line">a<span class="bw-r">r<svg class="bw-rs" viewBox="425 -705 795 353"><path d="M430 -566C520 -640 750 -700 900 -700C1050 -700 1150 -660 1215 -600C1130 -625 1030 -640 900 -640C750 -640 560 -610 480 -500C455 -460 438 -400 430 -357Z"/></svg></span>oni<span class="bw-x">x<svg class="bw-xs" viewBox="-2760 -1220 3740 1580"><path d="M404 -561L967.8 -1211L619 -561L225 0C160 120 -330 215 -600 225C-1500 250 -2297 285 -2747 270C-2297 300 -1500 350 -600 340C-260 330 -120 180 10 0Z"/></svg></span><span class="bw-tz"><i class="bw-bar"></i><span class="bw-t">T<i class="bw-stem"></i></span><em>Z</em></span></span></span>}
   `,
   styles: [`
     :host {
@@ -37,16 +36,12 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
       font-family: 'Poppins', sans-serif;
       font-weight: 800;
     }
-    /* The crowned B stands well above the letters... */
+    /* A big B, the words centred on it. */
     .bw-b {
-      height: 1.8em;
+      height: 1.24em;
       width: auto;
       flex-shrink: 0;
-      margin-right: 0.02em;
-    }
-    /* ...and the words are centred on the B itself, not the B plus crown. */
-    .bw-rest {
-      padding-top: 0.49em;
+      margin-right: 0.04em;
     }
     .bw-line, .bw-tz, .bw-t, .bw-x, .bw-r {
       position: relative;
@@ -81,6 +76,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
        stroke clears the T). */
     .bw-r {
       margin-right: 0.05em;
+      color: #f5a524; /* the r in gold, like its arm */
     }
     .bw-x {
       margin-right: 0.13em;
@@ -94,28 +90,28 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
       left: 0.425em;
       width: 0.795em;
       height: 0.353em;
-      fill: currentColor;
+      fill: #f5a524;
       overflow: visible;
     }
-    /* The x's "/" runs on far above the letter and well below the line, at
-       its own slant (Poppins ExtraBold: 10..225 at the line up to 404..619 at
-       the x-height, in 1/1000 em; here carried 450 higher and 550 lower),
-       full weight across the letter and narrowing to a point at each end. */
+    /* The x's "/" runs on far above the letter to a point (Poppins
+       ExtraBold: 10..225 at the line up to 404..619 at the x-height, in
+       1/1000 em; carried 650 higher). Below the line it bends left and runs
+       under the word, thinning to a point by the B: the x is the tail. */
     .bw-xs {
       position: absolute;
-      top: 0.039em;
-      left: -0.275em;
-      width: 1.11em;
-      height: 1.561em;
+      top: -0.17em;
+      left: -2.76em;
+      width: 3.74em;
+      height: 1.58em;
       fill: currentColor;
       overflow: visible;
     }
-    /* Mark only: the crowned B at cap height, on the text's baseline. */
+    /* Mark only: the B at cap height, on the text's baseline. */
     :host(.bw-mark) {
       align-items: baseline;
     }
     :host(.bw-mark) .bw-b {
-      height: 1.04em;
+      height: 0.74em;
       margin-right: 0.015em;
     }
   `],

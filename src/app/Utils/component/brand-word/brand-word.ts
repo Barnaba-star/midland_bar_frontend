@@ -6,7 +6,8 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
  * middle of the B. The T is drawn, not typed: a heavy bar that runs on over
  * the Z to end with it, on a straight stem of the same weight. Under the
  * word, clear of it, a tail starts at the end of the Z and thins to a point
- * by the B. The x's "/" stroke is long, rising far above the letter.
+ * by the B. The x's "/" stroke is long, rising far above the letter and
+ * cutting down through the tail.
  *
  * The B takes the colour of the text around it, the crown stays amber; it
  * sizes with the font. With [mark]="true" only the crowned B is drawn, at
@@ -25,7 +26,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
       <path d="M22 15.5 20.6 9l4.9 3.4L32 6.5l6.5 5.9L43.4 9 42 15.5z" fill="#f5a524"/>
       <path fill="currentColor" fill-rule="evenodd"
             d="M19 19h15.5c6.4 0 10.5 3.4 10.5 8.6 0 3.2-1.6 5.6-4.3 6.9 3.7 1.2 5.8 4 5.8 7.8 0 6-4.6 9.7-11.6 9.7H19zm8 6.6v6.5h6.8c2.4 0 3.8-1.2 3.8-3.2s-1.4-3.3-3.8-3.3zm0 12.4v7.4h7.8c2.7 0 4.3-1.4 4.3-3.7s-1.6-3.7-4.3-3.7z"/>
-    </svg>@if (!mark()) {<span class="bw-rest" aria-hidden="true"><span class="bw-line">aroni<span class="bw-x">x<svg class="bw-xs" viewBox="0 -861 840 861"><path d="M10 0H225L830 -861H615Z"/></svg></span><span class="bw-tz"><i class="bw-bar"></i><span class="bw-t">T<i class="bw-stem"></i></span><em>Z</em></span><svg class="bw-tail" viewBox="0 0 1000 19" preserveAspectRatio="none"><path d="M1000 0V19C800 19 200 15 0 10C200 8 800 0 1000 0Z"/></svg></span></span>}
+    </svg>@if (!mark()) {<span class="bw-rest" aria-hidden="true"><span class="bw-line"><svg class="bw-tail" viewBox="0 0 1000 19" preserveAspectRatio="none"><path d="M1000 0V19C800 19 200 15 0 10C200 8 800 0 1000 0Z"/></svg>aroni<span class="bw-x">x<svg class="bw-xs" viewBox="-280 -861 1120 1261"><path d="M-271 400H-56L830 -861H615Z"/></svg></span><span class="bw-tz"><i class="bw-bar"></i><span class="bw-t">T<i class="bw-stem"></i></span><em>Z</em></span></span></span>}
   `,
   styles: [`
     :host {
@@ -87,15 +88,16 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
       height: 0.19em;
       fill: #f5a524;
     }
-    /* The x's "/" runs on far above the letter, at its own slant (Poppins
-       ExtraBold: 10..225 at the line up to 404..619 at the x-height, in
-       1/1000 em, here carried 300 higher). */
+    /* The x's "/" runs on far above the letter and down through the tail,
+       at its own slant (Poppins ExtraBold: 10..225 at the line up to 404..619
+       at the x-height, in 1/1000 em; here carried 300 higher and 400 lower).
+       It comes after the tail in the markup, so it is drawn across it. */
     .bw-xs {
       position: absolute;
       top: 0.189em;
-      left: 0;
-      width: 0.84em;
-      height: 0.861em;
+      left: -0.28em;
+      width: 1.12em;
+      height: 1.261em;
       fill: currentColor;
       overflow: visible;
     }

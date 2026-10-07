@@ -1,0 +1,52 @@
+<div class="page">
+  <nav class="nav">
+    <a class="brand" routerLink="/" aria-label="BaronixTZ"><app-brand-word /></a>
+    <a class="nav-link" routerLink="/login">{{ 'LOGIN.SIGN_IN' | translate }} <mat-icon>login</mat-icon></a>
+  </nav>
+
+  <main class="hero">
+    <div class="copy">
+      <span class="eyebrow"><mat-icon>android</mat-icon> {{ 'DOWNLOAD.EYEBROW' | translate }}</span>
+      <h1>{{ 'DOWNLOAD.TITLE' | translate }}</h1>
+      <p class="lead">{{ 'DOWNLOAD.LEAD' | translate }}</p>
+
+      @if (isApple) {
+        <p class="note apple"><mat-icon>info</mat-icon> {{ 'DOWNLOAD.APPLE' | translate }}</p>
+      }
+
+      <a class="btn-amber" [href]="main.href" download>
+        <mat-icon>download</mat-icon>
+        {{ 'DOWNLOAD.BUTTON' | translate }}
+        <span class="size">{{ main.mb }} MB</span>
+      </a>
+      <p class="meta">
+        {{ 'DOWNLOAD.VERSION' | translate: { v: version } }} ·
+        <a [href]="older.href" download>{{ 'DOWNLOAD.OLDER' | translate: { mb: older.mb } }}</a>
+      </p>
+    </div>
+
+    <ol class="steps">
+      <li>
+        <span class="n">1</span>
+        <div><b>{{ 'DOWNLOAD.S1_T' | translate }}</b><p>{{ 'DOWNLOAD.S1_D' | translate }}</p></div>
+      </li>
+      <li>
+        <span class="n">2</span>
+        <div><b>{{ 'DOWNLOAD.S2_T' | translate }}</b><p>{{ 'DOWNLOAD.S2_D' | translate }}</p></div>
+      </li>
+      <li>
+        <span class="n">3</span>
+        <div><b>{{ 'DOWNLOAD.S3_T' | translate }}</b><p>{{ 'DOWNLOAD.S3_D' | translate }}</p></div>
+      </li>
+      <li>
+        <span class="n">4</span>
+        <div><b>{{ 'DOWNLOAD.S4_T' | translate }}</b><p>{{ 'DOWNLOAD.S4_D' | translate }}</p></div>
+      </li>
+    </ol>
+  </main>
+
+  <footer class="footer">
+    <a routerLink="/">&larr; {{ 'DOWNLOAD.BACK' | translate }}</a>
+    <span>&copy; {{ currentYear }} BaronixTZ</span>
+  </footer>
+</div>

@@ -2402,5 +2402,24 @@
     "BUTTON_CASHIER": "Handover summary",
     "SENT_BADGE": "Sent",
     "CONFIRM_Q": "Received Tshs {{amount}} for {{count}} bill(s)?"
+  },
+  "DOWNLOAD": {
+    "EYEBROW": "Android app",
+    "TITLE": "Get the BaronixTZ app",
+    "LEAD": "Run your bar from your phone: sales, orders, store, reports, cash-up and receipts - everything on the website, now in an app. Sign in with the same account you use here.",
+    "APPLE": "The app is for Android phones for now. On an iPhone, keep using this website.",
+    "BUTTON": "Download for Android",
+    "VERSION": "Version {{v}}",
+    "OLDER": "Older phone? Download this version ({{mb}} MB)",
+    "S1_T": "Download",
+    "S1_D": "Tap Download. The file (APK) goes to your phone's Downloads.",
+    "S2_T": "Allow installing",
+    "S2_D": "When you open it, the phone asks to allow \"Install unknown apps\" for the browser (Chrome). Allow it - only once.",
+    "S3_T": "Install",
+    "S3_D": "Tap Install. If Play Protect asks, choose \"Install anyway\" - the app is BaronixTZ's own.",
+    "S4_T": "Sign in",
+    "S4_D": "Open BaronixTZ and sign in with your username and password, or code and PIN for waiters.",
+    "BACK": "Back to home",
+    "NAV": "Get the app"
   }
 }

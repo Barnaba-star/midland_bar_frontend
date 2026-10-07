@@ -2402,5 +2402,24 @@
     "BUTTON_CASHIER": "Muhtasari wa makabidhiano",
     "SENT_BADGE": "Ametuma",
     "CONFIRM_Q": "Umepokea Tshs {{amount}} kwa bill {{count}}?"
+  },
+  "DOWNLOAD": {
+    "EYEBROW": "App ya Android",
+    "TITLE": "Pakua App ya BaronixTZ",
+    "LEAD": "Simamia bar yako kutoka kwenye simu: mauzo, oda, stoo, ripoti, cash-up na risiti - kila kitu kilichopo kwenye website, sasa ndani ya app. Tumia akaunti ile ile unayoingia nayo hapa.",
+    "APPLE": "App ni ya simu za Android kwa sasa. Kwenye iPhone tumia website hii kama kawaida.",
+    "BUTTON": "Pakua kwa Android",
+    "VERSION": "Toleo {{v}}",
+    "OLDER": "Simu ya zamani? Pakua toleo hili ({{mb}} MB)",
+    "S1_T": "Pakua",
+    "S1_D": "Gusa kitufe cha Pakua. Faili (APK) litaingia kwenye Downloads za simu.",
+    "S2_T": "Ruhusu kusakinisha",
+    "S2_D": "Ukilifungua, simu itauliza kuruhusu \"Install unknown apps\" kwa kivinjari (Chrome). Ruhusu - ni mara moja tu.",
+    "S3_T": "Sakinisha",
+    "S3_D": "Gusa Install. Ikiuliza Play Protect, chagua \"Install anyway\" - app ni ya BaronixTZ yenyewe.",
+    "S4_T": "Ingia",
+    "S4_D": "Fungua BaronixTZ uingie kwa jina na neno la siri lako, au code na PIN kwa mhudumu.",
+    "BACK": "Rudi Mwanzo",
+    "NAV": "Pakua App"
   }
 }

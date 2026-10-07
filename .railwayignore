@@ -1,0 +1,2 @@
+# railway up skips what .gitignore skips; the app downloads must still go up.
+!public/downloads/*.apk

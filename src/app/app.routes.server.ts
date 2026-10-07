@@ -20,6 +20,11 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Prerender
   },
   {
+    // The Android app download page - public, the same for everyone.
+    path: 'app',
+    renderMode: RenderMode.Prerender
+  },
+  {
     path: '**',
     renderMode: RenderMode.Client
   }

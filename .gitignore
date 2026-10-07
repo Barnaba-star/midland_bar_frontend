@@ -40,3 +40,6 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Android app builds: too big for git, but they ship with the site (see .railwayignore).
+public/downloads/*.apk

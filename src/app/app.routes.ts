@@ -102,6 +102,11 @@ export const routes: Routes = [
   loadComponent: () => import('./landing/landing').then(m => m.Landing)
 },
 {
+  // Download the Android app.
+  path: 'app',
+  loadComponent: () => import('./download/download').then(m => m.Download)
+},
+{
   path: 'login',
   loadComponent: () => import('./login/login').then(m => m.Login)
 },

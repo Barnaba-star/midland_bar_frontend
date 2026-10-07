@@ -13,7 +13,7 @@ import { BrandWord } from '../Utils/component/brand-word/brand-word';
  * new (64-bit) - two separate downloads confused people. Bump APP_VERSION
  * and the size together with the file.
  */
-const APP_VERSION = '1.0.7';
+const APP_VERSION = '1.0.8';
 
 @Component({
   selector: 'app-download',
@@ -24,7 +24,7 @@ const APP_VERSION = '1.0.7';
 })
 export class Download {
   readonly version = APP_VERSION;
-  readonly main = { href: `/downloads/baronixtz-${APP_VERSION}.apk`, mb: 40.8 };
+  readonly main = { href: `/downloads/baronixtz-${APP_VERSION}.apk`, mb: 40.9 };
   readonly currentYear = new Date().getFullYear();
   /** iPhone/iPad: the app is Android only for now - point them at the website. */
   readonly isApple: boolean;

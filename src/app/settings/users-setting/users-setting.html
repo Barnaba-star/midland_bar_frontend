@@ -79,9 +79,6 @@
                       {{ user.branchName || ('COMMON.NA' | translate) }}
                     </strong>
 
-                    @if (user.branchCode) {
-                   
-                    }
                   </div>
                 </td>
 
@@ -287,12 +284,6 @@
                 {{ user.branchName | uppercase}}
               </span>
 
-              <span
-                class="branch-code"
-                *ngIf="user?.branchCode"
-              >
-                {{ user.branchCode  | uppercase}}
-              </span>
 
             </div>
 

@@ -129,7 +129,7 @@ export class MainSidenav2 implements OnInit, OnDestroy {
 
   @Input() menuItems: SidenavItem[] = [];
 
-  @Input() logoUrl = 'assets/images/login.png';
+  @Input() logoUrl = 'assets/images/baronix-logo.png';
 
   canManageLogo = false;
 

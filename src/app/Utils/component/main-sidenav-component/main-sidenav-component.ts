@@ -118,7 +118,7 @@ goToLogin() {
 
 
 @Input() menuItems: SidenavItem[] = [];
-@Input() logoUrl: string = 'assets/images/login.png';
+@Input() logoUrl: string = 'assets/images/baronix-logo.png';
 
 isOpen = true;
 openIndex: number | null = null;

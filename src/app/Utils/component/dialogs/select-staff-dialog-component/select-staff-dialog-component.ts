@@ -1,3 +1,4 @@
+import { localDate } from '../../../services/local-date';
 import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy, Inject, Optional } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -149,7 +150,11 @@ export class SelectStaffDialogComponent implements OnInit {
       return '';
     }
     const date = new Date(value);
-    return isNaN(date.getTime()) ? String(value) : date.toISOString().slice(0, 10);
+    // A plain yyyy-MM-dd is already the day; a date-time is read in local time.
+    if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
+      return value;
+    }
+    return isNaN(date.getTime()) ? String(value) : localDate(date);
   }
 
   close(): void {

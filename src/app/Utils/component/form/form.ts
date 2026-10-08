@@ -1,3 +1,4 @@
+import { localDate } from '../../services/local-date';
 import {
   Component,
   Input,
@@ -125,9 +126,7 @@ export class FormComponent implements OnInit, OnDestroy {
       const formValue = { ...this.form.value };
       this.fields.forEach((field) => {
         if (field.type === 'date' && formValue[field.name] instanceof Date) {
-          formValue[field.name] = formValue[field.name]
-            .toISOString()
-            .split('T')[0];
+          formValue[field.name] = localDate(formValue[field.name]);
         }
       if (field.prefix || field.suffix) {
         formValue[field.name] = `${field.prefix ?? ''}${formValue}${field.suffix ?? ''}`.trim();

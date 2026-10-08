@@ -1,3 +1,4 @@
+import { localDate } from '../../Utils/services/local-date';
 import { Insights } from '../insights/insights';
 import { PotsLedger } from '../pots-ledger/pots-ledger';
 import { CashUp } from '../cash-up/cash-up';
@@ -890,7 +891,7 @@ middleName:string=''
 lastName:string=''
 filterDate:string=''
 remainingAmount:number=0
-weekDate: string = new Date().toISOString().split('T')[0];
+weekDate: string = localDate(new Date());
 descriptions:string=''
 /** How the staff payment goes out - the cash-up takes it off this method. */
 paymentMethod = 'cash';

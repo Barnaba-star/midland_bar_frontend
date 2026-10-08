@@ -1,3 +1,4 @@
+import { localDate } from './local-date';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { debounceTime, map, Observable, distinctUntilChanged, tap, switchMap, finalize } from 'rxjs';
@@ -100,7 +101,7 @@ console.log('Searching with term:', options);
 
 private formatDateToBackend(date: Date): string {
   if (!(date instanceof Date)) return '';
-  return date.toISOString().split('T')[0]; 
+  return localDate(date); 
 }
 
 enumToOptions(enumObj: any): FieldOption[] {

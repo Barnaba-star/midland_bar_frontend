@@ -1,3 +1,4 @@
+import { localDate } from '../../services/local-date';
 import {
   Component,
   Input,
@@ -142,9 +143,7 @@ getFormValue() {
     this.fields.forEach((field) => {
 
       if (field.type === 'date' && formValue[field.name] instanceof Date) {
-        formValue[field.name] = formValue[field.name]
-          .toISOString()
-          .split('T')[0];
+        formValue[field.name] = localDate(formValue[field.name]);
       }
 
       if (field.prefix || field.suffix) {

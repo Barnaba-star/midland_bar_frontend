@@ -34,6 +34,15 @@ deleteBranch(branchUID:string): Observable<Response<any>>{
   return this.http.post<Response<any>>(`${this.baseUrl}/deleteBranch/${branchUID}`, null)
 }
 
+/**
+ * Clears one branch's day-to-day records dated from..to (yyyy-MM-dd, both
+ * included); ROOT only. dryRun counts without deleting; the real run needs
+ * the branch code typed back. data = rows per table, or null with a code.
+ */
+purgeBranchPeriod(branchUID: string, body: { from: string; to: string; dryRun: boolean; confirmCode?: string }): Observable<Response<Record<string, number> | null>> {
+  return this.http.post<Response<Record<string, number> | null>>(`${this.baseUrl}/purgeBranchPeriod/${branchUID}`, body);
+}
+
 findBranchList():Observable<ResponseList<any>>{
  return this.http.get<ResponseList<any>>(`${this.baseUrl}/findBranchList`)
 }

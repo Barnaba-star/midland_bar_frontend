@@ -303,3 +303,175 @@
 .view-size-btn:hover {
   background: #17110b;
 }
+
+/* =========================
+   CLEAR A BRANCH'S RECORDS FOR A PERIOD (ROOT)
+   Title 18px > labels/heading 13-14px > figures 13px.
+========================= */
+
+.period-card {
+  box-sizing: border-box;
+  max-width: 100%;
+  margin-top: 20px;
+  padding: 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-top: 3px solid var(--color-accent);
+  border-radius: 16px;
+  box-shadow:
+    0 4px 6px rgba(0, 0, 0, 0.03),
+    0 12px 30px rgba(0, 0, 0, 0.06);
+}
+
+.period-head h2 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.period-head p {
+  margin: 6px 0 0;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.period-form {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.period-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.period-field span {
+  color: var(--color-text);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.period-field select,
+.period-field input {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font: 500 13px var(--font-sans);
+}
+
+.period-field select:focus,
+.period-field input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  background: var(--color-surface);
+}
+
+.period-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.period-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 38px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 9px;
+  background: var(--color-primary);
+  color: var(--color-surface);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.period-btn:hover:not(:disabled) { background: var(--color-text); }
+.period-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.period-btn mat-icon { width: 18px; height: 18px; font-size: 18px; }
+.period-btn-danger { background: #c0392b; }
+.period-btn-danger:hover:not(:disabled) { background: #c0392b; filter: brightness(0.9); }
+
+.period-msg {
+  margin: 12px 0 0;
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.period-msg-error {
+  color: #c0392b;
+  font-weight: 600;
+}
+
+.period-result {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-bg);
+}
+
+.period-result h3 {
+  margin: 0 0 8px;
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.period-result ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.period-result li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 13px;
+}
+
+.period-name {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--color-primary);
+}
+
+.period-count {
+  flex: 0 0 auto;
+  color: var(--color-text);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.period-result li.period-total {
+  border-bottom: 0;
+  padding-top: 8px;
+  font-weight: 700;
+}
+
+.period-total .period-name { color: var(--color-text); }
+
+@media (max-width: 600px) {
+  .period-form { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .period-branch { grid-column: 1 / -1; }
+  .period-btn { flex: 1 1 140px; }
+}

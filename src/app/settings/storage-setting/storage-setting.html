@@ -6,6 +6,84 @@
 ></app-title2>
 @switch (storage) {
   @case ('STORAGE_SETTING_PAGE.MANAGE_TAB') {
+    <!-- ROOT only: clear one branch's day-to-day records for a period. -->
+    @if (isRoot) {
+      <section class="period-card">
+
+        <div class="period-head">
+          <h2>{{ 'PURGE_PERIOD.CARD_TITLE' | translate }}</h2>
+          <p>{{ 'PURGE_PERIOD.CARD_SUBTITLE' | translate }}</p>
+        </div>
+
+        <div class="period-form">
+          <label class="period-field period-branch">
+            <span>{{ 'PURGE_PERIOD.BRANCH' | translate }}</span>
+            <select [(ngModel)]="periodBranchUID" (ngModelChange)="onPeriodChange()">
+              <option value="" disabled>{{ 'PURGE_PERIOD.PICK_BRANCH' | translate }}</option>
+              @for (b of periodBranches; track b.uid) {
+                <option [value]="b.uid">{{ b.branchName }} ({{ b.branchCode }})</option>
+              }
+            </select>
+          </label>
+
+          <label class="period-field">
+            <span>{{ 'PURGE_PERIOD.FROM' | translate }}</span>
+            <input type="date" [(ngModel)]="periodFrom" (ngModelChange)="onPeriodChange()" [max]="periodTo || today">
+          </label>
+
+          <label class="period-field">
+            <span>{{ 'PURGE_PERIOD.TO' | translate }}</span>
+            <input type="date" [(ngModel)]="periodTo" (ngModelChange)="onPeriodChange()" [min]="periodFrom" [max]="today">
+          </label>
+        </div>
+
+        @if (periodFrom && periodTo && !periodDatesValid) {
+          <p class="period-msg period-msg-error">{{ 'PURGE_PERIOD.BAD_DATES' | translate }}</p>
+        }
+
+        <div class="period-actions">
+          <button type="button" class="period-btn" [disabled]="!periodValid || periodBusy" (click)="previewPeriod()">
+            <mat-icon>calculate</mat-icon>{{ 'PURGE_PERIOD.PREVIEW' | translate }}
+          </button>
+          @if (periodPreview?.length) {
+            <button type="button" class="period-btn period-btn-danger" [disabled]="!periodValid || periodBusy" (click)="confirmPeriodPurge()">
+              <mat-icon>delete_forever</mat-icon>{{ 'PURGE_PERIOD.DELETE' | translate }}
+            </button>
+          }
+        </div>
+
+        @if (periodError) {
+          <p class="period-msg period-msg-error">{{ periodError | translate }}</p>
+        }
+
+        @if (periodPreview && !periodPreview.length) {
+          <p class="period-msg">{{ 'PURGE_PERIOD.NOTHING' | translate }}</p>
+        }
+
+        @for (result of [periodPreview, periodDeleted]; track $index) {
+          @if (result?.length) {
+            <div class="period-result">
+              <h3>{{ ($index === 0 ? 'PURGE_PERIOD.WILL_GO' : 'PURGE_PERIOD.WENT') | translate }}</h3>
+              <ul>
+                @for (row of result; track row.table) {
+                  @let key = 'PURGE_PERIOD.TABLES.' + row.table;
+                  <li>
+                    <span class="period-name">{{ (key | translate) === key ? row.table : (key | translate) }}</span>
+                    <span class="period-count">{{ row.count | number }}</span>
+                  </li>
+                }
+                <li class="period-total">
+                  <span class="period-name">{{ 'PURGE_PERIOD.TOTAL' | translate }}</span>
+                  <span class="period-count">{{ periodTotal(result) | number }}</span>
+                </li>
+              </ul>
+            </div>
+          }
+        }
+
+      </section>
+    }
+
     <div class="table-size-container">
 
   <div class="table-header">

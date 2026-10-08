@@ -168,9 +168,12 @@ export class AuditSetting implements OnInit {
     this.loadStorage();
   }
 
-  /** Nothing to offer when nothing is old enough to go. */
+  /**
+   * Offered whenever there is anything in the log at all: the backend keeps
+   * the last 7 days itself, and the dialog shows what each age would remove.
+   */
   get canPurge(): boolean {
-    return this.olderThan90Count > 0;
+    return this.storageTotal > 0;
   }
 
   openPurge() {

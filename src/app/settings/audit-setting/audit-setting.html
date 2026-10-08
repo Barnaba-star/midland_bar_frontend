@@ -22,7 +22,7 @@
             {{ 'AUDIT_SETTING_PAGE.REFRESH_BTN' | translate }}
           </button>
 
-          <!-- Offered only when something is actually old enough to remove. -->
+          <!-- Offered whenever the log holds any entries at all. -->
           @if (canPurge) {
             <button type="button" class="purge-btn" [disabled]="purging" (click)="openPurge()">
               {{ 'AUDIT_SETTING_PAGE.PURGE_BTN' | translate }}

@@ -72,7 +72,7 @@ export class AuditService {
 
   /**
    * Removes everything older than `days`, which the backend refuses to take
-   * below 30. The count removed comes back in `data`.
+   * below 7. The count removed comes back in `data`.
    */
   purgeAuditLog(days: number): Observable<Response<number>> {
     return this.http.post<Response<number>>(

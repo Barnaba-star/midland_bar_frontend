@@ -16,7 +16,7 @@ export interface PurgeAuditDialogData {
  * Asks how far back to clear the audit log. Closes with the chosen age in days
  * when it is confirmed, and with nothing when it is not.
  *
- * Removing is by age only: there is no single entry to pick, and the last 30
+ * Removing is by age only: there is no single entry to pick, and the last 7
  * days are never on offer because the backend refuses them.
  */
 @Component({
@@ -29,9 +29,9 @@ export interface PurgeAuditDialogData {
 })
 export class PurgeAuditDialogComponent {
 
-  readonly dayOptions = [90, 180, 365];
+  readonly dayOptions = [7, 30, 90, 365];
 
-  /** The gentlest of the three is the one that starts selected. */
+  /** The gentlest of the options is the one that starts selected. */
   days = 365;
 
   constructor(
@@ -48,10 +48,13 @@ export class PurgeAuditDialogComponent {
 
   /**
    * How many entries a choice would remove, or null when it is not known.
-   * Only 90 and 365 were counted; guessing at 180 would put a wrong figure in
+   * Only 30, 90 and 365 are counted; guessing at 7 would put a wrong figure in
    * front of someone about to delete, so that chip carries no number at all.
    */
   countFor(days: number): number | null {
+    if (days === 30) {
+      return this.data?.olderThan30 ?? null;
+    }
     if (days === 90) {
       return this.data?.olderThan90 ?? null;
     }

@@ -57,17 +57,45 @@
 
               @if (cashier) {
                 <div class="ho-group-action">
-                  @if (confirming === g.method) {
+                  @if (shorting === g.method) {
+                    <!-- Less came in: the bills are paid all the same, the gap goes on the staff member. -->
+                    <div class="ho-short">
+                      <label>
+                        <span>{{ 'STAFF_HANDOVER.SHORT_HANDED' | translate }}</span>
+                        <input type="number" inputmode="numeric" min="0" [(ngModel)]="handed" [placeholder]="g.amount" autofocus />
+                      </label>
+                      <label>
+                        <span>{{ 'STAFF_HANDOVER.SHORT_NOTE' | translate }}</span>
+                        <input type="text" maxlength="200" [(ngModel)]="shortNote" />
+                      </label>
+                      <p class="ho-short-sum">
+                        {{ 'STAFF_HANDOVER.SHORT_AMOUNT' | translate }}:
+                        <b>{{ shortOf(g.amount) > 0 ? ('Tshs ' + (shortOf(g.amount) | number)) : '-' }}</b>
+                      </p>
+                      <span class="ho-confirm">
+                        <button type="button" class="ho-no" (click)="shorting = null">{{ 'COMMON.CANCEL' | translate }}</button>
+                        <button type="button" class="ho-yes ho-yes-short" [disabled]="shortOf(g.amount) <= 0 || !!receiving" (click)="receiveShort(g)">
+                          {{ 'STAFF_HANDOVER.SHORT_CONFIRM' | translate }}
+                        </button>
+                      </span>
+                    </div>
+                  } @else if (confirming === g.method) {
                     <span class="ho-confirm-text">{{ 'STAFF_HANDOVER.CONFIRM_Q' | translate: { amount: (g.amount | number), count: g.bills.length } }}</span>
                     <span class="ho-confirm">
                       <button type="button" class="ho-no" (click)="confirming = null">{{ 'COMMON.CANCEL' | translate }}</button>
                       <button type="button" class="ho-yes" (click)="receive(g)">{{ 'STAFF_HANDOVER.CONFIRM' | translate }}</button>
                     </span>
                   } @else {
-                    <button type="button" class="ho-receive" [disabled]="!!receiving || !fromServer" (click)="confirming = g.method">
-                      <mat-icon>done_all</mat-icon>
-                      {{ (receiving === g.method ? 'COMMON.LOADING' : 'STAFF_HANDOVER.RECEIVED') | translate }}
-                    </button>
+                    <span class="ho-confirm">
+                      <button type="button" class="ho-receive ho-short-btn" [disabled]="!!receiving || !fromServer" (click)="startShort(g.method)">
+                        <mat-icon>report</mat-icon>
+                        {{ 'STAFF_HANDOVER.SHORTAGE' | translate }}
+                      </button>
+                      <button type="button" class="ho-receive" [disabled]="!!receiving || !fromServer" (click)="confirming = g.method">
+                        <mat-icon>done_all</mat-icon>
+                        {{ (receiving === g.method ? 'COMMON.LOADING' : 'STAFF_HANDOVER.RECEIVED') | translate }}
+                      </button>
+                    </span>
                   }
                 </div>
               }
@@ -81,6 +109,8 @@
       }
     </section>
 
+    <!-- The cashier works on what is still owed; the paid bills only crowd it. -->
+    @if (!cashier) {
     <section class="ho-section">
       <h4>{{ 'STAFF_HANDOVER.PAID_TITLE' | translate }}</h4>
       @if (!fromServer) {
@@ -105,6 +135,7 @@
       }
       }
     </section>
+    }
 
     @if (summary.sentAt) {
       <p class="ho-sent"><mat-icon>send</mat-icon>{{ 'STAFF_HANDOVER.SENT_AT' | translate }} {{ summary.sentAt | date: 'HH:mm' }}</p>

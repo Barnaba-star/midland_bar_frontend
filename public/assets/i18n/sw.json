@@ -2398,10 +2398,16 @@
     "RECEIVED": "Nimepokea",
     "CONFIRM": "Ndiyo, nimepokea",
     "RECEIVED_OK": "Umepokea Tshs {{amount}} ({{method}}) · bill {{count}} zimelipwa",
-    "CASHIER_HINT": "Bonyeza \"Nimepokea\" baada ya kuhesabu pesa za njia hiyo: bill zote za njia hiyo zinalipwa kwa mara moja. Kama bill imebadilika tangu ufungue, hakuna kinacholipwa hadi uonyeshe upya.",
+    "CASHIER_HINT": "Bonyeza \"Nimepokea\" baada ya kuhesabu pesa zote za njia hiyo: bill zote za njia hiyo zinalipwa kwa mara moja. Akikabidhi pungufu, bonyeza \"Shortage\" uandike kiasi ulichopokea - bill zinalipwa na upungufu unarekodiwa kwa mhudumu kwenye njia hiyo. Kama bill imebadilika tangu ufungue, hakuna kinacholipwa hadi uonyeshe upya.",
     "BUTTON_CASHIER": "Muhtasari wa makabidhiano",
     "SENT_BADGE": "Ametuma",
-    "CONFIRM_Q": "Umepokea Tshs {{amount}} kwa bill {{count}}?"
+    "CONFIRM_Q": "Umepokea Tshs {{amount}} kwa bill {{count}}?",
+    "SHORTAGE": "Shortage",
+    "SHORT_HANDED": "Kiasi ulichopokea (Tshs)",
+    "SHORT_NOTE": "Sababu (hiari)",
+    "SHORT_AMOUNT": "Upungufu",
+    "SHORT_CONFIRM": "Pokea na rekodi upungufu",
+    "SHORT_OK": "Umepokea Tshs {{amount}} ({{method}}) · upungufu Tshs {{short}} umerekodiwa kwa mhudumu"
   },
   "DOWNLOAD": {
     "EYEBROW": "App ya Android",

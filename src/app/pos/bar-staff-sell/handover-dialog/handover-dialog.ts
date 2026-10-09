@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -21,7 +22,7 @@ const KNOWN_METHODS = ['cash', 'mpesa', 'tigopesa', 'airtelmoney', 'halopesa', '
  */
 @Component({
   selector: 'app-staff-handover-dialog',
-  imports: [MatIconModule, TranslatePipe, DecimalPipe, DatePipe],
+  imports: [MatIconModule, TranslatePipe, DecimalPipe, DatePipe, FormsModule],
   templateUrl: './handover-dialog.html',
   styleUrl: './handover-dialog.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,6 +34,10 @@ export class StaffHandoverDialog implements OnInit {
   /** The method waiting on "yes" before its bills are paid, and the one being paid. */
   confirming: string | null = null;
   receiving: string | null = null;
+  /** The method whose money came in short, while its form is open. */
+  shorting: string | null = null;
+  handed: number | null = null;
+  shortNote = '';
   private changed = false;
 
   /** False while showing the bills the screen already had - the server's figures are on their way. */
@@ -162,8 +167,28 @@ export class StaffHandoverDialog implements OnInit {
     });
   }
 
+  /** Less came in for this method than its bills: open the shortage form. */
+  startShort(method: string): void {
+    this.confirming = null;
+    this.shorting = method;
+    this.handed = null;
+    this.shortNote = '';
+  }
+
+  shortOf(amount: number): number {
+    return this.handed === null || (this.handed as any) === '' ? 0 : Math.max(0, amount - Number(this.handed));
+  }
+
+  /** Bills paid in full, the difference recorded as the staff member's shortage in this method. */
+  receiveShort(row: { method: string; amount: number }): void {
+    if (this.shortOf(row.amount) <= 0) {
+      return;
+    }
+    this.receive(row, Math.round(Number(this.handed)), this.shortNote.trim());
+  }
+
   /** Cashier: every bill in this method, paid by it, exactly as listed here. */
-  receive(row: { method: string }): void {
+  receive(row: { method: string }, handedAmount?: number, note?: string): void {
     // Only on the server's figures - the screen's copy may be behind.
     if (!this.summary || this.receiving || !this.fromServer) {
       return;
@@ -173,16 +198,27 @@ export class StaffHandoverDialog implements OnInit {
       .map(b => ({ uid: b.uid, amount: b.amount }));
     this.receiving = row.method;
     this.confirming = null;
-    this.barService.receiveStaffHandover({ staffCode: this.data.staffCode, method: row.method, bills }).subscribe({
+    this.shorting = null;
+    this.barService.receiveStaffHandover({
+      staffCode: this.data.staffCode, method: row.method, bills,
+      ...(handedAmount !== undefined ? { handedAmount, note } : {}),
+    }).subscribe({
       next: (res) => {
         this.receiving = null;
         if (res?.data) {
           this.changed = true;
-          this.alert.show('success', this.translate.instant('STAFF_HANDOVER.RECEIVED_OK', {
-            amount: res.data.amount.toLocaleString(),
-            method: this.translate.instant(this.label(row.method)),
-            count: res.data.bills,
-          }));
+          const short = res.data.shortage || 0;
+          this.alert.show('success', short > 0
+            ? this.translate.instant('STAFF_HANDOVER.SHORT_OK', {
+                amount: (res.data.amount - short).toLocaleString(),
+                method: this.translate.instant(this.label(row.method)),
+                short: short.toLocaleString(),
+              })
+            : this.translate.instant('STAFF_HANDOVER.RECEIVED_OK', {
+                amount: res.data.amount.toLocaleString(),
+                method: this.translate.instant(this.label(row.method)),
+                count: res.data.bills,
+              }));
         }
         // Paid or refused (bills changed), show what is there now.
         this.load();

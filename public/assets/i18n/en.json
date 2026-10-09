@@ -2401,7 +2401,13 @@
     "CASHIER_HINT": "Press \"Received\" after counting that method's money: all its bills are paid at once. If a bill changed since you opened this, nothing is paid until you refresh.",
     "BUTTON_CASHIER": "Handover summary",
     "SENT_BADGE": "Sent",
-    "CONFIRM_Q": "Received Tshs {{amount}} for {{count}} bill(s)?"
+    "CONFIRM_Q": "Received Tshs {{amount}} for {{count}} bill(s)?",
+    "SHORTAGE": "Shortage",
+    "SHORT_HANDED": "Amount received (Tshs)",
+    "SHORT_NOTE": "Reason (optional)",
+    "SHORT_AMOUNT": "Shortage",
+    "SHORT_CONFIRM": "Receive and record shortage",
+    "SHORT_OK": "Received Tshs {{amount}} ({{method}}) · shortage Tshs {{short}} recorded against the staff member"
   },
   "DOWNLOAD": {
     "EYEBROW": "Android app",

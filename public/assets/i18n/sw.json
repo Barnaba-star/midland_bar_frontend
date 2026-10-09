@@ -2147,7 +2147,11 @@
     "PAYOUTS_DESC": "yamechukuliwa na mfumo kutoka Pay ya akiba, commission ya staff na Stock & Purchase - hayabadilishwi hapa",
     "PAYOUTS_NONE": "Hakuna matumizi uliyorekodi kwenye zamu hii.",
     "SHOW_HISTORY": "Onyesha cash-up {{count}}",
-    "HIDE_HISTORY": "Ficha cash-up"
+    "HIDE_HISTORY": "Ficha cash-up",
+    "HIDE": "Ficha",
+    "SHOW_SHIFTS": "Onyesha shift {{count}}",
+    "SHOW_VOIDS": "Onyesha zilizoondolewa {{count}}",
+    "SHOW_PAYOUTS": "Onyesha matumizi {{count}}"
   },
   "SHIFT": {
     "NONE_TITLE": "Huna shift iliyo wazi",

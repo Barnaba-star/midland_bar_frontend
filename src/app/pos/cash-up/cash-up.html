@@ -84,7 +84,12 @@
             <strong>{{ 'CASH_UP.PAYOUTS_TITLE' | translate }}</strong>
             <span class="muted">{{ 'CASH_UP.PAYOUTS_DESC' | translate }}</span>
           </div>
-          @if (payouts.length === 0) {
+          <button type="button" class="cu-fold" (click)="toggleFold('payouts')" [attr.aria-expanded]="isOpen('payouts')">
+            <mat-icon>{{ isOpen('payouts') ? 'expand_less' : 'expand_more' }}</mat-icon>
+            {{ (isOpen('payouts') ? 'CASH_UP.HIDE' : 'CASH_UP.SHOW_PAYOUTS') | translate: { count: payouts.length } }}
+          </button>
+          @if (!isOpen('payouts')) {
+          } @else if (payouts.length === 0) {
             <p class="muted">{{ 'CASH_UP.PAYOUTS_NONE' | translate }}</p>
           } @else {
             @for (o of payouts; track $index) {
@@ -132,7 +137,12 @@
         <p>{{ 'SHIFT.LIST_DESC' | translate }}</p>
       </div>
     </div>
-    @if (shifts.length === 0) {
+    <button type="button" class="cu-fold" (click)="toggleFold('shifts')" [attr.aria-expanded]="isOpen('shifts')">
+      <mat-icon>{{ isOpen('shifts') ? 'expand_less' : 'expand_more' }}</mat-icon>
+      {{ (isOpen('shifts') ? 'CASH_UP.HIDE' : 'CASH_UP.SHOW_SHIFTS') | translate: { count: shifts.length } }}
+    </button>
+    @if (!isOpen('shifts')) {
+    } @else if (shifts.length === 0) {
       <p class="muted">{{ 'SHIFT.EMPTY' | translate }}</p>
     } @else {
       <div class="cu-scroll">
@@ -190,7 +200,12 @@
         <span class="pill short">−{{ voidsTotal | number }}</span>
       }
     </div>
-    @if (voids.length === 0) {
+    <button type="button" class="cu-fold" (click)="toggleFold('voids')" [attr.aria-expanded]="isOpen('voids')">
+      <mat-icon>{{ isOpen('voids') ? 'expand_less' : 'expand_more' }}</mat-icon>
+      {{ (isOpen('voids') ? 'CASH_UP.HIDE' : 'CASH_UP.SHOW_VOIDS') | translate: { count: voids.length } }}
+    </button>
+    @if (!isOpen('voids')) {
+    } @else if (voids.length === 0) {
       <p class="muted">{{ 'BILL_EDIT.EMPTY' | translate }}</p>
     } @else {
       <div class="cu-scroll">

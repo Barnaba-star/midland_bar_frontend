@@ -2147,7 +2147,11 @@
     "PAYOUTS_DESC": "taken by the system from pot payments, staff commission and Stock & Purchase - they cannot be changed here",
     "PAYOUTS_NONE": "You recorded no payouts in this shift.",
     "SHOW_HISTORY": "Show {{count}} cash-ups",
-    "HIDE_HISTORY": "Hide cash-ups"
+    "HIDE_HISTORY": "Hide cash-ups",
+    "HIDE": "Hide",
+    "SHOW_SHIFTS": "Show {{count}} shifts",
+    "SHOW_VOIDS": "Show {{count}} removed items",
+    "SHOW_PAYOUTS": "Show {{count}} payouts"
   },
   "SHIFT": {
     "NONE_TITLE": "You have no open shift",

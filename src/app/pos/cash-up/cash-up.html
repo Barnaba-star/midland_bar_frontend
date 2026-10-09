@@ -18,64 +18,56 @@
         <!-- Open a shift to sell, close it to count it here. -->
         <app-shift-bar [area]="area" [showCashUpLink]="false" (stateChange)="onShiftState($event)"></app-shift-bar>
       } @else {
-        <table class="cu-table">
-          <thead>
-            <tr>
-              <th>{{ 'CASH_UP.COL_METHOD' | translate }}</th>
-              <th class="num">{{ 'CASH_UP.COL_TAKINGS' | translate }}</th>
-              <th class="num">{{ 'CASH_UP.COL_PAYOUTS' | translate }}</th>
-              <th class="num">{{ 'CASH_UP.COL_EXPECTED' | translate }}</th>
-              <th class="num">{{ 'CASH_UP.COL_COUNTED' | translate }}</th>
-              <th class="num">{{ 'CASH_UP.COL_VARIANCE' | translate }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (l of lines; track l.method) {
-              <tr>
-                <td>
+        <!-- One button per payment method: tap to count it. The totals stay in view below. -->
+        <div class="cu-methods">
+          @for (l of lines; track l.method) {
+            <div class="cu-mfold" [class.open]="isOpen('m:' + l.method)">
+              <button type="button" class="cu-mhead" (click)="toggleFold('m:' + l.method)" [attr.aria-expanded]="isOpen('m:' + l.method)">
+                <span class="cu-mtitle">
                   <strong>{{ 'PAY_BILL.METHOD_' + l.method | translate }}</strong>
-                  @if (l.bills) { <small class="muted">{{ 'CASH_UP.BILLS' | translate: { count: l.bills } }}</small> }
-                </td>
-                <td class="num">{{ l.takings | number }}</td>
-                <td class="num">
-                  @if (l.payouts) { <span class="neg">−{{ l.payouts | number }}</span> } @else { <span class="muted">-</span> }
-                </td>
-                <td class="num"><strong>{{ l.expected | number }}</strong></td>
-                <td class="num">
-                  <input type="number" min="0" step="1" [(ngModel)]="l.counted" [name]="'c-' + l.method"
-                         [placeholder]="'CASH_UP.COUNT_PH' | translate" />
-                </td>
-                <td class="num">
-                  @if (variance(l) !== null) {
-                    <span class="pill" [class.short]="variance(l)! < 0" [class.over]="variance(l)! > 0" [class.even]="variance(l) === 0">
-                      {{ variance(l)! > 0 ? '+' : '' }}{{ variance(l) | number }}
-                    </span>
-                  } @else {
-                    <span class="muted">-</span>
-                  }
-                </td>
-              </tr>
-            }
-          </tbody>
-          <tfoot>
-            <tr>
-              <td>{{ 'OTHER_SPLIT.TOTAL' | translate }}</td>
-              <td class="num">{{ takingsTotal | number }}</td>
-              <td class="num">@if (payoutsTotal) { <span class="neg">−{{ payoutsTotal | number }}</span> } @else { - }</td>
-              <td class="num">{{ expectedTotal | number }}</td>
-              <td class="num">{{ countedTotal | number }}</td>
-              <td class="num">
-                @if (anyCounted) {
-                  <span class="pill" [class.short]="countedTotal - expectedTotal < 0" [class.over]="countedTotal - expectedTotal > 0" [class.even]="countedTotal === expectedTotal">
-                    {{ countedTotal - expectedTotal > 0 ? '+' : '' }}{{ countedTotal - expectedTotal | number }}
+                  <small>{{ 'CASH_UP.COL_EXPECTED' | translate }} {{ l.expected | number }}@if (l.bills) { · {{ 'CASH_UP.BILLS' | translate: { count: l.bills } }} }</small>
+                </span>
+                @if (variance(l) !== null) {
+                  <span class="pill" [class.short]="variance(l)! < 0" [class.over]="variance(l)! > 0" [class.even]="variance(l) === 0">
+                    {{ variance(l)! > 0 ? '+' : '' }}{{ variance(l) | number }}
                   </span>
-                } @else {
-                  <span class="muted">-</span>
                 }
-              </td>
-            </tr>
-          </tfoot>
-        </table>
+                <mat-icon>{{ isOpen('m:' + l.method) ? 'expand_less' : 'expand_more' }}</mat-icon>
+              </button>
+              @if (isOpen('m:' + l.method)) {
+                <div class="cu-mbody">
+                  <div class="cu-kv"><span>{{ 'CASH_UP.COL_TAKINGS' | translate }}</span><span>{{ l.takings | number }}</span></div>
+                  @if (l.payouts) {
+                    <div class="cu-kv"><span>{{ 'CASH_UP.COL_PAYOUTS' | translate }}</span><span class="neg">−{{ l.payouts | number }}</span></div>
+                  }
+                  <div class="cu-kv strong"><span>{{ 'CASH_UP.COL_EXPECTED' | translate }}</span><span>{{ l.expected | number }}</span></div>
+                  <label class="cu-count">
+                    <span>{{ 'CASH_UP.COL_COUNTED' | translate }}</span>
+                    <input type="number" min="0" step="1" inputmode="numeric" [(ngModel)]="l.counted" [name]="'c-' + l.method"
+                           [placeholder]="'CASH_UP.COUNT_PH' | translate" />
+                  </label>
+                </div>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="cu-totals">
+          <div class="cu-kv"><span>{{ 'CASH_UP.COL_TAKINGS' | translate }}</span><span>{{ takingsTotal | number }}</span></div>
+          @if (payoutsTotal) {
+            <div class="cu-kv"><span>{{ 'CASH_UP.COL_PAYOUTS' | translate }}</span><span class="neg">−{{ payoutsTotal | number }}</span></div>
+          }
+          <div class="cu-kv strong"><span>{{ 'CASH_UP.COL_EXPECTED' | translate }}</span><span>{{ expectedTotal | number }}</span></div>
+          <div class="cu-kv"><span>{{ 'CASH_UP.COL_COUNTED' | translate }}</span><span>{{ countedTotal | number }}</span></div>
+          @if (anyCounted) {
+            <div class="cu-kv strong">
+              <span>{{ 'CASH_UP.COL_VARIANCE' | translate }}</span>
+              <span class="pill" [class.short]="countedTotal - expectedTotal < 0" [class.over]="countedTotal - expectedTotal > 0" [class.even]="countedTotal === expectedTotal">
+                {{ countedTotal - expectedTotal > 0 ? '+' : '' }}{{ countedTotal - expectedTotal | number }}
+              </span>
+            </div>
+          }
+        </div>
 
         <!-- Payouts recorded in the system during this shift: read from those records, not typed here. -->
         <div class="cu-payouts">

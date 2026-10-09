@@ -376,3 +376,21 @@
 .shift-status[data-status='OPEN'] { color: #2e9e5b; border-color: #2e9e5b; }
 .shift-status[data-status='CLOSED'] { color: #3b82f6; border-color: #3b82f6; }
 .shift-status[data-status='CASHED_UP'] { color: var(--color-text-muted); }
+
+/* The closed cash-ups, folded behind one button. */
+.cu-fold {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  min-height: 40px;
+  margin: 8px 0;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}

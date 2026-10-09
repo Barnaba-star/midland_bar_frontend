@@ -2143,7 +2143,9 @@
     "COL_PAYOUTS": "Payouts",
     "PAYOUTS_TITLE": "Payouts recorded in this shift",
     "PAYOUTS_DESC": "taken by the system from pot payments, staff commission and Stock & Purchase - they cannot be changed here",
-    "PAYOUTS_NONE": "You recorded no payouts in this shift."
+    "PAYOUTS_NONE": "You recorded no payouts in this shift.",
+    "SHOW_HISTORY": "Show {{count}} cash-ups",
+    "HIDE_HISTORY": "Hide cash-ups"
   },
   "SHIFT": {
     "NONE_TITLE": "You have no open shift",

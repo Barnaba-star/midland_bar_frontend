@@ -74,6 +74,8 @@ export class CashUp implements OnInit {
   ];
   history: any[] = [];
   openUid: string | null = null;
+  /** The closed cash-ups stay folded until asked for. */
+  showHistory = false;
   openLines: any[] = [];
 
   constructor(

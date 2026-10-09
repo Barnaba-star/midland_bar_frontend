@@ -248,6 +248,12 @@
           {{ 'CASH_UP.NET_VARIANCE' | translate }}: {{ historyVariance > 0 ? '+' : '' }}{{ historyVariance | number }}
         </span>
       </div>
+      <!-- Folded until asked for: the summary line above says enough at a glance. -->
+      <button type="button" class="cu-fold" (click)="showHistory = !showHistory" [attr.aria-expanded]="showHistory">
+        <mat-icon>{{ showHistory ? 'expand_less' : 'expand_more' }}</mat-icon>
+        {{ (showHistory ? 'CASH_UP.HIDE_HISTORY' : 'CASH_UP.SHOW_HISTORY') | translate: { count: history.length } }}
+      </button>
+      @if (showHistory) {
       <table class="cu-table">
         <thead>
           <tr>
@@ -299,6 +305,7 @@
           }
         </tbody>
       </table>
+      }
     }
   </section>
 </div>

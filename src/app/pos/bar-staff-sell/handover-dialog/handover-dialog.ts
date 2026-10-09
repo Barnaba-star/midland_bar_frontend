@@ -38,6 +38,8 @@ export class StaffHandoverDialog implements OnInit {
   shorting: string | null = null;
   handed: number | null = null;
   shortNote = '';
+  /** The bills already paid stay folded until asked for. */
+  showPaid = false;
   private changed = false;
 
   /** False while showing the bills the screen already had - the server's figures are on their way. */

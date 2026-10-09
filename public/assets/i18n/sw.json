@@ -2407,7 +2407,8 @@
     "SHORT_NOTE": "Sababu (hiari)",
     "SHORT_AMOUNT": "Upungufu",
     "SHORT_CONFIRM": "Pokea na rekodi upungufu",
-    "SHORT_OK": "Umepokea Tshs {{amount}} ({{method}}) · upungufu Tshs {{short}} umerekodiwa kwa mhudumu"
+    "SHORT_OK": "Umepokea Tshs {{amount}} ({{method}}) · upungufu Tshs {{short}} umerekodiwa kwa mhudumu",
+    "HIDE_PAID": "Ficha zilizokwisha lipwa"
   },
   "DOWNLOAD": {
     "EYEBROW": "App ya Android",

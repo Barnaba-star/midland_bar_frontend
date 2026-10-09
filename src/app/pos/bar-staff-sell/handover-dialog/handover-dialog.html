@@ -111,6 +111,16 @@
 
     <!-- The cashier works on what is still owed; the paid bills only crowd it. -->
     @if (!cashier) {
+    <!-- Folded: what is still owed is what matters at handover. -->
+    <button type="button" class="ho-paid-toggle" (click)="showPaid = !showPaid" [attr.aria-expanded]="showPaid">
+      <mat-icon>{{ showPaid ? 'expand_less' : 'check_circle' }}</mat-icon>
+      @if (showPaid) {
+        {{ 'STAFF_HANDOVER.HIDE_PAID' | translate }}
+      } @else {
+        {{ 'STAFF_HANDOVER.PAID_TITLE' | translate }} · Tshs {{ (summary.paid.total || 0) | number }}
+      }
+    </button>
+    @if (showPaid) {
     <section class="ho-section">
       <h4>{{ 'STAFF_HANDOVER.PAID_TITLE' | translate }}</h4>
       @if (!fromServer) {
@@ -135,6 +145,7 @@
       }
       }
     </section>
+    }
     }
 
     @if (summary.sentAt) {

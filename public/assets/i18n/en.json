@@ -2407,7 +2407,8 @@
     "SHORT_NOTE": "Reason (optional)",
     "SHORT_AMOUNT": "Shortage",
     "SHORT_CONFIRM": "Receive and record shortage",
-    "SHORT_OK": "Received Tshs {{amount}} ({{method}}) · shortage Tshs {{short}} recorded against the staff member"
+    "SHORT_OK": "Received Tshs {{amount}} ({{method}}) · shortage Tshs {{short}} recorded against the staff member",
+    "HIDE_PAID": "Hide the paid bills"
   },
   "DOWNLOAD": {
     "EYEBROW": "Android app",

@@ -2020,7 +2020,8 @@
     "PICK_BILL": "Chagua bill",
     "PICK_SEARCH": "Tafuta namba au jina la mteja",
     "PICK_NONE": "Hakuna bill inayolingana",
-    "PICK_HINT": "Gusa \"Chagua bill\" kufungua bill moja. Ukituma oda, inarudi kwenye orodha."
+    "PICK_HINT": "Gusa \"Chagua bill\" kufungua bill moja. Ukituma oda, inarudi kwenye orodha.",
+    "BACK_TO_ORDERS": "Rudi kwenye oda"
   },
   "SUPERVISOR_PAGE": {
     "OFFLINE_SEEN": "Nimekagua",
@@ -2038,7 +2039,8 @@
     "SOUND_ON": "Washa sauti",
     "SOUND_OFF": "Zima sauti",
     "TITLE_COUNTER": "Counter · Oda za vinywaji",
-    "TITLE_CHEF": "Jikoni · Oda za chakula"
+    "TITLE_CHEF": "Jikoni · Oda za chakula",
+    "MY_BILLS": "Bili zangu"
   },
   "BRANCH_CHOICE": {
     "DEFAULT": "Default",

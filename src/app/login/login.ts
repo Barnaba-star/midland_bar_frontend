@@ -153,6 +153,7 @@ onSubmit(branchUID?: string) {
         clearTimeout(this.idleTimer);
 
         // Save token
+        this.auth.removeToken(); // a fresh sign-in: nothing kept from before (e.g. a counter's login)
         this.auth.setToken(res.token!);
 
         // Signing in is a manager proving who they are, so a till left
@@ -266,7 +267,8 @@ private staffSignIn(staffCode: string, pin: string, branchUID?: string): void {
         return;
       }
       clearTimeout(this.idleTimer);
-      this.auth.setToken(res.token!);
+      this.auth.removeToken(); // a fresh sign-in: nothing kept from before (e.g. a counter's login)
+        this.auth.setToken(res.token!);
       // No heartbeat: a staff member is not an account to show as online.
       lockStaffSell();
       this.route.navigate(['/staff-sell']);

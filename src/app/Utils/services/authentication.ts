@@ -47,6 +47,13 @@ removeToken(): void {
   // without a token and come back "session expired" over the login screen.
   this.stopHeartbeat();
   this.cookieService.delete('bar_jwt_token', '/');
+  // A COUNTER login kept aside while it sold on its own bills goes too, so
+  // the next person on this browser is never handed back into it.
+  try {
+    localStorage.removeItem('bar_counter_login');
+  } catch {
+    // Storage blocked: nothing was kept.
+  }
   this.clearRoleCaches();
 }
 

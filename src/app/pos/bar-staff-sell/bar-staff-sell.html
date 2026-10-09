@@ -4,8 +4,8 @@
        The only way out is back to POS, which is the manager's. -->
   <header class="module-bar">
     <button type="button" class="exit-btn" (click)="exitToPos()">
-      <mat-icon>{{ ownSession ? 'logout' : 'arrow_back' }}</mat-icon>
-      <span>{{ (ownSession ? 'STAFF_SELL_PAGE.SIGN_OUT' : 'STAFF_SELL_PAGE.EXIT') | translate }}</span>
+      <mat-icon>{{ ownSession && !counterSession ? 'logout' : 'arrow_back' }}</mat-icon>
+      <span>{{ (counterSession ? 'STAFF_SELL_PAGE.BACK_TO_ORDERS' : ownSession ? 'STAFF_SELL_PAGE.SIGN_OUT' : 'STAFF_SELL_PAGE.EXIT') | translate }}</span>
     </button>
     <div class="module-brand">
       <span class="module-logo"><app-brand-word [mark]="true" /></span>

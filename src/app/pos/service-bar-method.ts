@@ -452,4 +452,9 @@ offlineUnreviewedOrders(): Observable<Response<StaffOrder[]>> {
 reviewStaffOrder(orderUid: string): Observable<Response<StaffOrder>> {
   return this.http.post<Response<StaffOrder>>(`${this.barURL}/staffOrders/${orderUid}/review`, {});
 }
+
+/** COUNTER: a staff session as itself, for selling to customers at the counter on its own bills. */
+counterSession(): Observable<{ token: string }> {
+  return this.http.post<{ token: string }>(`${this.barURL}/staffSell/mySession`, {});
+}
 }

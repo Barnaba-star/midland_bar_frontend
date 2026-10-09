@@ -12,6 +12,7 @@ import { ServiceBarMethod } from '../service-bar-method';
 import { StaffOrder } from '../BarModel';
 import { LiveChanges } from '../../Utils/services/live-changes';
 import { Subscription } from 'rxjs';
+import { borrowCounterSession } from '../bar-staff-sell/counter-session';
 
 /** A fallback only: the live stream brings new orders at once. */
 const POLL_MS = 15000;
@@ -232,6 +233,35 @@ export class BarSupervisor implements OnInit, OnDestroy {
 
   backToPos(): void {
     this.router.navigate(['/pos']);
+  }
+
+  /** The counter sells to customers sitting there: its own bills, handed to the cashier. */
+  get canSellHere(): boolean {
+    return this.auth.getPermissions().split(',').includes('COUNTER_SELL');
+  }
+
+  openingMine = false;
+
+  myBills(): void {
+    if (this.openingMine) {
+      return;
+    }
+    this.openingMine = true;
+    this.cdr.markForCheck();
+    this.barService.counterSession().subscribe({
+      next: (res) => {
+        this.openingMine = false;
+        if (res?.token) {
+          borrowCounterSession(this.auth, res.token);
+          this.router.navigate(['/staff-sell']);
+        }
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.openingMine = false;
+        this.cdr.markForCheck();
+      },
+    });
   }
 
   logout(): void {

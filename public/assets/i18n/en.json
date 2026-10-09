@@ -2020,7 +2020,8 @@
     "PICK_BILL": "Choose a bill",
     "PICK_SEARCH": "Search number or customer nickname",
     "PICK_NONE": "No matching bill",
-    "PICK_HINT": "Tap \"Choose a bill\" to open one. Once the order is sent it goes back into the list."
+    "PICK_HINT": "Tap \"Choose a bill\" to open one. Once the order is sent it goes back into the list.",
+    "BACK_TO_ORDERS": "Back to orders"
   },
   "SUPERVISOR_PAGE": {
     "OFFLINE_SEEN": "Looked over",
@@ -2038,7 +2039,8 @@
     "SOUND_ON": "Sound on",
     "SOUND_OFF": "Sound off",
     "TITLE_COUNTER": "Counter · Drink orders",
-    "TITLE_CHEF": "Kitchen · Food orders"
+    "TITLE_CHEF": "Kitchen · Food orders",
+    "MY_BILLS": "My bills"
   },
   "BRANCH_CHOICE": {
     "DEFAULT": "Default",

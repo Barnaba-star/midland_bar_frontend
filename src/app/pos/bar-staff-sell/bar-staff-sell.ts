@@ -1,3 +1,4 @@
+import { isCounterSession, returnFromCounterSession } from './counter-session';
 import { BrandWord } from '../../Utils/component/brand-word/brand-word';
 import { PaymentNoteDialog } from '../../Utils/component/dialogs/payment-note-dialog/payment-note-dialog';
 import { SellableItems } from '../../Utils/services/sellable-items';
@@ -273,8 +274,25 @@ export class BarStaffSell implements OnInit, OnDestroy {
     return this.auth.isStaffSession();
   }
 
+  /** The counter's own bills (from "Bili zangu"): leaving goes back to its orders queue. */
+  get counterSession(): boolean {
+    return this.ownSession && isCounterSession();
+  }
+
   /** Hand the screen back to the manager - only with a manager's login. */
   exitToPos(): void {
+    if (this.counterSession) {
+      const back = () => {
+        returnFromCounterSession(this.auth);
+        this.router.navigate(['/supervisor']);
+      };
+      if (this.unsentCount > 0) {
+        this.sendOrders(back);
+      } else {
+        back();
+      }
+      return;
+    }
     if (this.ownSession) {
       // Written orders go to the supervisor before they leave.
       if (this.unsentCount > 0) {

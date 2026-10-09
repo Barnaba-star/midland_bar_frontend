@@ -17,6 +17,12 @@
       [attr.aria-label]="(sound ? 'SUPERVISOR_PAGE.SOUND_OFF' : 'SUPERVISOR_PAGE.SOUND_ON') | translate">
       <mat-icon>{{ sound ? 'volume_up' : 'volume_off' }}</mat-icon>
     </button>
+    @if (canSellHere) {
+      <button type="button" class="bar-btn" [disabled]="openingMine" (click)="myBills()">
+        <mat-icon>receipt_long</mat-icon>
+        <span>{{ 'SUPERVISOR_PAGE.MY_BILLS' | translate }}</span>
+      </button>
+    }
     <span class="sup-user">{{ userName }}</span>
     <button type="button" class="bar-btn icon" (click)="logout()" [attr.aria-label]="'MENU.LOGOUT' | translate">
       <mat-icon>logout</mat-icon>

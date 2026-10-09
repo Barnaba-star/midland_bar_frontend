@@ -82,6 +82,8 @@ export const StatusInterceptor: HttpInterceptorFn = (
     req.url.includes('/authentication/login') ||
     // Staff code sign-in: the login screen words each refusal itself.
     req.url.includes('/authentication/staffLogin') ||
+    // A staff member's first sign-in, choosing their own code and PIN: same screen, same rule.
+    req.url.includes('/authentication/staffSetup') ||
     // Registering this device for staff sign-in happens in the background.
     req.url.includes('/bar/device/register') ||
     // The subscribe dialog shows the reason inside itself; a popup over it

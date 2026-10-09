@@ -37,7 +37,7 @@
             autocomplete="off"
             spellcheck="false"
             maxlength="10"
-            placeholder="•••"
+            placeholder="••••"
             [attr.aria-label]="'STAFF_SELL_PAGE.CODE_TITLE' | translate"
           />
 
@@ -59,8 +59,9 @@
             }
           </div>
 
-          <button type="submit" class="code-btn" [disabled]="!code.trim() || looking">
-            {{ (looking ? 'COMMON.LOADING' : 'STAFF_SELL_PAGE.CONTINUE') | translate }}
+          <!-- A 4-digit code opens by itself; an older 3-digit one is opened here (or with Enter). -->
+          <button type="submit" class="code-btn" [disabled]="!codeReady">
+            {{ (looking ? 'COMMON.LOADING' : 'STAFF_SELL_PAGE.OPEN_CODE') | translate }}
             <mat-icon>arrow_forward</mat-icon>
           </button>
         </form>

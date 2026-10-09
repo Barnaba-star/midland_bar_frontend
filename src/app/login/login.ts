@@ -22,6 +22,18 @@ import { lockStaffSell, unlockStaffSell } from '../pos/bar-staff-sell/staff-sell
 import { DeviceRegistration } from '../Utils/services/device-registration';
 import { landingFor } from './landing-for';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+/** What /authentication/staffLogin and /staffSetup answer with on a 200. */
+interface StaffLoginReply {
+  token?: string;
+  code?: string;
+  branches?: BranchChoice[];
+  /** SET_CODE: the code the system gave, which they may keep. */
+  currentCode?: string;
+  /** SET_CODE: free 4-digit codes to choose from. */
+  suggestions?: string[];
+  branchUID?: string;
+}
+
 @Component({
   selector: 'app-login',
   imports: [BrandWord, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, ReactiveFormsModule, CommonModule, TranslatePipe, RouterLink],
@@ -98,17 +110,20 @@ private forcePasswordChange(): void {
   });
 }
 
-/** Three digits in the username box: a staff member signing in with their code and PIN. */
+/** A staff code in the username box: 3 digits (older codes) or 4 (new ones). */
+private static readonly STAFF_CODE = /^\d{3,4}$/;
+
+/** A staff code in the username box: a staff member signing in with their code and PIN. */
 get staffMode(): boolean {
-  return /^\d{3}$/.test(String(this.loginForm?.value?.username ?? '').trim());
+  return Login.STAFF_CODE.test(String(this.loginForm?.value?.username ?? '').trim());
 }
 
 /** branchUID: the branch chosen by a user of several - sent on the second try, after CHOOSE_BRANCH. */
 onSubmit(branchUID?: string) {
-  // Three digits in the username box is a staff code: the PIN goes in the
+  // A 3- or 4-digit username is a staff code: the PIN goes in the
   // password box, and they go straight to Staff Sell.
   const typed = String(this.loginForm.value.username ?? '').trim();
-  if (!branchUID && /^\d{3}$/.test(typed) && this.loginForm.valid) {
+  if (!branchUID && Login.STAFF_CODE.test(typed) && this.loginForm.valid) {
     this.staffSignIn(typed, String(this.loginForm.value.password ?? '').trim());
     return;
   }
@@ -237,7 +252,7 @@ onSubmit(branchUID?: string) {
 }
 
 /**
- * A staff member: their 3-digit code and 4-digit PIN, from any device - their
+ * A staff member: their 3- or 4-digit code and 4-digit PIN, from any device - their
  * own phone included. A device a manager or cashier has signed in on sends
  * its branch ticket, which narrows the code to that branch; otherwise code +
  * PIN are matched across branches, and if they fit two the person picks one.
@@ -247,9 +262,16 @@ private staffSignIn(staffCode: string, pin: string, branchUID?: string): void {
   this.loginError = '';
   this.submitting = true;
   const body = { deviceToken: this.device.token(), staffCode, pin, branchUID: branchUID ?? null };
-  this.http.post<{ token?: string; code?: string; branches?: BranchChoice[] }>(`${this.api}/authentication/staffLogin`, body).subscribe({
+  this.http.post<StaffLoginReply>(`${this.api}/authentication/staffLogin`, body).subscribe({
     next: (res) => {
       this.submitting = false;
+      if (res.code === 'SET_CODE') {
+        // Their first sign-in with the code and PIN the manager was given:
+        // they pick their own code and PIN before anything else.
+        this.openSetup(staffCode, pin, res);
+        this.cdr.detectChanges();
+        return;
+      }
       if (res.code === 'CHOOSE_BRANCH') {
         this.dialog.open(BranchChoiceDialogComponent, {
           width: '460px',
@@ -266,24 +288,165 @@ private staffSignIn(staffCode: string, pin: string, branchUID?: string): void {
         this.cdr.detectChanges();
         return;
       }
-      clearTimeout(this.idleTimer);
-      this.auth.removeToken(); // a fresh sign-in: nothing kept from before (e.g. a counter's login)
-        this.auth.setToken(res.token!);
-      // No heartbeat: a staff member is not an account to show as online.
-      lockStaffSell();
-      this.route.navigate(['/staff-sell']);
-      this.cdr.detectChanges();
+      this.staffSignedIn(res.token!);
     },
     error: (err) => {
-      const body = err?.error;
-      const code = body?.code;
-      this.loginError =
-        code === 'STAFF_LOCKED' ? this.translate.instant('LOGIN.STAFF_LOCKED', { minutes: body?.minutes ?? 15 })
-        : code === 'NO_PIN_SET' ? this.translate.instant('LOGIN.STAFF_NO_PIN')
-        : code === 'SUBSCRIPTION_EXPIRED' ? this.translate.instant('LOGIN.EXPIRED_TITLE')
-        : this.translate.instant('LOGIN.STAFF_INVALID');
+      this.loginError = this.staffErrorMessage(err?.error);
       this.auth.removeToken();
       this.submitting = false;
+      this.cdr.detectChanges();
+    },
+  });
+}
+
+/** A staff token in hand (sign-in or first-time setup): into Staff Sell, and the device stays there. */
+private staffSignedIn(token: string): void {
+  clearTimeout(this.idleTimer);
+  this.auth.removeToken(); // a fresh sign-in: nothing kept from before (e.g. a counter's login)
+  this.auth.setToken(token);
+  // No heartbeat: a staff member is not an account to show as online.
+  lockStaffSell();
+  this.route.navigate(['/staff-sell']);
+  this.cdr.detectChanges();
+}
+
+/** A staff sign-in or setup refusal, in the screen's own words. */
+private staffErrorMessage(body: any): string {
+  switch (body?.code) {
+    case 'STAFF_LOCKED': return this.translate.instant('LOGIN.STAFF_LOCKED', { minutes: body?.minutes ?? 15 });
+    case 'NO_PIN_SET': return this.translate.instant('LOGIN.STAFF_NO_PIN');
+    case 'SUBSCRIPTION_EXPIRED': return this.translate.instant('LOGIN.EXPIRED_TITLE');
+    case 'CODE_FORMAT': return this.translate.instant('LOGIN.SETUP_CODE_FORMAT');
+    case 'CODE_TAKEN': return this.translate.instant('LOGIN.SETUP_CODE_TAKEN');
+    case 'PIN_RULE': return this.translate.instant(this.pinRuleKey(this.setupForm.value.newPin) ?? 'LOGIN.SETUP_PIN_RULE');
+    case 'PIN_SAME': return this.translate.instant('LOGIN.SETUP_PIN_SAME');
+    case 'ALREADY_SET': return this.translate.instant('LOGIN.SETUP_ALREADY_SET');
+    default: return this.translate.instant('LOGIN.STAFF_INVALID');
+  }
+}
+
+// ---------- First sign-in with a code the system gave: choose their own ----------
+
+/** Set while the "choose your code" step shows in place of the sign-in form. */
+setup: { staffCode: string; pin: string; branchUID: string | null; currentCode: string; suggestions: string[] } | null = null;
+/** The code picked: one of the suggestions, or '' to keep the current one. */
+chosenCode = '';
+setupError = '';
+setupSubmitting = false;
+showSetupPin = false;
+readonly setupForm = new FormGroup({
+  newPin: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.pattern(/^\d{4}$/)] }),
+  confirmPin: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+});
+
+private openSetup(staffCode: string, pin: string, res: StaffLoginReply): void {
+  this.loginError = '';
+  this.setupError = '';
+  this.chosenCode = '';
+  this.setupForm.reset();
+  this.setup = {
+    staffCode,
+    pin,
+    branchUID: res.branchUID ?? null,
+    currentCode: res.currentCode ?? staffCode,
+    suggestions: (res.suggestions ?? []).filter((c) => !!c),
+  };
+}
+
+chooseCode(code: string): void {
+  this.chosenCode = code;
+  this.setupError = '';
+}
+
+/** The same rules the server holds a PIN to; null when it is fine. */
+pinRuleKey(raw: string | null | undefined): string | null {
+  const pin = String(raw ?? '');
+  if (!/^\d{4}$/.test(pin)) return 'LOGIN.SETUP_PIN_FORMAT';
+  if (new Set(pin).size === 1) return 'LOGIN.SETUP_PIN_REPEAT';
+  if ('0123456789'.includes(pin) || '9876543210'.includes(pin)) return 'LOGIN.SETUP_PIN_RUN';
+  return null;
+}
+
+/** Shown under the PIN boxes once both have something in them. */
+get setupPinProblem(): string | null {
+  const { newPin, confirmPin } = this.setupForm.getRawValue();
+  if (!newPin) return null;
+  if (newPin.length === 4) {
+    const rule = this.pinRuleKey(newPin);
+    if (rule) return rule;
+  }
+  if (confirmPin.length === 4 && newPin !== confirmPin) return 'LOGIN.SETUP_PIN_MISMATCH';
+  return null;
+}
+
+get setupReady(): boolean {
+  const { newPin, confirmPin } = this.setupForm.getRawValue();
+  return !this.setupSubmitting && !this.pinRuleKey(newPin) && newPin === confirmPin;
+}
+
+/** Digits only in the PIN boxes, whatever the keyboard sends. */
+onSetupPinInput(name: 'newPin' | 'confirmPin', event: Event): void {
+  const input = event.target as HTMLInputElement;
+  const digits = input.value.replace(/\D/g, '').slice(0, 4);
+  if (digits !== input.value) input.value = digits;
+  this.setupForm.controls[name].setValue(digits);
+  this.setupError = '';
+}
+
+cancelSetup(): void {
+  this.setup = null;
+  this.setupError = '';
+  this.setupForm.reset();
+  this.loginForm.patchValue({ password: '' });
+  this.cdr.detectChanges();
+}
+
+submitSetup(): void {
+  if (!this.setup || !this.setupReady) {
+    return;
+  }
+  const { newPin } = this.setupForm.getRawValue();
+  this.setupError = '';
+  this.setupSubmitting = true;
+  const body = {
+    deviceToken: this.device.token(),
+    staffCode: this.setup.staffCode,
+    pin: this.setup.pin,
+    branchUID: this.setup.branchUID,
+    // Empty: keep the code they have.
+    newCode: this.chosenCode,
+    newPin,
+  };
+  this.http.post<StaffLoginReply>(`${this.api}/authentication/staffSetup`, body).subscribe({
+    next: (res) => {
+      this.setupSubmitting = false;
+      if (!res?.token) {
+        this.setupError = this.translate.instant('LOGIN.STAFF_INVALID');
+        this.cdr.detectChanges();
+        return;
+      }
+      this.setup = null;
+      this.staffSignedIn(res.token);
+    },
+    error: (err) => {
+      const code = err?.error?.code;
+      this.setupSubmitting = false;
+      this.auth.removeToken();
+      this.setupError = this.staffErrorMessage(err?.error);
+      if (code === 'CODE_TAKEN') {
+        // Someone took it in the meantime: back to keeping theirs, pick again.
+        this.setup = this.setup && {
+          ...this.setup,
+          suggestions: this.setup.suggestions.filter((c) => c !== this.chosenCode),
+        };
+        this.chosenCode = '';
+      } else if (code === 'ALREADY_SET' || code === 'INVALID_STAFF_LOGIN' || code === 'STAFF_LOCKED'
+          || code === 'NO_PIN_SET' || code === 'SUBSCRIPTION_EXPIRED') {
+        // Nothing to choose any more: back to the sign-in form, saying why.
+        this.loginError = this.setupError;
+        this.setup = null;
+        this.loginForm.patchValue({ password: '' });
+      }
       this.cdr.detectChanges();
     },
   });

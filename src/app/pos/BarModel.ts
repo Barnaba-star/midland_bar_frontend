@@ -1,9 +1,9 @@
 
 export interface BarStaffDTO{
   uid?: string;
-  /** K1, A2... - blank gives the next number (001, 002...). */
+  /** 4 digits, unique across all branches; left out on a new staff member, the system chooses one. On an edit only when changing it. */
   staffCode?: string;
-  /** 4 digits, for signing in with the code; on an edit only when changing it. */
+  /** 4 digits, for signing in with the code; left out on a new staff member, the system gives a temporary one. On an edit only when changing it. */
   pin?: string;
   firstName?: string;
   middleName?:string;
@@ -17,8 +17,12 @@ export interface BarStaffDTO{
 }
 export interface BarStaffEntity{
   uid?: string;
-  /** Typed at Staff Sell - 001, 002... */
+  /** Typed at Staff Sell and at sign-in: 4 digits (older staff: 3). */
   staffCode?: string;
+  /** Added without a code or PIN: they choose their own at their first sign-in. */
+  mustSetCode?: boolean;
+  /** The temporary PIN the system gave, only in the reply to adding them. */
+  issuedPin?: string;
   firstName?: string;
   middleName?:string;
   lastName?:string;

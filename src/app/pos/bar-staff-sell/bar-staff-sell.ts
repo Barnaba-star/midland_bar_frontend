@@ -321,8 +321,15 @@ export class BarStaffSell implements OnInit, OnDestroy {
     this.router.navigate(['/login']);
   }
 
-  /** Staff codes are three digits: the third one sends it, no extra tap. */
-  private static readonly CODE_LENGTH = 3;
+  /** New staff codes are four digits: the fourth one sends it, no extra tap. */
+  private static readonly CODE_LENGTH = 4;
+  /** Older staff still hold 3-digit codes: from three digits the Open button sends it. */
+  static readonly MIN_CODE_LENGTH = 3;
+
+  /** Enough digits for the Open button (or Enter) to look the code up. */
+  get codeReady(): boolean {
+    return this.code.trim().length >= BarStaffSell.MIN_CODE_LENGTH && !this.looking;
+  }
   /** The on-screen keypad, in phone order. */
   readonly keypad = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'C', '0', '<'];
   /** A touch screen: the code box is read-only so the device keyboard stays away - the keypad types. */
@@ -346,7 +353,7 @@ export class BarStaffSell implements OnInit, OnDestroy {
     this.cdr.markForCheck();
   }
 
-  /** Typed on a real keyboard: digits only, and the third sends it too. */
+  /** Typed on a real keyboard: digits only, and the fourth sends it too. */
   onCodeTyped(value: string): void {
     const digits = String(value ?? '').replace(/\D/g, '');
     if (digits !== value) {
@@ -365,7 +372,7 @@ export class BarStaffSell implements OnInit, OnDestroy {
   /** Code in: who is it, and what are they holding. None held - open one. */
   findStaff(): void {
     const code = this.code.trim();
-    if (!code || this.looking) {
+    if (code.length < BarStaffSell.MIN_CODE_LENGTH || this.looking) {
       return;
     }
     this.looking = true;

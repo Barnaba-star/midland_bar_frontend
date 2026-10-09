@@ -1,0 +1,36 @@
+<div class="si">
+  <div class="si-head">
+    <span class="si-icon"><mat-icon>badge</mat-icon></span>
+    <div class="si-head-text">
+      <h2>{{ 'STAFF_ISSUED.TITLE' | translate }}</h2>
+      @if (data.name) {
+        <p>{{ data.name }}</p>
+      }
+    </div>
+  </div>
+
+  <div class="si-values">
+    <div class="si-value">
+      <span class="si-label">{{ 'STAFF_ISSUED.CODE_LABEL' | translate }}</span>
+      <strong class="si-digits">{{ data.staffCode }}</strong>
+    </div>
+    <div class="si-value">
+      <span class="si-label">{{ 'STAFF_ISSUED.PIN_LABEL' | translate }}</span>
+      <strong class="si-digits">{{ data.issuedPin }}</strong>
+    </div>
+  </div>
+
+  <p class="si-text">{{ 'STAFF_ISSUED.EXPLAIN' | translate }}</p>
+  <p class="si-warn">
+    <mat-icon>visibility_off</mat-icon>
+    <span>{{ 'STAFF_ISSUED.ONCE' | translate }}</span>
+  </p>
+
+  <div class="si-actions">
+    <button type="button" class="si-copy" (click)="copy()">
+      <mat-icon>{{ copied ? 'check' : 'content_copy' }}</mat-icon>
+      {{ (copied ? 'STAFF_ISSUED.COPIED' : 'STAFF_ISSUED.COPY') | translate }}
+    </button>
+    <button type="button" class="si-ok" (click)="close()">{{ 'STAFF_ISSUED.OK' | translate }}</button>
+  </div>
+</div>

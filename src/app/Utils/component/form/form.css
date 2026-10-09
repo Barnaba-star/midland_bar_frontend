@@ -251,3 +251,8 @@ mat-form-field .mat-form-field-label-required {
   cursor: not-allowed;
   box-shadow: none;
 }
+
+/* A typed value that does not fit the field (e.g. a 4-digit code). */
+.field-error {
+  color: #c0392b;
+}

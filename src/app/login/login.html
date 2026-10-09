@@ -52,6 +52,73 @@
         <span class="ticket-code">{{ 'LOGIN.SIGN_IN' | translate }}</span>
         <span class="ticket-logo"><app-brand-word [mark]="true" /></span>
       </div>
+    @if (setup) {
+      <!-- First sign-in with the code and PIN the manager was given: their own code and PIN first. -->
+      <h1 class="brand-title">{{ 'LOGIN.SETUP_TITLE' | translate }}</h1>
+      <p class="brand-subtitle">{{ 'LOGIN.SETUP_SUBTITLE' | translate }}</p>
+      <div class="ticket-rule"></div>
+
+      <form class="setup" [formGroup]="setupForm" (ngSubmit)="submitSetup()">
+        <div class="setup-block">
+          <h2 class="setup-label">{{ 'LOGIN.SETUP_CODE_LABEL' | translate }}</h2>
+          <div class="code-chips" role="radiogroup" [attr.aria-label]="'LOGIN.SETUP_CODE_LABEL' | translate">
+            @for (c of setup.suggestions; track c) {
+              <button type="button" class="code-chip" role="radio"
+                      [class.on]="chosenCode === c" [attr.aria-checked]="chosenCode === c"
+                      (click)="chooseCode(c)">{{ c }}</button>
+            }
+          </div>
+          <button type="button" class="keep-chip" role="radio"
+                  [class.on]="chosenCode === ''" [attr.aria-checked]="chosenCode === ''"
+                  (click)="chooseCode('')">
+            <mat-icon>{{ chosenCode === '' ? 'radio_button_checked' : 'radio_button_unchecked' }}</mat-icon>
+            <span>{{ 'LOGIN.SETUP_KEEP' | translate: { code: setup.currentCode } }}</span>
+          </button>
+        </div>
+
+        <div class="setup-block">
+          <h2 class="setup-label">{{ 'LOGIN.SETUP_PIN_LABEL' | translate }}</h2>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'LOGIN.SETUP_NEW_PIN' | translate }}</mat-label>
+            <mat-icon matPrefix>lock</mat-icon>
+            <input matInput formControlName="newPin" [type]="showSetupPin ? 'text' : 'password'"
+                   inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off"
+                   (input)="onSetupPinInput('newPin', $event)">
+            <button mat-icon-button matSuffix type="button" (click)="showSetupPin = !showSetupPin" [attr.aria-label]="(showSetupPin ? 'LOGIN.HIDE_PASSWORD' : 'LOGIN.SHOW_PASSWORD') | translate">
+              <mat-icon>{{ showSetupPin ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'LOGIN.SETUP_CONFIRM_PIN' | translate }}</mat-label>
+            <mat-icon matPrefix>lock</mat-icon>
+            <input matInput formControlName="confirmPin" [type]="showSetupPin ? 'text' : 'password'"
+                   inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off"
+                   (input)="onSetupPinInput('confirmPin', $event)">
+          </mat-form-field>
+          <ul class="pin-rules">
+            <li>{{ 'LOGIN.SETUP_RULE_DIGITS' | translate }}</li>
+            <li>{{ 'LOGIN.SETUP_RULE_REPEAT' | translate }}</li>
+            <li>{{ 'LOGIN.SETUP_RULE_RUN' | translate }}</li>
+            <li>{{ 'LOGIN.SETUP_RULE_NEW' | translate }}</li>
+          </ul>
+        </div>
+
+        @if (setupPinProblem || setupError) {
+          <div class="login-error">
+            <mat-icon>error_outline</mat-icon>
+            <span>{{ setupError || (setupPinProblem! | translate) }}</span>
+          </div>
+        }
+
+        <button mat-flat-button color="primary" class="submit-button full-width" type="submit" [disabled]="!setupReady">
+          <mat-icon *ngIf="setupSubmitting" class="spinner">autorenew</mat-icon>
+          <span>{{ (setupSubmitting ? 'LOGIN.SIGNING_IN' : 'LOGIN.SETUP_SAVE') | translate }}</span>
+        </button>
+        <button type="button" class="setup-cancel" (click)="cancelSetup()" [disabled]="setupSubmitting">
+          {{ 'COMMON.CANCEL' | translate }}
+        </button>
+      </form>
+    } @else {
       <h1 class="brand-title">{{ 'LOGIN.WELCOME_BACK' | translate }}</h1>
       <p class="brand-subtitle">{{ 'LOGIN.SUBTITLE' | translate }}</p>
       <div class="ticket-rule"></div>
@@ -69,7 +136,7 @@
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>{{ 'COMMON.PASSWORD' | translate }}</mat-label>
         <mat-icon matPrefix>lock</mat-icon>
-        <!-- A staff code (3 digits) above: the PIN box opens the number pad, and no saved password is filled in. -->
+        <!-- A staff code (3 or 4 digits) above: the PIN box opens the number pad, and no saved password is filled in. -->
         <input matInput formControlName="password" [type]="showPassword ? 'text' : 'password'"
                [attr.inputmode]="staffMode ? 'numeric' : null"
                [attr.autocomplete]="staffMode ? 'off' : 'current-password'">
@@ -116,6 +183,7 @@
         <span>{{ 'LOGIN.STAFF_HINT' | translate }}</span>
       </p>
     </form>
+    }
     </div>
   </main>
 </div>

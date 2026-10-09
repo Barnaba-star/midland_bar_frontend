@@ -20,13 +20,16 @@
           <!-- Text -->
           <mat-form-field *ngSwitchCase="'text'" appearance="outline" class="w-100">
              <span *ngIf="field.prefix" matPrefix>{{ field.prefix }}&nbsp;</span>
-            <input matInput type="text" [formControlName]="field.name" [placeholder]="(field.placeholder || 'Enter text here') | translate" />
+            <input matInput type="text" [attr.inputmode]="('' + field.pattern).startsWith('^[0-9]') ? 'numeric' : null" [attr.maxlength]="field.maxLength || null" [attr.autocomplete]="field.autoComplete || null" [formControlName]="field.name" [placeholder]="(field.placeholder || 'Enter text here') | translate" />
             <span *ngIf="field.suffix" matSuffix>&nbsp;{{ field.suffix }}</span>
+            <mat-hint *ngIf="field.patternMessage && form.get(field.name)?.hasError('pattern')" class="field-error">{{ field.patternMessage | translate }}</mat-hint>
+            <mat-hint *ngIf="field.hint && !(field.patternMessage && form.get(field.name)?.hasError('pattern'))">{{ field.hint | translate }}</mat-hint>
           </mat-form-field>
 
           <mat-form-field *ngSwitchCase="'password'" appearance="outline" class="w-100">
             <input matInput type="password" [attr.inputmode]="('' + field.pattern).startsWith('^[0-9]') ? 'numeric' : null" [attr.maxlength]="field.maxLength || null" [formControlName]="field.name" [placeholder]="(field.placeholder || field.label || '') | translate" autocomplete="new-password" />
-            <mat-hint *ngIf="field.hint">{{ field.hint | translate }}</mat-hint>
+            <mat-hint *ngIf="field.patternMessage && form.get(field.name)?.hasError('pattern')" class="field-error">{{ field.patternMessage | translate }}</mat-hint>
+            <mat-hint *ngIf="field.hint && !(field.patternMessage && form.get(field.name)?.hasError('pattern'))">{{ field.hint | translate }}</mat-hint>
           </mat-form-field>
 
           <!-- Number -->

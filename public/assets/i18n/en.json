@@ -533,11 +533,32 @@
     "PANEL_POINT3": "Every shilling lands in its own bucket",
     "BACK": "Back to home",
     "BRANCH_NOT_ALLOWED": "You are not set up to work in that branch.",
-    "STAFF_HINT": "Bar staff: your 3-digit code here, your 4-digit PIN as the password",
+    "STAFF_HINT": "Bar staff: your 4-digit code here (3 digits for older codes), your 4-digit PIN as the password",
     "STAFF_INVALID": "Wrong staff code or PIN.",
     "STAFF_LOCKED": "Too many wrong PINs - this code is locked for {{minutes}} minutes.",
     "STAFF_NO_PIN": "This staff code has no PIN yet. Ask the manager to set one (Staff > Edit).",
-    "STAFF_DEVICE_NOT_REGISTERED": "This device is not set up for staff sign-in yet. A manager or cashier of the bar must sign in on it once first."
+    "STAFF_DEVICE_NOT_REGISTERED": "This device is not set up for staff sign-in yet. A manager or cashier of the bar must sign in on it once first.",
+    "SETUP_TITLE": "Choose your code",
+    "SETUP_SUBTITLE": "This is your first sign-in. Choose your own code and a new PIN - the temporary ones you were given will stop working.",
+    "SETUP_CODE_LABEL": "Your code",
+    "SETUP_KEEP": "Keep {{code}}",
+    "SETUP_PIN_LABEL": "Your new PIN",
+    "SETUP_NEW_PIN": "New PIN (4 digits)",
+    "SETUP_CONFIRM_PIN": "Repeat the new PIN",
+    "SETUP_RULE_DIGITS": "Exactly 4 digits",
+    "SETUP_RULE_REPEAT": "Not one digit repeated (like 1111)",
+    "SETUP_RULE_RUN": "Not a run (like 1234 or 4321)",
+    "SETUP_RULE_NEW": "Not the same as the temporary PIN",
+    "SETUP_SAVE": "Save and sign in",
+    "SETUP_PIN_FORMAT": "The PIN must be 4 digits.",
+    "SETUP_PIN_REPEAT": "Choose a PIN that is not one digit repeated (like 1111).",
+    "SETUP_PIN_RUN": "Choose a PIN that is not a run of digits (like 1234).",
+    "SETUP_PIN_RULE": "That PIN is not allowed - choose another.",
+    "SETUP_PIN_MISMATCH": "The two PINs do not match.",
+    "SETUP_PIN_SAME": "The new PIN is the same as the temporary one - choose another.",
+    "SETUP_CODE_FORMAT": "The code must be 4 digits.",
+    "SETUP_CODE_TAKEN": "That code was just taken - choose another.",
+    "SETUP_ALREADY_SET": "Your code and PIN are already set. Sign in with your own code and PIN."
   },
   "LANDING": {
     "HERO_BADGE": "Bar Online Management & Supervision",
@@ -1792,9 +1813,9 @@
     "DELETE_FAILED": "Could not delete the staff member",
     "DELETE_HAS_OPEN": "This staff member still has unpaid bills or orders not yet received. Close them first.",
     "STAFF_CODE": "Staff code",
-    "STAFF_CODE_PH": "3 digits, e.g. 245",
+    "STAFF_CODE_PH": "4 digits, e.g. 2458",
     "STAFF_CODE_HINT": "Their code for Staff Sell and for signing in - the PIN below is the secret",
-    "STAFF_CODE_FORMAT": "The code must be exactly 3 digits (e.g. 245)",
+    "STAFF_CODE_FORMAT": "The code must be exactly 4 digits (e.g. 2458)",
     "PIN": "PIN",
     "PIN_PH": "4 digits",
     "PIN_HINT": "Their secret for signing in with the code - only they should know it",
@@ -1803,7 +1824,10 @@
     "NEW_PIN_PH": "Leave empty to keep the current PIN",
     "NEW_PIN_HINT": "4 digits - also unlocks a code locked by wrong PINs",
     "NO_PIN": "No PIN",
-    "NO_PIN_TIP": "Cannot sign in with the code until a PIN is set - Edit to add one"
+    "NO_PIN_TIP": "Cannot sign in with the code until a PIN is set - Edit to add one",
+    "NEW_CODE": "New code",
+    "NEW_CODE_PH": "Leave empty to keep the current code",
+    "NEW_CODE_HINT": "4 digits no other staff member holds"
   },
   "STOCK_FORM": {
     "ADD_BTN": "Add Stock",
@@ -2000,7 +2024,7 @@
     "TITLE": "Staff Sell",
     "CODE_EYEBROW": "Staff sell",
     "CODE_TITLE": "Enter your code",
-    "CODE_HINT": "Tap your 3-digit staff code - it stays hidden. Bills you open here carry it (e.g. 245-1), and what sells on them counts toward your commission.",
+    "CODE_HINT": "Tap your 4-digit staff code - it stays hidden. An older 3-digit code? Type it and press Open. Bills you open here carry it (e.g. 2458-1), and what sells on them counts toward your commission.",
     "CONTINUE": "Continue",
     "OPEN_BILLS": "open bills",
     "SWITCH": "Switch staff",
@@ -2021,7 +2045,8 @@
     "PICK_SEARCH": "Search number or customer nickname",
     "PICK_NONE": "No matching bill",
     "PICK_HINT": "Tap \"Choose a bill\" to open one. Once the order is sent it goes back into the list.",
-    "BACK_TO_ORDERS": "Back to orders"
+    "BACK_TO_ORDERS": "Back to orders",
+    "OPEN_CODE": "Open"
   },
   "SUPERVISOR_PAGE": {
     "OFFLINE_SEEN": "Looked over",
@@ -2496,5 +2521,16 @@
       "audit_logs": "Audit log",
       "error_logs": "Error log"
     }
+  },
+  "STAFF_ISSUED": {
+    "TITLE": "Staff code and PIN",
+    "CODE_LABEL": "Staff code",
+    "PIN_LABEL": "Temporary PIN",
+    "EXPLAIN": "Give these to the staff member. They sign in once with this code and temporary PIN, then choose their own code and PIN.",
+    "ONCE": "The temporary PIN is shown only now - write it down or copy it before closing.",
+    "COPY": "Copy",
+    "COPIED": "Copied",
+    "OK": "OK",
+    "COPY_TEXT": "{{name}} - Staff code: {{code}}, temporary PIN: {{pin}}"
   }
 }

@@ -82,6 +82,10 @@ export class FormComponent implements OnInit, OnDestroy {
     const group: any = {};
     this.fields.forEach((field) => {
       const validators = field.required ? [Validators.required] : [];
+      if (field.pattern) {
+        // An empty optional field passes; anything typed must fit.
+        validators.push(Validators.pattern(field.pattern));
+      }
       const initialValue =
         this.initialData?.[field.name] ??
         (field.type === 'checkbox-group' ? [] : '');

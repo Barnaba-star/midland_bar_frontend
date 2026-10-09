@@ -19,6 +19,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { StaffDetailsDialogComponent } from '../../Utils/component/dialogs/staff-details-dialog-component/staff-details-dialog-component';
 import { DeleteConfirmationComponent } from '../../Utils/component/dialogs/delete-confirmation-component/delete-confirmation-component';
 import { EmptyStateComponent } from '../../Utils/component/empty-state/empty-state';
+import { StaffCodeIssuedDialog } from '../../Utils/component/dialogs/staff-code-issued-dialog/staff-code-issued-dialog';
 
 /** Stored as the backend's StaffCategory names. */
 export const STAFF_CATEGORY_OPTIONS = [
@@ -109,35 +110,12 @@ export class BarStaff implements OnInit{
     }
   }
 
-  // No staff code field: the backend gives each new staff member a random
-  // three-digit code, shown in the tables below.
+  // No code or PIN fields: the backend gives each new staff member a free
+  // 4-digit code (unique across all branches) and a temporary PIN, shown once
+  // in a dialog; at their first sign-in they choose their own.
   @ViewChild('staffForm') staffForm?: Form3;
 
   staffFields: FormField[] = [
-    {
-      // The staff member's own code - typed on the Staff Sell keypad, so three digits.
-      name: 'staffCode',
-      type: 'text',
-      label: 'STAFF_FORM.STAFF_CODE',
-      placeholder: 'STAFF_FORM.STAFF_CODE_PH',
-      hint: 'STAFF_FORM.STAFF_CODE_HINT',
-      required: true,
-      pattern: '^[0-9]{3}$',
-      patternMessage: 'STAFF_FORM.STAFF_CODE_FORMAT',
-      autoComplete: 'off',
-    },
-    {
-      // Their secret for signing in with the code: code = who, PIN = proof.
-      name: 'pin',
-      type: 'password',
-      label: 'STAFF_FORM.PIN',
-      placeholder: 'STAFF_FORM.PIN_PH',
-      hint: 'STAFF_FORM.PIN_HINT',
-      required: true,
-      pattern: '^[0-9]{4}$',
-      patternMessage: 'STAFF_FORM.PIN_FORMAT',
-      maxLength: 4,
-    },
     {
       name: 'firstName',
       type: 'text',
@@ -252,12 +230,25 @@ export class BarStaff implements OnInit{
       options: GENDER_OPTIONS,
     },
     {
+      // Left empty, the code stays as it is (older 3-digit codes included).
+      name: 'newCode',
+      type: 'text',
+      label: 'STAFF_FORM.NEW_CODE',
+      placeholder: 'STAFF_FORM.NEW_CODE_PH',
+      hint: 'STAFF_FORM.NEW_CODE_HINT',
+      pattern: '^[0-9]{4}$',
+      patternMessage: 'STAFF_FORM.STAFF_CODE_FORMAT',
+      maxLength: 4,
+      autoComplete: 'off',
+    },
+    {
       name: 'newPin',
       type: 'password',
       label: 'STAFF_FORM.NEW_PIN',
       placeholder: 'STAFF_FORM.NEW_PIN_PH',
       hint: 'STAFF_FORM.NEW_PIN_HINT',
       pattern: '^[0-9]{4}$',
+      patternMessage: 'STAFF_FORM.PIN_FORMAT',
       maxLength: 4,
     },
   ];
@@ -296,9 +287,8 @@ export class BarStaff implements OnInit{
   ];
 
   savedData(value: any): void {
+    // No code or PIN: the backend chooses both and sends them back once.
     const barStaffDTO: BarStaffDTO = {
-      staffCode: String(value.staffCode ?? '').trim(),
-      pin: String(value.pin ?? '').trim(),
       firstName: value.firstName,
       middleName: value.middleName,
       lastName: value.lastName,
@@ -318,7 +308,7 @@ export class BarStaff implements OnInit{
           this.staffForm?.reset();
           this.barStaff.push(response.data);
           this.cdr.detectChanges();
-          console.log('Saved Bar Staff:', this.barStaff);
+          this.showIssuedCode(response.data);
         }
       },
       error: (error) => {
@@ -326,6 +316,30 @@ export class BarStaff implements OnInit{
       },
     });
   }
+  /** The code and temporary PIN the system gave a new staff member - the only time the PIN is shown. */
+  private showIssuedCode(staff: BarStaffEntity): void {
+    if (!staff?.issuedPin || !staff.staffCode) {
+      return;
+    }
+    const name = [staff.firstName, staff.middleName, staff.lastName].filter((x) => !!x && x.trim()).join(' ');
+    this.dialog.open(StaffCodeIssuedDialog, {
+      width: '440px',
+      maxWidth: '95vw',
+      disableClose: true,
+      autoFocus: false,
+      data: { name, staffCode: staff.staffCode, issuedPin: staff.issuedPin },
+    });
+  }
+
+  /** The optional code and PIN changes of an edit: empty leaves each as it is. */
+  private codeAndPinChange(result: any, current?: string): Pick<BarStaffDTO, 'staffCode' | 'pin'> {
+    const code = String(result?.newCode ?? '').trim();
+    return {
+      staffCode: code && code !== String(current ?? '').trim() ? code : undefined,
+      pin: String(result?.newPin ?? '').trim() || undefined,
+    };
+  }
+
   staffUID: string = '';
   onEditBarStaff(event: any) {
     this.staffUID = event.uid;
@@ -352,6 +366,7 @@ export class BarStaff implements OnInit{
         barCategory: result.barCategory,
         description: result.description,
         gender: result.gender,
+        ...this.codeAndPinChange(result, event.staffCode),
       };
       this.barService.saveBarStaff(staffEdited).subscribe({
         next: (response) => {
@@ -589,8 +604,8 @@ loadStaffPage() {
           dateOfBirth: result.dateOfBirth,
           barCategory: result.barCategory,
           phoneNumber: result.phoneNumber,
-          // Left empty, the PIN stays as it is.
-          pin: String(result.newPin ?? '').trim() || undefined,
+          // Left empty, the code and the PIN stay as they are.
+          ...this.codeAndPinChange(result, event.staffCode),
         };
         this.barService.saveBarStaff(barStaffDTO).subscribe({
           next: (res) => {

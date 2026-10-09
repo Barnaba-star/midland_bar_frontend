@@ -533,11 +533,32 @@
     "PANEL_POINT3": "Kila shilingi inaenda kwenye fungu lake",
     "BACK": "Rudi mwanzo",
     "BRANCH_NOT_ALLOWED": "Hujawekwa kufanya kazi kwenye branch hiyo.",
-    "STAFF_HINT": "Wauzaji: weka code yako (tarakimu 3) hapa, na PIN yako (tarakimu 4) kama neno la siri",
+    "STAFF_HINT": "Wauzaji: weka code yako (tarakimu 4, au 3 kwa code za zamani) hapa, na PIN yako (tarakimu 4) kama neno la siri",
     "STAFF_INVALID": "Code au PIN si sahihi.",
     "STAFF_LOCKED": "Umekosea PIN mara nyingi - code hii imefungwa kwa dakika {{minutes}}.",
     "STAFF_NO_PIN": "Code hii bado haina PIN. Mwombe meneja akuwekee (Staff > Edit).",
-    "STAFF_DEVICE_NOT_REGISTERED": "Kifaa hiki bado hakijasajiliwa kwa wauzaji. Meneja au cashier wa bar aingie kwenye kifaa hiki mara moja kwanza."
+    "STAFF_DEVICE_NOT_REGISTERED": "Kifaa hiki bado hakijasajiliwa kwa wauzaji. Meneja au cashier wa bar aingie kwenye kifaa hiki mara moja kwanza.",
+    "SETUP_TITLE": "Chagua code yako",
+    "SETUP_SUBTITLE": "Hii ni mara yako ya kwanza kuingia. Chagua code yako mwenyewe na PIN mpya - hizo za muda ulizopewa hazitatumika tena.",
+    "SETUP_CODE_LABEL": "Code yako",
+    "SETUP_KEEP": "Baki na {{code}}",
+    "SETUP_PIN_LABEL": "PIN yako mpya",
+    "SETUP_NEW_PIN": "PIN mpya (tarakimu 4)",
+    "SETUP_CONFIRM_PIN": "Rudia PIN mpya",
+    "SETUP_RULE_DIGITS": "Tarakimu 4 hasa",
+    "SETUP_RULE_REPEAT": "Si tarakimu moja inayojirudia (kama 1111)",
+    "SETUP_RULE_RUN": "Si mfululizo (kama 1234 au 4321)",
+    "SETUP_RULE_NEW": "Si sawa na PIN ya muda uliyopewa",
+    "SETUP_SAVE": "Hifadhi na uingie",
+    "SETUP_PIN_FORMAT": "PIN lazima iwe tarakimu 4.",
+    "SETUP_PIN_REPEAT": "Chagua PIN isiyo tarakimu moja inayojirudia (kama 1111).",
+    "SETUP_PIN_RUN": "Chagua PIN isiyo mfululizo wa tarakimu (kama 1234).",
+    "SETUP_PIN_RULE": "PIN hii hairuhusiwi - chagua nyingine.",
+    "SETUP_PIN_MISMATCH": "PIN hizi mbili hazifanani.",
+    "SETUP_PIN_SAME": "PIN mpya ni sawa na ile ya muda - chagua nyingine.",
+    "SETUP_CODE_FORMAT": "Code lazima iwe tarakimu 4.",
+    "SETUP_CODE_TAKEN": "Code hiyo imeshachukuliwa sasa hivi - chagua nyingine.",
+    "SETUP_ALREADY_SET": "Code na PIN yako zimeshawekwa. Ingia kwa code na PIN yako mwenyewe."
   },
   "LANDING": {
     "HERO_BADGE": "Bar Online Management & Supervision",
@@ -1792,9 +1813,9 @@
     "DELETE_FAILED": "Imeshindikana kumfuta mhudumu",
     "DELETE_HAS_OPEN": "Mhudumu huyu bado ana bill ambazo hazijalipwa au order ambazo hazijapokelewa. Zifunge kwanza.",
     "STAFF_CODE": "Code ya mhudumu",
-    "STAFF_CODE_PH": "Namba 3, mfano 245",
+    "STAFF_CODE_PH": "Tarakimu 4, mfano 2458",
     "STAFF_CODE_HINT": "Code yake ya Staff Sell na ya kuingia - siri ni PIN iliyo chini",
-    "STAFF_CODE_FORMAT": "Code lazima iwe namba 3 hasa (mfano 245)",
+    "STAFF_CODE_FORMAT": "Code lazima iwe tarakimu 4 hasa (mfano 2458)",
     "PIN": "PIN",
     "PIN_PH": "Tarakimu 4",
     "PIN_HINT": "Siri yake ya kuingia kwa code - aijue yeye peke yake",
@@ -1803,7 +1824,10 @@
     "NEW_PIN_PH": "Acha wazi kubaki na PIN ya sasa",
     "NEW_PIN_HINT": "Tarakimu 4 - pia inafungua code iliyofungwa kwa makosa ya PIN",
     "NO_PIN": "Hana PIN",
-    "NO_PIN_TIP": "Hawezi kuingia kwa code mpaka awekewe PIN - bonyeza Edit"
+    "NO_PIN_TIP": "Hawezi kuingia kwa code mpaka awekewe PIN - bonyeza Edit",
+    "NEW_CODE": "Code mpya",
+    "NEW_CODE_PH": "Acha wazi kubaki na code ya sasa",
+    "NEW_CODE_HINT": "Tarakimu 4, isiyotumiwa na mhudumu mwingine yeyote"
   },
   "STOCK_FORM": {
     "ADD_BTN": "Ongeza Stock",
@@ -2000,7 +2024,7 @@
     "TITLE": "Mauzo ya Wahudumu",
     "CODE_EYEBROW": "Mauzo ya wahudumu",
     "CODE_TITLE": "Andika code yako",
-    "CODE_HINT": "Gusa code yako ya namba 3 - haionekani kwa wengine. Bili unazofungua hapa zinabeba code yako (mf. 245-1), na mauzo yake yanaingia kwenye kamisheni yako.",
+    "CODE_HINT": "Gusa code yako (tarakimu 4) - haionekani kwa wengine. Code ya zamani ya tarakimu 3? Iandike kisha bonyeza Fungua. Bili unazofungua hapa zinabeba code yako (mf. 2458-1), na mauzo yake yanaingia kwenye kamisheni yako.",
     "CONTINUE": "Endelea",
     "OPEN_BILLS": "bill zilizo wazi",
     "SWITCH": "Badilisha mhudumu",
@@ -2021,7 +2045,8 @@
     "PICK_SEARCH": "Tafuta namba au jina la mteja",
     "PICK_NONE": "Hakuna bill inayolingana",
     "PICK_HINT": "Gusa \"Chagua bill\" kufungua bill moja. Ukituma oda, inarudi kwenye orodha.",
-    "BACK_TO_ORDERS": "Rudi kwenye oda"
+    "BACK_TO_ORDERS": "Rudi kwenye oda",
+    "OPEN_CODE": "Fungua"
   },
   "SUPERVISOR_PAGE": {
     "OFFLINE_SEEN": "Nimekagua",
@@ -2496,5 +2521,16 @@
       "audit_logs": "Kumbukumbu za ukaguzi",
       "error_logs": "Kumbukumbu za hitilafu"
     }
+  },
+  "STAFF_ISSUED": {
+    "TITLE": "Code na PIN ya mhudumu",
+    "CODE_LABEL": "Code ya mhudumu",
+    "PIN_LABEL": "PIN ya muda",
+    "EXPLAIN": "Mpe mhudumu namba hizi. Ataingia mara moja kwa code hii na PIN hii ya muda, kisha atachagua code yake na PIN yake mwenyewe.",
+    "ONCE": "PIN ya muda inaonyeshwa sasa tu - iandike au inakili kabla ya kufunga.",
+    "COPY": "Nakili",
+    "COPIED": "Imenakiliwa",
+    "OK": "Sawa",
+    "COPY_TEXT": "{{name}} - Code ya mhudumu: {{code}}, PIN ya muda: {{pin}}"
   }
 }

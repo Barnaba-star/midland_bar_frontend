@@ -514,3 +514,99 @@ input.mat-input-element:-webkit-autofill {
   font-size: 18px;
   color: var(--color-primary, #b86e00);
 }
+
+/* ---------- First staff sign-in: choose your own code and PIN ---------- */
+
+.setup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.setup-block {
+  margin-bottom: 10px;
+}
+
+/* Smaller than the ticket title, bigger than what it heads. */
+.setup-label {
+  margin: 0 0 10px;
+  font-family: var(--display);
+  font-size: 24px;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  line-height: 1.1;
+  text-transform: uppercase;
+  color: #1d1812;
+}
+
+.code-chips {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.code-chip {
+  min-width: 0;
+  height: 56px;
+  border: 2px solid #d8ccb8;
+  border-radius: 14px;
+  background: #fff;
+  color: #1d1812;
+  font-family: 'Courier New', monospace;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.code-chip.on {
+  border-color: var(--amber);
+  background: var(--amber);
+  color: #1a1206;
+}
+
+.keep-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: 8px;
+  padding: 10px 12px;
+  border: 2px solid #d8ccb8;
+  border-radius: 14px;
+  background: #fff;
+  color: #1d1812;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.keep-chip.on {
+  border-color: var(--amber);
+  background: color-mix(in srgb, var(--amber) 16%, #fff);
+}
+
+.keep-chip mat-icon {
+  flex: 0 0 auto;
+  color: #b86e00;
+}
+
+.pin-rules {
+  margin: 0;
+  padding: 0 0 0 18px;
+  color: #7a6f60;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.setup-cancel {
+  margin-top: 8px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  color: #7a6f60;
+  font-weight: 600;
+  cursor: pointer;
+}

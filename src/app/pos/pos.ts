@@ -8,7 +8,7 @@ import { MainSidenav2 } from '../Utils/component/main-sidenav2/main-sidenav2';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslatePipe } from '@ngx-translate/core';
-import { CASHIER_HOME, POS_FULL_ACCESS_ROLES, isCashierOnly } from './pos-role.guard';
+import { CASHIER_HOME, POS_FULL_ACCESS_ROLES, STOCK_COUNT_ROUTE, STORE_KEEPER_HOME, isCashierOnly, isStoreKeeperOnly } from './pos-role.guard';
 import { ServiceBarMethod } from './service-bar-method';
 import { EmptyStateComponent } from '../Utils/component/empty-state/empty-state';
 
@@ -88,7 +88,15 @@ menuItems: SidenavItem[] = [
     label: 'MENU.STORE',
     icon: 'store',
     route: '/pos/barStore',
-    roles: this.noCashierRoles
+    roles: [...this.noCashierRoles, 'STORE_KEEPER']
+  },
+  {
+    // The stock count on its own page - whoever may correct the store
+    // (SAVE_STORE), the store keeper among them. It is in Reports as well.
+    label: 'MENU.STOCK_COUNT',
+    icon: 'stock',
+    route: STOCK_COUNT_ROUTE,
+    permissions: ['SAVE_STORE']
   },
    {
     label: 'MENU.SALES',
@@ -137,6 +145,12 @@ return this.visibility.filteredMenuItems(menu);
     if (this.isHome && isCashierOnly(this.visibility)) {
       this.isHome = false;
       this.router.navigateByUrl(CASHIER_HOME, { replaceUrl: true });
+      return;
+    }
+    // Nor the store keeper: their home is the Store.
+    if (this.isHome && isStoreKeeperOnly(this.visibility)) {
+      this.isHome = false;
+      this.router.navigateByUrl(STORE_KEEPER_HOME, { replaceUrl: true });
       return;
     }
 

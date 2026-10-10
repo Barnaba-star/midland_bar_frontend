@@ -137,7 +137,8 @@
     "SUPPORT": "Ujumbe",
     "HELP": "Msaada",
     "STAFF_SELL": "Mauzo ya Wahudumu",
-    "SUPERVISOR": "Oda za Wahudumu"
+    "SUPERVISOR": "Oda za Wahudumu",
+    "STOCK_COUNT": "Hesabu Stock"
   },
   "SALON": {
     "OFFICE": "Ofisi",
@@ -2270,7 +2271,11 @@
     "HISTORY": "Hesabu zilizofanyika",
     "COL_WHEN": "Lini",
     "COL_BY": "Aliyehesabu",
-    "COL_ITEMS": "Tofauti / Zilizohesabiwa"
+    "COL_ITEMS": "Tofauti / Zilizohesabiwa",
+    "PACK": "Pack",
+    "EVEN": "Sawa",
+    "SUBTITLE_COUNT": "Hesabu bidhaa zilizopo kwenye rafu - kreti na chupa; mfumo unaonyesha tofauti, kisha unarekebisha stock.",
+    "HINT_COUNT": "Bidhaa usizohesabu hazibadilishwi. Tumia '=' kwa bidhaa iliyolingana na mfumo."
   },
   "SPEND_DIALOG": {
     "SUBTITLE": "Weka kiasi, njia ya malipo na maelezo ya matumizi haya.",

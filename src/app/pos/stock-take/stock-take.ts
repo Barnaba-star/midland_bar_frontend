@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
-import { DatePipe, DecimalPipe } from '@angular/common';
+import { DatePipe, DecimalPipe, NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,6 +8,15 @@ import { environment } from '../../Utils/enviroments/environment';
 import { Response, ResponseList } from '../../Utils/models/responces';
 import { AlertService } from '../../Utils/services/alert';
 import { Authentication } from '../../Utils/services/authentication';
+import { unitKey } from '../../Utils/pipes/stock-packs.pipe';
+import { isStoreKeeperOnly } from '../pos-role.guard';
+
+/** Anything shown in packs + units: a count row, a saved line, a product's variance. */
+interface Packed {
+  unit: string | null;
+  packUnit: string | null;
+  unitsPerPack: number;
+}
 
 interface CountRow {
   uid: string;
@@ -31,7 +40,7 @@ interface CountRow {
  */
 @Component({
   selector: 'app-stock-take',
-  imports: [FormsModule, MatIconModule, DecimalPipe, DatePipe, TranslatePipe],
+  imports: [FormsModule, MatIconModule, DecimalPipe, DatePipe, TranslatePipe, NgTemplateOutlet],
   templateUrl: './stock-take.html',
   styleUrl: './stock-take.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -39,10 +48,12 @@ interface CountRow {
 export class StockTake implements OnInit {
   @Input() area = 'bar';
 
-  /** Who may count and correct the store (SAVE_STORE). */
+  /** Who may count and correct the store: SAVE_STORE (CEO, MANAGER, STORE_KEEPER; ROOT passes). */
   private static readonly COUNTERS = ['ROOT', 'CEO', 'MANAGER'];
 
   canCount = false;
+  /** The store keeper counts bottles, not money: values and losses in Tshs stay hidden from them. */
+  showMoney = true;
   counting = false;
   loadingItems = false;
   rows: CountRow[] = [];
@@ -75,7 +86,8 @@ export class StockTake implements OnInit {
   }
 
   ngOnInit(): void {
-    this.canCount = StockTake.COUNTERS.some((r) => this.auth.hasRole(r));
+    this.canCount = StockTake.COUNTERS.some((r) => this.auth.hasRole(r)) || this.auth.hasPermission('SAVE_STORE');
+    this.showMoney = !isStoreKeeperOnly(this.auth);
     this.loadHistory(this.filter);
   }
 
@@ -106,13 +118,24 @@ export class StockTake implements OnInit {
     this.note = '';
   }
 
-  hasPack(r: { packUnit: string | null; unitsPerPack: number }): boolean {
-    return !!r.packUnit && r.unitsPerPack > 1;
+  /** Counted in packs as well as units: anything with more than one unit to a pack (24 Chupa to a Kreti). */
+  hasPack(r: Packed): boolean {
+    return r.unitsPerPack > 1;
   }
 
-  /** "4 Crate + 6 Chupa" from a number of bottles. */
-  split(units: number, r: { packUnit: string | null; unitsPerPack: number }): { packs: number; loose: number } {
-    const n = Math.abs(units);
+  /** The pack's own name - Kreti, Katoni, or as typed in Setting. */
+  packLabel(r: Packed): string {
+    return r.packUnit ? unitKey(r.packUnit) : 'STOCK_TAKE.PACK';
+  }
+
+  /** The unit's own name - Chupa, Kopo, or as typed in Setting. */
+  unitLabel(r: Packed): string {
+    return r.unit ? unitKey(r.unit) : 'PRODUCT_FORM.UNIT_PIECE';
+  }
+
+  /** 102 Chupa at 24 a Kreti -> 4 Kreti + 6 Chupa (sign dropped; the caller shows it). */
+  split(units: number, r: Packed): { packs: number; loose: number } {
+    const n = Math.abs(Number(units) || 0);
     return this.hasPack(r) ? { packs: Math.floor(n / r.unitsPerPack), loose: n % r.unitsPerPack } : { packs: 0, loose: n };
   }
 
@@ -121,6 +144,7 @@ export class StockTake implements OnInit {
   }
 
   countedUnits(r: CountRow): number {
+    // crates x units per crate + loose bottles
     return (Number(r.packs) || 0) * (this.hasPack(r) ? r.unitsPerPack : 0) + (Number(r.loose) || 0);
   }
 

@@ -7,7 +7,7 @@
           <div class="st-head-icon"><mat-icon>inventory</mat-icon></div>
           <div>
             <h3>{{ 'STOCK_TAKE.TITLE' | translate }}</h3>
-            <p>{{ 'STOCK_TAKE.SUBTITLE' | translate }}</p>
+            <p>{{ (showMoney ? 'STOCK_TAKE.SUBTITLE' : 'STOCK_TAKE.SUBTITLE_COUNT') | translate }}</p>
           </div>
         </div>
         @if (!counting) {
@@ -23,69 +23,73 @@
         } @else if (rows.length === 0) {
           <p class="muted">{{ 'STOCK_TAKE.NO_ITEMS' | translate }}</p>
         } @else {
-          <div class="st-scroll">
-            <table class="st-table">
-              <thead>
-                <tr>
-                  <th>{{ 'STOCK_TAKE.COL_PRODUCT' | translate }}</th>
-                  <th class="num">{{ 'STOCK_TAKE.COL_SYSTEM' | translate }}</th>
-                  <th class="num">{{ 'STOCK_TAKE.COL_COUNTED' | translate }}</th>
-                  <th class="num">{{ 'STOCK_TAKE.COL_DIFF' | translate }}</th>
-                  <th class="num">{{ 'STOCK_TAKE.COL_VALUE' | translate }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (r of rows; track r.uid) {
-                  <tr [class.done]="isCounted(r)">
-                    <td>
-                      <strong>{{ r.serviceName }}</strong>
-                      <small class="muted">{{ r.serviceCode }}</small>
-                    </td>
-                    <td class="num">
-                      @if (hasPack(r)) {
-                        {{ split(r.stockQuantity, r).packs }} {{ r.packUnit! | translate }} + {{ split(r.stockQuantity, r).loose }} {{ (r.unit || 'Unit') | translate }}
+          <!-- One card per product rather than a table: a phone at 360px
+               has no room for five columns, and the inputs need it most. -->
+          <div class="cnt-list">
+            @for (r of rows; track r.uid) {
+              <div class="cnt-row" [class.done]="isCounted(r)" [class.no-money]="!showMoney">
+                <div class="cnt-name">
+                  <strong>{{ r.serviceName }}</strong>
+                  <small class="muted">{{ r.serviceCode }}</small>
+                </div>
+
+                <div class="cnt-cell cnt-system">
+                  <small>{{ 'STOCK_TAKE.COL_SYSTEM' | translate }}</small>
+                  <span><ng-container *ngTemplateOutlet="qty; context: { u: r.stockQuantity, r: r }" /></span>
+                </div>
+
+                <div class="cnt-inputs">
+                  @if (hasPack(r)) {
+                    <label class="cnt-field">
+                      <span>{{ packLabel(r) | translate }}</span>
+                      <input type="number" inputmode="numeric" min="0" step="1" [(ngModel)]="r.packs" [name]="'p-' + r.uid" placeholder="0" />
+                    </label>
+                  }
+                  <label class="cnt-field">
+                    <span>{{ unitLabel(r) | translate }}</span>
+                    <input type="number" inputmode="numeric" min="0" step="1" [(ngModel)]="r.loose" [name]="'l-' + r.uid" placeholder="0" />
+                  </label>
+                  <button type="button" class="same" (click)="matchSystem(r)" [title]="'STOCK_TAKE.SAME_TIP' | translate" [attr.aria-label]="'STOCK_TAKE.SAME_TIP' | translate">=</button>
+                </div>
+
+                <div class="cnt-cell cnt-diff">
+                  <small>{{ 'STOCK_TAKE.COL_DIFF' | translate }}</small>
+                  @if (isCounted(r)) {
+                    <span class="pill" [class.short]="diff(r) < 0" [class.over]="diff(r) > 0" [class.even]="diff(r) === 0">
+                      @if (diff(r) === 0) {
+                        {{ 'STOCK_TAKE.EVEN' | translate }}
                       } @else {
-                        {{ r.stockQuantity }} {{ (r.unit || 'Unit') | translate }}
+                        <ng-container *ngTemplateOutlet="qty; context: { u: diff(r), r: r, signed: true }" />
                       }
-                      <small class="muted">= {{ r.stockQuantity }}</small>
-                    </td>
-                    <td class="num">
-                      <div class="count-in">
-                        @if (hasPack(r)) {
-                          <input type="number" min="0" step="1" [(ngModel)]="r.packs" [name]="'p-' + r.uid" />
-                          <span>{{ r.packUnit! | translate }}</span>
-                        }
-                        <input type="number" min="0" step="1" [(ngModel)]="r.loose" [name]="'l-' + r.uid" />
-                        <span>{{ (r.unit || 'Unit') | translate }}</span>
-                        <button type="button" class="same" (click)="matchSystem(r)" [title]="'STOCK_TAKE.SAME_TIP' | translate">=</button>
-                      </div>
-                    </td>
-                    <td class="num">
-                      @if (isCounted(r)) {
-                        <span class="pill" [class.short]="diff(r) < 0" [class.over]="diff(r) > 0" [class.even]="diff(r) === 0">
-                          {{ diff(r) > 0 ? '+' : '' }}{{ diff(r) }}
-                        </span>
-                      } @else {
-                        <span class="muted">-</span>
-                      }
-                    </td>
-                    <td class="num">
-                      @if (isCounted(r) && diff(r) !== 0) {
-                        <span [class.neg]="value(r) < 0">{{ value(r) | number }}</span>
-                      } @else {
-                        <span class="muted">-</span>
-                      }
-                    </td>
-                  </tr>
+                    </span>
+                    @if (hasPack(r)) {
+                      <small class="muted">= {{ countedUnits(r) }} {{ unitLabel(r) | translate }}</small>
+                    }
+                  } @else {
+                    <span class="muted">-</span>
+                  }
+                </div>
+
+                @if (showMoney) {
+                  <div class="cnt-cell cnt-value">
+                    <small>{{ 'STOCK_TAKE.COL_VALUE' | translate }}</small>
+                    @if (isCounted(r) && diff(r) !== 0) {
+                      <span [class.neg]="value(r) < 0">{{ value(r) | number }}</span>
+                    } @else {
+                      <span class="muted">-</span>
+                    }
+                  </div>
                 }
-              </tbody>
-            </table>
+              </div>
+            }
           </div>
 
           <div class="st-summary">
             <span>{{ 'STOCK_TAKE.SUMMARY' | translate: { counted: counted.length, total: rows.length, different: differentCount } }}</span>
-            <span class="pill short">{{ 'STOCK_TAKE.LOSS' | translate }}: {{ lossTotal | number }}</span>
-            <span class="pill over">{{ 'STOCK_TAKE.GAIN' | translate }}: +{{ gainTotal | number }}</span>
+            @if (showMoney) {
+              <span class="pill short">{{ 'STOCK_TAKE.LOSS' | translate }}: {{ lossTotal | number }}</span>
+              <span class="pill over">{{ 'STOCK_TAKE.GAIN' | translate }}: +{{ gainTotal | number }}</span>
+            }
           </div>
 
           <div class="st-foot">
@@ -105,7 +109,7 @@
               <button type="button" class="btn-main" (click)="save()"><mat-icon>check</mat-icon>{{ 'STOCK_TAKE.CONFIRM_BTN' | translate }}</button>
             </div>
           }
-          <p class="muted small">{{ 'STOCK_TAKE.HINT' | translate }}</p>
+          <p class="muted small">{{ (showMoney ? 'STOCK_TAKE.HINT' : 'STOCK_TAKE.HINT_COUNT') | translate }}</p>
         }
       }
     </section>
@@ -133,9 +137,11 @@
     } @else {
       <div class="st-kpis">
         <div class="kpi"><small>{{ 'STOCK_TAKE.KPI_COUNTS' | translate }}</small><strong>{{ takes.length }}</strong></div>
-        <div class="kpi bad"><small>{{ 'STOCK_TAKE.LOSS' | translate }}</small><strong>{{ periodLoss | number }}</strong></div>
-        <div class="kpi warn"><small>{{ 'STOCK_TAKE.GAIN' | translate }}</small><strong>+{{ periodGain | number }}</strong></div>
-        <div class="kpi"><small>{{ 'STOCK_TAKE.NET' | translate }}</small><strong [class.neg]="periodLoss + periodGain < 0">{{ periodLoss + periodGain | number }}</strong></div>
+        @if (showMoney) {
+          <div class="kpi bad"><small>{{ 'STOCK_TAKE.LOSS' | translate }}</small><strong>{{ periodLoss | number }}</strong></div>
+          <div class="kpi warn"><small>{{ 'STOCK_TAKE.GAIN' | translate }}</small><strong>+{{ periodGain | number }}</strong></div>
+          <div class="kpi"><small>{{ 'STOCK_TAKE.NET' | translate }}</small><strong [class.neg]="periodLoss + periodGain < 0">{{ periodLoss + periodGain | number }}</strong></div>
+        }
       </div>
 
       <h4>{{ 'STOCK_TAKE.BY_PRODUCT' | translate }}</h4>
@@ -145,7 +151,9 @@
             <th>{{ 'STOCK_TAKE.COL_PRODUCT' | translate }}</th>
             <th class="num">{{ 'STOCK_TAKE.COL_TIMES' | translate }}</th>
             <th class="num">{{ 'STOCK_TAKE.COL_DIFF' | translate }}</th>
-            <th class="num">{{ 'STOCK_TAKE.COL_VALUE' | translate }}</th>
+            @if (showMoney) {
+              <th class="num">{{ 'STOCK_TAKE.COL_VALUE' | translate }}</th>
+            }
           </tr>
         </thead>
         <tbody>
@@ -155,10 +163,16 @@
               <td class="num">{{ p.counts }}</td>
               <td class="num">
                 <span class="pill" [class.short]="p.differenceUnits < 0" [class.over]="p.differenceUnits > 0" [class.even]="p.differenceUnits === 0">
-                  {{ p.differenceUnits > 0 ? '+' : '' }}{{ p.differenceUnits }} {{ (p.unit || 'Unit') | translate }}
+                  @if (p.differenceUnits === 0) {
+                    {{ 'STOCK_TAKE.EVEN' | translate }}
+                  } @else {
+                    <ng-container *ngTemplateOutlet="qty; context: { u: p.differenceUnits, r: p, signed: true }" />
+                  }
                 </span>
               </td>
-              <td class="num"><span [class.neg]="p.differenceValue < 0">{{ p.differenceValue | number }}</span></td>
+              @if (showMoney) {
+                <td class="num"><span [class.neg]="p.differenceValue < 0">{{ p.differenceValue | number }}</span></td>
+              }
             </tr>
           }
         </tbody>
@@ -171,8 +185,10 @@
             <th>{{ 'STOCK_TAKE.COL_WHEN' | translate }}</th>
             <th>{{ 'STOCK_TAKE.COL_BY' | translate }}</th>
             <th class="num">{{ 'STOCK_TAKE.COL_ITEMS' | translate }}</th>
-            <th class="num">{{ 'STOCK_TAKE.LOSS' | translate }}</th>
-            <th class="num">{{ 'STOCK_TAKE.GAIN' | translate }}</th>
+            @if (showMoney) {
+              <th class="num">{{ 'STOCK_TAKE.LOSS' | translate }}</th>
+              <th class="num hide-sm">{{ 'STOCK_TAKE.GAIN' | translate }}</th>
+            }
             <th></th>
           </tr>
         </thead>
@@ -182,23 +198,31 @@
               <td>{{ t.takenAt | date: 'dd MMM yyyy, HH:mm' }}</td>
               <td>{{ t.takenByName || t.takenBy }}</td>
               <td class="num">{{ t.itemsDifferent }} / {{ t.itemsCounted }}</td>
-              <td class="num"><span [class.neg]="t.lossValue < 0">{{ t.lossValue | number }}</span></td>
-              <td class="num">+{{ t.gainValue | number }}</td>
+              @if (showMoney) {
+                <td class="num"><span [class.neg]="t.lossValue < 0">{{ t.lossValue | number }}</span></td>
+                <td class="num hide-sm">+{{ t.gainValue | number }}</td>
+              }
               <td class="num"><mat-icon class="chev">{{ openUid === t.uid ? 'expand_less' : 'expand_more' }}</mat-icon></td>
             </tr>
             @if (openUid === t.uid) {
               <tr class="detail">
-                <td colspan="6">
+                <td [attr.colspan]="showMoney ? 6 : 4">
                   <div class="detail-box">
                     @for (l of openLines; track l.uid) {
-                      <div class="detail-line">
-                        <span><strong>{{ l.serviceName }}</strong></span>
-                        <span>{{ 'STOCK_TAKE.COL_SYSTEM' | translate }}: {{ l.systemUnits }}</span>
-                        <span>{{ 'STOCK_TAKE.COL_COUNTED' | translate }}: {{ l.countedUnits }}</span>
+                      <div class="detail-line" [class.no-money]="!showMoney">
+                        <span class="dl-name"><strong>{{ l.serviceName }}</strong></span>
+                        <span>{{ 'STOCK_TAKE.COL_SYSTEM' | translate }}: <ng-container *ngTemplateOutlet="qty; context: { u: l.systemUnits, r: l }" /></span>
+                        <span>{{ 'STOCK_TAKE.COL_COUNTED' | translate }}: <ng-container *ngTemplateOutlet="qty; context: { u: l.countedUnits, r: l }" /></span>
                         <span class="pill" [class.short]="l.differenceUnits < 0" [class.over]="l.differenceUnits > 0" [class.even]="l.differenceUnits === 0">
-                          {{ l.differenceUnits > 0 ? '+' : '' }}{{ l.differenceUnits }}
+                          @if (l.differenceUnits === 0) {
+                            {{ 'STOCK_TAKE.EVEN' | translate }}
+                          } @else {
+                            <ng-container *ngTemplateOutlet="qty; context: { u: l.differenceUnits, r: l, signed: true }" />
+                          }
                         </span>
-                        <span class="num" [class.neg]="l.differenceValue < 0">{{ l.differenceValue | number }}</span>
+                        @if (showMoney) {
+                          <span class="num" [class.neg]="l.differenceValue < 0">{{ l.differenceValue | number }}</span>
+                        }
                       </div>
                     }
                     @if (t.note) {
@@ -214,3 +238,17 @@
     }
   </section>
 </div>
+
+<!-- A number of units shown the way it sits on the shelf: "4 Kreti + 6 Chupa",
+     or "6 Chupa" for a product without a pack - each in the item's own names. -->
+<ng-template #qty let-u="u" let-r="r" let-signed="signed">
+  @let q = split(u, r);
+  @let sign = u < 0 ? '−' : (signed && u > 0 ? '+' : '');
+  <span class="qty">
+    @if (hasPack(r)) {
+      {{ sign }}{{ q.packs }} {{ packLabel(r) | translate }} + {{ q.loose }} {{ unitLabel(r) | translate }}
+    } @else {
+      {{ sign }}{{ q.loose }} {{ unitLabel(r) | translate }}
+    }
+  </span>
+</ng-template>

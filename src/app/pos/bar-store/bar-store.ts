@@ -16,6 +16,7 @@ import { EmptyStateComponent } from '../../Utils/component/empty-state/empty-sta
 import { PageableParam } from '../../Utils/models/responces';
 import { StockPacksPipe } from '../../Utils/pipes/stock-packs.pipe';
 import { ServiceBarMethod } from '../service-bar-method';
+import { isStoreKeeperOnly } from '../pos-role.guard';
 import { BarServiceEntity, StockReceiptDTO } from '../BarModel';
 
 /** Where a product's count stands, for the status badge. */
@@ -45,12 +46,18 @@ export class BarStore implements OnInit {
   ) {}
 
   /**
-   * Adding stock needs SAVE_STORE, which the seed gives CEO and MANAGER
-   * (ROOT passes every check). Hiding the button from the rest only spares
-   * them a refusal - the backend is what enforces it.
+   * Adding stock needs SAVE_STORE, which the seed gives CEO, MANAGER and
+   * STORE_KEEPER (ROOT passes every check). Hiding the button from the rest
+   * only spares them a refusal - the backend is what enforces it.
    */
   get canAddStock(): boolean {
-    return ['ROOT', 'CEO', 'MANAGER'].some(role => this.visibility.hasRole(role));
+    return ['ROOT', 'CEO', 'MANAGER'].some(role => this.visibility.hasRole(role))
+      || this.visibility.hasPermission('SAVE_STORE');
+  }
+
+  /** The store keeper counts bottles, not money: buying price and stock value stay hidden from them. */
+  get seesMoney(): boolean {
+    return !isStoreKeeperOnly(this.visibility);
   }
 
   ngOnInit(): void {
@@ -64,7 +71,7 @@ export class BarStore implements OnInit {
     {
       icon: 'setting',
       title: 'STORE.MANAGE',
-      roles: ['ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'MANAGER', 'CASHIER'],
+      roles: ['ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'MANAGER', 'CASHIER', 'STORE_KEEPER'],
     },
     {
       // Carries purchase costs, so it stays with those who see money -

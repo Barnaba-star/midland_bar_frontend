@@ -216,6 +216,28 @@ getPermissions():string{
   return permissionsAsString;
 }
 
+/**
+ * True when the token carries this permission, or the user is ROOT (who
+ * passes every backend check without listing them). Frontend visibility
+ * only - the backend's @PreAuthorize is the real boundary.
+ */
+hasPermission(permission: string): boolean {
+  const token = this.getToken();
+  if (!token) {
+    return false;
+  }
+  try {
+    const decoded = this.jwtHelper.decodeToken(token);
+    if (decoded?.isRoot === true || this.hasRole('ROOT')) {
+      return true;
+    }
+    const permissions = decoded?.permissions;
+    return Array.isArray(permissions) && permissions.includes(permission);
+  } catch {
+    return false;
+  }
+}
+
 getTenantId(): string {
   const token = this.getToken();
   if (!token) {
@@ -269,14 +291,10 @@ filteredMenuItems(menuItems:SidenavItem[]): SidenavItem[] {
   }
 
   const filtered = menuItems
-    .filter(item =>
-      !item.roles || item.roles.some(role => this.hasRole(role))
-    )
+    .filter(item => this.menuItemAllowed(item))
     .map(item => ({
       ...item,
-      children: item.children?.filter(child =>
-        !child.roles || child.roles.some(role => this.hasRole(role))
-      )
+      children: item.children?.filter(child => this.menuItemAllowed(child))
     }))
     .filter(item =>
       !item.children || item.children.length > 0 || item.route
@@ -284,6 +302,12 @@ filteredMenuItems(menuItems:SidenavItem[]): SidenavItem[] {
 
   this.filteredMenuCache.set(menuItems, filtered);
   return filtered;
+}
+
+/** An item shows when the user holds one of its roles (if it lists any) and one of its permissions (if it lists any). */
+private menuItemAllowed(item: SidenavItem): boolean {
+  return (!item.roles || item.roles.some(role => this.hasRole(role)))
+    && (!item.permissions || item.permissions.some(p => this.hasPermission(p)));
 }
 
 filteredTitleActions(titles: TitleAction[]): TitleAction[] {

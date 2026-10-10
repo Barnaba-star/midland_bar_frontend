@@ -327,48 +327,6 @@
   cursor: default;
 }
 
-.st-scroll {
-  max-height: 520px;
-  overflow: auto;
-  border: 1px solid #f1e8d8;
-  border-radius: 12px;
-}
-
-.st-scroll thead th {
-  position: sticky;
-  top: 0;
-  background: #faf6ef;
-  z-index: 1;
-}
-
-tr.done td {
-  background: #fbfdf9;
-}
-
-.count-in {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.count-in input {
-  width: 70px;
-  padding: 7px 8px;
-  border: 1px solid #e3dccb;
-  border-radius: 8px;
-  font: inherit;
-  text-align: right;
-}
-
-.count-in input:focus {
-  outline: none;
-  border-color: var(--color-primary);
-}
-
-.count-in span {
-  color: #7a6f60;
-  font-size: 12px;
-}
 
 .same {
   width: 28px;
@@ -451,7 +409,11 @@ h4 {
 }
 
 .detail-line {
-  grid-template-columns: 1.6fr 1fr 1fr auto 90px !important;
+  grid-template-columns: 1.4fr 1fr 1fr auto 90px;
+}
+
+.detail-line.no-money {
+  grid-template-columns: 1.4fr 1fr 1fr auto;
 }
 
 @media (max-width: 720px) {
@@ -466,4 +428,200 @@ h4 {
 
 .st-table td small {
   margin-left: 6px;
+}
+
+/* ================= THE COUNT: one card per product ================= */
+.cnt-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 620px;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+/* Wide screens: name | system | inputs side by side | difference | value. */
+.cnt-row {
+  display: grid;
+  grid-template-columns: minmax(130px, 1.3fr) minmax(110px, 1fr) auto minmax(110px, 1fr) 90px;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid #f1e8d8;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.cnt-row.no-money {
+  grid-template-columns: minmax(130px, 1.3fr) minmax(110px, 1fr) auto minmax(110px, 1fr);
+}
+
+.cnt-row.done {
+  background: #fbfdf9;
+  border-color: #d9ecd9;
+}
+
+.cnt-name {
+  min-width: 0;
+}
+
+.cnt-name strong {
+  display: block;
+  font-size: 15px;
+  color: #2b2118;
+  overflow-wrap: anywhere;
+}
+
+.cnt-name small {
+  font-size: 12px;
+}
+
+.cnt-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  font-size: 13px;
+  color: #2b2118;
+  font-variant-numeric: tabular-nums;
+}
+
+.cnt-cell > small:first-child {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #7a6f60;
+}
+
+.cnt-cell .pill {
+  align-self: flex-start;
+}
+
+.cnt-value {
+  text-align: right;
+}
+
+.cnt-inputs {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.cnt-field {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.cnt-field span {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #5c5647;
+}
+
+.cnt-field input {
+  width: 84px;
+  padding: 8px 10px;
+  border: 1px solid #e3dccb;
+  border-radius: 9px;
+  font: inherit;
+  font-size: 15px;
+  text-align: right;
+  box-sizing: border-box;
+}
+
+.cnt-field input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.cnt-inputs .same {
+  flex-shrink: 0;
+  width: 36px;
+  height: 38px;
+}
+
+.qty {
+  white-space: normal;
+}
+
+/* Phones (360-412px): name across the top, system and difference side by
+   side, the two inputs sharing one row - nothing wider than the screen. */
+@media (max-width: 720px) {
+  .cnt-row,
+  .cnt-row.no-money {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 8px 10px;
+    padding: 10px;
+  }
+
+  .cnt-name {
+    grid-column: 1 / -1;
+  }
+
+  .cnt-inputs {
+    grid-column: 1 / -1;
+    order: 2;
+  }
+
+  .cnt-system {
+    order: 1;
+  }
+
+  .cnt-diff {
+    order: 1;
+  }
+
+  .cnt-value {
+    order: 3;
+    grid-column: 1 / -1;
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+
+  .cnt-field {
+    flex: 1;
+  }
+
+  .cnt-field input {
+    width: 100%;
+  }
+
+  .st-table th,
+  .st-table td {
+    padding: 8px 6px;
+  }
+
+  .st-table {
+    font-size: 12.5px;
+  }
+
+  .num {
+    white-space: normal;
+  }
+
+  .hide-sm {
+    display: none;
+  }
+
+  .detail-line,
+  .detail-line.no-money {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .detail-line .dl-name {
+    grid-column: 1 / -1;
+  }
+
+  .st-head-left {
+    min-width: 0;
+  }
+
+  .st-foot .btn-main,
+  .st-foot .btn-ghost {
+    justify-content: center;
+  }
 }

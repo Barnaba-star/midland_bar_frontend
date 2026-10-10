@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { posFullAccessGuard, posNoCashierGuard } from './pos/pos-role.guard';
+import { posFullAccessGuard, posNoCashierGuard, posNoStoreKeeperGuard, stockCountGuard } from './pos/pos-role.guard';
 import { settingsGuard, settingsManageGuard, settingsRootOnlyGuard } from './settings/settings-role.guard';
 import { adminGuard, adminManageGuard, adminRootOnlyGuard } from './admin/admin-role.guard';
 import { staffSellLockGuard } from './pos/bar-staff-sell/staff-sell-lock';
@@ -112,7 +112,8 @@ export const routes: Routes = [
 },
 {
   path: 'dashboard',
-  canActivate: [staffSellLockGuard],
+  // The store keeper has no Dashboard cards; the logo and "home" bring them back to the Store.
+  canActivate: [staffSellLockGuard, posNoStoreKeeperGuard],
   loadComponent: () => import('./dashboard/dashboard').then(m => m.Dashboard)
 },
 {
@@ -142,19 +143,22 @@ export const routes: Routes = [
       },
       {
         path: 'barStaff',
-        canActivate: [posNoCashierGuard],
+        canActivate: [posNoCashierGuard, posNoStoreKeeperGuard],
         loadComponent:()=>import('./pos/bar-staff/bar-staff').then(m=>m.BarStaff)
       },
        {
         path: 'barService',
+        canActivate: [posNoStoreKeeperGuard],
         loadComponent:()=>import('./pos/bar-service/bar-service').then(m=>m.BarService)
       },
        {
         path: 'barSales',
+        canActivate: [posNoStoreKeeperGuard],
         loadComponent:()=>import('./pos/bar-sales/bar-sales').then(m=>m.BarSales)
       },
         {
         path: 'barReports',
+        canActivate: [posNoStoreKeeperGuard],
         loadComponent:()=>import('./pos/bar-reports/bar-reports').then(m=>m.BarReports)
       },
        {
@@ -163,14 +167,21 @@ export const routes: Routes = [
         loadComponent:()=>import('./pos/bar-store/bar-store').then(m=>m.BarStore)
       },
       {
+        // The stock count on its own, for whoever may correct the store
+        // (the store keeper included) - it also stays inside Reports.
+        path: 'stockTake',
+        canActivate: [stockCountGuard],
+        loadComponent:()=>import('./pos/stock-take/stock-take-page').then(m=>m.StockTakePage)
+      },
+      {
         // Open to every POS role except CASHIER, who only works the till.
         path: 'barSupport',
-        canActivate: [posNoCashierGuard],
+        canActivate: [posNoCashierGuard, posNoStoreKeeperGuard],
         loadComponent:()=>import('./pos/bar-support/bar-support').then(m=>m.BarSupport)
       },
       {
         path: 'barHelp',
-        canActivate: [posNoCashierGuard],
+        canActivate: [posNoCashierGuard, posNoStoreKeeperGuard],
         loadComponent:()=>import('./pos/bar-help/bar-help').then(m=>m.BarHelp)
       },
 

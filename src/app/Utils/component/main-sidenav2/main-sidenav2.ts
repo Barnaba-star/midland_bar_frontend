@@ -41,7 +41,7 @@ import { SystemSettingService } from '../../services/system-setting';
 import { AlertService } from '../../services/alert';
 
 import { SidenavItem } from '../main-sidenav-component/model';
-import { POS_FULL_ACCESS_ROLES, isCashierOnly } from '../../../pos/pos-role.guard';
+import { POS_FULL_ACCESS_ROLES, STOCK_COUNT_ROUTE, STORE_KEEPER_HOME, isCashierOnly, isStoreKeeperOnly } from '../../../pos/pos-role.guard';
 
 
 @Component({
@@ -136,6 +136,9 @@ export class MainSidenav2 implements OnInit, OnDestroy {
   // CASHIER only works the till: the header leaves out Notifications,
   // Settings, Help and Subscribe for them.
   isCashier = false;
+
+  /** STORE_KEEPER only: search offers just the Store and the stock count. */
+  isStoreKeeper = false;
 
   // Notifications and the Settings shortcut are for CEO and above: hidden
   // from CASHIER and from a MANAGER who holds no higher role.
@@ -242,7 +245,10 @@ export class MainSidenav2 implements OnInit, OnDestroy {
       || (this.authDetails.getPermissions() || '').split(',').includes('MANAGE_SYSTEM_SETTINGS');
     this.loadSystemLogo();
 
-    this.isCashier = isCashierOnly(this.authDetails);
+    // The store keeper's header is as bare as the cashier's: no
+    // notifications, settings, help or subscribe - store work only.
+    this.isStoreKeeper = isStoreKeeperOnly(this.authDetails);
+    this.isCashier = isCashierOnly(this.authDetails) || this.isStoreKeeper;
     const isManagerOnly = this.authDetails.hasRole('MANAGER')
       && !POS_FULL_ACCESS_ROLES.some(role => this.authDetails.hasRole(role));
     this.hideAdminIcons = this.isCashier || isManagerOnly;
@@ -797,9 +803,16 @@ export class MainSidenav2 implements OnInit, OnDestroy {
     this.profile = false;
     this.searchQuery = '';
     this.activeResultIndex = 0;
-    this.searchResults = this.globalSearch.index;
+    this.searchResults = this.searchIndex;
 
     setTimeout(() => this.searchInputRef?.nativeElement.focus());
+  }
+
+  /** What search may offer: everything, or for the store keeper the store pages only. */
+  private get searchIndex(): SearchItem[] {
+    return this.isStoreKeeper
+      ? this.globalSearch.index.filter(item => item.route === STORE_KEEPER_HOME || item.route === STOCK_COUNT_ROUTE)
+      : this.globalSearch.index;
   }
 
   closeSearch(): void {
@@ -813,11 +826,11 @@ export class MainSidenav2 implements OnInit, OnDestroy {
     this.activeResultIndex = 0;
 
     if (!query) {
-      this.searchResults = this.globalSearch.index;
+      this.searchResults = this.searchIndex;
       return;
     }
 
-    this.searchResults = this.globalSearch.index.filter(item => {
+    this.searchResults = this.searchIndex.filter(item => {
 
       const label = this.translate.instant(item.labelKey) as string;
 

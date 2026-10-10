@@ -52,8 +52,10 @@
                   <th>{{ 'STORE_PAGE.COL_BOUGHT_IN' | translate }}</th>
                   <th>{{ 'STORE_PAGE.COL_ON_HAND' | translate }}</th>
                   <th>{{ 'STORE_PAGE.COL_UNITS' | translate }}</th>
-                  <th>{{ 'SETTING_PAGE.COL_BUYING_PRICE' | translate }}</th>
-                  <th>{{ 'STORE_PAGE.COL_VALUE' | translate }}</th>
+                  @if (seesMoney) {
+                    <th>{{ 'SETTING_PAGE.COL_BUYING_PRICE' | translate }}</th>
+                    <th>{{ 'STORE_PAGE.COL_VALUE' | translate }}</th>
+                  }
                   <th>{{ 'COMMON.STATUS' | translate }}</th>
                   <th>{{ 'COMMON.ACTIONS' | translate }}</th>
                 </tr>
@@ -121,18 +123,20 @@
                       }
                     </td>
 
-                    <!-- Buying price -->
-                    <td>
-                      Tshs {{ (product.buyingPrice || 0) | number }}
-                      @if (st.packKey) {
-                        <span class="muted">/ {{ st.packKey | translate }}</span>
-                      }
-                    </td>
+                    @if (seesMoney) {
+                      <!-- Buying price -->
+                      <td>
+                        Tshs {{ (product.buyingPrice || 0) | number }}
+                        @if (st.packKey) {
+                          <span class="muted">/ {{ st.packKey | translate }}</span>
+                        }
+                      </td>
 
-                    <!-- Stock value -->
-                    <td class="value-cell">
-                      Tshs {{ stockValue(product) | number: '1.0-0' }}
-                    </td>
+                      <!-- Stock value -->
+                      <td class="value-cell">
+                        Tshs {{ stockValue(product) | number: '1.0-0' }}
+                      </td>
+                    }
 
                     <!-- Status -->
                     <td>
@@ -168,7 +172,7 @@
 
                 @if (products.length === 0 && searchTerm) {
                   <tr>
-                    <td colspan="10" class="no-match">
+                    <td [attr.colspan]="seesMoney ? 10 : 8" class="no-match">
                       {{ 'SERVICE_PAGE.NO_MATCH' | translate: { term: searchTerm } }}
                     </td>
                   </tr>
@@ -190,10 +194,12 @@
               <span>{{ 'COMMON.ENTRIES' | translate }}</span>
             </div>
 
-            <div class="page-value">
-              {{ 'STORE_PAGE.PAGE_VALUE' | translate }}:
-              <strong>Tshs {{ pageStockValue | number: '1.0-0' }}</strong>
-            </div>
+            @if (seesMoney) {
+              <div class="page-value">
+                {{ 'STORE_PAGE.PAGE_VALUE' | translate }}:
+                <strong>Tshs {{ pageStockValue | number: '1.0-0' }}</strong>
+              </div>
+            }
 
             <div class="pagination-buttons">
               <button type="button" class="page-btn" [disabled]="page === 0" (click)="changePage(page - 1)">

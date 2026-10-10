@@ -137,7 +137,8 @@
     "SUPPORT": "Messages",
     "HELP": "Help",
     "STAFF_SELL": "Staff Sell",
-    "SUPERVISOR": "Waiters' orders"
+    "SUPERVISOR": "Waiters' orders",
+    "STOCK_COUNT": "Stock count"
   },
   "SALON": {
     "OFFICE": "Office",
@@ -2270,7 +2271,11 @@
     "HISTORY": "Counts made",
     "COL_WHEN": "When",
     "COL_BY": "Counted by",
-    "COL_ITEMS": "Different / Counted"
+    "COL_ITEMS": "Different / Counted",
+    "PACK": "Pack",
+    "EVEN": "Matches",
+    "SUBTITLE_COUNT": "Count what is on the shelves - crates and bottles; the system shows each difference, then corrects the stock.",
+    "HINT_COUNT": "Products you do not count are left as they are. Use '=' for a product that matches the system."
   },
   "SPEND_DIALOG": {
     "SUBTITLE": "Enter the amount, how it was paid and what it was for.",

@@ -21,6 +21,7 @@ export class GlobalSearchService {
     { labelKey: 'MENU.STAFF', route: '/pos/barStaff', icon: 'person' },
     { labelKey: 'MENU.SERVICE', route: '/pos/barService', icon: 'service' },
     { labelKey: 'MENU.STORE', route: '/pos/barStore', icon: 'store' },
+    { labelKey: 'MENU.STOCK_COUNT', route: '/pos/stockTake', icon: 'stock' },
     { labelKey: 'MENU.SALES', route: '/pos/barSales', icon: 'payment2' },
     { labelKey: 'MENU.REPORT', route: '/pos/barReports', icon: 'report' },
     { labelKey: 'MENU.SETTING', route: '/pos/barSetting', icon: 'setting' },

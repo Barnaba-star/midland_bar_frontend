@@ -1,4 +1,4 @@
-import { CASHIER_HOME } from '../pos/pos-role.guard';
+import { CASHIER_HOME, STORE_KEEPER_HOME, storeKeeperOnly } from '../pos/pos-role.guard';
 
 /**
  * Where a user starts after signing in - shared by login and anything that
@@ -17,6 +17,10 @@ export function landingFor(hasRole: (role: string) => boolean): string {
   // (food), and a SUPERVISOR from before - go straight to their queue.
   if (['COUNTER', 'CHEF', 'SUPERVISOR'].some(hasRole) && !['CEO', 'MANAGER'].some(hasRole)) {
     return '/supervisor';
+  }
+  // The store keeper only works the store: stock levels, receiving, counting.
+  if (storeKeeperOnly(hasRole)) {
+    return STORE_KEEPER_HOME;
   }
   // Cashier-only: a user who also holds CEO/MANAGER starts on the Dashboard.
   if (hasRole('CASHIER') && !['CEO', 'MANAGER'].some(hasRole)) {

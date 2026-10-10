@@ -15,6 +15,11 @@ subscriptionAmount?: number;
 subscriptionDays?: number;
 subscriptionStatus?: string;
 subscriptionPhoneNumber?: string;
+/** Set by the main office: nobody in the branch can sign in or work while true. */
+blocked?: boolean;
+blockedReason?: string | null;
+blockedAt?: string | null;
+blockedBy?: string | null;
 }
 export interface BranchDTO{
 uid?:string;

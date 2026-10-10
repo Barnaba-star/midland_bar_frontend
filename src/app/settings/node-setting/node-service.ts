@@ -43,6 +43,15 @@ purgeBranchPeriod(branchUID: string, body: { from: string; to: string; dryRun: b
   return this.http.post<Response<Record<string, number> | null>>(`${this.baseUrl}/purgeBranchPeriod/${branchUID}`, body);
 }
 
+/**
+ * Blocks or unblocks a branch (BLOCK_BRANCH or ROOT). While blocked nobody in
+ * it can sign in or work; nothing is deleted. data = the branch, or null with
+ * BRANCH_NOT_FOUND / ROOT_BRANCH.
+ */
+blockBranch(branchUID: string, body: { blocked: boolean; reason?: string }): Observable<Response<any>> {
+  return this.http.post<Response<any>>(`${this.baseUrl}/blockBranch/${branchUID}`, body);
+}
+
 findBranchList():Observable<ResponseList<any>>{
  return this.http.get<ResponseList<any>>(`${this.baseUrl}/findBranchList`)
 }

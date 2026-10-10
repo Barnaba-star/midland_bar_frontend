@@ -235,6 +235,9 @@ export class OfflineService {
             outcome = 'stop';
           } else if (e?.status === 401) {
             outcome = 'stop';
+          } else if (e?.status === 403 && (e?.error as any)?.code === 'BRANCH_BLOCKED') {
+            // Blocked by the main office: keep the sales queued for when it is lifted.
+            outcome = 'stop';
           } else {
             outcome = 'refused';
             message = e?.error?.message || e?.message || `Error ${e?.status}`;

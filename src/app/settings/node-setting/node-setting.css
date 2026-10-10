@@ -734,6 +734,48 @@ app-form{
 }
 
 
+.info-card12 .status-badge.blocked {
+  background: #dc2626;
+
+  color: #ffffff;
+
+  letter-spacing: 0.04em;
+
+  cursor: help;
+}
+
+.info-card12 .status-badge.blocked mat-icon {
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
+}
+
+/* Why the branch is blocked, right under its name. */
+.info-card12 .branch-details .blocked-note {
+  display: flex;
+
+  max-width: 240px;
+  align-items: flex-start;
+  gap: 4px;
+
+  margin-top: 3px;
+
+  color: #b42318;
+
+  font-size: 11px;
+
+  font-weight: 600;
+
+  overflow-wrap: anywhere;
+}
+
+.info-card12 .branch-details .blocked-note mat-icon {
+  flex: none;
+  font-size: 13px;
+  width: 13px;
+  height: 13px;
+}
+
 .info-card12 .status-dot {
   width: 7px;
   height: 7px;
@@ -1401,4 +1443,15 @@ app-form{
 
 ::ng-deep .branch-action-menu .mat-mdc-menu-item .mat-icon {
   margin-right: 10px;
+}
+
+::ng-deep .branch-action-menu .menu-item-ok,
+::ng-deep .branch-action-menu .menu-item-ok .mat-icon {
+  color: #027a48;
+}
+
+/* Reason, when and by whom: one line each. */
+::ng-deep .blocked-tooltip .mdc-tooltip__surface {
+  white-space: pre-line;
+  text-align: left;
 }

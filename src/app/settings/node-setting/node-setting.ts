@@ -35,6 +35,7 @@ import { SelectUserDialogComponent } from '../../Utils/component/dialogs/select-
 import { UserRoleDialogComponent } from '../../Utils/component/dialogs/user-role-dialog-component/user-role-dialog-component';
 import { SearchBoxComponent } from '../../Utils/component/search-box/search-box.component';
 import { BranchDialogComponent } from '../../Utils/component/dialogs/branch-dialog-component/branch-dialog-component';
+import { BlockBranchDialogComponent, BlockBranchResult } from '../../Utils/component/dialogs/block-branch-dialog/block-branch-dialog';
 import { ActivationCodeDialogComponent } from '../../Utils/component/dialogs/activation-code-dialog-component/activation-code-dialog-component';
 
 @Component({
@@ -46,7 +47,13 @@ import { ActivationCodeDialogComponent } from '../../Utils/component/dialogs/act
 })
 export class NodeSetting implements OnInit{
 constructor(private dialog:MatDialog, private visibility:Authentication, private nodeService:NodeService, private alertService:AlertService, private cdr: ChangeDetectorRef, private translate: TranslateService, private userService: UserService) {
+  // Resolved once: each call decodes the JWT. The backend checks it again.
+  this.canBlock = visibility.hasRole('ROOT')
+    || (visibility.getPermissions() || '').split(',').includes('BLOCK_BRANCH');
 }
+
+/** Block / Unblock shows only for ROOT or holders of BLOCK_BRANCH. */
+readonly canBlock: boolean;
 
 @ViewChild('stepper')
 stepper !: MatStepper;
@@ -514,6 +521,96 @@ private openDeleteDialog(item: any, translations: Record<string, string>): void 
  */
 isActive(status: string | null | undefined): boolean {
   return (status || '').trim().toUpperCase() === 'ACTIVE';
+}
+
+//*************************************** BLOCK / UNBLOCK A BRANCH ******************************************************/
+
+/** The main office's own branch: it can never be blocked (the backend refuses it too). */
+isRootBranch(item: Branch): boolean {
+  return (item?.branchCode || '').toUpperCase() === 'ROOT'
+    || (item?.branchType || '').toUpperCase() === 'ROOT';
+}
+
+/** Older rows carry only status; newer ones carry the flag too. */
+isBlocked(item: Branch): boolean {
+  return item?.blocked === true || (item?.status || '').trim().toUpperCase() === 'BLOCKED';
+}
+
+/** Reason, when and by whom - for the badge's tooltip. */
+blockedTooltip(item: Branch): string {
+  const lines: string[] = [];
+  if (item.blockedReason) {
+    lines.push(this.translate.instant('BLOCK_BRANCH.INFO_REASON', { reason: item.blockedReason }));
+  }
+  if (item.blockedAt) {
+    const at = new Date(item.blockedAt);
+    const when = isNaN(at.getTime()) ? item.blockedAt : at.toLocaleString();
+    lines.push(this.translate.instant('BLOCK_BRANCH.INFO_AT', { at: when }));
+  }
+  if (item.blockedBy) {
+    lines.push(this.translate.instant('BLOCK_BRANCH.INFO_BY', { by: item.blockedBy }));
+  }
+  return lines.join('\n');
+}
+
+toggleBlock(item: Branch): void {
+
+  if (!item?.uid || this.isRootBranch(item)) {
+    return;
+  }
+
+  const unblock = this.isBlocked(item);
+
+  this.dialog.open(BlockBranchDialogComponent, {
+    width: '460px',
+    maxWidth: '95vw',
+    autoFocus: false,
+    data: {
+      branchName: item.branchName ?? '',
+      branchCode: item.branchCode ?? '',
+      unblock,
+    },
+  }).afterClosed().subscribe((result?: BlockBranchResult) => {
+
+    if (!result) {
+      return;
+    }
+
+    const body = unblock
+      ? { blocked: false }
+      : { blocked: true, reason: result.reason || undefined };
+
+    this.nodeService.blockBranch(item.uid!, body).subscribe({
+      next: (res) => {
+        if (res.data) {
+          const index = this.branch.findIndex(b => b.uid === res.data.uid);
+          if (index !== -1) {
+            this.branch = [
+              ...this.branch.slice(0, index),
+              res.data,
+              ...this.branch.slice(index + 1),
+            ];
+          }
+          this.alertService.show('success', this.translate.instant(
+            unblock ? 'BLOCK_BRANCH.UNBLOCKED' : 'BLOCK_BRANCH.BLOCKED', { name: item.branchName ?? '' }));
+          this.cdr.detectChanges();
+        } else {
+          this.alertService.show('error', this.blockErrorMessage(res.message));
+        }
+      },
+      error: (err) => {
+        this.alertService.show('error', this.blockErrorMessage(err?.error?.code ?? err?.error?.message));
+      },
+    });
+  });
+}
+
+private blockErrorMessage(code: string | null | undefined): string {
+  switch (code) {
+    case 'BRANCH_NOT_FOUND': return this.translate.instant('BLOCK_BRANCH.ERR_NOT_FOUND');
+    case 'ROOT_BRANCH': return this.translate.instant('BLOCK_BRANCH.ERR_ROOT');
+    default: return this.translate.instant('BLOCK_BRANCH.ERR_FAILED');
+  }
 }
 
 editItem(item: any): void {

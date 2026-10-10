@@ -106,6 +106,15 @@
                   {{ item.address || ('NODE_SETTING_PAGE.NO_ADDRESS' | translate) | lowercase }}
                 </span>
 
+                @if (isBlocked(item)) {
+                  <span class="blocked-note">
+                    <mat-icon>block</mat-icon>
+                    {{ item.blockedReason
+                        ? ('BLOCK_BRANCH.INFO_REASON' | translate: { reason: item.blockedReason })
+                        : ('BLOCK_BRANCH.NO_REASON' | translate) }}
+                  </span>
+                }
+
               </div>
 
             </div>
@@ -167,6 +176,17 @@
           <!-- STATUS -->
           <td>
 
+            @if (isBlocked(item)) {
+              <span
+                class="status-badge blocked"
+                [matTooltip]="blockedTooltip(item)"
+                matTooltipClass="blocked-tooltip"
+                tabindex="0"
+              >
+                <mat-icon>block</mat-icon>
+                {{ 'BLOCK_BRANCH.BADGE' | translate }}
+              </span>
+            } @else {
             <span
               class="status-badge"
               [class.active]="isActive(item.status)"
@@ -178,6 +198,7 @@
               {{ item.status | uppercase}}
 
             </span>
+            }
 
           </td>
 
@@ -230,6 +251,19 @@
         <mat-icon>visibility</mat-icon>
         <span>{{ 'NODE_SETTING_PAGE.MENU_VIEW_USER' | translate }}</span>
       </button>
+
+      <!-- Block / Unblock: main office only, never the ROOT branch. -->
+      @if (canBlock && !isRootBranch(item)) {
+        <button
+          mat-menu-item
+          type="button"
+          [class.menu-item-danger]="!isBlocked(item)"
+          [class.menu-item-ok]="isBlocked(item)"
+          (click)="toggleBlock(item)">
+          <mat-icon>{{ isBlocked(item) ? 'lock_open' : 'block' }}</mat-icon>
+          <span>{{ (isBlocked(item) ? 'BLOCK_BRANCH.MENU_UNBLOCK' : 'BLOCK_BRANCH.MENU_BLOCK') | translate }}</span>
+        </button>
+      }
 
       <!-- Destructive, so it sits apart from the rest. -->
       <button

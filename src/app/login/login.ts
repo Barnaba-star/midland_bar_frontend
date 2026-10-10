@@ -21,6 +21,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { lockStaffSell, unlockStaffSell } from '../pos/bar-staff-sell/staff-sell-lock';
 import { DeviceRegistration } from '../Utils/services/device-registration';
 import { landingFor } from './landing-for';
+import { takeBranchBlocked } from '../Utils/services/branch-blocked';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 /** What /authentication/staffLogin and /staffSetup answer with on a 200. */
 interface StaffLoginReply {
@@ -61,6 +62,16 @@ private baseUrl: string = `${this.api}/authentication/login`;
  private idleTimer: any;
 
  ngOnInit(): void {
+    // Signed out because the main office blocked the branch: say so, once.
+    const blocked = takeBranchBlocked();
+    if (blocked) {
+      // get(), not instant(): on a fresh load the wording may still be on its way.
+      this.translate.get('LOGIN.BRANCH_BLOCKED_CONTACT').subscribe(() => {
+        this.loginError = this.branchBlockedMessage(blocked);
+        this.cdr.markForCheck();
+      });
+    }
+
     const idleTime = 1 * 60 * 1000;
 
     this.idleTimer = setTimeout(() => {
@@ -227,6 +238,10 @@ onSubmit(branchUID?: string) {
           // than as a fault the person might try to work around.
           this.loginError = this.translate.instant('LOGIN.ACCOUNT_BLOCKED');
           this.subscriptionExpired = false;
+        } else if (body && body.code === 'BRANCH_BLOCKED') {
+          // The main office decided this; nothing on this screen undoes it.
+          this.loginError = this.branchBlockedMessage(body);
+          this.subscriptionExpired = false;
         } else if (body && body.code === 'BRANCH_NOT_ALLOWED') {
           this.loginError = this.translate.instant('LOGIN.BRANCH_NOT_ALLOWED');
           this.subscriptionExpired = false;
@@ -310,12 +325,27 @@ private staffSignedIn(token: string): void {
   this.cdr.detectChanges();
 }
 
+/**
+ * "Branch X was blocked by the main office. Reason: ... Contact the main
+ * office." - the name and the reason only when the backend sent them.
+ */
+private branchBlockedMessage(body: { branchName?: string | null; reason?: string | null } | null | undefined): string {
+  const name = (body?.branchName ?? '').trim();
+  const reason = (body?.reason ?? '').trim();
+  const head = name
+    ? this.translate.instant('LOGIN.BRANCH_BLOCKED', { name })
+    : this.translate.instant('LOGIN.BRANCH_BLOCKED_NO_NAME');
+  const why = reason ? ' ' + this.translate.instant('LOGIN.BRANCH_BLOCKED_REASON', { reason }) : '';
+  return `${head}${why} ${this.translate.instant('LOGIN.BRANCH_BLOCKED_CONTACT')}`;
+}
+
 /** A staff sign-in or setup refusal, in the screen's own words. */
 private staffErrorMessage(body: any): string {
   switch (body?.code) {
     case 'STAFF_LOCKED': return this.translate.instant('LOGIN.STAFF_LOCKED', { minutes: body?.minutes ?? 15 });
     case 'NO_PIN_SET': return this.translate.instant('LOGIN.STAFF_NO_PIN');
     case 'SUBSCRIPTION_EXPIRED': return this.translate.instant('LOGIN.EXPIRED_TITLE');
+    case 'BRANCH_BLOCKED': return this.branchBlockedMessage(body);
     case 'CODE_FORMAT': return this.translate.instant('LOGIN.SETUP_CODE_FORMAT');
     case 'CODE_TAKEN': return this.translate.instant('LOGIN.SETUP_CODE_TAKEN');
     case 'PIN_RULE': return this.translate.instant(this.pinRuleKey(this.setupForm.value.newPin) ?? 'LOGIN.SETUP_PIN_RULE');
@@ -441,7 +471,7 @@ submitSetup(): void {
         };
         this.chosenCode = '';
       } else if (code === 'ALREADY_SET' || code === 'INVALID_STAFF_LOGIN' || code === 'STAFF_LOCKED'
-          || code === 'NO_PIN_SET' || code === 'SUBSCRIPTION_EXPIRED') {
+          || code === 'NO_PIN_SET' || code === 'SUBSCRIPTION_EXPIRED' || code === 'BRANCH_BLOCKED') {
         // Nothing to choose any more: back to the sign-in form, saying why.
         this.loginError = this.setupError;
         this.setup = null;

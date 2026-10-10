@@ -19,6 +19,9 @@ import {
 
 import { tap } from 'rxjs';
 
+import { unlockStaffSell } from '../../pos/bar-staff-sell/staff-sell-lock';
+import { rememberBranchBlocked } from '../services/branch-blocked';
+
 import { ErrorLogService } from '../services/error-log-service';
 
 /** The body as it was about to be sent, so a failure can be traced back to it. */
@@ -42,6 +45,9 @@ const serialiseBody = (body: unknown): string | undefined => {
 
 /** A "session expired" dialog is already up - the other requests that failed with it stay quiet. */
 let sessionExpiredShown = false;
+
+/** Already signed out for a blocked branch - the other requests in flight stay quiet. */
+let branchBlockedHandled = false;
 
 export const StatusInterceptor: HttpInterceptorFn = (
   req: HttpRequest<any>,
@@ -99,6 +105,8 @@ export const StatusInterceptor: HttpInterceptorFn = (
     // has wording for, in both the success and the failure case.
     req.url.includes('/branchMessage/') ||
     req.url.includes('/guidance/') ||
+    // Block / unblock a branch: Settings > Branches words each outcome itself.
+    req.url.includes('/branch/blockBranch/') ||
     // Polls: the next one tries again - a popup every few seconds would bury the screen.
     req.context.get(SILENT_REQUEST);
 
@@ -227,6 +235,35 @@ export const StatusInterceptor: HttpInterceptorFn = (
          */
 
         if (status === 403 && error?.error?.code === 'PASSWORD_CHANGE_REQUIRED') {
+          router.navigate(['/login']);
+          return;
+        }
+
+        /*
+         * ======================================================
+         * 3c. THE BRANCH WAS BLOCKED BY THE MAIN OFFICE
+         * ======================================================
+         *
+         * Every request from that branch is refused until it is unblocked,
+         * so nothing on screen can work: sign out and say why on the login
+         * screen. Done once - the requests in flight with it (polls, the
+         * heartbeat) stay quiet. The sign-in calls word it themselves.
+         */
+
+        if (status === 403 && error?.error?.code === 'BRANCH_BLOCKED') {
+          const isSignIn =
+            req.url.includes('/authentication/login') ||
+            req.url.includes('/authentication/staffLogin') ||
+            req.url.includes('/authentication/staffSetup');
+          if (isSignIn || branchBlockedHandled) {
+            return;
+          }
+          branchBlockedHandled = true;
+          setTimeout(() => (branchBlockedHandled = false), 5000);
+          rememberBranchBlocked(error.error?.branchName, error.error?.reason);
+          authService.removeToken();
+          unlockStaffSell();
+          dialog.closeAll();
           router.navigate(['/login']);
           return;
         }

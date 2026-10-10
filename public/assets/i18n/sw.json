@@ -2273,9 +2273,11 @@
     "COL_BY": "Aliyehesabu",
     "COL_ITEMS": "Tofauti / Zilizohesabiwa",
     "PACK": "Pack",
-    "EVEN": "Sawa",
+    "EVEN": "Imelingana",
     "SUBTITLE_COUNT": "Hesabu bidhaa zilizopo kwenye rafu - kreti na chupa; mfumo unaonyesha tofauti, kisha unarekebisha stock.",
-    "HINT_COUNT": "Bidhaa usizohesabu hazibadilishwi. Tumia '=' kwa bidhaa iliyolingana na mfumo."
+    "HINT_COUNT": "Bidhaa usizohesabu hazibadilishwi. Tumia '=' kwa bidhaa iliyolingana na mfumo.",
+    "SHORT_BY": "Pungufu",
+    "OVER_BY": "Ziada"
   },
   "SPEND_DIALOG": {
     "SUBTITLE": "Weka kiasi, njia ya malipo na maelezo ya matumizi haya.",

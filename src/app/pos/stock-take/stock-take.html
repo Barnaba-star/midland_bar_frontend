@@ -241,14 +241,19 @@
 
 <!-- A number of units shown the way it sits on the shelf: "4 Kreti + 6 Chupa",
      or "6 Chupa" for a product without a pack - each in the item's own names. -->
+<!-- A difference reads in words, as in the app: "Pungufu 1 Kreti + 3 Chupa",
+     "Ziada 3 Chupa" or "Imelingana" - a minus in front of "1 Kreti + 3" was
+     easy to misread as -1 crate + 3 bottles. -->
 <ng-template #qty let-u="u" let-r="r" let-signed="signed">
-  @let q = split(u, r);
-  @let sign = u < 0 ? '−' : (signed && u > 0 ? '+' : '');
+  @let q = split(u < 0 ? -u : u, r);
+  @let word = signed ? (u < 0 ? ('STOCK_TAKE.SHORT_BY' | translate) + ' ' : (u > 0 ? ('STOCK_TAKE.OVER_BY' | translate) + ' ' : '')) : (u < 0 ? '−' : '');
   <span class="qty">
-    @if (hasPack(r)) {
-      {{ sign }}{{ q.packs }} {{ packLabel(r) | translate }} + {{ q.loose }} {{ unitLabel(r) | translate }}
+    @if (signed && u === 0) {
+      {{ 'STOCK_TAKE.EVEN' | translate }}
+    } @else if (hasPack(r)) {
+      {{ word }}{{ q.packs }} {{ packLabel(r) | translate }} + {{ q.loose }} {{ unitLabel(r) | translate }}
     } @else {
-      {{ sign }}{{ q.loose }} {{ unitLabel(r) | translate }}
+      {{ word }}{{ q.loose }} {{ unitLabel(r) | translate }}
     }
   </span>
 </ng-template>

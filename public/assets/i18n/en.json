@@ -2275,7 +2275,9 @@
     "PACK": "Pack",
     "EVEN": "Matches",
     "SUBTITLE_COUNT": "Count what is on the shelves - crates and bottles; the system shows each difference, then corrects the stock.",
-    "HINT_COUNT": "Products you do not count are left as they are. Use '=' for a product that matches the system."
+    "HINT_COUNT": "Products you do not count are left as they are. Use '=' for a product that matches the system.",
+    "SHORT_BY": "Short",
+    "OVER_BY": "Over"
   },
   "SPEND_DIALOG": {
     "SUBTITLE": "Enter the amount, how it was paid and what it was for.",

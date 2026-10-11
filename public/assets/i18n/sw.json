@@ -2100,7 +2100,7 @@
     "COLLEAGUE_UNSENT": "Una oda ambazo hazijatumwa ({{n}}). Zitabaki kwenye bili zako, lakini counter haitaziona mpaka zitumwe.",
     "COLLEAGUE_SEND_FIRST": "Tuma kwanza",
     "COLLEAGUE_NOW": "Sasa unauza kama {{name}}",
-    "DRINK_SEARCH_PH": "Tafuta kinywaji: jina, ladha (tamu, ndimu…) au aina",
+    "DRINK_SEARCH_PH": "Mteja anataka ladha gani? Tafuta: ginger, ndimu, tamu, jina…",
     "DRINK_IN_STOCK": "Ipo ({{n}})",
     "DRINK_PICK_BILL": "Chagua bill kwanza ili kuongeza kinywaji kwenye oda."
   },

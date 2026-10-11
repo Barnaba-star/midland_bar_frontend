@@ -2100,7 +2100,7 @@
     "COLLEAGUE_UNSENT": "You have orders not sent yet ({{n}}). They stay on your bills, but the counter will not see them until sent.",
     "COLLEAGUE_SEND_FIRST": "Send first",
     "COLLEAGUE_NOW": "Now selling as {{name}}",
-    "DRINK_SEARCH_PH": "Find a drink: name, flavour (sweet, lime…) or kind",
+    "DRINK_SEARCH_PH": "What flavour does the customer want? Search: ginger, lime, sweet, name…",
     "DRINK_IN_STOCK": "In stock ({{n}})",
     "DRINK_PICK_BILL": "Pick a bill first to add the drink to its order."
   },

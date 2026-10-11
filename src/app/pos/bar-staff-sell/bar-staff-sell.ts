@@ -285,7 +285,7 @@ export class BarStaffSell implements OnInit, OnDestroy {
       const text = [name, s.serviceCode, s.description, s.category]
         .map((v) => String(v ?? '').toLowerCase())
         .join(' ');
-      if (!words.every((w) => text.includes(w))) {
+      if (!words.every((w) => flavourWords(w).some((f) => text.includes(f)))) {
         continue;
       }
       (words.every((w) => name.includes(w)) ? named : described).push(s);
@@ -735,4 +735,43 @@ export class BarStaffSell implements OnInit, OnDestroy {
   get total(): number {
     return this.bills.reduce((sum, b) => sum + (Number(b.bill) || 0), 0);
   }
+}
+
+/** A flavour in English or Swahili, so "ginger" also finds "Stoney Tangawizi". */
+const FLAVOURS = [
+  ['ginger', 'tangawizi'],
+  ['lemon', 'lime', 'ndimu', 'limau'],
+  ['orange', 'chungwa', 'machungwa'],
+  ['pineapple', 'nanasi', 'mananasi'],
+  ['mango', 'embe', 'maembe'],
+  ['apple', 'tufaha'],
+  ['passion', 'pasheni', 'karakara'],
+  ['banana', 'ndizi'],
+  ['coconut', 'nazi'],
+  ['grape', 'zabibu'],
+  ['watermelon', 'tikiti'],
+  ['strawberry', 'stroberi'],
+  ['sweet', 'tamu'],
+  ['bitter', 'chungu'],
+  ['sour', 'chachu'],
+  ['coffee', 'kahawa'],
+  ['honey', 'asali'],
+  ['milk', 'maziwa'],
+  ['water', 'maji'],
+  ['juice', 'juisi', 'sharubati'],
+  ['beer', 'bia'],
+  ['wine', 'mvinyo', 'divai'],
+  ['vanilla', 'vanila'],
+  ['chocolate', 'chokoleti'],
+  ['mint', 'nanaa'],
+  ['cinnamon', 'mdalasini'],
+];
+
+/** The word and, when it is (the start of) a flavour, its other names. */
+function flavourWords(word: string): string[] {
+  if (word.length < 3) {
+    return [word];
+  }
+  const group = FLAVOURS.filter((g) => g.some((t) => t.startsWith(word) || word.startsWith(t)));
+  return [word, ...group.flat()];
 }

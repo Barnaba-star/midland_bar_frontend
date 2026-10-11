@@ -1816,7 +1816,9 @@
     "SOURCE_FROM_LEVEL": "Inatoka: {{name}} › {{level}}",
     "SALE_UNIT_COUNT": "Ngapi za kipimo hicho kwa kimoja",
     "SALE_UNIT_COUNT_PH": "Kawaida 1 - mfano Nusu 1",
-    "SOURCE_NOTE_LEVEL": "Inatoka: {{name}}: {{n}} × {{level}}"
+    "SOURCE_NOTE_LEVEL": "Inatoka: {{name}}: {{n}} × {{level}}",
+    "DESCRIPTION_FLAVOUR": "Ladha na maelezo",
+    "DESCRIPTION_FLAVOUR_PH": "Ladha na maelezo: tamu, ndimu, chungu, baridi… - wahudumu wanatafuta kinywaji kwa maneno haya"
   },
   "STAFF_FORM": {
     "FIRST_NAME": "Jina la kwanza",
@@ -1900,7 +1902,15 @@
     "WHOLE_NUMBERS": "Kila asilimia iwe namba kamili kati ya 0 na 100",
     "OVER_100": "Asilimia zinajumlisha {{total}}% - haziwezi kuzidi 100%",
     "SAVED": "Kamisheni imehifadhiwa kwa {{name}}",
-    "DELETED": "Kamisheni imefutwa"
+    "DELETED": "Kamisheni imefutwa",
+    "STOCK_WORK_PACK": "{{pack}} {{buy}} ÷ {{per}} = {{cost}} kwa {{unit}} · bei ya kuuza {{price}} → {{pct}}%",
+    "STOCK_WORK_SINGLE": "Bei ya kununua {{cost}} kwa {{unit}} · bei ya kuuza {{price}} → {{pct}}%",
+    "STOCK_WORK_SOURCE": "inatoka kwenye {{name}} ({{n}} kila mauzo)",
+    "STOCK_PACK": "Pakiti",
+    "STOCK_UNIT": "kimoja",
+    "STOCK_APPLY": "Tumia {{pct}}%",
+    "STOCK_LOSS": "Inauzwa chini ya au sawa na gharama ya kununua - hakuna faida.",
+    "STOCK_NO_BUYING": "Stock Purchase % itajazwa yenyewe bidhaa hii ikiwekewa bei ya kununua (Setting > Bidhaa)."
   },
   "BILL_CODES": {
     "TITLE": "Codes za Bill",
@@ -2077,7 +2087,18 @@
     "PICK_NONE": "Hakuna bill inayolingana",
     "PICK_HINT": "Gusa \"Chagua bill\" kufungua bill moja. Ukituma oda, inarudi kwenye orodha.",
     "BACK_TO_ORDERS": "Rudi kwenye oda",
-    "OPEN_CODE": "Fungua"
+    "OPEN_CODE": "Fungua",
+    "COLLEAGUE_BTN": "Mpishe mwenzako",
+    "COLLEAGUE_TITLE": "Mpishe mwenzako",
+    "COLLEAGUE_HINT": "Mwenzako aingize code yake na PIN. Bili za {{name}} zinabaki salama - utarudi kwa kitufe hiki hiki.",
+    "COLLEAGUE_CODE": "Code",
+    "COLLEAGUE_GO": "Ingia",
+    "COLLEAGUE_UNSENT": "Una oda ambazo hazijatumwa ({{n}}). Zitabaki kwenye bili zako, lakini counter haitaziona mpaka zitumwe.",
+    "COLLEAGUE_SEND_FIRST": "Tuma kwanza",
+    "COLLEAGUE_NOW": "Sasa unauza kama {{name}}",
+    "DRINK_SEARCH_PH": "Tafuta kinywaji: jina, ladha (tamu, ndimu…) au aina",
+    "DRINK_IN_STOCK": "Ipo ({{n}})",
+    "DRINK_PICK_BILL": "Chagua bill kwanza ili kuongeza kinywaji kwenye oda."
   },
   "SUPERVISOR_PAGE": {
     "OFFLINE_SEEN": "Nimekagua",

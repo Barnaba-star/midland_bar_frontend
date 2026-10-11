@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { IconRegistryService } from '../Utils/services/icon-registry.service';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { BranchChoice, BranchChoiceDialogComponent } from '../Utils/component/dialogs/branch-choice-dialog-component/branch-choice-dialog-component';
 import { SubscribeDialogComponent } from '../Utils/component/dialogs/subscribe-dialog-component/subscribe-dialog-component';
@@ -45,6 +45,7 @@ interface StaffLoginReply {
 export class Login implements OnInit {
 private api = environment.baseApiUrl
 private device = inject(DeviceRegistration);
+private activatedRoute = inject(ActivatedRoute);
 private baseUrl: string = `${this.api}/authentication/login`;
 
   loginForm: FormGroup;
@@ -62,6 +63,13 @@ private baseUrl: string = `${this.api}/authentication/login`;
  private idleTimer: any;
 
  ngOnInit(): void {
+    // Sent here from Staff Sell's "Let a colleague sell" when their code still
+    // needs its first-time setup: their code is already in the box.
+    const code = this.activatedRoute.snapshot.queryParamMap.get('code');
+    if (code && Login.STAFF_CODE.test(code)) {
+      this.loginForm.patchValue({ username: code });
+    }
+
     // Signed out because the main office blocked the branch: say so, once.
     const blocked = takeBranchBlocked();
     if (blocked) {

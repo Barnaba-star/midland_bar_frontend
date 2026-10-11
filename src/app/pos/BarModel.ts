@@ -107,6 +107,33 @@ export interface CommissionDTO{
     lukuPercent?:number;
     stockPurchasePercent?:number;
 }
+/**
+ * One row of Setting > Commission: a service and its split (bucket fields
+ * null/0 until set), with what one sold unit costs to buy, so the Stock
+ * Purchase share can be filled in from the buying price.
+ */
+export interface ServiceCommissionRow extends CommissionDTO {
+    serviceUid: string;
+    serviceName: string;
+    serviceCode?: string;
+    commissionUid?: number | null;
+    price?: number | null;
+    /** Cost of one pack (a carton: 48000). */
+    buyingPrice?: number | null;
+    unitsPerPack?: number | null;
+    /** Katoni, crate... may be null. */
+    packUnit?: string | null;
+    /** Bottle... */
+    unit?: string | null;
+    /** 1 unless the product draws from a stock item. */
+    unitsPerSale?: number | null;
+    /** Null unless drawn from a stock item. */
+    stockSourceName?: string | null;
+    /** buyingPrice * unitsPerSale / unitsPerPack, rounded; null without a buying price. */
+    unitCost?: number | null;
+    /** ceil(unitCost * 100 / price), at most 100; null when unknown. */
+    suggestedStockPercent?: number | null;
+}
 export interface BarBookingDTO{
    uid?:string;
    customerName?:string;

@@ -22,6 +22,8 @@ import { ServiceBarMethod } from '../service-bar-method';
 import { lockStaffSell, unlockStaffSell } from './staff-sell-lock';
 import { StaffSellUnlockDialog } from './unlock-dialog/unlock-dialog';
 import { StaffHandoverDialog } from './handover-dialog/handover-dialog';
+import { ColleagueResult, StaffColleagueDialog } from './colleague-dialog/colleague-dialog';
+import { Subscription } from 'rxjs';
 import { LiveChanges } from '../../Utils/services/live-changes';
 import { landingFor } from '../../login/landing-for';
 import { Authentication } from '../../Utils/services/authentication';
@@ -52,6 +54,7 @@ import { SalesOpened, StaffOrder, StaffSellStaff } from '../BarModel';
 })
 export class BarStaffSell implements OnInit, OnDestroy {
   @ViewChild('codeInput') codeInput?: ElementRef<HTMLInputElement>;
+  @ViewChild(ShiftBar) shiftBar?: ShiftBar;
 
   constructor(
     private barService: ServiceBarMethod,
@@ -93,12 +96,12 @@ export class BarStaffSell implements OnInit, OnDestroy {
       this.code = this.auth.getStaffCode();
       this.findStaff();
     }
-    // The add-item list, loaded before the first tap.
+    // The add-item list, loaded before the first tap - the drink search reads it too.
     this.sellable.prefetch();
+    this.loadDrinks();
     // Orders and bills made offline have reached the server: read them again.
     this.offline.synced.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.refresh(true));
-    // The supervisor received or rejected, or a bill moved at the till: show it at once.
-    this.liveChanges.on('orders', 'bills').pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.refresh(true));
+    this.listenLive();
     if (!this.touch) {
       setTimeout(() => this.codeInput?.nativeElement.focus());
     }
@@ -172,6 +175,140 @@ export class BarStaffSell implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.stopPoll();
+    this.live?.unsubscribe();
+  }
+
+  private live?: Subscription;
+
+  /**
+   * The supervisor received or rejected, or a bill moved at the till: show it
+   * at once. Started again after a colleague signs in, so the stream opens
+   * with their token.
+   */
+  private listenLive(): void {
+    this.live?.unsubscribe();
+    this.live = this.liveChanges.on('orders', 'bills').subscribe(() => this.refresh(true));
+  }
+
+  // ---- "Mpishe mwenzako": a colleague whose phone is broken sells on this one ----
+
+  /**
+   * Only in a staff member's own session: the keypad till already has
+   * "Switch staff", and the counter's own bills go back to its queue.
+   */
+  get canLetColleague(): boolean {
+    return this.ownSession && !this.counterSession;
+  }
+
+  letColleagueSell(): void {
+    if (!this.canLetColleague || this.sending) {
+      return;
+    }
+    this.dialog.open(StaffColleagueDialog, {
+      width: '420px',
+      maxWidth: '95vw',
+      autoFocus: false,
+      data: { currentName: this.staff?.name ?? '', unsent: this.unsentCount },
+    }).afterClosed().subscribe((result?: ColleagueResult) => {
+      if (!result) {
+        return;
+      }
+      if ('send' in result) {
+        // Send what was written, then ask again.
+        this.sendOrders(() => {
+          this.refresh();
+          this.letColleagueSell();
+        });
+        return;
+      }
+      if ('setCode' in result) {
+        // Their code still needs its first-time setup, which only the login page does.
+        this.auth.removeToken();
+        unlockStaffSell();
+        this.router.navigate(['/login'], { queryParams: { code: result.setCode } });
+        return;
+      }
+      this.becomeColleague(result.token);
+    });
+  }
+
+  /** The screen is now the colleague's: their token, their bills, the shift bar and live stream anew. */
+  private becomeColleague(token: string): void {
+    this.auth.setToken(token);
+    lockStaffSell();
+    this.closeBill();
+    this.pickerOpen = false;
+    this.pickerSearch = '';
+    this.drinkQuery = '';
+    this.clearStaff();
+    this.code = this.auth.getStaffCode();
+    this.listenLive();
+    this.shiftBar?.load();
+    this.findStaff((name) =>
+      this.alertService.show('success', this.translate.instant('STAFF_SELL_PAGE.COLLEAGUE_NOW', { name })));
+  }
+
+  // ---- Drink search: "a drink that tastes of lime / sweet" - answer the customer ----
+
+  /** Everything that can be sold, for the search below. */
+  drinks: any[] = [];
+  drinkQuery = '';
+
+  private loadDrinks(): void {
+    const known = this.sellable.current();
+    if (known) {
+      this.drinks = known;
+    }
+    this.sellable.refresh().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (items) => {
+        this.drinks = items;
+        this.cdr.markForCheck();
+      },
+      error: () => {},
+    });
+  }
+
+  /**
+   * Every word typed has to be found in the name, code, description (where
+   * the flavours are written) or category - so "tamu baridi" finds the
+   * sweet ones described as cold too. Names that match come first.
+   */
+  get drinkMatches(): any[] {
+    const words = this.drinkQuery.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    if (!words.length) {
+      return [];
+    }
+    const named: any[] = [];
+    const described: any[] = [];
+    for (const s of this.drinks) {
+      const name = String(s.serviceName ?? '').toLowerCase();
+      const text = [name, s.serviceCode, s.description, s.category]
+        .map((v) => String(v ?? '').toLowerCase())
+        .join(' ');
+      if (!words.every((w) => text.includes(w))) {
+        continue;
+      }
+      (words.every((w) => name.includes(w)) ? named : described).push(s);
+    }
+    return [...named, ...described].slice(0, 20);
+  }
+
+  /** How many can still be sold, or null when not counted - as the add-item dialog says it. */
+  drinkLeft(service: any): number | null {
+    if (service?.stockSourceUid) {
+      return Math.floor((service.sourceStockQuantity ?? 0) / (service.unitsPerSale || 1));
+    }
+    return service?.trackStock ? (service.stockQuantity ?? 0) : null;
+  }
+
+  /** Tapped in the search: onto the open bill's order, through the same add-item dialog. */
+  pickDrink(service: any): void {
+    const bill = this.selectedBill;
+    if (!bill) {
+      this.alertService.show('error', this.translate.instant('STAFF_SELL_PAGE.DRINK_PICK_BILL'));
+      return;
+    }
+    this.addToBill(bill, service);
   }
 
   ordersFor(bill: SalesOpened, status: StaffOrder['status']): StaffOrder[] {
@@ -370,7 +507,7 @@ export class BarStaffSell implements OnInit, OnDestroy {
   }
 
   /** Code in: who is it, and what are they holding. None held - open one. */
-  findStaff(): void {
+  findStaff(then?: (name: string) => void): void {
     const code = this.code.trim();
     if (code.length < BarStaffSell.MIN_CODE_LENGTH || this.looking) {
       return;
@@ -392,6 +529,7 @@ export class BarStaffSell implements OnInit, OnDestroy {
         this.billLines = {};
         this.bills.forEach((b) => this.loadLines(b));
         this.cdr.markForCheck();
+        then?.(res.data.staff?.name ?? res.data.staff?.staffCode ?? '');
         if (this.bills.length === 0) {
           this.openBill();
         }
@@ -499,7 +637,8 @@ export class BarStaffSell implements OnInit, OnDestroy {
     });
   }
 
-  addToBill(bill: SalesOpened): void {
+  /** preselect: a drink already found (the drink search) - the dialog opens at "how many". */
+  addToBill(bill: SalesOpened, preselect?: any): void {
     if (!bill.uid || this.busyBill) {
       return;
     }
@@ -510,7 +649,7 @@ export class BarStaffSell implements OnInit, OnDestroy {
       exitAnimationDuration: 0,
       maxWidth: '95vw',
       autoFocus: false,
-      data: { billCode: bill.salesCode, askServing: true },
+      data: { billCode: bill.salesCode, askServing: true, preselect },
     }).afterClosed().subscribe((result?: SaleItemResult) => {
       if (!result) {
         return;

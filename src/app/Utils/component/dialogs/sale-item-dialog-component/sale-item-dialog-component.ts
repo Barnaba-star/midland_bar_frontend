@@ -45,13 +45,17 @@ export class SaleItemDialogComponent implements OnInit, AfterViewInit {
   serving: 'COLD' | 'WARM' | null = null;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { billCode?: string; askServing?: boolean },
+    @Inject(MAT_DIALOG_DATA) public data: { billCode?: string; askServing?: boolean; preselect?: any },
     private dialogRef: MatDialogRef<SaleItemDialogComponent, SaleItemResult>,
     private sellable: SellableItems,
     private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
+    // Already found (Staff Sell's drink search): straight to "how many".
+    if (this.data?.preselect) {
+      this.selected = this.data.preselect;
+    }
     // The list already in memory shows at once; a fresh copy (prices, stock)
     // replaces it behind the scenes.
     const known = this.sellable.current();
@@ -63,6 +67,10 @@ export class SaleItemDialogComponent implements OnInit, AfterViewInit {
       next: (items) => {
         this.services = items;
         this.loading = false;
+        // The chosen one with its fresh price and stock.
+        if (this.selected) {
+          this.selected = items.find((i) => i.uid === this.selected.uid) ?? this.selected;
+        }
         this.cdr.detectChanges();
       },
       error: () => {
@@ -109,7 +117,9 @@ export class SaleItemDialogComponent implements OnInit, AfterViewInit {
   /**
    * Names starting with what was typed come first - "C" brings Castle Lite,
    * Coca Cola... - then any other name or code containing it, so "lager"
-   * still finds Kilimanjaro Lager.
+   * still finds Kilimanjaro Lager, then those whose description or category
+   * holds every word typed - the flavours live in the description, so
+   * "tamu ndimu" finds the sweet lime ones.
    */
   get matches(): any[] {
     const term = this.search.trim().toLowerCase();
@@ -122,8 +132,10 @@ export class SaleItemDialogComponent implements OnInit, AfterViewInit {
         .filter((s) => this.keyOf(s) === this.letter)
         .sort((a, b) => String(a.serviceName).localeCompare(String(b.serviceName)));
     }
+    const words = term.split(/\s+/).filter(Boolean);
     const starts: any[] = [];
     const contains: any[] = [];
+    const described: any[] = [];
     for (const s of this.services) {
       const name = (s.serviceName ?? '').toLowerCase();
       const code = (s.serviceCode ?? '').toLowerCase();
@@ -131,9 +143,14 @@ export class SaleItemDialogComponent implements OnInit, AfterViewInit {
         starts.push(s);
       } else if (name.includes(term) || code.includes(term)) {
         contains.push(s);
+      } else {
+        const text = `${name} ${code} ${(s.description ?? '').toLowerCase()} ${(s.category ?? '').toLowerCase()}`;
+        if (words.every((w) => text.includes(w))) {
+          described.push(s);
+        }
       }
     }
-    return [...starts, ...contains].slice(0, 12);
+    return [...starts, ...contains, ...described].slice(0, 20);
   }
 
   choose(service: any): void {

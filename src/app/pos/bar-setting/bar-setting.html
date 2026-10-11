@@ -643,6 +643,30 @@
             }
           </div>
 
+          <!-- Stock Purchase from the buying price: the working, and the share it gives. -->
+          @if (stockWorking; as working) {
+            <div class="stock-hint" [class.loss]="sellsAtLoss">
+              <mat-icon>{{ sellsAtLoss ? 'warning_amber' : 'calculate' }}</mat-icon>
+              <div class="stock-hint-text">
+                <strong>{{ 'COMMISSION_BREAKDOWN.STOCK_PURCHASE' | translate }}</strong>
+                <span>{{ working }}</span>
+                @if (sellsAtLoss) {
+                  <span class="stock-hint-warn">{{ 'COMMISSION_FORM.STOCK_LOSS' | translate }}</span>
+                }
+              </div>
+              @if (canApplyStockSuggestion) {
+                <button type="button" class="stock-hint-btn" (click)="applyStockSuggestion()">
+                  {{ 'COMMISSION_FORM.STOCK_APPLY' | translate: { pct: editingService.suggestedStockPercent } }}
+                </button>
+              }
+            </div>
+          } @else {
+            <p class="stock-hint muted-hint">
+              <mat-icon>info</mat-icon>
+              <span>{{ 'COMMISSION_FORM.STOCK_NO_BUYING' | translate }}</span>
+            </p>
+          }
+
           <div class="split-footer">
             <div class="split-total" [class.over]="draftTotal > 100" [class.full]="draftTotal === 100">
               {{ 'COMMISSION_FORM.TOTAL' | translate }}: <strong>{{ draftTotal }}%</strong>

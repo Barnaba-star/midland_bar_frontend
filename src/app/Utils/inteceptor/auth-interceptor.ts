@@ -22,7 +22,11 @@ export const AuthInterceptor: HttpInterceptorFn = (
 
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
-      const isLoginRequest = req.url.includes('/authentication/login');
+      // A wrong code or PIN on a sign-in is not an expired session - e.g. a
+      // colleague signing in from Staff Sell must not throw out the one there.
+      const isLoginRequest = req.url.includes('/authentication/login')
+        || req.url.includes('/authentication/staffLogin')
+        || req.url.includes('/authentication/staffSetup');
       const isProfilePicRequest = req.url.includes('/attachment/findUserForProfile');
 
       if (error.status === 401 && !isLoginRequest && !isProfilePicRequest) {

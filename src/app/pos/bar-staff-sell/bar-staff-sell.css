@@ -807,3 +807,155 @@
 .bill-picker ~ .bill-grid {
   grid-template-columns: minmax(0, 560px);
 }
+
+/* ---------- Top bar: let a colleague sell on this phone ---------- */
+.colleague-btn {
+  flex-shrink: 0;
+}
+
+.colleague-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+@media (max-width: 600px) {
+  .colleague-btn span {
+    max-width: 110px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+/* ---------- Drink search: by name, code, flavour or category ---------- */
+.drink-search {
+  margin-bottom: 14px;
+}
+
+.drink-search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 50px;
+  padding: 0 8px 0 14px;
+  border: 1px solid #e8dcc8;
+  border-radius: 14px;
+  background: #fffdf9;
+  color: #8a7a66;
+}
+
+.drink-search-box:focus-within {
+  border-color: #f5a524;
+  box-shadow: 0 0 0 3px rgba(245, 165, 36, 0.2);
+}
+
+.drink-search-box input {
+  flex: 1;
+  min-width: 0;
+  height: 46px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #2b2118;
+  font: inherit;
+  font-size: 15px;
+}
+
+.drink-clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: #7a6f60;
+  cursor: pointer;
+}
+
+.drink-results {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 6px;
+  padding: 6px;
+  max-height: 50vh;
+  overflow-y: auto;
+  border: 1px solid #e8dcc8;
+  border-radius: 14px;
+  background: #fffdf9;
+  box-shadow: 0 10px 24px rgba(43, 33, 24, 0.12);
+}
+
+.drink-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 6px 12px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: #2b2118;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.drink-row:hover {
+  border-color: #f5a524;
+  background: #fdf6e8;
+}
+
+.drink-row.out {
+  opacity: 0.6;
+}
+
+.drink-icon {
+  color: #d97706;
+}
+
+.drink-main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.drink-name {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.drink-desc {
+  color: #7a6f60;
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.drink-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.drink-side small {
+  color: #16a34a;
+  font-size: 11.5px;
+}
+
+.drink-side small.drink-out {
+  color: #b91c1c;
+}
+
+.drink-empty,
+.drink-hint {
+  margin: 8px 6px;
+  color: #7a6f60;
+  font-size: 13px;
+}

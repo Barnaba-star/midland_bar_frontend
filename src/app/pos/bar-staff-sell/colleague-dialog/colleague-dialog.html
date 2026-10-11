@@ -1,0 +1,69 @@
+<form class="colleague" (ngSubmit)="submit()">
+  <div class="colleague-head">
+    <span class="colleague-icon"><mat-icon>swap_horiz</mat-icon></span>
+    <div>
+      <h3>{{ 'STAFF_SELL_PAGE.COLLEAGUE_TITLE' | translate }}</h3>
+      <p>{{ 'STAFF_SELL_PAGE.COLLEAGUE_HINT' | translate: { name: data.currentName || '' } }}</p>
+    </div>
+  </div>
+
+  @if (data.unsent) {
+    <!-- Written but not sent: it stays on the server, but the supervisor will not see it until sent. -->
+    <div class="colleague-warn">
+      <mat-icon>warning_amber</mat-icon>
+      <span>{{ 'STAFF_SELL_PAGE.COLLEAGUE_UNSENT' | translate: { n: data.unsent } }}</span>
+      <button type="button" class="warn-btn" (click)="sendFirst()">
+        <mat-icon>send</mat-icon>
+        {{ 'STAFF_SELL_PAGE.COLLEAGUE_SEND_FIRST' | translate }}
+      </button>
+    </div>
+  }
+
+  <div class="colleague-fields">
+    <label class="colleague-field" [class.active]="field === 'code'">
+      <span>{{ 'STAFF_SELL_PAGE.COLLEAGUE_CODE' | translate }}</span>
+      <input name="code" type="password" inputmode="numeric" autocomplete="off" maxlength="4" placeholder="••••"
+             [ngModel]="code" (ngModelChange)="onTyped('code', $event)" (focus)="field = 'code'" [readOnly]="touch"
+             (click)="field = 'code'" />
+    </label>
+    <label class="colleague-field" [class.active]="field === 'pin'">
+      <span>PIN</span>
+      <input name="pin" type="password" inputmode="numeric" autocomplete="off" maxlength="4" placeholder="••••"
+             [ngModel]="pin" (ngModelChange)="onTyped('pin', $event)" (focus)="field = 'pin'" [readOnly]="touch"
+             (click)="field = 'pin'" />
+    </label>
+  </div>
+
+  <div class="keypad" role="group">
+    @for (k of keypad; track k) {
+      @switch (k) {
+        @case ('C') {
+          <button type="button" class="key key-fn" (click)="press('C')" [disabled]="checking">C</button>
+        }
+        @case ('<') {
+          <button type="button" class="key key-fn" (click)="press('<')" [disabled]="checking" [attr.aria-label]="'COMMON.DELETE' | translate">
+            <mat-icon>backspace</mat-icon>
+          </button>
+        }
+        @default {
+          <button type="button" class="key" (click)="press(k)" [disabled]="checking">{{ k }}</button>
+        }
+      }
+    }
+  </div>
+
+  @if (error) {
+    <p class="colleague-error">{{ error }}</p>
+  }
+
+  <div class="colleague-actions">
+    <button type="button" class="row-action view" (click)="cancel()">
+      <mat-icon>close</mat-icon>
+      <span>{{ 'COMMON.CANCEL' | translate }}</span>
+    </button>
+    <button type="submit" class="colleague-btn" [disabled]="!ready">
+      <mat-icon>login</mat-icon>
+      {{ (checking ? 'COMMON.LOADING' : 'STAFF_SELL_PAGE.COLLEAGUE_GO') | translate }}
+    </button>
+  </div>
+</form>

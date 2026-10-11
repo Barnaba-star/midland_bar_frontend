@@ -1,12 +1,12 @@
 import { OtherSplit } from '../other-split/other-split';
-import { UnitLabelPipe } from '../../Utils/pipes/stock-packs.pipe';
+import { UnitLabelPipe, unitKey } from '../../Utils/pipes/stock-packs.pipe';
 import { StockItemDialogComponent, StockItemResult } from '../../Utils/component/dialogs/stock-item-dialog-component/stock-item-dialog-component';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { TitleAction, Title2 } from "../../Utils/component/title2/title2";
 import { Authentication } from '../../Utils/services/authentication';
 import { MatIconModule } from "@angular/material/icon";
 import { FormField } from '../../Utils/models/form-field';
-import { CommissionDTO, BarServiceData, BarServiceDTO, UserTableData } from '../BarModel';
+import { CommissionDTO, ServiceCommissionRow, BarServiceData, BarServiceDTO, UserTableData } from '../BarModel';
 import { ServiceBarMethod } from '../service-bar-method';
 import { AlertService } from '../../Utils/services/alert';
 import { RecordtableComponent } from "../../Utils/component/recordtable/recordtable";
@@ -262,7 +262,8 @@ private serviceFormFields(): FormField[] {
     { name: 'packUnit', type: 'select', label: 'PRODUCT_FORM.PACK_UNIT', placeholder: 'PRODUCT_FORM.PACK_UNIT', options: PRODUCT_PACK_OPTIONS },
     { name: 'unitsPerPack', type: 'number', label: 'PRODUCT_FORM.UNITS_PER_PACK', placeholder: 'PRODUCT_FORM.UNITS_PER_PACK_PH' },
     { name: 'buyingPrice', type: 'number', label: 'PRODUCT_FORM.BUYING_PRICE', placeholder: 'PRODUCT_FORM.BUYING_PRICE_PH' },
-    { name: 'description', type: 'textarea', label: 'PRODUCT_FORM.DESCRIPTION', placeholder: 'PRODUCT_FORM.DESCRIPTION_PH' },
+    // Flavours go here: Staff Sell's drink search reads them ("tamu ndimu").
+    { name: 'description', type: 'textarea', label: 'PRODUCT_FORM.DESCRIPTION_FLAVOUR', placeholder: 'PRODUCT_FORM.DESCRIPTION_FLAVOUR_PH' },
   ];
 }
 
@@ -603,7 +604,7 @@ readonly commissionBuckets: { key: keyof CommissionDTO; label: string }[] = [
 /** Kept so the tab switch (onAction) can still reset it. */
 addCommission: Boolean = false;
 
-serviceCommissions: any[] = [];
+serviceCommissions: ServiceCommissionRow[] = [];
 commissionPage = 0;
 commissionSize = 10;
 commissionTotalPages = 0;
@@ -612,7 +613,7 @@ commissionSearch = '';
 private commissionSearchTimer?: ReturnType<typeof setTimeout>;
 
 /** The service whose split is open in the editor, or null. */
-editingService: any = null;
+editingService: ServiceCommissionRow | null = null;
 /** Percent per bucket key while editing. */
 splitDraft: Record<string, number> = {};
 savingCommission = false;
@@ -674,11 +675,16 @@ changeCommissionPage(page: number) {
   this.findCommissionPage();
 }
 
-openSplitEditor(row: any) {
+openSplitEditor(row: ServiceCommissionRow) {
   this.editingService = row;
   this.splitDraft = {};
   for (const bucket of this.commissionBuckets) {
     this.splitDraft[bucket.key] = Number(row[bucket.key]) || 0;
+  }
+  // No stock share yet and the buying price is known: start from what one unit costs.
+  const noStockShare = !row.commissionUid || !Number(row.stockPurchasePercent);
+  if (noStockShare && row.suggestedStockPercent != null) {
+    this.splitDraft['stockPurchasePercent'] = row.suggestedStockPercent;
   }
   this.cdr.detectChanges();
   // The editor sits above the list; bring it into view from a row far down.
@@ -698,6 +704,59 @@ get draftTotal(): number {
 bucketAmount(percent: number): number {
   const price = Number(this.editingService?.price) || 0;
   return (price * (Number(percent) || 0)) / 100;
+}
+
+/**
+ * How the Stock Purchase share comes about, in words: "Katoni 48,000 ÷ 24 =
+ * 2,000 kwa chupa · bei ya kuuza 3,000 → 67%". Null without a buying price.
+ */
+get stockWorking(): string | null {
+  const s = this.editingService;
+  if (!s || s.unitCost == null) {
+    return null;
+  }
+  const n = (v: number | null | undefined) => Number(v ?? 0).toLocaleString('en-US');
+  const label = (u: string | null | undefined, fallback: string) =>
+    u ? this.translate.instant(unitKey(u)) : this.translate.instant(fallback);
+  const unit = label(s.unit, 'COMMISSION_FORM.STOCK_UNIT').toLowerCase();
+  const perPack = Number(s.unitsPerPack) || 1;
+  const params = {
+    pack: label(s.packUnit, 'COMMISSION_FORM.STOCK_PACK'),
+    buy: n(s.buyingPrice),
+    per: perPack,
+    cost: n(s.unitCost),
+    unit,
+    price: n(s.price),
+    pct: s.suggestedStockPercent ?? '-',
+  };
+  let text = this.translate.instant(perPack > 1 ? 'COMMISSION_FORM.STOCK_WORK_PACK' : 'COMMISSION_FORM.STOCK_WORK_SINGLE', params);
+  if (s.stockSourceName) {
+    text += ' · ' + this.translate.instant('COMMISSION_FORM.STOCK_WORK_SOURCE', {
+      name: s.stockSourceName,
+      n: s.unitsPerSale || 1,
+    });
+  }
+  return text;
+}
+
+/** Sold at or below what it costs to buy. */
+get sellsAtLoss(): boolean {
+  const s = this.editingService;
+  return !!s && s.unitCost != null && (Number(s.price) || 0) <= s.unitCost;
+}
+
+/** The suggested share is known and differs from what is typed. */
+get canApplyStockSuggestion(): boolean {
+  const pct = this.editingService?.suggestedStockPercent;
+  return pct != null && (Number(this.splitDraft['stockPurchasePercent']) || 0) !== pct;
+}
+
+applyStockSuggestion() {
+  const pct = this.editingService?.suggestedStockPercent;
+  if (pct != null) {
+    this.splitDraft['stockPurchasePercent'] = pct;
+    this.cdr.detectChanges();
+  }
 }
 
 saveCommission() {
@@ -730,7 +789,7 @@ saveCommission() {
     next: (res) => {
       this.savingCommission = false;
       if (res?.data) {
-        this.alertService.show('success', this.translate.instant('COMMISSION_FORM.SAVED', { name: this.editingService.serviceName }));
+        this.alertService.show('success', this.translate.instant('COMMISSION_FORM.SAVED', { name: this.editingService?.serviceName ?? '' }));
         this.findCommissionPage();
       }
     },

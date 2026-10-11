@@ -1816,7 +1816,9 @@
     "SOURCE_FROM_LEVEL": "From {{name}} › {{level}}",
     "SALE_UNIT_COUNT": "How many of that per sale",
     "SALE_UNIT_COUNT_PH": "Usually 1 - e.g. 1 Nusu",
-    "SOURCE_NOTE_LEVEL": "From {{name}}: {{n}} × {{level}}"
+    "SOURCE_NOTE_LEVEL": "From {{name}}: {{n}} × {{level}}",
+    "DESCRIPTION_FLAVOUR": "Flavour and description",
+    "DESCRIPTION_FLAVOUR_PH": "Flavours and description: sweet, lime, bitter, cold… - staff search drinks by these words"
   },
   "STAFF_FORM": {
     "FIRST_NAME": "First name",
@@ -1900,7 +1902,15 @@
     "WHOLE_NUMBERS": "Each percentage must be a whole number from 0 to 100",
     "OVER_100": "The percentages add up to {{total}}% - they cannot pass 100%",
     "SAVED": "Commission saved for {{name}}",
-    "DELETED": "Commission deleted"
+    "DELETED": "Commission deleted",
+    "STOCK_WORK_PACK": "{{pack}} {{buy}} ÷ {{per}} = {{cost}} per {{unit}} · selling price {{price}} → {{pct}}%",
+    "STOCK_WORK_SINGLE": "Buying price {{cost}} per {{unit}} · selling price {{price}} → {{pct}}%",
+    "STOCK_WORK_SOURCE": "drawn from {{name}} ({{n}} per sale)",
+    "STOCK_PACK": "Pack",
+    "STOCK_UNIT": "unit",
+    "STOCK_APPLY": "Use {{pct}}%",
+    "STOCK_LOSS": "Sold at or below its buying cost - no profit.",
+    "STOCK_NO_BUYING": "The Stock Purchase % fills itself in once this product has a buying price (Setting > Products)."
   },
   "BILL_CODES": {
     "TITLE": "Bill codes",
@@ -2077,7 +2087,18 @@
     "PICK_NONE": "No matching bill",
     "PICK_HINT": "Tap \"Choose a bill\" to open one. Once the order is sent it goes back into the list.",
     "BACK_TO_ORDERS": "Back to orders",
-    "OPEN_CODE": "Open"
+    "OPEN_CODE": "Open",
+    "COLLEAGUE_BTN": "Let a colleague sell",
+    "COLLEAGUE_TITLE": "Let a colleague sell",
+    "COLLEAGUE_HINT": "Your colleague enters their code and PIN. {{name}}'s bills stay safe - come back with this same button.",
+    "COLLEAGUE_CODE": "Code",
+    "COLLEAGUE_GO": "Sign in",
+    "COLLEAGUE_UNSENT": "You have orders not sent yet ({{n}}). They stay on your bills, but the counter will not see them until sent.",
+    "COLLEAGUE_SEND_FIRST": "Send first",
+    "COLLEAGUE_NOW": "Now selling as {{name}}",
+    "DRINK_SEARCH_PH": "Find a drink: name, flavour (sweet, lime…) or kind",
+    "DRINK_IN_STOCK": "In stock ({{n}})",
+    "DRINK_PICK_BILL": "Pick a bill first to add the drink to its order."
   },
   "SUPERVISOR_PAGE": {
     "OFFLINE_SEEN": "Looked over",

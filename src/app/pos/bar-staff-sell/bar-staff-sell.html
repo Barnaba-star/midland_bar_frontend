@@ -11,6 +11,13 @@
       <span class="module-logo"><app-brand-word [mark]="true" /></span>
       <span class="module-name">{{ 'STAFF_SELL_PAGE.TITLE' | translate }}</span>
     </div>
+    <!-- A colleague whose phone is broken sells here under their own code + PIN. -->
+    @if (canLetColleague) {
+      <button type="button" class="exit-btn colleague-btn" [disabled]="sending" (click)="letColleagueSell()">
+        <mat-icon>swap_horiz</mat-icon>
+        <span>{{ 'STAFF_SELL_PAGE.COLLEAGUE_BTN' | translate }}</span>
+      </button>
+    }
   </header>
 
     <div class="staff-sell">
@@ -104,6 +111,50 @@
               </button>
             }
           </div>
+        </div>
+
+        <!-- "A drink that tastes of lime?" - find it by name, code, flavour (description) or category. -->
+        <div class="drink-search">
+          <label class="drink-search-box">
+            <mat-icon>search</mat-icon>
+            <input type="search" name="drinkQuery" autocomplete="off" [(ngModel)]="drinkQuery"
+                   [placeholder]="'STAFF_SELL_PAGE.DRINK_SEARCH_PH' | translate"
+                   [attr.aria-label]="'STAFF_SELL_PAGE.DRINK_SEARCH_PH' | translate" />
+            @if (drinkQuery) {
+              <button type="button" class="drink-clear" (click)="drinkQuery = ''" [attr.aria-label]="'COMMON.CLOSE' | translate">
+                <mat-icon>close</mat-icon>
+              </button>
+            }
+          </label>
+          @if (drinkQuery.trim()) {
+            <div class="drink-results">
+              @for (d of drinkMatches; track d.uid) {
+                @let left = drinkLeft(d);
+                <button type="button" class="drink-row" [class.out]="left === 0" (click)="pickDrink(d)">
+                  <mat-icon class="drink-icon">{{ d.category === 'FOOD' ? 'restaurant' : 'local_bar' }}</mat-icon>
+                  <span class="drink-main">
+                    <span class="drink-name">{{ d.serviceName }}</span>
+                    @if (d.description) {
+                      <small class="drink-desc">{{ d.description }}</small>
+                    }
+                  </span>
+                  <span class="drink-side">
+                    <strong>Tshs {{ d.price | number }}</strong>
+                    @if (left === 0) {
+                      <small class="drink-out">{{ 'STORE_PAGE.STATE_OUT' | translate }}</small>
+                    } @else if (left !== null) {
+                      <small>{{ 'STAFF_SELL_PAGE.DRINK_IN_STOCK' | translate: { n: left } }}</small>
+                    }
+                  </span>
+                </button>
+              } @empty {
+                <p class="drink-empty">{{ 'SALE_ITEM.NO_MATCH' | translate: { term: drinkQuery } }}</p>
+              }
+              @if (drinkMatches.length && !selectedBill) {
+                <p class="drink-hint">{{ 'STAFF_SELL_PAGE.DRINK_PICK_BILL' | translate }}</p>
+              }
+            </div>
+          }
         </div>
 
         @if (bills.length === 0) {

@@ -172,6 +172,15 @@ export class BarSales implements OnInit{
       // Filled each time from the codes no unpaid bill is holding.
       options: [],
     },
+    {
+      // Optional; kept on this device only, like the box on the bill card.
+      name: 'nickname',
+      type: 'text',
+      label: 'BILL_NICKNAME.LABEL',
+      placeholder: 'BILL_NICKNAME.PH',
+      required: false,
+      maxLength: 40,
+    },
   ];
   salesOpenedList: SalesOpened[] = [];
 
@@ -282,6 +291,10 @@ export class BarSales implements OnInit{
       this.barServce.saveOpenSale(openSaleDTO).subscribe({
         next: (res) => {
           if (res.data) {
+            const nickname = (result.nickname ?? '').trim();
+            if (nickname && res.data.uid) {
+              this.nicknames.set(res.data.uid, nickname);
+            }
             this.salesOpenedList = [...this.salesOpenedList, res.data];
             this.cdr.detectChanges();
           }
@@ -606,9 +619,14 @@ openSaleDetailsDialogForMore(sale: SalesOpened) {
     });
   }
 
+  /** The chosen staff chip's bills that hold something - an empty bill has nothing to hand over or print. */
+  get handoverBills(): SalesOpened[] {
+    return this.visibleBills.filter((b) => (b.bill || 0) > 0);
+  }
+
   /** Every bill under the chosen staff chip, with a summary, in one receipt dialog and one print job. */
   printStaffBills(): void {
-    const bills = this.visibleBills;
+    const bills = this.handoverBills;
     if (!bills.length) {
       return;
     }
@@ -634,7 +652,7 @@ openSaleDetailsDialogForMore(sale: SalesOpened) {
       maxWidth: '95vw',
       autoFocus: false,
       // The bills already on screen: the summary opens on them at once, then checks with the server.
-      data: { staffCode: opt.code, mode: 'cashier', staffName: opt.name, bills: this.visibleBills },
+      data: { staffCode: opt.code, mode: 'cashier', staffName: opt.name, bills: this.handoverBills },
     }).afterClosed().subscribe((paid?: boolean) => {
       if (paid) {
         this.salesOpenedListToday();

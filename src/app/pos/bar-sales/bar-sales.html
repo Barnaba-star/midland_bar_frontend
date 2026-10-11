@@ -66,10 +66,10 @@
               {{ 'STAFF_LOSS.BUTTON' | translate }}
             </button>
           }
-          @if (staffFilter !== 'ALL' && visibleBills.length) {
+          @if (staffFilter !== 'ALL' && handoverBills.length) {
             <button type="button" class="print-all-btn" (click)="printStaffBills()">
               <mat-icon>print</mat-icon>
-              {{ 'SALES_PAGE.PRINT_ALL' | translate: { count: visibleBills.length } }}
+              {{ 'SALES_PAGE.PRINT_ALL' | translate: { count: handoverBills.length } }}
             </button>
           }
         </div>

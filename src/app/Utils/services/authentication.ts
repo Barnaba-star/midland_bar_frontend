@@ -159,6 +159,11 @@ getRoles(): string {
 }
 
 hasRole(role: string): boolean {
+  // The root account is known by its isRoot claim even without a ROOT role
+  // row - without this its dashboard showed no modules at all.
+  if (role === 'ROOT' && this.jwtHelper.decodeToken(this.getToken() || '')?.isRoot === true) {
+    return true;
+  }
   const roles = this.getRoles();
   if (Array.isArray(roles)) {
     return roles.includes(role);

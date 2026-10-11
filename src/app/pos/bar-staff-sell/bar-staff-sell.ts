@@ -539,10 +539,9 @@ export class BarStaffSell implements OnInit, OnDestroy {
         this.billLines = {};
         this.bills.forEach((b) => this.loadLines(b));
         this.cdr.markForCheck();
+        // No bill is opened for them: one left unused sat empty on the
+        // Sales page. They open one with "Fungua bill" when a customer comes.
         then?.(res.data.staff?.name ?? '');
-        if (this.bills.length === 0) {
-          this.openBill();
-        }
       },
       error: () => {
         this.looking = false;

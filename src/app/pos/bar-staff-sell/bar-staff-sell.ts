@@ -200,6 +200,16 @@ export class BarStaffSell implements OnInit, OnDestroy {
     return this.ownSession && !this.counterSession;
   }
 
+  /** A waiter who typed their code on the manager's till. */
+  get tillStaff(): boolean {
+    return !this.ownSession && !!this.staff;
+  }
+
+  /** The way out: the manager's (empty keypad), the counter's, or a signed-in waiter's sign-out. */
+  get showExit(): boolean {
+    return !this.tillStaff;
+  }
+
   letColleagueSell(): void {
     if (!this.canLetColleague || this.sending) {
       return;

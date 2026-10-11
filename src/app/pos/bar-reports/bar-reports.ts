@@ -738,11 +738,12 @@ totalPagesC = 0;
 
 commissionReports: any[] = [];
 
-/** Ranges longer than a day show one row per staff member, the days added together. */
-private static readonly TOTAL_RANGES = ['THIS_WEEK', 'LAST_WEEK', 'THIS_MONTH', 'LAST_MONTH', 'THIS_YEAR', 'LAST_YEAR'];
-
+/**
+ * Every range - a day too, which can hold several rows for one person - shows
+ * one row per staff member with their rows added together, and is paid as one.
+ */
 get commissionTotals(): boolean {
-  return BarReports.TOTAL_RANGES.includes(this.selectedRange);
+  return true;
 }
 
 filterCommissions(range: string) {

@@ -3,17 +3,21 @@
   <!-- Staff are not users: the manager signs in and opens this for them.
        The only way out is back to POS, which is the manager's. -->
   <header class="module-bar">
-    <button type="button" class="exit-btn" (click)="exitToPos()">
-      <mat-icon>{{ ownSession && !counterSession ? 'logout' : 'arrow_back' }}</mat-icon>
-      <span>{{ (counterSession ? 'STAFF_SELL_PAGE.BACK_TO_ORDERS' : ownSession ? 'STAFF_SELL_PAGE.SIGN_OUT' : 'STAFF_SELL_PAGE.EXIT') | translate }}</span>
-    </button>
+    <!-- A waiter on the till's keypad never sees the way back to POS: that is
+         for the manager, once the keypad is empty again. -->
+    @if (showExit) {
+      <button type="button" class="exit-btn" (click)="exitToPos()">
+        <mat-icon>{{ ownSession && !counterSession ? 'logout' : 'arrow_back' }}</mat-icon>
+        <span>{{ (counterSession ? 'STAFF_SELL_PAGE.BACK_TO_ORDERS' : ownSession ? 'STAFF_SELL_PAGE.SIGN_OUT' : 'STAFF_SELL_PAGE.EXIT') | translate }}</span>
+      </button>
+    }
     <div class="module-brand">
       <span class="module-logo"><app-brand-word [mark]="true" /></span>
       <span class="module-name">{{ 'STAFF_SELL_PAGE.TITLE' | translate }}</span>
     </div>
     <!-- A colleague whose phone is broken sells here under their own code + PIN. -->
-    @if (canLetColleague) {
-      <button type="button" class="exit-btn colleague-btn" [disabled]="sending" (click)="letColleagueSell()">
+    @if (canLetColleague || tillStaff) {
+      <button type="button" class="exit-btn colleague-btn" [disabled]="sending" (click)="canLetColleague ? letColleagueSell() : switchStaff()">
         <mat-icon>swap_horiz</mat-icon>
         <span>{{ 'STAFF_SELL_PAGE.COLLEAGUE_BTN' | translate }}</span>
       </button>
@@ -104,12 +108,6 @@
             <button type="button" class="row-action view" (click)="refresh()">
               <mat-icon>refresh</mat-icon>
             </button>
-            @if (!ownSession) {
-              <button type="button" class="row-action view" [disabled]="sending" (click)="switchStaff()">
-                <mat-icon>logout</mat-icon>
-                <span>{{ 'STAFF_SELL_PAGE.SWITCH' | translate }}</span>
-              </button>
-            }
           </div>
         </div>
 

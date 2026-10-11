@@ -1885,9 +1885,11 @@ closeStockPaymentDialog(): void {
         t.profit += (r.soldValue ?? 0) - (r.soldCost ?? 0);
         t.onHandValue += this.onHandValue(r);
         t.adjustedValue += r.adjustedValue ?? 0;
+        t.lossUnits += -(r.countLossUnits ?? 0);
+        t.lossValue += -(r.countLossValue ?? 0);
         return t;
       },
-      { boughtUnits: 0, boughtCost: 0, soldUnits: 0, soldValue: 0, soldCost: 0, profit: 0, onHandValue: 0, adjustedValue: 0 },
+      { boughtUnits: 0, boughtCost: 0, soldUnits: 0, soldValue: 0, soldCost: 0, profit: 0, onHandValue: 0, adjustedValue: 0, lossUnits: 0, lossValue: 0 },
     );
   }
 }

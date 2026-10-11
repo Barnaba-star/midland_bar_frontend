@@ -1959,6 +1959,8 @@
     "ADDED": "{{qty}} x {{name}} imeongezwa kwenye bill {{code}}"
   },
   "STOCK_REPORT": {
+    "COUNT_LOSS": "Upotevu (hesabu)",
+    "UNITS": "vipande",
     "TITLE": "Ripoti ya Stock",
     "SUBTITLE": "Kilichonunuliwa, kilichouzwa, faida yake na kilichobaki",
     "BOUGHT_UNITS": "Vipande vilivyonunuliwa",

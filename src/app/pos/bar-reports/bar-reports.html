@@ -1253,6 +1253,12 @@
               <small>{{ 'STOCK_REPORT.GROSS_PROFIT' | translate }}</small>
               <strong>Tshs {{ stockReportTotals.profit | number }}</strong>
             </div>
+            <!-- What the stock counts found missing (the Stock variance report), all items -->
+            <div class="sr-tile" [class.bad]="stockReportTotals.lossValue > 0">
+              <small>{{ 'STOCK_REPORT.COUNT_LOSS' | translate }}</small>
+              <strong>Tshs {{ stockReportTotals.lossValue | number }}</strong>
+              <span>{{ stockReportTotals.lossUnits | number }} {{ 'STOCK_REPORT.UNITS' | translate }}</span>
+            </div>
             <div class="sr-tile" [class.bad]="stockReportTotals.adjustedValue < 0">
               <small>{{ 'STOCK_ADJUST.TILE' | translate }}</small>
               <strong>Tshs {{ stockReportTotals.adjustedValue | number }}</strong>
@@ -1279,6 +1285,7 @@
                   <th>{{ 'STOCK_REPORT.COST_OF_SOLD' | translate }}</th>
                   <th>{{ 'STOCK_REPORT.GROSS_PROFIT' | translate }}</th>
                 }
+                <th>{{ 'STOCK_REPORT.COUNT_LOSS' | translate }}</th>
                 <th>{{ 'STOCK_ADJUST.COL_ADJUSTED' | translate }}</th>
                 <th>{{ 'STORE_PAGE.COL_ON_HAND_NOW' | translate }}</th>
                 @if (seesStockMoney) { <th>{{ 'STORE_PAGE.COL_VALUE' | translate }}</th> }
@@ -1312,6 +1319,17 @@
                     <td>Tshs {{ (m.soldCost ?? 0) | number }}</td>
                     <td [class.sr-good]="profit > 0" [class.sr-bad]="profit < 0"><strong>Tshs {{ profit | number }}</strong></td>
                   }
+                  <td>
+                    <!-- Missing at stock counts in the period - this item's line of the Stock variance report -->
+                    @if (m.countLossUnits) {
+                      @let lost = packsOf(-m.countLossUnits, m);
+                      <span class="sr-bad">−@for (p of lost.parts; track $index) { {{ p.count }} {{ p.label | translate }}@if (!$last) {, } }</span>
+                      <small class="sr-muted">({{ -m.countLossUnits | number }})</small>
+                      @if (seesStockMoney) { <small class="sr-bad">Tshs {{ -m.countLossValue | number }}</small> }
+                    } @else {
+                      <span class="sr-muted">0</span>
+                    }
+                  </td>
                   <td>
                     @if (m.adjustedUnits) {
                       <span [class.sr-bad]="m.adjustedUnits < 0" [class.sr-good]="m.adjustedUnits > 0">{{ m.adjustedUnits > 0 ? '+' : '' }}{{ m.adjustedUnits | number }}</span>

@@ -132,6 +132,11 @@ private forcePasswordChange(): void {
 /** A staff code in the username box: 3 digits (older codes) or 4 (new ones). */
 private static readonly STAFF_CODE = /^\d{3,4}$/;
 
+/** Only digits in the username box so far: a staff code being typed (masked). */
+get codeTyped(): boolean {
+  return /^\d+$/.test(String(this.loginForm?.value?.username ?? '').trim());
+}
+
 /** A staff code in the username box: a staff member signing in with their code and PIN. */
 get staffMode(): boolean {
   return Login.STAFF_CODE.test(String(this.loginForm?.value?.username ?? '').trim());

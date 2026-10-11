@@ -17,8 +17,10 @@ export interface BarStaffDTO{
 }
 export interface BarStaffEntity{
   uid?: string;
-  /** Typed at Staff Sell and at sign-in: 4 digits (older staff: 3). */
+  /** Typed at Staff Sell and at sign-in: 4 digits (older staff: 3). Never shown; Manage Staff rows send only hasCode. */
   staffCode?: string;
+  /** Whether they have a code (Manage Staff rows - the code itself is their secret). */
+  hasCode?: boolean;
   /** Added without a code or PIN: they choose their own at their first sign-in. */
   mustSetCode?: boolean;
   /** The temporary PIN the system gave, only in the reply to adding them. */
@@ -345,9 +347,9 @@ export interface StaffHandover {
     paid: { byMethod: StaffHandoverMethod[]; total: number };
 }
 
-/** One staff member's day on the Sales page. Null staffCode = bills opened on the Sales page itself. */
+/** One staff member's day on the Sales page. staff false = bills opened on the Sales page itself (no code is sent - it is secret). */
 export interface StaffSalesRow {
-    staffCode: string | null;
+    staff: boolean;
     staffName: string | null;
     total: number;
     paidBills: number;

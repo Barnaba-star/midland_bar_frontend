@@ -107,7 +107,7 @@
 
                     <!-- Code -->
                     <td>
-                      @if (staff.staffCode) {
+                      @if (staff.hasCode || staff.staffCode) {
                         <!-- The code is the staff member's secret: only that one is set. -->
                         <span class="staff-code-tag" [attr.aria-label]="'STAFF_PAGE.CODE' | translate">••••</span>
                         @if (staff.hasPin === false) {

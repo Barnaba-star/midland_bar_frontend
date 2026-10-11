@@ -127,7 +127,9 @@
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>{{ 'COMMON.USERNAME' | translate }}</mat-label>
         <mat-icon matPrefix>person</mat-icon>
-        <input matInput formControlName="username" type="text" autocomplete="username">
+        <!-- Digits only = a staff code, their secret: shown as dots, never offered back by the browser. -->
+        <input matInput formControlName="username" type="text" [class.secret-code]="codeTyped"
+               [attr.autocomplete]="codeTyped ? 'off' : 'username'" spellcheck="false">
         <mat-error *ngIf="username?.hasError('required') && username?.touched">
           {{ 'LOGIN.USERNAME_REQUIRED' | translate }}
         </mat-error>

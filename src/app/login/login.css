@@ -610,3 +610,10 @@ input.mat-input-element:-webkit-autofill {
   font-weight: 600;
   cursor: pointer;
 }
+
+/* A staff code typed as the username: dots, like the PIN beside it. */
+.secret-code {
+  -webkit-text-security: disc;
+  text-security: disc;
+  letter-spacing: 2px;
+}

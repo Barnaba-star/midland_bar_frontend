@@ -233,7 +233,8 @@ export class BarSales implements OnInit{
   /** The name a bill goes by: its staff member, else whoever opened it at the till. */
   billOwner(bill: SalesOpened): string {
     if (bill.staffCode) {
-      return `${bill.staffCode} · ${bill.staffName ?? ''}`;
+      // The staff code is the staff member's secret: the name only.
+      return bill.staffName ?? '';
     }
     return bill.openedByName || bill.openedBy || '';
   }
@@ -632,7 +633,7 @@ openSaleDetailsDialogForMore(sale: SalesOpened) {
     }
     const opt = this.staffOptions.find((o) => o.code === this.staffFilter);
     const opener = this.openerOptions.find((o) => o.key === this.staffFilter);
-    const title = opt ? `${opt.code} · ${opt.name}` : opener ? opener.name : this.translate.instant('SALES_PAGE.FILTER_NONE');
+    const title = opt ? opt.name : opener ? opener.name : this.translate.instant('SALES_PAGE.FILTER_NONE');
     this.dialog.open(ReceiptDialogComponent, {
       width: '400px',
       maxWidth: '95vw',

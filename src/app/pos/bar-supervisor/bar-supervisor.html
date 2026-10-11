@@ -43,7 +43,7 @@
         @for (order of offlineOrders; track order.uid) {
           <div class="sup-offline-row">
             <span class="ticket-bill">{{ order.salesCode }}</span>
-            <span><b>{{ order.staffCode }}</b> {{ order.staffName }}</span>
+            <span>{{ order.staffName }}</span>
             <span class="sup-offline-items">
               @for (line of order.lines; track line.uid) {
                 <span>{{ line.quantity }}× {{ line.serviceName }} @if (line.serving) { <span class="serving-tag" [class.warm]="line.serving === 'WARM'">{{ (line.serving === 'WARM' ? 'SALE_ITEM.WARM' : 'SALE_ITEM.COLD') | translate }}</span> }</span>
@@ -74,7 +74,7 @@
             <div class="ticket-head">
               <div>
                 <span class="ticket-bill">{{ order.salesCode }}</span>
-                <span class="ticket-staff"><b>{{ order.staffCode }}</b> {{ order.staffName }}</span>
+                <span class="ticket-staff">{{ order.staffName }}</span>
               </div>
               <span class="ticket-time" [class.late]="waited(order) >= 5">
                 <mat-icon>schedule</mat-icon>

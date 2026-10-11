@@ -34,7 +34,7 @@
           </button>
           @for (opt of staffOptions; track opt.code) {
             <button type="button" class="staff-chip" [class.active]="staffFilter === opt.code" (click)="setStaffFilter(opt.code)">
-              <b>{{ opt.code }}</b> {{ opt.name }}
+              {{ opt.name }}
               @if (opt.sent) {
                 <mat-icon class="chip-sent" [attr.title]="'STAFF_HANDOVER.SENT_BADGE' | translate">send</mat-icon>
               }

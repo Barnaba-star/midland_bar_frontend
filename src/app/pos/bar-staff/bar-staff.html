@@ -108,7 +108,8 @@
                     <!-- Code -->
                     <td>
                       @if (staff.staffCode) {
-                        <span class="staff-code-tag">{{ staff.staffCode }}</span>
+                        <!-- The code is the staff member's secret: only that one is set. -->
+                        <span class="staff-code-tag" [attr.aria-label]="'STAFF_PAGE.CODE' | translate">••••</span>
                         @if (staff.hasPin === false) {
                           <!-- Cannot sign in with the code until a PIN is set (Edit). -->
                           <span class="staff-nopin-tag" [title]="'STAFF_FORM.NO_PIN_TIP' | translate">{{ 'STAFF_FORM.NO_PIN' | translate }}</span>

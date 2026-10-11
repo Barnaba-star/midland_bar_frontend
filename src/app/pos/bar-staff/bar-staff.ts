@@ -257,10 +257,6 @@ export class BarStaff implements OnInit{
   barStaffEdited: BarStaffEntity[] = [];
   staffColumns = [
     {
-      field: 'staffCode',
-      header: 'STAFF_PAGE.CODE',
-    },
-    {
       field: 'firstName',
       header: 'STAFF_FORM.FIRST_NAME',
     },

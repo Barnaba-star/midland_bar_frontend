@@ -529,7 +529,7 @@ export class BarStaffSell implements OnInit, OnDestroy {
         this.billLines = {};
         this.bills.forEach((b) => this.loadLines(b));
         this.cdr.markForCheck();
-        then?.(res.data.staff?.name ?? res.data.staff?.staffCode ?? '');
+        then?.(res.data.staff?.name ?? '');
         if (this.bills.length === 0) {
           this.openBill();
         }

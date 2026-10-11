@@ -396,6 +396,8 @@
     "TOTAL_USED": "Used on this page"
   },
   "REPORTS_PAGE": {
+    "STAFF_DAYS": "{{count}} day(s)",
+    "COL_DAYS": "Days",
     "SERVICE_REPORT_LABEL": "SERVICE REPORT",
     "COMPLETED_SERVICES": "Completed Services",
     "COMPLETED_SERVICES_DESC": "Browse completed services and their revenue for each period.",
@@ -2065,7 +2067,7 @@
     "TITLE": "Staff Sell",
     "CODE_EYEBROW": "Staff sell",
     "CODE_TITLE": "Enter your code",
-    "CODE_HINT": "Tap your 4-digit staff code - it stays hidden. An older 3-digit code? Type it and press Open. Bills you open here carry it (e.g. 2458-1), and what sells on them counts toward your commission.",
+    "CODE_HINT": "Tap your 4-digit staff code - it stays hidden. An older 3-digit code? Type it and press Open. Bills you open here carry your initials (e.g. JM-1), and what sells on them counts toward your commission.",
     "CONTINUE": "Continue",
     "OPEN_BILLS": "open bills",
     "SWITCH": "Switch staff",

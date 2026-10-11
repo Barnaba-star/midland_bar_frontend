@@ -396,6 +396,8 @@
     "TOTAL_USED": "Iliyotumika (ukurasa huu)"
   },
   "REPORTS_PAGE": {
+    "STAFF_DAYS": "Siku {{count}}",
+    "COL_DAYS": "Siku",
     "SERVICE_REPORT_LABEL": "RIPOTI YA HUDUMA",
     "COMPLETED_SERVICES": "Huduma Zilizokamilika",
     "COMPLETED_SERVICES_DESC": "Angalia huduma zilizokamilika na mapato yake kwa kila kipindi.",
@@ -2065,7 +2067,7 @@
     "TITLE": "Mauzo ya Wahudumu",
     "CODE_EYEBROW": "Mauzo ya wahudumu",
     "CODE_TITLE": "Andika code yako",
-    "CODE_HINT": "Gusa code yako (tarakimu 4) - haionekani kwa wengine. Code ya zamani ya tarakimu 3? Iandike kisha bonyeza Fungua. Bili unazofungua hapa zinabeba code yako (mf. 2458-1), na mauzo yake yanaingia kwenye kamisheni yako.",
+    "CODE_HINT": "Gusa code yako (tarakimu 4) - haionekani kwa wengine. Code ya zamani ya tarakimu 3? Iandike kisha bonyeza Fungua. Bili unazofungua hapa zinabeba herufi za jina lako (mf. JM-1), na mauzo yake yanaingia kwenye kamisheni yako.",
     "CONTINUE": "Endelea",
     "OPEN_BILLS": "bill zilizo wazi",
     "SWITCH": "Badilisha mhudumu",

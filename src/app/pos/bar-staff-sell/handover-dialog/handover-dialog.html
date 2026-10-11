@@ -4,7 +4,7 @@
     <div>
       <h3>{{ 'STAFF_HANDOVER.TITLE' | translate }}</h3>
       @if (summary) {
-        <p>{{ summary.staff.staffCode }} · {{ summary.staff.name }}</p>
+        <p>{{ summary.staff.name }}</p>
       }
     </div>
     <button type="button" class="ho-refresh" [disabled]="loading" (click)="load()" [attr.aria-label]="'STAFF_HANDOVER.REFRESH' | translate">

@@ -213,6 +213,15 @@
   font-size: 26px;
   letter-spacing: 0.08em;
   line-height: 1;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* The code is the staff member's secret: an icon stands in its place. */
+.staff-code mat-icon {
+  width: 24px;
+  height: 24px;
+  font-size: 24px;
 }
 
 .staff-name {

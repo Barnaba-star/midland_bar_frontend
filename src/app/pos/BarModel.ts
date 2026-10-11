@@ -229,6 +229,8 @@ export interface StaffCommissionDTO {
    /** How it was paid out: cash, mpesa, tigopesa, airtelmoney, halopesa or bank. */
    method?: string;
      uid?:string;
+     /** Paying a staff member's total over the filter's range instead of one day. */
+     staffUid?: string;
      amount?: number;
      filterDate?:string;
      remainingAmount?:number;

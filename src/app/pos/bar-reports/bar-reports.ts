@@ -738,8 +738,36 @@ totalPagesC = 0;
 
 commissionReports: any[] = [];
 
+/** Ranges longer than a day show one row per staff member, the days added together. */
+private static readonly TOTAL_RANGES = ['THIS_WEEK', 'LAST_WEEK', 'THIS_MONTH', 'LAST_MONTH', 'THIS_YEAR', 'LAST_YEAR'];
+
+get commissionTotals(): boolean {
+  return BarReports.TOTAL_RANGES.includes(this.selectedRange);
+}
+
 filterCommissions(range: string) {
   this.selectedRange = range;
+
+  if (this.commissionTotals) {
+    this.pageC = 0;
+    this.barService.findStaffCommissionTotals({ page: 0, size: 0, filter: range } as PageableParam).subscribe({
+      next: (res) => {
+        // uid = the staff member, so the table and Pay work on the total.
+        this.commissionReports = (res.data ?? []).map((r: any) => ({ ...r, uid: r.staffUid }));
+        this.totalElementsC = this.commissionReports.length;
+        this.totalPagesC = 1;
+        this.cdr.detectChanges();
+      },
+      error: (error) => {
+        console.error('Error Occurred:', error);
+        this.commissionReports = [];
+        this.totalElementsC = 0;
+        this.totalPagesC = 0;
+        this.cdr.detectChanges();
+      },
+    });
+    return;
+  }
 
   const params: PageableParam = {
     page: this.pageC,
@@ -925,6 +953,31 @@ closePaymentOverlay(): void {
 
 
 submitPayment(): void {
+
+  if (this.commissionTotals) {
+    this.barService.payStaffCommissionTotal({
+      staffUid: this.paymentReport.staffUid,
+      amount: this.paymentAmount,
+      filter: this.selectedRange,
+      descriptions: this.descriptions.trim(),
+      method: this.paymentMethod,
+    } as StaffCommissionDTO).subscribe({
+      next: (res) => {
+        if (res.data) {
+          this.alert.show('success', 'Payment Successfully');
+        } else {
+          this.alert.show('error', res.message || 'Error Occurred when saving');
+        }
+        this.filterCommissions(this.selectedRange);
+      },
+      error: (error) => {
+        console.error('Error Occurred when saving Staff Commission', error);
+        this.alert.show('error', 'Error Occurred when saving');
+      },
+    });
+    this.closePaymentOverlay();
+    return;
+  }
 
   const staffCommissionDTO: StaffCommissionDTO = {
     uid: this.paymentReport.uid,

@@ -524,12 +524,15 @@ export class OfflineService {
     const staff = await this.staffByCode(String(body?.staffCode ?? ''));
     if (!staff) throw new OfflineRefusal('STAFF_NOT_CACHED');
     const held = new Set((await this.openBillsView()).map((b) => b.salesCode));
+    // Initials, as the server numbers them - the staff code is secret.
+    const prefix = (staff.name || '').split(/\s+/).filter(Boolean).map((w: string) => w.replace(/[^\p{L}]/gu, '')).filter(Boolean)
+      .map((w: string) => w[0].toUpperCase()).filter((_: string, i: number, a: string[]) => i === 0 || i === a.length - 1).join('') || 'B';
     let n = 1;
-    while (held.has(`${staff.staffCode}-${n}`)) n++;
+    while (held.has(`${prefix}-${n}`)) n++;
     const clientUid = body.clientUid ?? this.newId();
     const at = Date.now();
     const bill = {
-      uid: clientUid, salesCode: `${staff.staffCode}-${n}`, staffUid: staff.uid, staffCode: staff.staffCode, staffName: staff.name,
+      uid: clientUid, salesCode: `${prefix}-${n}`, staffUid: staff.uid, staffCode: staff.staffCode, staffName: staff.name,
       bill: 0, paidAmount: 0, paymentStatus: 'PENDING', status: 'ACTIVE', createdAt: toLocalIso(at).slice(0, 10), offline: true,
     };
     await this.enqueue({ id, kind: 'STAFF_OPEN_BILL', user: this.user(), url, body: { staffCode: staff.staffCode, clientUid }, at, meta: { bill } });

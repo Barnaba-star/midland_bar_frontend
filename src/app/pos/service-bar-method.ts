@@ -171,6 +171,16 @@ findBarRevenueByService(date: string): Observable<Response<any>> {
   return this.http.get<Response<any>>(`${this.barURL}/findBarRevenueByService/${date}`);
 }
 
+/** Week/month/year: one row per staff member, the days added together. */
+findStaffCommissionTotals(params: PageableParam): Observable<ResponseList<any>> {
+  return this.http.post<ResponseList<any>>(`${this.barURL}/findStaffCommissionTotals`, params);
+}
+
+/** Pays a staff member's total over the filter's range, oldest owed day first. */
+payStaffCommissionTotal(staffCommissionDTO: StaffCommissionDTO): Observable<Response<number>> {
+  return this.http.post<Response<number>>(`${this.barURL}/payStaffCommissionTotal`, staffCommissionDTO);
+}
+
 payStaffCommission(staffCommissionDTO:StaffCommissionDTO):Observable<Response<any>>{
   return this.http.post<Response<any>>(`${this.barURL}/payStaffCommission`, staffCommissionDTO);
 }

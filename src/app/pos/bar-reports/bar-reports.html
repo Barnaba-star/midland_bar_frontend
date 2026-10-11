@@ -894,7 +894,7 @@
                     <th class="index-col">#</th>
                     <th>{{ 'REPORTS_PAGE.COL_STAFF' | translate }}</th>
                     <th>{{ 'REPORTS_PAGE.COL_CATEGORY' | translate }}</th>
-                    <th>{{ 'COMMON.DATE' | translate }}</th>
+                    <th>{{ (commissionTotals ? 'REPORTS_PAGE.COL_DAYS' : 'COMMON.DATE') | translate }}</th>
                     <th>{{ 'COMMON.TOTAL' | translate }}</th>
                     <th>{{ 'STAFF_LOSS.COL_LOSS' | translate }}</th>
                     <th>{{ 'COMMON.PAID' | translate }}</th>
@@ -941,10 +941,14 @@
                         </span>
                       </td>
 
-                      <!-- DATE -->
+                      <!-- DATE, or the days added together over a week/month/year -->
                       <td>
                         <span class="category-badge">
-                          {{ report.date | uppercase }}
+                          @if (commissionTotals) {
+                            {{ 'REPORTS_PAGE.STAFF_DAYS' | translate: { count: report.days } }}
+                          } @else {
+                            {{ report.date | uppercase }}
+                          }
                         </span>
                       </td>
 

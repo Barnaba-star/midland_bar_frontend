@@ -1959,7 +1959,7 @@
     "ADDED": "{{qty}} x {{name}} added to bill {{code}}"
   },
   "STOCK_REPORT": {
-    "COUNT_LOSS": "Count loss",
+    "COUNT_LOSS": "Loss",
     "UNITS": "units",
     "TITLE": "Stock report",
     "SUBTITLE": "What was bought, what was sold, the profit on it and what is left",

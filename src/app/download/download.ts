@@ -13,7 +13,7 @@ import { BrandWord } from '../Utils/component/brand-word/brand-word';
  * new (64-bit) - two separate downloads confused people. Bump APP_VERSION
  * and the size together with the file.
  */
-const APP_VERSION = '1.0.34';
+const APP_VERSION = '1.0.35';
 
 @Component({
   selector: 'app-download',

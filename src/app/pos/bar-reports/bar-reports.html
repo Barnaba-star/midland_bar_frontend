@@ -1320,7 +1320,7 @@
                     <td [class.sr-good]="profit > 0" [class.sr-bad]="profit < 0"><strong>Tshs {{ profit | number }}</strong></td>
                   }
                   <td>
-                    <!-- Missing at stock counts in the period - this item's line of the Stock variance report -->
+                    <!-- Lost in the period: counts found short, spoiled, broken, lost, other - not the house's own use -->
                     @if (m.countLossUnits) {
                       @let lost = packsOf(-m.countLossUnits, m);
                       <span class="sr-bad">−@for (p of lost.parts; track $index) { {{ p.count }} {{ p.label | translate }}@if (!$last) {, } }</span>

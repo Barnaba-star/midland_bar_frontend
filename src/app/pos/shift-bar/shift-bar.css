@@ -140,16 +140,46 @@
   color: #1d1812;
 }
 
-/* Closing ends selling: outlined in red rather than a loud red block. */
+/*
+ * Opening and closing a shift are the bar's two big moments: solid green to
+ * start selling, solid red to stop - plain to see on the dark theme and the
+ * light one, in a busy bar, from a step away.
+ */
+.shift-btn.start,
 .shift-btn.stop {
-  background: transparent;
-  color: #c0392b;
-  border-color: color-mix(in srgb, #c0392b 55%, transparent);
+  height: 44px;
+  padding: 0 20px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.02em;
+}
+
+.shift-btn.start {
+  background: #1f9d55;
+  border-color: #17803f;
+  box-shadow: 0 2px 10px color-mix(in srgb, #1f9d55 45%, transparent);
+}
+
+.shift-btn.start:not(:disabled):hover {
+  background: #17803f;
+}
+
+.shift-btn.stop {
+  background: #d63a2b;
+  border-color: #b42d20;
+  box-shadow: 0 2px 10px color-mix(in srgb, #d63a2b 45%, transparent);
 }
 
 .shift-btn.stop:not(:disabled):hover {
-  background: #c0392b;
-  color: #fff;
+  background: #b42d20;
+}
+
+.shift-btn.start mat-icon,
+.shift-btn.stop mat-icon {
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
 }
 
 .shift-btn.ghost {

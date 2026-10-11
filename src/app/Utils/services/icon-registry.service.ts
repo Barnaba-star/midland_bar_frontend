@@ -48,6 +48,7 @@ export class IconRegistryService {
     { name: 'logout', path: 'assets/icons/logout.svg' },
     { name: 'seting', path: 'assets/icons/seting.svg' },
     { name: 'role', path: 'assets/icons/role.svg' },
+    { name: 'manage', path: 'assets/icons/manage.svg' },
     { name: 'permission', path: 'assets/icons/permission.svg' },
     { name: 'workflow', path: 'assets/icons/workflow.svg' },
     { name: 'user', path: 'assets/icons/user.svg' },

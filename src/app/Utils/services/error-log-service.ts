@@ -17,6 +17,8 @@ export interface ErrorLog {
   httpMethod: string;
   username: string;
   branchUid: string;
+  /** The branch's name, so the list says where it happened. */
+  branchName?: string | null;
   userAgent: string;
   payload: string;
   queryString: string;

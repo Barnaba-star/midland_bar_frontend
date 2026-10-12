@@ -182,7 +182,10 @@ export class BarSales implements OnInit{
       maxLength: 40,
     },
   ];
+  /** The open bills shown: empty ones are left out (owner's choice), except those opened here, so items can go on them. */
   salesOpenedList: SalesOpened[] = [];
+  /** Bills this page opened - shown while still empty. */
+  private openedHere = new Set<string>();
 
   /*
    * Filter the open bills by whose they are: 'ALL', a staff code from Staff
@@ -295,6 +298,9 @@ export class BarSales implements OnInit{
             const nickname = (result.nickname ?? '').trim();
             if (nickname && res.data.uid) {
               this.nicknames.set(res.data.uid, nickname);
+            }
+            if (res.data.uid) {
+              this.openedHere.add(res.data.uid);
             }
             this.salesOpenedList = [...this.salesOpenedList, res.data];
             this.cdr.detectChanges();
@@ -775,9 +781,10 @@ openSaleDetailsDialogForMore(sale: SalesOpened) {
     this.barServce.salesOpenedList(quiet).subscribe({
       next: (res) => {
         if (res) {
-          this.salesOpenedList = res.data ?? [];
+          const all = res.data ?? [];
           // The branch's whole open list: a nickname whose bill is not in it was paid elsewhere.
-          this.nicknames.keepOnly(this.salesOpenedList.map((b) => b.uid));
+          this.nicknames.keepOnly(all.map((b) => b.uid));
+          this.salesOpenedList = all.filter((b) => (Number(b.bill) || 0) > 0 || this.openedHere.has(b.uid!));
           this.cdr.detectChanges();
         }
       },

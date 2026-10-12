@@ -1350,6 +1350,7 @@
     "STATUS_UNKNOWN": "Hakuna mpango"
   },
   "ERROR_SETTING_PAGE": {
+    "COL_BRANCH": "Tawi",
     "TITLE": "Makosa",
     "MANAGE_TAB": "Kumbukumbu ya Makosa",
     "MGMT_TITLE": "Makosa ya Mfumo",

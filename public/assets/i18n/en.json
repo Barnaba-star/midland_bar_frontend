@@ -1350,6 +1350,7 @@
     "STATUS_UNKNOWN": "No plan"
   },
   "ERROR_SETTING_PAGE": {
+    "COL_BRANCH": "Branch",
     "TITLE": "Errors",
     "MANAGE_TAB": "Error Log",
     "MGMT_TITLE": "System Errors",

@@ -93,6 +93,7 @@
               <th>{{ 'ERROR_SETTING_PAGE.COL_MESSAGE' | translate }}</th>
               <th>{{ 'ERROR_SETTING_PAGE.COL_PATH' | translate }}</th>
               <th>{{ 'ERROR_SETTING_PAGE.COL_USER' | translate }}</th>
+              <th>{{ 'ERROR_SETTING_PAGE.COL_BRANCH' | translate }}</th>
               <th>{{ 'ERROR_SETTING_PAGE.COL_ACTION' | translate }}</th>
             </tr>
           </thead>
@@ -135,6 +136,8 @@
 
                 <td>{{ errorLog.username || '-' }}</td>
 
+                <td>{{ errorLog.branchName || '-' }}</td>
+
                 <td>
                   <button type="button" class="view-btn" (click)="openDetail(errorLog)">
                     {{ 'ERROR_SETTING_PAGE.VIEW_BTN' | translate }}
@@ -146,7 +149,7 @@
 
             @if (!isLoading && errorLogs.length === 0) {
               <tr>
-                <td colspan="9">
+                <td colspan="10">
                   <div class="empty-state">
                     {{ 'ERROR_SETTING_PAGE.EMPTY_TEXT' | translate }}
                   </div>

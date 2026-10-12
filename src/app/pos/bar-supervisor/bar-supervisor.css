@@ -250,6 +250,43 @@
   font-size: 13px;
 }
 
+/* Biss lines green, fresh juice lines blue (owner's choice); everything else stays plain. */
+.ticket-lines li.tint-biss,
+.ticket-lines li.tint-juice {
+  margin: 0 -6px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  color: #fff;
+}
+
+.ticket-lines li.tint-biss {
+  background: #2e7d32;
+}
+
+.ticket-lines li.tint-juice {
+  background: #1565c0;
+}
+
+.ticket-lines li.tint-biss .amt,
+.ticket-lines li.tint-juice .amt {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.sup-offline-items .tint-biss,
+.sup-offline-items .tint-juice {
+  padding: 1px 6px;
+  border-radius: 6px;
+  color: #fff;
+}
+
+.sup-offline-items .tint-biss {
+  background: #2e7d32;
+}
+
+.sup-offline-items .tint-juice {
+  background: #1565c0;
+}
+
 .ticket-total {
   display: flex;
   justify-content: space-between;
@@ -388,4 +425,10 @@
 .sup-offline-time {
   opacity: 0.75;
   font-size: 13px;
+}
+
+/* The cold tag is blue too: an outline keeps it readable on a tinted line. */
+.tint-biss .serving-tag,
+.tint-juice .serving-tag {
+  box-shadow: 0 0 0 1.5px #fff;
 }

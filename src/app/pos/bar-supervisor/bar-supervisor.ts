@@ -160,6 +160,14 @@ export class BarSupervisor implements OnInit, OnDestroy {
     return order.lines.reduce((sum, l) => sum + (l.unitPrice || 0) * l.quantity, 0);
   }
 
+  /** Owner's colours on the ticket: any Biss green, any fresh juice blue, the rest as they were. */
+  tint(name: string | undefined): 'biss' | 'juice' | null {
+    const n = (name ?? '').toLowerCase();
+    if (n.includes('biss')) return 'biss';
+    if (n.includes('fresh') && n.includes('juice')) return 'juice';
+    return null;
+  }
+
   /** Minutes the order has waited - the oldest ones are the ones to clear first. */
   waited(order: StaffOrder): number {
     if (!order.sentAt) {

@@ -410,7 +410,8 @@
               </button>
 
 
-              <!-- DELETE -->
+              <!-- DELETE - only for those allowed to (not STAFF) -->
+              @if (canDeleteUser) {
               <button
                 type="button"
                 class="action-button delete-button"
@@ -420,6 +421,7 @@
                 <mat-icon>delete_outline</mat-icon>
                 <span>{{ 'USERS_SETTING_PAGE.BTN_DELETE_USER' | translate }}</span>
               </button>
+              }
 
             </div>
 

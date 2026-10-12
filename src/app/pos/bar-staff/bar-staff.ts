@@ -63,6 +63,11 @@ const GENDER_OPTIONS = [
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BarStaff implements OnInit{
+  /** Only those with DELETE_STAFF see the delete buttons; the server checks it too. */
+  get canDeleteStaff(): boolean {
+    return this.visibility.hasPermission('DELETE_STAFF');
+  }
+
   constructor(
     private visibility: Authentication,
     private barService: ServiceBarMethod,

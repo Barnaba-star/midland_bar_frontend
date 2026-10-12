@@ -14,7 +14,7 @@
           [columns]="staffColumns"
           [data]="barStaff"
           [showEdit]="true"
-          [showDelete]="true"
+          [showDelete]="canDeleteStaff"
           (editRecord)="onEditBarStaff($event)"
           (deleteRecord)="onDeleteBarStaff($event)"
         >
@@ -218,6 +218,7 @@
                           <span>{{ 'COMMON.EDIT' | translate }}</span>
                         </button>
 
+                        @if (canDeleteStaff) {
                         <!-- Someone with a login role would sign in again: the CEO removes the role first. -->
                         <span [matTooltip]="staff.roles?.length ? ('STAFF_PAGE.DELETE_HAS_ROLE' | translate) : ''">
                           <button
@@ -229,6 +230,7 @@
                             <span>{{ 'COMMON.DELETE' | translate }}</span>
                           </button>
                         </span>
+                        }
                       </div>
                     </td>
                   </tr>

@@ -78,6 +78,11 @@ export class UsersSetting implements OnInit {
   get totalSteps(): number {
     return this.stepper?.steps.length || 0;
   }
+  /** Deleting a user is DELETE_USER's (DIRECTOR, ROOT) - STAFF registers, it does not remove. */
+  get canDeleteUser(): boolean {
+    return this.visibility.hasPermission('DELETE_USER');
+  }
+
   constructor(
     private dialog: MatDialog,
     private visibility: Authentication,

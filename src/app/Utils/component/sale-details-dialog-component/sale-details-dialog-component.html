@@ -170,6 +170,14 @@
 
             </div>
 
+            <!-- Staff Sell: the customer changed their mind - bring this back, take another (Badilisho). -->
+            @if (canSwap) {
+              <button type="button" class="line-swap-btn" (click)="exchange(service)">
+                <mat-icon>swap_horiz</mat-icon>
+                <span>{{ 'BILL_EDIT.EXCHANGE' | translate }}</span>
+              </button>
+            }
+
             <!-- Wrong item on an open bill: take it off (with a reason), then add the right one. -->
             @if (canEdit && removingUid !== service.uid) {
               <button type="button" class="line-remove-btn" (click)="startRemove(service)"

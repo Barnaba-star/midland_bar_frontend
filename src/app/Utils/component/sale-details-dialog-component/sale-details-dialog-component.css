@@ -595,6 +595,36 @@
   color: #fff;
 }
 
+/* Staff Sell: Badilisho - a change goes to the station, nothing comes off here. */
+.line-swap-btn {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 34px;
+  margin-left: 8px;
+  padding: 0 10px;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 60%, transparent);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--color-accent) 14%, transparent);
+  color: var(--color-accent-dark, var(--color-text));
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.line-swap-btn mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
+.line-swap-btn:hover {
+  background: var(--color-accent);
+  color: #1d1812;
+}
+
 .line-remove-form {
   margin: -4px 0 10px;
   padding: 12px;

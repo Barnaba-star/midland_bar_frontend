@@ -352,3 +352,77 @@
 }
 
 .serving-btn.on mat-icon { color: #fff; }
+
+/* A change (Badilisho): what goes back, above what the customer wants instead. */
+.exchange-back {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  padding: 10px 12px;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  background: #fef2f2;
+  color: #1d1812;
+}
+
+.exchange-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: #b42318;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.exchange-tag mat-icon {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
+
+.exchange-name {
+  font-size: 15px;
+}
+
+.exchange-one {
+  margin-left: auto;
+  font-weight: 700;
+}
+
+.exchange-qty {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-basis: 100%;
+}
+
+.exchange-qty small {
+  color: #7a6f60;
+}
+
+.exchange-for {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 8px 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1f7a43;
+}
+
+.exchange-for mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
+.exchange-note {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: #7a6f60;
+}

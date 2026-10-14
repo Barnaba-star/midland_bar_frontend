@@ -279,6 +279,18 @@
                   </div>
                 }
                 @for (order of ordersFor(bill, 'SENT'); track order.uid) {
+                  @if (order.exchange) {
+                    <div class="order-block sent exchange">
+                      <span class="order-tag"><span class="exchange-light" aria-hidden="true"></span>{{ 'STAFF_SELL_PAGE.EXCHANGE_WAITING' | translate: { place: (placeKey(order) | translate) } }}</span>
+                      <ul class="order-lines">
+                        @for (line of order.lines; track line.uid) {
+                          <li [class]="line.returnOfSalesUid ? 'swap-back' : 'swap-give'">
+                            <span><b class="swap-tag">{{ (line.returnOfSalesUid ? 'STAFF_SELL_PAGE.RETURN' : 'STAFF_SELL_PAGE.GIVE') | translate }}</b> {{ line.quantity }} × {{ line.serviceName }} @if (line.serving) { <span class="serving-tag" [class.warm]="line.serving === 'WARM'">{{ (line.serving === 'WARM' ? 'SALE_ITEM.WARM' : 'SALE_ITEM.COLD') | translate }}</span> }</span>
+                          </li>
+                        }
+                      </ul>
+                    </div>
+                  } @else {
                   <div class="order-block sent">
                     <span class="order-tag"><mat-icon>hourglass_top</mat-icon>{{ 'STAFF_SELL_PAGE.ORDER_SENT' | translate }}</span>
                     <ul class="order-lines">
@@ -287,13 +299,14 @@
                       }
                     </ul>
                   </div>
+                  }
                 }
                 @for (order of ordersFor(bill, 'REJECTED'); track order.uid) {
                   <div class="order-block rejected">
-                    <span class="order-tag"><mat-icon>block</mat-icon>{{ 'STAFF_SELL_PAGE.ORDER_REJECTED' | translate }}: {{ order.rejectReason }}</span>
+                    <span class="order-tag"><mat-icon>block</mat-icon>{{ (order.exchange ? 'STAFF_SELL_PAGE.EXCHANGE_REJECTED' : 'STAFF_SELL_PAGE.ORDER_REJECTED') | translate }}: {{ order.rejectReason }}</span>
                     <ul class="order-lines">
                       @for (line of order.lines; track line.uid) {
-                        <li><span>{{ line.quantity }} × {{ line.serviceName }} @if (line.serving) { <span class="serving-tag" [class.warm]="line.serving === 'WARM'">{{ (line.serving === 'WARM' ? 'SALE_ITEM.WARM' : 'SALE_ITEM.COLD') | translate }}</span> }</span></li>
+                        <li><span>@if (order.exchange) { <b class="swap-tag">{{ (line.returnOfSalesUid ? 'STAFF_SELL_PAGE.RETURN' : 'STAFF_SELL_PAGE.GIVE') | translate }}</b> }{{ line.quantity }} × {{ line.serviceName }} @if (line.serving) { <span class="serving-tag" [class.warm]="line.serving === 'WARM'">{{ (line.serving === 'WARM' ? 'SALE_ITEM.WARM' : 'SALE_ITEM.COLD') | translate }}</span> }</span></li>
                       }
                     </ul>
                   </div>

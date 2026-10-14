@@ -432,3 +432,101 @@
 .tint-juice .serving-tag {
   box-shadow: 0 0 0 1.5px #fff;
 }
+
+/* A change (Badilisho): a blinking light and a pulsing edge until it is decided. */
+.ticket.exchange {
+  animation: rise 0.25s ease-out, exchange-edge 1s ease-in-out infinite;
+}
+
+@keyframes exchange-edge {
+  0%, 100% { box-shadow: inset 0 0 0 4px #e5484d, 0 18px 40px rgba(0, 0, 0, 0.45); }
+  50% { box-shadow: inset 0 0 0 4px #f5a524, 0 18px 40px rgba(0, 0, 0, 0.45); }
+}
+
+.exchange-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  margin: -18px -18px 0;
+  padding: 10px 18px;
+  background: #fff1e6;
+  border-bottom: 1px dashed #e5484d;
+}
+
+.exchange-banner strong {
+  font-family: 'Bebas Neue', 'Oswald', Impact, sans-serif;
+  font-size: 26px;
+  letter-spacing: 0.06em;
+  color: #b42318;
+}
+
+.exchange-banner small {
+  flex-basis: 100%;
+  font-size: 12px;
+  color: #7a3b1a;
+}
+
+.exchange-light {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #e5484d;
+  box-shadow: 0 0 0 0 rgba(229, 72, 77, 0.7);
+  animation: exchange-blink 0.8s ease-in-out infinite;
+}
+
+@keyframes exchange-blink {
+  0%, 100% { background: #e5484d; box-shadow: 0 0 0 0 rgba(229, 72, 77, 0.7); }
+  50% { background: #f5a524; box-shadow: 0 0 0 8px rgba(245, 165, 36, 0); }
+}
+
+.ticket-lines li.swap-back,
+.ticket-lines li.swap-give {
+  grid-template-columns: auto auto 1fr auto;
+  margin: 0 -18px;
+  padding: 8px 18px;
+  color: #fff;
+}
+
+.ticket-lines li.swap-back {
+  background: #b42318;
+  text-decoration: none;
+}
+
+.ticket-lines li.swap-give {
+  background: #1f8a4c;
+}
+
+.ticket-lines li.swap-back .amt,
+.ticket-lines li.swap-give .amt {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.swap-tag {
+  padding: 1px 6px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.22);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.exchange-note {
+  margin: 0;
+  font-size: 13px;
+  color: #4a3f33;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticket.exchange {
+    animation: none;
+    box-shadow: inset 0 0 0 4px #e5484d, 0 18px 40px rgba(0, 0, 0, 0.45);
+  }
+
+  .exchange-light {
+    animation: none;
+    background: #e5484d;
+  }
+}

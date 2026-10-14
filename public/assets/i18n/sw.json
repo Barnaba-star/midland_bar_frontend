@@ -1933,6 +1933,12 @@
     "DELETED": "Code {{code}} imefutwa"
   },
   "SALE_ITEM": {
+    "EXCHANGE_TITLE": "Badilisha {{name}}",
+    "EXCHANGE_SUB": "Bili {{code}} · chagua anachotaka badala yake",
+    "EXCHANGE_BACK": "Ngapi zinarudishwa",
+    "EXCHANGE_SEND": "Tuma badilisho",
+    "EXCHANGE_FOR": "Badala yake",
+    "EXCHANGE_NOTE": "Inatumwa moja kwa moja kwa counter/jikoni ikiwa na taa ya badilisho. Bili inabadilika wakiipokea.",
     "TITLE": "Ongeza huduma",
     "FOR_BILL": "Bill {{code}}",
     "SEARCH_PH": "Andika herufi ya kwanza, mfano C",
@@ -2070,6 +2076,16 @@
     "BAR_COPY": "Nakala ya bar"
   },
   "STAFF_SELL_PAGE": {
+    "EXCHANGE_WAITING": "Badilisho · inasubiri {{place}}",
+    "EXCHANGE_REJECTED": "Badilisho limekataliwa",
+    "EXCHANGE_SENT": "Badilisho limetumwa {{place}} - rudisha {{back}}, chukua {{take}}",
+    "RETURN": "Rudisha",
+    "GIVE": "Mpe",
+    "PLACE_COUNTER": "counter",
+    "PLACE_CHEF": "jikoni",
+    "PLACE_JUICE": "juice",
+    "PLACE_BISS": "Biss",
+    "PLACE_SHISHER": "shisha",
     "TITLE": "Mauzo ya Wahudumu",
     "CODE_EYEBROW": "Mauzo ya wahudumu",
     "CODE_TITLE": "Andika code yako",
@@ -2109,6 +2125,11 @@
     "DRINK_PICK_BILL": "Chagua bill kwanza ili kuongeza kinywaji kwenye oda."
   },
   "SUPERVISOR_PAGE": {
+    "EXCHANGE": "Badilisho",
+    "EXCHANGE_HINT": "Mhudumu anarudisha bidhaa - ipokee, mpe nyingine",
+    "RETURN": "Rudisha",
+    "GIVE": "Mpe",
+    "RECEIVE_EXCHANGE": "Pokea badilisho",
     "OFFLINE_SEEN": "Nimekagua",
     "OFFLINE_TEXT": "Hizi ziliingia kwenye bill wakati hakuna internet, bila wewe kuziona.",
     "OFFLINE_TITLE": "Zilizouzwa offline - zikague ({{n}})",
@@ -2374,6 +2395,7 @@
     "LABEL": "Jina la utani la mteja (kifaa hiki tu)"
   },
   "BILL_EDIT": {
+    "EXCHANGE": "Badilisha",
     "REMOVE": "Ondoa kwenye bill",
     "TITLE": "Ondoa {{name}} kwenye bill",
     "HOW_MANY": "Ngapi",

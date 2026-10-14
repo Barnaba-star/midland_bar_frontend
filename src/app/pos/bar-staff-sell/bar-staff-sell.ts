@@ -719,10 +719,78 @@ export class BarStaffSell implements OnInit, OnDestroy {
           maxHeight: '90vh',
           panelClass: 'sale-details-dialog',
           autoFocus: false,
-          data: { sale: bill, services, showPayment: false, canPay: false, previewReceipt: true },
-        }).afterClosed().subscribe(() => this.cdr.markForCheck());
+          data: { sale: bill, services, showPayment: false, canPay: false, previewReceipt: true, canExchange: true },
+        }).afterClosed().subscribe((result?: { action?: string; service?: any }) => {
+          this.cdr.markForCheck();
+          if (result?.action === 'EXCHANGE' && result.service) {
+            this.exchange(bill, result.service);
+          }
+        });
       },
     });
+  }
+
+  /**
+   * Badilisho: the customer wanted something else instead of a line already
+   * on the bill (a Serengeti Lite for the Castle Lite). Pick the new item;
+   * the change goes straight to the station(s), marked, and the bill changes
+   * when they receive it.
+   */
+  exchange(bill: SalesOpened, line: any): void {
+    if (!bill.uid || !line?.uid || this.busyBill) {
+      return;
+    }
+    const max = Math.max(1, Number(line.quantity) || 1);
+    this.dialog.open(SaleItemDialogComponent, {
+      width: '560px',
+      enterAnimationDuration: 0,
+      exitAnimationDuration: 0,
+      maxWidth: '95vw',
+      autoFocus: false,
+      data: { billCode: bill.salesCode, askServing: true, exchange: { name: line.serviceName, max } },
+    }).afterClosed().subscribe((result?: SaleItemResult) => {
+      if (!result) {
+        return;
+      }
+      const back = Math.min(max, Math.max(1, result.returnQuantity ?? max));
+      this.busyBill = bill.uid!;
+      this.cdr.markForCheck();
+      this.barService.exchangeStaffOrder({
+        barSalesUID: line.uid,
+        returnQuantity: back,
+        barServiceUID: result.service.uid,
+        quantity: result.quantity,
+        serving: result.serving ?? null,
+      }).subscribe({
+        next: (res) => {
+          this.busyBill = null;
+          if (res?.data?.length) {
+            const uids = new Set(res.data.map((o) => o.uid));
+            this.setOrders([...this.orders.filter((o) => !uids.has(o.uid)), ...res.data]);
+            const place = res.data
+              .map((o) => this.translate.instant(this.placeKey(o)))
+              .join(' / ');
+            this.alertService.show('success', this.translate.instant('STAFF_SELL_PAGE.EXCHANGE_SENT', {
+              place,
+              back: `${back} × ${line.serviceName}`,
+              take: `${result.quantity} × ${result.service.serviceName}`,
+            }));
+          } else if (res?.message) {
+            this.alertService.show('error', res.message);
+          }
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.busyBill = null;
+          this.cdr.markForCheck();
+        },
+      });
+    });
+  }
+
+  /** Where an order is received, for the words on the screen. */
+  placeKey(order: StaffOrder): string {
+    return 'STAFF_SELL_PAGE.PLACE_' + (order.station || 'COUNTER');
   }
 
   private loadLines(bill: SalesOpened): void {

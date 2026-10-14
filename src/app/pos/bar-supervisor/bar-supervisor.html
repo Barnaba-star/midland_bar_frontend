@@ -70,7 +70,15 @@
     } @else {
       <div class="ticket-grid">
         @for (order of orders; track order.uid) {
-          <article class="ticket" [class.fresh]="fresh.has(order.uid)" [class.busy]="busy[order.uid]">
+          <article class="ticket" [class.fresh]="fresh.has(order.uid)" [class.busy]="busy[order.uid]" [class.exchange]="order.exchange">
+            <!-- A change: the waiter brings one back and takes another - the light blinks until it is decided. -->
+            @if (order.exchange) {
+              <div class="exchange-banner" role="status">
+                <span class="exchange-light" aria-hidden="true"></span>
+                <strong>{{ 'SUPERVISOR_PAGE.EXCHANGE' | translate }}</strong>
+                <small>{{ 'SUPERVISOR_PAGE.EXCHANGE_HINT' | translate }}</small>
+              </div>
+            }
             <div class="ticket-head">
               <div>
                 <span class="ticket-bill">{{ order.salesCode }}</span>
@@ -85,13 +93,20 @@
 
             <ul class="ticket-lines">
               @for (line of order.lines; track line.uid) {
-                <li [class]="tint(line.serviceName) ? 'tint-' + tint(line.serviceName) : ''">
+                <li [class]="lineClass(order, line)">
+                  @if (order.exchange) {
+                    <span class="swap-tag">{{ (line.returnOfSalesUid ? 'SUPERVISOR_PAGE.RETURN' : 'SUPERVISOR_PAGE.GIVE') | translate }}</span>
+                  }
                   <span class="qty">{{ line.quantity }}×</span>
                   <span class="name">{{ line.serviceName }} @if (line.serving) { <span class="serving-tag" [class.warm]="line.serving === 'WARM'">{{ (line.serving === 'WARM' ? 'SALE_ITEM.WARM' : 'SALE_ITEM.COLD') | translate }}</span> }</span>
                   <span class="amt">{{ line.quantity * line.unitPrice | number }}</span>
                 </li>
               }
             </ul>
+
+            @if (order.exchange && order.exchangeNote) {
+              <p class="exchange-note">{{ order.exchangeNote }}</p>
+            }
 
             <div class="ticket-total">
               <span>{{ 'SUPERVISOR_PAGE.TOTAL' | translate }}</span>
@@ -104,8 +119,8 @@
                 {{ 'SUPERVISOR_PAGE.REJECT' | translate }}
               </button>
               <button type="button" class="btn-receive" [disabled]="busy[order.uid]" (click)="receive(order)">
-                <mat-icon>check</mat-icon>
-                {{ 'SUPERVISOR_PAGE.RECEIVE' | translate }}
+                <mat-icon>{{ order.exchange ? 'swap_horiz' : 'check' }}</mat-icon>
+                {{ (order.exchange ? 'SUPERVISOR_PAGE.RECEIVE_EXCHANGE' : 'SUPERVISOR_PAGE.RECEIVE') | translate }}
               </button>
             </div>
           </article>

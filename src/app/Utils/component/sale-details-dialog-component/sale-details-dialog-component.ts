@@ -40,6 +40,8 @@ export class SaleDetailsDialogComponent {
       canPay?: boolean;
       /** Print shows the receipt first (as after paying on Sales), Print pressed there - Staff Sell. */
       previewReceipt?: boolean;
+      /** Staff Sell: each line can be changed (Badilisho) - the page sends it to the station. */
+      canExchange?: boolean;
     },
     private dialog: MatDialog,
     private barService: ServiceBarMethod,
@@ -109,6 +111,15 @@ export class SaleDetailsDialogComponent {
         this.cdr.markForCheck();
       },
     });
+  }
+
+  get canSwap(): boolean {
+    return !!this.data.canExchange && this.data.sale?.paymentStatus !== 'PAID';
+  }
+
+  /** The customer wants something else instead: the page picks it and sends the change. */
+  exchange(service: any): void {
+    this.dialogRef.close({ action: 'EXCHANGE', service });
   }
 
   get payable(): boolean {

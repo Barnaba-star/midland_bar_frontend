@@ -10,7 +10,7 @@ import { DialogComponent } from '../../Utils/component/dialog/dialog';
 import { FormField } from '../../Utils/models/form-field';
 import { Authentication } from '../../Utils/services/authentication';
 import { ServiceBarMethod } from '../service-bar-method';
-import { StaffOrder } from '../BarModel';
+import { StaffOrder, StaffOrderLine } from '../BarModel';
 import { LiveChanges } from '../../Utils/services/live-changes';
 import { Subscription } from 'rxjs';
 import { borrowCounterSession } from '../bar-staff-sell/counter-session';
@@ -154,8 +154,18 @@ export class BarSupervisor implements OnInit, OnDestroy {
     this.cdr.markForCheck();
   }
 
+  /** A change: what comes back counts against what goes out. */
   total(order: StaffOrder): number {
-    return order.lines.reduce((sum, l) => sum + (l.unitPrice || 0) * l.quantity, 0);
+    return order.lines.reduce((sum, l) => sum + (l.unitPrice || 0) * l.quantity * (l.returnOfSalesUid ? -1 : 1), 0);
+  }
+
+  /** On a change, coming back is red and going out green; otherwise the owner's Biss / juice colours. */
+  lineClass(order: StaffOrder, line: StaffOrderLine): string {
+    if (order.exchange) {
+      return line.returnOfSalesUid ? 'swap-back' : 'swap-give';
+    }
+    const t = this.tint(line.serviceName);
+    return t ? 'tint-' + t : '';
   }
 
   /** Owner's colours on the ticket: any Biss green, any fresh juice blue, the rest as they were. */

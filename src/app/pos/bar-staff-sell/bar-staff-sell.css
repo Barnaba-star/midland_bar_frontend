@@ -413,6 +413,50 @@
   background: #fef2f2;
 }
 
+/* Badilisho waiting at the station: a blinking light, back in red, out in green. */
+.order-block.sent.exchange {
+  border: 2px solid #e5484d;
+  background: #fff1e6;
+}
+
+.order-block.exchange .order-tag {
+  color: #b42318;
+}
+
+.exchange-light {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #e5484d;
+  animation: exchange-blink 0.8s ease-in-out infinite;
+}
+
+@keyframes exchange-blink {
+  50% { background: #f5a524; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .exchange-light {
+    animation: none;
+  }
+}
+
+.order-lines li.swap-back {
+  color: #b42318;
+}
+
+.order-lines li.swap-give {
+  color: #1f7a43;
+}
+
+.swap-tag {
+  margin-right: 4px;
+  font-family: inherit;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
 .order-tag {
   display: inline-flex;
   align-items: center;

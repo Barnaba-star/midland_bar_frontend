@@ -1933,6 +1933,12 @@
     "DELETED": "Code {{code}} deleted"
   },
   "SALE_ITEM": {
+    "EXCHANGE_TITLE": "Change {{name}}",
+    "EXCHANGE_SUB": "Bill {{code}} · pick what the customer wants instead",
+    "EXCHANGE_BACK": "How many go back",
+    "EXCHANGE_SEND": "Send change",
+    "EXCHANGE_FOR": "Instead",
+    "EXCHANGE_NOTE": "Goes straight to the counter/kitchen with the change light. The bill changes when they receive it.",
     "TITLE": "Add service",
     "FOR_BILL": "Bill {{code}}",
     "SEARCH_PH": "Type the first letter, e.g. C",
@@ -2070,6 +2076,16 @@
     "BAR_COPY": "Bar copy"
   },
   "STAFF_SELL_PAGE": {
+    "EXCHANGE_WAITING": "Change · waiting at the {{place}}",
+    "EXCHANGE_REJECTED": "Change rejected",
+    "EXCHANGE_SENT": "Change sent to the {{place}} - bring back {{back}}, take {{take}}",
+    "RETURN": "Bring back",
+    "GIVE": "Give",
+    "PLACE_COUNTER": "counter",
+    "PLACE_CHEF": "kitchen",
+    "PLACE_JUICE": "juice station",
+    "PLACE_BISS": "Biss station",
+    "PLACE_SHISHER": "shisha station",
     "TITLE": "Staff Sell",
     "CODE_EYEBROW": "Staff sell",
     "CODE_TITLE": "Enter your code",
@@ -2109,6 +2125,11 @@
     "DRINK_PICK_BILL": "Pick a bill first to add the drink to its order."
   },
   "SUPERVISOR_PAGE": {
+    "EXCHANGE": "Change",
+    "EXCHANGE_HINT": "The waiter brings an item back - take it, give the other",
+    "RETURN": "Bring back",
+    "GIVE": "Give",
+    "RECEIVE_EXCHANGE": "Receive change",
     "OFFLINE_SEEN": "Looked over",
     "OFFLINE_TEXT": "These went onto bills while there was no internet, without you.",
     "OFFLINE_TITLE": "Sold offline - to look over ({{n}})",
@@ -2374,6 +2395,7 @@
     "LABEL": "Customer nickname (this device only)"
   },
   "BILL_EDIT": {
+    "EXCHANGE": "Change",
     "REMOVE": "Take off the bill",
     "TITLE": "Take {{name}} off the bill",
     "HOW_MANY": "How many",

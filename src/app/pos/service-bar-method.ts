@@ -349,6 +349,11 @@ addStaffOrderItem(dto: { salesOpenedUID: string; barServiceUID: string; quantity
   return this.http.post<Response<StaffOrder>>(`${this.barURL}/staffOrders/addItem`, dto);
 }
 
+/** Staff Sell: a change on a received line - what goes back and what comes instead, straight to the station(s). */
+exchangeStaffOrder(dto: { barSalesUID: string; returnQuantity: number | null; barServiceUID: string; quantity: number; serving?: string | null }): Observable<Response<StaffOrder[]>> {
+  return this.http.post<Response<StaffOrder[]>>(`${this.barURL}/staffOrders/exchange`, dto);
+}
+
 /** Staff Sell: take a line off an order not yet sent. */
 removeStaffOrderLine(orderUid: string, lineUid: string): Observable<Response<StaffOrder>> {
   return this.http.post<Response<StaffOrder>>(`${this.barURL}/staffOrders/${orderUid}/removeLine/${lineUid}`, {});

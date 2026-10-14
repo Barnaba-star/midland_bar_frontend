@@ -13,6 +13,8 @@ export interface SaleItemResult {
   quantity: number;
   /** A drink at Staff Sell: how the customer wants it, for the supervisor to have ready. */
   serving?: 'COLD' | 'WARM' | null;
+  /** A change (Badilisho): how many of the old item go back. */
+  returnQuantity?: number;
 }
 
 /**
@@ -41,17 +43,27 @@ export class SaleItemDialogComponent implements OnInit, AfterViewInit {
   private readonly touch = typeof window !== 'undefined' && !!window.matchMedia?.('(pointer: coarse)').matches;
   readonly letters = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ', '#'];
   quantity = 1;
+  /** A change: how many of the old item go back (all of them unless said). */
+  returnQty = 1;
   /** Cold or warm, when asked (Staff Sell) and the item is a drink; null = not said. */
   serving: 'COLD' | 'WARM' | null = null;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { billCode?: string; askServing?: boolean; preselect?: any },
+    @Inject(MAT_DIALOG_DATA) public data: {
+      billCode?: string;
+      askServing?: boolean;
+      preselect?: any;
+      /** Staff Sell, a change: the item going back and how many are on the bill. */
+      exchange?: { name: string; max: number };
+    },
     private dialogRef: MatDialogRef<SaleItemDialogComponent, SaleItemResult>,
     private sellable: SellableItems,
     private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
+    // A change sends the whole line back unless the waiter says fewer.
+    this.returnQty = this.data?.exchange?.max ?? 1;
     // Already found (Staff Sell's drink search): straight to "how many".
     if (this.data?.preselect) {
       this.selected = this.data.preselect;
@@ -181,6 +193,19 @@ export class SaleItemDialogComponent implements OnInit, AfterViewInit {
     this.serving = this.serving === v ? null : v;
   }
 
+  stepBack(by: number): void {
+    const max = this.data?.exchange?.max ?? 1;
+    this.returnQty = Math.min(max, Math.max(1, (Number(this.returnQty) || 0) + by));
+  }
+
+  get validReturn(): boolean {
+    if (!this.data?.exchange) {
+      return true;
+    }
+    const q = Number(this.returnQty);
+    return Number.isInteger(q) && q >= 1 && q <= this.data.exchange.max;
+  }
+
   step(by: number): void {
     this.quantity = Math.max(1, (Number(this.quantity) || 0) + by);
   }
@@ -222,13 +247,14 @@ export class SaleItemDialogComponent implements OnInit, AfterViewInit {
   }
 
   confirm(): void {
-    if (!this.selected || !this.validQuantity || this.overStock) {
+    if (!this.selected || !this.validQuantity || this.overStock || !this.validReturn) {
       return;
     }
     this.dialogRef.close({
       service: this.selected,
       quantity: Number(this.quantity),
       serving: this.asksServing ? this.serving : null,
+      ...(this.data?.exchange ? { returnQuantity: Number(this.returnQty) } : {}),
     });
   }
 

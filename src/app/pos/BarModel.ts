@@ -372,6 +372,12 @@ export interface StaffOrder {
     decidedAt?: string;
     decidedBy?: string;
     rejectReason?: string;
+    /** COUNTER, CHEF, JUICE, BISS or SHISHER - who receives it; null = any. */
+    station?: string | null;
+    /** A change (Badilisho): the waiter brings something back and takes something else. */
+    exchange?: boolean;
+    /** For a change, in words: "Castle Lite x1 -> Serengeti Lite x1". */
+    exchangeNote?: string | null;
     lines: StaffOrderLine[];
 }
 
@@ -383,4 +389,6 @@ export interface StaffOrderLine {
     unitPrice: number;
     /** COLD / WARM as the customer asked; null = not said. */
     serving?: 'COLD' | 'WARM' | null;
+    /** On a change: the bill line this one brings back. Null = an item to hand out. */
+    returnOfSalesUid?: string | null;
 }

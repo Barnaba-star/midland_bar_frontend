@@ -1,15 +1,42 @@
 <div class="item-dialog">
   <div class="item-header">
     <div>
-      <h3>{{ 'SALE_ITEM.TITLE' | translate }}</h3>
-      @if (data?.billCode) {
-        <p>{{ 'SALE_ITEM.FOR_BILL' | translate: { code: data.billCode } }}</p>
+      @if (data?.exchange; as ex) {
+        <h3>{{ 'SALE_ITEM.EXCHANGE_TITLE' | translate: { name: ex.name } }}</h3>
+        <p>{{ 'SALE_ITEM.EXCHANGE_SUB' | translate: { code: data.billCode } }}</p>
+      } @else {
+        <h3>{{ 'SALE_ITEM.TITLE' | translate }}</h3>
+        @if (data?.billCode) {
+          <p>{{ 'SALE_ITEM.FOR_BILL' | translate: { code: data.billCode } }}</p>
+        }
       }
     </div>
     <button type="button" class="close-btn" (click)="cancel()" [attr.aria-label]="'COMMON.CLOSE' | translate">
       <mat-icon>close</mat-icon>
     </button>
   </div>
+
+  @if (data?.exchange; as ex) {
+    <!-- A change: what goes back, then (below) what the customer wants instead. -->
+    <div class="exchange-back">
+      <span class="exchange-tag"><mat-icon>undo</mat-icon>{{ 'STAFF_SELL_PAGE.RETURN' | translate }}</span>
+      <strong class="exchange-name">{{ ex.name }}</strong>
+      @if (ex.max > 1) {
+        <div class="exchange-qty">
+          <small>{{ 'SALE_ITEM.EXCHANGE_BACK' | translate }}</small>
+          <div class="qty-row">
+            <button type="button" class="qty-btn" (click)="stepBack(-1)" [disabled]="returnQty <= 1"><mat-icon>remove</mat-icon></button>
+            <input type="number" min="1" [max]="ex.max" step="1" class="qty-input" [(ngModel)]="returnQty" />
+            <button type="button" class="qty-btn" (click)="stepBack(1)" [disabled]="returnQty >= ex.max"><mat-icon>add</mat-icon></button>
+            <small>/ {{ ex.max }}</small>
+          </div>
+        </div>
+      } @else {
+        <span class="exchange-one">1 ×</span>
+      }
+    </div>
+    <p class="exchange-for"><mat-icon>south</mat-icon>{{ 'SALE_ITEM.EXCHANGE_FOR' | translate }}</p>
+  }
 
   @if (!selected) {
     <!-- STEP 1: find the service -->
@@ -145,15 +172,26 @@
       </p>
     }
 
+    @if (data?.exchange) {
+      <p class="exchange-note">{{ 'SALE_ITEM.EXCHANGE_NOTE' | translate }}</p>
+    }
+
     <div class="item-actions">
       <button type="button" class="row-action view" (click)="cancel()">
         <mat-icon>close</mat-icon>
         <span>{{ 'COMMON.CANCEL' | translate }}</span>
       </button>
-      <button type="button" class="row-action edit" [disabled]="!validQuantity || overStock" (click)="confirm()">
-        <mat-icon>add_shopping_cart</mat-icon>
-        <span>{{ 'SALE_ITEM.ADD_TO_BILL' | translate }}</span>
-      </button>
+      @if (data?.exchange) {
+        <button type="button" class="row-action edit" [disabled]="!validQuantity || overStock || !validReturn" (click)="confirm()">
+          <mat-icon>swap_horiz</mat-icon>
+          <span>{{ 'SALE_ITEM.EXCHANGE_SEND' | translate }}</span>
+        </button>
+      } @else {
+        <button type="button" class="row-action edit" [disabled]="!validQuantity || overStock" (click)="confirm()">
+          <mat-icon>add_shopping_cart</mat-icon>
+          <span>{{ 'SALE_ITEM.ADD_TO_BILL' | translate }}</span>
+        </button>
+      }
     </div>
   }
 </div>

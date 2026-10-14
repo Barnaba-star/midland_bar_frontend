@@ -1056,16 +1056,16 @@ private showActivationCode(data: any, phone?: string): void {
 private getAssignableRoleNames(): string[] {
 
   if (this.visibility.hasRole('ROOT')) {
-    return ['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'CEO', 'MANAGER', 'COUNTER', 'CHEF', 'JUICE', 'BISS', 'SHISHER', 'CASHIER'];
+    return ['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'CEO', 'MANAGER', 'COUNTER', 'CHEF', 'JUICE', 'BISS', 'SHISHER', 'POOL', 'CASHIER'];
   }
   if (this.visibility.hasRole('DIRECTOR')) {
-    return ['STAFF', 'MANAGER', 'CEO', 'COUNTER', 'CHEF', 'JUICE', 'BISS', 'SHISHER', 'CASHIER'];
+    return ['STAFF', 'MANAGER', 'CEO', 'COUNTER', 'CHEF', 'JUICE', 'BISS', 'SHISHER', 'POOL', 'CASHIER'];
   }
   if (this.visibility.hasRole('CEO')) {
-    return ['CASHIER', 'MANAGER', 'COUNTER', 'CHEF', 'JUICE', 'BISS', 'SHISHER'];
+    return ['CASHIER', 'MANAGER', 'COUNTER', 'CHEF', 'JUICE', 'BISS', 'SHISHER', 'POOL'];
   }
   if (this.visibility.hasRole('STAFF')) {
-    return ['CEO', 'CASHIER', 'MANAGER', 'COUNTER', 'CHEF', 'JUICE', 'BISS', 'SHISHER'];
+    return ['CEO', 'CASHIER', 'MANAGER', 'COUNTER', 'CHEF', 'JUICE', 'BISS', 'SHISHER', 'POOL'];
   }
 
   return [];

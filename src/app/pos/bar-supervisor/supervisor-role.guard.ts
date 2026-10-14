@@ -4,7 +4,7 @@ import { Authentication } from '../../Utils/services/authentication';
 
 /** Who may open the orders screen: the COUNTER, the CHEF (and an older SUPERVISOR), and the roles above them. */
 /** The roles that are a place orders are received - each sees only its own (backend OrderStation). */
-export const ORDER_STATIONS = ['COUNTER', 'CHEF', 'JUICE', 'BISS', 'SHISHER'];
+export const ORDER_STATIONS = ['COUNTER', 'CHEF', 'JUICE', 'BISS', 'SHISHER', 'POOL'];
 
 export const SUPERVISOR_SCREEN_ROLES = [...ORDER_STATIONS, 'SUPERVISOR', 'ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'CEO', 'MANAGER'];
 

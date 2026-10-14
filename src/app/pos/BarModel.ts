@@ -372,7 +372,7 @@ export interface StaffOrder {
     decidedAt?: string;
     decidedBy?: string;
     rejectReason?: string;
-    /** COUNTER, CHEF, JUICE, BISS or SHISHER - who receives it; null = any. */
+    /** COUNTER, CHEF, JUICE, BISS, SHISHER or POOL - who receives it; null = any. */
     station?: string | null;
     /** A change (Badilisho): the waiter brings something back and takes something else. */
     exchange?: boolean;

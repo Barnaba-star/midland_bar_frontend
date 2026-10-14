@@ -2088,6 +2088,7 @@
     "PLACE_JUICE": "juice station",
     "PLACE_BISS": "Biss station",
     "PLACE_SHISHER": "shisha station",
+    "PLACE_POOL": "pool table",
     "TITLE": "Staff Sell",
     "CODE_EYEBROW": "Staff sell",
     "CODE_TITLE": "Enter your code",
@@ -2154,6 +2155,7 @@
     "TITLE_JUICE": "Juice · Fresh juice orders",
     "TITLE_BISS": "Biss · Biss orders",
     "TITLE_SHISHER": "Shisha · Shisha orders",
+    "TITLE_POOL": "Pool · Pool table orders",
     "TITLE_MULTI": "Orders",
     "AND": " and ",
     "COMMA": ", ",
@@ -2164,6 +2166,7 @@
     "STATION_JUICE": "Juice",
     "STATION_BISS": "Biss",
     "STATION_SHISHER": "Shisha",
+    "STATION_POOL": "Pool",
     "STATION_ANY": "Any station"
   },
   "BRANCH_CHOICE": {

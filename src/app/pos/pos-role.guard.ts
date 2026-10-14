@@ -42,7 +42,7 @@ export const STORE_KEEPER_HOME = '/pos/barStore';
 export const STOCK_COUNT_ROUTE = '/pos/stockTake';
 
 /** Any role that opens more than the store; holding one of these means not store-keeper-only. */
-const BEYOND_STORE_ROLES = [...POS_FULL_ACCESS_ROLES, 'MANAGER', 'CASHIER', 'COUNTER', 'CHEF', 'JUICE', 'BISS', 'SHISHER', 'SUPERVISOR', 'ADMIN'];
+const BEYOND_STORE_ROLES = [...POS_FULL_ACCESS_ROLES, 'MANAGER', 'CASHIER', 'COUNTER', 'CHEF', 'JUICE', 'BISS', 'SHISHER', 'POOL', 'SUPERVISOR', 'ADMIN'];
 
 /** Same test as isStoreKeeperOnly, for places that only have a hasRole function (landingFor). */
 export function storeKeeperOnly(hasRole: (role: string) => boolean): boolean {

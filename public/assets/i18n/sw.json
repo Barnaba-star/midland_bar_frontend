@@ -2088,6 +2088,7 @@
     "PLACE_JUICE": "juice",
     "PLACE_BISS": "Biss",
     "PLACE_SHISHER": "shisha",
+    "PLACE_POOL": "pool table",
     "TITLE": "Mauzo ya Wahudumu",
     "CODE_EYEBROW": "Mauzo ya wahudumu",
     "CODE_TITLE": "Andika code yako",
@@ -2154,6 +2155,7 @@
     "TITLE_JUICE": "Juice · Oda za fresh juice",
     "TITLE_BISS": "Biss · Oda za Biss",
     "TITLE_SHISHER": "Shisha · Oda za shisha",
+    "TITLE_POOL": "Pool · Oda za pool table",
     "TITLE_MULTI": "Oda",
     "AND": " na ",
     "COMMA": ", ",
@@ -2164,6 +2166,7 @@
     "STATION_JUICE": "Juice",
     "STATION_BISS": "Biss",
     "STATION_SHISHER": "Shisha",
+    "STATION_POOL": "Pool",
     "STATION_ANY": "Kituo chochote"
   },
   "BRANCH_CHOICE": {

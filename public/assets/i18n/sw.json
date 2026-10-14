@@ -2122,7 +2122,9 @@
     "COLLEAGUE_NOW": "Sasa unauza kama {{name}}",
     "DRINK_SEARCH_PH": "Mteja anataka ladha gani? Tafuta: ginger, ndimu, tamu, jina…",
     "DRINK_IN_STOCK": "Ipo ({{n}})",
-    "DRINK_PICK_BILL": "Chagua bill kwanza ili kuongeza kinywaji kwenye oda."
+    "DRINK_PICK_BILL": "Chagua bill kwanza ili kuongeza kinywaji kwenye oda.",
+    "ORDER_DRAFT_TO": "Haijatumwa bado · itaenda {{place}}",
+    "ORDER_SENT_TO": "Inaenda {{place}} · inasubiri"
   },
   "SUPERVISOR_PAGE": {
     "EXCHANGE": "Badilisho",
@@ -2149,7 +2151,18 @@
     "MY_BILLS": "Bili zangu",
     "TITLE_JUICE": "Juice · Oda za fresh juice",
     "TITLE_BISS": "Biss · Oda za Biss",
-    "TITLE_SHISHER": "Shisha · Oda za shisha"
+    "TITLE_SHISHER": "Shisha · Oda za shisha",
+    "TITLE_MULTI": "Oda",
+    "AND": " na ",
+    "COMMA": ", ",
+    "STATIONS": "Vituo",
+    "STATION_ALL": "Zote",
+    "STATION_COUNTER": "Counter",
+    "STATION_CHEF": "Jikoni",
+    "STATION_JUICE": "Juice",
+    "STATION_BISS": "Biss",
+    "STATION_SHISHER": "Shisha",
+    "STATION_ANY": "Kituo chochote"
   },
   "BRANCH_CHOICE": {
     "DEFAULT": "Default",

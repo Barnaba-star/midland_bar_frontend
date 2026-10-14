@@ -5,7 +5,7 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { DialogComponent } from '../../Utils/component/dialog/dialog';
 import { FormField } from '../../Utils/models/form-field';
 import { Authentication } from '../../Utils/services/authentication';
@@ -18,6 +18,7 @@ import { borrowCounterSession } from '../bar-staff-sell/counter-session';
 /** A fallback only: the live stream brings new orders at once. */
 const POLL_MS = 15000;
 const SOUND_KEY = 'bar_supervisor_sound';
+const STATION_KEY = 'bar_supervisor_station';
 
 /**
  * The supervisor's screen. Every order a staff member hands over at Staff
@@ -40,6 +41,7 @@ export class BarSupervisor implements OnInit, OnDestroy {
     private router: Router,
     private cdr: ChangeDetectorRef,
     private liveChanges: LiveChanges,
+    private translate: TranslateService,
   ) {}
 
   orders: StaffOrder[] = [];
@@ -75,6 +77,82 @@ export class BarSupervisor implements OnInit, OnDestroy {
       return 'SUPERVISOR_PAGE.TITLE_' + held[0];
     }
     return 'SUPERVISOR_PAGE.TITLE';
+  }
+
+  /** The station roles this login holds - two or more (counter and juice) see both. */
+  get heldStations(): string[] {
+    return ORDER_STATIONS.filter((s) => this.auth.hasRole(s));
+  }
+
+  /** A station-only login holding two or more: the title lists them. */
+  get multiStationTitle(): boolean {
+    return this.onlySupervisor && this.heldStations.length > 1;
+  }
+
+  /** One station only: nothing to filter - the server sends just theirs. */
+  get showStationChips(): boolean {
+    return !(this.onlySupervisor && this.heldStations.length === 1);
+  }
+
+  /** ALL, or the one station picked on this browser. */
+  stationFilter = this.readStationFilter();
+
+  /** The stations to offer: the ones held, those with orders waiting, and the one picked. */
+  get stationChips(): { station: string; count: number }[] {
+    const offered = new Set<string>(this.onlySupervisor ? this.heldStations : []);
+    this.orders.forEach((o) => o.station && offered.add(o.station));
+    if (this.stationFilter !== 'ALL') {
+      offered.add(this.stationFilter);
+    }
+    return ORDER_STATIONS.filter((s) => offered.has(s))
+      .map((station) => ({ station, count: this.orders.filter((o) => this.forStation(o, station)).length }));
+  }
+
+  /** No station on the order (older and mixed offline ones) = every station's. */
+  private forStation(order: StaffOrder, station: string): boolean {
+    return !order.station || order.station === station;
+  }
+
+  get visibleOrders(): StaffOrder[] {
+    const f = this.stationFilter;
+    return f === 'ALL' || !this.showStationChips ? this.orders : this.orders.filter((o) => this.forStation(o, f));
+  }
+
+  pickStation(station: string): void {
+    this.stationFilter = station;
+    try {
+      localStorage.setItem(STATION_KEY, station);
+    } catch {
+      // Remembering is a convenience only.
+    }
+    this.cdr.markForCheck();
+  }
+
+  /** "Counter, Juice na Biss". */
+  stationList(stations: string[]): string {
+    const names = stations.map((s) => this.translate.instant(this.stationKey(s)));
+    if (names.length < 2) {
+      return names.join('');
+    }
+    return names.slice(0, -1).join(this.translate.instant('SUPERVISOR_PAGE.COMMA'))
+      + this.translate.instant('SUPERVISOR_PAGE.AND') + names[names.length - 1];
+  }
+
+  stationKey(station: string | undefined | null): string {
+    return 'SUPERVISOR_PAGE.STATION_' + (station || 'ANY');
+  }
+
+  stationClass(station: string | undefined | null): string {
+    return 'station-' + (station || 'any').toLowerCase();
+  }
+
+  private readStationFilter(): string {
+    try {
+      const v = localStorage.getItem(STATION_KEY);
+      return v && ORDER_STATIONS.includes(v) ? v : 'ALL';
+    } catch {
+      return 'ALL';
+    }
   }
 
   get userName(): string {

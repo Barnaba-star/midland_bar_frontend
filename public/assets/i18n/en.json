@@ -2122,7 +2122,9 @@
     "COLLEAGUE_NOW": "Now selling as {{name}}",
     "DRINK_SEARCH_PH": "What flavour does the customer want? Search: ginger, lime, sweet, name…",
     "DRINK_IN_STOCK": "In stock ({{n}})",
-    "DRINK_PICK_BILL": "Pick a bill first to add the drink to its order."
+    "DRINK_PICK_BILL": "Pick a bill first to add the drink to its order.",
+    "ORDER_DRAFT_TO": "Not sent yet · goes to {{place}}",
+    "ORDER_SENT_TO": "Going to {{place}} · waiting"
   },
   "SUPERVISOR_PAGE": {
     "EXCHANGE": "Change",
@@ -2149,7 +2151,18 @@
     "MY_BILLS": "My bills",
     "TITLE_JUICE": "Juice · Fresh juice orders",
     "TITLE_BISS": "Biss · Biss orders",
-    "TITLE_SHISHER": "Shisha · Shisha orders"
+    "TITLE_SHISHER": "Shisha · Shisha orders",
+    "TITLE_MULTI": "Orders",
+    "AND": " and ",
+    "COMMA": ", ",
+    "STATIONS": "Stations",
+    "STATION_ALL": "All",
+    "STATION_COUNTER": "Counter",
+    "STATION_CHEF": "Kitchen",
+    "STATION_JUICE": "Juice",
+    "STATION_BISS": "Biss",
+    "STATION_SHISHER": "Shisha",
+    "STATION_ANY": "Any station"
   },
   "BRANCH_CHOICE": {
     "DEFAULT": "Default",

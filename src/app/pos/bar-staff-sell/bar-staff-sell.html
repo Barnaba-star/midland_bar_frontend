@@ -265,7 +265,7 @@
                 <!-- Written, not on the bill yet -->
                 @for (order of ordersFor(bill, 'DRAFT'); track order.uid) {
                   <div class="order-block draft">
-                    <span class="order-tag">{{ 'STAFF_SELL_PAGE.ORDER_DRAFT' | translate }}</span>
+                    <span class="order-tag">{{ 'STAFF_SELL_PAGE.ORDER_DRAFT_TO' | translate: { place: (placeKey(order) | translate) } }}</span>
                     <ul class="order-lines">
                       @for (line of order.lines; track line.uid) {
                         <li>
@@ -292,7 +292,7 @@
                     </div>
                   } @else {
                   <div class="order-block sent">
-                    <span class="order-tag"><mat-icon>hourglass_top</mat-icon>{{ 'STAFF_SELL_PAGE.ORDER_SENT' | translate }}</span>
+                    <span class="order-tag"><mat-icon>hourglass_top</mat-icon>{{ 'STAFF_SELL_PAGE.ORDER_SENT_TO' | translate: { place: (placeKey(order) | translate) } }}</span>
                     <ul class="order-lines">
                       @for (line of order.lines; track line.uid) {
                         <li><span>{{ line.quantity }} × {{ line.serviceName }} @if (line.serving) { <span class="serving-tag" [class.warm]="line.serving === 'WARM'">{{ (line.serving === 'WARM' ? 'SALE_ITEM.WARM' : 'SALE_ITEM.COLD') | translate }}</span> }</span><span>{{ line.quantity * line.unitPrice | number }}</span></li>

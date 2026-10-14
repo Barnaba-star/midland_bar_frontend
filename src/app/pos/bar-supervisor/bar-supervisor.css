@@ -530,3 +530,62 @@
     background: #e5484d;
   }
 }
+
+/* ============ Stations: whose ticket it is ============ */
+
+/* One colour per station - Biss green and juice blue as on their lines. */
+.station-counter { --station: #b86e00; }
+.station-chef { --station: #c62828; }
+.station-juice { --station: #1565c0; }
+.station-biss { --station: #2e7d32; }
+.station-shisher { --station: #6a1b9a; }
+.station-any { --station: #6d6257; }
+
+.station-badge {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--station, #6d6257);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.station-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.station-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border: 2px solid var(--station, #f5a524);
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.station-chip.on {
+  background: var(--station, #f5a524);
+  color: #fff;
+}
+
+.station-chip .chip-n {
+  min-width: 20px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.25);
+  font-size: 12px;
+  text-align: center;
+}

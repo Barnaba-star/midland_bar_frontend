@@ -145,18 +145,18 @@ private reloadPagedTab() {
     {
       icon: 'person2',
       title: 'SALON.STAFF',
-      roles: ['ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'MANAGER', 'CASHIER']
+      roles: ['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'CEO', 'MANAGER', 'CASHIER']
     },
     {
       icon: 'service',
       title: 'SALON.SERVICE',
-      roles: ['ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'MANAGER', 'CASHIER']
+      roles: ['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'CEO', 'MANAGER', 'CASHIER']
     },
 
     {
       icon: 'commission',
       title: 'SALON.COMMISSION',
-      roles: ['ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'MANAGER', 'CASHIER']
+      roles: ['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'CEO', 'MANAGER', 'CASHIER']
     },
     {
       // Only the CEO decides what the Other commission pays for.
@@ -167,7 +167,7 @@ private reloadPagedTab() {
     {
       icon: 'more',
       title: 'SALON.BILL_CODES',
-      roles: ['ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'MANAGER', 'CASHIER']
+      roles: ['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'CEO', 'MANAGER', 'CASHIER']
     }
   ];
 
@@ -1053,7 +1053,7 @@ private showActivationCode(data: any, phone?: string): void {
 private getAssignableRoleNames(): string[] {
 
   if (this.visibility.hasRole('ROOT')) {
-    return ['ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'MANAGER', 'COUNTER', 'CHEF', 'CASHIER'];
+    return ['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'CEO', 'MANAGER', 'COUNTER', 'CHEF', 'CASHIER'];
   }
   if (this.visibility.hasRole('DIRECTOR')) {
     return ['STAFF', 'MANAGER', 'CEO', 'COUNTER', 'CHEF', 'CASHIER'];

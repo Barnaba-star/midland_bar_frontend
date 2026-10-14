@@ -3,10 +3,10 @@ import { CanActivateFn, Router } from '@angular/router';
 import { Authentication } from '../Utils/services/authentication';
 
 // Who reaches Settings at all. CEO/MANAGER/CASHIER are sent back to POS.
-export const SETTINGS_ROLES = ['ROOT', 'DIRECTOR', 'STAFF'];
+export const SETTINGS_ROLES = ['ROOT', 'DIRECTOR', 'STAFF', 'ADMIN'];
 
-// Role + Users: ROOT and DIRECTOR. STAFF only gets Branch.
-export const SETTINGS_MANAGE_ROLES = ['ROOT', 'DIRECTOR'];
+// Role + Users: ROOT, DIRECTOR and ADMIN (ADMIN below its own role - backend). STAFF only gets Branch.
+export const SETTINGS_MANAGE_ROLES = ['ROOT', 'DIRECTOR', 'ADMIN'];
 
 // Permission, Config and Storage are ROOT only.
 export const SETTINGS_ROOT_ONLY_ROLES = ['ROOT'];

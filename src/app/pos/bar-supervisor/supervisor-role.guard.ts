@@ -3,7 +3,7 @@ import { CanActivateFn, Router } from '@angular/router';
 import { Authentication } from '../../Utils/services/authentication';
 
 /** Who may open the orders screen: the COUNTER, the CHEF (and an older SUPERVISOR), and the roles above them. */
-export const SUPERVISOR_SCREEN_ROLES = ['COUNTER', 'CHEF', 'SUPERVISOR', 'ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'MANAGER'];
+export const SUPERVISOR_SCREEN_ROLES = ['COUNTER', 'CHEF', 'SUPERVISOR', 'ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'CEO', 'MANAGER'];
 
 export const supervisorGuard: CanActivateFn = () => {
   const auth = inject(Authentication);

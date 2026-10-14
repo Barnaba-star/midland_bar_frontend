@@ -35,7 +35,7 @@ export class CommissionSetting implements OnInit {
     // Resolved once here rather than as field initialisers (those run before
     // the injected `auth` is assigned) and rather than as getters (each call
     // decodes the JWT, and a template getter runs on every change detection).
-    this.seesAllStaff = auth.hasRole('ROOT') || auth.hasRole('DIRECTOR');
+    this.seesAllStaff = auth.hasRole('ROOT') || auth.hasRole('DIRECTOR') || auth.hasRole('ADMIN');
 
     this.canPay =
       auth.hasRole('ROOT') ||

@@ -102,9 +102,9 @@ export class UsersSetting implements OnInit {
 
   selectedUser = '';
   titleActions = [
-    { icon: 'manage', title: 'USERS_SETTING_PAGE.MANAGE_TAB', roles: ['ROOT', 'STAFF', 'DIRECTOR', 'REG OFFICER'] },
+    { icon: 'manage', title: 'USERS_SETTING_PAGE.MANAGE_TAB', roles: ['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'REG OFFICER'] },
 
-    { icon: 'manage', title: 'USERS_SETTING_PAGE.ONLINE_TAB', roles: ['ROOT', 'STAFF', 'DIRECTOR', 'REG OFFICER'] }
+    { icon: 'manage', title: 'USERS_SETTING_PAGE.ONLINE_TAB', roles: ['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'REG OFFICER'] }
   ];
 
   onAction(action: string) {

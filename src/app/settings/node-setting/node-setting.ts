@@ -71,7 +71,7 @@ this.loadBranches();
 
 selectedNode = '';
 titleActions = [
-    { icon: 'more', title: 'NODE_SETTING_PAGE.MANAGE_BRANCH_TAB', roles: ['ROOT', 'STAFF', 'DIRECTOR', 'REG OFFICER'] }
+    { icon: 'more', title: 'NODE_SETTING_PAGE.MANAGE_BRANCH_TAB', roles: ['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'REG OFFICER'] }
 ];
 onAction(action: string) {
     this.selectedNode = action;

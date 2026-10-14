@@ -4,7 +4,7 @@ import { Authentication } from '../Utils/services/authentication';
 
 // Roles that see every POS section, including Setting. MANAGER and
 // CASHIER are deliberately left out.
-export const POS_FULL_ACCESS_ROLES = ['ROOT', 'STAFF', 'DIRECTOR', 'CEO'];
+export const POS_FULL_ACCESS_ROLES = ['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'CEO'];
 
 // Hiding the sidenav item isn't enough on its own - a MANAGER/CASHIER could
 // still type /pos/barSetting into the address bar. This sends them back

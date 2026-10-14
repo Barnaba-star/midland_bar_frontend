@@ -1378,7 +1378,10 @@
     "VIEW_BTN": "View",
     "EMPTY_TEXT": "No errors recorded.",
     "CLEAR_CONFIRM_TITLE": "Clear the error log?",
-    "CLEAR_CONFIRM_ACTION": "Clear all"
+    "CLEAR_CONFIRM_ACTION": "Clear all",
+    "DELETE_BTN": "Delete",
+    "DELETE_CONFIRM_TITLE": "Delete this error?",
+    "DELETE_CONFIRM_TEXT": "This error will be removed from the list."
   },
   "ERROR_DETAIL_DIALOG": {
     "TITLE": "Error detail",

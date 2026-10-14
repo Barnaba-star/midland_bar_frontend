@@ -41,7 +41,7 @@ export class BarService implements OnInit{
     {
       icon: 'more',
       title: 'SERVICE.MANAGE',
-      roles: ['ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'MANAGER', 'CASHIER']
+      roles: ['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'CEO', 'MANAGER', 'CASHIER']
     },
 
 

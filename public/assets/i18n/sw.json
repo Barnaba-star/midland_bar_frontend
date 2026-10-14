@@ -1378,7 +1378,10 @@
     "VIEW_BTN": "Angalia",
     "EMPTY_TEXT": "Hakuna makosa yaliyorekodiwa.",
     "CLEAR_CONFIRM_TITLE": "Futa kumbukumbu ya makosa?",
-    "CLEAR_CONFIRM_ACTION": "Futa yote"
+    "CLEAR_CONFIRM_ACTION": "Futa yote",
+    "DELETE_BTN": "Futa",
+    "DELETE_CONFIRM_TITLE": "Futa kosa hili?",
+    "DELETE_CONFIRM_TEXT": "Kosa hili litaondoka kwenye orodha."
   },
   "ERROR_DETAIL_DIALOG": {
     "TITLE": "Maelezo ya kosa",

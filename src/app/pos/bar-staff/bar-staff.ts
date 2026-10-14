@@ -88,12 +88,12 @@ export class BarStaff implements OnInit{
     {
       icon: 'add',
       title: 'STAFF.ADD',
-      roles: ['ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'MANAGER', 'CASHIER'],
+      roles: ['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'CEO', 'MANAGER', 'CASHIER'],
     },
     {
       icon: 'more',
       title: 'STAFF.MANAGE',
-      roles: ['ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'MANAGER', 'CASHIER'],
+      roles: ['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'CEO', 'MANAGER', 'CASHIER'],
     },
   ];
 

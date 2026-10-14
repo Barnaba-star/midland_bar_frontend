@@ -27,7 +27,7 @@ export class PermissionSetting implements OnInit {
   permissions: any[] = [];
   selectedPermission = '';
   titleActions = [
-    { icon: 'more', title: 'PERMISSION_SETTING_PAGE.MANAGE_TAB', roles: ['ROOT', 'STAFF', 'DIRECTOR', 'REG OFFICER'] },
+    { icon: 'more', title: 'PERMISSION_SETTING_PAGE.MANAGE_TAB', roles: ['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'REG OFFICER'] },
   ];
 
   constructor(

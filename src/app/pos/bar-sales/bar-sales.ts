@@ -105,18 +105,18 @@ export class BarSales implements OnInit{
     {
       icon: 'add',
       title: 'SALES.ADD',
-      roles: ['ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'MANAGER', 'CASHIER'],
+      roles: ['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'CEO', 'MANAGER', 'CASHIER'],
     },
     {
       icon: 'history',
       title: 'SALES.MANAGE',
-      roles: ['ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'MANAGER', 'CASHIER'],
+      roles: ['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'CEO', 'MANAGER', 'CASHIER'],
     },
     {
       // The names bills were noted as paid from (M-Pesa, Tigo Pesa...) - for the manager to check.
       icon: 'payment2',
       title: 'SALES.PHONE_PAYMENTS',
-      roles: ['ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'MANAGER', 'CASHIER'],
+      roles: ['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'CEO', 'MANAGER', 'CASHIER'],
     },
   ];
 

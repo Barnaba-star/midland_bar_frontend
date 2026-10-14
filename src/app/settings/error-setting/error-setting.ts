@@ -25,7 +25,11 @@ export class ErrorSetting implements OnInit {
     private dialog: MatDialog
   ) {}
 
+  /** Futa / Futa yote show only to those who may delete (DELETE_ERROR_LOG, or ROOT). */
+  canDelete = false;
+
   ngOnInit(): void {
+    this.canDelete = this.visibility.hasPermission('DELETE_ERROR_LOG');
     this.errors = 'ERROR_SETTING_PAGE.MANAGE_TAB';
     this.loadErrors();
     this.loadSummary();
@@ -35,7 +39,7 @@ export class ErrorSetting implements OnInit {
   errors: string = '';
 
   titleActions = [
-    { icon: 'more', title: 'ERROR_SETTING_PAGE.MANAGE_TAB', roles: ['ROOT', 'DIRECTOR'] }
+    { icon: 'more', title: 'ERROR_SETTING_PAGE.MANAGE_TAB', roles: ['ROOT', 'DIRECTOR', 'ADMIN'] }
   ];
 
   getTitled(title: TitleAction[]): TitleAction[] {
@@ -150,6 +154,36 @@ export class ErrorSetting implements OnInit {
       this.errorLogService.clearErrors().subscribe({
         next: () => {
           this.refresh();
+        },
+        error: () => {
+          this.cdr.markForCheck();
+        }
+      });
+    });
+  }
+
+  /** One error off the list, after a confirm. */
+  deleteError(errorLog: ErrorLog) {
+    const dialogRef = this.dialog.open(ComfirmDialogComponent, {
+      width: '460px',
+      data: {
+        title: 'ERROR_SETTING_PAGE.DELETE_CONFIRM_TITLE',
+        message: 'ERROR_SETTING_PAGE.DELETE_CONFIRM_TEXT',
+        confirmLabel: 'ERROR_SETTING_PAGE.DELETE_BTN'
+      }
+    });
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (!confirmed) {
+        return;
+      }
+      this.errorLogService.deleteError(errorLog.uid).subscribe({
+        next: () => {
+          // Back a page when the last row of this one went.
+          if (this.errorLogs.length === 1 && this.currentPage > 0) {
+            this.currentPage--;
+          }
+          this.loadErrors();
+          this.loadSummary();
         },
         error: () => {
           this.cdr.markForCheck();

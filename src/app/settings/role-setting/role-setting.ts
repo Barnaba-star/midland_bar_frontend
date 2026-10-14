@@ -52,7 +52,7 @@ private cdr:ChangeDetectorRef,  private loaderService: LoaderService, private tr
   }
 selectedRoleRole = '';
 titleActions = [
-    { icon: 'manage', title: 'ROLE_SETTING_PAGE.MANAGE_TAB',  roles: ['ROOT', 'STAFF', 'DIRECTOR'] },
+    { icon: 'manage', title: 'ROLE_SETTING_PAGE.MANAGE_TAB',  roles: ['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN'] },
 
 ];
 

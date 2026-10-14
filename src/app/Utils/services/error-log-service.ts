@@ -70,6 +70,10 @@ export class ErrorLogService {
     return this.http.delete<Response<number>>(`${this.monitoringUrl}/clearErrors`);
   }
 
+  deleteError(uid: string): Observable<Response<boolean>> {
+    return this.http.delete<Response<boolean>>(`${this.monitoringUrl}/deleteError/${uid}`);
+  }
+
   /**
    * Sends one browser-side error to the backend. Swallows its own failure on
    * purpose: if reporting an error itself errored, surfacing that would just

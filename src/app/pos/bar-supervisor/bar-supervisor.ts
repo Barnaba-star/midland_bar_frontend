@@ -64,7 +64,7 @@ export class BarSupervisor implements OnInit, OnDestroy {
   /** Someone whose whole app is this queue (COUNTER, CHEF, an older SUPERVISOR) - no way back to POS. */
   get onlySupervisor(): boolean {
     return ['COUNTER', 'CHEF', 'SUPERVISOR'].some((r) => this.auth.hasRole(r))
-      && !['ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'MANAGER'].some((r) => this.auth.hasRole(r));
+      && !['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'CEO', 'MANAGER'].some((r) => this.auth.hasRole(r));
   }
 
   /** The counter sees drink orders, the kitchen food orders (the server sends only theirs); the title says which. */

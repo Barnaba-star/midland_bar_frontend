@@ -22,9 +22,11 @@
             {{ 'ERROR_SETTING_PAGE.REFRESH_BTN' | translate }}
           </button>
 
+          @if (canDelete) {
           <button type="button" class="clear-btn" (click)="clearErrors()">
             {{ 'ERROR_SETTING_PAGE.CLEAR_BTN' | translate }}
           </button>
+          }
         </div>
 
       </div>
@@ -139,9 +141,16 @@
                 <td>{{ errorLog.branchName || '-' }}</td>
 
                 <td>
-                  <button type="button" class="view-btn" (click)="openDetail(errorLog)">
-                    {{ 'ERROR_SETTING_PAGE.VIEW_BTN' | translate }}
-                  </button>
+                  <div class="row-actions">
+                    <button type="button" class="view-btn" (click)="openDetail(errorLog)">
+                      {{ 'ERROR_SETTING_PAGE.VIEW_BTN' | translate }}
+                    </button>
+                    @if (canDelete) {
+                      <button type="button" class="view-btn delete-btn" (click)="deleteError(errorLog)">
+                        {{ 'ERROR_SETTING_PAGE.DELETE_BTN' | translate }}
+                      </button>
+                    }
+                  </div>
                 </td>
 
               </tr>

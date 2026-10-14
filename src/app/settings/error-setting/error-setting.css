@@ -321,3 +321,17 @@
     max-width: 220px;
   }
 }
+
+.row-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.delete-btn {
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+
+.delete-btn:hover {
+  background: #fef2f2;
+}

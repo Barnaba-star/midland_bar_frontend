@@ -71,14 +71,14 @@ export class BarStore implements OnInit {
     {
       icon: 'setting',
       title: 'STORE.MANAGE',
-      roles: ['ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'MANAGER', 'CASHIER', 'STORE_KEEPER'],
+      roles: ['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'CEO', 'MANAGER', 'CASHIER', 'STORE_KEEPER'],
     },
     {
       // Carries purchase costs, so it stays with those who see money -
       // not the cashier, as on the POS home.
       icon: 'more',
       title: 'STORE.USED',
-      roles: ['ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'MANAGER'],
+      roles: ['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'CEO', 'MANAGER'],
     },
   ];
 

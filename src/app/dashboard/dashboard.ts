@@ -43,7 +43,7 @@ cards = [
     // straight into one section of it.
     route: '/pos',
     glyph: 'point_of_sale',
-    roles: ['ROOT', 'STAFF', 'DIRECTOR', 'REG OFFICER', 'CEO', 'MANAGER', 'CASHIER']
+    roles: ['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'REG OFFICER', 'CEO', 'MANAGER', 'CASHIER']
   },
   {
     title: 'DASHBOARD.CARD_STAFF_SELL_TITLE',
@@ -52,7 +52,7 @@ cards = [
     img: '',
     description: 'DASHBOARD.CARD_STAFF_SELL_DESC',
     route: '/staff-sell',
-    roles: ['ROOT', 'STAFF', 'DIRECTOR', 'REG OFFICER', 'CEO', 'MANAGER', 'CASHIER']
+    roles: ['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'REG OFFICER', 'CEO', 'MANAGER', 'CASHIER']
   },
   {
     title: 'DASHBOARD.CARD_SUPERVISOR_TITLE',
@@ -62,7 +62,7 @@ cards = [
     description: 'DASHBOARD.CARD_SUPERVISOR_DESC',
     route: '/supervisor',
     // Not MANAGER: their Dashboard is POS and Staff Sell only.
-    roles: ['ROOT', 'STAFF', 'DIRECTOR', 'CEO', 'MANAGER', 'COUNTER', 'CHEF', 'SUPERVISOR']
+    roles: ['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'CEO', 'MANAGER', 'COUNTER', 'CHEF', 'SUPERVISOR']
   },
   {
     title: 'DASHBOARD.CARD_SETTING_TITLE',
@@ -71,7 +71,7 @@ cards = [
     description: 'DASHBOARD.CARD_SETTING_DESC',
     route: '/settings',
     glyph: 'tune',
-    roles: ['ROOT', 'STAFF', 'DIRECTOR', 'REG OFFICER']
+    roles: ['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'REG OFFICER']
   },
   {
     // What branches are asking, and what we publish back to them. STAFF is

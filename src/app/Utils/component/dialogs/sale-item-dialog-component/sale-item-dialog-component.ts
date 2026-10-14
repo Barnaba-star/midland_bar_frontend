@@ -186,7 +186,7 @@ export class SaleItemDialogComponent implements OnInit, AfterViewInit {
 
   /** Staff Sell, a drink: ask whether the customer wants it cold or warm. */
   get asksServing(): boolean {
-    return !!this.data?.askServing && !!this.selected && this.selected.category !== 'FOOD' && this.selected.category !== 'SHISHA';
+    return !!this.data?.askServing && !!this.selected && !['FOOD', 'SHISHA', 'POOL'].includes(this.selected.category);
   }
 
   /** Tap the chosen one again to take it back. */

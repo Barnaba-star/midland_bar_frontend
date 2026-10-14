@@ -275,6 +275,12 @@
   color: #7b3fa0;
 }
 
+/* Pool table: the green of the cloth. */
+.category-chip.pool {
+  background: color-mix(in srgb, #1f7a4d 14%, transparent);
+  color: #1f7a4d;
+}
+
 .category-chip mat-icon {
   width: 14px;
   height: 14px;

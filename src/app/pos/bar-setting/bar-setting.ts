@@ -64,11 +64,12 @@ export interface BarServiceEntity {
   usageType?:string;
 }
 
-/** Stored as DRINK / FOOD / SHISHA - the backend's ProductCategory. */
+/** Stored as DRINK / FOOD / SHISHA / POOL - the backend's ProductCategory. */
 const PRODUCT_CATEGORY_OPTIONS = [
   { value: 'DRINK', label: 'SETTING_PAGE.CATEGORY_DRINK' },
   { value: 'FOOD', label: 'SETTING_PAGE.CATEGORY_FOOD' },
-  { value: 'SHISHA', label: 'SETTING_PAGE.CATEGORY_SHISHA' }
+  { value: 'SHISHA', label: 'SETTING_PAGE.CATEGORY_SHISHA' },
+  { value: 'POOL', label: 'SETTING_PAGE.CATEGORY_POOL' }
 ];
 
 /** How stock is bought. '' = one unit at a time, no pack. */

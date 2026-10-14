@@ -1,3 +1,4 @@
+import { ORDER_STATIONS } from './supervisor-role.guard';
 import { BrandWord } from '../../Utils/component/brand-word/brand-word';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
@@ -63,18 +64,15 @@ export class BarSupervisor implements OnInit, OnDestroy {
   /** A SUPERVISOR has only this screen; managers and above came from POS and can go back. */
   /** Someone whose whole app is this queue (COUNTER, CHEF, an older SUPERVISOR) - no way back to POS. */
   get onlySupervisor(): boolean {
-    return ['COUNTER', 'CHEF', 'SUPERVISOR'].some((r) => this.auth.hasRole(r))
+    return [...ORDER_STATIONS, 'SUPERVISOR'].some((r) => this.auth.hasRole(r))
       && !['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'CEO', 'MANAGER'].some((r) => this.auth.hasRole(r));
   }
 
-  /** The counter sees drink orders, the kitchen food orders (the server sends only theirs); the title says which. */
+  /** Each station sees only its own orders (the server sends only theirs); the title says which. */
   get pageTitle(): string {
-    const counter = this.auth.hasRole('COUNTER'), chef = this.auth.hasRole('CHEF');
-    if (this.onlySupervisor && counter && !chef) {
-      return 'SUPERVISOR_PAGE.TITLE_COUNTER';
-    }
-    if (this.onlySupervisor && chef && !counter) {
-      return 'SUPERVISOR_PAGE.TITLE_CHEF';
+    const held = ORDER_STATIONS.filter((s) => this.auth.hasRole(s));
+    if (this.onlySupervisor && held.length === 1) {
+      return 'SUPERVISOR_PAGE.TITLE_' + held[0];
     }
     return 'SUPERVISOR_PAGE.TITLE';
   }

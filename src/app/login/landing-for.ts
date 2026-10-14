@@ -1,3 +1,4 @@
+import { ORDER_STATIONS } from '../pos/bar-supervisor/supervisor-role.guard';
 import { CASHIER_HOME, STORE_KEEPER_HOME, storeKeeperOnly } from '../pos/pos-role.guard';
 
 /**
@@ -15,7 +16,7 @@ export function landingFor(hasRole: (role: string) => boolean): string {
   }
   // Those who receive waiters' orders - the COUNTER (drinks), the CHEF
   // (food), and a SUPERVISOR from before - go straight to their queue.
-  if (['COUNTER', 'CHEF', 'SUPERVISOR'].some(hasRole) && !['CEO', 'MANAGER'].some(hasRole)) {
+  if ([...ORDER_STATIONS, 'SUPERVISOR'].some(hasRole) && !['CEO', 'MANAGER'].some(hasRole)) {
     return '/supervisor';
   }
   // The store keeper only works the store: stock levels, receiving, counting.

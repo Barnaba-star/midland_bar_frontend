@@ -2125,7 +2125,10 @@
     "SOUND_OFF": "Zima sauti",
     "TITLE_COUNTER": "Counter · Oda za vinywaji",
     "TITLE_CHEF": "Jikoni · Oda za chakula",
-    "MY_BILLS": "Bili zangu"
+    "MY_BILLS": "Bili zangu",
+    "TITLE_JUICE": "Juice · Oda za fresh juice",
+    "TITLE_BISS": "Biss · Oda za Biss",
+    "TITLE_SHISHER": "Shisha · Oda za shisha"
   },
   "BRANCH_CHOICE": {
     "DEFAULT": "Default",

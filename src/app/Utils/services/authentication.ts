@@ -164,11 +164,11 @@ hasRole(role: string): boolean {
   if (role === 'ROOT' && this.jwtHelper.decodeToken(this.getToken() || '')?.isRoot === true) {
     return true;
   }
+  // Case-blind: a role added from Settings may be named "Juice" for JUICE.
+  const wanted = role.toUpperCase();
   const roles = this.getRoles();
-  if (Array.isArray(roles)) {
-    return roles.includes(role);
-  }
-  return roles.split(', ').includes(role);
+  const list: string[] = Array.isArray(roles) ? roles : roles.split(', ');
+  return list.some((r) => String(r).toUpperCase() === wanted);
 }
 
 /**

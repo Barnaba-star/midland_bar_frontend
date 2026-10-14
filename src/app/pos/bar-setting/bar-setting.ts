@@ -960,7 +960,7 @@ addUser(): void {
     next: (roleRes) => {
       const assignableRoleNames = this.getAssignableRoleNames();
       const roles = (roleRes.data || []).filter((role: any) =>
-        assignableRoleNames.includes(role.name)
+        assignableRoleNames.includes(String(role.name).toUpperCase())
       );
       this.openAddUserDialog(roles);
     },
@@ -1053,16 +1053,16 @@ private showActivationCode(data: any, phone?: string): void {
 private getAssignableRoleNames(): string[] {
 
   if (this.visibility.hasRole('ROOT')) {
-    return ['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'CEO', 'MANAGER', 'COUNTER', 'CHEF', 'CASHIER'];
+    return ['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'CEO', 'MANAGER', 'COUNTER', 'CHEF', 'JUICE', 'BISS', 'SHISHER', 'CASHIER'];
   }
   if (this.visibility.hasRole('DIRECTOR')) {
-    return ['STAFF', 'MANAGER', 'CEO', 'COUNTER', 'CHEF', 'CASHIER'];
+    return ['STAFF', 'MANAGER', 'CEO', 'COUNTER', 'CHEF', 'JUICE', 'BISS', 'SHISHER', 'CASHIER'];
   }
   if (this.visibility.hasRole('CEO')) {
-    return ['CASHIER', 'MANAGER', 'COUNTER', 'CHEF'];
+    return ['CASHIER', 'MANAGER', 'COUNTER', 'CHEF', 'JUICE', 'BISS', 'SHISHER'];
   }
   if (this.visibility.hasRole('STAFF')) {
-    return ['CEO', 'CASHIER', 'MANAGER', 'COUNTER', 'CHEF'];
+    return ['CEO', 'CASHIER', 'MANAGER', 'COUNTER', 'CHEF', 'JUICE', 'BISS', 'SHISHER'];
   }
 
   return [];
@@ -1174,7 +1174,7 @@ onAssignRole(user: UserTableData): void {
           // hide a role the user already has, otherwise saving would
           // silently strip a role the viewer isn't even allowed to touch.
           this.roles = allRoles.filter((role: any) =>
-            assignableRoleNames.includes(role.name) ||
+            assignableRoleNames.includes(String(role.name).toUpperCase()) ||
             currentRoleUIDs.includes(role.uid)
           );
 

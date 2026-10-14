@@ -2125,7 +2125,10 @@
     "SOUND_OFF": "Sound off",
     "TITLE_COUNTER": "Counter · Drink orders",
     "TITLE_CHEF": "Kitchen · Food orders",
-    "MY_BILLS": "My bills"
+    "MY_BILLS": "My bills",
+    "TITLE_JUICE": "Juice · Fresh juice orders",
+    "TITLE_BISS": "Biss · Biss orders",
+    "TITLE_SHISHER": "Shisha · Shisha orders"
   },
   "BRANCH_CHOICE": {
     "DEFAULT": "Default",

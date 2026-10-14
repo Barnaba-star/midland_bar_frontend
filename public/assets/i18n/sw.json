@@ -2654,5 +2654,11 @@
     "NONE": "Hakuna nyingine",
     "ERR_COUNT": "Weka idadi (1 au zaidi) kwa kila malighafi",
     "MADE_FROM": "Imetengenezwa kutoka"
+  },
+  "STOCK_SHARES": {
+    "TITLE": "Kwa kila malighafi",
+    "HINT": "Pesa ya manunuzi ya huduma za mapishi, imegawanywa kwa kila malighafi - kiasi cha kununulia kila moja.",
+    "NOTE": "Mgawanyo kwa gharama ya kununulia ya leo",
+    "LEFT": "imebaki"
   }
 }

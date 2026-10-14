@@ -2200,9 +2200,49 @@
                         </button>
                       </td>
                     </tr>
+                    <!-- A recipe: each stock item's part of this pot -->
+                    @if (stock.ingredientShares?.length) {
+                      @for (share of stock.ingredientShares; track share.stockItemUid) {
+                        <tr class="share-row">
+                          <td></td>
+                          <td colspan="2" class="share-name">
+                            <span class="share-arrow">↳</span>
+                            <strong>{{ share.name }}</strong>
+                            <span class="share-pct">{{ share.percent }}%</span>
+                          </td>
+                          <td class="amount-cell">Tshs {{ share.totalAmount | number: '1.0-0' }}</td>
+                          <td></td>
+                          <td class="amount-cell remaining-amount">
+                            {{ 'STOCK_SHARES.LEFT' | translate }} {{ share.remainingAmount | number: '1.0-0' }}
+                          </td>
+                          <td colspan="2"></td>
+                        </tr>
+                      }
+                      <tr class="share-row share-note-row">
+                        <td></td>
+                        <td colspan="7" class="share-note">{{ 'STOCK_SHARES.NOTE' | translate }}</td>
+                      </tr>
+                    }
                   }
                 </tbody>
               </table>
+
+              <!-- Kwa kila malighafi: the recipes' shares added up per stock item -->
+              @if (ingredientTotals.length > 0) {
+                <section class="ingredient-totals">
+                  <h3 class="ingredient-title">{{ 'STOCK_SHARES.TITLE' | translate }}</h3>
+                  <p class="ingredient-hint">{{ 'STOCK_SHARES.HINT' | translate }}</p>
+                  <div class="ingredient-grid">
+                    @for (item of ingredientTotals; track item.stockItemUid) {
+                      <div class="ingredient-card">
+                        <span class="ingredient-name">{{ item.name }}</span>
+                        <span class="ingredient-amount">Tshs {{ item.totalAmount | number: '1.0-0' }}</span>
+                        <span class="ingredient-left">{{ 'STOCK_SHARES.LEFT' | translate }} {{ item.remainingAmount | number: '1.0-0' }}</span>
+                      </div>
+                    }
+                  </div>
+                </section>
+              }
               <!-- =====================================================
      STOCK PAYMENT DIALOG
 ====================================================== -->

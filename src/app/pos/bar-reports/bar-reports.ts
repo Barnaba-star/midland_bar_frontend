@@ -16,7 +16,7 @@ import { ServiceBarMethod } from '../service-bar-method';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CdkConnectedOverlay, CdkOverlayOrigin } from '@angular/cdk/overlay';
-import { PayStockAndPurchaseDTO, SpendDTO, StaffCommissionDTO } from '../BarModel';
+import { IngredientShare, PayStockAndPurchaseDTO, SpendDTO, StaffCommissionDTO } from '../BarModel';
 import { AlertService } from '../../Utils/services/alert';
 import { MatFormField, MatLabel } from "@angular/material/select";
 import { MatDatepickerModule } from "@angular/material/datepicker";
@@ -1516,6 +1516,25 @@ getStockAndPurchaseByFilter(filter: string): void {
         this.cdr.markForCheck();
       }
     });
+}
+
+/**
+ * Kwa kila malighafi: every recipe pot's shares added up per stock item, so
+ * the owner sees how much of the buying money is for the fish, the rice...
+ * Services that are their own stock have no shares and are left out.
+ */
+get ingredientTotals(): IngredientShare[] {
+  const byItem = new Map<string, IngredientShare>();
+  for (const row of this.stockAndPurchaseReports) {
+    for (const share of (row.ingredientShares ?? []) as IngredientShare[]) {
+      const t = byItem.get(share.stockItemUid)
+        ?? { stockItemUid: share.stockItemUid, name: share.name, percent: 0, totalAmount: 0, remainingAmount: 0 };
+      t.totalAmount += share.totalAmount ?? 0;
+      t.remainingAmount += share.remainingAmount ?? 0;
+      byItem.set(share.stockItemUid, t);
+    }
+  }
+  return [...byItem.values()].sort((a, b) => b.totalAmount - a.totalAmount);
 }
 
 getStockTotalAmount(): number {

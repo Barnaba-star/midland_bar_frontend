@@ -301,6 +301,17 @@ export interface SpendDTO {
    amount?:number;
    description?:string;
 }
+/**
+ * A recipe's Stock & Purchase pot (wali samaki = fish + rice), split by what
+ * each stock item costs today: its part of the pot and of what is left.
+ */
+export interface IngredientShare {
+   stockItemUid: string;
+   name: string;
+   percent: number;
+   totalAmount: number;
+   remainingAmount: number;
+}
 export interface PayStockAndPurchaseDTO {
    /** How it was paid out: cash, mpesa, tigopesa, airtelmoney, halopesa or bank. */
    method?: string;

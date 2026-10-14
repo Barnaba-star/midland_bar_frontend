@@ -2654,5 +2654,11 @@
     "NONE": "No others",
     "ERR_COUNT": "Enter how many (1 or more) for each ingredient",
     "MADE_FROM": "Made from"
+  },
+  "STOCK_SHARES": {
+    "TITLE": "Per raw material",
+    "HINT": "Recipe services' purchase money, split by raw material - how much to spend on each.",
+    "NOTE": "Split by today's buying cost",
+    "LEFT": "left"
   }
 }

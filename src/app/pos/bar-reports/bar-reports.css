@@ -7719,3 +7719,108 @@
 .summary-card.loss .summary-icon {
   color: #c0392b;
 }
+
+
+/* =========================================================
+   RECIPE SHARES - each stock item's part of a recipe's pot
+========================================================= */
+
+.stock-table tbody tr.share-row {
+  border-bottom: none;
+  background: color-mix(in srgb, var(--color-accent, #c8902c) 5%, transparent);
+}
+
+.stock-table tr.share-row td {
+  height: 34px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  font-size: 12px;
+  color: var(--color-text-muted, #7a6f60);
+}
+
+.share-name {
+  padding-left: 28px !important;
+}
+
+.share-name strong {
+  color: var(--color-text, #4a3f33);
+  font-weight: 600;
+}
+
+.share-arrow {
+  margin-right: 6px;
+  color: var(--color-accent, #c8902c);
+}
+
+.share-pct {
+  margin-left: 8px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-accent, #c8902c) 16%, transparent);
+  color: var(--color-accent-dark, #8a5d12);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.stock-table tr.share-note-row {
+  border-bottom: 1px solid #f1e8d8;
+}
+
+.share-note {
+  padding-left: 28px !important;
+  font-size: 11px !important;
+  font-style: italic;
+}
+
+.ingredient-totals {
+  margin-top: 20px;
+  padding: 16px;
+  border: 1px solid var(--color-border, #e8dcc8);
+  border-radius: var(--radius-md, 12px);
+  background: var(--color-surface, #ffffff);
+}
+
+.ingredient-title {
+  margin: 0 0 4px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-text, #4a3f33);
+}
+
+.ingredient-hint {
+  margin: 0 0 12px;
+  font-size: 12px;
+  color: var(--color-text-muted, #7a6f60);
+}
+
+.ingredient-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 10px;
+}
+
+.ingredient-card {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm, 8px);
+  background: color-mix(in srgb, var(--color-accent, #c8902c) 7%, transparent);
+}
+
+.ingredient-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text, #4a3f33);
+}
+
+.ingredient-amount {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-text, #4a3f33);
+}
+
+.ingredient-left {
+  font-size: 12px;
+  color: var(--color-text-muted, #7a6f60);
+}

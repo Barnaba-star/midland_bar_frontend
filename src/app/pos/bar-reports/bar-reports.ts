@@ -1525,7 +1525,14 @@ getStockAndPurchaseByFilter(filter: string): void {
  */
 get ingredientTotals(): IngredientShare[] {
   const byItem = new Map<string, IngredientShare>();
+  // A pot comes back once per payment written against it - count each pot once.
+  const seen = new Set<string>();
   for (const row of this.stockAndPurchaseReports) {
+    const key = (row as { uid?: string }).uid;
+    if (key) {
+      if (seen.has(key)) continue;
+      seen.add(key);
+    }
     for (const share of (row.ingredientShares ?? []) as IngredientShare[]) {
       const t = byItem.get(share.stockItemUid)
         ?? { stockItemUid: share.stockItemUid, name: share.name, percent: 0, totalAmount: 0, remainingAmount: 0 };

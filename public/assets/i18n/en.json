@@ -2641,5 +2641,18 @@
     "COPIED": "Copied",
     "OK": "OK",
     "COPY_TEXT": "{{name}} - Staff code: {{code}}, temporary PIN: {{pin}}"
+  },
+  "RECIPE_FORM": {
+    "TITLE": "Recipe for {{name}}",
+    "HINT": "Every sale takes from all of these in the store.",
+    "FIRST": "First ingredient",
+    "OTHERS": "Other ingredients",
+    "CHOOSE_ITEM": "Choose an ingredient",
+    "HOW_MANY": "How many",
+    "EMPTY": "No other ingredients yet - e.g. rice for wali samaki.",
+    "ADD": "Add ingredient",
+    "NONE": "No others",
+    "ERR_COUNT": "Enter how many (1 or more) for each ingredient",
+    "MADE_FROM": "Made from"
   }
 }

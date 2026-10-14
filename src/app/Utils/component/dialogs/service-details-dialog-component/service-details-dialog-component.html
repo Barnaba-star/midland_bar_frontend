@@ -44,6 +44,19 @@
       </div>
     </div>
 
+    @if (service?.stockSourceName) {
+      <div class="detail-item">
+        <mat-icon>inventory_2</mat-icon>
+        <div>
+          <span>{{ 'RECIPE_FORM.MADE_FROM' | translate }}</span>
+          <strong>
+            {{ service.stockSourceName }} {{ service.saleUnitName ? (service.saleUnitCount || 1) + ' ' + service.saleUnitName : '× ' + (service.unitsPerSale || 1) }}
+            @if (service.recipeText) { + {{ service.recipeText }} }
+          </strong>
+        </div>
+      </div>
+    }
+
     <div class="detail-item">
       <mat-icon>shopping_cart</mat-icon>
       <div>

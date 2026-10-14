@@ -1,6 +1,7 @@
 import { OtherSplit } from '../other-split/other-split';
 import { UnitLabelPipe, unitKey } from '../../Utils/pipes/stock-packs.pipe';
 import { StockItemDialogComponent, StockItemResult } from '../../Utils/component/dialogs/stock-item-dialog-component/stock-item-dialog-component';
+import { ExtraIngredientDTO, RecipeDialogComponent, parseExtraIngredients } from '../../Utils/component/dialogs/recipe-dialog-component/recipe-dialog-component';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { TitleAction, Title2 } from "../../Utils/component/title2/title2";
 import { Authentication } from '../../Utils/services/authentication';
@@ -55,6 +56,8 @@ export interface BarServiceEntity {
   unitLadder?: any;
   saleUnitName?: string;
   saleUnitCount?: number;
+  /** JSON of the other stock items it is made from: [{"uid","unit","count","units"}]. */
+  extraIngredients?: string | null;
   buyingPrice?: number;
   stockQuantity?: number;
   lowStock?: boolean;
@@ -433,30 +436,76 @@ private openServiceDialog(kind: 'SERVICE' | 'STOCK_ITEM', row?: any) {
         } else {
           dto.unitsPerSale = count;
         }
+        // Then the other stock items it takes (the rice of a wali samaki).
+        const primary = this.stockItems.find((s) => s.uid === uid);
+        const recipe = this.dialog.open(RecipeDialogComponent, {
+          width: '620px',
+          maxWidth: '95vw',
+          autoFocus: false,
+          data: {
+            serviceName: data.serviceName,
+            primaryUid: uid,
+            primaryLabel: `${primary?.serviceName ?? ''} · ${count} ${level || primary?.unit || ''}`.trim(),
+            stockItems: this.stockItems,
+            current: row?.extraIngredients,
+          },
+        });
+        recipe.afterClosed().subscribe((extras?: ExtraIngredientDTO[]) => {
+          // Closed without choosing: keep what is stored.
+          dto.extraIngredients = extras ?? this.storedExtras(row, uid);
+          this.saveService(dto, !!row);
+        });
+        return;
       } else {
         dto.stockSource = data.stockSource;
       }
     }
+    this.saveService(dto, !!row);
+  });
+}
+
+/** The extras stored on a service, in the form saving sends them. */
+private storedExtras(row: any, primaryUid: string): ExtraIngredientDTO[] {
+  return parseExtraIngredients(row?.extraIngredients)
+    .filter((x) => x.uid !== primaryUid)
+    .map((x) => x.unit
+      ? { stockItemUid: x.uid, saleUnitName: x.unit, saleUnitCount: x.count ?? 1 }
+      : { stockItemUid: x.uid, unitsPerSale: x.units });
+}
+
+private saveService(dto: BarServiceDTO, editing: boolean) {
     this.service.saveBarEntity(dto).subscribe({
       next: (response) => {
         if (response?.data) {
-          this.alertService.show('success', this.translate.instant(row ? 'PRODUCT_FORM.UPDATED' : 'PRODUCT_FORM.SAVED'));
+          this.alertService.show('success', this.translate.instant(editing ? 'PRODUCT_FORM.UPDATED' : 'PRODUCT_FORM.SAVED'));
           this.findBarServicePage();
           this.cdr.markForCheck();
+        } else if (response?.message) {
+          this.alertService.show('error', response.message);
         }
       },
       error: (error) => console.error('Error saving service:', error),
     });
-  });
 }
 
    onViewRecord(row: any) {
     this.dialog.open(ServiceDetailsDialogComponent, {
       width: '480px',
       maxWidth: '95vw',
-      data: row,
+      data: { ...row, recipeText: this.recipeText(row) },
     });
    }
+
+/** The other stock items a service takes, in words: "Mchele 1 Sahani + Maharage 2 Kikombe". */
+recipeText(service: any): string {
+  return parseExtraIngredients(service?.extraIngredients)
+    .map((x) => {
+      const item = this.stockItems.find((s) => s.uid === x.uid);
+      const name = item?.serviceName ?? '?';
+      return x.unit ? `${name} ${x.count ?? 1} ${x.unit}` : `${name} ${x.units} ${item?.unit ?? ''}`.trim();
+    })
+    .join(' + ');
+}
 
    param:PageableParam = {
     page: 0,
@@ -490,6 +539,10 @@ findBarServicePage() {
     size: this.size
   };
 
+  // Names for the recipes shown in the list ("+ Mchele 1 Sahani").
+  if (!this.stockItems.length) {
+    this.loadStockItems(() => this.cdr.markForCheck());
+  }
   this.service.findBarServicePage(this.param).subscribe({
     next: (response) => {
       if (response) {

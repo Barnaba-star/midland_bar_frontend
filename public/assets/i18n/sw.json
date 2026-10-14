@@ -2641,5 +2641,18 @@
     "COPIED": "Imenakiliwa",
     "OK": "Sawa",
     "COPY_TEXT": "{{name}} - Code ya mhudumu: {{code}}, PIN ya muda: {{pin}}"
+  },
+  "RECIPE_FORM": {
+    "TITLE": "Mapishi ya {{name}}",
+    "HINT": "Kila mauzo yatapunguza stoo kutoka malighafi zote hizi.",
+    "FIRST": "Malighafi ya kwanza",
+    "OTHERS": "Malighafi nyingine",
+    "CHOOSE_ITEM": "Chagua malighafi",
+    "HOW_MANY": "Ngapi",
+    "EMPTY": "Hakuna malighafi nyingine bado - mfano wali kwa wali samaki.",
+    "ADD": "Ongeza malighafi",
+    "NONE": "Hakuna nyingine",
+    "ERR_COUNT": "Weka idadi (1 au zaidi) kwa kila malighafi",
+    "MADE_FROM": "Imetengenezwa kutoka"
   }
 }

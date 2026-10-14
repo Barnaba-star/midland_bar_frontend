@@ -422,6 +422,9 @@
                     } @else {
                       {{ 'PRODUCT_FORM.SOURCE_NOTE' | translate: { name: service.stockSourceName, n: service.unitsPerSale } }}
                     }
+                    @if (recipeText(service); as more) {
+                      + {{ more }}
+                    }
                   </small>
                 }
               </td>

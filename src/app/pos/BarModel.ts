@@ -57,6 +57,8 @@ export interface BarServiceDTO{
   unitLadder?: any;
   saleUnitName?: string;
   saleUnitCount?: number;
+  /** With a stock item as source: the other stock items one sale takes too (rice beside the fish). [] clears them. */
+  extraIngredients?: { stockItemUid: string; saleUnitName?: string; saleUnitCount?: number; unitsPerSale?: number }[];
   buyingPrice?: number;
   stockQuantity?: number;
   lowStock?: boolean;

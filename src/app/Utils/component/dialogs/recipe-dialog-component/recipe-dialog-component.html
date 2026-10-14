@@ -1,0 +1,60 @@
+<div class="rc-dialog">
+  <div class="rc-header">
+    <h3>{{ 'RECIPE_FORM.TITLE' | translate: { name: data.serviceName } }}</h3>
+    <button type="button" class="rc-icon-btn" (click)="cancel()" [attr.aria-label]="'COMMON.CLOSE' | translate">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <p class="rc-hint">{{ 'RECIPE_FORM.HINT' | translate }}</p>
+
+  <div class="rc-first">
+    <mat-icon>inventory_2</mat-icon>
+    <span>{{ 'RECIPE_FORM.FIRST' | translate }}: <strong>{{ data.primaryLabel }}</strong></span>
+  </div>
+
+  <h4 class="rc-section">{{ 'RECIPE_FORM.OTHERS' | translate }}</h4>
+  @for (row of rows; track $index; let i = $index) {
+    <div class="rc-row">
+      <select class="rc-item" [(ngModel)]="row.stockItemUid" (ngModelChange)="pick(row)">
+        <option value="">{{ 'RECIPE_FORM.CHOOSE_ITEM' | translate }}</option>
+        @for (s of choicesFor(i); track s.uid) {
+          <option [value]="s.uid">{{ s.serviceName }}</option>
+        }
+      </select>
+      <input type="number" min="1" step="1" class="rc-count" [(ngModel)]="row.count" [attr.aria-label]="'RECIPE_FORM.HOW_MANY' | translate" />
+      @if (row.stockItemUid && measuresOf(row.stockItemUid).length) {
+        <select class="rc-unit" [(ngModel)]="row.unit">
+          @for (m of measuresOf(row.stockItemUid); track m) {
+            <option [value]="m">{{ m }}</option>
+          }
+        </select>
+      } @else {
+        <span class="rc-unit-text">{{ unitOf(row.stockItemUid) }}</span>
+      }
+      <button type="button" class="rc-icon-btn" (click)="remove(i)" [attr.aria-label]="'COMMON.DELETE' | translate">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  } @empty {
+    <p class="rc-empty">{{ 'RECIPE_FORM.EMPTY' | translate }}</p>
+  }
+
+  <button type="button" class="row-action view rc-add" (click)="add()">
+    <mat-icon>add</mat-icon>
+    <span>{{ 'RECIPE_FORM.ADD' | translate }}</span>
+  </button>
+
+  @if (error) {
+    <p class="rc-error">{{ error | translate }}</p>
+  }
+
+  <div class="rc-actions">
+    <button type="button" class="row-action view" (click)="none()">
+      <span>{{ 'RECIPE_FORM.NONE' | translate }}</span>
+    </button>
+    <button type="button" class="row-action edit" (click)="save()">
+      <mat-icon>save</mat-icon>
+      <span>{{ 'COMMON.SUBMIT' | translate }}</span>
+    </button>
+  </div>
+</div>

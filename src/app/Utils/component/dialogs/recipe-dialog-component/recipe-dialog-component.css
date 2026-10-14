@@ -1,0 +1,108 @@
+.rc-dialog {
+  padding: 20px;
+  text-align: left;
+  color: var(--color-text);
+  background: var(--color-surface);
+}
+
+.rc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* The title is the largest text in the dialog. */
+.rc-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.rc-hint,
+.rc-empty {
+  margin: 6px 0 12px;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.rc-first {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md, 8px);
+  font-size: 13px;
+}
+
+.rc-first mat-icon {
+  color: var(--color-primary);
+}
+
+.rc-section {
+  margin: 16px 0 8px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.rc-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.rc-row select,
+.rc-row input {
+  padding: 8px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-size: 13px;
+  min-width: 0;
+}
+
+.rc-item { flex: 2; }
+.rc-count { width: 72px; }
+.rc-unit { flex: 1; }
+.rc-unit-text { flex: 1; font-size: 13px; color: var(--color-text-muted); }
+
+.rc-icon-btn {
+  display: flex;
+  padding: 4px;
+  border: none;
+  border-radius: 8px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.rc-icon-btn mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
+.rc-add {
+  margin-top: 4px;
+}
+
+.rc-error {
+  margin: 10px 0 0;
+  color: #c62828;
+  font-size: 12px;
+}
+
+.rc-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+@media (max-width: 520px) {
+  .rc-row { flex-wrap: wrap; }
+  .rc-item { flex-basis: 100%; }
+}

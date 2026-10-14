@@ -35,9 +35,19 @@
               }
             </div>
 
+            <!-- Counted in the store only, or every service (made-from and uncounted ones too). -->
+            <div class="store-scope" role="group">
+              <button type="button" class="scope-btn" [class.active]="!showAll" (click)="setShowAll(false)">
+                {{ 'STORE_PAGE.SCOPE_COUNTED' | translate }}
+              </button>
+              <button type="button" class="scope-btn" [class.active]="showAll" (click)="setShowAll(true)">
+                {{ 'STORE_PAGE.SCOPE_ALL' | translate }}
+              </button>
+            </div>
+
             <div class="store-summary">
               <span class="summary-number">{{ totalElements }}</span>
-              <span class="summary-label">{{ 'SERVICE_PAGE.SERVICES_LABEL' | translate }}</span>
+              <span class="summary-label">{{ (showAll ? 'SERVICE_PAGE.SERVICES_LABEL' : 'STORE_PAGE.COUNTED_LABEL') | translate }}</span>
             </div>
           </div>
 

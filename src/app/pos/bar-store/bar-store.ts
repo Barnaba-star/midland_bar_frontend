@@ -208,9 +208,10 @@ export class BarStore implements OnInit {
       page: this.page,
       size: this.size,
       searchParam: this.searchTerm || undefined,
-      // Only what has a count of its own: bottles and stock items. A
-      // mshikaki or a nusu is counted through the meat it is made from.
-      filter: 'COUNTED',
+      // By default only what has a count of its own: bottles and stock
+      // items. A mshikaki or a nusu is counted through the meat it is made
+      // from. "Zote" lists every service as well.
+      filter: this.showAll ? undefined : 'COUNTED',
     };
 
     this.barService.findBarServicePage(params).subscribe({
@@ -241,6 +242,18 @@ export class BarStore implements OnInit {
     input.value = '';
     clearTimeout(this.searchTimer);
     this.searchTerm = '';
+    this.page = 0;
+    this.loadStock();
+  }
+
+  /** Zinazohesabiwa (counted in the store) or Zote (every service). */
+  showAll = false;
+
+  setShowAll(all: boolean) {
+    if (this.showAll === all) {
+      return;
+    }
+    this.showAll = all;
     this.page = 0;
     this.loadStock();
   }

@@ -124,6 +124,28 @@
   cursor: pointer;
 }
 
+.store-scope {
+  display: inline-flex;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.scope-btn {
+  padding: 6px 14px;
+  border: 0;
+  background: transparent;
+  color: var(--color-text);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.scope-btn.active {
+  background: var(--color-primary);
+  color: #ffffff;
+}
+
 .store-summary {
   min-width: 80px;
   display: flex;

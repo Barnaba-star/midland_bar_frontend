@@ -82,7 +82,7 @@
           @let st = s | stockPacks;
           @let left = available(s);
           <button type="button" class="result" (click)="choose(s)" [class.out]="left === 0">
-            <mat-icon class="result-icon">{{ s.category === 'FOOD' ? 'restaurant' : 'local_bar' }}</mat-icon>
+            <mat-icon class="result-icon">{{ s.category | categoryIcon }}</mat-icon>
             <span class="result-main">
               <span class="result-name">{{ s.serviceName }}</span>
               <small>{{ s.serviceCode }}</small>
@@ -113,7 +113,7 @@
   } @else {
     <!-- STEP 2: how many -->
     <div class="chosen">
-      <mat-icon class="result-icon">{{ selected.category === 'FOOD' ? 'restaurant' : 'local_bar' }}</mat-icon>
+      <mat-icon class="result-icon">{{ selected.category | categoryIcon }}</mat-icon>
       <div class="result-main">
         <span class="result-name">{{ selected.serviceName }}</span>
         <small>{{ selected.serviceCode }} · Tshs {{ selected.price | number }} {{ 'SALE_ITEM.EACH' | translate }}</small>

@@ -270,6 +270,11 @@
   color: #856404;
 }
 
+.category-chip.shisha {
+  background: color-mix(in srgb, #7b3fa0 14%, transparent);
+  color: #7b3fa0;
+}
+
 .category-chip mat-icon {
   width: 14px;
   height: 14px;

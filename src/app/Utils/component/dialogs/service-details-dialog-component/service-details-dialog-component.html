@@ -40,7 +40,7 @@
       <mat-icon>category</mat-icon>
       <div>
         <span>{{ 'SETTING_PAGE.COL_CATEGORY' | translate }}</span>
-        <strong>{{ (service?.category === 'FOOD' ? 'SETTING_PAGE.CATEGORY_FOOD' : 'SETTING_PAGE.CATEGORY_DRINK') | translate }}</strong>
+        <strong>{{ service?.category | categoryLabel | translate }}</strong>
       </div>
     </div>
 

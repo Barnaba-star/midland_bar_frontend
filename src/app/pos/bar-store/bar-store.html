@@ -86,9 +86,9 @@
 
                     <!-- Category -->
                     <td>
-                      <span class="category-chip" [class.food]="product.category === 'FOOD'">
-                        <mat-icon>{{ product.category === 'FOOD' ? 'restaurant' : 'local_bar' }}</mat-icon>
-                        {{ (product.category === 'FOOD' ? 'SETTING_PAGE.CATEGORY_FOOD' : 'SETTING_PAGE.CATEGORY_DRINK') | translate }}
+                      <span class="category-chip" [class.food]="product.category === 'FOOD'" [class.shisha]="product.category === 'SHISHA'">
+                        <mat-icon>{{ product.category | categoryIcon }}</mat-icon>
+                        {{ product.category | categoryLabel | translate }}
                       </span>
                     </td>
 

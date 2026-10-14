@@ -411,7 +411,7 @@
               <!-- Category -->
               <td>
                 <span class="service-code">
-                  {{ (service.category === 'FOOD' ? 'SETTING_PAGE.CATEGORY_FOOD' : 'SETTING_PAGE.CATEGORY_DRINK') | translate }}
+                  {{ service.category | categoryLabel | translate }}
                 </span>
                 @if (service.kind === 'STOCK_ITEM') {
                   <span class="kind-badge">{{ 'PRODUCT_FORM.KIND_STOCK_ITEM' | translate }}</span>

@@ -28,6 +28,7 @@ import { LiveChanges } from '../../Utils/services/live-changes';
 import { landingFor } from '../../login/landing-for';
 import { Authentication } from '../../Utils/services/authentication';
 import { SalesOpened, StaffOrder, StaffSellStaff } from '../BarModel';
+import { CategoryIconPipe } from '../../Utils/pipes/product-category.pipe';
 
 /**
  * Staff Sell, a module of its own beside POS, Settings and Admin. Staff are
@@ -47,7 +48,7 @@ import { SalesOpened, StaffOrder, StaffSellStaff } from '../BarModel';
  */
 @Component({
   selector: 'app-bar-staff-sell',
-  imports: [BrandWord, ShiftBar, EmptyStateComponent, MatIconModule, FormsModule, DecimalPipe, TranslatePipe],
+  imports: [CategoryIconPipe, BrandWord, ShiftBar, EmptyStateComponent, MatIconModule, FormsModule, DecimalPipe, TranslatePipe],
   templateUrl: './bar-staff-sell.html',
   styleUrl: './bar-staff-sell.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

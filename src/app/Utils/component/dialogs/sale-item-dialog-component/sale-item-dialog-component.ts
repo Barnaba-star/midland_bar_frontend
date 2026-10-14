@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { TranslatePipe } from '@ngx-translate/core';
 import { SellableItems } from '../../../services/sellable-items';
 import { StockPacksPipe } from '../../../pipes/stock-packs.pipe';
+import { CategoryIconPipe } from '../../../pipes/product-category.pipe';
 
 /** What the dialog hands back: one service and how many of it. */
 export interface SaleItemResult {
@@ -24,7 +25,7 @@ export interface SaleItemResult {
  */
 @Component({
   selector: 'app-sale-item-dialog-component',
-  imports: [FormsModule, MatIconModule, DecimalPipe, TranslatePipe, StockPacksPipe],
+  imports: [CategoryIconPipe, FormsModule, MatIconModule, DecimalPipe, TranslatePipe, StockPacksPipe],
   templateUrl: './sale-item-dialog-component.html',
   styleUrl: './sale-item-dialog-component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -185,7 +186,7 @@ export class SaleItemDialogComponent implements OnInit, AfterViewInit {
 
   /** Staff Sell, a drink: ask whether the customer wants it cold or warm. */
   get asksServing(): boolean {
-    return !!this.data?.askServing && !!this.selected && this.selected.category !== 'FOOD';
+    return !!this.data?.askServing && !!this.selected && this.selected.category !== 'FOOD' && this.selected.category !== 'SHISHA';
   }
 
   /** Tap the chosen one again to take it back. */

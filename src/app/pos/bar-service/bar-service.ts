@@ -11,11 +11,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { ServiceDetailsDialogComponent } from '../../Utils/component/dialogs/service-details-dialog-component/service-details-dialog-component';
 import { DecimalPipe } from '@angular/common';
 import { EmptyStateComponent } from '../../Utils/component/empty-state/empty-state';
+import { CategoryIconPipe, CategoryLabelPipe } from '../../Utils/pipes/product-category.pipe';
 
 
 @Component({
   selector: 'app-bar-service',
-  imports: [
+  imports: [CategoryIconPipe, CategoryLabelPipe, 
     EmptyStateComponent,Title2, MatIconModule, TranslatePipe, MatTooltipModule, DecimalPipe, UnitLabelPipe],
   templateUrl: './bar-service.html',
   styleUrl: './bar-service.css',

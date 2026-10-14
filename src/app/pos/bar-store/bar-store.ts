@@ -18,6 +18,7 @@ import { StockPacksPipe } from '../../Utils/pipes/stock-packs.pipe';
 import { ServiceBarMethod } from '../service-bar-method';
 import { isStoreKeeperOnly } from '../pos-role.guard';
 import { BarServiceEntity, StockReceiptDTO } from '../BarModel';
+import { CategoryIconPipe, CategoryLabelPipe } from '../../Utils/pipes/product-category.pipe';
 
 /** Where a product's count stands, for the status badge. */
 export type StockState = 'OUT' | 'LOW' | 'OK' | 'NOT_COUNTED';
@@ -30,7 +31,7 @@ export type StockState = 'OUT' | 'LOW' | 'OK' | 'NOT_COUNTED';
  */
 @Component({
   selector: 'app-bar-store',
-  imports: [EmptyStateComponent, Title2, MatIconModule, DecimalPipe, TranslatePipe, StockPacksPipe],
+  imports: [CategoryIconPipe, CategoryLabelPipe, EmptyStateComponent, Title2, MatIconModule, DecimalPipe, TranslatePipe, StockPacksPipe],
   templateUrl: './bar-store.html',
   styleUrl: './bar-store.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -32,6 +32,7 @@ import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatButtonModule } from "@angular/material/button";
 import { EmptyStateComponent } from '../../Utils/component/empty-state/empty-state';
 import { ComfirmDialogComponent } from '../../Utils/component/comfirm-dialog/comfirm-dialog';
+import { CategoryLabelPipe } from '../../Utils/pipes/product-category.pipe';
 
 export interface BarServiceEntity {
   uid?: string;
@@ -63,10 +64,11 @@ export interface BarServiceEntity {
   usageType?:string;
 }
 
-/** Stored as DRINK / FOOD - the backend's ProductCategory. */
+/** Stored as DRINK / FOOD / SHISHA - the backend's ProductCategory. */
 const PRODUCT_CATEGORY_OPTIONS = [
   { value: 'DRINK', label: 'SETTING_PAGE.CATEGORY_DRINK' },
-  { value: 'FOOD', label: 'SETTING_PAGE.CATEGORY_FOOD' }
+  { value: 'FOOD', label: 'SETTING_PAGE.CATEGORY_FOOD' },
+  { value: 'SHISHA', label: 'SETTING_PAGE.CATEGORY_SHISHA' }
 ];
 
 /** How stock is bought. '' = one unit at a time, no pack. */
@@ -90,7 +92,7 @@ const STOCK_UNIT_OPTIONS = [
 
 @Component({
   selector: 'app-bar-setting',
-  imports: [
+  imports: [CategoryLabelPipe, 
     OtherSplit, EmptyStateComponent,Title2, MatIconModule, RecordtableComponent, DecimalPipe, UpperCasePipe, CommonModule, FormsModule, MatMenuModule, MatPaginator, MatButtonModule, TranslatePipe, MatTooltipModule, UnitLabelPipe],
   templateUrl: './bar-setting.html',
   styleUrl: './bar-setting.css',

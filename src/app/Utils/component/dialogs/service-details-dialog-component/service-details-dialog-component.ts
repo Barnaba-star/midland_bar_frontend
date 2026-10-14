@@ -4,10 +4,11 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { DecimalPipe } from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
+import { CategoryLabelPipe } from '../../../pipes/product-category.pipe';
 
 @Component({
   selector: 'app-service-details-dialog-component',
-  imports: [MatIconModule, DecimalPipe, TranslatePipe, UnitLabelPipe],
+  imports: [CategoryLabelPipe, MatIconModule, DecimalPipe, TranslatePipe, UnitLabelPipe],
   templateUrl: './service-details-dialog-component.html',
   styleUrl: './service-details-dialog-component.css',
   changeDetection: ChangeDetectionStrategy.OnPush

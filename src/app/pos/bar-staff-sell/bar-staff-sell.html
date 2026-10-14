@@ -129,7 +129,7 @@
               @for (d of drinkMatches; track d.uid) {
                 @let left = drinkLeft(d);
                 <button type="button" class="drink-row" [class.out]="left === 0" (click)="pickDrink(d)">
-                  <mat-icon class="drink-icon">{{ d.category === 'FOOD' ? 'restaurant' : 'local_bar' }}</mat-icon>
+                  <mat-icon class="drink-icon">{{ d.category | categoryIcon }}</mat-icon>
                   <span class="drink-main">
                     <span class="drink-name">{{ d.serviceName }}</span>
                     @if (d.description) {

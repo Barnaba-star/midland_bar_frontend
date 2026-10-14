@@ -85,7 +85,7 @@
                 <div class="service-info">
 
                   <div class="service-avatar">
-                    <mat-icon>{{ service.category === 'FOOD' ? 'restaurant' : 'local_bar' }}</mat-icon>
+                    <mat-icon>{{ service.category | categoryIcon }}</mat-icon>
                   </div>
 
                   <div class="service-details">
@@ -113,7 +113,7 @@
               <!-- Category -->
               <td>
                 <span class="service-code">
-                  {{ (service.category === 'FOOD' ? 'SETTING_PAGE.CATEGORY_FOOD' : 'SETTING_PAGE.CATEGORY_DRINK') | translate }}
+                  {{ service.category | categoryLabel | translate }}
                 </span>
               </td>
 

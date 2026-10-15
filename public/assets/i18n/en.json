@@ -383,6 +383,7 @@
     "SCOPE_COUNTED": "Counted",
     "SCOPE_ALL": "All",
     "COUNTED_LABEL": "Counted in store",
+    "PAGE_INFO": "Page {{page}} of {{pages}} · {{from}}–{{to}} of {{total}}",
     "PAGE_VALUE": "Stock value on this page",
     "USED_TITLE": "Stock bought and used",
     "USED_SUBTITLE": "What came into the store and what went out over the dates you choose",

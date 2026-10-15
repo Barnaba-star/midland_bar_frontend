@@ -211,6 +211,16 @@
               </div>
             }
 
+            <div class="page-info">
+              {{ 'STORE_PAGE.PAGE_INFO' | translate: {
+                page: totalPages ? page + 1 : 0,
+                pages: totalPages,
+                from: totalElements ? page * size + 1 : 0,
+                to: page * size + products.length,
+                total: totalElements
+              } }}
+            </div>
+
             <div class="pagination-buttons">
               <button type="button" class="page-btn" [disabled]="page === 0" (click)="changePage(page - 1)">
                 <mat-icon>chevron_left</mat-icon>

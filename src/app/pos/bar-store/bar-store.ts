@@ -246,8 +246,8 @@ export class BarStore implements OnInit {
     this.loadStock();
   }
 
-  /** Zinazohesabiwa (counted in the store) or Zote (every service). */
-  showAll = false;
+  /** Zinazohesabiwa (counted in the store) or Zote (every service). Zote first, so every service can be paged through. */
+  showAll = true;
 
   setShowAll(all: boolean) {
     if (this.showAll === all) {

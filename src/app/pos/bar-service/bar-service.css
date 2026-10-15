@@ -2,6 +2,9 @@
 
 .action-container {
   width: 100%;
+  /* The global .action-container fixes it at 80vh, which cut the table's
+     pagination off the bottom - grow with the table instead. */
+  height: auto;
   min-height: 83vh;
 
   display: flex;

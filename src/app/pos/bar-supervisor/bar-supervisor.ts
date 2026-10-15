@@ -19,6 +19,8 @@ import { borrowCounterSession } from '../bar-staff-sell/counter-session';
 const POLL_MS = 15000;
 const SOUND_KEY = 'bar_supervisor_sound';
 const STATION_KEY = 'bar_supervisor_station';
+/** While orders wait, the alarm rings again this often until someone acts. */
+const REMIND_MS = 30000;
 
 /**
  * The supervisor's screen. Every order a staff member hands over at Staff
@@ -62,6 +64,13 @@ export class BarSupervisor implements OnInit, OnDestroy {
   private timer: ReturnType<typeof setInterval> | null = null;
   private live: Subscription | null = null;
   private audio: AudioContext | null = null;
+  private lastRing = 0;
+  /**
+   * The browser keeps sound off until the page is touched once. True while
+   * that is so - a banner asks for the one tap.
+   */
+  soundLocked = false;
+  private readonly unlock = () => this.unlockSound();
 
   /** A SUPERVISOR has only this screen; managers and above came from POS and can go back. */
   /** Someone whose whole app is this queue (COUNTER, CHEF, an older SUPERVISOR) - no way back to POS. */
@@ -160,6 +169,9 @@ export class BarSupervisor implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    // Any first tap or key on the page turns sound on for the rest of the shift.
+    ['pointerdown', 'keydown', 'touchstart'].forEach((e) => document.addEventListener(e, this.unlock, { capture: true }));
+    this.checkSoundLock();
     this.load();
     this.timer = setInterval(() => this.load(), POLL_MS);
     // A staff member pressed Send: the queue arrives with the nudge - shown now, no fetch.
@@ -173,6 +185,7 @@ export class BarSupervisor implements OnInit, OnDestroy {
       clearInterval(this.timer);
     }
     this.live?.unsubscribe();
+    ['pointerdown', 'keydown', 'touchstart'].forEach((e) => document.removeEventListener(e, this.unlock, { capture: true }));
     this.audio?.close().catch(() => undefined);
   }
 
@@ -227,6 +240,9 @@ export class BarSupervisor implements OnInit, OnDestroy {
     this.now = Date.now();
     this.loaded = true;
     if (arrived.length) {
+      this.beep();
+    } else if (this.orders.length && Date.now() - this.lastRing >= REMIND_MS) {
+      // Still waiting: ring again so a busy counter cannot miss it.
       this.beep();
     }
     this.cdr.markForCheck();
@@ -313,6 +329,12 @@ export class BarSupervisor implements OnInit, OnDestroy {
     this.cdr.markForCheck();
   }
 
+  /** The banner: sound on, and a ring so they hear how loud it is. */
+  toggleSoundOn(): void {
+    this.unlockSound();
+    this.beep();
+  }
+
   toggleSound(): void {
     this.sound = !this.sound;
     try {
@@ -321,7 +343,10 @@ export class BarSupervisor implements OnInit, OnDestroy {
       // Remembering is a convenience only.
     }
     if (this.sound) {
+      this.unlockSound();
       this.beep();
+    } else {
+      this.checkSoundLock();
     }
   }
 
@@ -364,28 +389,82 @@ export class BarSupervisor implements OnInit, OnDestroy {
     this.router.navigate(['/login']);
   }
 
-  /** A short two-note chime. Browsers only allow it after the page has been clicked once. */
+  /** The page was touched: wake the sound up (browsers start it asleep). */
+  private unlockSound(): void {
+    try {
+      this.audio ??= new AudioContext();
+      if (this.audio.state === 'suspended') {
+        this.audio.resume().finally(() => this.checkSoundLock());
+      } else {
+        this.checkSoundLock();
+      }
+    } catch {
+      // No sound on this device.
+    }
+  }
+
+  private checkSoundLock(): void {
+    let locked = false;
+    try {
+      this.audio ??= new AudioContext();
+      locked = this.sound && this.audio.state !== 'running';
+    } catch {
+      locked = false;
+    }
+    if (locked !== this.soundLocked) {
+      this.soundLocked = locked;
+      this.cdr.markForCheck();
+    }
+  }
+
+  /**
+   * A loud alarm for a new order: three rings of a two-tone bell, about two
+   * and a half seconds, through a compressor so it is as loud as the device
+   * allows. Browsers only allow it after the page has been touched once.
+   */
   private beep(): void {
     if (!this.sound) {
       return;
     }
+    this.lastRing = Date.now();
     try {
       this.audio ??= new AudioContext();
       const ctx = this.audio;
-      [880, 1320].forEach((freq, i) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.frequency.value = freq;
-        gain.gain.setValueAtTime(0.0001, ctx.currentTime + i * 0.16);
-        gain.gain.exponentialRampToValueAtTime(0.25, ctx.currentTime + i * 0.16 + 0.02);
-        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + i * 0.16 + 0.15);
-        osc.connect(gain).connect(ctx.destination);
-        osc.start(ctx.currentTime + i * 0.16);
-        osc.stop(ctx.currentTime + i * 0.16 + 0.16);
-      });
+      if (ctx.state === 'suspended') {
+        ctx.resume().catch(() => undefined);
+      }
+      const loud = ctx.createDynamicsCompressor();
+      loud.threshold.value = -30;
+      loud.knee.value = 0;
+      loud.ratio.value = 20;
+      const master = ctx.createGain();
+      master.gain.value = 1;
+      loud.connect(master).connect(ctx.destination);
+
+      const t0 = ctx.currentTime + 0.05;
+      for (let ring = 0; ring < 3; ring++) {
+        [988, 1319, 988, 1319].forEach((freq, i) => {
+          const at = t0 + ring * 0.85 + i * 0.14;
+          // Square and sawtooth carry far better through a noisy bar than a sine.
+          for (const type of ['square', 'sawtooth'] as OscillatorType[]) {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = type;
+            osc.frequency.value = type === 'square' ? freq : freq * 2;
+            gain.gain.setValueAtTime(0.0001, at);
+            gain.gain.exponentialRampToValueAtTime(type === 'square' ? 0.9 : 0.35, at + 0.01);
+            gain.gain.setValueAtTime(type === 'square' ? 0.9 : 0.35, at + 0.11);
+            gain.gain.exponentialRampToValueAtTime(0.0001, at + 0.13);
+            osc.connect(gain).connect(loud);
+            osc.start(at);
+            osc.stop(at + 0.14);
+          }
+        });
+      }
     } catch {
       // No sound available - the flashing card still says it.
     }
+    this.checkSoundLock();
   }
 
   private readSound(): boolean {

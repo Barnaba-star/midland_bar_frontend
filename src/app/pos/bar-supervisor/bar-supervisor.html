@@ -34,6 +34,13 @@
   </header>
 
   <main class="sup-main">
+    <!-- The browser holds sound back until the page is touched once. -->
+    @if (soundLocked) {
+      <button type="button" class="sup-sound-lock" (click)="toggleSoundOn()">
+        <mat-icon>volume_up</mat-icon>
+        <span>{{ 'SUPERVISOR_PAGE.SOUND_UNLOCK' | translate }}</span>
+      </button>
+    }
     <!-- Went onto bills while there was no internet: no one checked them then. -->
     @if (offlineOrders.length) {
       <section class="sup-offline">

@@ -291,7 +291,7 @@
         </div>
       }
 
-     @if (serviceDataSource.data.length > 0) {
+     @if (serviceDataSource.data.length > 0 || serviceSearch) {
 
   <div class="service-table-card">
 
@@ -310,6 +310,24 @@
     </div>
 
   </div>
+
+ <!-- Search by name, code or description, as on the Services and Store pages. -->
+ <div class="service-search">
+   <mat-icon>search</mat-icon>
+   <input
+     #serviceSearchBox
+     type="text"
+     enterkeyhint="search"
+     [placeholder]="'SERVICE_PAGE.SEARCH_PH' | translate"
+     [value]="serviceSearch"
+     (input)="onServiceSearch($event)"
+   />
+   @if (serviceSearch) {
+     <button type="button" class="clear-search" (click)="clearServiceSearch(serviceSearchBox)" [attr.aria-label]="'COMMON.CLOSE' | translate">
+       <mat-icon>close</mat-icon>
+     </button>
+   }
+ </div>
 
  <div class="header-right">
   <button
@@ -486,6 +504,12 @@
 
             </tr>
 
+          } @empty {
+            <tr>
+              <td colspan="8" class="no-match">
+                {{ 'SERVICE_PAGE.NO_MATCH' | translate: { term: serviceSearch } }}
+              </td>
+            </tr>
           }
 
         </tbody>

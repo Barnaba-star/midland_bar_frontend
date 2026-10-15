@@ -529,6 +529,29 @@ tableConfig = {
   ] as TableColumn[]
 };
 
+/** Services tab search: name, code or description. */
+serviceSearch = '';
+private serviceSearchTimer?: ReturnType<typeof setTimeout>;
+
+onServiceSearch(event: Event) {
+  const value = (event.target as HTMLInputElement).value;
+  clearTimeout(this.serviceSearchTimer);
+  // Wait for a pause in typing rather than asking the backend per keystroke.
+  this.serviceSearchTimer = setTimeout(() => {
+    this.serviceSearch = value.trim();
+    this.page = 0;
+    this.findBarServicePage();
+  }, 300);
+}
+
+clearServiceSearch(input: HTMLInputElement) {
+  input.value = '';
+  clearTimeout(this.serviceSearchTimer);
+  this.serviceSearch = '';
+  this.page = 0;
+  this.findBarServicePage();
+}
+
 findBarServicePage() {
   this.barServiceAddForm = false;
   this.barServiceInfo = false;
@@ -536,7 +559,8 @@ findBarServicePage() {
 
   this.param = {
     page: this.page,
-    size: this.size
+    size: this.size,
+    searchParam: this.serviceSearch || undefined,
   };
 
   // Names for the recipes shown in the list ("+ Mchele 1 Sahani").

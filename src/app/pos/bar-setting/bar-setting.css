@@ -1439,6 +1439,57 @@ app-form{
   box-sizing: border-box;
 }
 
+.service-search {
+  flex: 1;
+  max-width: 360px;
+  margin: 0 16px;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 8px 12px;
+
+  border: 1px solid #e8dcc8;
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.service-search:focus-within {
+  border-color: var(--color-primary);
+}
+
+.service-search mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+  color: #a89c8a;
+}
+
+.service-search input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 13px;
+  color: #1d1812;
+}
+
+.service-search .clear-search {
+  display: flex;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.no-match {
+  padding: 24px;
+  text-align: center;
+  color: #a89c8a;
+}
+
 .header-left {
   display: flex;
   align-items: center;
@@ -2648,5 +2699,20 @@ mat-paginator {
   .stock-hint {
     flex-wrap: wrap;
     margin: 0 16px 14px;
+  }
+}
+
+@media (max-width: 900px) {
+  .service-table-header {
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 12px 18px;
+  }
+
+  .service-search {
+    order: 3;
+    flex-basis: 100%;
+    max-width: none;
+    margin: 0;
   }
 }

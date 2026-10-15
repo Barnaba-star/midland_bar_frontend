@@ -90,6 +90,8 @@ export class BarStaffSell implements OnInit, OnDestroy {
   private poll: ReturnType<typeof setInterval> | null = null;
 
   ngOnInit(): void {
+    // Sound may only start from a tap; the first one on the page wakes it for the shift.
+    ['pointerdown', 'keydown', 'touchstart'].forEach((e) => document.addEventListener(e, this.wakeSound, { capture: true }));
     // From here on the till stays in Staff Sell until a manager lets it out.
     lockStaffSell();
     // Signed in with their own code + PIN: straight to their bills, no keypad.
@@ -175,6 +177,8 @@ export class BarStaffSell implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    ['pointerdown', 'keydown', 'touchstart'].forEach((e) => document.removeEventListener(e, this.wakeSound, { capture: true }));
+    this.audio?.close().catch(() => undefined);
     this.stopPoll();
     this.live?.unsubscribe();
   }
@@ -392,7 +396,9 @@ export class BarStaffSell implements OnInit, OnDestroy {
   }
 
   private setOrders(orders: StaffOrder[] | undefined): void {
+    const before = this.orders.filter((o) => o.status === 'SENT');
     this.orders = orders ?? [];
+    this.tellDecided(before);
     if (this.waitingCount > 0) {
       this.startPoll();
     } else {
@@ -790,6 +796,72 @@ export class BarStaffSell implements OnInit, OnDestroy {
   }
 
   /** Where an order is received, for the words on the screen. */
+  private audio: AudioContext | null = null;
+  private readonly wakeSound = () => {
+    try {
+      this.audio ??= new AudioContext();
+      if (this.audio.state === 'suspended') {
+        this.audio.resume().catch(() => undefined);
+      }
+    } catch {
+      // No sound on this device.
+    }
+  };
+
+  /**
+   * Orders that were waiting and now are not: received (a bright rising
+   * chime and a note "ready") or turned back (a low double tone) - so the
+   * waiter knows without watching the screen.
+   */
+  private tellDecided(before: StaffOrder[]): void {
+    if (!before.length) {
+      return;
+    }
+    const now = new Map(this.orders.map((o) => [o.uid, o]));
+    const rejected = before.filter((o) => now.get(o.uid)?.status === 'REJECTED');
+    const received = before.filter((o) => !now.has(o.uid) || now.get(o.uid)?.status === 'RECEIVED');
+    if (received.length) {
+      this.chime([1047, 1319, 1568, 2093]);
+      const place = [...new Set(received.map((o) => this.translate.instant(this.placeKey(o))))].join(' / ');
+      this.alertService.show('success', this.translate.instant('STAFF_SELL_PAGE.ORDER_READY', { place }));
+    } else if (rejected.length) {
+      this.chime([440, 330]);
+    }
+  }
+
+  /** A short loud run of notes. */
+  private chime(notes: number[]): void {
+    try {
+      this.audio ??= new AudioContext();
+      const ctx = this.audio;
+      if (ctx.state === 'suspended') {
+        ctx.resume().catch(() => undefined);
+      }
+      const loud = ctx.createDynamicsCompressor();
+      loud.threshold.value = -30;
+      loud.ratio.value = 20;
+      loud.connect(ctx.destination);
+      const t0 = ctx.currentTime + 0.05;
+      for (let round = 0; round < 2; round++) {
+        notes.forEach((freq, i) => {
+          const at = t0 + round * (notes.length * 0.13 + 0.25) + i * 0.13;
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'square';
+          osc.frequency.value = freq;
+          gain.gain.setValueAtTime(0.0001, at);
+          gain.gain.exponentialRampToValueAtTime(0.8, at + 0.01);
+          gain.gain.exponentialRampToValueAtTime(0.0001, at + 0.2);
+          osc.connect(gain).connect(loud);
+          osc.start(at);
+          osc.stop(at + 0.21);
+        });
+      }
+    } catch {
+      // No sound - the note on screen still says it.
+    }
+  }
+
   placeKey(order: StaffOrder): string {
     return 'STAFF_SELL_PAGE.PLACE_' + (order.station || 'COUNTER');
   }

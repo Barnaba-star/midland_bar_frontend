@@ -403,9 +403,20 @@
   background: #fffaf1;
 }
 
+/* Sent, not received yet: orange and breathing until the station takes it. */
 .order-block.sent {
-  border: 1px solid #f3d9a8;
-  background: #fdf1dc;
+  border: 2px solid #f08c00;
+  background: #fff1d6;
+  animation: order-waiting 1.6s ease-in-out infinite;
+}
+
+.order-block.sent .order-tag {
+  color: #b35c00;
+  font-weight: 700;
+}
+
+@keyframes order-waiting {
+  50% { box-shadow: 0 0 0 4px rgba(240, 140, 0, 0.25); }
 }
 
 .order-block.rejected {

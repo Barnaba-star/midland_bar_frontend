@@ -35,6 +35,12 @@
 
   <main class="sup-main">
     <!-- The browser holds sound back until the page is touched once. -->
+    @if (sound && notifyState === 'default') {
+      <button type="button" class="sup-sound-lock sup-notify-ask" (click)="askNotify()">
+        <mat-icon>notifications_active</mat-icon>
+        <span>{{ 'SUPERVISOR_PAGE.NOTIFY_ASK' | translate }}</span>
+      </button>
+    }
     @if (soundLocked) {
       <button type="button" class="sup-sound-lock" (click)="toggleSoundOn()">
         <mat-icon>volume_up</mat-icon>

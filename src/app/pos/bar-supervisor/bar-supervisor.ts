@@ -241,6 +241,7 @@ export class BarSupervisor implements OnInit, OnDestroy {
     this.loaded = true;
     if (arrived.length) {
       this.beep();
+      this.notify(arrived);
     } else if (this.orders.length && Date.now() - this.lastRing >= REMIND_MS) {
       // Still waiting: ring again so a busy counter cannot miss it.
       this.beep();
@@ -389,12 +390,50 @@ export class BarSupervisor implements OnInit, OnDestroy {
     this.router.navigate(['/login']);
   }
 
+  /** The computer's own notifications (Windows / Mac) - they sound even before the page is touched. */
+  notifyState: NotificationPermission | 'unsupported' = typeof Notification === 'undefined' ? 'unsupported' : Notification.permission;
+
+  askNotify(): void {
+    if (typeof Notification === 'undefined') {
+      return;
+    }
+    Notification.requestPermission().then((p) => {
+      this.notifyState = p;
+      this.cdr.markForCheck();
+    });
+  }
+
+  private notify(arrived: StaffOrder[]): void {
+    if (!this.sound || typeof Notification === 'undefined' || Notification.permission !== 'granted') {
+      return;
+    }
+    try {
+      const first = arrived[0];
+      const body = arrived.length === 1
+        ? `${first.staffName || first.staffCode} · ${first.lines.map((l) => `${l.serviceName} x${l.quantity}`).join(', ')}`
+        : this.translate.instant('SUPERVISOR_PAGE.NOTIFY_MANY', { count: arrived.length });
+      const n = new Notification(this.translate.instant('SUPERVISOR_PAGE.NOTIFY_TITLE'), {
+        body,
+        tag: 'baronix-new-order',
+        renotify: true,
+        requireInteraction: true,
+        silent: false,
+      } as NotificationOptions);
+      n.onclick = () => {
+        window.focus();
+        n.close();
+      };
+    } catch {
+      // Some browsers only allow notifications from a service worker - the alarm still rings.
+    }
+  }
+
   /** The page was touched: wake the sound up (browsers start it asleep). */
   private unlockSound(): void {
     try {
-      this.audio ??= new AudioContext();
-      if (this.audio.state === 'suspended') {
-        this.audio.resume().finally(() => this.checkSoundLock());
+      this.ctx();
+      if (this.audio!.state === 'suspended') {
+        this.audio!.resume().finally(() => this.checkSoundLock());
       } else {
         this.checkSoundLock();
       }
@@ -403,11 +442,20 @@ export class BarSupervisor implements OnInit, OnDestroy {
     }
   }
 
+  /** One context for the page; the banner follows its state. */
+  private ctx(): AudioContext {
+    if (!this.audio) {
+      this.audio = new AudioContext();
+      this.audio.onstatechange = () => this.checkSoundLock();
+    }
+    return this.audio;
+  }
+
   private checkSoundLock(): void {
     let locked = false;
     try {
-      this.audio ??= new AudioContext();
-      locked = this.sound && this.audio.state !== 'running';
+      this.ctx();
+      locked = this.sound && this.ctx().state !== 'running';
     } catch {
       locked = false;
     }
@@ -428,8 +476,7 @@ export class BarSupervisor implements OnInit, OnDestroy {
     }
     this.lastRing = Date.now();
     try {
-      this.audio ??= new AudioContext();
-      const ctx = this.audio;
+      const ctx = this.ctx();
       if (ctx.state === 'suspended') {
         ctx.resume().catch(() => undefined);
       }

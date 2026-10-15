@@ -615,3 +615,9 @@
 @keyframes sup-sound-pulse {
   50% { opacity: 0.75; }
 }
+
+.sup-notify-ask {
+  background: #f5a524;
+  color: #1d1812;
+  animation: none;
+}

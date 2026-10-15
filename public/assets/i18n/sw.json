@@ -1166,7 +1166,8 @@
     "ACCOUNT_NAME_PLACEHOLDER": "Jina lilivyo kwenye akaunti"
   },
   "MAIN_LOGO": {
-    "CHANGE": "Badilisha Logo ya Kampuni"
+    "CHANGE": "Badilisha Logo ya Kampuni",
+    "REMOVE": "Ondoa Logo ya Kampuni"
   },
   "CHANGE_PASSWORD_DIALOG": {
     "TITLE": "Badilisha Nenosiri",

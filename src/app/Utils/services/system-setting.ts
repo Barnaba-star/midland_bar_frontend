@@ -24,4 +24,9 @@ export class SystemSettingService {
   uploadLogo(file: FormData): Observable<Response<SystemSettingData>> {
     return this.http.post<Response<SystemSettingData>>(`${this.baseUrl}/uploadLogo`, file);
   }
+
+  /** Back to the BaronixTZ logo. */
+  removeLogo(): Observable<Response<SystemSettingData>> {
+    return this.http.post<Response<SystemSettingData>>(`${this.baseUrl}/removeLogo`, null);
+  }
 }

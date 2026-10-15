@@ -741,6 +741,21 @@
   transform: translateX(-50%) scale(1.08);
 }
 
+/* With a logo of the branch's own: camera and remove side by side. */
+.logo-upload-btn--pair {
+  left: calc(50% - 20px);
+}
+
+.logo-remove-btn {
+  left: calc(50% + 20px);
+  padding: 0;
+  background: #c0392b;
+}
+
+.logo-remove-btn:hover {
+  background: #962d22;
+}
+
 .logo-upload-btn mat-icon {
   width: 16px;
   height: 16px;

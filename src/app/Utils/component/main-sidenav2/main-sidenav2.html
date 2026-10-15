@@ -508,6 +508,7 @@
 
           <label
             class="logo-upload-btn"
+            [class.logo-upload-btn--pair]="hasOwnLogo"
             [matTooltip]="'MAIN_LOGO.CHANGE' | translate"
           >
             <mat-icon>photo_camera</mat-icon>
@@ -519,6 +520,18 @@
               hidden
             />
           </label>
+
+          @if (hasOwnLogo) {
+            <button
+              type="button"
+              class="logo-upload-btn logo-remove-btn"
+              [matTooltip]="'MAIN_LOGO.REMOVE' | translate"
+              [attr.aria-label]="'MAIN_LOGO.REMOVE' | translate"
+              (click)="removeLogo()"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          }
 
         }
 

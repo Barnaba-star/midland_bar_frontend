@@ -1166,7 +1166,8 @@
     "ACCOUNT_NAME_PLACEHOLDER": "The name the account is held in"
   },
   "MAIN_LOGO": {
-    "CHANGE": "Change Company Logo"
+    "CHANGE": "Change Company Logo",
+    "REMOVE": "Remove company logo"
   },
   "CHANGE_PASSWORD_DIALOG": {
     "TITLE": "Change Password",

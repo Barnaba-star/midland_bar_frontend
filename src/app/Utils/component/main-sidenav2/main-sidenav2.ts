@@ -132,6 +132,9 @@ export class MainSidenav2 implements OnInit, OnDestroy {
   @Input() logoUrl = 'assets/images/baronix-logo.png';
 
   canManageLogo = false;
+  /** The branch has put up a logo of its own (so there is one to take off). */
+  hasOwnLogo = false;
+  private readonly defaultLogoUrl = 'assets/images/baronix-logo.png';
 
   // CASHIER only works the till: the header leaves out Notifications,
   // Settings, Help and Subscribe for them.
@@ -518,6 +521,7 @@ export class MainSidenav2 implements OnInit, OnDestroy {
 
       next: (res) => {
 
+        this.hasOwnLogo = !!res.data?.logoImage;
         if (res.data?.logoImage) {
           this.uploadedImage.load(res.data.logoImage).subscribe((url) => {
             this.logoUrl = url ?? this.logoUrl;
@@ -528,6 +532,19 @@ export class MainSidenav2 implements OnInit, OnDestroy {
 
       error: (error) => {
         console.error('Error loading system logo:', error);
+      },
+    });
+  }
+
+  removeLogo(): void {
+    this.systemSettingService.removeLogo().subscribe({
+      next: () => {
+        this.hasOwnLogo = false;
+        this.logoUrl = this.defaultLogoUrl;
+        this.cdr.markForCheck();
+      },
+      error: (error) => {
+        console.error('Error removing system logo:', error);
       },
     });
   }
@@ -550,6 +567,7 @@ export class MainSidenav2 implements OnInit, OnDestroy {
 
         input.value = '';
 
+        this.hasOwnLogo = !!res.data?.logoImage;
         if (res.data?.logoImage) {
           this.uploadedImage.load(res.data.logoImage).subscribe((url) => {
             this.logoUrl = url ?? this.logoUrl;

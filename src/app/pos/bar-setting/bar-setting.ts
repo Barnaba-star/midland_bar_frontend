@@ -72,7 +72,8 @@ const PRODUCT_CATEGORY_OPTIONS = [
   { value: 'DRINK', label: 'SETTING_PAGE.CATEGORY_DRINK' },
   { value: 'FOOD', label: 'SETTING_PAGE.CATEGORY_FOOD' },
   { value: 'SHISHA', label: 'SETTING_PAGE.CATEGORY_SHISHA' },
-  { value: 'POOL', label: 'SETTING_PAGE.CATEGORY_POOL' }
+  { value: 'POOL', label: 'SETTING_PAGE.CATEGORY_POOL' },
+  { value: 'JUICE', label: 'SETTING_PAGE.CATEGORY_JUICE' }
 ];
 
 /** How stock is bought. '' = one unit at a time, no pack. */

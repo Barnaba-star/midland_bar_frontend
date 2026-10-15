@@ -96,7 +96,7 @@
 
                     <!-- Category -->
                     <td>
-                      <span class="category-chip" [class.food]="product.category === 'FOOD'" [class.shisha]="product.category === 'SHISHA'" [class.pool]="product.category === 'POOL'">
+                      <span class="category-chip" [class.food]="product.category === 'FOOD'" [class.shisha]="product.category === 'SHISHA'" [class.pool]="product.category === 'POOL'" [class.juice]="product.category === 'JUICE'">
                         <mat-icon>{{ product.category | categoryIcon }}</mat-icon>
                         {{ product.category | categoryLabel | translate }}
                       </span>

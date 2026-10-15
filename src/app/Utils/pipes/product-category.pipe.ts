@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-/** The backend's ProductCategory: DRINK, FOOD, SHISHA or POOL (pool table games). */
-export const PRODUCT_CATEGORIES = ['DRINK', 'FOOD', 'SHISHA', 'POOL'] as const;
+/** The backend's ProductCategory: DRINK, FOOD, SHISHA, POOL (pool table games) or JUICE (fresh juice). */
+export const PRODUCT_CATEGORIES = ['DRINK', 'FOOD', 'SHISHA', 'POOL', 'JUICE'] as const;
 
 /** The mat-icon for a product's category; anything unknown reads as a drink, as before. */
 export function categoryIcon(category: string | null | undefined): string {
@@ -9,6 +9,7 @@ export function categoryIcon(category: string | null | undefined): string {
     case 'FOOD': return 'restaurant';
     case 'SHISHA': return 'smoking_rooms';
     case 'POOL': return 'sports_baseball';
+    case 'JUICE': return 'blender';
     default: return 'local_bar';
   }
 }
@@ -19,6 +20,7 @@ export function categoryLabel(category: string | null | undefined): string {
     case 'FOOD': return 'SETTING_PAGE.CATEGORY_FOOD';
     case 'SHISHA': return 'SETTING_PAGE.CATEGORY_SHISHA';
     case 'POOL': return 'SETTING_PAGE.CATEGORY_POOL';
+    case 'JUICE': return 'SETTING_PAGE.CATEGORY_JUICE';
     default: return 'SETTING_PAGE.CATEGORY_DRINK';
   }
 }

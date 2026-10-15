@@ -269,6 +269,8 @@
     "BILL_DELETED": "Bili {{code}} imefutwa"
   },
   "SERVICE_PAGE": {
+    "KIND_SERVICES": "Huduma",
+    "KIND_STOCK_ITEMS": "Malighafi",
     "TITLE": "Huduma za Bar",
     "SUBTITLE": "Simamia na fuatilia huduma zote zinazotolewa",
     "SERVICES_LABEL": "Huduma",

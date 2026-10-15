@@ -54,7 +54,7 @@
 }
 
 .pn-field input::placeholder {
-  text-transform: none;
+  text-transform: uppercase;
 }
 
 .pn-field input:focus {

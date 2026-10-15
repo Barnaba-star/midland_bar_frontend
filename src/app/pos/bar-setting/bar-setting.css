@@ -603,12 +603,12 @@ app-form{
 
 .active-status {
   color: #16a34a !important;
-  text-transform: capitalize;
+  text-transform: uppercase;
 }
 
 .inactive-status {
   color: #dc2626 !important;
-  text-transform: capitalize;
+  text-transform: uppercase;
 }
 
 .commission-action {
@@ -1437,6 +1437,30 @@ app-form{
 
   border-bottom: 1px solid #f1e8d8;
   box-sizing: border-box;
+}
+
+.service-kind {
+  display: inline-flex;
+  flex-shrink: 0;
+  margin-left: 16px;
+  border: 1px solid #e8dcc8;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.service-kind button {
+  padding: 7px 14px;
+  border: none;
+  background: #ffffff;
+  color: #4a3f33;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.service-kind button.active {
+  background: #1d1812;
+  color: #ffffff;
 }
 
 .service-search {
@@ -2709,8 +2733,13 @@ mat-paginator {
     padding: 12px 18px;
   }
 
-  .service-search {
+  .service-kind {
     order: 3;
+    margin-left: 0;
+  }
+
+  .service-search {
+    order: 4;
     flex-basis: 100%;
     max-width: none;
     margin: 0;

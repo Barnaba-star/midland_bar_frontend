@@ -10,6 +10,8 @@ export interface FieldOption {
 export interface FormField {
   [x: string]: any;
   searchControl?: any;
+  /** select: a search box at the top of the list. */
+  searchable?: boolean;
   filteredOptions$?: any;
   name: string;
   label?: string;

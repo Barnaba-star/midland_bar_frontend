@@ -887,7 +887,7 @@
   font-size: 10px;
   font-weight: 700;
 
-  text-transform: none;
+  text-transform: uppercase;
   letter-spacing: 0;
   white-space: nowrap;
 }

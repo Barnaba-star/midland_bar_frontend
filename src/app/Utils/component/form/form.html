@@ -52,9 +52,21 @@
 
           <!-- Select -->
           <mat-form-field *ngSwitchCase="'select'" appearance="outline" class="w-100">
-  <mat-select [formControlName]="field.name" [placeholder]="(field.placeholder || field.label) | translate">
+  <mat-select [formControlName]="field.name" [placeholder]="(field.placeholder || field.label) | translate"
+    (openedChange)="!$event && clearSelectSearch(field)">
+    <!-- A long list (Inatoka wapi: every stock item x every measure) can be searched. -->
+    <div *ngIf="field.searchable" class="select-search" (click)="$event.stopPropagation()">
+      <mat-icon>search</mat-icon>
+      <input
+        type="text"
+        [placeholder]="'COMMON.SEARCH' | translate"
+        [value]="selectSearch[field.name] || ''"
+        (input)="onSelectSearch(field, $event)"
+        (keydown)="$event.stopPropagation()"
+      />
+    </div>
     <mat-option
-      *ngFor="let option of field.options"
+      *ngFor="let option of visibleOptions(field)"
       [value]="option.value"
       [ngClass]="{'selected-option': form.get(field.name)?.value === option.value}">
       {{ option.label | translate }}

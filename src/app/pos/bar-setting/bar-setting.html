@@ -291,7 +291,7 @@
         </div>
       }
 
-     @if (serviceDataSource.data.length > 0 || serviceSearch) {
+     @if (serviceDataSource.data.length > 0 || serviceSearch || serviceKindView === 'STOCK_ITEMS') {
 
   <div class="service-table-card">
 
@@ -310,6 +310,16 @@
     </div>
 
   </div>
+
+ <!-- Services, or the malighafi they are made from - not the two mixed. -->
+ <div class="service-kind" role="group">
+   <button type="button" [class.active]="serviceKindView === 'SERVICES'" (click)="setServiceKindView('SERVICES')">
+     {{ 'SERVICE_PAGE.KIND_SERVICES' | translate }}
+   </button>
+   <button type="button" [class.active]="serviceKindView === 'STOCK_ITEMS'" (click)="setServiceKindView('STOCK_ITEMS')">
+     {{ 'SERVICE_PAGE.KIND_STOCK_ITEMS' | translate }}
+   </button>
+ </div>
 
  <!-- Search by name, code or description, as on the Services and Store pages. -->
  <div class="service-search">

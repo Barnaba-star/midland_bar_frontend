@@ -256,3 +256,35 @@ mat-form-field .mat-form-field-label-required {
 .field-error {
   color: #c0392b;
 }
+
+/* Search box at the top of a searchable select's list. */
+.select-search {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 8px 12px;
+
+  background: var(--color-surface, #ffffff);
+  border-bottom: 1px solid #e8dcc8;
+}
+
+.select-search mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+  color: #a89c8a;
+}
+
+.select-search input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+}

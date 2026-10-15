@@ -31,7 +31,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-form',
@@ -76,7 +76,32 @@ export class FormComponent implements OnInit, OnDestroy {
   form!: FormGroup;
   picker: any;
 
-  constructor(private fb: FormBuilder, private dialog: MatDialog, private cdRef: ChangeDetectorRef) {}
+  constructor(private fb: FormBuilder, private dialog: MatDialog, private cdRef: ChangeDetectorRef, private translate: TranslateService) {}
+
+  /** What is typed in a searchable select's box, by field name. */
+  selectSearch: Record<string, string> = {};
+
+  onSelectSearch(field: FormField, event: Event): void {
+    this.selectSearch = { ...this.selectSearch, [field.name]: (event.target as HTMLInputElement).value };
+  }
+
+  clearSelectSearch(field: FormField): void {
+    if (this.selectSearch[field.name]) {
+      this.selectSearch = { ...this.selectSearch, [field.name]: '' };
+    }
+  }
+
+  /** A searchable select's options matching the box, by their words; the chosen one always stays. */
+  visibleOptions(field: FormField): FieldOption[] {
+    const options = field.options ?? [];
+    const term = (this.selectSearch[field.name] || '').trim().toLowerCase();
+    if (!field.searchable || !term) {
+      return options;
+    }
+    const chosen = this.form.get(field.name)?.value;
+    return options.filter((o) => o.value === chosen
+      || String(this.translate.instant(String(o.label ?? ''))).toLowerCase().includes(term));
+  }
 
   ngOnInit() {
     const group: any = {};

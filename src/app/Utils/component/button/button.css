@@ -6,7 +6,7 @@ button {
   font-weight: 500;
   border-radius: 8px;
   width: 1600px; /* ← Badilisha kutoka 100% */
-  text-transform: capitalize;
+  text-transform: uppercase;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   transition: background-color 1s ease, box-shadow 1s ease;
    min-width: 100px;

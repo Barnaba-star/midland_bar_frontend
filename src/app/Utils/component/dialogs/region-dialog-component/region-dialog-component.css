@@ -149,7 +149,7 @@
 
 .field-input-code::placeholder {
   letter-spacing: normal;
-  text-transform: none;
+  text-transform: uppercase;
 }
 
 .field-hint {

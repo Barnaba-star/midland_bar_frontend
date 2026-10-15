@@ -252,6 +252,7 @@ private serviceFormFields(): FormField[] {
     {
       name: 'stockSource',
       type: 'select',
+      searchable: true,
       label: 'PRODUCT_FORM.STOCK_SOURCE',
       placeholder: 'PRODUCT_FORM.STOCK_SOURCE',
       required: true,
@@ -530,6 +531,18 @@ tableConfig = {
   ] as TableColumn[]
 };
 
+/** Services tab: the services, or the stock items (malighafi) they are made from. */
+serviceKindView: 'SERVICES' | 'STOCK_ITEMS' = 'SERVICES';
+
+setServiceKindView(view: 'SERVICES' | 'STOCK_ITEMS') {
+  if (this.serviceKindView === view) {
+    return;
+  }
+  this.serviceKindView = view;
+  this.page = 0;
+  this.findBarServicePage();
+}
+
 /** Services tab search: name, code or description. */
 serviceSearch = '';
 private serviceSearchTimer?: ReturnType<typeof setTimeout>;
@@ -562,6 +575,8 @@ findBarServicePage() {
     page: this.page,
     size: this.size,
     searchParam: this.serviceSearch || undefined,
+    // Malighafi is picked as a service's source, not listed among the services.
+    filter: this.serviceKindView,
   };
 
   // Names for the recipes shown in the list ("+ Mchele 1 Sahani").

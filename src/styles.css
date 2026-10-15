@@ -54,6 +54,9 @@ html {
 
 body {
   margin: 0;
+  /* Owner, 2026-10-15: every word in the system in capitals, whatever was
+     typed - shown so, not stored so (logins and search are untouched). */
+  text-transform: uppercase;
   font-family: var(--font-sans);
   color: var(--color-text);
   background-color: var(--color-bg);
@@ -553,4 +556,31 @@ body {
 /* Landing menu links jump to their section smoothly. */
 html {
   scroll-behavior: smooth;
+}
+
+
+/* =====================================================
+   ALL CAPITALS (owner, 2026-10-15)
+   Form controls do not inherit text-transform from the page, so they are
+   told too: what is typed shows in capitals, the value keeps what was typed.
+   Icons are drawn from their names (ligatures) and the BaronixTZ wordmark is
+   a logo - both keep their own case.
+===================================================== */
+input:not([type="password"]),
+textarea,
+select,
+button,
+input::placeholder,
+textarea::placeholder {
+  text-transform: uppercase;
+}
+
+.material-icons,
+.material-icons-outlined,
+.material-symbols-outlined,
+mat-icon,
+.mat-icon,
+app-brand-word,
+app-brand-word * {
+  text-transform: none !important;
 }

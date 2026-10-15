@@ -269,6 +269,8 @@
     "BILL_DELETED": "Bill {{code}} deleted"
   },
   "SERVICE_PAGE": {
+    "KIND_SERVICES": "Services",
+    "KIND_STOCK_ITEMS": "Stock items",
     "TITLE": "Bar Services",
     "SUBTITLE": "Manage and monitor all services offered",
     "SERVICES_LABEL": "Services",

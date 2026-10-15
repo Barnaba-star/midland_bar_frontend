@@ -97,7 +97,9 @@ findBarServicePage() {
   const params: PageableParam = {
     page: this.page,
     size: this.size,
-    searchParam: this.searchTerm || undefined
+    searchParam: this.searchTerm || undefined,
+    // Malighafi is not sold - it shows as a service's source and in the Store.
+    filter: 'SERVICES',
   };
 
   this.barService.findBarServicePage(params).subscribe({

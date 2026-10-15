@@ -471,7 +471,7 @@
 
 .rejected .order-tag {
   color: #b42318;
-  text-transform: none;
+  text-transform: uppercase;
   letter-spacing: 0;
 }
 

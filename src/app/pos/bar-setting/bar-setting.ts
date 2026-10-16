@@ -987,11 +987,36 @@ removeBillCode(row: { uid: string; code: string; inUse: boolean }) {
   });
 }
 
-userDataSource: UserTableData[] = [];findUserPageByBranch() {
+userDataSource: UserTableData[] = [];
+
+/** Users tab search: username, name, phone, email or role. */
+userSearch = '';
+private userSearchTimer?: ReturnType<typeof setTimeout>;
+
+onUserSearch(event: Event) {
+  const value = (event.target as HTMLInputElement).value;
+  clearTimeout(this.userSearchTimer);
+  this.userSearchTimer = setTimeout(() => {
+    this.userSearch = value.trim();
+    this.page = 0;
+    this.findUserPageByBranch();
+  }, 300);
+}
+
+clearUserSearch(input: HTMLInputElement) {
+  input.value = '';
+  clearTimeout(this.userSearchTimer);
+  this.userSearch = '';
+  this.page = 0;
+  this.findUserPageByBranch();
+}
+
+findUserPageByBranch() {
 
   const params: PageableParam = {
     page: this.page,
-    size: this.size
+    size: this.size,
+    searchParam: this.userSearch || undefined
   };
 
   this.barService.findUserPageByBranch(params).subscribe({

@@ -2745,3 +2745,22 @@ mat-paginator {
     margin: 0;
   }
 }
+
+/* Users tab: the search sits between the count and the add button. */
+.user-search {
+  margin: 0 12px;
+}
+
+@media (max-width: 760px) {
+  .user-management-header {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .user-search {
+    order: 3;
+    flex: 1 1 100%;
+    max-width: none;
+    margin: 0;
+  }
+}

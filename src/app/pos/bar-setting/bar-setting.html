@@ -8,7 +8,7 @@
 
 @switch (selectedSetting) {
   @case ('SALON.STAFF') {
-    @if (userDataSource.length > 0) {
+    @if (userDataSource.length > 0 || userSearch) {
        <div class="action-container123">
       <div class="user-management-card">
         <!-- Header -->
@@ -30,6 +30,24 @@
             </span>
 
             <span class="count-label"> {{ 'SETTING_PAGE.USERS_LABEL' | translate }} </span>
+          </div>
+
+          <!-- Search by username, name, phone, email or role. -->
+          <div class="service-search user-search">
+            <mat-icon>search</mat-icon>
+            <input
+              #userSearchBox
+              type="text"
+              enterkeyhint="search"
+              [placeholder]="'SETTING_PAGE.USER_SEARCH_PH' | translate"
+              [value]="userSearch"
+              (input)="onUserSearch($event)"
+            />
+            @if (userSearch) {
+              <button type="button" class="clear-search" (click)="clearUserSearch(userSearchBox)" [attr.aria-label]="'COMMON.CLOSE' | translate">
+                <mat-icon>close</mat-icon>
+              </button>
+            }
           </div>
 
           <button
@@ -140,6 +158,12 @@
                     </div>
                   </td>
                 </tr>
+              } @empty {
+                <tr>
+                  <td colspan="6" class="no-match">
+                    {{ 'SERVICE_PAGE.NO_MATCH' | translate: { term: userSearch } }}
+                  </td>
+                </tr>
               }
             </tbody>
           </table>
@@ -220,7 +244,7 @@
       </div>
       </div>
     }
-    @if (userDataSource.length === 0) {
+    @if (userDataSource.length === 0 && !userSearch) {
       <app-empty-state
         icon="team"
         title="SETTING_PAGE.EMPTY_USERS_TITLE"

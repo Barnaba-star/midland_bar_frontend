@@ -287,6 +287,7 @@
     "USER_MGMT_TITLE": "User Management",
     "USER_MGMT_SUBTITLE": "Manage system users, roles and assigned branches",
     "USERS_LABEL": "Users",
+    "USER_SEARCH_PH": "Search name, phone or role",
     "COL_USERNAME": "Username",
     "COL_FULLNAME": "Full Name",
     "COL_ROLE": "Role",

@@ -184,7 +184,7 @@
 .sale-code strong {
   color: #1d1812;
 
-  font-size: 15px;
+  font-size: 13.5px;
   font-weight: 800;
 
   letter-spacing: 0.3px;
@@ -661,7 +661,7 @@
 
   color: white;
 
-  font-size: 14px;
+  font-size: 13px;
 
   font-weight: 600;
 
@@ -810,7 +810,7 @@
 .payment-wrapper label {
   display: block;
   margin-bottom: 8px;
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 600;
   color: #333;
 }
@@ -922,7 +922,7 @@
 
 .sale-info span {
   color: #7a6f60;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
 }
 
@@ -1033,7 +1033,7 @@
   border-radius: 8px;
   background: #1d1812;
   color: #fff;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition: 0.2s ease;
@@ -1050,7 +1050,7 @@
   border-radius: 50%;
   background: #2b2118;
   color: white;
-  font-size: 17px;
+  font-size: 15px;
 }
 
 .add-bill-btn:hover {
@@ -1114,7 +1114,7 @@
 }
 
 .sale-code {
-  font-size: 15px;
+  font-size: 13.5px;
   font-weight: 700;
   color: #2b2118;
 }
@@ -1313,7 +1313,7 @@
 .bill-text {
   color: #4a3f33;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .separator {
@@ -1683,7 +1683,7 @@
 .no-bill {
   color: #a89c8a;
 
-  font-size: 15px;
+  font-size: 13.5px;
 }
 
 
@@ -1793,7 +1793,7 @@
   margin: 0;
 
   color: #2b2118;
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 700;
   letter-spacing: 0.3px;
 
@@ -2894,7 +2894,7 @@
 .no-bill {
   color: #d8ccb8;
 
-  font-size: 16px;
+  font-size: 14px;
 }
 
 
@@ -3402,7 +3402,7 @@
 .customer-label {
   color: #2b2118;
 
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 800;
 
   letter-spacing: 0.3px;
@@ -4144,7 +4144,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .chip-sent {
   width: 15px;
   height: 15px;
-  font-size: 15px;
+  font-size: 13.5px;
   color: #0f766e;
 }
 

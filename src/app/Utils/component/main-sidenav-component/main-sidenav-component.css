@@ -7,7 +7,7 @@
 .submenu-item {
   padding: 15px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
   color: rgb(129, 129, 135);
   border-bottom: 1px dotted black;
   border-top: 1px dotted rgb(192, 179, 179);
@@ -126,7 +126,7 @@ position: static;
   justify-content: space-between;
   padding: 10px 10px;
   cursor: pointer;
-  font-size: 15px;
+  font-size: 13.5px;
 }
 
 .profileItems:hover {
@@ -328,7 +328,7 @@ position: static;
   background-color: rgb(244, 248, 244);
   border-radius: 400px;
   color: rgb(15, 14, 14);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   border: 2px dotted rgb(168, 185, 168);
   position: relative;
@@ -364,7 +364,7 @@ position: static;
 }
 
 .label {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 300px;
   color: rgb(99, 105, 104);
 }

@@ -164,7 +164,7 @@ mat-form-field .mat-form-field-label-required {
     display:flex;
     align-items:center;
 
-    font-size:14px;
+    font-size:13px;
 
     cursor:pointer;
 
@@ -223,7 +223,7 @@ mat-form-field .mat-form-field-label-required {
   padding: 0 24px;
 
   border-radius: 10px;
-  font-size: 15px;
+  font-size: 13.5px;
   font-weight: 600;
   letter-spacing: 0.3px;
 

@@ -113,7 +113,7 @@
   gap: 10px;
   padding: 7px 0;
   border-bottom: 1px dashed var(--color-border);
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .ho-rows small {
@@ -387,7 +387,7 @@
 
 .ho-short-sum {
   margin: 0;
-  font-size: 14px;
+  font-size: 13px;
   color: var(--color-text);
 }
 
@@ -421,7 +421,7 @@
   border-radius: 8px;
   background: transparent;
   color: var(--color-text);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
 }

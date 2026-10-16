@@ -599,3 +599,28 @@ app-download {
 :is(app-landing, app-login, app-download) :is(input, textarea)::placeholder {
   text-transform: none;
 }
+
+/* =====================================================
+   CONTENT A STEP SMALLER (owner, 2026-10-16)
+   Everything shows in capitals, and capitals read big: titles keep their
+   size, the words under them (tables, buttons, menus, dialog text) come
+   down a step so pages look calm. Form fields stay at 16px - below that an
+   iPhone zooms the page when a field is tapped.
+===================================================== */
+html {
+  --mat-sys-body-medium: 400 13px / 19px var(--font-sans);
+  --mat-sys-body-medium-size: 13px;
+  --mat-sys-body-medium-line-height: 19px;
+  --mat-sys-label-large: 500 13px / 19px var(--font-sans);
+  --mat-sys-label-large-size: 13px;
+  --mat-sys-label-large-line-height: 19px;
+  --mat-option-label-text-size: 14px;
+  --mat-menu-item-label-text-size: 14px;
+  --mat-table-row-item-label-text-size: 13px;
+  --mat-table-header-headline-size: 12px;
+}
+
+/* Capitals sit tight; a hair of tracking keeps small words readable. */
+body {
+  letter-spacing: 0.01em;
+}

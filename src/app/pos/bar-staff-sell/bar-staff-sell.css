@@ -690,7 +690,7 @@
   background: #fffdf9;
   color: #2b2118;
   font: inherit;
-  font-size: 15px;
+  font-size: 13.5px;
   text-align: left;
   cursor: pointer;
 }
@@ -779,7 +779,7 @@
 
 .picker-code {
   font-weight: 800;
-  font-size: 15px;
+  font-size: 13.5px;
 }
 
 .picker-nick {
@@ -787,7 +787,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   color: #6b5b48;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .picker-flags {
@@ -858,7 +858,7 @@
   background: #f5a524;
   color: #1a1206;
   font: inherit;
-  font-size: 15px;
+  font-size: 13.5px;
   font-weight: 800;
   cursor: pointer;
 }
@@ -988,7 +988,7 @@
 }
 
 .drink-name {
-  font-size: 15px;
+  font-size: 13.5px;
   font-weight: 600;
 }
 
@@ -1004,7 +1004,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  font-size: 14px;
+  font-size: 13px;
   white-space: nowrap;
 }
 

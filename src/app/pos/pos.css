@@ -25,7 +25,7 @@
 .pos-home-intro p {
   margin: 0;
   color: var(--color-text-muted, #7a6f60);
-  font-size: 14px;
+  font-size: 13px;
 }
 
 @media (max-width: 600px) {

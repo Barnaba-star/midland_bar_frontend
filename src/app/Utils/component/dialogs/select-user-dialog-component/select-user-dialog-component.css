@@ -190,7 +190,7 @@
 }
 
 .user-row-info strong {
-  font-size: 14px;
+  font-size: 13.5px;
   color: var(--color-text, #1d1812);
   white-space: nowrap;
   overflow: hidden;

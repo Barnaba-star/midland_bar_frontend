@@ -390,7 +390,7 @@
   border-radius: 8px;
   background: transparent;
   color: var(--color-text);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
 }
@@ -454,7 +454,7 @@
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .cu-kv.strong {

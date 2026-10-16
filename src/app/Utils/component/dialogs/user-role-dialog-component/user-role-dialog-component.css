@@ -78,7 +78,7 @@ mat-dialog-content {
 .section-label {
   margin-bottom: 8px;
 
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 600;
 
   color: #4a3f33;
@@ -100,7 +100,7 @@ mat-dialog-content {
 }
 
 .role-name {
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 500;
   color: #2b2118;
 }

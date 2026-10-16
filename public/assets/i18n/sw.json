@@ -830,7 +830,18 @@
     "VIS_S2": "Tunaweka bar",
     "VIS_S3": "Code za wahudumu",
     "VIS_S4": "Anza",
-    "VIS_FREE": "Siku 30 bure"
+    "VIS_FREE": "Siku 30 bure",
+    "HOME_STAT1_N": "8",
+    "HOME_STAT1_L": "Huduma zinazofanya kazi pamoja",
+    "HOME_STAT2_N": "5",
+    "HOME_STAT2_L": "Majukumu — kila mtu na ruhusa yake",
+    "HOME_STAT3_N": "30",
+    "HOME_STAT3_L": "Siku za kwanza bure",
+    "HOME_STAT4_N": "24/7",
+    "HOME_STAT4_L": "Unaona bar yako ukiwa popote",
+    "HOME_SV_MORE": "Soma kila huduma",
+    "HOME_FAQ_MORE": "Maswali yote",
+    "HOME_EXTRAS_EYEBROW": "Na zaidi"
   },
   "DASHBOARD": {
     "WELCOME": "Karibu",

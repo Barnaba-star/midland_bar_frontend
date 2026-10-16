@@ -830,7 +830,18 @@
     "VIS_S2": "We set up",
     "VIS_S3": "Waiter codes",
     "VIS_S4": "Start",
-    "VIS_FREE": "30 days free"
+    "VIS_FREE": "30 days free",
+    "HOME_STAT1_N": "8",
+    "HOME_STAT1_L": "Services working together",
+    "HOME_STAT2_N": "5",
+    "HOME_STAT2_L": "Roles — everyone with their own access",
+    "HOME_STAT3_N": "30",
+    "HOME_STAT3_L": "First days free",
+    "HOME_STAT4_N": "24/7",
+    "HOME_STAT4_L": "See your bar from anywhere",
+    "HOME_SV_MORE": "Read every service",
+    "HOME_FAQ_MORE": "All questions",
+    "HOME_EXTRAS_EYEBROW": "And more"
   },
   "DASHBOARD": {
     "WELCOME": "Welcome",

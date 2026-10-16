@@ -206,6 +206,196 @@
   </div>
 
 
+  <!-- ================= MWANZO: everything at a glance, under the hero ================= -->
+  @if (home) {
+  <section class="home-stats" aria-label="BaronixTZ">
+    @for (st of homeStats; track st.n) {
+      <div class="home-stat">
+        <strong>{{ st.n | translate }}</strong>
+        <span>{{ st.l | translate }}</span>
+      </div>
+    }
+  </section>
+
+  <section class="home-block">
+    <div class="home-head">
+      <span class="eyebrow">{{ 'LANDING.NIGHT_EYEBROW' | translate }}</span>
+      <h2>{{ 'LANDING.NIGHT_TITLE' | translate }}</h2>
+    </div>
+    <ol class="home-jobs">
+      @for (j of managerJobs; track j.title) {
+        <li>
+          <span class="home-jobs-no">0{{ $index + 1 }}</span>
+          <mat-icon>{{ j.icon }}</mat-icon>
+          <h3>{{ j.title | translate }}</h3>
+          <p>{{ j.desc | translate }}</p>
+        </li>
+      }
+    </ol>
+  </section>
+
+  <section class="home-block alt">
+    <div class="home-head">
+      <span class="eyebrow">{{ 'LANDING.GALLERY_EYEBROW' | translate }}</span>
+      <h2>{{ 'LANDING.GALLERY_TITLE' | translate }}</h2>
+      <p>{{ 'LANDING.GALLERY_DESC' | translate }}</p>
+    </div>
+    <div class="home-gallery">
+      @for (g of gallery; track g.img) {
+        <figure [style.background-image]="'url(' + g.img + ')'">
+          <figcaption>
+            <strong>{{ g.title | translate }}</strong>
+            <span>{{ g.note | translate }}</span>
+          </figcaption>
+        </figure>
+      }
+    </div>
+  </section>
+
+  <section class="home-block">
+    <div class="home-head">
+      <span class="eyebrow">{{ 'LANDING.SV_EYEBROW' | translate }}</span>
+      <h2>{{ 'LANDING.SV_TITLE' | translate }}</h2>
+      <p>{{ 'LANDING.SV_DESC' | translate }}</p>
+    </div>
+    <div class="home-services">
+      @for (sv of services; track sv.title) {
+        <a class="home-sv" [routerLink]="[]" fragment="huduma">
+          <span class="home-sv-top">
+            <mat-icon>{{ sv.icon }}</mat-icon>
+            <small>0{{ $index + 1 }}</small>
+          </span>
+          <h3>{{ sv.title | translate }}</h3>
+          <p>{{ sv.desc | translate }}</p>
+        </a>
+      }
+    </div>
+    <a class="home-more" [routerLink]="[]" fragment="huduma">
+      {{ 'LANDING.HOME_SV_MORE' | translate }}<mat-icon>arrow_forward</mat-icon>
+    </a>
+  </section>
+
+  <section class="home-block alt">
+    <div class="home-split">
+      <div class="home-head">
+        <span class="eyebrow">{{ 'LANDING.SPLIT_EYEBROW' | translate }}</span>
+        <h2>{{ 'LANDING.SPLIT_TITLE' | translate }}</h2>
+        <p>{{ 'LANDING.SPLIT_DESC' | translate }}</p>
+      </div>
+      <ul class="home-buckets">
+        @for (b of buckets; track b.label) {
+          <li><mat-icon>{{ b.icon }}</mat-icon>{{ b.label | translate }}</li>
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="home-block">
+    <div class="home-head">
+      <span class="eyebrow">{{ 'LANDING.HOME_EXTRAS_EYEBROW' | translate }}</span>
+      <h2>{{ 'LANDING.FEATURES_TITLE' | translate }}</h2>
+    </div>
+    <div class="home-cards three">
+      @for (x of extras; track x.title) {
+        <article class="info-card">
+          <mat-icon>{{ x.icon }}</mat-icon>
+          <h3>{{ x.title | translate }}</h3>
+          <p>{{ x.desc | translate }}</p>
+        </article>
+      }
+    </div>
+  </section>
+
+  <section class="home-block alt">
+    <div class="home-head">
+      <span class="eyebrow">{{ 'LANDING.ROLES_EYEBROW' | translate }}</span>
+      <h2>{{ 'LANDING.ROLES_TITLE' | translate }}</h2>
+    </div>
+    <div class="home-cards five">
+      @for (r of roles; track r.title) {
+        <article class="info-card">
+          <mat-icon>{{ r.icon }}</mat-icon>
+          <h3>{{ r.title | translate }}</h3>
+          <p>{{ r.desc | translate }}</p>
+        </article>
+      }
+    </div>
+  </section>
+
+  <section class="home-block">
+    <div class="home-start">
+      <div>
+        <div class="home-head">
+          <span class="eyebrow">{{ 'LANDING.START_EYEBROW' | translate }}</span>
+          <h2>{{ 'LANDING.START_TITLE' | translate }}</h2>
+        </div>
+        <ol class="home-steps">
+          @for (st of startSteps; track st.no) {
+            <li>
+              <span class="home-steps-no">{{ st.no }}</span>
+              <div>
+                <h3>{{ st.title | translate }}</h3>
+                <p>{{ st.desc | translate }}</p>
+              </div>
+            </li>
+          }
+        </ol>
+      </div>
+      <div class="price-card">
+        <span class="price-badge">{{ 'LANDING.PRICE_BADGE' | translate }}</span>
+        <span class="price-then">{{ 'LANDING.PRICE_THEN' | translate }}</span>
+        <strong class="price-inc">{{ 'LANDING.PRICE_INC' | translate }}</strong>
+        <ul>
+          @for (i of priceIncludes; track i) {
+            <li><mat-icon>check_circle</mat-icon>{{ i | translate }}</li>
+          }
+        </ul>
+        <a class="btn-amber" [href]="contactHref">
+          {{ 'LANDING.PRICE_CTA' | translate }}
+          <mat-icon>mail</mat-icon>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="home-block alt">
+    <div class="home-head">
+      <span class="eyebrow">{{ 'LANDING.FAQ_EYEBROW' | translate }}</span>
+      <h2>{{ 'LANDING.FAQ_TITLE' | translate }}</h2>
+    </div>
+    <div class="faq home-faq">
+      @for (f of faqs.slice(0, 4); track f.q) {
+        <details>
+          <summary>{{ f.q | translate }}<mat-icon>expand_more</mat-icon></summary>
+          <p>{{ f.a | translate }}</p>
+        </details>
+      }
+    </div>
+    <a class="home-more" [routerLink]="[]" fragment="maswali">
+      {{ 'LANDING.HOME_FAQ_MORE' | translate }}<mat-icon>arrow_forward</mat-icon>
+    </a>
+  </section>
+
+  <section class="last-call home-last">
+    <div class="last-call-inner">
+      <span class="eyebrow">{{ 'LANDING.CTA_EYEBROW' | translate }}</span>
+      <h2>{{ 'LANDING.CTA_TITLE' | translate }}</h2>
+      <p>{{ 'LANDING.CONTACT_DESC' | translate }}</p>
+      <div class="contact-actions">
+        <a class="btn-amber" [href]="contactHref">
+          {{ 'LANDING.CONTACT_EMAIL' | translate }}
+          <mat-icon>mail</mat-icon>
+        </a>
+        <a class="btn-ghost" routerLink="/app">
+          <mat-icon>android</mat-icon>
+          {{ 'DOWNLOAD.NAV' | translate }}
+        </a>
+      </div>
+      <a class="contact-email" [href]="contactHref">{{ contactEmail }}</a>
+    </div>
+  </section>
+  }
+
   <!-- Every tab opens with its own title, biggest on the page; nothing below is bigger. -->
   @if (!home) {
     <header class="page-head">
@@ -429,7 +619,6 @@
     </nav>
   }
 
-  @if (!home) {
   <footer class="footer">
     <div class="brand">
       <span class="brand-name"><app-brand-word /></span>
@@ -437,5 +626,4 @@
     <a class="footer-app" routerLink="/app"><mat-icon>android</mat-icon> {{ 'DOWNLOAD.NAV' | translate }}</a>
     <span>&copy; {{ currentYear }} BaronixTZ. {{ 'LANDING.ALL_RIGHTS_RESERVED' | translate }}</span>
   </footer>
-  }
 </div>

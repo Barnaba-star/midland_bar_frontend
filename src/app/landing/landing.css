@@ -2064,3 +2064,461 @@ a.sv-btn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+/* =====================================================
+   MWANZO: the sections under the hero (owner, 2026-10-16: "jaza taarifa")
+   Phone first - one column; the computer block below spreads them out.
+===================================================== */
+
+.page > .home-block {
+  padding: 72px 20px;
+}
+
+.home-block.alt {
+  background: var(--ink-2);
+}
+
+.home-head {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 760px;
+  margin: 0 0 32px;
+}
+
+.home-head h2 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(26px, 3.4vw, 46px);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.home-head p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+/* Four figures in a band right under the hero. */
+.page > .home-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  padding: 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: var(--line);
+}
+
+.home-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 24px 20px;
+  background: var(--ink);
+}
+
+.home-stat strong {
+  font-family: var(--display);
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--amber);
+}
+
+.home-stat span {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* A manager's four jobs. */
+.home-jobs {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.home-jobs li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: linear-gradient(160deg, rgba(245, 165, 36, 0.08), var(--ink-2) 60%);
+}
+
+.home-jobs mat-icon {
+  color: var(--amber);
+}
+
+.home-jobs-no {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  font-family: var(--display);
+  font-size: 30px;
+  font-weight: 700;
+  color: rgba(245, 165, 36, 0.22);
+}
+
+.home-jobs h3,
+.home-sv h3,
+.home-steps h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.home-jobs p,
+.home-sv p,
+.home-steps p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* Photos of the bar, each with what BaronixTZ does there. */
+.home-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.home-gallery figure {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: 220px;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 16px;
+  background-position: center;
+  background-size: cover;
+}
+
+.home-gallery figure:first-child {
+  grid-column: 1 / -1;
+  min-height: 260px;
+}
+
+.home-gallery figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  padding: 40px 16px 16px;
+  background: linear-gradient(0deg, rgba(14, 12, 10, 0.92), rgba(14, 12, 10, 0));
+}
+
+.home-gallery strong {
+  font-size: 17px;
+}
+
+.home-gallery span {
+  color: #e3d8c6;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+/* Every service, a card each. */
+.home-services {
+  display: grid;
+  gap: 14px;
+}
+
+.home-sv {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--ink-3);
+  color: var(--cream);
+  text-decoration: none;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.home-sv:hover {
+  border-color: rgba(245, 165, 36, 0.5);
+  transform: translateY(-2px);
+}
+
+.home-sv-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.home-sv-top mat-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 9px;
+  border-radius: 12px;
+  background: rgba(245, 165, 36, 0.14);
+  color: var(--amber);
+  font-size: 24px;
+  box-sizing: border-box;
+}
+
+.home-sv-top small {
+  color: rgba(245, 165, 36, 0.6);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.home-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 26px;
+  color: var(--amber);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.home-more mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
+/* Every shilling has a job: the buckets the money is split into. */
+.home-split {
+  display: grid;
+  gap: 8px;
+}
+
+.home-buckets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.home-buckets li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 1px solid rgba(245, 165, 36, 0.3);
+  border-radius: 999px;
+  background: rgba(245, 165, 36, 0.07);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.home-buckets mat-icon {
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+  color: var(--amber);
+}
+
+.home-cards {
+  display: grid;
+  gap: 14px;
+}
+
+/* Getting started and the price, side by side on a computer. */
+.home-start {
+  display: grid;
+  gap: 32px;
+}
+
+.home-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.home-steps li {
+  display: flex;
+  gap: 16px;
+}
+
+.home-steps div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.home-steps-no {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--amber);
+  color: #1a1206;
+  font-weight: 800;
+}
+
+.home-faq + .home-more {
+  margin-top: 22px;
+}
+
+.home-last .eyebrow {
+  margin-bottom: 4px;
+}
+
+@media (min-width: 601px) {
+  .page > .home-stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .home-jobs,
+  .home-services,
+  .home-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .home-gallery {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 961px) {
+  .page > .home-block {
+    flex: 0 0 auto;
+    padding: 104px var(--pad-x);
+  }
+
+  .page > .home-stats {
+    flex: 0 0 auto;
+    padding: 0;
+  }
+
+  .home-stat {
+    padding: 34px max(28px, calc(var(--pad-x) / 3));
+  }
+
+  .home-stat:first-child {
+    padding-left: var(--pad-x);
+  }
+
+  .home-stat strong {
+    font-size: 44px;
+  }
+
+  .home-stat span {
+    font-size: 15px;
+  }
+
+  .home-head {
+    margin-bottom: 44px;
+  }
+
+  .home-head p {
+    font-size: 18px;
+  }
+
+  .home-jobs {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .home-jobs li {
+    padding: 30px 26px;
+  }
+
+  /* One big photo on the left, four around it on the right. */
+  .home-gallery {
+    grid-template-columns: 1.4fr 1fr 1fr;
+    grid-template-rows: 260px 260px;
+    gap: 16px;
+  }
+
+  .home-gallery figure,
+  .home-gallery figure:first-child {
+    min-height: 0;
+  }
+
+  .home-gallery figure:first-child {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+
+  .home-gallery strong {
+    font-size: 19px;
+  }
+
+  .home-gallery span {
+    font-size: 14px;
+  }
+
+  .home-services {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .home-sv {
+    padding: 26px;
+  }
+
+  .home-split {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    align-items: center;
+    gap: clamp(48px, 6vw, 112px);
+  }
+
+  .home-split .home-head {
+    margin-bottom: 0;
+  }
+
+  .home-buckets {
+    gap: 12px;
+  }
+
+  .home-buckets li {
+    padding: 12px 18px;
+    font-size: 16px;
+  }
+
+  .home-cards.three {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .home-cards.five {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .home-cards .info-card {
+    min-height: 0;
+  }
+
+  .home-start {
+    grid-template-columns: minmax(0, 1fr) minmax(420px, 520px);
+    align-items: center;
+    gap: clamp(48px, 6vw, 112px);
+  }
+
+  .home-steps {
+    gap: 24px;
+  }
+
+  .page > .home-last {
+    flex: 0 0 auto;
+    padding-top: 136px;
+    padding-bottom: 136px;
+  }
+}

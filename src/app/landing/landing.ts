@@ -348,6 +348,48 @@ export class Landing implements OnInit, OnDestroy {
     { icon: 'room_service', title: 'LANDING.R_WAITER_T', desc: 'LANDING.R_WAITER_D' },
   ];
 
+  // ---- Mwanzo: the sections under the hero ----
+
+  readonly homeStats = [1, 2, 3, 4].map((n) => ({ n: `LANDING.HOME_STAT${n}_N`, l: `LANDING.HOME_STAT${n}_L` }));
+
+  readonly managerJobs = [
+    { icon: 'fact_check', title: 'LANDING.STEP1_TITLE', desc: 'LANDING.STEP1_DESC' },
+    { icon: 'inventory_2', title: 'LANDING.STEP2_TITLE', desc: 'LANDING.STEP2_DESC' },
+    { icon: 'payments', title: 'LANDING.STEP3_TITLE', desc: 'LANDING.STEP3_DESC' },
+    { icon: 'insights', title: 'LANDING.STEP4_TITLE', desc: 'LANDING.STEP4_DESC' },
+  ];
+
+  readonly gallery = [
+    { img: 'bar-counter', title: 'LANDING.G_COUNTER', note: 'LANDING.G_COUNTER_NOTE' },
+    { img: 'beer-pour', title: 'LANDING.G_BEER', note: 'LANDING.G_BEER_NOTE' },
+    { img: 'mshikaki', title: 'LANDING.G_GRILL', note: 'LANDING.G_GRILL_NOTE' },
+    { img: 'cocktails', title: 'LANDING.G_COCKTAILS', note: 'LANDING.G_COCKTAILS_NOTE' },
+    { img: 'bar-crowd', title: 'LANDING.G_CROWD', note: 'LANDING.G_CROWD_NOTE' },
+  ].map((g) => ({ ...g, img: `assets/images/bar/${g.img}.jpg` }));
+
+  readonly buckets = [
+    { icon: 'workspace_premium', label: 'LANDING.B_OWNER' },
+    { icon: 'local_shipping', label: 'LANDING.B_STOCK' },
+    { icon: 'badge', label: 'LANDING.B_STAFF' },
+    { icon: 'home_work', label: 'LANDING.B_RENT' },
+    { icon: 'account_balance', label: 'LANDING.B_TRA' },
+    { icon: 'credit_score', label: 'LANDING.B_LOAN' },
+    { icon: 'bolt', label: 'LANDING.B_LUKU' },
+    { icon: 'build', label: 'LANDING.B_MAINT' },
+    { icon: 'water_drop', label: 'LANDING.B_WATER' },
+    { icon: 'emergency', label: 'LANDING.B_EMERGENCY' },
+    { icon: 'more_horiz', label: 'LANDING.B_OTHER' },
+  ];
+
+  readonly extras = [
+    { icon: 'scale', title: 'LANDING.F1_TITLE', desc: 'LANDING.F1_DESC' },
+    { icon: 'pin', title: 'LANDING.F2_TITLE', desc: 'LANDING.F2_DESC' },
+    { icon: 'wifi_off', title: 'LANDING.M1_T', desc: 'LANDING.M1_D' },
+    { icon: 'phone_iphone', title: 'LANDING.M2_T', desc: 'LANDING.M2_D' },
+    { icon: 'receipt_long', title: 'LANDING.M3_T', desc: 'LANDING.M3_D' },
+    { icon: 'notifications_active', title: 'LANDING.M4_T', desc: 'LANDING.M4_D' },
+  ];
+
   readonly priceIncludes = ['LANDING.PRICE_INC1', 'LANDING.PRICE_INC2', 'LANDING.PRICE_INC3', 'LANDING.PRICE_INC4'];
 
   readonly faqs = [1, 2, 3, 4, 5, 6, 7].map((n) => ({ q: `LANDING.Q${n}`, a: `LANDING.A${n}` }));

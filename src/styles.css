@@ -505,7 +505,7 @@ body {
   background: transparent;
   color: var(--color-text-muted, #7a6f60);
   font: inherit;
-  font-size: 13px;
+  font-size: 12px;
   text-align: left;
   cursor: pointer;
 }
@@ -608,16 +608,16 @@ app-download {
    iPhone zooms the page when a field is tapped.
 ===================================================== */
 html {
-  --mat-sys-body-medium: 400 13px / 19px var(--font-sans);
-  --mat-sys-body-medium-size: 13px;
-  --mat-sys-body-medium-line-height: 19px;
-  --mat-sys-label-large: 500 13px / 19px var(--font-sans);
-  --mat-sys-label-large-size: 13px;
-  --mat-sys-label-large-line-height: 19px;
-  --mat-option-label-text-size: 14px;
-  --mat-menu-item-label-text-size: 14px;
-  --mat-table-row-item-label-text-size: 13px;
-  --mat-table-header-headline-size: 12px;
+  --mat-sys-body-medium: 400 12px / 18px var(--font-sans);
+  --mat-sys-body-medium-size: 12px;
+  --mat-sys-body-medium-line-height: 18px;
+  --mat-sys-label-large: 500 12.5px / 18px var(--font-sans);
+  --mat-sys-label-large-size: 12.5px;
+  --mat-sys-label-large-line-height: 18px;
+  --mat-option-label-text-size: 13px;
+  --mat-menu-item-label-text-size: 13px;
+  --mat-table-row-item-label-text-size: 12px;
+  --mat-table-header-headline-size: 11px;
 }
 
 /* Capitals sit tight; a hair of tracking keeps small words readable. */

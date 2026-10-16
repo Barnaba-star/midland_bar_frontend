@@ -84,7 +84,7 @@
   border-radius: 999px;
   background: #ffffff;
   font: inherit;
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
 }
@@ -98,7 +98,7 @@
 .st-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 13.5px;
+  font-size: 12.5px;
 }
 
 .st-table th {
@@ -154,7 +154,7 @@
   display: inline-block;
   padding: 3px 10px;
   border-radius: 999px;
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 800;
 }
 
@@ -198,7 +198,7 @@
   padding: 10px 18px;
   border-radius: 10px;
   font: inherit;
-  font-size: 13.5px;
+  font-size: 12.5px;
   font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
@@ -231,7 +231,7 @@
   border-radius: 12px;
   background: #fffaeb;
   color: #7a4b00;
-  font-size: 13.5px;
+  font-size: 12.5px;
 }
 
 .st-confirm span {
@@ -245,7 +245,7 @@
   justify-content: space-between;
   margin-bottom: 8px;
   color: #7a6f60;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .row {
@@ -275,7 +275,7 @@
   grid-template-columns: 1.2fr 1fr 1fr auto;
   gap: 10px;
   align-items: center;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .detail-note {
@@ -284,7 +284,7 @@
   gap: 6px;
   margin: 6px 0 0;
   color: #5c5647;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 @media (max-width: 720px) {
@@ -316,7 +316,7 @@
   background: var(--color-primary);
   color: #ffffff;
   font: inherit;
-  font-size: 13.5px;
+  font-size: 12.5px;
   font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
@@ -350,7 +350,7 @@
   gap: 10px;
   margin-top: 12px;
   color: #5c5647;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .st-foot {
@@ -467,7 +467,7 @@ h4 {
 
 .cnt-name strong {
   display: block;
-  font-size: 13.5px;
+  font-size: 13px;
   color: #2b2118;
   overflow-wrap: anywhere;
 }
@@ -481,7 +481,7 @@ h4 {
   flex-direction: column;
   gap: 3px;
   min-width: 0;
-  font-size: 13px;
+  font-size: 12px;
   color: #2b2118;
   font-variant-numeric: tabular-nums;
 }
@@ -596,7 +596,7 @@ h4 {
   }
 
   .st-table {
-    font-size: 12.5px;
+    font-size: 12px;
   }
 
   .num {

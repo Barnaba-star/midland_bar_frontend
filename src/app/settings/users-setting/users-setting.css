@@ -803,7 +803,7 @@
   padding: 13px 18px;
   border-top: 1px solid #f1e8d8;
   color: #4a3f33;
-  font-size: 13px;
+  font-size: 12px;
   white-space: nowrap;
 }
 
@@ -847,7 +847,7 @@
 
 .user-name-wrapper strong {
   color: #2b2118;
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 600;
 }
 

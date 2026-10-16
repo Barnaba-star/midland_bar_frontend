@@ -100,7 +100,7 @@ app-form{
     border:none;
     border-radius:6px;
     cursor:pointer;
-    font-size:13.5px;
+    font-size:12.5px;
 }
 
 .btn-primary{
@@ -178,5 +178,5 @@ app-form{
 .action-container p {
   margin-top: 1px;
   color: #7a6f60;
-  font-size: 13.5px;
+  font-size: 12.5px;
 }

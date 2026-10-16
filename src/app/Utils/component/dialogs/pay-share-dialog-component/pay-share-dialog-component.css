@@ -96,7 +96,7 @@
 .recipient-name {
   margin: 0 0 16px;
   color: #1d1812;
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 700;
   overflow-wrap: anywhere;
 }
@@ -240,7 +240,7 @@
   border: 1px solid #fde68a;
   border-radius: 12px;
   color: #92400e;
-  font-size: 12.5px;
+  font-size: 12px;
   line-height: 1.5;
 }
 
@@ -278,7 +278,7 @@
   padding: 0 18px;
   border-radius: 12px;
   font-family: inherit;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.1px;
   cursor: pointer;

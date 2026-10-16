@@ -78,7 +78,7 @@ mat-dialog-content {
 .section-label {
   margin-bottom: 8px;
 
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 600;
 
   color: #4a3f33;
@@ -100,7 +100,7 @@ mat-dialog-content {
 }
 
 .role-name {
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 500;
   color: #2b2118;
 }
@@ -221,7 +221,7 @@ mat-dialog-actions {
   background: #faf6ef;
   color: #4a3f33;
 
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .chip-remove {

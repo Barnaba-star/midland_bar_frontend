@@ -54,7 +54,7 @@
   border: 1px solid #1d1812;
   border-radius: 10px;
   color: #ffffff;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.15s ease, border-color 0.15s ease;
@@ -75,7 +75,7 @@
   border: 1px solid #e8dcc8;
   border-radius: 10px;
   color: #4a3f33;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.15s ease, border-color 0.15s ease;
@@ -149,7 +149,7 @@
 .table-wrapper table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .table-wrapper th {

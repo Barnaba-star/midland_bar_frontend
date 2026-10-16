@@ -52,7 +52,7 @@
   border-radius: 10px;
   background: #fdf1dc;
   color: #7a4a06;
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1.4;
 }
 
@@ -79,7 +79,7 @@
   background: #2b2118;
   color: #f5a524;
   font: inherit;
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
 }
@@ -100,7 +100,7 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 600;
   color: #4a3f33;
 }
@@ -177,7 +177,7 @@
 .colleague-error {
   margin: 0;
   color: #b91c1c;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
 }
 

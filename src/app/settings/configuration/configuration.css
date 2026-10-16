@@ -43,14 +43,14 @@
     display:block;
     margin-bottom:8px;
     color:#4a3f33;
-    font-size:14px;
+    font-size:13.5px;
 }
 
 .configuration-row p{
     margin:0;
     color:#7a6f60;
     line-height:1.8;
-    font-size:13.5px;
+    font-size:12.5px;
 }
 .action-container {
     margin-top: 150px;
@@ -106,7 +106,7 @@
 .action-container p {
   margin-top: 1px;
   color: #7a6f60;
-  font-size: 13.5px;
+  font-size: 12.5px;
 }
 
 
@@ -152,7 +152,7 @@
 .general-loading {
   padding: 40px 0;
   color: #a89c8a;
-  font-size: 13px;
+  font-size: 12px;
   text-align: center;
 }
 
@@ -254,7 +254,7 @@
   height: 40px;
   padding: 0 22px;
   border-radius: 12px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;

@@ -149,7 +149,7 @@
   border-radius: 12px;
   background: #faf6ef;
   color: #5c5042;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   overflow-wrap: anywhere;
@@ -191,7 +191,7 @@
 .publish-toggle strong {
   display: block;
   color: #1d1812;
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 700;
 }
 
@@ -213,7 +213,7 @@
   border-radius: 12px;
   background: #fef3f2;
   color: #b42318;
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1.45;
 }
 
@@ -245,7 +245,7 @@
   padding: 0 18px;
   border-radius: 12px;
   font-family: inherit;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
 }

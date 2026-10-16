@@ -125,13 +125,13 @@
   align-items: center;
   gap: 10px;
 
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--color-text, #1d1812);
 }
 
 .info-row.muted {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   color: var(--color-text-muted, #7a6f60);
 }
@@ -154,7 +154,7 @@
 .save-btn {
   padding: 8px 18px;
   border-radius: var(--radius-sm, 10px);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   display: inline-flex;

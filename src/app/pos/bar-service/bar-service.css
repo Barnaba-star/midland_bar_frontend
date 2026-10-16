@@ -234,7 +234,7 @@
 .index-column {
   color: #a89c8a;
 
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
 }
 
@@ -280,7 +280,7 @@
 .service-name {
   color: #1d1812;
 
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 700;
 }
 
@@ -346,7 +346,7 @@
 
   color: #5c5042;
 
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
 }
 
@@ -456,7 +456,7 @@
   gap: 8px;
 
   color: #7a6f60;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .page-size select {

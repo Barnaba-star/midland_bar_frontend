@@ -316,7 +316,7 @@
 .region-none {
   padding: 14px;
   color: #a89c8a;
-  font-size: 13px;
+  font-size: 12px;
   text-align: center;
 }
 
@@ -385,7 +385,7 @@
   border-radius: 12px;
   background: #fef3f2;
   color: #b42318;
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1.45;
 }
 
@@ -421,7 +421,7 @@
   padding: 0 18px;
   border-radius: 12px;
   font-family: inherit;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.1px;
   cursor: pointer;

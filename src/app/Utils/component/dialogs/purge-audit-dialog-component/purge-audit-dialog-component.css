@@ -126,14 +126,14 @@
   background: #ffffff;
   color: #1d1812;
   font-family: inherit;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
 .chip-days {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
 }
 
@@ -180,7 +180,7 @@
   border: 1px solid #e8dcc8;
   border-radius: 12px;
   color: #5c5042;
-  font-size: 12.5px;
+  font-size: 12px;
   line-height: 1.5;
 }
 
@@ -226,7 +226,7 @@
   padding: 0 18px;
   border-radius: 12px;
   font-family: inherit;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.1px;
   cursor: pointer;

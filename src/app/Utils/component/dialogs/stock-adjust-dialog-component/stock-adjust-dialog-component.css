@@ -49,7 +49,7 @@
   border-radius: 10px;
   background: #ffffff;
   color: #4a3f33;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   cursor: pointer;
 }
@@ -130,7 +130,7 @@
 }
 
 .adj-preview strong {
-  font-size: 13.5px;
+  font-size: 13px;
   color: #1d1812;
 }
 
@@ -155,7 +155,7 @@
 .adj-error {
   margin: 10px 0 0;
   color: #dc2626;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
 }
 

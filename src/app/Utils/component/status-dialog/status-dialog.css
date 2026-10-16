@@ -140,7 +140,7 @@
 ========================================= */
 
 .dialog-message {
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.6;
 
   color: #555;
@@ -174,7 +174,7 @@ mat-dialog-actions {
 
   border-radius: 0px;
 
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
 
   color: #ffffff;

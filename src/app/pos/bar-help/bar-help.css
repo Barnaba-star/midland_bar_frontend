@@ -53,7 +53,7 @@
 .note-body {
   margin: 0;
   color: #5c5042;
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1.6;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
@@ -75,7 +75,7 @@
   border-radius: 999px;
   background: #faf6ef;
   color: #175cd3;
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 600;
   text-decoration: none;
 }

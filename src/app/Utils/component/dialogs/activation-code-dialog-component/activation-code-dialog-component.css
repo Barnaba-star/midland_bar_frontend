@@ -135,7 +135,7 @@
 .done-btn {
   padding: 8px 18px;
   border-radius: var(--radius-sm, 10px);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   display: inline-flex;

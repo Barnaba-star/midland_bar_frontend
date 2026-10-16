@@ -42,7 +42,7 @@
   margin: 0 0 18px;
 
   color: #7a6f60;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .pay-summary {
@@ -64,7 +64,7 @@
 
   padding: 6px 0;
 
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .summary-line .label {
@@ -154,7 +154,7 @@
   border-radius: 8px;
 
   font-family: inherit;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
 
   cursor: pointer;

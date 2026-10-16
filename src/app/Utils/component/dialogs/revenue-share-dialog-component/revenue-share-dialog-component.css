@@ -172,14 +172,14 @@
 
 .revenue-unit {
   color: #7a6f60;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0;
 }
 
 .revenue-meta {
   color: #7a6f60;
-  font-size: 12.5px;
+  font-size: 12px;
 }
 
 
@@ -217,7 +217,7 @@
 
 .share-name {
   color: #1d1812;
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 600;
   overflow-wrap: anywhere;
 }
@@ -355,7 +355,7 @@
 
 .recipient-name {
   color: #1d1812;
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 600;
   overflow-wrap: anywhere;
 }
@@ -512,7 +512,7 @@
   height: 40px;
   padding: 0 18px;
   border-radius: 12px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.1px;
   cursor: pointer;

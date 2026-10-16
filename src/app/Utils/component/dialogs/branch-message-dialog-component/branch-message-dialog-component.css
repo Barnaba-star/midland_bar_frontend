@@ -169,7 +169,7 @@
 .bubble {
   padding: 10px 13px;
   border-radius: 14px;
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1.55;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
@@ -239,7 +239,7 @@
   background: linear-gradient(180deg, #2b2118 0%, #1d1812 100%);
   color: #ffffff;
   font-family: inherit;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
 }

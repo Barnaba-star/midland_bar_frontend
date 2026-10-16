@@ -37,7 +37,7 @@
   background: #1d1812;
   color: #ffffff;
   font-family: inherit;
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
 }
@@ -86,7 +86,7 @@
   background: #ffffff;
   color: #7a6f60;
   font-family: inherit;
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
@@ -133,7 +133,7 @@
   padding: 0 16px;
   border-radius: 10px;
   font-family: inherit;
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
 }
@@ -161,7 +161,7 @@
   border-radius: 10px;
   background: #ecfdf3;
   color: #067647;
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 600;
 }
 
@@ -242,7 +242,7 @@
 
 .subject {
   color: #1d1812;
-  font-size: 13.5px;
+  font-size: 12.5px;
   font-weight: 600;
   overflow-wrap: anywhere;
 }

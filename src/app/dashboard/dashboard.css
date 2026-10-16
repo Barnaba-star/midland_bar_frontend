@@ -95,7 +95,7 @@
   border: 1px solid var(--line);
   border-radius: 999px;
   background: var(--ink-2);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
 }
 
@@ -190,7 +190,7 @@
 .intro p {
   margin: 0;
   color: var(--muted);
-  font-size: 14px;
+  font-size: 13px;
 }
 
 /* ---------- Module cards ---------- */
@@ -269,7 +269,7 @@
   flex: 1;
   margin: 0;
   color: var(--muted);
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1.6;
 }
 
@@ -278,7 +278,7 @@
   align-items: center;
   gap: 6px;
   color: var(--amber);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
 }
 

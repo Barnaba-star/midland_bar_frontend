@@ -62,7 +62,7 @@
 .dialog-message {
   margin: 0;
   color: #5c5042;
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1.6;
   overflow-wrap: anywhere;
 }
@@ -94,7 +94,7 @@
   height: 40px;
   padding: 0 18px;
   border-radius: 12px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.1px;
   cursor: pointer;

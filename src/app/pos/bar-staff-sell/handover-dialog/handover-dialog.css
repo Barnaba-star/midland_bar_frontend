@@ -67,7 +67,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--color-text-muted);
 }
 
@@ -113,7 +113,7 @@
   gap: 10px;
   padding: 7px 0;
   border-bottom: 1px dashed var(--color-border);
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .ho-rows small {
@@ -130,7 +130,7 @@
 }
 
 .ho-bills li {
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .ho-code {
@@ -182,7 +182,7 @@
   height: 36px;
   padding: 0 12px;
   border-radius: 8px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   cursor: pointer;
 }
@@ -234,7 +234,7 @@
   align-items: center;
   gap: 6px;
   margin: 0;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   color: #0f766e;
 }
@@ -334,7 +334,7 @@
 
 .ho-confirm-text {
   flex: 1;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
 }
 
@@ -367,7 +367,7 @@
 .ho-short label {
   display: grid;
   gap: 4px;
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 600;
   color: var(--color-text);
 }
@@ -387,7 +387,7 @@
 
 .ho-short-sum {
   margin: 0;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--color-text);
 }
 
@@ -421,7 +421,7 @@
   border-radius: 8px;
   background: transparent;
   color: var(--color-text);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
 }

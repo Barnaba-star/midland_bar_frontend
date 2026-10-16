@@ -1814,3 +1814,253 @@ a.sv-btn {
     transition: none;
   }
 }
+
+/* ---------- Services index: only on a computer ---------- */
+
+.sv-index {
+  display: none;
+}
+
+/* =====================================================
+   COMPUTER (owner, 2026-10-16): the public pages fill the screen.
+   One frame for everything - menu, tab title, the section, the step
+   buttons, the foot - so every left edge lines up; up to 1440px of
+   content, wider screens keep it centred. Each tab fills the window
+   so the foot sits at the bottom, not halfway up. The phone and
+   tablet layouts above are untouched.
+===================================================== */
+@media (min-width: 961px) {
+  .page {
+    --pad-x: max(clamp(24px, 5vw, 80px), calc((100% - 1440px) / 2));
+    display: flex;
+    flex-direction: column;
+  }
+
+  .nav,
+  .hero,
+  .page-head,
+  .services.solo,
+  .about,
+  .info-section,
+  .last-call,
+  .step-nav,
+  .tab-flow,
+  .footer {
+    padding-left: var(--pad-x);
+    padding-right: var(--pad-x);
+  }
+
+  /* The open tab takes the room left between its title and the foot. */
+  .page > section {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 56px;
+    padding-bottom: 72px;
+  }
+
+  .page-head + section,
+  .page-head + .services {
+    padding-top: 48px;
+  }
+
+  .about-inner,
+  .price-inner,
+  .info-grid,
+  .faq,
+  .step-nav {
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  /* A section's heading starts on the same line as the tab title. */
+  .info-section .section-head {
+    align-items: flex-start;
+    max-width: none;
+    margin: 0 0 36px;
+    padding: 0;
+    text-align: left;
+  }
+
+  /* Kuhusu */
+  .about-inner {
+    grid-template-columns: 1.15fr 1fr;
+    gap: clamp(48px, 6vw, 96px);
+  }
+
+  .about-copy p {
+    font-size: 18px;
+    max-width: 62ch;
+  }
+
+  .about-points li {
+    padding: 22px 24px;
+  }
+
+  .about-points strong {
+    font-size: 17px;
+  }
+
+  .about-points span {
+    font-size: 15px;
+  }
+
+  /* Inavyofanya kazi, Watumiaji */
+  .info-grid {
+    gap: 20px;
+  }
+
+  .info-card {
+    padding: 28px;
+    min-height: 220px;
+  }
+
+  .info-card h3 {
+    font-size: 19px;
+  }
+
+  .info-card p {
+    font-size: 15px;
+  }
+
+  /* Bei */
+  .price-inner {
+    grid-template-columns: 1fr minmax(420px, 520px);
+    gap: clamp(48px, 6vw, 112px);
+  }
+
+  .price-copy p {
+    font-size: 18px;
+    max-width: 58ch;
+  }
+
+  .price-card {
+    padding: 36px;
+  }
+
+  .price-card li {
+    font-size: 15px;
+  }
+
+  /* Maswali: two columns of questions across the screen. */
+  .faq {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 16px 20px;
+  }
+
+  /* Wasiliana: the toast photo fills the tab, the words in its middle. */
+  .last-call {
+    align-items: center;
+  }
+
+  .last-call-inner {
+    max-width: 900px;
+  }
+
+  .last-call p {
+    max-width: 640px;
+    font-size: 18px;
+  }
+
+  /* Huduma: the open service on the left, every service listed on the right. */
+  .page > .services.solo {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+    grid-template-rows: auto auto;
+    align-content: center;
+    column-gap: clamp(40px, 5vw, 96px);
+    min-height: 0;
+  }
+
+  .services.solo app-typed-service {
+    grid-column: 1;
+    grid-row: 1;
+    max-width: none;
+  }
+
+  .services.solo .sv-nav {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .sv-index {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0;
+    padding: 14px;
+    list-style: none;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--ink-3);
+  }
+
+  .sv-index button {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .sv-index button:hover {
+    color: var(--cream);
+  }
+
+  .sv-index button.on {
+    border-color: rgba(245, 165, 36, 0.4);
+    background: rgba(245, 165, 36, 0.1);
+    color: var(--cream);
+  }
+
+  .sv-index mat-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    color: var(--amber);
+  }
+
+  .sv-index-no {
+    min-width: 22px;
+    color: rgba(245, 165, 36, 0.6);
+    font-size: 13px;
+  }
+
+  .step-nav {
+    padding-top: 0;
+  }
+
+  .footer {
+    padding-top: 26px;
+    padding-bottom: 26px;
+  }
+
+  /* Mwanzo: the answer's picture is placed against the hero, so the chat
+     bubbles must not become its frame (a moving bubble would carry it
+     over the words) - they fade in instead of sliding. */
+  .hero .bubble {
+    animation-name: bubble-fade;
+  }
+}
+
+@keyframes bubble-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

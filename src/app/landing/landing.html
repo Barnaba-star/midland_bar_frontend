@@ -271,6 +271,19 @@
         </button>
       }
     </div>
+
+    <!-- On a computer: every service listed beside the one open, one click away. -->
+    <ol class="sv-index">
+      @for (sv of services; track sv.title; let i = $index) {
+        <li>
+          <button type="button" [class.on]="i === svIndex" (click)="showService(i)">
+            <span class="sv-index-no">{{ i + 1 < 10 ? '0' : '' }}{{ i + 1 }}</span>
+            <mat-icon>{{ sv.icon }}</mat-icon>
+            <span>{{ sv.title | translate }}</span>
+          </button>
+        </li>
+      }
+    </ol>
   </section>
   }
 

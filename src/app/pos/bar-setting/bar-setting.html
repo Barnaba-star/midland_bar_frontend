@@ -305,7 +305,7 @@
     </div>
 
     <div>
-      <h2>{{ 'SERVICE_PAGE.TITLE' | translate }}</h2>
+      <h2>{{ (serviceKindView === 'STOCK_ITEMS' ? 'SERVICE_PAGE.KIND_STOCK_ITEMS' : 'SERVICE_PAGE.TITLE') | translate }}</h2>
       <p>{{ 'SETTING_PAGE.TABLE_SUBTITLE' | translate }}</p>
     </div>
 
@@ -374,7 +374,7 @@
         <thead>
           <tr>
             <th>#</th>
-            <th>{{ 'SERVICE_PAGE.COL_SERVICE' | translate }}</th>
+            <th>{{ (serviceKindView === 'STOCK_ITEMS' ? 'PRODUCT_FORM.KIND_STOCK_ITEM' : 'SERVICE_PAGE.COL_SERVICE') | translate }}</th>
             <th>{{ 'COMMON.CODE' | translate }}</th>
             <th>{{ 'COMMON.PRICE' | translate }}</th>
             <th>{{ 'SETTING_PAGE.COL_CATEGORY' | translate }}</th>

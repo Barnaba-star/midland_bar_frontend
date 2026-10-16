@@ -1,4 +1,4 @@
-import { isCounterSession, returnFromCounterSession } from './counter-session';
+import { counterLoginToken, isCounterSession, returnFromCounterSession } from './counter-session';
 import { BrandWord } from '../../Utils/component/brand-word/brand-word';
 import { PaymentNoteDialog } from '../../Utils/component/dialogs/payment-note-dialog/payment-note-dialog';
 import { SellableItems } from '../../Utils/services/sellable-items';
@@ -105,6 +105,7 @@ export class BarStaffSell implements OnInit, OnDestroy {
     // Orders and bills made offline have reached the server: read them again.
     this.offline.synced.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.refresh(true));
     this.listenLive();
+    this.watchCounterQueue();
     if (!this.touch) {
       setTimeout(() => this.codeInput?.nativeElement.focus());
     }
@@ -181,9 +182,44 @@ export class BarStaffSell implements OnInit, OnDestroy {
     this.audio?.close().catch(() => undefined);
     this.stopPoll();
     this.live?.unsubscribe();
+    if (this.counterWatch) {
+      clearInterval(this.counterWatch);
+    }
   }
 
   private live?: Subscription;
+
+  // ---- The counter on its own bills still hears new orders ----
+
+  private counterWatch: ReturnType<typeof setInterval> | null = null;
+  /** Orders already in the queue; null until the first look. */
+  private counterKnown: Set<string> | null = null;
+
+  /**
+   * "Bili zangu" takes the counter off the orders screen, which used to stop
+   * its alarm: a waiter's order sent meanwhile went unheard. While here, the
+   * queue is read with the counter's own login and a new order rings.
+   */
+  private watchCounterQueue(): void {
+    const token = isCounterSession() ? counterLoginToken() : null;
+    if (!token) {
+      return;
+    }
+    const look = () => this.barService.pendingStaffOrdersAs(token).subscribe({
+      next: (res) => {
+        const uids = (res?.data ?? []).map((o) => o.uid);
+        const arrived = this.counterKnown ? uids.filter((u) => !this.counterKnown!.has(u)) : [];
+        this.counterKnown = new Set(uids);
+        if (arrived.length) {
+          this.chime([988, 1319, 988, 1319]);
+          this.alertService.show('info', this.translate.instant('STAFF_SELL_PAGE.COUNTER_NEW_ORDER', { count: arrived.length }));
+        }
+      },
+      error: () => {},
+    });
+    look();
+    this.counterWatch = setInterval(look, 8000);
+  }
 
   /**
    * The supervisor received or rejected, or a bill moved at the till: show it
@@ -577,6 +613,8 @@ export class BarStaffSell implements OnInit, OnDestroy {
       next: (res) => {
         this.sending = false;
         if (res?.data !== undefined && res?.data !== null) {
+          // Sent: a short rising two-note so the waiter knows it went.
+          this.chime([784, 1175]);
           if (then) {
             then();
             return;

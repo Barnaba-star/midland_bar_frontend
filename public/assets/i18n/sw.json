@@ -2147,7 +2147,8 @@
     "DRINK_PICK_BILL": "Chagua bill kwanza ili kuongeza kinywaji kwenye oda.",
     "ORDER_DRAFT_TO": "Haijatumwa bado · itaenda {{place}}",
     "ORDER_READY": "Oda yako iko tayari - imepokelewa {{place}}",
-    "ORDER_SENT_TO": "Inaenda {{place}} · inasubiri"
+    "ORDER_SENT_TO": "Inaenda {{place}} · inasubiri",
+    "COUNTER_NEW_ORDER": "Oda mpya ya mhudumu ({{count}}) - iko kwenye Oda za Wahudumu"
   },
   "SUPERVISOR_PAGE": {
     "EXCHANGE": "Badilisho",

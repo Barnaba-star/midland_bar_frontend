@@ -1,4 +1,5 @@
 import { silent } from '../Utils/inteceptor/silent-request';
+import { AS_TOKEN } from '../Utils/inteceptor/auth-interceptor';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -365,6 +366,11 @@ sendStaffOrders(staffCode: string): Observable<Response<number>> {
 }
 
 /** Supervisor: orders waiting to be received, oldest first. */
+/** The orders queue as the counter's own login, from its Staff Sell. */
+pendingStaffOrdersAs(token: string): Observable<Response<StaffOrder[]>> {
+  return this.http.get<Response<StaffOrder[]>>(`${this.barURL}/staffOrders/pending`, { context: silent().set(AS_TOKEN, token) });
+}
+
 pendingStaffOrders(): Observable<Response<StaffOrder[]>> {
   // Polled every few seconds: no spinner, no popups.
   return this.http.get<Response<StaffOrder[]>>(`${this.barURL}/staffOrders/pending`, { context: silent() });

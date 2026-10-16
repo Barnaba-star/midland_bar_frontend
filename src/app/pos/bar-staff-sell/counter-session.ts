@@ -26,6 +26,15 @@ export function isCounterSession(): boolean {
   }
 }
 
+/** The COUNTER login kept aside, to keep listening for orders with it. */
+export function counterLoginToken(): string | null {
+  try {
+    return localStorage.getItem(KEY);
+  } catch {
+    return null;
+  }
+}
+
 /** Back to the COUNTER login. False when there was none to go back to. */
 export function returnFromCounterSession(auth: Authentication): boolean {
   let login: string | null = null;

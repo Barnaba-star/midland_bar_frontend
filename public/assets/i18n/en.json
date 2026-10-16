@@ -2147,7 +2147,8 @@
     "DRINK_PICK_BILL": "Pick a bill first to add the drink to its order.",
     "ORDER_DRAFT_TO": "Not sent yet · goes to {{place}}",
     "ORDER_READY": "Your order is ready - received at {{place}}",
-    "ORDER_SENT_TO": "Going to {{place}} · waiting"
+    "ORDER_SENT_TO": "Going to {{place}} · waiting",
+    "COUNTER_NEW_ORDER": "New waiter order ({{count}}) - waiting on the orders screen"
   },
   "SUPERVISOR_PAGE": {
     "EXCHANGE": "Change",

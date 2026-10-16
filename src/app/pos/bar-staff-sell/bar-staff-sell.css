@@ -1071,3 +1071,45 @@
   font-size: 16px;
   color: #b86e00;
 }
+
+.handover-frozen div {
+  flex: 1;
+}
+
+.recall-btn {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 6px;
+  align-self: center;
+  padding: 8px 12px;
+  border: 1px solid #b86e00;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #6b4400;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.recall-btn mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
+.recall-btn:disabled {
+  opacity: 0.5;
+}
+
+@media (max-width: 600px) {
+  .handover-frozen {
+    flex-wrap: wrap;
+  }
+
+  .recall-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

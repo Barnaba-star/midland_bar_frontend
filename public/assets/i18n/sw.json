@@ -2099,6 +2099,8 @@
     "BAR_COPY": "Nakala ya bar"
   },
   "STAFF_SELL_PAGE": {
+    "RECALL_HANDOVER": "Rudisha makabidhiano",
+    "HANDOVER_RECALLED": "Makabidhiano yamerudishwa - unaweza kuendelea kuuza",
     "HANDOVER_FROZEN_TITLE": "Makabidhiano yametumwa",
     "HANDOVER_FROZEN": "Bili zako zimetumwa kwa makabidhiano. Huwezi kufungua bili mpya, kuongeza wala kubadilisha chochote mpaka cashier apokee.",
     "BILL_FROZEN": "Bili hii imetumwa kwa makabidhiano - haiwezi kubadilishwa",

@@ -406,6 +406,11 @@ sendStaffHandover(staffCode: string): Observable<Response<number>> {
   return this.http.post<Response<number>>(`${this.barURL}/staffSell/handover/${encodeURIComponent(staffCode)}/send`, {});
 }
 
+/** Takes a sent handover back: the staff member's bills open up again. */
+recallStaffHandover(staffCode: string): Observable<Response<number>> {
+  return this.http.post<Response<number>>(`${this.barURL}/staffSell/handover/${encodeURIComponent(staffCode)}/recall`, {});
+}
+
 /** Sales: the cashier took one method's money - every listed bill in it is paid, or none if any changed. */
 receiveStaffHandover(dto: { staffCode: string; method: string; bills: { uid: string; amount: number }[]; handedAmount?: number; note?: string }): Observable<Response<{ method: string; bills: number; amount: number; shortage?: number }>> {
   return this.http.post<Response<{ method: string; bills: number; amount: number; shortage?: number }>>(`${this.barURL}/staffSell/handover/receive`, dto);

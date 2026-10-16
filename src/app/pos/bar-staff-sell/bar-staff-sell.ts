@@ -126,6 +126,32 @@ export class BarStaffSell implements OnInit, OnDestroy {
     return this.handoverSent;
   }
 
+  recalling = false;
+
+  /** Sent too soon: take the handover back, and the bills open up again. */
+  recallHandover(): void {
+    if (!this.staff || this.recalling) {
+      return;
+    }
+    this.recalling = true;
+    this.cdr.markForCheck();
+    this.barService.recallStaffHandover(this.staff.staffCode).subscribe({
+      next: (res) => {
+        this.recalling = false;
+        if (res?.data) {
+          this.handoverSent = false;
+          this.alertService.show('success', this.translate.instant('STAFF_SELL_PAGE.HANDOVER_RECALLED'));
+          this.refresh();
+        }
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.recalling = false;
+        this.cdr.markForCheck();
+      },
+    });
+  }
+
   openHandover(): void {
     if (!this.staff) {
       return;

@@ -119,6 +119,10 @@
               <strong>{{ 'STAFF_SELL_PAGE.HANDOVER_FROZEN_TITLE' | translate }}</strong>
               <span>{{ 'STAFF_SELL_PAGE.HANDOVER_FROZEN' | translate }}</span>
             </div>
+            <button type="button" class="recall-btn" [disabled]="recalling" (click)="recallHandover()">
+              <mat-icon>undo</mat-icon>
+              {{ 'STAFF_SELL_PAGE.RECALL_HANDOVER' | translate }}
+            </button>
           </div>
         }
 

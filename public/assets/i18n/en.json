@@ -2099,6 +2099,8 @@
     "BAR_COPY": "Bar copy"
   },
   "STAFF_SELL_PAGE": {
+    "RECALL_HANDOVER": "Take handover back",
+    "HANDOVER_RECALLED": "Handover taken back - you can sell again",
     "HANDOVER_FROZEN_TITLE": "Handover sent",
     "HANDOVER_FROZEN": "Your bills were sent for handover. You cannot open a new bill, add or change anything until the cashier receives it.",
     "BILL_FROZEN": "This bill was sent for handover - it cannot be changed",

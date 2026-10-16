@@ -247,7 +247,7 @@
                 <!-- Only on this device, never saved: who the customer is. -->
                 <label class="bill-nickname">
                   <mat-icon>sell</mat-icon>
-                  <input type="text" maxlength="40"
+                  <input type="text" maxlength="40" [readOnly]="handoverSent"
                          [value]="nicknames.get(bill.uid)"
                          (input)="nicknames.set(bill.uid, $any($event.target).value)"
                          [placeholder]="'BILL_NICKNAME.PH' | translate"
@@ -256,13 +256,13 @@
 
                 <!-- Paid by phone: how and from whose name, for the cashier to check at handover. -->
                 @if (bill.paymentNoteMethod) {
-                  <button type="button" class="pay-note on" (click)="openPaymentNote(bill)">
+                  <button type="button" class="pay-note on" [disabled]="handoverSent" (click)="openPaymentNote(bill)">
                     <mat-icon>phone_iphone</mat-icon>
                     <span class="pay-note-text"><b>{{ 'PAY_BILL.METHOD_' + bill.paymentNoteMethod | translate }}</b> · {{ bill.paymentNotePayer }}@if (bill.paymentNoteRef) { · {{ bill.paymentNoteRef }} }</span>
                     <mat-icon class="pay-note-edit">edit</mat-icon>
                   </button>
                 } @else {
-                  <button type="button" class="pay-note" (click)="openPaymentNote(bill)">
+                  <button type="button" class="pay-note" [disabled]="handoverSent" (click)="openPaymentNote(bill)">
                     <mat-icon>phone_iphone</mat-icon>
                     <span class="pay-note-text">{{ 'PAYMENT_NOTE.ADD' | translate }}</span>
                   </button>
@@ -281,7 +281,7 @@
                       @for (line of order.lines; track line.uid) {
                         <li>
                           <span>{{ line.quantity }} × {{ line.serviceName }} @if (line.serving) { <span class="serving-tag" [class.warm]="line.serving === 'WARM'">{{ (line.serving === 'WARM' ? 'SALE_ITEM.WARM' : 'SALE_ITEM.COLD') | translate }}</span> }</span>
-                          <button type="button" class="line-remove" (click)="removeLine(order, line.uid)" [attr.aria-label]="'COMMON.DELETE' | translate">
+                          <button type="button" class="line-remove" [hidden]="handoverSent" (click)="removeLine(order, line.uid)" [attr.aria-label]="'COMMON.DELETE' | translate">
                             <mat-icon>close</mat-icon>
                           </button>
                         </li>
@@ -326,7 +326,7 @@
                 <!-- What is already on the bill shows only in View inside; its count rides on that button. -->
 
                 @if (countOf(bill, 'DRAFT')) {
-                  <button type="button" class="bill-send" [disabled]="sending" (click)="sendOrders()">
+                  <button type="button" class="bill-send" [disabled]="sending || handoverSent" (click)="sendOrders()">
                     <mat-icon>send</mat-icon>
                     {{ 'STAFF_SELL_PAGE.SEND' | translate }} ({{ unsentCount }})
                   </button>

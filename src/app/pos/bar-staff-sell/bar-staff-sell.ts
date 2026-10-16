@@ -140,6 +140,9 @@ export class BarStaffSell implements OnInit, OnDestroy {
 
   /** "Paid by phone, from this name" - noted on the bill for the cashier; marks nothing paid. */
   openPaymentNote(bill: SalesOpened): void {
+    if (this.frozen()) {
+      return;
+    }
     this.dialog.open(PaymentNoteDialog, {
       width: '440px',
       maxWidth: '95vw',

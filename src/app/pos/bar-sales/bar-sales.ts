@@ -268,7 +268,7 @@ export class BarSales implements OnInit{
     this.setStaffFilter(filter);
     const opt = this.staffOptions.find((o) => o.code === filter);
     const opener = this.openerOptions.find((o) => o.key === filter);
-    if (!opt && !opener) {
+    if (!opt && !opener && filter !== 'NONE') {
       return;
     }
     const bills = this.handoverBills;
@@ -277,7 +277,7 @@ export class BarSales implements OnInit{
       maxWidth: '95vw',
       autoFocus: false,
       data: {
-        staffName: opt ? opt.name : opener!.name,
+        staffName: opt ? opt.name : opener ? opener.name : this.translate.instant('SALES_PAGE.FILTER_NONE'),
         bills: bills.length,
         total: bills.reduce((sum, b) => sum + (Number(b.bill) || 0), 0),
         shiftOpen: this.shiftState === 'OPEN',

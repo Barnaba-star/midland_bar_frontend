@@ -584,3 +584,18 @@ app-brand-word,
 app-brand-word * {
   text-transform: none !important;
 }
+
+/* The public pages - landing (Mwanzo, Kuhusu, Huduma, Inavyofanya Kazi, Bei,
+   Wasiliana Nasi), login and the app download - keep the case as written
+   (owner, 2026-10-16); capitals start once inside the system. Their own
+   component styles (eyebrows, labels) can still ask for uppercase. */
+app-landing,
+app-login,
+app-download {
+  text-transform: none;
+}
+
+:is(app-landing, app-login, app-download) :is(input:not([type="password"]), textarea, select, button),
+:is(app-landing, app-login, app-download) :is(input, textarea)::placeholder {
+  text-transform: none;
+}

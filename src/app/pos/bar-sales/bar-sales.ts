@@ -3,6 +3,7 @@ import { PaymentNoteDialog } from '../../Utils/component/dialogs/payment-note-di
 import { SellableItems } from '../../Utils/services/sellable-items';
 import { OfflineService } from '../../Utils/offline/offline.service';
 import { StaffLossDialog } from '../../Utils/component/dialogs/staff-loss-dialog/staff-loss-dialog';
+import { StaffActionsDialog, StaffAction } from '../../Utils/component/dialogs/staff-actions-dialog/staff-actions-dialog';
 import { StaffHandoverDialog } from '../bar-staff-sell/handover-dialog/handover-dialog';
 import { LiveChanges } from '../../Utils/services/live-changes';
 import { BillNicknames } from '../../Utils/services/bill-nicknames';
@@ -260,6 +261,34 @@ export class BarSales implements OnInit{
   setStaffFilter(filter: string): void {
     this.staffFilter = filter;
     this.cdr.markForCheck();
+  }
+
+  /** Tapping a staff member's name: their bills, then what to do with them. */
+  onStaffChip(filter: string): void {
+    this.setStaffFilter(filter);
+    const opt = this.staffOptions.find((o) => o.code === filter);
+    const opener = this.openerOptions.find((o) => o.key === filter);
+    if (!opt && !opener) {
+      return;
+    }
+    const bills = this.handoverBills;
+    this.dialog.open(StaffActionsDialog, {
+      width: '400px',
+      maxWidth: '95vw',
+      autoFocus: false,
+      data: {
+        staffName: opt ? opt.name : opener!.name,
+        bills: bills.length,
+        total: bills.reduce((sum, b) => sum + (Number(b.bill) || 0), 0),
+        shiftOpen: this.shiftState === 'OPEN',
+        // Handover and shortage are a staff member's; a till login's bills can only be printed.
+        canHandover: !!opt,
+      },
+    }).afterClosed().subscribe((action?: StaffAction) => {
+      if (action === 'HANDOVER') this.openStaffHandover();
+      else if (action === 'LOSS') this.recordStaffLoss();
+      else if (action === 'PRINT') this.printStaffBills();
+    });
   }
 
   openNewSales() {

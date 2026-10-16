@@ -2456,6 +2456,15 @@
     "COL_REASON": "Sababu",
     "COL_WHEN": "Lini"
   },
+  "STAFF_ACTIONS": {
+    "BILLS": "Bili {{count}}",
+    "ASK": "Unataka kufanya nini?",
+    "HANDOVER_HINT": "Cash na pesa za simu anazotakiwa kukabidhi",
+    "LOSS_HINT": "Amekabidhi pungufu ya bili zake",
+    "PRINT_HINT": "Bili zake zote kwenye risiti moja",
+    "SHIFT_CLOSED": "Fungua shift kwanza ili kupokea makabidhiano au kurekodi upungufu.",
+    "JUST_VIEW": "Angalia bili zake tu"
+  },
   "STAFF_LOSS": {
     "BUTTON": "Upungufu",
     "TITLE": "Upungufu wa makabidhiano",

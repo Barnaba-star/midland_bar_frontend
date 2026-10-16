@@ -2456,6 +2456,15 @@
     "COL_REASON": "Reason",
     "COL_WHEN": "When"
   },
+  "STAFF_ACTIONS": {
+    "BILLS": "{{count}} bills",
+    "ASK": "What would you like to do?",
+    "HANDOVER_HINT": "Cash and phone money they should hand in",
+    "LOSS_HINT": "They handed in less than their bills",
+    "PRINT_HINT": "All their bills on one receipt",
+    "SHIFT_CLOSED": "Open the shift first to take a handover or record a shortage.",
+    "JUST_VIEW": "Just view their bills"
+  },
   "STAFF_LOSS": {
     "BUTTON": "Shortage",
     "TITLE": "Handover shortage",

@@ -33,7 +33,7 @@
             <span class="chip-count">{{ salesOpenedList.length }}</span>
           </button>
           @for (opt of staffOptions; track opt.code) {
-            <button type="button" class="staff-chip" [class.active]="staffFilter === opt.code" (click)="setStaffFilter(opt.code)">
+            <button type="button" class="staff-chip" [class.active]="staffFilter === opt.code" (click)="onStaffChip(opt.code)">
               {{ opt.name }}
               @if (opt.sent) {
                 <mat-icon class="chip-sent" [attr.title]="'STAFF_HANDOVER.SENT_BADGE' | translate">send</mat-icon>
@@ -42,7 +42,7 @@
             </button>
           }
           @for (opt of openerOptions; track opt.key) {
-            <button type="button" class="staff-chip" [class.active]="staffFilter === opt.key" (click)="setStaffFilter(opt.key)">
+            <button type="button" class="staff-chip" [class.active]="staffFilter === opt.key" (click)="onStaffChip(opt.key)">
               {{ opt.name }}
               <span class="chip-count">{{ opt.count }}</span>
             </button>

@@ -1,0 +1,46 @@
+<div class="sa">
+  <div class="sa-head">
+    <span class="sa-icon"><mat-icon>person</mat-icon></span>
+    <div>
+      <h3>{{ data.staffName }}</h3>
+      <p>{{ 'STAFF_ACTIONS.BILLS' | translate: { count: data.bills } }} · Tshs {{ data.total | number }}</p>
+    </div>
+  </div>
+
+  <p class="sa-ask">{{ 'STAFF_ACTIONS.ASK' | translate }}</p>
+
+  @if (data.canHandover) {
+    <button type="button" class="sa-option" [disabled]="!data.shiftOpen" (click)="choose('HANDOVER')">
+      <span class="sa-opt-icon"><mat-icon>account_balance_wallet</mat-icon></span>
+      <span class="sa-opt-text">
+        <strong>{{ 'STAFF_HANDOVER.BUTTON_CASHIER' | translate }}</strong>
+        <small>{{ 'STAFF_ACTIONS.HANDOVER_HINT' | translate }}</small>
+      </span>
+      <mat-icon class="sa-go">chevron_right</mat-icon>
+    </button>
+
+    <button type="button" class="sa-option loss" [disabled]="!data.shiftOpen" (click)="choose('LOSS')">
+      <span class="sa-opt-icon"><mat-icon>money_off</mat-icon></span>
+      <span class="sa-opt-text">
+        <strong>{{ 'STAFF_LOSS.BUTTON' | translate }}</strong>
+        <small>{{ 'STAFF_ACTIONS.LOSS_HINT' | translate }}</small>
+      </span>
+      <mat-icon class="sa-go">chevron_right</mat-icon>
+    </button>
+  }
+
+  <button type="button" class="sa-option" [disabled]="!data.bills" (click)="choose('PRINT')">
+    <span class="sa-opt-icon"><mat-icon>print</mat-icon></span>
+    <span class="sa-opt-text">
+      <strong>{{ 'SALES_PAGE.PRINT_ALL' | translate: { count: data.bills } }}</strong>
+      <small>{{ 'STAFF_ACTIONS.PRINT_HINT' | translate }}</small>
+    </span>
+    <mat-icon class="sa-go">chevron_right</mat-icon>
+  </button>
+
+  @if (data.canHandover && !data.shiftOpen) {
+    <small class="sa-note">{{ 'STAFF_ACTIONS.SHIFT_CLOSED' | translate }}</small>
+  }
+
+  <button type="button" class="sa-close" (click)="close()">{{ 'STAFF_ACTIONS.JUST_VIEW' | translate }}</button>
+</div>

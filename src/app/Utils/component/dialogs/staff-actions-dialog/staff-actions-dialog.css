@@ -1,0 +1,123 @@
+.sa {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.sa-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sa-head h3 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.sa-head p {
+  margin: 2px 0 0;
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+.sa-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: color-mix(in srgb, #f5a524 18%, var(--color-surface));
+  color: #b86e00;
+}
+
+.sa-ask {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.sa-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.sa-option:hover:not(:disabled) {
+  border-color: #f5a524;
+  background: color-mix(in srgb, #f5a524 6%, var(--color-surface));
+}
+
+.sa-option:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sa-opt-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: color-mix(in srgb, #f5a524 14%, var(--color-surface));
+  color: #b86e00;
+}
+
+.sa-option.loss .sa-opt-icon {
+  background: color-mix(in srgb, #c0392b 12%, var(--color-surface));
+  color: #c0392b;
+}
+
+.sa-opt-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.sa-opt-text strong {
+  font-size: 13px;
+}
+
+.sa-opt-text small {
+  font-size: 11.5px;
+  color: var(--color-text-muted);
+}
+
+.sa-go {
+  color: var(--color-text-muted);
+}
+
+.sa-note {
+  font-size: 11.5px;
+  color: #c0392b;
+}
+
+.sa-close {
+  margin-top: 4px;
+  height: 38px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 12.5px;
+  cursor: pointer;
+}
+
+.sa-close:hover {
+  background: color-mix(in srgb, var(--color-text) 6%, transparent);
+}

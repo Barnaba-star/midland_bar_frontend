@@ -1113,3 +1113,19 @@
     justify-content: center;
   }
 }
+
+/* Makabidhiano: the one button every waiter must find at the end of a shift. */
+.row-action.handover-btn {
+  border-color: #2b2118;
+  background: #2b2118;
+  color: #f6ecdc;
+  font-weight: 800;
+}
+
+.row-action.handover-btn mat-icon {
+  color: #f5a524;
+}
+
+.row-action.handover-btn:hover {
+  background: #1a1206;
+}

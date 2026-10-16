@@ -97,7 +97,7 @@
                 <span>{{ 'STAFF_SELL_PAGE.SEND' | translate }} ({{ unsentCount }})</span>
               </button>
             }
-            <button type="button" class="row-action edit" [disabled]="opening" (click)="openBill()">
+            <button type="button" class="row-action edit" [disabled]="opening || handoverSent" (click)="openBill()">
               <mat-icon>add</mat-icon>
               <span>{{ 'SALES_PAGE.OPEN_BILL' | translate }}</span>
             </button>
@@ -110,6 +110,17 @@
             </button>
           </div>
         </div>
+
+        @if (handoverSent) {
+          <!-- Sent for handover: everything stays as it is until the cashier takes the money. -->
+          <div class="handover-frozen">
+            <mat-icon>lock</mat-icon>
+            <div>
+              <strong>{{ 'STAFF_SELL_PAGE.HANDOVER_FROZEN_TITLE' | translate }}</strong>
+              <span>{{ 'STAFF_SELL_PAGE.HANDOVER_FROZEN' | translate }}</span>
+            </div>
+          </div>
+        }
 
         <!-- "A drink that tastes of lime?" - find it by name, code, flavour (description) or category. -->
         <div class="drink-search">
@@ -321,8 +332,12 @@
                   </button>
                 }
 
+                @if (handoverSent) {
+                  <p class="bill-frozen"><mat-icon>lock</mat-icon>{{ 'STAFF_SELL_PAGE.BILL_FROZEN' | translate }}</p>
+                }
+
                 <div class="bill-actions">
-                  <button type="button" class="bill-btn add" [disabled]="busyBill === bill.uid" (click)="addToBill(bill)">
+                  <button type="button" class="bill-btn add" [disabled]="busyBill === bill.uid || handoverSent" (click)="addToBill(bill)">
                     <mat-icon>add</mat-icon>
                     {{ 'SERVICE.ADD' | translate }}
                   </button>

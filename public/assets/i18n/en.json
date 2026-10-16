@@ -257,6 +257,7 @@
     "FILTER_STAFF": "Filter by staff",
     "FILTER_ALL": "All",
     "FILTER_NONE": "No staff",
+    "PICK_STAFF_HINT": "Pick a staff name above, then \"Their bills\" to see their bills.",
     "PRINT_ALL": "Print all ({{count}})",
     "STAFF_SALES_TITLE": "Staff sales",
     "STAFF_SALES_ALL": "Total",
@@ -2098,6 +2099,9 @@
     "BAR_COPY": "Bar copy"
   },
   "STAFF_SELL_PAGE": {
+    "HANDOVER_FROZEN_TITLE": "Handover sent",
+    "HANDOVER_FROZEN": "Your bills were sent for handover. You cannot open a new bill, add or change anything until the cashier receives it.",
+    "BILL_FROZEN": "This bill was sent for handover - it cannot be changed",
     "EXCHANGE_WAITING": "Change · waiting at the {{place}}",
     "EXCHANGE_REJECTED": "Change rejected",
     "EXCHANGE_SENT": "Change sent to the {{place}} - bring back {{back}}, take {{take}}",

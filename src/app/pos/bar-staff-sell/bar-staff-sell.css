@@ -1023,3 +1023,51 @@
   color: #7a6f60;
   font-size: 13px;
 }
+
+/* Sent for handover: the bills are read-only until the cashier receives it. */
+.handover-frozen {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0 0 12px;
+  padding: 12px 14px;
+  border: 1px solid #f5a524;
+  border-radius: 12px;
+  background: #fff6e5;
+  color: #6b4400;
+}
+
+.handover-frozen mat-icon {
+  flex-shrink: 0;
+  color: #b86e00;
+}
+
+.handover-frozen div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 12px;
+}
+
+.handover-frozen strong {
+  font-size: 13px;
+}
+
+.bill-frozen {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 8px 0 0;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #fff6e5;
+  color: #6b4400;
+  font-size: 11.5px;
+}
+
+.bill-frozen mat-icon {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  color: #b86e00;
+}

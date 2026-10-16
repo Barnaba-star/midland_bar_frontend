@@ -341,8 +341,8 @@ findAvailableBillCodes(): Observable<ResponseList<string>> {
 }
 
 /** Staff Sell: who a staff code belongs to, and their unpaid bills. */
-findStaffSell(staffCode: string, quiet = false): Observable<Response<{ staff: StaffSellStaff; bills: SalesOpened[]; orders: StaffOrder[] }>> {
-  return this.http.get<Response<{ staff: StaffSellStaff; bills: SalesOpened[]; orders: StaffOrder[] }>>(`${this.barURL}/staffSell/${encodeURIComponent(staffCode)}`, quiet ? { context: silent() } : {});
+findStaffSell(staffCode: string, quiet = false): Observable<Response<{ staff: StaffSellStaff; bills: SalesOpened[]; orders: StaffOrder[]; handoverSent?: boolean }>> {
+  return this.http.get<Response<{ staff: StaffSellStaff; bills: SalesOpened[]; orders: StaffOrder[]; handoverSent?: boolean }>>(`${this.barURL}/staffSell/${encodeURIComponent(staffCode)}`, quiet ? { context: silent() } : {});
 }
 
 /** Staff Sell: write an item onto the bill's order for the supervisor - not onto the bill. */

@@ -112,6 +112,20 @@ export class BarStaffSell implements OnInit, OnDestroy {
   }
 
   /** Summary: cash to hand over, phone money, and what is already paid this shift. */
+  /**
+   * Sent for handover and not yet received by the cashier: the bills are
+   * read-only (the backend refuses changes too) until the money is taken.
+   */
+  handoverSent = false;
+
+  /** True, with a word to the staff member, when the bills are frozen for handover. */
+  private frozen(): boolean {
+    if (this.handoverSent) {
+      this.alertService.show('error', this.translate.instant('STAFF_SELL_PAGE.HANDOVER_FROZEN'));
+    }
+    return this.handoverSent;
+  }
+
   openHandover(): void {
     if (!this.staff) {
       return;
@@ -143,6 +157,9 @@ export class BarStaffSell implements OnInit, OnDestroy {
 
   /** A bill opened by mistake, still at zero - asked once, then gone and its code free again. */
   deleteEmptyBill(bill: SalesOpened): void {
+    if (this.frozen()) {
+      return;
+    }
     if (!bill.uid || this.busyBill) {
       return;
     }
@@ -354,6 +371,9 @@ export class BarStaffSell implements OnInit, OnDestroy {
 
   /** Tapped in the search: onto the open bill's order, through the same add-item dialog. */
   pickDrink(service: any): void {
+    if (this.frozen()) {
+      return;
+    }
     const bill = this.selectedBill;
     if (!bill) {
       this.alertService.show('error', this.translate.instant('STAFF_SELL_PAGE.DRINK_PICK_BILL'));
@@ -578,6 +598,7 @@ export class BarStaffSell implements OnInit, OnDestroy {
         }
         this.staff = res.data.staff;
         this.bills = res.data.bills ?? [];
+        this.handoverSent = res.data.handoverSent === true;
         this.setOrders(res.data.orders);
         this.billLines = {};
         this.bills.forEach((b) => this.loadLines(b));
@@ -605,6 +626,15 @@ export class BarStaffSell implements OnInit, OnDestroy {
   /** Send what this staff member has written to the supervisor, staying on their bills. */
   sendOrders(then?: () => void): void {
     if (!this.staff || this.sending) {
+      return;
+    }
+    // Frozen for handover: nothing goes out, but switching staff still carries on.
+    if (this.handoverSent) {
+      if (then) {
+        then();
+      } else {
+        this.frozen();
+      }
       return;
     }
     this.sending = true;
@@ -654,6 +684,7 @@ export class BarStaffSell implements OnInit, OnDestroy {
       next: (res) => {
         if (res?.data) {
           this.bills = res.data.bills ?? [];
+          this.handoverSent = res.data.handoverSent === true;
           // Paid or deleted elsewhere: nothing to keep open.
           if (this.selectedUid && !this.bills.some((b) => b.uid === this.selectedUid)) {
             this.selectedUid = null;
@@ -669,6 +700,9 @@ export class BarStaffSell implements OnInit, OnDestroy {
   /** A new bill for this staff member; its code comes from theirs (K1-1, K1-2...). */
   openBill(): void {
     if (!this.staff || this.opening) {
+      return;
+    }
+    if (this.frozen()) {
       return;
     }
     this.opening = true;
@@ -693,6 +727,9 @@ export class BarStaffSell implements OnInit, OnDestroy {
 
   /** preselect: a drink already found (the drink search) - the dialog opens at "how many". */
   addToBill(bill: SalesOpened, preselect?: any): void {
+    if (this.frozen()) {
+      return;
+    }
     if (!bill.uid || this.busyBill) {
       return;
     }
@@ -734,6 +771,9 @@ export class BarStaffSell implements OnInit, OnDestroy {
 
   /** Take a line off an order not yet sent. */
   removeLine(order: StaffOrder, lineUid: string): void {
+    if (this.frozen()) {
+      return;
+    }
     this.barService.removeStaffOrderLine(order.uid, lineUid).subscribe({
       next: (res) => {
         if (res?.data) {
@@ -782,6 +822,9 @@ export class BarStaffSell implements OnInit, OnDestroy {
    * when they receive it.
    */
   exchange(bill: SalesOpened, line: any): void {
+    if (this.frozen()) {
+      return;
+    }
     if (!bill.uid || !line?.uid || this.busyBill) {
       return;
     }

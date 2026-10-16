@@ -4465,3 +4465,22 @@ app-shift-bar .add-bill-btn:not(:disabled):hover span {
     gap: 8px;
   }
 }
+
+/* Nothing chosen yet: a pointer to the names above instead of every bill. */
+.pick-staff-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 28px 16px;
+  border: 1px dashed #e8dcc8;
+  border-radius: 14px;
+  background: #fffdf9;
+  color: #7a6f60;
+  font-size: 13px;
+  text-align: center;
+}
+
+.pick-staff-hint mat-icon {
+  color: #b86e00;
+}

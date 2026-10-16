@@ -257,6 +257,7 @@
     "FILTER_STAFF": "Chuja kwa mhudumu",
     "FILTER_ALL": "Wote",
     "FILTER_NONE": "Bila mhudumu",
+    "PICK_STAFF_HINT": "Chagua jina la mhudumu hapo juu, kisha \"Bili zake\" kuona bili zake.",
     "PRINT_ALL": "Chapisha zote ({{count}})",
     "STAFF_SALES_TITLE": "Mauzo ya wahudumu",
     "STAFF_SALES_ALL": "Jumla",
@@ -2098,6 +2099,9 @@
     "BAR_COPY": "Nakala ya bar"
   },
   "STAFF_SELL_PAGE": {
+    "HANDOVER_FROZEN_TITLE": "Makabidhiano yametumwa",
+    "HANDOVER_FROZEN": "Bili zako zimetumwa kwa makabidhiano. Huwezi kufungua bili mpya, kuongeza wala kubadilisha chochote mpaka cashier apokee.",
+    "BILL_FROZEN": "Bili hii imetumwa kwa makabidhiano - haiwezi kubadilishwa",
     "EXCHANGE_WAITING": "Badilisho · inasubiri {{place}}",
     "EXCHANGE_REJECTED": "Badilisho limekataliwa",
     "EXCHANGE_SENT": "Badilisho limetumwa {{place}} - rudisha {{back}}, chukua {{take}}",

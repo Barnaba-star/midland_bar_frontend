@@ -193,7 +193,9 @@ export class BarSales implements OnInit{
    * Sell (K1), 'U:<login>' for bills a manager/CEO/root opened here on the
    * Sales page, or 'NONE' for old bills nobody is recorded against.
    */
-  staffFilter = 'ALL';
+  // Nobody chosen yet: the page opens on the staff names, and a name's
+  // dialog ("Bili zake") is what shows bills (owner, 2026-10-16).
+  staffFilter = '';
   /** Open bill is off until the login's shift is open. */
   shiftState: ShiftState | null = null;
   /** This device's nicknames for open bills - never saved to the backend. */
@@ -351,6 +353,8 @@ export class BarSales implements OnInit{
               this.openedHere.add(res.data.uid);
             }
             this.salesOpenedList = [...this.salesOpenedList, res.data];
+            // Show the bill just opened: it sits under the login that opened it.
+            this.staffFilter = res.data.staffCode || (res.data.openedBy ? 'U:' + res.data.openedBy : 'NONE');
             this.cdr.detectChanges();
           }
         },

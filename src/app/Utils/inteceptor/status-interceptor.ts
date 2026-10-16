@@ -1,3 +1,4 @@
+import { TranslateService } from '@ngx-translate/core';
 import { Authentication } from '../services/authentication';
 import { OFFLINE_AWARE } from '../offline/offline.service';
 import { SILENT_REQUEST } from './silent-request';
@@ -8,7 +9,7 @@ import {
   HttpResponse
 } from '@angular/common/http';
 
-import { inject } from '@angular/core';
+import { Injector, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 
@@ -58,6 +59,8 @@ export const StatusInterceptor: HttpInterceptorFn = (
   const authService = inject(Authentication);
   const errorLogService = inject(ErrorLogService);
   const router = inject(Router);
+  // Taken when needed, not here: the translations load through this very interceptor.
+  const injector = inject(Injector);
 
   /*
    * ============================================================
@@ -307,6 +310,10 @@ export const StatusInterceptor: HttpInterceptorFn = (
         ) {
 
           errorMessage = error.error.message;
+          // Codes the backend sends for the screen to word.
+          if (errorMessage === 'HANDOVER_SENT') {
+            errorMessage = injector.get(TranslateService).instant('STAFF_SELL_PAGE.HANDOVER_FROZEN');
+          }
         }
 
 

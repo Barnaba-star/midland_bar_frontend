@@ -225,6 +225,10 @@
 
 /* "Imefunguliwa na Grace Dulle tangu 16:25" reads in normal case, not the
    capitals the rest of the system uses (owner, 2026-10-16). */
-.shift-by {
+.shift-text .shift-by {
   text-transform: none;
+  /* Smaller than the shift's own line (owner, 2026-10-16). */
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.3;
 }

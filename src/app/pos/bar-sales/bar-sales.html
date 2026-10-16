@@ -26,7 +26,7 @@
       </app-shift-bar>
 
       <!-- ================= WHOSE BILLS ================= -->
-      @if (staffOptions.length) {
+      @if (salesOpenedList.length) {
         <div class="staff-filter" role="tablist" [attr.aria-label]="'SALES_PAGE.FILTER_STAFF' | translate">
           <button type="button" class="staff-chip all" [class.active]="staffFilter === 'ALL'" (click)="setStaffFilter('ALL')">
             <span class="chip-avatar"><mat-icon>groups</mat-icon></span>
@@ -65,6 +65,12 @@
       <div class="outerSale">
         <!-- ================= LEFT 70% ================= -->
         <div class="sales-section">
+          @if (staffFilter === '' && salesOpenedList.length) {
+            <div class="pick-staff-hint">
+              <mat-icon>touch_app</mat-icon>
+              <span>{{ 'SALES_PAGE.PICK_STAFF_HINT' | translate }}</span>
+            </div>
+          }
           <div class="sales-list">
             @for (sale of visibleBills; track sale.uid) {
               <div class="sale-card" [class.selected]="selectedSale?.uid === sale.uid">

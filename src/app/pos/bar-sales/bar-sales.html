@@ -28,13 +28,15 @@
       <!-- ================= WHOSE BILLS ================= -->
       @if (staffOptions.length) {
         <div class="staff-filter" role="tablist" [attr.aria-label]="'SALES_PAGE.FILTER_STAFF' | translate">
-          <button type="button" class="staff-chip" [class.active]="staffFilter === 'ALL'" (click)="setStaffFilter('ALL')">
-            {{ 'SALES_PAGE.FILTER_ALL' | translate }}
+          <button type="button" class="staff-chip all" [class.active]="staffFilter === 'ALL'" (click)="setStaffFilter('ALL')">
+            <span class="chip-avatar"><mat-icon>groups</mat-icon></span>
+            <span class="chip-name">{{ 'SALES_PAGE.FILTER_ALL' | translate }}</span>
             <span class="chip-count">{{ salesOpenedList.length }}</span>
           </button>
           @for (opt of staffOptions; track opt.code) {
             <button type="button" class="staff-chip" [class.active]="staffFilter === opt.code" (click)="onStaffChip(opt.code)">
-              {{ opt.name }}
+              <span class="chip-avatar">{{ opt.name.charAt(0) }}</span>
+              <span class="chip-name">{{ opt.name }}</span>
               @if (opt.sent) {
                 <mat-icon class="chip-sent" [attr.title]="'STAFF_HANDOVER.SENT_BADGE' | translate">send</mat-icon>
               }
@@ -42,14 +44,16 @@
             </button>
           }
           @for (opt of openerOptions; track opt.key) {
-            <button type="button" class="staff-chip" [class.active]="staffFilter === opt.key" (click)="onStaffChip(opt.key)">
-              {{ opt.name }}
+            <button type="button" class="staff-chip till" [class.active]="staffFilter === opt.key" (click)="onStaffChip(opt.key)">
+              <span class="chip-avatar"><mat-icon>point_of_sale</mat-icon></span>
+              <span class="chip-name">{{ opt.name }}</span>
               <span class="chip-count">{{ opt.count }}</span>
             </button>
           }
           @if (unassignedCount) {
-            <button type="button" class="staff-chip" [class.active]="staffFilter === 'NONE'" (click)="onStaffChip('NONE')">
-              {{ 'SALES_PAGE.FILTER_NONE' | translate }}
+            <button type="button" class="staff-chip till" [class.active]="staffFilter === 'NONE'" (click)="onStaffChip('NONE')">
+              <span class="chip-avatar"><mat-icon>help_outline</mat-icon></span>
+              <span class="chip-name">{{ 'SALES_PAGE.FILTER_NONE' | translate }}</span>
               <span class="chip-count">{{ unassignedCount }}</span>
             </button>
           }

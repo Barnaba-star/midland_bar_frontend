@@ -2458,6 +2458,8 @@
   },
   "STAFF_ACTIONS": {
     "BILLS": "{{count}} bills",
+    "BILLS_OPTION": "Their bills ({{count}})",
+    "BILLS_HINT": "Show their open bills below",
     "ASK": "What would you like to do?",
     "HANDOVER_HINT": "Cash and phone money they should hand in",
     "LOSS_HINT": "They handed in less than their bills",

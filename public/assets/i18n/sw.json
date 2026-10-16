@@ -2458,6 +2458,8 @@
   },
   "STAFF_ACTIONS": {
     "BILLS": "Bili {{count}}",
+    "BILLS_OPTION": "Bili zake ({{count}})",
+    "BILLS_HINT": "Onyesha bili zake zilizo wazi hapa chini",
     "ASK": "Unataka kufanya nini?",
     "HANDOVER_HINT": "Cash na pesa za simu anazotakiwa kukabidhi",
     "LOSS_HINT": "Amekabidhi pungufu ya bili zake",

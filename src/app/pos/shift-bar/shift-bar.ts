@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { DatePipe } from '@angular/common';
+import { DatePipe, TitleCasePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,7 +19,7 @@ export type ShiftState = 'NONE' | 'OPEN' | 'CLOSED';
  */
 @Component({
   selector: 'app-shift-bar',
-  imports: [MatIconModule, DatePipe, TranslatePipe],
+  imports: [MatIconModule, DatePipe, TitleCasePipe, TranslatePipe],
   templateUrl: './shift-bar.html',
   styleUrl: './shift-bar.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -4372,3 +4372,96 @@ app-shift-bar .add-bill-btn:not(:disabled):hover span {
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
+
+/* ============ Staff names laid out as cards (owner, 2026-10-16) ============
+   An even grid instead of a ragged row of pills: initial, name, bill count.
+   Tapping a name opens the actions dialog; "Bili zake" there shows the bills. */
+.staff-filter {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 10px;
+  margin: 0 0 16px;
+}
+
+.staff-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: auto;
+  min-height: 52px;
+  padding: 8px 10px;
+  border: 1px solid #e8dcc8;
+  border-radius: 12px;
+  background: #fffdf9;
+  text-align: left;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.staff-chip:hover {
+  border-color: #f5a524;
+  box-shadow: 0 4px 14px rgba(184, 110, 0, 0.12);
+  transform: translateY(-1px);
+}
+
+.chip-avatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #f5a524;
+  color: #1a1206;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.chip-avatar mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
+.staff-chip.all .chip-avatar,
+.staff-chip.till .chip-avatar {
+  background: #f1e8d8;
+  color: #4a3f33;
+}
+
+.chip-name {
+  flex: 1;
+  min-width: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  white-space: normal;
+  line-height: 1.3;
+  word-break: break-word;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.chip-count {
+  min-width: 24px;
+  padding: 3px 7px;
+  font-size: 11.5px;
+}
+
+.staff-chip.active {
+  border-color: #2b2118;
+  background: #2b2118;
+  box-shadow: 0 6px 16px rgba(43, 33, 24, 0.25);
+}
+
+.staff-chip.active .chip-avatar {
+  background: #f5a524;
+  color: #1a1206;
+}
+
+@media (max-width: 600px) {
+  .staff-filter {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+}

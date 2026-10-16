@@ -249,13 +249,18 @@ export class BarSales implements OnInit{
   }
 
   get visibleBills(): SalesOpened[] {
-    if (this.staffFilter === 'ALL') return this.salesOpenedList;
-    if (this.staffFilter === 'NONE') return this.salesOpenedList.filter((b) => !b.staffCode && !b.openedBy);
-    if (this.staffFilter.startsWith('U:')) {
-      const login = this.staffFilter.slice(2);
+    return this.billsFor(this.staffFilter);
+  }
+
+  /** The open bills under one chip: ALL, NONE, a till login (U:...) or a staff code. */
+  private billsFor(filter: string): SalesOpened[] {
+    if (filter === 'ALL') return this.salesOpenedList;
+    if (filter === 'NONE') return this.salesOpenedList.filter((b) => !b.staffCode && !b.openedBy);
+    if (filter.startsWith('U:')) {
+      const login = filter.slice(2);
       return this.salesOpenedList.filter((b) => !b.staffCode && b.openedBy === login);
     }
-    return this.salesOpenedList.filter((b) => b.staffCode === this.staffFilter);
+    return this.salesOpenedList.filter((b) => b.staffCode === filter);
   }
 
   setStaffFilter(filter: string): void {
@@ -263,15 +268,17 @@ export class BarSales implements OnInit{
     this.cdr.markForCheck();
   }
 
-  /** Tapping a staff member's name: their bills, then what to do with them. */
+  /**
+   * Tapping a staff member's name asks what to do: the handover summary, a
+   * shortage, print all - or "Bili zake", which is what shows their bills.
+   */
   onStaffChip(filter: string): void {
-    this.setStaffFilter(filter);
     const opt = this.staffOptions.find((o) => o.code === filter);
     const opener = this.openerOptions.find((o) => o.key === filter);
     if (!opt && !opener && filter !== 'NONE') {
       return;
     }
-    const bills = this.handoverBills;
+    const bills = this.billsFor(filter).filter((b) => (b.bill || 0) > 0);
     this.dialog.open(StaffActionsDialog, {
       width: '400px',
       maxWidth: '95vw',
@@ -280,14 +287,26 @@ export class BarSales implements OnInit{
         staffName: opt ? opt.name : opener ? opener.name : this.translate.instant('SALES_PAGE.FILTER_NONE'),
         bills: bills.length,
         total: bills.reduce((sum, b) => sum + (Number(b.bill) || 0), 0),
+        open: this.billsFor(filter).length,
         shiftOpen: this.shiftState === 'OPEN',
         // Handover and shortage are a staff member's; a till login's bills can only be printed.
         canHandover: !!opt,
       },
     }).afterClosed().subscribe((action?: StaffAction) => {
+      if (action === 'BILLS') {
+        this.setStaffFilter(filter);
+        return;
+      }
+      if (!action) {
+        return;
+      }
+      // The actions read the chosen chip; the list on screen stays as it was.
+      const shown = this.staffFilter;
+      this.staffFilter = filter;
       if (action === 'HANDOVER') this.openStaffHandover();
       else if (action === 'LOSS') this.recordStaffLoss();
       else if (action === 'PRINT') this.printStaffBills();
+      this.staffFilter = shown;
     });
   }
 

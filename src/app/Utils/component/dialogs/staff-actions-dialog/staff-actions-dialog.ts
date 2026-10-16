@@ -4,7 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslatePipe } from '@ngx-translate/core';
 
-export type StaffAction = 'HANDOVER' | 'LOSS' | 'PRINT';
+export type StaffAction = 'BILLS' | 'HANDOVER' | 'LOSS' | 'PRINT';
 
 /**
  * Tapping a staff member's name on the Sales page: what to do with their
@@ -20,7 +20,7 @@ export type StaffAction = 'HANDOVER' | 'LOSS' | 'PRINT';
 })
 export class StaffActionsDialog {
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { staffName: string; bills: number; total: number; shiftOpen: boolean; canHandover: boolean },
+    @Inject(MAT_DIALOG_DATA) public data: { staffName: string; bills: number; total: number; open: number; shiftOpen: boolean; canHandover: boolean },
     private dialogRef: MatDialogRef<StaffActionsDialog, StaffAction>,
   ) {}
 

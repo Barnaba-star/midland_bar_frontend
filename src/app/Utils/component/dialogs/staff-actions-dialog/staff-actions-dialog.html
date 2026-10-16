@@ -9,6 +9,15 @@
 
   <p class="sa-ask">{{ 'STAFF_ACTIONS.ASK' | translate }}</p>
 
+  <button type="button" class="sa-option bills" (click)="choose('BILLS')">
+    <span class="sa-opt-icon"><mat-icon>receipt_long</mat-icon></span>
+    <span class="sa-opt-text">
+      <strong>{{ 'STAFF_ACTIONS.BILLS_OPTION' | translate: { count: data.open } }}</strong>
+      <small>{{ 'STAFF_ACTIONS.BILLS_HINT' | translate }}</small>
+    </span>
+    <mat-icon class="sa-go">chevron_right</mat-icon>
+  </button>
+
   @if (data.canHandover) {
     <button type="button" class="sa-option" [disabled]="!data.shiftOpen" (click)="choose('HANDOVER')">
       <span class="sa-opt-icon"><mat-icon>account_balance_wallet</mat-icon></span>
@@ -42,5 +51,5 @@
     <small class="sa-note">{{ 'STAFF_ACTIONS.SHIFT_CLOSED' | translate }}</small>
   }
 
-  <button type="button" class="sa-close" (click)="close()">{{ 'STAFF_ACTIONS.JUST_VIEW' | translate }}</button>
+  <button type="button" class="sa-close" (click)="close()">{{ 'COMMON.CLOSE' | translate }}</button>
 </div>

@@ -187,7 +187,42 @@ export class BarSupervisor implements OnInit, OnDestroy {
     this.live?.unsubscribe();
     ['pointerdown', 'keydown', 'touchstart'].forEach((e) => document.removeEventListener(e, this.unlock, { capture: true }));
     this.audio?.close().catch(() => undefined);
+    if (this.titleBlink) {
+      clearInterval(this.titleBlink);
+    }
+    document.title = this.baseTitle;
   }
+
+  /**
+   * The browser tab says how many orders wait, flashing - seen from another
+   * tab or window even when the computer gives no sound (page never touched
+   * since it loaded, tab muted).
+   */
+  private readonly baseTitle = document.title;
+  private titleBlink: ReturnType<typeof setInterval> | null = null;
+  private titleOn = false;
+
+  private showWaitingInTitle(): void {
+    const n = this.orders.length;
+    if (!n) {
+      if (this.titleBlink) {
+        clearInterval(this.titleBlink);
+        this.titleBlink = null;
+      }
+      document.title = this.baseTitle;
+      return;
+    }
+    const text = `(${n}) ${this.translate.instant('SUPERVISOR_PAGE.NOTIFY_TITLE')}`;
+    if (!this.titleBlink) {
+      this.titleBlink = setInterval(() => {
+        this.titleOn = !this.titleOn;
+        document.title = this.titleOn ? `🔔 ${this.waitingTitle}` : this.waitingTitle;
+      }, 1000);
+    }
+    this.waitingTitle = text;
+  }
+
+  private waitingTitle = '';
 
   /** Orders that went straight onto bills while there was no internet - to look over. */
   offlineOrders: StaffOrder[] = [];
@@ -246,6 +281,7 @@ export class BarSupervisor implements OnInit, OnDestroy {
       // Still waiting: ring again so a busy counter cannot miss it.
       this.beep();
     }
+    this.showWaitingInTitle();
     this.cdr.markForCheck();
   }
 
@@ -326,6 +362,7 @@ export class BarSupervisor implements OnInit, OnDestroy {
     if (decided) {
       this.decided.add(order.uid);
       this.orders = this.orders.filter((o) => o.uid !== order.uid);
+      this.showWaitingInTitle();
     }
     this.cdr.markForCheck();
   }

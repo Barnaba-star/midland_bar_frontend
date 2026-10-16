@@ -547,3 +547,34 @@
   color: #4a3f33;
   font-weight: 600;
 }
+
+/* Wherever the list is a table (tablet, computer): the three actions as
+   small icon buttons - the name shows on hover - so the columns get the
+   room. On a phone the rows are cards and keep their labels. */
+@media (min-width: 601px) {
+  .stock-list-table .row-actions {
+    gap: 4px;
+  }
+
+  .stock-list-table .row-action {
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+  }
+
+  .stock-list-table .row-action span {
+    display: none;
+  }
+
+  .stock-list-table .row-action mat-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+  }
+
+  .stock-list-table th:last-child,
+  .stock-list-table td:last-child {
+    width: 1%;
+  }
+}

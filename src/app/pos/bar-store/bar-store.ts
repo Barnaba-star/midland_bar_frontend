@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -31,7 +32,7 @@ export type StockState = 'OUT' | 'LOW' | 'OK' | 'NOT_COUNTED';
  */
 @Component({
   selector: 'app-bar-store',
-  imports: [CategoryIconPipe, CategoryLabelPipe, EmptyStateComponent, Title2, MatIconModule, DecimalPipe, TranslatePipe, StockPacksPipe],
+  imports: [CategoryIconPipe, CategoryLabelPipe, EmptyStateComponent, Title2, MatIconModule, DecimalPipe, TranslatePipe, StockPacksPipe, MatTooltipModule],
   templateUrl: './bar-store.html',
   styleUrl: './bar-store.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

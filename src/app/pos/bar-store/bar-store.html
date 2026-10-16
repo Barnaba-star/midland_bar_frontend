@@ -160,18 +160,21 @@
                     <td>
                       <div class="row-actions">
                         @if (canAddStock && state !== 'NOT_COUNTED') {
-                          <button type="button" class="row-action edit" (click)="onAddStock(product)">
+                          <button type="button" class="row-action edit" (click)="onAddStock(product)"
+                                  [matTooltip]="'STOCK_FORM.ADD_BTN' | translate" [attr.aria-label]="'STOCK_FORM.ADD_BTN' | translate">
                             <mat-icon>add_box</mat-icon>
                             <span>{{ 'STOCK_FORM.ADD_BTN' | translate }}</span>
                           </button>
                         }
                         @if (canAddStock && state !== 'NOT_COUNTED') {
-                          <button type="button" class="row-action delete" (click)="onAdjust(product)">
+                          <button type="button" class="row-action delete" (click)="onAdjust(product)"
+                                  [matTooltip]="'STOCK_ADJUST.BTN' | translate" [attr.aria-label]="'STOCK_ADJUST.BTN' | translate">
                             <mat-icon>tune</mat-icon>
                             <span>{{ 'STOCK_ADJUST.BTN' | translate }}</span>
                           </button>
                         }
-                        <button type="button" class="row-action view" (click)="onHistory(product)">
+                        <button type="button" class="row-action view" (click)="onHistory(product)"
+                                  [matTooltip]="'STOCK_FORM.HISTORY_BTN' | translate" [attr.aria-label]="'STOCK_FORM.HISTORY_BTN' | translate">
                           <mat-icon>history</mat-icon>
                           <span>{{ 'STOCK_FORM.HISTORY_BTN' | translate }}</span>
                         </button>

@@ -624,3 +624,9 @@ html {
 body {
   letter-spacing: 0.01em;
 }
+
+/* [hidden] means gone, even on elements whose own class sets display (a
+   flex button would otherwise stay on screen). */
+[hidden] {
+  display: none !important;
+}

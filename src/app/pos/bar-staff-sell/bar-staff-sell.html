@@ -97,7 +97,7 @@
                 <span>{{ 'STAFF_SELL_PAGE.SEND' | translate }} ({{ unsentCount }})</span>
               </button>
             }
-            <button type="button" class="row-action edit" [disabled]="opening || handoverSent" (click)="openBill()">
+            <button type="button" class="row-action edit" [hidden]="handoverSent" [disabled]="opening" (click)="openBill()">
               <mat-icon>add</mat-icon>
               <span>{{ 'SALES_PAGE.OPEN_BILL' | translate }}</span>
             </button>
@@ -127,7 +127,7 @@
         }
 
         <!-- "A drink that tastes of lime?" - find it by name, code, flavour (description) or category. -->
-        <div class="drink-search">
+        <div class="drink-search" [hidden]="handoverSent">
           <label class="drink-search-box">
             <mat-icon>search</mat-icon>
             <input type="search" name="drinkQuery" autocomplete="off" [(ngModel)]="drinkQuery"
@@ -341,7 +341,8 @@
                 }
 
                 <div class="bill-actions">
-                  <button type="button" class="bill-btn add" [disabled]="busyBill === bill.uid || handoverSent" (click)="addToBill(bill)">
+                  <!-- Sent for handover: no adding at all. -->
+                  <button type="button" class="bill-btn add" [hidden]="handoverSent" [disabled]="busyBill === bill.uid" (click)="addToBill(bill)">
                     <mat-icon>add</mat-icon>
                     {{ 'SERVICE.ADD' | translate }}
                   </button>

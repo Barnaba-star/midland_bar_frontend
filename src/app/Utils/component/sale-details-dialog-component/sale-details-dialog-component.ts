@@ -1,4 +1,4 @@
-import { Component, Inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, Inject, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -12,6 +12,9 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ServiceBarMethod } from '../../../pos/service-bar-method';
 import { AlertService } from '../../services/alert';
 import { ReceiptDialogComponent } from '../dialogs/receipt-dialog-component/receipt-dialog-component';
+import { Authentication } from '../../services/authentication';
+import { OfflineService } from '../../offline/offline.service';
+import { CREDIT_METHOD, PAYMENT_METHODS } from '../dialogs/pay-bill-dialog-component/pay-bill-dialog-component';
 
 @Component({
   selector: 'app-sale-details-dialog-component',
@@ -42,6 +45,8 @@ export class SaleDetailsDialogComponent {
       previewReceipt?: boolean;
       /** Staff Sell: each line can be changed (Badilisho) - the page sends it to the station. */
       canExchange?: boolean;
+      /** Sales history: a paid bill offers money back per item. */
+      canRefund?: boolean;
     },
     private dialog: MatDialog,
     private barService: ServiceBarMethod,
@@ -108,6 +113,74 @@ export class SaleDetailsDialogComponent {
       },
       error: () => {
         this.removing = false;
+        this.cdr.markForCheck();
+      },
+    });
+  }
+
+  /*
+   * Money back on a paid bill: one item at a time, with how many, how it goes
+   * back and why. A CEO or manager's goes through at once; a cashier's waits
+   * for their approval (Sales > Refunds). Online only.
+   */
+  private auth = inject(Authentication);
+  private offline = inject(OfflineService);
+  readonly refundMethods = [...PAYMENT_METHODS, CREDIT_METHOD];
+  refundingUid: string | null = null;
+  refundQty = 1;
+  refundMethod = 'cash';
+  refundReason = '';
+  refunding = false;
+
+  get canRefund(): boolean {
+    return !!this.data.canRefund && this.data.sale?.paymentStatus === 'PAID'
+      && this.auth.hasPermission('SAVE_SALES') && this.offline.online();
+  }
+
+  startRefund(service: any): void {
+    this.refundingUid = service.uid;
+    this.refundQty = Number(service.quantity) || 1;
+    this.refundMethod = this.data.sale?.paymentMethod === CREDIT_METHOD ? CREDIT_METHOD : 'cash';
+    this.refundReason = '';
+  }
+
+  confirmRefund(service: any): void {
+    const max = Number(service.quantity) || 1;
+    const qty = Math.min(Math.max(1, Math.floor(Number(this.refundQty) || 1)), max);
+    const reason = this.refundReason.trim();
+    if (reason.length < 3 || this.refunding) {
+      return;
+    }
+    this.refunding = true;
+    this.barService.requestRefund({
+      salesOpenedUID: this.data.sale.uid,
+      lines: [{ barSalesUID: service.uid, quantity: qty }],
+      method: this.refundMethod,
+      reason,
+    }).subscribe({
+      next: (res) => {
+        this.refunding = false;
+        const r = res?.data;
+        if (r) {
+          this.refundingUid = null;
+          if (r.status === 'APPROVED') {
+            const services = this.data.services;
+            if (qty >= max) {
+              services.splice(services.indexOf(service), 1);
+            } else {
+              const unit = Number(service.unitPrice) || (Number(service.lineTotal ?? service.price) || 0) / max;
+              service.quantity = max - qty;
+              service.lineTotal = (Number(service.lineTotal ?? service.price) || 0) - unit * qty;
+            }
+            this.alert.show('success', this.translate.instant('REFUND.DONE', { amount: r.amount }));
+          } else {
+            this.alert.show('success', this.translate.instant('REFUND.SENT'));
+          }
+        }
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.refunding = false;
         this.cdr.markForCheck();
       },
     });

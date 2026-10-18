@@ -162,7 +162,8 @@
   "SALES": {
     "ADD": "Mauzo Mapya",
     "MANAGE": "Historia ya Mauzo",
-    "PHONE_PAYMENTS": "Malipo ya Simu"
+    "PHONE_PAYMENTS": "Malipo ya Simu",
+    "REFUNDS": "Refund"
   },
   "REPORTS": {
     "STAFF": "Ripoti ya Watumishi",
@@ -2768,6 +2769,36 @@
     "REASON": "Sababu",
     "NAME": "Jina la mteja",
     "PHONE": "Namba ya simu",
-    "NOTE": "Maelezo (mf. anafanya kazi wapi)"
+    "NOTE": "Maelezo (mf. anafanya kazi wapi)",
+    "KIND_REFUND": "Refund"
+  },
+  "REFUND": {
+    "BTN": "Rudisha pesa",
+    "TITLE": "Rudisha pesa - {{name}}",
+    "METHOD": "Inarudishwa kwa",
+    "REASON_PH": "Kwa nini? (mf. kilikuwa kimeharibika)",
+    "NOTE": "Kitu kinarudi stoo, mgawanyo unapunguzwa, na pesa inatoka kwenye cash-up yako. Cashier: Manager au CEO ataidhinisha kwanza.",
+    "CONFIRM": "Rudisha",
+    "DONE": "Tshs {{amount}} zimerudishwa",
+    "SENT": "Ombi limetumwa - Manager au CEO ataidhinisha (Mauzo > Refund)",
+    "PAGE_TITLE": "Refund (kurudisha pesa)",
+    "PAGE_SUBTITLE": "Pesa iliyorudishwa kwenye bili zilizolipwa. Kuomba: Historia ya mauzo > bili > kitufe cha kurudisha.",
+    "PENDING": "Zinasubiri idhini ({{n}})",
+    "NONE_PENDING": "Hakuna ombi linalosubiri.",
+    "BILL": "Bili {{code}}",
+    "APPROVE": "Idhinisha",
+    "REJECT": "Kataa",
+    "REJECT_WHY": "Kwa nini unakataa?",
+    "RANGE_DAY": "Leo",
+    "RANGE_WEEK": "Wiki hii",
+    "RANGE_MONTH": "Mwezi huu",
+    "TOTAL": "Zilizorudishwa: Tshs {{amount}}",
+    "EMPTY": "Hakuna refund katika kipindi hiki.",
+    "COL_BILL": "Bili",
+    "COL_ASKED": "Aliyeomba",
+    "COL_STATUS": "Hali",
+    "STATUS_PENDING": "Inasubiri",
+    "STATUS_APPROVED": "Imeidhinishwa",
+    "STATUS_REJECTED": "Imekataliwa"
   }
 }

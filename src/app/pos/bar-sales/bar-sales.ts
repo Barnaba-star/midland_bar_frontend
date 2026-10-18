@@ -1,3 +1,4 @@
+import { Refunds } from '../refunds/refunds';
 import { PaymentNotes } from '../payment-notes/payment-notes';
 import { PaymentNoteDialog } from '../../Utils/component/dialogs/payment-note-dialog/payment-note-dialog';
 import { SellableItems } from '../../Utils/services/sellable-items';
@@ -48,6 +49,7 @@ interface PaymentSummaryDisplay {
 @Component({
   selector: 'app-bar-sales',
   imports: [
+    Refunds,
     ShiftBar,
     EmptyStateComponent,
     MatIconModule,
@@ -117,6 +119,12 @@ export class BarSales implements OnInit{
       // The names bills were noted as paid from (M-Pesa, Tigo Pesa...) - for the manager to check.
       icon: 'payment2',
       title: 'SALES.PHONE_PAYMENTS',
+      roles: ['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'CEO', 'MANAGER', 'CASHIER'],
+    },
+    {
+      // Money back on paid bills: asked for on the bill, approved here by a CEO or manager.
+      icon: 'history',
+      title: 'SALES.REFUNDS',
       roles: ['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'CEO', 'MANAGER', 'CASHIER'],
     },
   ];
@@ -473,7 +481,9 @@ openSaleDetailsDialogForMore(sale: SalesOpened) {
           data: {
             sale: sale,
             services: services,
-            showPayment: false
+            showPayment: false,
+            // History: a paid bill can give money back from here.
+            canRefund: true
           },
 
           autoFocus: false

@@ -186,7 +186,50 @@
               </button>
             }
 
+            <!-- Paid bill: money back for this item (approved by a CEO or manager). -->
+            @if (canRefund && refundingUid !== service.uid) {
+              <button type="button" class="line-remove-btn" (click)="startRefund(service)"
+                      [title]="'REFUND.BTN' | translate" [attr.aria-label]="'REFUND.BTN' | translate">
+                <mat-icon>undo</mat-icon>
+              </button>
+            }
+
           </div>
+
+          @if (refundingUid === service.uid) {
+            <div class="line-remove-form">
+              <strong>{{ 'REFUND.TITLE' | translate: { name: service.serviceName } }}</strong>
+              <div class="line-remove-fields">
+                @if ((service.quantity || 1) > 1) {
+                  <label class="lr-qty">
+                    <span>{{ 'BILL_EDIT.HOW_MANY' | translate }}</span>
+                    <input type="number" min="1" [max]="service.quantity" step="1" [(ngModel)]="refundQty" name="refundQty" />
+                    <small>/ {{ service.quantity }}</small>
+                  </label>
+                }
+                <label class="lr-qty">
+                  <span>{{ 'REFUND.METHOD' | translate }}</span>
+                  <select [(ngModel)]="refundMethod" name="refundMethod">
+                    @for (m of refundMethods; track m) {
+                      <option [value]="m">{{ 'PAY_BILL.METHOD_' + m | translate }}</option>
+                    }
+                  </select>
+                </label>
+                <label class="lr-reason">
+                  <span>{{ 'BILL_EDIT.REASON' | translate }}</span>
+                  <input type="text" maxlength="300" [(ngModel)]="refundReason" name="refundReason"
+                         [placeholder]="'REFUND.REASON_PH' | translate" />
+                </label>
+              </div>
+              <p class="lr-note">{{ 'REFUND.NOTE' | translate }}</p>
+              <div class="lr-actions">
+                <button type="button" class="lr-cancel" (click)="refundingUid = null">{{ 'COMMON.CANCEL' | translate }}</button>
+                <button type="button" class="lr-confirm" [disabled]="refundReason.trim().length < 3 || refunding" (click)="confirmRefund(service)">
+                  <mat-icon>undo</mat-icon>{{ 'REFUND.CONFIRM' | translate }}
+                </button>
+              </div>
+            </div>
+          }
 
           @if (removingUid === service.uid) {
             <div class="line-remove-form">

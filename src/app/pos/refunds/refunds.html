@@ -1,0 +1,101 @@
+<div class="action-container db-page">
+  <div class="db-card">
+    <div class="db-card-header">
+      <div>
+        <h3>{{ 'REFUND.PAGE_TITLE' | translate }}</h3>
+        <p>{{ 'REFUND.PAGE_SUBTITLE' | translate }}</p>
+      </div>
+    </div>
+
+    @if (canApprove) {
+      <h4 class="rf-head">{{ 'REFUND.PENDING' | translate: { n: pending.length } }}</h4>
+      @if (!pending.length) {
+        <p class="db-hint">{{ 'REFUND.NONE_PENDING' | translate }}</p>
+      }
+      <div class="db-list">
+        @for (r of pending; track r.uid) {
+          <div class="db-row open">
+            <div class="db-who">
+              <strong>{{ 'REFUND.BILL' | translate: { code: r.salesCode } }} · {{ r.requestedByName || r.requestedBy }}</strong>
+              <span>
+                @for (l of lines(r); track $index) { {{ l.quantity }} × {{ l.serviceName }}@if (!$last) {, } }
+                · “{{ r.reason }}”
+              </span>
+            </div>
+            <div class="db-fig">
+              <small>{{ 'PAY_BILL.METHOD_' + r.method | translate }}</small>
+              <strong>Tshs {{ r.amount | number }}</strong>
+              <span>{{ r.requestedAt | date: 'dd MMM HH:mm' }}</span>
+            </div>
+            <div></div>
+            <div class="db-row-actions">
+              <button type="button" class="row-action edit" [disabled]="busy" (click)="decide(r, true)">
+                <mat-icon>check</mat-icon><span>{{ 'REFUND.APPROVE' | translate }}</span>
+              </button>
+              <button type="button" class="row-action delete" [disabled]="busy" (click)="decide(r, false)">
+                <mat-icon>close</mat-icon><span>{{ 'REFUND.REJECT' | translate }}</span>
+              </button>
+            </div>
+            @if (rejectingUid === r.uid) {
+              <div class="db-panel">
+                <div class="db-form">
+                  <label class="wide">
+                    <small>{{ 'REFUND.REJECT_WHY' | translate }}</small>
+                    <input type="text" maxlength="300" [(ngModel)]="rejectNote" />
+                  </label>
+                </div>
+                <div class="db-actions">
+                  <button type="button" class="row-action view" (click)="rejectingUid = null">{{ 'COMMON.CANCEL' | translate }}</button>
+                  <button type="button" class="row-action delete" [disabled]="busy || rejectNote.trim().length < 3" (click)="decide(r, false)">
+                    <mat-icon>close</mat-icon><span>{{ 'REFUND.REJECT' | translate }}</span>
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+
+    <div class="db-filters">
+      @for (g of ranges; track g) {
+        <button type="button" class="row-action" [class.edit]="range === g" [class.view]="range !== g" (click)="setRange(g)">{{ 'REFUND.RANGE_' + g | translate }}</button>
+      }
+      <span class="db-hint">{{ 'REFUND.TOTAL' | translate: { amount: (approvedTotal | number) } }}</span>
+    </div>
+
+    @if (!rows.length) {
+      <p class="db-empty">{{ 'REFUND.EMPTY' | translate }}</p>
+    } @else {
+      <div class="db-table-wrap">
+        <table class="db-table">
+          <thead>
+            <tr>
+              <th>{{ 'DEBTS.COL_TIME' | translate }}</th>
+              <th>{{ 'REFUND.COL_BILL' | translate }}</th>
+              <th>{{ 'DEBTS.COL_DETAIL' | translate }}</th>
+              <th>{{ 'REFUND.COL_ASKED' | translate }}</th>
+              <th>{{ 'REFUND.COL_STATUS' | translate }}</th>
+              <th class="num">{{ 'DEBTS.COL_AMOUNT' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (r of rows; track r.uid) {
+              <tr>
+                <td>{{ r.requestedAt | date: 'dd MMM HH:mm' }}</td>
+                <td>{{ r.salesCode }}</td>
+                <td>
+                  @for (l of lines(r); track $index) { {{ l.quantity }} × {{ l.serviceName }} }
+                  · {{ r.reason }}@if (r.decisionNote) { · {{ r.decisionNote }} }
+                </td>
+                <td>{{ r.requestedByName || r.requestedBy }}@if (r.decidedByName && r.decidedBy !== r.requestedBy) { → {{ r.decidedByName }} }</td>
+                <td><span class="db-kind" [class]="'db-kind ' + (r.status === 'APPROVED' ? 'PAYMENT' : r.status === 'REJECTED' ? 'WRITE_OFF' : 'CHARGE')">{{ 'REFUND.STATUS_' + r.status | translate }}</span></td>
+                <td class="num">{{ r.amount | number }} · {{ 'PAY_BILL.METHOD_' + r.method | translate }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+</div>

@@ -162,7 +162,8 @@
   "SALES": {
     "ADD": "New Sales",
     "MANAGE": "History",
-    "PHONE_PAYMENTS": "Phone payments"
+    "PHONE_PAYMENTS": "Phone payments",
+    "REFUNDS": "Refunds"
   },
   "REPORTS": {
     "STAFF": "Staff Report",
@@ -2768,6 +2769,36 @@
     "REASON": "Reason",
     "NAME": "Customer name",
     "PHONE": "Phone number",
-    "NOTE": "Note (e.g. where they work)"
+    "NOTE": "Note (e.g. where they work)",
+    "KIND_REFUND": "Refund"
+  },
+  "REFUND": {
+    "BTN": "Give money back",
+    "TITLE": "Money back - {{name}}",
+    "METHOD": "Given back by",
+    "REASON_PH": "Why? (e.g. it was spoilt)",
+    "NOTE": "The item goes back to the store, the split is taken off, and the money comes off your cash-up. Cashier: a Manager or CEO approves first.",
+    "CONFIRM": "Give back",
+    "DONE": "Tshs {{amount}} given back",
+    "SENT": "Request sent - a Manager or CEO will approve it (Sales > Refunds)",
+    "PAGE_TITLE": "Refunds",
+    "PAGE_SUBTITLE": "Money given back on paid bills. To ask: Sales history > the bill > the undo button.",
+    "PENDING": "Waiting for approval ({{n}})",
+    "NONE_PENDING": "Nothing waiting.",
+    "BILL": "Bill {{code}}",
+    "APPROVE": "Approve",
+    "REJECT": "Reject",
+    "REJECT_WHY": "Why reject?",
+    "RANGE_DAY": "Today",
+    "RANGE_WEEK": "This week",
+    "RANGE_MONTH": "This month",
+    "TOTAL": "Given back: Tshs {{amount}}",
+    "EMPTY": "No refunds in this period.",
+    "COL_BILL": "Bill",
+    "COL_ASKED": "Asked by",
+    "COL_STATUS": "Status",
+    "STATUS_PENDING": "Waiting",
+    "STATUS_APPROVED": "Approved",
+    "STATUS_REJECTED": "Rejected"
   }
 }

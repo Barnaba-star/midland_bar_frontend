@@ -23,6 +23,7 @@ export class PotNamePipe implements PipeTransform {
     'Stock Purchase': 'COMMISSION_BREAKDOWN.STOCK_PURCHASE',
     // Not a pot: a staff member's handover shortage, shown among a shift's payouts.
     'Staff shortage': 'STAFF_LOSS.POT',
+    'Refund': 'SALES.REFUNDS',
   };
 
   constructor(private translate: TranslateService) {}

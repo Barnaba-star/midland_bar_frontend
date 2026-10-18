@@ -347,3 +347,9 @@
     justify-content: flex-start;
   }
 }
+
+.rf-head {
+  margin: 0;
+  font-size: 16px;
+  color: var(--color-text, #1d1812);
+}

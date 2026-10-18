@@ -440,6 +440,24 @@ payBill(dto: { salesOpenedUID: string; payments: { method: string; amount: numbe
   return this.http.post<Response<any>>(`${this.barURL}/payBill`, dto);
 }
 
+/* Refunds - money back on a paid bill. */
+
+requestRefund(body: { salesOpenedUID: string; lines: { barSalesUID: string; quantity: number }[]; method: string; reason: string }): Observable<Response<any>> {
+  return this.http.post<Response<any>>(`${this.barURL}/refunds/request`, body);
+}
+
+findPendingRefunds(): Observable<ResponseList<any>> {
+  return this.http.get<ResponseList<any>>(`${this.barURL}/refunds/pending`);
+}
+
+findRefunds(filter: string): Observable<ResponseList<any>> {
+  return this.http.get<ResponseList<any>>(`${this.barURL}/refunds/list/${filter}`);
+}
+
+decideRefund(uid: string, approve: boolean, note?: string): Observable<Response<any>> {
+  return this.http.post<Response<any>>(`${this.barURL}/refunds/${uid}/${approve ? 'approve' : 'reject'}`, approve ? {} : { note });
+}
+
 /* Madeni - customers who drink on credit. */
 
 /** Every credit customer with what they owe, their limit and since when, most owed first. */

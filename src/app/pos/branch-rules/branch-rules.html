@@ -1,0 +1,44 @@
+<div class="action-container db-page">
+  <div class="db-card">
+    <div class="db-card-header">
+      <div>
+        <h3>{{ 'BRANCH_RULES.TITLE' | translate }}</h3>
+        <p>{{ 'BRANCH_RULES.SUBTITLE' | translate }}</p>
+      </div>
+    </div>
+
+    <div class="db-panel">
+      <h4>{{ 'BRANCH_RULES.TRA' | translate }}</h4>
+      <p class="db-hint">{{ 'BRANCH_RULES.TRA_NOTE' | translate }}</p>
+      <div class="db-form">
+        <label><small>TIN</small><input type="text" inputmode="numeric" maxlength="11" [(ngModel)]="form.taxTin" placeholder="123456789" /></label>
+        <label><small>VRN</small><input type="text" maxlength="20" [(ngModel)]="form.taxVrn" /></label>
+        <label><small>{{ 'BRANCH_RULES.EFD' | translate }}</small><input type="text" maxlength="40" [(ngModel)]="form.efdSerial" /></label>
+      </div>
+    </div>
+
+    <div class="db-panel">
+      <h4>{{ 'BRANCH_RULES.DISCOUNT' | translate }}</h4>
+      <div class="db-form">
+        <label><small>{{ 'BRANCH_RULES.CASHIER_PERCENT' | translate }}</small><input type="number" min="0" max="100" [(ngModel)]="form.cashierDiscountPercent" /></label>
+      </div>
+      <p class="db-hint">{{ 'BRANCH_RULES.DISCOUNT_NOTE' | translate }}</p>
+    </div>
+
+    <div class="db-panel">
+      <h4>{{ 'BRANCH_RULES.ALERTS' | translate }}</h4>
+      <div class="db-form">
+        <label><small>{{ 'BRANCH_RULES.VOIDS' | translate }}</small><input type="number" min="1" [(ngModel)]="form.alertVoidsPerShift" /></label>
+        <label><small>{{ 'BRANCH_RULES.SHORTAGE' | translate }}</small><input type="number" min="0" step="1000" [(ngModel)]="form.alertShortageAmount" /></label>
+        <label><small>{{ 'BRANCH_RULES.HOURS' | translate }}</small><input type="number" min="1" max="72" [(ngModel)]="form.alertShiftHours" /></label>
+      </div>
+      <p class="db-hint">{{ 'BRANCH_RULES.ALERTS_NOTE' | translate }}</p>
+    </div>
+
+    <div class="db-actions">
+      <button type="button" class="row-action edit" [disabled]="saving" (click)="save()">
+        <mat-icon>save</mat-icon><span>{{ 'DEBTS.SAVE' | translate }}</span>
+      </button>
+    </div>
+  </div>
+</div>

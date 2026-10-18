@@ -1,3 +1,4 @@
+import { BranchRules } from '../branch-rules/branch-rules';
 import { OtherSplit } from '../other-split/other-split';
 import { UnitLabelPipe, unitKey } from '../../Utils/pipes/stock-packs.pipe';
 import { StockItemDialogComponent, StockItemResult } from '../../Utils/component/dialogs/stock-item-dialog-component/stock-item-dialog-component';
@@ -98,7 +99,7 @@ const STOCK_UNIT_OPTIONS = [
 @Component({
   selector: 'app-bar-setting',
   imports: [CategoryLabelPipe, 
-    OtherSplit, EmptyStateComponent,Title2, MatIconModule, RecordtableComponent, DecimalPipe, UpperCasePipe, CommonModule, FormsModule, MatMenuModule, MatPaginator, MatButtonModule, TranslatePipe, MatTooltipModule, UnitLabelPipe],
+    OtherSplit, BranchRules, EmptyStateComponent,Title2, MatIconModule, RecordtableComponent, DecimalPipe, UpperCasePipe, CommonModule, FormsModule, MatMenuModule, MatPaginator, MatButtonModule, TranslatePipe, MatTooltipModule, UnitLabelPipe],
   templateUrl: './bar-setting.html',
   styleUrl: './bar-setting.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -169,6 +170,12 @@ private reloadPagedTab() {
       // Only the CEO decides what the Other commission pays for.
       icon: 'pay',
       title: 'SALON.OTHER_SPLIT',
+      roles: ['CEO']
+    },
+    {
+      // The CEO's branch rules: TRA on receipts, cashier discount limit, theft alerts.
+      icon: 'setting',
+      title: 'SALON.BRANCH_RULES',
       roles: ['CEO']
     },
     {

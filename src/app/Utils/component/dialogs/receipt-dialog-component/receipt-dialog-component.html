@@ -31,6 +31,15 @@
           <img class="r-logo" [src]="logoUrl" alt="" />
         }
         <div class="r-center r-title">{{ receipt.branchName || 'BaronixTZ' }}</div>
+        @if (receipt.taxTin || receipt.taxVrn) {
+          <div class="r-center r-muted">@if (receipt.taxTin) {TIN {{ receipt.taxTin }}}@if (receipt.taxTin && receipt.taxVrn) { · }@if (receipt.taxVrn) {VRN {{ receipt.taxVrn }}}</div>
+        }
+        @if (receipt.efdSerial) {
+          <div class="r-center r-muted">EFD {{ receipt.efdSerial }}</div>
+        }
+        @if (receipt.traReceiptNo) {
+          <div class="r-center r-muted">TRA {{ receipt.traReceiptNo }}</div>
+        }
         <!-- No "RECEIPT" heading on a paid slip (by request); an unpaid bill
              still says so, so it is never taken for proof of payment. -->
         @if (receipt.status !== 'PAID') {

@@ -149,7 +149,8 @@
     "SERVICE": "Huduma",
     "COMMISSION": "Kamisheni",
     "BILL_CODES": "Codes za Bill",
-    "OTHER_SPLIT": "Matumizi ya Other"
+    "OTHER_SPLIT": "Matumizi ya Other",
+    "BRANCH_RULES": "Tawi: TRA na kanuni"
   },
   "SERVICE": {
     "ADD": "Ongeza Huduma",
@@ -2110,7 +2111,10 @@
     "NOT_FOUND": "Risiti haikupatikana",
     "RECEIVED_BY": "Aliyepokea malipo",
     "CUSTOMER_COPY": "Nakala ya mteja",
-    "BAR_COPY": "Nakala ya bar"
+    "BAR_COPY": "Nakala ya bar",
+    "TIN": "TIN",
+    "VRN": "VRN",
+    "EFD": "EFD"
   },
   "STAFF_SELL_PAGE": {
     "RECALL_HANDOVER": "Rudisha makabidhiano",
@@ -2800,5 +2804,21 @@
     "STATUS_PENDING": "Inasubiri",
     "STATUS_APPROVED": "Imeidhinishwa",
     "STATUS_REJECTED": "Imekataliwa"
+  },
+  "BRANCH_RULES": {
+    "TITLE": "Kanuni za tawi",
+    "SUBTITLE": "TRA kwenye risiti, punguzo la cashier, na lini CEO anapata arifa.",
+    "TRA": "TRA",
+    "TRA_NOTE": "TIN, VRN na namba ya mashine ya EFD zinaonekana kwenye kila risiti. Kuunganisha VFD (risiti ya TRA moja kwa moja) kunakuja baadaye.",
+    "EFD": "Namba ya EFD/VFD",
+    "DISCOUNT": "Punguzo",
+    "CASHIER_PERCENT": "Cashier anaweza kupunguza hadi (%)",
+    "DISCOUNT_NOTE": "Zaidi ya asilimia hii, punguzo linatolewa na Manager au CEO tu. Kila punguzo lina sababu na rekodi.",
+    "ALERTS": "Arifa za wizi",
+    "VOIDS": "Vitu vilivyoondolewa kwenye zamu moja",
+    "SHORTAGE": "Cash-up pungufu kwa (Tshs)",
+    "HOURS": "Zamu wazi zaidi ya (saa)",
+    "ALERTS_NOTE": "Ikivuka, CEO anapata arifa (kengele) - na SMS ikiwashwa.",
+    "SAVED": "Imehifadhiwa"
   }
 }

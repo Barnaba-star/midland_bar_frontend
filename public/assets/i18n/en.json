@@ -149,7 +149,8 @@
     "SERVICE": "Services",
     "COMMISSION": "Commissions",
     "BILL_CODES": "Bill Codes",
-    "OTHER_SPLIT": "Other Expenses"
+    "OTHER_SPLIT": "Other Expenses",
+    "BRANCH_RULES": "Branch: TRA and rules"
   },
   "STAFF": {
     "ADD": "Add Staff",
@@ -2110,7 +2111,10 @@
     "NOT_FOUND": "Receipt not found",
     "RECEIVED_BY": "Payment taken by",
     "CUSTOMER_COPY": "Customer copy",
-    "BAR_COPY": "Bar copy"
+    "BAR_COPY": "Bar copy",
+    "TIN": "TIN",
+    "VRN": "VRN",
+    "EFD": "EFD"
   },
   "STAFF_SELL_PAGE": {
     "RECALL_HANDOVER": "Take handover back",
@@ -2800,5 +2804,21 @@
     "STATUS_PENDING": "Waiting",
     "STATUS_APPROVED": "Approved",
     "STATUS_REJECTED": "Rejected"
+  },
+  "BRANCH_RULES": {
+    "TITLE": "Branch rules",
+    "SUBTITLE": "TRA on receipts, the cashier's discount limit, and when the CEO is alerted.",
+    "TRA": "TRA",
+    "TRA_NOTE": "TIN, VRN and the EFD machine number print on every receipt. The VFD link (TRA receipts directly) comes later.",
+    "EFD": "EFD/VFD number",
+    "DISCOUNT": "Discounts",
+    "CASHIER_PERCENT": "A cashier may discount up to (%)",
+    "DISCOUNT_NOTE": "Above this, only a Manager or CEO gives the discount. Every discount has a reason and a record.",
+    "ALERTS": "Theft alerts",
+    "VOIDS": "Items taken off bills in one shift",
+    "SHORTAGE": "Cash-up short by (Tshs)",
+    "HOURS": "Shift open longer than (hours)",
+    "ALERTS_NOTE": "Past these, the CEO gets an alert (the bell) - and an SMS once SMS is on.",
+    "SAVED": "Saved"
   }
 }

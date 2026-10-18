@@ -293,6 +293,40 @@
   </div>
 
 
+  <!-- An open bill: a discount, with the reason (cashier up to the CEO's limit). -->
+  @if (canEdit && data.services.length > 0) {
+    @if (!discounting) {
+      <button type="button" class="line-swap-btn" (click)="discounting = true">
+        <mat-icon>percent</mat-icon><span>{{ 'DISCOUNT.BTN' | translate }}</span>
+      </button>
+    } @else {
+      <div class="line-remove-form">
+        <strong>{{ 'DISCOUNT.TITLE' | translate: { code: data.sale?.salesCode } }}</strong>
+        <div class="line-remove-fields">
+          <label class="lr-qty">
+            <span>{{ 'DISCOUNT.PERCENT' | translate }}</span>
+            <input type="number" min="1" max="100" [(ngModel)]="discountPercent" name="discountPercent" (ngModelChange)="discountAmount = null" />
+          </label>
+          <label class="lr-qty">
+            <span>{{ 'DISCOUNT.AMOUNT' | translate }}</span>
+            <input type="number" min="1" [(ngModel)]="discountAmount" name="discountAmount" (ngModelChange)="discountPercent = null" />
+          </label>
+          <label class="lr-reason">
+            <span>{{ 'DISCOUNT.REASON' | translate }}</span>
+            <input type="text" maxlength="300" [(ngModel)]="discountReason" name="discountReason" />
+          </label>
+        </div>
+        <p class="lr-note">{{ 'DISCOUNT.NOTE' | translate }}</p>
+        <div class="lr-actions">
+          <button type="button" class="lr-cancel" (click)="discounting = false">{{ 'COMMON.CANCEL' | translate }}</button>
+          <button type="button" class="lr-confirm" [disabled]="discountReason.trim().length < 3 || (!discountPercent && !discountAmount) || giving" (click)="giveDiscount()">
+            <mat-icon>percent</mat-icon>{{ 'DISCOUNT.CONFIRM' | translate }}
+          </button>
+        </div>
+      </div>
+    }
+  }
+
   <!-- ================= TOTAL ================= -->
   <div class="dialog-total">
 

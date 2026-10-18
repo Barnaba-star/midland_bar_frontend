@@ -150,7 +150,8 @@
     "COMMISSION": "Commissions",
     "BILL_CODES": "Bill Codes",
     "OTHER_SPLIT": "Other Expenses",
-    "BRANCH_RULES": "Branch: TRA and rules"
+    "BRANCH_RULES": "Branch: TRA and rules",
+    "OFFERS": "Offers / Happy hour"
   },
   "STAFF": {
     "ADD": "Add Staff",
@@ -2114,7 +2115,14 @@
     "BAR_COPY": "Bar copy",
     "TIN": "TIN",
     "VRN": "VRN",
-    "EFD": "EFD"
+    "EFD": "EFD",
+    "FREE": "{{n}} free",
+    "WAS": "was {{price}}",
+    "DISCOUNT": "Discount",
+    "DIRECT_Q": "Print straight away without choosing the printer?",
+    "DIRECT_1": "On Windows, make the receipt printer the 'Default printer' (Settings > Printers).",
+    "DIRECT_2": "Right-click the Google Chrome shortcut > Properties > at the end of 'Target' add a space and:",
+    "DIRECT_3": "Close all of Chrome and open it from that shortcut. Every 'Print' now goes straight out."
   },
   "STAFF_SELL_PAGE": {
     "RECALL_HANDOVER": "Take handover back",
@@ -2820,5 +2828,57 @@
     "HOURS": "Shift open longer than (hours)",
     "ALERTS_NOTE": "Past these, the CEO gets an alert (the bell) - and an SMS once SMS is on.",
     "SAVED": "Saved"
+  },
+  "OFFERS": {
+    "TITLE": "Offers and Happy hour",
+    "SUBTITLE": "Prices drop by themselves on the days and times you choose. The split follows the price charged.",
+    "ADD": "Add offer",
+    "EDIT": "Edit offer",
+    "NAME": "Offer name",
+    "KIND": "Kind",
+    "KIND_PERCENT": "Percent off",
+    "KIND_PRICE": "Set price",
+    "KIND_BUY_GET": "Buy ... get ... free",
+    "PRODUCT": "Product",
+    "BY_CATEGORY": "By category (not one product)",
+    "CATEGORY": "Category",
+    "ALL": "All",
+    "PERCENT": "Percent (%)",
+    "PRICE": "Offer price (Tshs)",
+    "BUY": "Buy",
+    "FREE": "Free",
+    "FROM": "From",
+    "TO": "To",
+    "HINT": "E.g. 22:00 to 02:00 runs past midnight. 'Buy 2 get 1' counts over the whole bill.",
+    "EMPTY": "No offers yet.",
+    "WHEN": "Time",
+    "STATE": "State",
+    "ON": "On",
+    "OFF": "Off",
+    "SUM_PERCENT": "{{p}}% off · {{what}}",
+    "SUM_PRICE": "{{what}} at Tshs {{price}}",
+    "SUM_BUY_GET": "Buy {{buy}} get {{free}} free · {{what}}",
+    "CAT_DRINK": "Drinks",
+    "CAT_FOOD": "Food",
+    "CAT_SHISHA": "Shisha",
+    "CAT_POOL": "Pool",
+    "CAT_JUICE": "Juice",
+    "DAY_1": "Mon",
+    "DAY_2": "Tue",
+    "DAY_3": "Wed",
+    "DAY_4": "Thu",
+    "DAY_5": "Fri",
+    "DAY_6": "Sat",
+    "DAY_7": "Sun"
+  },
+  "DISCOUNT": {
+    "BTN": "Discount",
+    "TITLE": "Discount on bill {{code}}",
+    "PERCENT": "Percent (%)",
+    "AMOUNT": "or Amount (Tshs)",
+    "REASON": "Reason",
+    "NOTE": "A cashier may give up to the percent the CEO set; beyond it a Manager or CEO. The split is taken down.",
+    "CONFIRM": "Give discount",
+    "DONE": "Discount given"
   }
 }

@@ -440,6 +440,30 @@ payBill(dto: { salesOpenedUID: string; payments: { method: string; amount: numbe
   return this.http.post<Response<any>>(`${this.barURL}/payBill`, dto);
 }
 
+/* Offers (happy hour) and discounts. */
+
+findPriceRules(): Observable<ResponseList<any>> {
+  return this.http.get<ResponseList<any>>(`${this.barURL}/priceRules`);
+}
+
+/** The offers running right now - shown at the till. */
+findPriceRulesNow(): Observable<ResponseList<any>> {
+  return this.http.get<ResponseList<any>>(`${this.barURL}/priceRules/now`);
+}
+
+savePriceRule(body: any, uid?: string): Observable<Response<any>> {
+  return this.http.post<Response<any>>(`${this.barURL}/priceRules${uid ? '/' + uid : ''}`, body);
+}
+
+deletePriceRule(uid: string): Observable<Response<any>> {
+  return this.http.post<Response<any>>(`${this.barURL}/priceRules/${uid}/delete`, {});
+}
+
+/** A discount on an open bill: a percent or an amount, with the reason. */
+discountBill(billUid: string, body: { percent?: number; amount?: number; reason: string }): Observable<Response<any>> {
+  return this.http.post<Response<any>>(`${this.barURL}/bills/${billUid}/discount`, body);
+}
+
 /* Refunds - money back on a paid bill. */
 
 requestRefund(body: { salesOpenedUID: string; lines: { barSalesUID: string; quantity: number }[]; method: string; reason: string }): Observable<Response<any>> {

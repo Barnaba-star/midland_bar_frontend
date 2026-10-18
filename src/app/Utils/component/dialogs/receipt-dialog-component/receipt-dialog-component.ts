@@ -38,6 +38,10 @@ export class ReceiptDialogComponent implements OnInit {
   receipts: any[] = [];
   /** The branch's logo, printed at the top of the slip (none if it has none, or offline). */
   logoUrl: string | null = null;
+  /** Printing BaronixTZ's wordmark: wider than a branch's square logo. */
+  logoIsDefault = false;
+  /** Phones and tablets always show their print dialog; the direct-print tip is for computers. */
+  readonly handheld = isHandheld();
   loading = true;
 
   constructor(
@@ -65,7 +69,9 @@ export class ReceiptDialogComponent implements OnInit {
     }).subscribe({
       next: ({ all, logo }) => {
         this.receipts = all.map((res) => res?.data).filter(Boolean);
-        this.logoUrl = logo;
+        // No logo of their own (or it would not load): BaronixTZ's, in black for the roll.
+        this.logoIsDefault = !logo;
+        this.logoUrl = logo || `${location.origin}/assets/images/baronix-receipt-logo.png`;
         this.loading = false;
         this.cdr.detectChanges();
         if (this.data.autoPrint) {
@@ -149,6 +155,7 @@ export class ReceiptDialogComponent implements OnInit {
           transform: rotate(-30deg);
         }
         .r-logo { display: block; margin: 0 auto ${vw(2)}; max-width: ${vw(26)}; max-height: ${vw(18)}; object-fit: contain; filter: grayscale(1) contrast(1.3); }
+        .r-logo.wide { max-width: ${vw(40)}; max-height: ${vw(18)}; }
         .r-wm span { font-size: 1.25em; font-weight: 700; letter-spacing: 0.08em; white-space: nowrap; color: #000; opacity: ${ReceiptDialogComponent.WATERMARK_OPACITY}; }
         .r-paper + .r-paper { page-break-before: always; break-before: page; }
         .r-center { text-align: center; }

@@ -186,6 +186,43 @@ export class SaleDetailsDialogComponent {
     });
   }
 
+  /* A discount on the open bill - the lines come back with their new totals. */
+  discounting = false;
+  discountPercent: number | null = null;
+  discountAmount: number | null = null;
+  discountReason = '';
+  giving = false;
+
+  giveDiscount(): void {
+    if (this.giving || !this.data.sale?.uid) return;
+    this.giving = true;
+    this.barService.discountBill(this.data.sale.uid, {
+      percent: this.discountPercent || undefined,
+      amount: this.discountAmount || undefined,
+      reason: this.discountReason.trim(),
+    }).subscribe({
+      next: (res) => {
+        if (res?.data) {
+          this.data.sale.bill = res.data.bill;
+          this.barService.findBarSalesList(this.data.sale.uid).subscribe((lines: any) => {
+            this.data.services.splice(0, this.data.services.length, ...(lines?.data ?? []));
+            this.giving = false;
+            this.discounting = false;
+            this.alert.show('success', this.translate.instant('DISCOUNT.DONE'));
+            this.cdr.markForCheck();
+          });
+        } else {
+          this.giving = false;
+          this.cdr.markForCheck();
+        }
+      },
+      error: () => {
+        this.giving = false;
+        this.cdr.markForCheck();
+      },
+    });
+  }
+
   get canSwap(): boolean {
     return !!this.data.canExchange && this.data.sale?.paymentStatus !== 'PAID';
   }

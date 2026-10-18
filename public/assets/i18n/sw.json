@@ -150,7 +150,8 @@
     "COMMISSION": "Kamisheni",
     "BILL_CODES": "Codes za Bill",
     "OTHER_SPLIT": "Matumizi ya Other",
-    "BRANCH_RULES": "Tawi: TRA na kanuni"
+    "BRANCH_RULES": "Tawi: TRA na kanuni",
+    "OFFERS": "Ofa / Happy hour"
   },
   "SERVICE": {
     "ADD": "Ongeza Huduma",
@@ -2114,7 +2115,14 @@
     "BAR_COPY": "Nakala ya bar",
     "TIN": "TIN",
     "VRN": "VRN",
-    "EFD": "EFD"
+    "EFD": "EFD",
+    "FREE": "{{n}} bure",
+    "WAS": "ilikuwa {{price}}",
+    "DISCOUNT": "Punguzo",
+    "DIRECT_Q": "Kuchapisha moja kwa moja bila kuchagua printer?",
+    "DIRECT_1": "Kwenye Windows, weka printer ya risiti kuwa 'Default printer' (Settings > Printers).",
+    "DIRECT_2": "Bonyeza kulia shortcut ya Google Chrome > Properties > mwishoni mwa 'Target' ongeza nafasi kisha:",
+    "DIRECT_3": "Funga Chrome yote, ifungue kwa shortcut hiyo. Kila 'Chapisha' sasa inatoka moja kwa moja."
   },
   "STAFF_SELL_PAGE": {
     "RECALL_HANDOVER": "Rudisha makabidhiano",
@@ -2820,5 +2828,57 @@
     "HOURS": "Zamu wazi zaidi ya (saa)",
     "ALERTS_NOTE": "Ikivuka, CEO anapata arifa (kengele) - na SMS ikiwashwa.",
     "SAVED": "Imehifadhiwa"
+  },
+  "OFFERS": {
+    "TITLE": "Ofa na Happy hour",
+    "SUBTITLE": "Bei zinashuka zenyewe kwa siku na saa ulizochagua. Makundi yanagawanywa kwa bei iliyolipwa.",
+    "ADD": "Ongeza ofa",
+    "EDIT": "Hariri ofa",
+    "NAME": "Jina la ofa",
+    "KIND": "Aina",
+    "KIND_PERCENT": "Punguzo la asilimia",
+    "KIND_PRICE": "Bei maalum",
+    "KIND_BUY_GET": "Nunua ... upate ... bure",
+    "PRODUCT": "Bidhaa",
+    "BY_CATEGORY": "Kwa aina (si bidhaa moja)",
+    "CATEGORY": "Aina",
+    "ALL": "Zote",
+    "PERCENT": "Asilimia (%)",
+    "PRICE": "Bei ya ofa (Tshs)",
+    "BUY": "Nunua",
+    "FREE": "Bure",
+    "FROM": "Kuanzia",
+    "TO": "Hadi",
+    "HINT": "Mf. 22:00 hadi 02:00 inavuka usiku wa manane. 'Nunua 2 upate 1' inahesabiwa kwa bili nzima.",
+    "EMPTY": "Hakuna ofa bado.",
+    "WHEN": "Saa",
+    "STATE": "Hali",
+    "ON": "Inatumika",
+    "OFF": "Imezimwa",
+    "SUM_PERCENT": "{{p}}% punguzo · {{what}}",
+    "SUM_PRICE": "{{what}} kwa Tshs {{price}}",
+    "SUM_BUY_GET": "Nunua {{buy}} upate {{free}} bure · {{what}}",
+    "CAT_DRINK": "Vinywaji",
+    "CAT_FOOD": "Chakula",
+    "CAT_SHISHA": "Shisha",
+    "CAT_POOL": "Pool",
+    "CAT_JUICE": "Juice",
+    "DAY_1": "Jtatu",
+    "DAY_2": "Jnne",
+    "DAY_3": "Jtano",
+    "DAY_4": "Alh",
+    "DAY_5": "Iju",
+    "DAY_6": "Jmos",
+    "DAY_7": "Jpili"
+  },
+  "DISCOUNT": {
+    "BTN": "Punguzo",
+    "TITLE": "Punguzo kwenye bili {{code}}",
+    "PERCENT": "Asilimia (%)",
+    "AMOUNT": "au Kiasi (Tshs)",
+    "REASON": "Sababu",
+    "NOTE": "Cashier anaweza hadi asilimia iliyowekwa na CEO; zaidi ya hapo Manager au CEO. Makundi yanapunguzwa.",
+    "CONFIRM": "Toa punguzo",
+    "DONE": "Punguzo limetolewa"
   }
 }

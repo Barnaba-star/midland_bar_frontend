@@ -22,7 +22,7 @@
   <div class="pay-lines">
     @for (l of data.lines; track $index) {
       <div class="pay-line">
-        <span>{{ l.quantity || 1 }} × {{ l.serviceName }}</span>
+        <span>{{ l.quantity || 1 }} × {{ l.serviceName }}@if (l.priceRuleName) { · <em>{{ l.priceRuleName }}</em> }@if (l.discountAmount) { · −{{ l.discountAmount | number }} }</span>
         <span>Tshs {{ (l.lineTotal ?? l.price) | number }}</span>
       </div>
     }

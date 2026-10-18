@@ -1,0 +1,110 @@
+<div class="action-container db-page">
+  <div class="db-card">
+    <div class="db-card-header">
+      <div>
+        <h3>{{ 'OFFERS.TITLE' | translate }}</h3>
+        <p>{{ 'OFFERS.SUBTITLE' | translate }}</p>
+      </div>
+      <button type="button" class="row-action edit" (click)="add()">
+        <mat-icon>add</mat-icon><span>{{ 'OFFERS.ADD' | translate }}</span>
+      </button>
+    </div>
+
+    @if (editing) {
+      <div class="db-panel">
+        <h4>{{ (editing.uid ? 'OFFERS.EDIT' : 'OFFERS.ADD') | translate }}</h4>
+        <div class="db-form">
+          <label class="wide"><small>{{ 'OFFERS.NAME' | translate }}</small><input type="text" maxlength="80" [(ngModel)]="editing.name" /></label>
+          <label>
+            <small>{{ 'OFFERS.KIND' | translate }}</small>
+            <select [(ngModel)]="editing.kind">
+              <option value="PERCENT">{{ 'OFFERS.KIND_PERCENT' | translate }}</option>
+              <option value="PRICE">{{ 'OFFERS.KIND_PRICE' | translate }}</option>
+              <option value="BUY_GET">{{ 'OFFERS.KIND_BUY_GET' | translate }}</option>
+            </select>
+          </label>
+        </div>
+        <div class="db-form">
+          <label class="wide">
+            <small>{{ 'OFFERS.PRODUCT' | translate }}</small>
+            <select [(ngModel)]="editing.serviceUid">
+              @if (editing.kind === 'PERCENT') {
+                <option [ngValue]="null">{{ 'OFFERS.BY_CATEGORY' | translate }}</option>
+              }
+              @for (s of services; track s.uid) {
+                <option [ngValue]="s.uid">{{ s.serviceName }} · {{ s.price | number }}</option>
+              }
+            </select>
+          </label>
+          @if (editing.kind === 'PERCENT' && !editing.serviceUid) {
+            <label>
+              <small>{{ 'OFFERS.CATEGORY' | translate }}</small>
+              <select [(ngModel)]="editing.category">
+                <option [ngValue]="null">{{ 'OFFERS.ALL' | translate }}</option>
+                @for (c of categories; track c) { <option [ngValue]="c">{{ 'OFFERS.CAT_' + c | translate }}</option> }
+              </select>
+            </label>
+          }
+          @if (editing.kind === 'PERCENT') {
+            <label><small>{{ 'OFFERS.PERCENT' | translate }}</small><input type="number" min="1" max="100" [(ngModel)]="editing.percent" /></label>
+          }
+          @if (editing.kind === 'PRICE') {
+            <label><small>{{ 'OFFERS.PRICE' | translate }}</small><input type="number" min="0" [(ngModel)]="editing.price" /></label>
+          }
+          @if (editing.kind === 'BUY_GET') {
+            <label><small>{{ 'OFFERS.BUY' | translate }}</small><input type="number" min="1" [(ngModel)]="editing.buyQty" /></label>
+            <label><small>{{ 'OFFERS.FREE' | translate }}</small><input type="number" min="1" [(ngModel)]="editing.freeQty" /></label>
+          }
+        </div>
+        <div class="db-form">
+          <label><small>{{ 'OFFERS.FROM' | translate }}</small><input type="time" [(ngModel)]="editing.startTime" /></label>
+          <label><small>{{ 'OFFERS.TO' | translate }}</small><input type="time" [(ngModel)]="editing.endTime" /></label>
+        </div>
+        <div class="of-days">
+          @for (d of weekdays; track d) {
+            <button type="button" class="row-action" [class.edit]="editing.days.includes(d)" [class.view]="!editing.days.includes(d)" (click)="toggleDay(d)">{{ 'OFFERS.DAY_' + d | translate }}</button>
+          }
+        </div>
+        <p class="db-hint">{{ 'OFFERS.HINT' | translate }}</p>
+        <div class="db-actions">
+          <button type="button" class="row-action view" (click)="editing = null"><mat-icon>close</mat-icon><span>{{ 'COMMON.CANCEL' | translate }}</span></button>
+          <button type="button" class="row-action edit" [disabled]="busy" (click)="save()"><mat-icon>save</mat-icon><span>{{ 'DEBTS.SAVE' | translate }}</span></button>
+        </div>
+      </div>
+    }
+
+    @if (!rules.length) {
+      <p class="db-empty">{{ 'OFFERS.EMPTY' | translate }}</p>
+    }
+    <div class="db-list">
+      @for (r of rules; track r.uid) {
+        <div class="db-row">
+          <div class="db-who">
+            <strong>{{ r.name }}</strong>
+            <span>
+              @switch (r.kind) {
+                @case ('PERCENT') { {{ 'OFFERS.SUM_PERCENT' | translate: { p: r.percent, what: r.serviceUid ? serviceName(r.serviceUid) : (r.category ? ('OFFERS.CAT_' + r.category | translate) : ('OFFERS.ALL' | translate)) } }} }
+                @case ('PRICE') { {{ 'OFFERS.SUM_PRICE' | translate: { price: (r.price | number), what: serviceName(r.serviceUid) } }} }
+                @case ('BUY_GET') { {{ 'OFFERS.SUM_BUY_GET' | translate: { buy: r.buyQty, free: r.freeQty, what: serviceName(r.serviceUid) } }} }
+              }
+            </span>
+          </div>
+          <div class="db-fig">
+            <small>{{ 'OFFERS.WHEN' | translate }}</small>
+            <strong>{{ (r.startTime || '').slice(0, 5) }} - {{ (r.endTime || '').slice(0, 5) }}</strong>
+            <span>@for (d of weekdays; track d) { @if (r.days.includes(d)) { {{ 'OFFERS.DAY_' + d | translate }} } }</span>
+          </div>
+          <div class="db-fig">
+            <small>{{ 'OFFERS.STATE' | translate }}</small>
+            <strong [class.zero]="r.enabled">{{ (r.enabled ? 'OFFERS.ON' : 'OFFERS.OFF') | translate }}</strong>
+          </div>
+          <div class="db-row-actions">
+            <button type="button" class="row-action view" (click)="toggle(r)"><mat-icon>{{ r.enabled ? 'pause' : 'play_arrow' }}</mat-icon></button>
+            <button type="button" class="row-action view" (click)="edit(r)"><mat-icon>edit</mat-icon></button>
+            <button type="button" class="row-action delete" (click)="remove(r)"><mat-icon>delete</mat-icon></button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

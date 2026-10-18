@@ -9,7 +9,7 @@
         <!-- Handover summary: whose bills, each one's total, and the sum. -->
         <div class="r-paper r-summary">
           @if (logoUrl) {
-            <img class="r-logo" [src]="logoUrl" alt="" />
+            <img class="r-logo" [class.wide]="logoIsDefault" [src]="logoUrl" alt="" />
           }
           <div class="r-center r-title">{{ receipts[0].branchName || 'BaronixTZ' }}</div>
           <div class="r-center r-muted">{{ 'RECEIPT.HANDOVER' | translate }}</div>
@@ -28,7 +28,7 @@
       @for (receipt of receipts; track $index) {
         <div class="r-paper">
         @if (logoUrl) {
-          <img class="r-logo" [src]="logoUrl" alt="" />
+          <img class="r-logo" [class.wide]="logoIsDefault" [src]="logoUrl" alt="" />
         }
         <div class="r-center r-title">{{ receipt.branchName || 'BaronixTZ' }}</div>
         @if (receipt.taxTin || receipt.taxVrn) {
@@ -62,10 +62,16 @@
         <div class="r-rule"></div>
 
         @for (l of receipt.lines; track $index) {
-          <div class="r-row"><span>{{ l.quantity || 1 }} × {{ l.name }}</span><span>{{ (l.lineTotal ?? l.unitPrice) | number }}</span></div>
+          <div class="r-row"><span>{{ l.quantity || 1 }} × {{ l.name }}</span><span>{{ ((l.lineTotal ?? l.unitPrice) + (l.discount || 0)) | number }}</span></div>
           @if ((l.quantity || 1) > 1) {
             <div class="r-muted r-sub">@ {{ l.unitPrice | number }}</div>
           }
+          @if (l.offer) {
+            <div class="r-muted r-sub">{{ l.offer }}@if (l.freeUnits) { · {{ 'RECEIPT.FREE' | translate: { n: l.freeUnits } }} }@if (l.listPrice && l.listPrice !== l.unitPrice) { · {{ 'RECEIPT.WAS' | translate: { price: (l.listPrice | number) } }} }</div>
+          }
+        }
+        @if (receipt.discountTotal) {
+          <div class="r-row"><span>{{ 'RECEIPT.DISCOUNT' | translate }}</span><span>−{{ receipt.discountTotal | number }}</span></div>
         }
         <div class="r-rule"></div>
 
@@ -101,4 +107,14 @@
       <span>{{ 'RECEIPT.PRINT' | translate }}</span>
     </button>
   </div>
+  @if (!handheld) {
+    <details class="r-direct">
+      <summary>{{ 'RECEIPT.DIRECT_Q' | translate }}</summary>
+      <ol>
+        <li>{{ 'RECEIPT.DIRECT_1' | translate }}</li>
+        <li>{{ 'RECEIPT.DIRECT_2' | translate }} <code>--kiosk-printing</code></li>
+        <li>{{ 'RECEIPT.DIRECT_3' | translate }}</li>
+      </ol>
+    </details>
+  }
 </div>

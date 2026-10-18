@@ -1,0 +1,74 @@
+<div class="action-container db-page">
+  <div class="db-card">
+    <div class="db-card-header">
+      <div>
+        <h3>{{ 'GIVEAWAYS.TITLE' | translate }}</h3>
+        <p>{{ 'GIVEAWAYS.SUBTITLE' | translate }}</p>
+      </div>
+    </div>
+
+    <div class="of-days">
+      @for (r of ranges; track r) {
+        <button type="button" class="row-action" [class.edit]="range === r" [class.view]="range !== r" (click)="setRange(r)">{{ 'GIVEAWAYS.R_' + r | translate }}</button>
+      }
+    </div>
+
+    @if (data) {
+      <div class="db-totals">
+        <div class="db-total grand"><small>{{ 'GIVEAWAYS.SALES' | translate }}</small><strong>Tshs {{ data.totals.sales | number }}</strong><span>{{ 'GIVEAWAYS.SALES_NOTE' | translate }}</span></div>
+        <div class="db-total"><small>{{ 'GIVEAWAYS.OFFERS' | translate }}</small><strong>Tshs {{ data.totals.offers | number }}</strong></div>
+        <div class="db-total"><small>{{ 'GIVEAWAYS.DISCOUNTS' | translate }}</small><strong>Tshs {{ data.totals.discounts | number }}</strong></div>
+        <div class="db-total"><small>{{ 'GIVEAWAYS.CUSTOMER_OFFERS' | translate }}</small><strong>Tshs {{ data.totals.customerOffers | number }}</strong></div>
+        <div class="db-total"><small>{{ 'GIVEAWAYS.REFUNDS' | translate }}</small><strong>Tshs {{ data.totals.refunds | number }}</strong></div>
+      </div>
+
+      <h4 class="rf-head">{{ 'GIVEAWAYS.OFFERS' | translate }}</h4>
+      @if (!data.offers.length) { <p class="db-hint">{{ 'GIVEAWAYS.NONE' | translate }}</p> } @else {
+        <div class="db-table-wrap"><table class="db-table">
+          <thead><tr><th>{{ 'GIVEAWAYS.COL_OFFER' | translate }}</th><th>{{ 'OFFERS.PRODUCT' | translate }}</th><th class="num">{{ 'GIVEAWAYS.COL_UNITS' | translate }}</th><th class="num">{{ 'GIVEAWAYS.COL_FREE' | translate }}</th><th class="num">{{ 'GIVEAWAYS.COL_CHARGED' | translate }}</th><th class="num">{{ 'GIVEAWAYS.COL_MENU' | translate }}</th><th class="num">{{ 'GIVEAWAYS.COL_GIVEN' | translate }}</th></tr></thead>
+          <tbody>
+            @for (o of data.offers; track $index) {
+              <tr><td>{{ o.offer }}</td><td>{{ o.product }}</td><td class="num">{{ o.units }}</td><td class="num">{{ o.free_units }}</td><td class="num">{{ o.charged | number }}</td><td class="num">{{ o.menu_value | number }}</td><td class="num">{{ o.given | number }}</td></tr>
+            }
+          </tbody>
+        </table></div>
+      }
+
+      <h4 class="rf-head">{{ 'GIVEAWAYS.DISCOUNTS' | translate }}</h4>
+      @if (!data.discounts.length) { <p class="db-hint">{{ 'GIVEAWAYS.NONE' | translate }}</p> } @else {
+        <div class="db-table-wrap"><table class="db-table">
+          <thead><tr><th>{{ 'DEBTS.COL_TIME' | translate }}</th><th>{{ 'REFUND.COL_BILL' | translate }}</th><th>{{ 'DEBTS.REASON' | translate }}</th><th>{{ 'DEBTS.COL_BY' | translate }}</th><th class="num">{{ 'DEBTS.COL_AMOUNT' | translate }}</th></tr></thead>
+          <tbody>
+            @for (d of data.discounts; track $index) {
+              <tr><td>{{ d.given_at | date: 'dd MMM HH:mm' }}</td><td>{{ d.sales_code }}</td><td>{{ d.reason }}</td><td>{{ d.given_by_name || d.given_by }}</td><td class="num">{{ d.amount | number }}</td></tr>
+            }
+          </tbody>
+        </table></div>
+      }
+
+      <h4 class="rf-head">{{ 'GIVEAWAYS.CUSTOMER_OFFERS' | translate }}</h4>
+      @if (!data.customerOffers.length) { <p class="db-hint">{{ 'GIVEAWAYS.NONE' | translate }}</p> } @else {
+        <div class="db-table-wrap"><table class="db-table">
+          <thead><tr><th>{{ 'DEBTS.COL_TIME' | translate }}</th><th>{{ 'DEBTS.NAME' | translate }}</th><th>{{ 'REFUND.COL_BILL' | translate }}</th><th>{{ 'DEBTS.COL_BY' | translate }}</th><th class="num">{{ 'DEBTS.COL_AMOUNT' | translate }}</th></tr></thead>
+          <tbody>
+            @for (o of data.customerOffers; track $index) {
+              <tr><td>{{ o.used_at | date: 'dd MMM HH:mm' }}</td><td>{{ o.customer_name }}</td><td>{{ o.bill_code }}</td><td>{{ o.used_by_name || o.used_by }}</td><td class="num">{{ o.amount | number }}</td></tr>
+            }
+          </tbody>
+        </table></div>
+      }
+
+      <h4 class="rf-head">{{ 'GIVEAWAYS.REFUNDS' | translate }}</h4>
+      @if (!data.refunds.length) { <p class="db-hint">{{ 'GIVEAWAYS.NONE' | translate }}</p> } @else {
+        <div class="db-table-wrap"><table class="db-table">
+          <thead><tr><th>{{ 'DEBTS.COL_TIME' | translate }}</th><th>{{ 'REFUND.COL_BILL' | translate }}</th><th>{{ 'DEBTS.REASON' | translate }}</th><th>{{ 'REFUND.COL_ASKED' | translate }}</th><th class="num">{{ 'DEBTS.COL_AMOUNT' | translate }}</th></tr></thead>
+          <tbody>
+            @for (r of data.refunds; track $index) {
+              <tr><td>{{ r.decided_at | date: 'dd MMM HH:mm' }}</td><td>{{ r.sales_code }}</td><td>{{ r.reason }}</td><td>{{ r.requested_by_name }}</td><td class="num">{{ r.amount | number }} · {{ 'PAY_BILL.METHOD_' + r.method | translate }}</td></tr>
+            }
+          </tbody>
+        </table></div>
+      }
+    }
+  </div>
+</div>

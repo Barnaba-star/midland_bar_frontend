@@ -458,6 +458,11 @@ receivePurchaseOrder(uid: string, body: any): Observable<Response<any>> { return
 cancelPurchaseOrder(uid: string): Observable<Response<any>> { return this.http.post<Response<any>>(`${this.barURL}/suppliers/orders/${uid}/cancel`, {}); }
 findPurchasePrices(serviceUid: string): Observable<ResponseList<any>> { return this.http.get<ResponseList<any>>(`${this.barURL}/suppliers/prices/${serviceUid}`); }
 
+/** Reports > Ofa na Punguzo for a period (DAY, WEEK, MONTH...). */
+findGiveaways(filter: string): Observable<Response<any>> {
+  return this.http.get<Response<any>>(`${this.barURL}/reports/giveaways/${filter}`);
+}
+
 /* Offers (happy hour) and discounts. */
 
 findPriceRules(): Observable<ResponseList<any>> {

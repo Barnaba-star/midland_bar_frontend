@@ -16,6 +16,8 @@ interface Rule {
   price?: number | null;
   buyQty?: number | null;
   freeQty?: number | null;
+  /** Buy-and-get-free once per bill (default) or every time. */
+  oncePerBill?: boolean | null;
   days: string;
   startTime: string;
   endTime: string;
@@ -95,11 +97,11 @@ export class Offers implements OnInit {
   add(): void {
     // The whole day by default: a time window left at someone else's guess is
     // an offer that silently never runs.
-    this.editing = { name: 'Ofa', kind: 'PERCENT', category: 'DRINK', percent: 20, days: '1234567', startTime: '00:00', endTime: '23:59', enabled: true };
+    this.editing = { name: 'Ofa', kind: 'PERCENT', category: 'DRINK', percent: 20, days: '1234567', startTime: '00:00', endTime: '23:59', enabled: true, oncePerBill: true };
   }
 
   edit(r: Rule): void {
-    this.editing = { ...r, startTime: (r.startTime ?? '').slice(0, 5), endTime: (r.endTime ?? '').slice(0, 5) };
+    this.editing = { ...r, oncePerBill: r.oncePerBill !== false, startTime: (r.startTime ?? '').slice(0, 5), endTime: (r.endTime ?? '').slice(0, 5) };
   }
 
   toggleDay(d: string): void {

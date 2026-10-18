@@ -56,6 +56,12 @@
             <label><small>{{ 'OFFERS.FREE' | translate }}</small><input type="number" min="1" [(ngModel)]="editing.freeQty" /></label>
           }
         </div>
+        @if (editing.kind === 'BUY_GET') {
+          <label class="db-check"><input type="checkbox" [(ngModel)]="editing.oncePerBill" /><span>{{ 'OFFERS.ONCE' | translate }}</span></label>
+          <p class="db-hint">{{ (editing.oncePerBill ? 'OFFERS.ONCE_ON' : 'OFFERS.ONCE_OFF') | translate: { buy: editing.buyQty, free: editing.freeQty } }}</p>
+        }
+        <div class="db-form">
+        </div>
         <div class="db-form">
           <label><small>{{ 'OFFERS.FROM' | translate }}</small><input type="time" [(ngModel)]="editing.startTime" /></label>
           <label><small>{{ 'OFFERS.TO' | translate }}</small><input type="time" [(ngModel)]="editing.endTime" /></label>
@@ -123,7 +129,7 @@
               @switch (r.kind) {
                 @case ('PERCENT') { {{ 'OFFERS.SUM_PERCENT' | translate: { p: r.percent, what: r.serviceUid ? serviceName(r.serviceUid) : (r.category ? ('OFFERS.CAT_' + r.category | translate) : ('OFFERS.ALL' | translate)) } }} }
                 @case ('PRICE') { {{ 'OFFERS.SUM_PRICE' | translate: { price: (r.price | number), what: serviceName(r.serviceUid) } }} }
-                @case ('BUY_GET') { {{ 'OFFERS.SUM_BUY_GET' | translate: { buy: r.buyQty, free: r.freeQty, what: serviceName(r.serviceUid) } }} }
+                @case ('BUY_GET') { {{ 'OFFERS.SUM_BUY_GET' | translate: { buy: r.buyQty, free: r.freeQty, what: serviceName(r.serviceUid) } }} · {{ (r.oncePerBill === false ? 'OFFERS.EVERY_TIME' : 'OFFERS.ONCE_SHORT') | translate }} }
               }
             </span>
           </div>

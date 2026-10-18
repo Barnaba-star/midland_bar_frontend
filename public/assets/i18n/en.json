@@ -184,7 +184,8 @@
     "MGR_STAFF_EXPENSES": "Staff Expenses",
     "MGR_OTHER_EXPENSES": "Other Expenses",
     "MGR_SERVICE_EXPENSES": "Service Expenses",
-    "MGR_STOCK_PURCHASE": "Stock Purchase"
+    "MGR_STOCK_PURCHASE": "Stock Purchase",
+    "GIVEAWAYS": "Offers & Discounts"
   },
   "STORE": {
     "ADD": "Add Store",
@@ -2920,7 +2921,12 @@
     "DELETE_SURE": "Yes, delete it",
     "WARN_OFF": "Offer \"{{name}}\" was saved but is OFF - it will not lower any price until you turn it on.",
     "WARN_DAY": "Offer \"{{name}}\" was saved but TODAY is not one of its days - it will not lower prices today. Tick today.",
-    "WARN_TIME": "Offer \"{{name}}\" was saved but now is outside its hours - it will not lower prices now. Press 'Whole day' to make it run all day."
+    "WARN_TIME": "Offer \"{{name}}\" was saved but now is outside its hours - it will not lower prices now. Press 'Whole day' to make it run all day.",
+    "ONCE": "Once per bill only",
+    "ONCE_ON": "Once: buying {{buy}} gets {{free}} free - ordering more on the same bill does not again.",
+    "ONCE_OFF": "Every time: every {{buy}} bought gets {{free}} free, again and again on the same bill.",
+    "ONCE_SHORT": "once per bill",
+    "EVERY_TIME": "every time"
   },
   "DISCOUNT": {
     "BTN": "Discount",
@@ -2978,5 +2984,27 @@
     "EMPTY": "No suppliers yet.",
     "NO_ORDERS": "No orders yet.",
     "NO_PRICES": "This product was never received."
+  },
+  "GIVEAWAYS": {
+    "TITLE": "Offers & Discounts",
+    "SUBTITLE": "What was given free or taken off, apart from sales. 'Sales' everywhere is money actually paid - after offers, discounts and refunds - so they never mix. Stock goes down for everything that went out, free or not.",
+    "R_DAY": "Today",
+    "R_YESTERDAY": "Yesterday",
+    "R_WEEK": "This week",
+    "R_MONTH": "This month",
+    "R_LAST_MONTH": "Last month",
+    "SALES": "Sales (money paid)",
+    "SALES_NOTE": "After offers, discounts and refunds",
+    "OFFERS": "Product offers / Happy hour",
+    "DISCOUNTS": "Bill discounts",
+    "CUSTOMER_OFFERS": "Customers' monthly offers",
+    "REFUNDS": "Refunds",
+    "NONE": "None in this period.",
+    "COL_OFFER": "Offer",
+    "COL_UNITS": "Went out",
+    "COL_FREE": "Free",
+    "COL_CHARGED": "Charged",
+    "COL_MENU": "At full price",
+    "COL_GIVEN": "Given"
   }
 }

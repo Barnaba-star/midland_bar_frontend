@@ -184,7 +184,8 @@
     "MGR_STAFF_EXPENSES": "Matumizi ya Watumishi",
     "MGR_OTHER_EXPENSES": "Matumizi Mengine",
     "MGR_SERVICE_EXPENSES": "Matumizi ya Huduma",
-    "MGR_STOCK_PURCHASE": "Manunuzi ya Stock"
+    "MGR_STOCK_PURCHASE": "Manunuzi ya Stock",
+    "GIVEAWAYS": "Ofa na Punguzo"
   },
   "STORE": {
     "ADD": "Ongeza Kwenye Store",
@@ -2920,7 +2921,12 @@
     "DELETE_SURE": "Ndiyo, futa kabisa",
     "WARN_OFF": "Ofa \"{{name}}\" imehifadhiwa lakini IMEZIMWA - haitapunguza bei hadi uiwashe.",
     "WARN_DAY": "Ofa \"{{name}}\" imehifadhiwa lakini LEO HAIPO kwenye siku zake - haitapunguza bei leo. Weka ✓ kwenye siku ya leo.",
-    "WARN_TIME": "Ofa \"{{name}}\" imehifadhiwa lakini saa hizi haziko ndani ya saa zake - haitapunguza bei sasa. Bonyeza 'Siku nzima' kama unataka iwe muda wote."
+    "WARN_TIME": "Ofa \"{{name}}\" imehifadhiwa lakini saa hizi haziko ndani ya saa zake - haitapunguza bei sasa. Bonyeza 'Siku nzima' kama unataka iwe muda wote.",
+    "ONCE": "Mara moja tu kwa bili",
+    "ONCE_ON": "Mara moja: akinunua {{buy}} anapata {{free}} bure - akiagiza zaidi kwenye bili hiyo hiyo, halipati tena.",
+    "ONCE_OFF": "Kila mara: kila akinunua {{buy}} anapata {{free}} bure, tena na tena kwenye bili hiyo hiyo.",
+    "ONCE_SHORT": "mara moja kwa bili",
+    "EVERY_TIME": "kila mara"
   },
   "DISCOUNT": {
     "BTN": "Punguzo",
@@ -2978,5 +2984,27 @@
     "EMPTY": "Hakuna msambazaji bado.",
     "NO_ORDERS": "Hakuna order bado.",
     "NO_PRICES": "Bidhaa hii haijawahi kupokelewa."
+  },
+  "GIVEAWAYS": {
+    "TITLE": "Ofa na Punguzo",
+    "SUBTITLE": "Kilichotolewa bure au kupunguzwa, kando na mauzo. 'Mauzo' kila mahali ni pesa iliyolipwa kweli - baada ya ofa, punguzo na refund - kwa hiyo hazichanganyiki. Stock inapungua kwa vitu vyote vilivyotoka, hata vya bure.",
+    "R_DAY": "Leo",
+    "R_YESTERDAY": "Jana",
+    "R_WEEK": "Wiki hii",
+    "R_MONTH": "Mwezi huu",
+    "R_LAST_MONTH": "Mwezi uliopita",
+    "SALES": "Mauzo (pesa halisi)",
+    "SALES_NOTE": "Baada ya ofa, punguzo na refund",
+    "OFFERS": "Ofa za bidhaa / Happy hour",
+    "DISCOUNTS": "Punguzo la bili",
+    "CUSTOMER_OFFERS": "Ofa za wateja (kwa mwezi)",
+    "REFUNDS": "Refund",
+    "NONE": "Hakuna katika kipindi hiki.",
+    "COL_OFFER": "Ofa",
+    "COL_UNITS": "Vilivyotoka",
+    "COL_FREE": "Bure",
+    "COL_CHARGED": "Kilicholipwa",
+    "COL_MENU": "Kwa bei kamili",
+    "COL_GIVEN": "Kilichotolewa"
   }
 }

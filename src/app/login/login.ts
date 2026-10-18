@@ -246,6 +246,9 @@ onSubmit(branchUID?: string) {
           // something that was never going to work again.
           this.loginError = this.translate.instant('LOGIN.CODE_EXPIRED');
           this.subscriptionExpired = false;
+        } else if (body && body.code === 'TOO_MANY_ATTEMPTS') {
+          this.loginError = this.translate.instant('LOGIN.TOO_MANY', { minutes: body.minutes ?? 15 });
+          this.subscriptionExpired = false;
         } else if (body && body.code === 'ACCOUNT_BLOCKED') {
           // Somebody decided this, so it should read as a decision rather
           // than as a fault the person might try to work around.
@@ -356,6 +359,7 @@ private branchBlockedMessage(body: { branchName?: string | null; reason?: string
 private staffErrorMessage(body: any): string {
   switch (body?.code) {
     case 'STAFF_LOCKED': return this.translate.instant('LOGIN.STAFF_LOCKED', { minutes: body?.minutes ?? 15 });
+    case 'TOO_MANY_ATTEMPTS': return this.translate.instant('LOGIN.TOO_MANY', { minutes: body?.minutes ?? 15 });
     case 'NO_PIN_SET': return this.translate.instant('LOGIN.STAFF_NO_PIN');
     case 'SUBSCRIPTION_EXPIRED': return this.translate.instant('LOGIN.EXPIRED_TITLE');
     case 'BRANCH_BLOCKED': return this.branchBlockedMessage(body);
@@ -483,7 +487,7 @@ submitSetup(): void {
           suggestions: this.setup.suggestions.filter((c) => c !== this.chosenCode),
         };
         this.chosenCode = '';
-      } else if (code === 'ALREADY_SET' || code === 'INVALID_STAFF_LOGIN' || code === 'STAFF_LOCKED'
+      } else if (code === 'ALREADY_SET' || code === 'INVALID_STAFF_LOGIN' || code === 'STAFF_LOCKED' || code === 'TOO_MANY_ATTEMPTS'
           || code === 'NO_PIN_SET' || code === 'SUBSCRIPTION_EXPIRED' || code === 'BRANCH_BLOCKED') {
         // Nothing to choose any more: back to the sign-in form, saying why.
         this.loginError = this.setupError;

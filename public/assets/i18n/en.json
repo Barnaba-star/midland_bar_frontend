@@ -577,7 +577,8 @@
     "SETUP_PIN_SAME": "The new PIN is the same as the temporary one - choose another.",
     "SETUP_CODE_FORMAT": "The code must be 4 digits.",
     "SETUP_CODE_TAKEN": "That code was just taken - choose another.",
-    "SETUP_ALREADY_SET": "Your code and PIN are already set. Sign in with your own code and PIN."
+    "SETUP_ALREADY_SET": "Your code and PIN are already set. Sign in with your own code and PIN.",
+    "TOO_MANY": "Too many wrong attempts - wait {{minutes}} minutes and try again."
   },
   "LANDING": {
     "HERO_BADGE": "Bar Online Management & Supervision",

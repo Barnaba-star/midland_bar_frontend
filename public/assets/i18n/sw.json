@@ -577,7 +577,8 @@
     "SETUP_PIN_SAME": "PIN mpya ni sawa na ile ya muda - chagua nyingine.",
     "SETUP_CODE_FORMAT": "Code lazima iwe tarakimu 4.",
     "SETUP_CODE_TAKEN": "Code hiyo imeshachukuliwa sasa hivi - chagua nyingine.",
-    "SETUP_ALREADY_SET": "Code na PIN yako zimeshawekwa. Ingia kwa code na PIN yako mwenyewe."
+    "SETUP_ALREADY_SET": "Code na PIN yako zimeshawekwa. Ingia kwa code na PIN yako mwenyewe.",
+    "TOO_MANY": "Majaribio mengi yasiyo sahihi - subiri dakika {{minutes}} kisha jaribu tena."
   },
   "LANDING": {
     "HERO_BADGE": "Bar Online Management & Supervision",

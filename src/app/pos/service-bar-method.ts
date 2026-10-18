@@ -445,6 +445,19 @@ findOwnerBranches(): Observable<ResponseList<any>> {
   return this.http.get<ResponseList<any>>(`${this.barURL}/owner/branches`);
 }
 
+/* Suppliers, purchase orders, buying prices. */
+
+findSuppliers(): Observable<ResponseList<any>> { return this.http.get<ResponseList<any>>(`${this.barURL}/suppliers`); }
+findSupplierLedger(uid: string): Observable<Response<any>> { return this.http.get<Response<any>>(`${this.barURL}/suppliers/${uid}`); }
+saveSupplier(body: any, uid?: string): Observable<Response<any>> { return this.http.post<Response<any>>(`${this.barURL}/suppliers${uid ? '/' + uid : ''}`, body); }
+paySupplier(body: any): Observable<Response<any>> { return this.http.post<Response<any>>(`${this.barURL}/suppliers/pay`, body); }
+findPurchaseOrders(): Observable<ResponseList<any>> { return this.http.get<ResponseList<any>>(`${this.barURL}/suppliers/orders/list`); }
+findPurchaseOrder(uid: string): Observable<Response<any>> { return this.http.get<Response<any>>(`${this.barURL}/suppliers/orders/${uid}`); }
+createPurchaseOrder(body: any): Observable<Response<any>> { return this.http.post<Response<any>>(`${this.barURL}/suppliers/orders`, body); }
+receivePurchaseOrder(uid: string, body: any): Observable<Response<any>> { return this.http.post<Response<any>>(`${this.barURL}/suppliers/orders/${uid}/receive`, body); }
+cancelPurchaseOrder(uid: string): Observable<Response<any>> { return this.http.post<Response<any>>(`${this.barURL}/suppliers/orders/${uid}/cancel`, {}); }
+findPurchasePrices(serviceUid: string): Observable<ResponseList<any>> { return this.http.get<ResponseList<any>>(`${this.barURL}/suppliers/prices/${serviceUid}`); }
+
 /* Offers (happy hour) and discounts. */
 
 findPriceRules(): Observable<ResponseList<any>> {

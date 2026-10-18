@@ -105,6 +105,13 @@ menuItems: SidenavItem[] = [
     roles: this.allRoles,
   },
   {
+    // Who the bar buys from: orders, receiving, what is owed, buying prices.
+    label: 'MENU.SUPPLIERS',
+    icon: 'store',
+    route: '/pos/suppliers',
+    roles: [...this.noCashierRoles, 'STORE_KEEPER']
+  },
+  {
     // Customers who drink on credit - who owes what, and paying it back.
     label: 'MENU.DEBTS',
     icon: 'pay',

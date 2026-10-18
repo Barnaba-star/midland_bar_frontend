@@ -174,6 +174,12 @@ export const routes: Routes = [
         loadComponent:()=>import('./pos/stock-take/stock-take-page').then(m=>m.StockTakePage)
       },
       {
+        // Suppliers, purchase orders and buying prices (VIEW_STORE on the backend).
+        path: 'suppliers',
+        canActivate: [posNoCashierGuard],
+        loadComponent:()=>import('./pos/suppliers/suppliers').then(m=>m.Suppliers)
+      },
+      {
         // Customers' debts: CEO, MANAGER and CASHIER (VIEW_DEBT on the backend).
         path: 'madeni',
         canActivate: [posNoStoreKeeperGuard],

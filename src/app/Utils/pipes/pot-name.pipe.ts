@@ -24,6 +24,7 @@ export class PotNamePipe implements PipeTransform {
     // Not a pot: a staff member's handover shortage, shown among a shift's payouts.
     'Staff shortage': 'STAFF_LOSS.POT',
     'Refund': 'SALES.REFUNDS',
+    'Supplier': 'SUPPLIERS.SUPPLIER',
   };
 
   constructor(private translate: TranslateService) {}

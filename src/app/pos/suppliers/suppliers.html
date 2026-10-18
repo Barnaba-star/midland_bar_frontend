@@ -1,0 +1,223 @@
+<div class="action-container db-page">
+  <div class="db-card">
+    <div class="db-card-header">
+      <div>
+        <h3>{{ 'SUPPLIERS.TITLE' | translate }}</h3>
+        <p>{{ 'SUPPLIERS.SUBTITLE' | translate }}</p>
+      </div>
+      <div class="db-row-actions">
+        @if (canManage) {
+          <button type="button" class="row-action edit" (click)="newOrder()"><mat-icon>add_shopping_cart</mat-icon><span>{{ 'SUPPLIERS.NEW_ORDER' | translate }}</span></button>
+          <button type="button" class="row-action view" (click)="newSupplier()"><mat-icon>person_add</mat-icon><span>{{ 'SUPPLIERS.NEW' | translate }}</span></button>
+        }
+      </div>
+    </div>
+
+    <div class="db-totals">
+      <div class="db-total grand">
+        <small>{{ 'SUPPLIERS.OWED' | translate }}</small>
+        <strong>Tshs {{ owedTotal | number }}</strong>
+        <span>{{ 'SUPPLIERS.N' | translate: { n: suppliers.length } }}</span>
+      </div>
+      <div class="db-total">
+        <small>{{ 'SUPPLIERS.OPEN_ORDERS' | translate }}</small>
+        <strong>{{ openOrders }}</strong>
+      </div>
+    </div>
+
+    <div class="of-days">
+      @for (t of ['SUPPLIERS', 'ORDERS', 'PRICES']; track t) {
+        <button type="button" class="row-action" [class.edit]="tab === t" [class.view]="tab !== t" (click)="tab = $any(t); closeAll()">{{ 'SUPPLIERS.TAB_' + t | translate }}</button>
+      }
+    </div>
+
+    <!-- New / edit supplier -->
+    @if (supplierForm) {
+      <div class="db-panel">
+        <h4>{{ (supplierForm.uid ? 'SUPPLIERS.EDIT' : 'SUPPLIERS.NEW') | translate }}</h4>
+        <div class="db-form">
+          <label class="wide"><small>{{ 'SUPPLIERS.NAME' | translate }}</small><input type="text" maxlength="100" [(ngModel)]="supplierForm.name" /></label>
+          <label><small>{{ 'DEBTS.PHONE' | translate }}</small><input type="tel" [(ngModel)]="supplierForm.phone" placeholder="0712 345 678" /></label>
+          <label><small>{{ 'SUPPLIERS.CONTACT' | translate }}</small><input type="text" maxlength="80" [(ngModel)]="supplierForm.contactPerson" /></label>
+          <label class="wide"><small>{{ 'DEBTS.NOTE' | translate }}</small><input type="text" maxlength="300" [(ngModel)]="supplierForm.note" /></label>
+        </div>
+        <div class="db-actions">
+          <button type="button" class="row-action view" (click)="supplierForm = null">{{ 'COMMON.CANCEL' | translate }}</button>
+          <button type="button" class="row-action edit" [disabled]="busy" (click)="saveSupplier()"><mat-icon>save</mat-icon><span>{{ 'DEBTS.SAVE' | translate }}</span></button>
+        </div>
+      </div>
+    }
+
+    <!-- Pay a supplier -->
+    @if (paying) {
+      <div class="db-panel">
+        <h4>{{ 'SUPPLIERS.PAY_TITLE' | translate: { name: paying.name, owed: (paying.owed | number) } }}</h4>
+        <div class="db-form">
+          <label><small>{{ 'PAY_BILL.AMOUNT' | translate }}</small><input type="number" min="1" [max]="paying.owed" [(ngModel)]="paying.amount" /></label>
+          <label><small>{{ 'DEBTS.METHOD' | translate }}</small>
+            <select [(ngModel)]="paying.method">@for (m of methods; track m) { <option [value]="m">{{ 'PAY_BILL.METHOD_' + m | translate }}</option> }</select>
+          </label>
+          <label class="wide"><small>{{ 'DEBTS.NOTE' | translate }}</small><input type="text" maxlength="300" [(ngModel)]="paying.note" /></label>
+        </div>
+        <label class="db-check"><input type="checkbox" [(ngModel)]="paying.fromDrawer" /><span>{{ 'SUPPLIERS.FROM_DRAWER' | translate }}</span></label>
+        <div class="db-actions">
+          <button type="button" class="row-action view" (click)="paying = null">{{ 'COMMON.CANCEL' | translate }}</button>
+          <button type="button" class="row-action edit" [disabled]="busy || !(paying.amount > 0)" (click)="pay()"><mat-icon>payments</mat-icon><span>{{ 'SUPPLIERS.PAY' | translate }}</span></button>
+        </div>
+      </div>
+    }
+
+    <!-- A supplier's account -->
+    @if (ledger) {
+      <div class="db-panel">
+        <h4>{{ ledger.name }} · {{ 'SUPPLIERS.OWED' | translate }} Tshs {{ ledger.owed | number }}</h4>
+        <div class="db-table-wrap">
+          <table class="db-table">
+            <thead><tr><th>{{ 'DEBTS.COL_TIME' | translate }}</th><th>{{ 'DEBTS.COL_KIND' | translate }}</th><th>{{ 'DEBTS.COL_DETAIL' | translate }}</th><th>{{ 'DEBTS.COL_BY' | translate }}</th><th class="num">{{ 'DEBTS.COL_AMOUNT' | translate }}</th></tr></thead>
+            <tbody>
+              @for (e of ledger.entries; track e.uid) {
+                <tr>
+                  <td>{{ e.entryAt | date: 'dd MMM yyyy HH:mm' }}</td>
+                  <td><span class="db-kind" [class]="'db-kind ' + (e.kind === 'DELIVERY' ? 'CHARGE' : 'PAYMENT')">{{ 'SUPPLIERS.KIND_' + e.kind | translate }}</span></td>
+                  <td>{{ e.poCode }} {{ e.detail }}@if (e.method) { · {{ 'PAY_BILL.METHOD_' + e.method | translate }} }</td>
+                  <td>{{ e.entryByName || e.entryBy }}</td>
+                  <td class="num">{{ e.kind === 'DELIVERY' ? '+' : '−' }}{{ e.amount | number }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        <div class="db-actions"><button type="button" class="row-action view" (click)="ledger = null">{{ 'COMMON.CLOSE' | translate }}</button></div>
+      </div>
+    }
+
+    <!-- New order -->
+    @if (orderForm) {
+      <div class="db-panel">
+        <h4>{{ 'SUPPLIERS.NEW_ORDER' | translate }}</h4>
+        <div class="db-form">
+          <label class="wide"><small>{{ 'SUPPLIERS.SUPPLIER' | translate }}</small>
+            <select [(ngModel)]="orderForm.supplierUid">@for (s of suppliers; track s.uid) { <option [value]="s.uid">{{ s.name }}</option> }</select>
+          </label>
+          <label><small>{{ 'SUPPLIERS.EXPECTED' | translate }}</small><input type="date" [(ngModel)]="orderForm.expectedOn" /></label>
+        </div>
+        @for (l of orderForm.lines; track $index; let i = $index) {
+          <div class="db-form">
+            <label class="wide"><small>{{ 'OFFERS.PRODUCT' | translate }}</small>
+              <select [(ngModel)]="l.serviceUid" (ngModelChange)="pickProduct(l)">
+                <option value="">-</option>
+                @for (p of products; track p.uid) { <option [value]="p.uid">{{ p.serviceName }}</option> }
+              </select>
+            </label>
+            <label><small>{{ 'SUPPLIERS.PACKS' | translate }}</small><input type="number" min="1" [(ngModel)]="l.packs" /></label>
+            <label><small>{{ 'SUPPLIERS.PACK_PRICE' | translate }}</small><input type="number" min="0" [(ngModel)]="l.packPrice" /></label>
+            @if (orderForm.lines.length > 1) {
+              <button type="button" class="row-action delete" (click)="removeLine(i)"><mat-icon>close</mat-icon></button>
+            }
+          </div>
+        }
+        <div class="db-actions" style="justify-content: space-between">
+          <button type="button" class="row-action view" (click)="addLine()"><mat-icon>add</mat-icon><span>{{ 'SUPPLIERS.ADD_LINE' | translate }}</span></button>
+          <strong>Tshs {{ orderTotal | number }}</strong>
+        </div>
+        <div class="db-form"><label class="wide"><small>{{ 'DEBTS.NOTE' | translate }}</small><input type="text" maxlength="300" [(ngModel)]="orderForm.note" /></label></div>
+        <div class="db-actions">
+          <button type="button" class="row-action view" (click)="orderForm = null">{{ 'COMMON.CANCEL' | translate }}</button>
+          <button type="button" class="row-action edit" [disabled]="busy || !orderForm.supplierUid" (click)="saveOrder()"><mat-icon>send</mat-icon><span>{{ 'SUPPLIERS.PLACE' | translate }}</span></button>
+        </div>
+      </div>
+    }
+
+    <!-- An order, and receiving against it -->
+    @if (order) {
+      <div class="db-panel">
+        <h4>{{ order.code }} · {{ order.supplierName }} · {{ 'SUPPLIERS.ST_' + order.status | translate }}</h4>
+        <div class="db-table-wrap">
+          <table class="db-table">
+            <thead><tr><th>{{ 'OFFERS.PRODUCT' | translate }}</th><th class="num">{{ 'SUPPLIERS.PACKS' | translate }}</th><th class="num">{{ 'SUPPLIERS.ARRIVED' | translate }}</th><th class="num">{{ 'SUPPLIERS.PACK_PRICE' | translate }}</th>
+              @if (canReceive && (order.status === 'OPEN' || order.status === 'PARTIAL')) { <th>{{ 'SUPPLIERS.RECEIVE_NOW' | translate }}</th> }</tr></thead>
+            <tbody>
+              @for (l of order.lines; track l.uid) {
+                <tr>
+                  <td>{{ l.serviceName }}</td>
+                  <td class="num">{{ l.packs }}</td>
+                  <td class="num">{{ l.receivedPacks }}</td>
+                  <td class="num">{{ l.packPrice | number }}</td>
+                  @if (canReceive && (order.status === 'OPEN' || order.status === 'PARTIAL')) {
+                    <td><input type="number" min="0" [max]="l.packs - l.receivedPacks" [(ngModel)]="receiving[l.uid]" style="width: 80px" /></td>
+                  }
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        <div class="db-actions">
+          <button type="button" class="row-action view" (click)="order = null">{{ 'COMMON.CLOSE' | translate }}</button>
+          @if (canManage && order.status === 'OPEN') {
+            <button type="button" class="row-action delete" [disabled]="busy" (click)="cancelOrder()"><mat-icon>block</mat-icon><span>{{ 'SUPPLIERS.CANCEL_ORDER' | translate }}</span></button>
+          }
+          @if (canReceive && (order.status === 'OPEN' || order.status === 'PARTIAL')) {
+            <button type="button" class="row-action edit" [disabled]="busy" (click)="receive()"><mat-icon>inventory</mat-icon><span>{{ 'SUPPLIERS.RECEIVE' | translate }}</span></button>
+          }
+        </div>
+      </div>
+    }
+
+    @switch (tab) {
+      @case ('SUPPLIERS') {
+        @if (!suppliers.length) { <p class="db-empty">{{ 'SUPPLIERS.EMPTY' | translate }}</p> }
+        <div class="db-list">
+          @for (s of suppliers; track s.uid) {
+            <div class="db-row">
+              <div class="db-who"><strong>{{ s.name }}</strong><span>{{ s.phone }}@if (s.contactPerson) { · {{ s.contactPerson }} }</span></div>
+              <div class="db-fig"><small>{{ 'SUPPLIERS.OWED' | translate }}</small><strong [class.zero]="s.owed <= 0">Tshs {{ s.owed | number }}</strong></div>
+              <div></div>
+              <div class="db-row-actions">
+                @if (canManage && s.owed > 0) { <button type="button" class="row-action edit" (click)="startPay(s)"><mat-icon>payments</mat-icon><span>{{ 'SUPPLIERS.PAY' | translate }}</span></button> }
+                <button type="button" class="row-action view" (click)="openLedger(s)"><mat-icon>history</mat-icon></button>
+                @if (canManage) { <button type="button" class="row-action view" (click)="editSupplier(s)"><mat-icon>edit</mat-icon></button> }
+              </div>
+            </div>
+          }
+        </div>
+      }
+      @case ('ORDERS') {
+        @if (!orders.length) { <p class="db-empty">{{ 'SUPPLIERS.NO_ORDERS' | translate }}</p> }
+        <div class="db-list">
+          @for (o of orders; track o.uid) {
+            <div class="db-row">
+              <div class="db-who"><strong>{{ o.code }} · {{ o.supplierName }}</strong><span>{{ o.orderedAt | date: 'dd MMM yyyy' }}@if (o.expectedOn) { · {{ 'SUPPLIERS.EXPECTED' | translate }} {{ o.expectedOn | date: 'dd MMM' }} }</span></div>
+              <div class="db-fig"><small>{{ 'OTHER_SPLIT.TOTAL' | translate }}</small><strong>Tshs {{ o.total | number }}</strong></div>
+              <div class="db-fig"><small>{{ 'REFUND.COL_STATUS' | translate }}</small><strong [class.zero]="o.status === 'RECEIVED'">{{ 'SUPPLIERS.ST_' + o.status | translate }}</strong></div>
+              <div class="db-row-actions"><button type="button" class="row-action view" (click)="openOrder(o)"><mat-icon>open_in_new</mat-icon></button></div>
+            </div>
+          }
+        </div>
+      }
+      @case ('PRICES') {
+        <div class="db-form">
+          <label class="wide"><small>{{ 'OFFERS.PRODUCT' | translate }}</small>
+            <select [(ngModel)]="priceProduct" (ngModelChange)="loadPrices()">
+              <option value="">-</option>
+              @for (p of products; track p.uid) { <option [value]="p.uid">{{ p.serviceName }}</option> }
+            </select>
+          </label>
+        </div>
+        @if (prices.length) {
+          <div class="db-table-wrap">
+            <table class="db-table">
+              <thead><tr><th>{{ 'DEBTS.COL_TIME' | translate }}</th><th>{{ 'SUPPLIERS.SUPPLIER' | translate }}</th><th class="num">{{ 'SUPPLIERS.PACKS' | translate }}</th><th class="num">{{ 'SUPPLIERS.PACK_PRICE' | translate }}</th></tr></thead>
+              <tbody>
+                @for (p of prices; track $index) {
+                  <tr><td>{{ p.receivedAt | date: 'dd MMM yyyy' }}</td><td>{{ p.supplier || '-' }} {{ p.poCode }}</td><td class="num">{{ p.packs }}</td><td class="num">{{ p.packPrice | number }}</td></tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        } @else if (priceProduct) {
+          <p class="db-empty">{{ 'SUPPLIERS.NO_PRICES' | translate }}</p>
+        }
+      }
+    }
+  </div>
+</div>

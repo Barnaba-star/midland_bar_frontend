@@ -139,7 +139,8 @@
     "STAFF_SELL": "Mauzo ya Wahudumu",
     "SUPERVISOR": "Oda za Wahudumu",
     "STOCK_COUNT": "Hesabu Stock",
-    "DEBTS": "Madeni"
+    "DEBTS": "Madeni",
+    "SUPPLIERS": "Wasambazaji"
   },
   "SALON": {
     "OFFICE": "Ofisi",
@@ -2902,5 +2903,42 @@
     "LONG_MESSAGE": "Zamu ya {{who}} iko wazi kwa saa {{h}}.",
     "DIGEST_TITLE": "Muhtasari wa jana",
     "DIGEST_MESSAGE": "Mauzo Tshs {{sales}} (bili {{bills}}) · upungufu Tshs {{short}} · vimeondolewa {{voids}} (Tshs {{voidAmount}}) · refund Tshs {{refunds}} · punguzo Tshs {{discounts}} · madeni Tshs {{owed}} · stock chini {{lowStock}}."
+  },
+  "SUPPLIERS": {
+    "TITLE": "Wasambazaji",
+    "SUBTITLE": "Unaonunua kwao, order za mzigo, kupokea mzigo (stock inaongezeka), deni kwao na bei za kununua kwa muda.",
+    "NEW": "Msambazaji mpya",
+    "EDIT": "Hariri msambazaji",
+    "NEW_ORDER": "Order mpya",
+    "OWED": "Tunadaiwa",
+    "N": "Wasambazaji {{n}}",
+    "OPEN_ORDERS": "Order zinazosubiri",
+    "TAB_SUPPLIERS": "Wasambazaji",
+    "TAB_ORDERS": "Order",
+    "TAB_PRICES": "Bei za kununua",
+    "NAME": "Jina la msambazaji",
+    "CONTACT": "Mtu wa kuwasiliana",
+    "PAY_TITLE": "Lipa {{name}} (tunadaiwa Tshs {{owed}})",
+    "FROM_DRAWER": "Pesa inatoka droo (inaingia kwenye cash-up yangu)",
+    "PAY": "Lipa",
+    "KIND_DELIVERY": "Mzigo",
+    "KIND_PAYMENT": "Malipo",
+    "SUPPLIER": "Msambazaji",
+    "EXPECTED": "Inatarajiwa",
+    "PACKS": "Kreti / pakiti",
+    "PACK_PRICE": "Bei ya kreti",
+    "ADD_LINE": "Ongeza bidhaa",
+    "PLACE": "Weka order",
+    "ARRIVED": "Zimefika",
+    "RECEIVE_NOW": "Zimefika sasa",
+    "RECEIVE": "Pokea mzigo",
+    "CANCEL_ORDER": "Futa order",
+    "ST_OPEN": "Inasubiri",
+    "ST_PARTIAL": "Nusu imefika",
+    "ST_RECEIVED": "Imefika yote",
+    "ST_CANCELLED": "Imefutwa",
+    "EMPTY": "Hakuna msambazaji bado.",
+    "NO_ORDERS": "Hakuna order bado.",
+    "NO_PRICES": "Bidhaa hii haijawahi kupokelewa."
   }
 }

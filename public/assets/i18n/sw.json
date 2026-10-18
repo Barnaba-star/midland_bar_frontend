@@ -2142,7 +2142,8 @@
     "DIRECT_1": "Kwenye Windows, weka printer ya risiti kuwa 'Default printer' (Settings > Printers).",
     "DIRECT_2": "Bonyeza kulia shortcut ya Google Chrome > Properties > mwishoni mwa 'Target' ongeza nafasi kisha:",
     "DIRECT_3": "Funga Chrome yote, ifungue kwa shortcut hiyo. Kila 'Chapisha' sasa inatoka moja kwa moja.",
-    "OFFER": "Ofa"
+    "OFFER": "Ofa",
+    "FREE_WORD": "BURE (ofa)"
   },
   "STAFF_SELL_PAGE": {
     "RECALL_HANDOVER": "Rudisha makabidhiano",

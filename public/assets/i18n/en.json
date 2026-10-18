@@ -2142,7 +2142,8 @@
     "DIRECT_1": "On Windows, make the receipt printer the 'Default printer' (Settings > Printers).",
     "DIRECT_2": "Right-click the Google Chrome shortcut > Properties > at the end of 'Target' add a space and:",
     "DIRECT_3": "Close all of Chrome and open it from that shortcut. Every 'Print' now goes straight out.",
-    "OFFER": "Offer"
+    "OFFER": "Offer",
+    "FREE_WORD": "FREE (offer)"
   },
   "STAFF_SELL_PAGE": {
     "RECALL_HANDOVER": "Take handover back",

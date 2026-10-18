@@ -26,7 +26,7 @@
     </div>
 
     <div class="of-days">
-      @for (t of ['SUPPLIERS', 'ORDERS', 'PRICES']; track t) {
+      @for (t of ['SUPPLIERS', 'ORDERS', 'BUDGET', 'PRICES']; track t) {
         <button type="button" class="row-action" [class.edit]="tab === t" [class.view]="tab !== t" (click)="tab = $any(t); closeAll()">{{ 'SUPPLIERS.TAB_' + t | translate }}</button>
       }
     </div>
@@ -60,6 +60,7 @@
           <label class="wide"><small>{{ 'DEBTS.NOTE' | translate }}</small><input type="text" maxlength="300" [(ngModel)]="paying.note" /></label>
         </div>
         <label class="db-check"><input type="checkbox" [(ngModel)]="paying.fromDrawer" /><span>{{ 'SUPPLIERS.FROM_DRAWER' | translate }}</span></label>
+        <p class="db-hint">{{ 'SUPPLIERS.PAY_FROM_MANUNUZI' | translate }}</p>
         <div class="db-actions">
           <button type="button" class="row-action view" (click)="paying = null">{{ 'COMMON.CANCEL' | translate }}</button>
           <button type="button" class="row-action edit" [disabled]="busy || !(paying.amount > 0)" (click)="pay()"><mat-icon>payments</mat-icon><span>{{ 'SUPPLIERS.PAY' | translate }}</span></button>
@@ -111,6 +112,12 @@
             </label>
             <label><small>{{ 'SUPPLIERS.PACKS' | translate }}</small><input type="number" min="1" [(ngModel)]="l.packs" /></label>
             <label><small>{{ 'SUPPLIERS.PACK_PRICE' | translate }}</small><input type="number" min="0" [(ngModel)]="l.packPrice" /></label>
+            @if (l.serviceUid) {
+              <div class="db-fig">
+                <small>{{ 'SUPPLIERS.MANUNUZI_FREE' | translate }}</small>
+                <strong [class.zero]="(l.packs * l.packPrice) <= available(l.serviceUid)" [style.color]="(l.packs * l.packPrice) > available(l.serviceUid) ? '#b91c1c' : null">Tshs {{ available(l.serviceUid) | number }}</strong>
+              </div>
+            }
             @if (orderForm.lines.length > 1) {
               <button type="button" class="row-action delete" (click)="removeLine(i)"><mat-icon>close</mat-icon></button>
             }
@@ -121,9 +128,15 @@
           <strong>Tshs {{ orderTotal | number }}</strong>
         </div>
         <div class="db-form"><label class="wide"><small>{{ 'DEBTS.NOTE' | translate }}</small><input type="text" maxlength="300" [(ngModel)]="orderForm.note" /></label></div>
+        @if (overBudget.length) {
+          <p class="of-warning">⚠ {{ 'SUPPLIERS.OVER_BUDGET' | translate }}:
+            @for (o of overBudget; track o.name) { {{ o.name }} (Tshs {{ o.value | number }} &gt; {{ o.free | number }})@if (!$last) {, } }
+          </p>
+          <label class="db-check"><input type="checkbox" [(ngModel)]="orderForm.allowOverBudget" /><span>{{ 'SUPPLIERS.ALLOW_OVER' | translate }}</span></label>
+        }
         <div class="db-actions">
           <button type="button" class="row-action view" (click)="orderForm = null">{{ 'COMMON.CANCEL' | translate }}</button>
-          <button type="button" class="row-action edit" [disabled]="busy || !orderForm.supplierUid" (click)="saveOrder()"><mat-icon>send</mat-icon><span>{{ 'SUPPLIERS.PLACE' | translate }}</span></button>
+          <button type="button" class="row-action edit" [disabled]="busy || !orderForm.supplierUid || (overBudget.length > 0 && !orderForm.allowOverBudget)" (click)="saveOrder()"><mat-icon>send</mat-icon><span>{{ 'SUPPLIERS.PLACE' | translate }}</span></button>
         </div>
       </div>
     }
@@ -186,12 +199,31 @@
         <div class="db-list">
           @for (o of orders; track o.uid) {
             <div class="db-row">
-              <div class="db-who"><strong>{{ o.code }} · {{ o.supplierName }}</strong><span>{{ o.orderedAt | date: 'dd MMM yyyy' }}@if (o.expectedOn) { · {{ 'SUPPLIERS.EXPECTED' | translate }} {{ o.expectedOn | date: 'dd MMM' }} }</span></div>
+              <div class="db-who"><strong>{{ o.code }} · {{ o.supplierName }}@if (o.overBudget) { <span class="late"> · {{ 'SUPPLIERS.OVER_TAG' | translate }}</span> }</strong><span>{{ o.orderedAt | date: 'dd MMM yyyy' }}@if (o.expectedOn) { · {{ 'SUPPLIERS.EXPECTED' | translate }} {{ o.expectedOn | date: 'dd MMM' }} }</span></div>
               <div class="db-fig"><small>{{ 'OTHER_SPLIT.TOTAL' | translate }}</small><strong>Tshs {{ o.total | number }}</strong></div>
               <div class="db-fig"><small>{{ 'REFUND.COL_STATUS' | translate }}</small><strong [class.zero]="o.status === 'RECEIVED'">{{ 'SUPPLIERS.ST_' + o.status | translate }}</strong></div>
               <div class="db-row-actions"><button type="button" class="row-action view" (click)="openOrder(o)"><mat-icon>open_in_new</mat-icon></button></div>
             </div>
           }
+        </div>
+      }
+      @case ('BUDGET') {
+        <p class="db-hint">{{ 'SUPPLIERS.BUDGET_NOTE' | translate }}</p>
+        <div class="db-table-wrap">
+          <table class="db-table">
+            <thead><tr><th>{{ 'OFFERS.PRODUCT' | translate }}</th><th class="num">{{ 'SUPPLIERS.B_SAVED' | translate }}</th><th class="num">{{ 'SUPPLIERS.B_ON_ORDER' | translate }}</th><th class="num">{{ 'SUPPLIERS.B_UNPAID' | translate }}</th><th class="num">{{ 'SUPPLIERS.B_FREE' | translate }}</th></tr></thead>
+            <tbody>
+              @for (b of budgetRows; track b.serviceUid) {
+                <tr>
+                  <td>{{ b.serviceName }}</td>
+                  <td class="num">{{ b.saved | number }}</td>
+                  <td class="num">{{ b.onOrder | number }}</td>
+                  <td class="num">{{ b.deliveredUnpaid | number }}</td>
+                  <td class="num"><strong [style.color]="b.available < 0 ? '#b91c1c' : '#0f766e'">{{ b.available | number }}</strong></td>
+                </tr>
+              }
+            </tbody>
+          </table>
         </div>
       }
       @case ('PRICES') {

@@ -7,7 +7,7 @@ import { ServiceBarMethod } from '../service-bar-method';
 import { Authentication } from '../../Utils/services/authentication';
 import { PAYMENT_METHODS } from '../../Utils/component/dialogs/pay-bill-dialog-component/pay-bill-dialog-component';
 
-type Tab = 'SUPPLIERS' | 'ORDERS' | 'PRICES';
+type Tab = 'SUPPLIERS' | 'ORDERS' | 'BUDGET' | 'PRICES';
 
 /**
  * POS > Wasambazaji: who the bar buys from and what is owed to each, purchase
@@ -33,6 +33,9 @@ export class Suppliers implements OnInit {
   busy = false;
 
   suppliers: any[] = [];
+  /** Each product's Manunuzi budget, by service uid. */
+  budget: Record<string, any> = {};
+  budgetRows: any[] = [];
   orders: any[] = [];
   products: any[] = [];
 
@@ -58,6 +61,12 @@ export class Suppliers implements OnInit {
   load(): void {
     this.bar.findSuppliers().subscribe((r) => { this.suppliers = r?.data ?? []; this.cdr.markForCheck(); });
     this.bar.findPurchaseOrders().subscribe((r) => { this.orders = r?.data ?? []; this.cdr.markForCheck(); });
+    this.bar.findManunuziBudget().subscribe((r) => {
+      this.budgetRows = r?.data ?? [];
+      this.budget = {};
+      for (const b of this.budgetRows) this.budget[b.serviceUid] = b;
+      this.cdr.markForCheck();
+    });
   }
 
   get openOrders(): number {
@@ -102,7 +111,7 @@ export class Suppliers implements OnInit {
   // orders
   newOrder(): void {
     this.closeAll();
-    this.orderForm = { supplierUid: this.suppliers[0]?.uid ?? '', expectedOn: '', note: '', lines: [{ serviceUid: '', packs: 1, packPrice: null }] };
+    this.orderForm = { supplierUid: this.suppliers[0]?.uid ?? '', expectedOn: '', note: '', allowOverBudget: false, lines: [{ serviceUid: '', packs: 1, packPrice: null }] };
   }
   addLine(): void { this.orderForm.lines.push({ serviceUid: '', packs: 1, packPrice: null }); }
   removeLine(i: number): void { this.orderForm.lines.splice(i, 1); }
@@ -110,6 +119,26 @@ export class Suppliers implements OnInit {
     const p = this.products.find((x) => x.uid === l.serviceUid);
     if (p && !l.packPrice) l.packPrice = p.buyingPrice ?? null;
   }
+  /** Free Manunuzi for a product, less what this order's other lines for it already take. */
+  available(serviceUid: string): number {
+    return Number(this.budget[serviceUid]?.available ?? 0);
+  }
+
+  /** The order's value per product above what its Manunuzi allows. */
+  get overBudget(): { name: string; value: number; free: number }[] {
+    const by = new Map<string, number>();
+    for (const l of this.orderForm?.lines ?? []) {
+      if (!l.serviceUid) continue;
+      by.set(l.serviceUid, (by.get(l.serviceUid) ?? 0) + (Number(l.packs) || 0) * (Number(l.packPrice) || 0));
+    }
+    const out: { name: string; value: number; free: number }[] = [];
+    by.forEach((value, uid) => {
+      const free = this.available(uid);
+      if (value > free) out.push({ name: this.budget[uid]?.serviceName ?? '', value, free: Math.max(0, free) });
+    });
+    return out;
+  }
+
   get orderTotal(): number {
     return (this.orderForm?.lines ?? []).reduce((s: number, l: any) => s + (Number(l.packs) || 0) * (Number(l.packPrice) || 0), 0);
   }

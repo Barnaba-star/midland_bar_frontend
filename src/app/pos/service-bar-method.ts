@@ -456,6 +456,8 @@ findPurchaseOrder(uid: string): Observable<Response<any>> { return this.http.get
 createPurchaseOrder(body: any): Observable<Response<any>> { return this.http.post<Response<any>>(`${this.barURL}/suppliers/orders`, body); }
 receivePurchaseOrder(uid: string, body: any): Observable<Response<any>> { return this.http.post<Response<any>>(`${this.barURL}/suppliers/orders/${uid}/receive`, body); }
 cancelPurchaseOrder(uid: string): Observable<Response<any>> { return this.http.post<Response<any>>(`${this.barURL}/suppliers/orders/${uid}/cancel`, {}); }
+/** Each product's Manunuzi: saved, on order, delivered unpaid, free to spend. */
+findManunuziBudget(): Observable<ResponseList<any>> { return this.http.get<ResponseList<any>>(`${this.barURL}/suppliers/budget`); }
 findPurchasePrices(serviceUid: string): Observable<ResponseList<any>> { return this.http.get<ResponseList<any>>(`${this.barURL}/suppliers/prices/${serviceUid}`); }
 
 /** Reports > Ofa na Punguzo for a period (DAY, WEEK, MONTH...). */

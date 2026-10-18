@@ -2983,7 +2983,18 @@
     "ST_CANCELLED": "Cancelled",
     "EMPTY": "No suppliers yet.",
     "NO_ORDERS": "No orders yet.",
-    "NO_PRICES": "This product was never received."
+    "NO_PRICES": "This product was never received.",
+    "TAB_BUDGET": "Manunuzi budget",
+    "MANUNUZI_FREE": "Manunuzi allows",
+    "OVER_BUDGET": "The order is over these products' Manunuzi",
+    "ALLOW_OVER": "Allow going over Manunuzi (the order is marked over budget)",
+    "OVER_TAG": "over budget",
+    "PAY_FROM_MANUNUZI": "The payment comes out of the Manunuzi of the delivered products (oldest delivery first) - the Manunuzi report updates itself.",
+    "BUDGET_NOTE": "Per product: Manunuzi saved from sales, less orders still to come and deliveries not yet paid = what may be spent now.",
+    "B_SAVED": "Manunuzi saved",
+    "B_ON_ORDER": "On order",
+    "B_UNPAID": "Delivered, unpaid",
+    "B_FREE": "Free to spend"
   },
   "GIVEAWAYS": {
     "TITLE": "Offers & Discounts",

@@ -2983,7 +2983,18 @@
     "ST_CANCELLED": "Imefutwa",
     "EMPTY": "Hakuna msambazaji bado.",
     "NO_ORDERS": "Hakuna order bado.",
-    "NO_PRICES": "Bidhaa hii haijawahi kupokelewa."
+    "NO_PRICES": "Bidhaa hii haijawahi kupokelewa.",
+    "TAB_BUDGET": "Bajeti ya Manunuzi",
+    "MANUNUZI_FREE": "Manunuzi yanaruhusu",
+    "OVER_BUDGET": "Order inazidi Manunuzi ya bidhaa hizi",
+    "ALLOW_OVER": "Ruhusu kuzidi Manunuzi (order itaandikwa imezidi bajeti)",
+    "OVER_TAG": "imezidi bajeti",
+    "PAY_FROM_MANUNUZI": "Malipo yanatoka kwenye Manunuzi ya bidhaa za mzigo huo (mzigo wa zamani kwanza) - ripoti ya Manunuzi inasasishwa yenyewe.",
+    "BUDGET_NOTE": "Kwa kila bidhaa: akiba ya Manunuzi kutoka mauzo, ukitoa order zinazosubiri na mzigo uliofika bado haujalipwa = kinachoruhusiwa kununulia sasa.",
+    "B_SAVED": "Akiba ya Manunuzi",
+    "B_ON_ORDER": "Kwenye order",
+    "B_UNPAID": "Umefika, haujalipwa",
+    "B_FREE": "Inaruhusiwa sasa"
   },
   "GIVEAWAYS": {
     "TITLE": "Ofa na Punguzo",

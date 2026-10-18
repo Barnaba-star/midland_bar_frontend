@@ -18,10 +18,10 @@ import { OfflineService } from './offline.service';
     @if (offline.browser) {
       <div class="cb-wrap">
         <button type="button" class="cb" (click)="open.set(!open())"
-                [class.off]="!offline.online()" [class.busy]="offline.syncing()" [class.warn]="offline.failed().length"
-                [matTooltip]="(offline.online() ? 'OFFLINE.ONLINE' : 'OFFLINE.OFFLINE') | translate">
+                [class.off]="!offline.online()" [class.weak]="state() === 'WEAK'" [class.busy]="offline.syncing()" [class.warn]="offline.failed().length"
+                [matTooltip]="('OFFLINE.' + state()) | translate">
           <i class="cb-dot"></i>
-          <span class="cb-label">{{ (offline.online() ? 'OFFLINE.ONLINE' : 'OFFLINE.OFFLINE') | translate }}</span>
+          <span class="cb-label">{{ ('OFFLINE.' + state()) | translate }}</span>
           @if (offline.pending().length) {
             <span class="cb-count">{{ offline.pending().length }}</span>
           }
@@ -33,8 +33,8 @@ import { OfflineService } from './offline.service';
         @if (open()) {
           <div class="cb-panel">
             <div class="cb-head">
-              <strong>{{ (offline.online() ? 'OFFLINE.ONLINE' : 'OFFLINE.OFFLINE') | translate }}</strong>
-              <span>{{ (offline.online() ? 'OFFLINE.ONLINE_TEXT' : 'OFFLINE.OFFLINE_TEXT') | translate }}</span>
+              <strong>{{ ('OFFLINE.' + state()) | translate }}</strong>
+              <span>{{ ('OFFLINE.' + state() + '_TEXT') | translate }}</span>
             </div>
 
             <div class="cb-sec">
@@ -87,6 +87,7 @@ import { OfflineService } from './offline.service';
       font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap;
     }
     .cb.off { --tone: #c0392b; }
+    .cb.weak { --tone: #d97706; }
     .cb.busy { --tone: #3b82f6; }
     .cb-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--tone); }
     .cb.busy .cb-dot { animation: cb-pulse 1s ease-in-out infinite; }
@@ -123,6 +124,10 @@ import { OfflineService } from './offline.service';
 export class ConnectivityBadge {
   readonly offline = inject(OfflineService);
   readonly open = signal(false);
+
+  state(): 'ONLINE' | 'WEAK' | 'OFFLINE' {
+    return !this.offline.online() ? 'OFFLINE' : this.offline.weak() ? 'WEAK' : 'ONLINE';
+  }
 
   label(op: any): string {
     return op.meta?.bill?.salesCode ?? op.meta?.salesCode ?? op.meta?.staffName ?? (op.meta?.total ? `· ${op.meta.total.toLocaleString()}` : '');

@@ -1,7 +1,7 @@
-import { HttpErrorResponse, HttpEvent, HttpHandlerFn, HttpInterceptorFn, HttpRequest, HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpEvent, HttpEventType, HttpHandlerFn, HttpInterceptorFn, HttpRequest, HttpResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Observable, catchError, from, mergeMap, of, tap, throwError } from 'rxjs';
+import { NEVER, Observable, TimeoutError, catchError, filter, finalize, from, mergeMap, of, race, share, tap, throwError, timeout, timer } from 'rxjs';
 import { environment } from '../enviroments/environment';
 import { AlertService } from '../services/alert';
 import { OFFLINE_AWARE, OFFLINE_BYPASS, OfflineRefusal, OfflineService, OpKind } from '../offline/offline.service';
@@ -29,6 +29,20 @@ const QUEUEABLE: { match: RegExp; kind: OpKind }[] = [
   { match: /^\/bar\/removeBillLine$/, kind: 'REMOVE_LINE' },
   { match: /^\/bar\/staffLoss$/, kind: 'STAFF_LOSS' },
 ];
+
+/**
+ * A weak line, not a dead one: the request neither answers nor fails, and the
+ * screen spins. Past these times the selling pages stop waiting - a read is
+ * answered from the device's copy, a sale is queued (its op id makes a late
+ * arrival of the original harmless) - and the line keeps working behind.
+ */
+const SLOW_READ_MS = 6000;
+const SLOW_WRITE_MS = 10000;
+/** Selling reads with no overlay that may still be answered from the device's last copy when slow. */
+const DEVICE_COPY_WHEN_SLOW = /^\/bar\/(findBarServiceList|findBarStaffList)$/;
+/** Reads the Sales page and its warm-up ask for at the same moment: one trip over the line, shared. */
+const SHARED_READS = /^\/bar\/(shift\/current|salesOpenedList|findAvailableBillCodes|findBarServiceList|findBarStaffList)$/;
+const inflight = new Map<string, Observable<HttpEvent<any>>>();
 
 const ok = (req: HttpRequest<any>, data: any) =>
   new HttpResponse({ status: 200, url: req.url, body: { data, message: null, status: 'SUCCESS' } });
@@ -76,19 +90,36 @@ export const OfflineInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, nex
   // ---------------- reads ----------------
   if (req.method === 'GET') {
     const overlay = OVERLAYS.map((o) => ({ o, m: path.match(o.match) })).find((x) => x.m);
+    const deviceData = (): Promise<any> =>
+      overlay ? overlay.o.view(offline, overlay.m!) : offline.recall<any>(req.urlWithParams).then((b) => b?.data);
     const fromDevice = (): Observable<HttpEvent<any>> =>
-      from(overlay ? overlay.o.view(offline, overlay.m!) : offline.recall<any>(req.urlWithParams).then((b) => b?.data)).pipe(
+      from(deviceData()).pipe(
         mergeMap((data) => (data === undefined || data === null ? refuse('NOT_CACHED') : of(ok(req, data)))),
       );
     if (offline.queueing && overlay) {
       return fromDevice();
     }
-    return next(aware).pipe(
-      tap((ev) => {
-        if (ev instanceof HttpResponse && ev.status === 200 && ev.body && (ev.body as any).data !== undefined) {
-          offline.remember(req.urlWithParams, ev.body);
-        }
-      }),
+    const fetch = (): Observable<HttpEvent<any>> =>
+      next(aware).pipe(
+        tap((ev) => {
+          if (ev instanceof HttpResponse) {
+            offline.weak.set(false);
+          }
+          if (ev instanceof HttpResponse && ev.status === 200 && ev.body && (ev.body as any).data !== undefined) {
+            offline.remember(req.urlWithParams, ev.body);
+          }
+        }),
+      );
+    let network: Observable<HttpEvent<any>>;
+    if (SHARED_READS.test(path)) {
+      const key = `${offline.user()}|${req.context.get(SILENT_REQUEST)}|${req.urlWithParams}`;
+      network = inflight.get(key) ?? fetch().pipe(finalize(() => inflight.delete(key)), share());
+      inflight.set(key, network);
+    } else {
+      // Shared so that, when the device's copy answers first, the same trip carries on to refresh it.
+      network = fetch().pipe(share());
+    }
+    const answered = network.pipe(
       catchError((err: HttpErrorResponse) => {
         if (err.status !== 0) {
           return throwError(() => err);
@@ -97,6 +128,22 @@ export const OfflineInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, nex
         return fromDevice();
       }),
     );
+    if (!overlay && !DEVICE_COPY_WHEN_SLOW.test(path)) {
+      return answered;
+    }
+    // Too slow: the device's copy answers, and the request carries on to refresh it.
+    const late = timer(SLOW_READ_MS).pipe(
+      mergeMap(() => deviceData()),
+      mergeMap((data) => {
+        if (data === undefined || data === null) {
+          return NEVER;
+        }
+        offline.weak.set(true);
+        network.subscribe({ error: () => {} });
+        return of(ok(req, data));
+      }),
+    );
+    return race(answered.pipe(filter((ev) => ev.type !== HttpEventType.Sent)), late);
   }
 
   // ---------------- writes ----------------
@@ -131,7 +178,14 @@ export const OfflineInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, nex
       return queue(id, body);
     }
     return next(aware.clone({ body, setHeaders: { 'X-Op-Id': id } })).pipe(
-      catchError((err: HttpErrorResponse) => {
+      filter((ev) => ev.type !== HttpEventType.Sent),
+      timeout({ first: SLOW_WRITE_MS }),
+      catchError((err: HttpErrorResponse | TimeoutError) => {
+        if (err instanceof TimeoutError) {
+          // Online but crawling: queued like an offline sale and sent in the background.
+          offline.weak.set(true);
+          return queue(id, body);
+        }
         if (err.status !== 0) {
           return throwError(() => err);
         }

@@ -2492,6 +2492,8 @@
   "OFFLINE": {
     "ONLINE": "Online",
     "OFFLINE": "Offline",
+    "WEAK": "Mtandao dhaifu",
+    "WEAK_TEXT": "Mtandao ni wa polepole - skrini inatumia data iliyo kwenye kifaa na mauzo yanatumwa nyuma kimya kimya.",
     "ONLINE_TEXT": "Imeunganishwa na server.",
     "OFFLINE_TEXT": "Hakuna internet - mauzo yanaendelea hapa na yatatumwa ikirudi.",
     "PENDING": "Zinasubiri kutumwa ({{n}})",

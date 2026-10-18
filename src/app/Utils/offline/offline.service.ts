@@ -1,7 +1,7 @@
 import { Injectable, PLATFORM_ID, inject, signal, computed } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpContext, HttpContextToken, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { Subject, firstValueFrom } from 'rxjs';
+import { Subject, TimeoutError, firstValueFrom, timeout } from 'rxjs';
 import { environment } from '../enviroments/environment';
 import { Authentication } from '../services/authentication';
 import { SILENT_REQUEST } from '../inteceptor/silent-request';
@@ -37,6 +37,8 @@ export interface FailedOp extends QueuedOp {
 export class OfflineRefusal extends Error {}
 
 const BAR = () => `${environment.baseApiUrl}/bar`;
+/** One queued sale that gets no answer in this time stops the run; the next try resends it under the same op id. */
+const SYNC_TIMEOUT_MS = 45000;
 
 /**
  * The Bar's offline mode. With no internet the Sales page keeps working on
@@ -55,6 +57,8 @@ export class OfflineService {
   readonly browser = isPlatformBrowser(inject(PLATFORM_ID));
 
   readonly online = signal(true);
+  /** Online, but answers are so slow the device's copy is standing in for them. */
+  readonly weak = signal(false);
   readonly syncing = signal(false);
   private readonly outbox = signal<QueuedOp[]>([]);
   readonly failed = signal<FailedOp[]>([]);
@@ -223,14 +227,17 @@ export class OfflineService {
             body: op.body,
             headers: new HttpHeaders({ 'X-Offline': '1', 'X-Op-Id': op.id, 'X-Client-Time': String(op.at) }),
             context: new HttpContext().set(OFFLINE_BYPASS, true).set(SILENT_REQUEST, true),
-          }));
+          }).pipe(timeout(SYNC_TIMEOUT_MS)));
           if (!res || res.data === null || res.data === undefined) {
             outcome = 'refused';
             message = res?.message || 'Refused';
           }
         } catch (err) {
           const e = err as HttpErrorResponse;
-          if (e?.status === 0) {
+          if (err instanceof TimeoutError) {
+            // A weak line: it may have arrived - its op id makes the next try harmless.
+            outcome = 'stop';
+          } else if (e?.status === 0) {
             this.setOffline();
             outcome = 'stop';
           } else if (e?.status === 401) {

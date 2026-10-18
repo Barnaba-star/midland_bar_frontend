@@ -2492,6 +2492,8 @@
   "OFFLINE": {
     "ONLINE": "Online",
     "OFFLINE": "Offline",
+    "WEAK": "Weak network",
+    "WEAK_TEXT": "The line is slow - screens use the copy on this device and sales are sent in the background.",
     "ONLINE_TEXT": "Connected to the server.",
     "OFFLINE_TEXT": "No internet - sales go on here and are sent when it is back.",
     "PENDING": "Waiting to send ({{n}})",

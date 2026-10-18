@@ -11,7 +11,7 @@
 <div class="edit-commission-body">
   @for (row of rows; track row.code) {
     <div class="edit-commission-row">
-      <label>{{ row.name }}</label>
+      <label>{{ row.name | translate }}</label>
       <div class="edit-commission-input">
         <input
           type="number"

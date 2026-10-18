@@ -630,3 +630,35 @@ body {
 [hidden] {
   display: none !important;
 }
+
+/* =====================================================
+   HEADINGS BIG, WHAT IS UNDER THEM SMALL (owner, 2026-10-19)
+   In capitals everything reads loud, so headings keep their size and the
+   content inside them - table cells, form labels and fields, notes - is
+   held a clear step down, whatever a component asked for. Inside the
+   system only (the public pages keep their own type). On a phone form
+   fields stay 16px - below that an iPhone zooms the page on tap.
+===================================================== */
+body :not(:is(app-landing, app-login, app-download) *):is(td, .mat-mdc-cell) {
+  font-size: 12px !important;
+  line-height: 1.45;
+}
+
+body :not(:is(app-landing, app-login, app-download) *):is(th, .mat-mdc-header-cell) {
+  font-size: 11px !important;
+  line-height: 1.35;
+}
+
+body :not(:is(app-landing, app-login, app-download) *):is(label, mat-label, .mat-mdc-floating-label, legend) {
+  font-size: 11.5px !important;
+}
+
+body :not(:is(app-landing, app-login, app-download) *):is(p, li, dd, dt, td small, label small) {
+  font-size: 12.5px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  body :not(:is(app-landing, app-login, app-download) *):is(input, select, textarea, .mat-mdc-input-element, .mat-mdc-select-value) {
+    font-size: 13px !important;
+  }
+}

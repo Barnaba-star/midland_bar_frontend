@@ -1,4 +1,5 @@
 import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -14,7 +15,7 @@ interface CommissionRow {
 @Component({
   selector: 'app-edit-commission-dialog',
   standalone: true,
-  imports: [CommonModule, FormsModule, DecimalPipe, MatIconModule, MatButtonModule],
+  imports: [CommonModule, FormsModule, DecimalPipe, MatIconModule, MatButtonModule, TranslatePipe],
   templateUrl: './edit-commission-dialog-component.html',
   styleUrl: './edit-commission-dialog-component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -30,17 +31,17 @@ export class EditCommissionDialogComponent {
     const commission = data.commission || {};
     this.serviceName = commission.serviceName;
     this.rows = [
-      { name: 'Owner Commission', code: 'ownerPercent', percent: commission.ownerPercent || 0 },
-      { name: 'Staff Commission', code: 'staffPercent', percent: commission.staffPercent || 0 },
-      { name: 'TRA Commission', code: 'traPercent', percent: commission.traPercent || 0 },
-      { name: 'Maintenance', code: 'maintenancePercent', percent: commission.maintenancePercent || 0 },
-      { name: 'Emergency', code: 'emergencyPercent', percent: commission.emergencyPercent || 0 },
-      { name: 'Loan', code: 'loanPercent', percent: commission.loanPercent || 0 },
-      { name: 'Rent', code: 'rentPercent', percent: commission.rentPercent || 0 },
-      { name: 'Luku', code: 'lukuPercent', percent: commission.lukuPercent || 0 },
-      { name: 'Water', code: 'waterPercent', percent: commission.waterPercent || 0 },
-      { name: 'Stock Purchase', code: 'stockPurchasePercent', percent: commission.stockPurchasePercent || 0 },
-      { name: 'Other', code: 'otherPercent', percent: commission.otherPercent || 0 },
+      { name: 'COMMISSION_BREAKDOWN.OWNER', code: 'ownerPercent', percent: commission.ownerPercent || 0 },
+      { name: 'COMMISSION_BREAKDOWN.STAFF', code: 'staffPercent', percent: commission.staffPercent || 0 },
+      { name: 'COMMISSION_BREAKDOWN.TRA', code: 'traPercent', percent: commission.traPercent || 0 },
+      { name: 'COMMISSION_BREAKDOWN.MAINTENANCE', code: 'maintenancePercent', percent: commission.maintenancePercent || 0 },
+      { name: 'COMMISSION_BREAKDOWN.EMERGENCY', code: 'emergencyPercent', percent: commission.emergencyPercent || 0 },
+      { name: 'COMMISSION_BREAKDOWN.LOAN', code: 'loanPercent', percent: commission.loanPercent || 0 },
+      { name: 'COMMISSION_BREAKDOWN.RENT', code: 'rentPercent', percent: commission.rentPercent || 0 },
+      { name: 'COMMISSION_BREAKDOWN.LUKU', code: 'lukuPercent', percent: commission.lukuPercent || 0 },
+      { name: 'COMMISSION_BREAKDOWN.WATER', code: 'waterPercent', percent: commission.waterPercent || 0 },
+      { name: 'COMMISSION_BREAKDOWN.STOCK_PURCHASE', code: 'stockPurchasePercent', percent: commission.stockPurchasePercent || 0 },
+      { name: 'COMMISSION_BREAKDOWN.OTHER', code: 'otherPercent', percent: commission.otherPercent || 0 },
     ];
   }
 

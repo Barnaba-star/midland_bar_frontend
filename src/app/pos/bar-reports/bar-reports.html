@@ -1380,6 +1380,26 @@
           <button
             type="button"
             class="income-filter-btn"
+            [class.active]="filterWeek === 'TODAY'"
+            (click)="selectIncomeExpenseFilter('TODAY')"
+          >
+            <mat-icon>today</mat-icon>
+            {{ 'COMMON.TODAY' | translate }}
+          </button>
+
+          <button
+            type="button"
+            class="income-filter-btn"
+            [class.active]="filterWeek === 'YESTERDAY'"
+            (click)="selectIncomeExpenseFilter('YESTERDAY')"
+          >
+            <mat-icon>event</mat-icon>
+            {{ 'COMMON.YESTERDAY' | translate }}
+          </button>
+
+          <button
+            type="button"
+            class="income-filter-btn"
             [class.active]="filterWeek === 'THIS_WEEK'"
             (click)="selectIncomeExpenseFilter('THIS_WEEK')"
           >
@@ -1693,6 +1713,26 @@
         <!-- ================= FILTERS ================= -->
 
         <div class="income-filters">
+          <button
+            type="button"
+            class="income-filter-btn"
+            [class.active]="filterWeek === 'TODAY'"
+            (click)="selectIncomeExpenseFilter('TODAY')"
+          >
+            <mat-icon>today</mat-icon>
+            {{ 'COMMON.TODAY' | translate }}
+          </button>
+
+          <button
+            type="button"
+            class="income-filter-btn"
+            [class.active]="filterWeek === 'YESTERDAY'"
+            (click)="selectIncomeExpenseFilter('YESTERDAY')"
+          >
+            <mat-icon>event</mat-icon>
+            {{ 'COMMON.YESTERDAY' | translate }}
+          </button>
+
           <button
             type="button"
             class="income-filter-btn"

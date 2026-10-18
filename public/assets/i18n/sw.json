@@ -2898,7 +2898,18 @@
     "WHOLE_DAY": "Siku nzima",
     "RUNNING": "Inaendelea sasa",
     "NOT_RUNNING": "Haiendelei sasa (angalia saa na siku)",
-    "HINT_NEW_ONLY": "Ofa inaingia kwenye vitu vinavyoongezwa baada ya kuihifadhi - vilivyokuwa tayari kwenye bili havibadiliki."
+    "HINT_NEW_ONLY": "Ofa inaingia kwenye vitu vinavyoongezwa baada ya kuihifadhi - vilivyokuwa tayari kwenye bili havibadiliki.",
+    "TRY_TITLE": "Jaribu ofa",
+    "TRY_QTY": "Idadi",
+    "TRY_NONE": "hakuna ofa inayotumika (bei kamili Tshs {{price}})",
+    "TRY_CATEGORY": "Aina ya bidhaa",
+    "TRY_TIME": "Saa ya server",
+    "WHY_APPLIES": "inatumika",
+    "WHY_OFF": "imezimwa",
+    "WHY_OTHER_PRODUCT": "ni ya bidhaa nyingine",
+    "WHY_OTHER_CATEGORY": "ni ya aina nyingine ya bidhaa",
+    "WHY_NOT_NOW": "haiendelei sasa (saa au siku)",
+    "WHY_NEED_MORE": "inahitaji idadi zaidi kwenye bili moja"
   },
   "DISCOUNT": {
     "BTN": "Punguzo",

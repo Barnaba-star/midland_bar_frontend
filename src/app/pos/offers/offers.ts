@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject }
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslatePipe } from '@ngx-translate/core';
-import { DecimalPipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { ServiceBarMethod } from '../service-bar-method';
 
 interface Rule {
@@ -28,7 +28,7 @@ interface Rule {
  */
 @Component({
   selector: 'app-offers',
-  imports: [FormsModule, MatIconModule, TranslatePipe, DecimalPipe],
+  imports: [FormsModule, MatIconModule, TranslatePipe, DecimalPipe, DatePipe],
   templateUrl: './offers.html',
   styleUrl: '../debts/debts.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -63,6 +63,19 @@ export class Offers implements OnInit {
     });
     this.barService.findPriceRulesNow().subscribe((res) => {
       this.runningNow = new Set((res?.data ?? []).map((r: any) => r.uid));
+      this.cdr.markForCheck();
+    });
+  }
+
+  /* Jaribu ofa: a product and how many - what it costs now, and each offer's reason. */
+  tryProduct = '';
+  tryQty = 1;
+  tried: any = null;
+
+  tryOffer(): void {
+    if (!this.tryProduct) return;
+    this.barService.previewPriceRule(this.tryProduct, Number(this.tryQty) || 1).subscribe((res) => {
+      this.tried = res?.data ?? null;
       this.cdr.markForCheck();
     });
   }

@@ -469,6 +469,11 @@ findPriceRulesNow(): Observable<ResponseList<any>> {
   return this.http.get<ResponseList<any>>(`${this.barURL}/priceRules/now`);
 }
 
+/** What a quantity of a product costs now, and why each offer does or does not apply. */
+previewPriceRule(serviceUid: string, qty: number): Observable<Response<any>> {
+  return this.http.get<Response<any>>(`${this.barURL}/priceRules/preview`, { params: { serviceUid, qty } });
+}
+
 savePriceRule(body: any, uid?: string): Observable<Response<any>> {
   return this.http.post<Response<any>>(`${this.barURL}/priceRules${uid ? '/' + uid : ''}`, body);
 }

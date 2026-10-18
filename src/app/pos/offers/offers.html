@@ -75,6 +75,31 @@
       </div>
     }
 
+    <!-- Jaribu ofa: does an offer price this product right now, and if not, why -->
+    <div class="db-panel">
+      <h4>{{ 'OFFERS.TRY_TITLE' | translate }}</h4>
+      <div class="db-form">
+        <label class="wide"><small>{{ 'OFFERS.PRODUCT' | translate }}</small>
+          <select [(ngModel)]="tryProduct" (ngModelChange)="tryOffer()">
+            <option value="">-</option>
+            @for (s of services; track s.uid) { <option [value]="s.uid">{{ s.serviceName }} · {{ s.price | number }}</option> }
+          </select>
+        </label>
+        <label><small>{{ 'OFFERS.TRY_QTY' | translate }}</small><input type="number" min="1" [(ngModel)]="tryQty" (ngModelChange)="tryOffer()" /></label>
+      </div>
+      @if (tried) {
+        <p><strong>{{ tried.quantity }} × {{ tried.serviceName }}</strong> = <strong>Tshs {{ tried.lineTotal | number }}</strong>
+          @if (tried.offer) { · {{ tried.offer }}@if (tried.freeUnits) { · {{ 'RECEIPT.FREE' | translate: { n: tried.freeUnits } }} } }
+          @else { · {{ 'OFFERS.TRY_NONE' | translate: { price: ((tried.listPrice * tried.quantity) | number) } }} }
+        </p>
+        <p class="db-hint">{{ 'OFFERS.TRY_CATEGORY' | translate }}: {{ tried.category ? ('OFFERS.CAT_' + tried.category | translate) : '-' }} · {{ 'OFFERS.TRY_TIME' | translate }}: {{ tried.serverTime | date: 'EEE HH:mm' }}</p>
+        @for (r of tried.rules; track $index) {
+          <div class="db-hint"><strong>{{ r.name }}</strong>: <span [class.offer]="r.why === 'APPLIES'" [class.late]="r.why !== 'APPLIES'">{{ 'OFFERS.WHY_' + r.why | translate }}</span>
+            ({{ (r.startTime || '').slice(0, 5) }}-{{ (r.endTime || '').slice(0, 5) }})</div>
+        }
+      }
+    </div>
+
     @if (!rules.length) {
       <p class="db-empty">{{ 'OFFERS.EMPTY' | translate }}</p>
     }

@@ -2898,7 +2898,18 @@
     "WHOLE_DAY": "Whole day",
     "RUNNING": "Running now",
     "NOT_RUNNING": "Not running now (check times and days)",
-    "HINT_NEW_ONLY": "An offer prices items added after it is saved - items already on a bill do not change."
+    "HINT_NEW_ONLY": "An offer prices items added after it is saved - items already on a bill do not change.",
+    "TRY_TITLE": "Try an offer",
+    "TRY_QTY": "Quantity",
+    "TRY_NONE": "no offer applies (full price Tshs {{price}})",
+    "TRY_CATEGORY": "Product category",
+    "TRY_TIME": "Server time",
+    "WHY_APPLIES": "applies",
+    "WHY_OFF": "switched off",
+    "WHY_OTHER_PRODUCT": "is for another product",
+    "WHY_OTHER_CATEGORY": "is for another category",
+    "WHY_NOT_NOW": "not running now (time or day)",
+    "WHY_NEED_MORE": "needs more on one bill"
   },
   "DISCOUNT": {
     "BTN": "Discount",

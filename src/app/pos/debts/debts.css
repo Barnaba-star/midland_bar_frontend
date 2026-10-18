@@ -370,3 +370,6 @@
   color: #0f766e;
   font-weight: 700;
 }
+
+.db-hint .offer { color: #0f766e; font-weight: 700; }
+.db-hint .late { color: #b45309; font-weight: 700; }

@@ -2107,7 +2107,13 @@
     "CREDIT_OWES": "Anadaiwa Tshs {{owes}} kati ya kikomo cha Tshs {{limit}}",
     "CREDIT_NEW": "Sajili mteja mpya",
     "ERR_CREDIT": "Chagua mteja wa deni, ndani ya kikomo chake",
-    "ERR_CREDIT_OFFLINE": "Deni linahitaji internet - lipa kwa njia nyingine au subiri mtandao"
+    "ERR_CREDIT_OFFLINE": "Deni linahitaji internet - lipa kwa njia nyingine au subiri mtandao",
+    "METHOD_ofa": "Ofa (bure)",
+    "OFFER_PICK": "Chagua mteja wa ofa",
+    "OFFER_LEFT": "ofa imebaki Tshs {{amount}}",
+    "OFFER_NONE": "Hakuna mteja mwenye ofa - CEO au Manager aweke 'Ofa kwa mwezi' kwenye Madeni",
+    "OFFER_OVER": "{{name}} ana ofa ya Tshs {{amount}} tu iliyobaki mwezi huu",
+    "ERR_OFFER": "Chagua mteja wa ofa, ndani ya ofa iliyobaki"
   },
   "RECEIPT": {
     "BTN": "Risiti",
@@ -2135,7 +2141,8 @@
     "DIRECT_Q": "Kuchapisha moja kwa moja bila kuchagua printer?",
     "DIRECT_1": "Kwenye Windows, weka printer ya risiti kuwa 'Default printer' (Settings > Printers).",
     "DIRECT_2": "Bonyeza kulia shortcut ya Google Chrome > Properties > mwishoni mwa 'Target' ongeza nafasi kisha:",
-    "DIRECT_3": "Funga Chrome yote, ifungue kwa shortcut hiyo. Kila 'Chapisha' sasa inatoka moja kwa moja."
+    "DIRECT_3": "Funga Chrome yote, ifungue kwa shortcut hiyo. Kila 'Chapisha' sasa inatoka moja kwa moja.",
+    "OFFER": "Ofa"
   },
   "STAFF_SELL_PAGE": {
     "RECALL_HANDOVER": "Rudisha makabidhiano",
@@ -2795,7 +2802,12 @@
     "NAME": "Jina la mteja",
     "PHONE": "Namba ya simu",
     "NOTE": "Maelezo (mf. anafanya kazi wapi)",
-    "KIND_REFUND": "Refund"
+    "KIND_REFUND": "Refund",
+    "OFFER": "Ofa imebaki",
+    "OFFER_OF": "kati ya {{monthly}} kwa mwezi",
+    "MONTHLY_OFFER": "Ofa kwa mwezi (bure, Tshs)",
+    "OFFERS_GIVEN": "Ofa alizopewa",
+    "KIND_OFFER": "Ofa"
   },
   "REFUND": {
     "BTN": "Rudisha pesa",

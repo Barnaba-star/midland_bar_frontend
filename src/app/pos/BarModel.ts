@@ -420,6 +420,10 @@ export interface DebtCustomer {
   owedSince?: string | null;
   daysOwed?: number | null;
   registeredAt?: string | null;
+  /** Drinks given free each month (ofa); what is used and left of it this month. */
+  monthlyOffer?: number;
+  offerUsed?: number;
+  offerLeft?: number;
 }
 
 /** One line of a customer's account. */

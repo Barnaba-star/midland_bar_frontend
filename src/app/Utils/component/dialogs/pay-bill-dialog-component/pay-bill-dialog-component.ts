@@ -15,6 +15,9 @@ export const PAYMENT_METHODS = ['cash', 'mpesa', 'tigopesa', 'airtelmoney', 'hal
 /** Not money in: the part goes on a credit customer's account (Madeni). Online only - the limit is checked there. */
 export const CREDIT_METHOD = 'deni';
 
+/** Not money in: the bar gives this part free out of the customer's monthly offer (ofa). Online only. */
+export const OFFER_METHOD = 'ofa';
+
 interface PaymentRow {
   method: string;
   amount: number | null;
@@ -48,9 +51,10 @@ export class PayBillDialogComponent {
 
   /** Deni is offered to whoever may see the debts, and only with internet. */
   readonly methods = this.auth.hasPermission('VIEW_DEBT') && this.offline.online()
-    ? [...PAYMENT_METHODS, CREDIT_METHOD]
+    ? [...PAYMENT_METHODS, CREDIT_METHOD, OFFER_METHOD]
     : PAYMENT_METHODS;
   readonly credit = CREDIT_METHOD;
+  readonly offer = OFFER_METHOD;
   rows: PaymentRow[];
   error = '';
 
@@ -106,12 +110,13 @@ export class PayBillDialogComponent {
 
   get canPay(): boolean {
     return this.remaining === 0 && this.rows.every((r) => Number(r.amount) > 0 && (this.change(r) ?? 0) >= 0)
-      && this.rows.every((r) => r.method !== CREDIT_METHOD || this.creditOk(r));
+      && this.rows.every((r) => r.method !== CREDIT_METHOD || this.creditOk(r))
+      && this.rows.every((r) => r.method !== OFFER_METHOD || this.offerOk(r));
   }
 
   /** A row turned to Deni: bring the customers in. */
   methodChanged(row: PaymentRow): void {
-    if (row.method !== CREDIT_METHOD) {
+    if (row.method !== CREDIT_METHOD && row.method !== OFFER_METHOD) {
       row.customerUid = undefined;
       return;
     }
@@ -150,6 +155,17 @@ export class PayBillDialogComponent {
     return !!c && c.creditLimit > 0 && (Number(row.amount) || 0) <= c.available;
   }
 
+  /** The customer is chosen and the part fits in what is left of their offer this month. */
+  offerOk(row: PaymentRow): boolean {
+    const c = this.customerOf(row);
+    return !!c && (c.offerLeft ?? 0) > 0 && (Number(row.amount) || 0) <= (c.offerLeft ?? 0);
+  }
+
+  /** Customers with an offer, for an ofa row. */
+  get offerCustomers(): DebtCustomer[] {
+    return this.matchingCustomers.filter((c) => (c.monthlyOffer ?? 0) > 0);
+  }
+
   registerCustomer(row: PaymentRow): void {
     const body = { name: this.newCustomer.name, phone: this.newCustomer.phone };
     this.barService.saveDebtCustomer(body).subscribe({
@@ -179,8 +195,12 @@ export class PayBillDialogComponent {
       this.error = 'PAY_BILL.ERR_TENDERED';
       return;
     }
-    if (this.rows.some((r) => r.method === CREDIT_METHOD) && !this.offline.online()) {
+    if (this.rows.some((r) => r.method === CREDIT_METHOD || r.method === OFFER_METHOD) && !this.offline.online()) {
       this.error = 'PAY_BILL.ERR_CREDIT_OFFLINE';
+      return;
+    }
+    if (this.rows.some((r) => r.method === OFFER_METHOD && !this.offerOk(r))) {
+      this.error = 'PAY_BILL.ERR_OFFER';
       return;
     }
     if (this.rows.some((r) => r.method === CREDIT_METHOD && !this.creditOk(r))) {
@@ -192,7 +212,7 @@ export class PayBillDialogComponent {
         method: r.method,
         amount: Number(r.amount),
         tendered: this.change(r) !== null ? Number(r.tendered) : undefined,
-        customerUid: r.method === CREDIT_METHOD ? r.customerUid : undefined,
+        customerUid: r.method === CREDIT_METHOD || r.method === OFFER_METHOD ? r.customerUid : undefined,
       })),
     });
   }

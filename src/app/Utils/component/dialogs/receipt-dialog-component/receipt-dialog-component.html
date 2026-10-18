@@ -62,13 +62,16 @@
         <div class="r-rule"></div>
 
         @for (l of receipt.lines; track $index) {
-          <div class="r-row"><span>{{ l.quantity || 1 }} × {{ l.name }}</span><span>{{ ((l.lineTotal ?? l.unitPrice) + (l.discount || 0)) | number }}</span></div>
+          <div class="r-row"><span>{{ l.quantity || 1 }} × {{ l.name }}</span><span>{{ ((l.lineTotal ?? l.unitPrice) + (l.discount || 0) + (l.offerAmount || 0)) | number }}</span></div>
           @if ((l.quantity || 1) > 1) {
             <div class="r-muted r-sub">@ {{ l.unitPrice | number }}</div>
           }
           @if (l.offer) {
             <div class="r-muted r-sub">{{ l.offer }}@if (l.freeUnits) { · {{ 'RECEIPT.FREE' | translate: { n: l.freeUnits } }} }@if (l.listPrice && l.listPrice !== l.unitPrice) { · {{ 'RECEIPT.WAS' | translate: { price: (l.listPrice | number) } }} }</div>
           }
+        }
+        @if (receipt.offerTotal) {
+          <div class="r-row"><span>{{ 'RECEIPT.OFFER' | translate }}@if (receipt.offerCustomer) { · {{ receipt.offerCustomer }} }</span><span>−{{ receipt.offerTotal | number }}</span></div>
         }
         @if (receipt.discountTotal) {
           <div class="r-row"><span>{{ 'RECEIPT.DISCOUNT' | translate }}</span><span>−{{ receipt.discountTotal | number }}</span></div>

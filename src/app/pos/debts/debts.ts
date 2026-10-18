@@ -47,13 +47,14 @@ export class Debts implements OnInit {
 
   /** Register / edit. */
   adding = false;
-  form = { name: '', phone: '', note: '', creditLimit: null as number | null };
+  form = { name: '', phone: '', note: '', creditLimit: null as number | null, monthlyOffer: null as number | null };
 
   /** Taking a payment. */
   pay = { method: 'cash', amount: null as number | null, tendered: null as number | null, note: '' };
 
   /** History, and writing off from it. */
   entries: DebtEntry[] = [];
+  offers: any[] = [];
   writeOff = { amount: null as number | null, reason: '', confirming: false };
 
   ngOnInit(): void {
@@ -98,7 +99,7 @@ export class Debts implements OnInit {
   get visible(): DebtCustomer[] {
     const q = this.search.trim().toLowerCase();
     return this.customers.filter((c) =>
-      (!this.onlyOwing || c.balance > 0 || !!q) &&
+      (!this.onlyOwing || c.balance > 0 || (c.monthlyOffer ?? 0) > 0 || !!q) &&
       (!q || c.name.toLowerCase().includes(q) || c.phone.includes(q.replace(/\D/g, '') || '~')));
   }
 
@@ -113,12 +114,12 @@ export class Debts implements OnInit {
   startAdd(): void {
     this.close();
     this.adding = true;
-    this.form = { name: '', phone: '', note: '', creditLimit: null };
+    this.form = { name: '', phone: '', note: '', creditLimit: null, monthlyOffer: null };
   }
 
   startEdit(c: DebtCustomer): void {
     this.open(c, 'EDIT');
-    this.form = { name: c.name, phone: this.phone(c.phone), note: c.note ?? '', creditLimit: c.creditLimit || null };
+    this.form = { name: c.name, phone: this.phone(c.phone), note: c.note ?? '', creditLimit: c.creditLimit || null, monthlyOffer: c.monthlyOffer || null };
   }
 
   saveCustomer(uid?: string): void {
@@ -129,6 +130,7 @@ export class Debts implements OnInit {
       phone: this.form.phone,
       note: this.form.note,
       creditLimit: this.canSetLimit ? Number(this.form.creditLimit) || 0 : undefined,
+      monthlyOffer: this.canSetLimit ? Number(this.form.monthlyOffer) || 0 : undefined,
     };
     this.barService.saveDebtCustomer(body, uid).subscribe({
       next: (res) => {
@@ -167,6 +169,7 @@ export class Debts implements OnInit {
       this.barService.findDebtLedger(c.uid).subscribe({
         next: (res) => {
           this.entries = res?.data?.entries ?? [];
+          this.offers = (res?.data as any)?.offers ?? [];
           this.cdr.markForCheck();
         },
       });

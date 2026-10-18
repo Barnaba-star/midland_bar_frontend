@@ -97,6 +97,9 @@
               } @else {
                 <span class="late">{{ 'DEBTS.NO_LIMIT' | translate }}</span>
               }
+              @if ((c.monthlyOffer ?? 0) > 0) {
+                <span class="offer">{{ 'DEBTS.OFFER' | translate }}: Tshs {{ c.offerLeft | number }} {{ 'DEBTS.OFFER_OF' | translate: { monthly: (c.monthlyOffer | number) } }}</span>
+              }
             </div>
             <div class="db-row-actions">
               @if (canTakePayment && c.balance > 0) {
@@ -212,6 +215,13 @@
                   </div>
                 }
 
+                @if (offers.length) {
+                  <h5 class="db-offers-head">{{ 'DEBTS.OFFERS_GIVEN' | translate }}</h5>
+                  @for (o of offers.slice(0, 20); track o.uid) {
+                    <div class="db-hint">{{ o.usedAt | date: 'dd MMM HH:mm' }} · {{ 'DEBTS.BILL' | translate: { code: o.billCode } }} · Tshs {{ o.amount | number }} · {{ o.usedByName || o.usedBy }}</div>
+                  }
+                }
+
                 @if (canWriteOff && c.balance > 0) {
                   <div class="db-writeoff">
                     <h5>{{ 'DEBTS.WRITE_OFF' | translate }}</h5>
@@ -257,6 +267,10 @@
       <label>
         <small>{{ 'DEBTS.LIMIT' | translate }}</small>
         <input type="number" min="0" step="1000" [(ngModel)]="form.creditLimit" />
+      </label>
+      <label>
+        <small>{{ 'DEBTS.MONTHLY_OFFER' | translate }}</small>
+        <input type="number" min="0" step="1000" [(ngModel)]="form.monthlyOffer" />
       </label>
     }
     <label class="wide">

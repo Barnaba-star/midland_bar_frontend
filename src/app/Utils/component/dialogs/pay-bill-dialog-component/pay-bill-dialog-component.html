@@ -94,6 +94,27 @@
             }
           </div>
         }
+        @if (row.method === offer) {
+          <!-- Ofa: given free out of the customer's monthly offer -->
+          <div class="pay-credit">
+            @if (customers === null) {
+              <small>…</small>
+            } @else {
+              <select [(ngModel)]="row.customerUid">
+                <option [ngValue]="undefined">{{ 'PAY_BILL.OFFER_PICK' | translate }}</option>
+                @for (c of offerCustomers; track c.uid) {
+                  <option [ngValue]="c.uid">{{ c.name }} · {{ 'PAY_BILL.OFFER_LEFT' | translate: { amount: (c.offerLeft | number) } }}</option>
+                }
+              </select>
+              @let p = customerOf(row);
+              @if (!offerCustomers.length) {
+                <small class="pay-credit-bad">{{ 'PAY_BILL.OFFER_NONE' | translate }}</small>
+              } @else if (p && (row.amount ?? 0) > (p.offerLeft ?? 0)) {
+                <small class="pay-credit-bad">{{ 'PAY_BILL.OFFER_OVER' | translate: { name: p.name, amount: (p.offerLeft | number) } }}</small>
+              }
+            }
+          </div>
+        }
         <div class="pay-row-actions">
           @if (remaining !== 0) {
             <button type="button" class="pay-mini" (click)="fillRemaining(row)" [title]="'PAY_BILL.FILL' | translate">

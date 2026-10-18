@@ -359,3 +359,14 @@
   flex-wrap: wrap;
   gap: 6px;
 }
+
+.db-offers-head {
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: var(--color-text, #1d1812);
+}
+
+.db-fig .offer {
+  color: #0f766e;
+  font-weight: 700;
+}

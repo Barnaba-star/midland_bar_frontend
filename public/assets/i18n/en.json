@@ -2107,7 +2107,13 @@
     "CREDIT_OWES": "Owes Tshs {{owes}} of a Tshs {{limit}} limit",
     "CREDIT_NEW": "Register a new customer",
     "ERR_CREDIT": "Choose the credit customer, within their limit",
-    "ERR_CREDIT_OFFLINE": "Credit needs internet - pay another way or wait for the connection"
+    "ERR_CREDIT_OFFLINE": "Credit needs internet - pay another way or wait for the connection",
+    "METHOD_ofa": "Offer (free)",
+    "OFFER_PICK": "Choose the offer customer",
+    "OFFER_LEFT": "offer left Tshs {{amount}}",
+    "OFFER_NONE": "No customer has an offer - a CEO or Manager sets 'Monthly offer' in Debts",
+    "OFFER_OVER": "{{name}} has only Tshs {{amount}} of this month's offer left",
+    "ERR_OFFER": "Choose the offer customer, within what is left"
   },
   "RECEIPT": {
     "BTN": "Receipt",
@@ -2135,7 +2141,8 @@
     "DIRECT_Q": "Print straight away without choosing the printer?",
     "DIRECT_1": "On Windows, make the receipt printer the 'Default printer' (Settings > Printers).",
     "DIRECT_2": "Right-click the Google Chrome shortcut > Properties > at the end of 'Target' add a space and:",
-    "DIRECT_3": "Close all of Chrome and open it from that shortcut. Every 'Print' now goes straight out."
+    "DIRECT_3": "Close all of Chrome and open it from that shortcut. Every 'Print' now goes straight out.",
+    "OFFER": "Offer"
   },
   "STAFF_SELL_PAGE": {
     "RECALL_HANDOVER": "Take handover back",
@@ -2795,7 +2802,12 @@
     "NAME": "Customer name",
     "PHONE": "Phone number",
     "NOTE": "Note (e.g. where they work)",
-    "KIND_REFUND": "Refund"
+    "KIND_REFUND": "Refund",
+    "OFFER": "Offer left",
+    "OFFER_OF": "of {{monthly}} a month",
+    "MONTHLY_OFFER": "Monthly offer (free, Tshs)",
+    "OFFERS_GIVEN": "Offers given",
+    "KIND_OFFER": "Offer"
   },
   "REFUND": {
     "BTN": "Give money back",

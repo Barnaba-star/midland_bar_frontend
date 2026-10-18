@@ -513,7 +513,7 @@ findDebtLedger(uid: string): Observable<Response<DebtCustomer & { entries: DebtE
 }
 
 /** Register (no uid) or edit a customer. The limit is kept only from a CEO or manager. */
-saveDebtCustomer(body: { name: string; phone: string; note?: string; creditLimit?: number }, uid?: string): Observable<Response<DebtCustomer>> {
+saveDebtCustomer(body: { name: string; phone: string; note?: string; creditLimit?: number; monthlyOffer?: number }, uid?: string): Observable<Response<DebtCustomer>> {
   return uid
     ? this.http.put<Response<DebtCustomer>>(`${this.barURL}/debt/customers/${uid}`, body)
     : this.http.post<Response<DebtCustomer>>(`${this.barURL}/debt/customers`, body);

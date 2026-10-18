@@ -2910,7 +2910,17 @@
     "WHY_OTHER_PRODUCT": "is for another product",
     "WHY_OTHER_CATEGORY": "is for another category",
     "WHY_NOT_NOW": "not running now (time or day)",
-    "WHY_NEED_MORE": "needs more on one bill"
+    "WHY_NEED_MORE": "needs more on one bill",
+    "DAYS_HELP": "Days the offer works - the ticked ones (tap to tick or untick):",
+    "ALL_DAYS": "Every day",
+    "ENABLED": "Offer is on",
+    "TURN_OFF": "Turn off",
+    "TURN_ON": "Turn on",
+    "DELETE": "Delete",
+    "DELETE_SURE": "Yes, delete it",
+    "WARN_OFF": "Offer \"{{name}}\" was saved but is OFF - it will not lower any price until you turn it on.",
+    "WARN_DAY": "Offer \"{{name}}\" was saved but TODAY is not one of its days - it will not lower prices today. Tick today.",
+    "WARN_TIME": "Offer \"{{name}}\" was saved but now is outside its hours - it will not lower prices now. Press 'Whole day' to make it run all day."
   },
   "DISCOUNT": {
     "BTN": "Discount",

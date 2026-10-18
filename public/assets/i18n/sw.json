@@ -2910,7 +2910,17 @@
     "WHY_OTHER_PRODUCT": "ni ya bidhaa nyingine",
     "WHY_OTHER_CATEGORY": "ni ya aina nyingine ya bidhaa",
     "WHY_NOT_NOW": "haiendelei sasa (saa au siku)",
-    "WHY_NEED_MORE": "inahitaji idadi zaidi kwenye bili moja"
+    "WHY_NEED_MORE": "inahitaji idadi zaidi kwenye bili moja",
+    "DAYS_HELP": "Siku ofa inafanya kazi - zenye ✓ ndizo zinazotumika (bonyeza kuweka au kuondoa ✓):",
+    "ALL_DAYS": "Siku zote",
+    "ENABLED": "Ofa inatumika (washa)",
+    "TURN_OFF": "Zima",
+    "TURN_ON": "Washa",
+    "DELETE": "Futa",
+    "DELETE_SURE": "Ndiyo, futa kabisa",
+    "WARN_OFF": "Ofa \"{{name}}\" imehifadhiwa lakini IMEZIMWA - haitapunguza bei hadi uiwashe.",
+    "WARN_DAY": "Ofa \"{{name}}\" imehifadhiwa lakini LEO HAIPO kwenye siku zake - haitapunguza bei leo. Weka ✓ kwenye siku ya leo.",
+    "WARN_TIME": "Ofa \"{{name}}\" imehifadhiwa lakini saa hizi haziko ndani ya saa zake - haitapunguza bei sasa. Bonyeza 'Siku nzima' kama unataka iwe muda wote."
   },
   "DISCOUNT": {
     "BTN": "Punguzo",

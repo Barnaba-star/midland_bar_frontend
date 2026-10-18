@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { TranslatePipe } from '@ngx-translate/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { ServiceBarMethod } from '../service-bar-method';
+import { TranslateService } from '@ngx-translate/core';
 
 interface Rule {
   uid?: string;
@@ -36,12 +37,17 @@ interface Rule {
 export class Offers implements OnInit {
   private barService = inject(ServiceBarMethod);
   private cdr = inject(ChangeDetectorRef);
+  private translate = inject(TranslateService);
 
   readonly categories = ['DRINK', 'FOOD', 'SHISHA', 'POOL', 'JUICE'];
   readonly weekdays = ['1', '2', '3', '4', '5', '6', '7'];
   rules: Rule[] = [];
   services: { uid: string; serviceName: string; price: number }[] = [];
   editing: Rule | null = null;
+  /** Asked once before an offer is deleted. */
+  deleting: string | null = null;
+  /** Shown after saving an offer that does not run now - with why. */
+  savedWarning = '';
   busy = false;
 
   ngOnInit(): void {
@@ -117,6 +123,7 @@ export class Offers implements OnInit {
         if (res?.data) {
           this.editing = null;
           this.load();
+          this.warnIfNotRunning(res.data);
         }
         this.cdr.markForCheck();
       },
@@ -127,11 +134,28 @@ export class Offers implements OnInit {
     });
   }
 
+  /** Right after saving: if the offer will not price anything now, say why. */
+  private warnIfNotRunning(saved: any): void {
+    this.savedWarning = '';
+    this.barService.findPriceRulesNow().subscribe((res) => {
+      if ((res?.data ?? []).some((x: any) => x.uid === saved.uid)) {
+        return;
+      }
+      const today = String(((new Date().getDay() + 6) % 7) + 1);
+      const why = !saved.enabled ? 'OFFERS.WARN_OFF'
+        : !(saved.days ?? '').includes(today) ? 'OFFERS.WARN_DAY'
+        : 'OFFERS.WARN_TIME';
+      this.savedWarning = this.translate.instant(why, { name: saved.name });
+      this.cdr.markForCheck();
+    });
+  }
+
   toggle(r: Rule): void {
     this.barService.savePriceRule({ ...r, enabled: !r.enabled }, r.uid).subscribe(() => this.load());
   }
 
   remove(r: Rule): void {
+    this.deleting = null;
     this.barService.deletePriceRule(r.uid!).subscribe(() => this.load());
   }
 }

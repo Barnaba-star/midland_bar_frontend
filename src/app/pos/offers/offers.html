@@ -61,11 +61,18 @@
           <label><small>{{ 'OFFERS.TO' | translate }}</small><input type="time" [(ngModel)]="editing.endTime" /></label>
           <button type="button" class="row-action view" (click)="wholeDay()"><mat-icon>schedule</mat-icon><span>{{ 'OFFERS.WHOLE_DAY' | translate }}</span></button>
         </div>
+        <!-- Days as ticks: a day that is on shows a tick, and tapping it takes it off. -->
+        <small class="db-hint">{{ 'OFFERS.DAYS_HELP' | translate }}</small>
         <div class="of-days">
           @for (d of weekdays; track d) {
-            <button type="button" class="row-action" [class.edit]="editing.days.includes(d)" [class.view]="!editing.days.includes(d)" (click)="toggleDay(d)">{{ 'OFFERS.DAY_' + d | translate }}</button>
+            <label class="of-day" [class.on]="editing.days.includes(d)">
+              <input type="checkbox" [checked]="editing.days.includes(d)" (change)="toggleDay(d)" />
+              {{ 'OFFERS.DAY_' + d | translate }}
+            </label>
           }
+          <button type="button" class="row-action view" (click)="editing.days = '1234567'">{{ 'OFFERS.ALL_DAYS' | translate }}</button>
         </div>
+        <label class="db-check"><input type="checkbox" [(ngModel)]="editing.enabled" /><span>{{ 'OFFERS.ENABLED' | translate }}</span></label>
         <p class="db-hint">{{ 'OFFERS.HINT' | translate }}</p>
         <p class="db-hint">{{ 'OFFERS.HINT_NEW_ONLY' | translate }}</p>
         <div class="db-actions">
@@ -100,6 +107,10 @@
       }
     </div>
 
+    @if (savedWarning) {
+      <p class="of-warning">⚠ {{ savedWarning }}</p>
+    }
+
     @if (!rules.length) {
       <p class="db-empty">{{ 'OFFERS.EMPTY' | translate }}</p>
     }
@@ -129,9 +140,16 @@
             }
           </div>
           <div class="db-row-actions">
-            <button type="button" class="row-action view" (click)="toggle(r)"><mat-icon>{{ r.enabled ? 'pause' : 'play_arrow' }}</mat-icon></button>
-            <button type="button" class="row-action view" (click)="edit(r)"><mat-icon>edit</mat-icon></button>
-            <button type="button" class="row-action delete" (click)="remove(r)"><mat-icon>delete</mat-icon></button>
+            <button type="button" class="row-action view" (click)="toggle(r)">
+              <mat-icon>{{ r.enabled ? 'pause' : 'play_arrow' }}</mat-icon><span>{{ (r.enabled ? 'OFFERS.TURN_OFF' : 'OFFERS.TURN_ON') | translate }}</span>
+            </button>
+            <button type="button" class="row-action view" (click)="edit(r)"><mat-icon>edit</mat-icon><span>{{ 'OFFERS.EDIT' | translate }}</span></button>
+            @if (deleting === r.uid) {
+              <button type="button" class="row-action delete" (click)="remove(r)"><mat-icon>warning</mat-icon><span>{{ 'OFFERS.DELETE_SURE' | translate }}</span></button>
+              <button type="button" class="row-action view" (click)="deleting = null">{{ 'COMMON.CANCEL' | translate }}</button>
+            } @else {
+              <button type="button" class="row-action delete" (click)="deleting = r.uid!"><mat-icon>delete</mat-icon><span>{{ 'OFFERS.DELETE' | translate }}</span></button>
+            }
           </div>
         </div>
       }

@@ -1250,7 +1250,19 @@
     "GROUP_STAFF": "Wafanyakazi",
     "GROUP_OWNER": "Mwenye saluni",
     "GROUP_COSTS": "Gharama za uendeshaji",
-    "AXIS_CAPTION": "Tarehe (siku/mwezi) dhidi ya mapato kwa TZS"
+    "AXIS_CAPTION": "Tarehe (siku/mwezi) dhidi ya mapato kwa TZS",
+    "BRANCHES_TITLE": "Matawi yako yote",
+    "BRANCHES_NOTE": "Leo Tshs {{today}} · Jana Tshs {{yesterday}}",
+    "BR_BRANCH": "Tawi",
+    "BR_TODAY": "Mauzo leo",
+    "BR_BILLS": "Bili",
+    "BR_YESTERDAY": "Jana",
+    "BR_SHORT": "Upungufu",
+    "BR_VOIDS": "Vimeondolewa",
+    "BR_OWED": "Madeni",
+    "BR_LOW": "Stock chini",
+    "BR_SHIFTS": "Zamu wazi",
+    "BRANCHES_SWITCH": "Kuingia tawi jingine: toka, kisha ingia na uchague tawi."
   },
   "SELECT_STAFF_DIALOG": {
     "TITLE": "Chagua Mfanyakazi",
@@ -2880,5 +2892,15 @@
     "NOTE": "Cashier anaweza hadi asilimia iliyowekwa na CEO; zaidi ya hapo Manager au CEO. Makundi yanapunguzwa.",
     "CONFIRM": "Toa punguzo",
     "DONE": "Punguzo limetolewa"
+  },
+  "ALERTS": {
+    "VOIDS_TITLE": "Tahadhari: vitu vingi vimeondolewa",
+    "VOIDS_MESSAGE": "{{who}} ameondoa vitu {{n}} kwenye bili katika zamu moja.",
+    "SHORT_TITLE": "Tahadhari: cash-up pungufu",
+    "SHORT_MESSAGE": "Cash-up ya {{who}} ina upungufu wa Tshs {{amount}}.",
+    "LONG_TITLE": "Tahadhari: zamu haijafungwa",
+    "LONG_MESSAGE": "Zamu ya {{who}} iko wazi kwa saa {{h}}.",
+    "DIGEST_TITLE": "Muhtasari wa jana",
+    "DIGEST_MESSAGE": "Mauzo Tshs {{sales}} (bili {{bills}}) · upungufu Tshs {{short}} · vimeondolewa {{voids}} (Tshs {{voidAmount}}) · refund Tshs {{refunds}} · punguzo Tshs {{discounts}} · madeni Tshs {{owed}} · stock chini {{lowStock}}."
   }
 }

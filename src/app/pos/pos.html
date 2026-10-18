@@ -48,6 +48,51 @@
       </section>
 
 
+      <!-- ============ ALL BRANCHES - an owner with more than one bar ============ -->
+      @if (seesMoney && branches.length > 1) {
+        <section class="dash-row">
+          <div class="dash-panel panel-full">
+            <div class="panel-head">
+              <h3>{{ 'POS_HOME.BRANCHES_TITLE' | translate }}</h3>
+              <span class="panel-note">{{ 'POS_HOME.BRANCHES_NOTE' | translate: { today: money(branchTotal('today', 'sales')), yesterday: money(branchTotal('yesterday', 'sales')) } }}</span>
+            </div>
+            <div class="branches-table-wrap">
+              <table class="branches-table">
+                <thead>
+                  <tr>
+                    <th>{{ 'POS_HOME.BR_BRANCH' | translate }}</th>
+                    <th class="num">{{ 'POS_HOME.BR_TODAY' | translate }}</th>
+                    <th class="num">{{ 'POS_HOME.BR_BILLS' | translate }}</th>
+                    <th class="num">{{ 'POS_HOME.BR_YESTERDAY' | translate }}</th>
+                    <th class="num">{{ 'POS_HOME.BR_SHORT' | translate }}</th>
+                    <th class="num">{{ 'POS_HOME.BR_VOIDS' | translate }}</th>
+                    <th class="num">{{ 'POS_HOME.BR_OWED' | translate }}</th>
+                    <th class="num">{{ 'POS_HOME.BR_LOW' | translate }}</th>
+                    <th class="num">{{ 'POS_HOME.BR_SHIFTS' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (b of branches; track b.uid) {
+                    <tr [class.current]="b.current">
+                      <td><strong>{{ b.branchName }}</strong> <small>{{ b.branchCode }}</small></td>
+                      <td class="num">{{ money(b.today?.sales) }}</td>
+                      <td class="num">{{ b.today?.bills || 0 }}</td>
+                      <td class="num">{{ money(b.yesterday?.sales) }}</td>
+                      <td class="num" [class.bad]="(b.today?.short || 0) + (b.yesterday?.short || 0) > 0">{{ money((b.today?.short || 0) + (b.yesterday?.short || 0)) }}</td>
+                      <td class="num">{{ b.today?.voids || 0 }}</td>
+                      <td class="num">{{ money(b.today?.owed) }}</td>
+                      <td class="num" [class.bad]="(b.today?.lowStock || 0) > 0">{{ b.today?.lowStock || 0 }}</td>
+                      <td class="num">{{ b.openShifts || 0 }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+            <p class="panel-note">{{ 'POS_HOME.BRANCHES_SWITCH' | translate }}</p>
+          </div>
+        </section>
+      }
+
       <!-- ============ ROW 2 - THE CHARTS ============ -->
       @if (seesMoney) {
       <section class="dash-row dash-row-charts">

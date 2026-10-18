@@ -189,6 +189,12 @@ return this.visibility.filteredMenuItems(menu);
   // worth rendering.
 
   summary: any = null;
+  /** Every branch this login may use - today and yesterday (shown when there is more than one). */
+  branches: any[] = [];
+
+  branchTotal(key: 'today' | 'yesterday', field: string): number {
+    return this.branches.reduce((sum, b) => sum + (Number(b?.[key]?.[field]) || 0), 0);
+  }
   dashboardLoading = false;
 
   /** Trend geometry, computed once per load rather than per change detection pass. */
@@ -259,6 +265,18 @@ return this.visibility.filteredMenuItems(menu);
     if (!this.seesMoney) {
       return;
     }
+
+    // An owner with more than one bar: every branch side by side.
+    this.barService.findOwnerBranches().subscribe({
+      next: (response) => {
+        this.branches = response?.data ?? [];
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.branches = [];
+        this.cdr.markForCheck();
+      }
+    });
 
     this.barService.findRevenueTrend(30).subscribe({
       next: (response) => {

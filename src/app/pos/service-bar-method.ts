@@ -440,6 +440,11 @@ payBill(dto: { salesOpenedUID: string; payments: { method: string; amount: numbe
   return this.http.post<Response<any>>(`${this.barURL}/payBill`, dto);
 }
 
+/** Every branch this login may use: today and yesterday's figures (owner dashboard). */
+findOwnerBranches(): Observable<ResponseList<any>> {
+  return this.http.get<ResponseList<any>>(`${this.barURL}/owner/branches`);
+}
+
 /* Offers (happy hour) and discounts. */
 
 findPriceRules(): Observable<ResponseList<any>> {

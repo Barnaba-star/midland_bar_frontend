@@ -603,3 +603,45 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.branches-table-wrap {
+  overflow-x: auto;
+}
+
+.branches-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.branches-table th,
+.branches-table td {
+  padding: 8px;
+  border-bottom: 1px solid var(--color-border, #e8dcc8);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.branches-table th {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--color-text-muted, #7a6f60);
+}
+
+.branches-table .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.branches-table tr.current td {
+  background: color-mix(in srgb, var(--color-primary, #b86e00) 8%, transparent);
+}
+
+.branches-table .bad {
+  color: #b91c1c;
+  font-weight: 700;
+}
+
+.branches-table small {
+  color: var(--color-text-muted, #7a6f60);
+}

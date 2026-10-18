@@ -1250,7 +1250,19 @@
     "GROUP_STAFF": "Staff",
     "GROUP_OWNER": "Owner",
     "GROUP_COSTS": "Running costs",
-    "AXIS_CAPTION": "Date (day/month) against revenue in TZS"
+    "AXIS_CAPTION": "Date (day/month) against revenue in TZS",
+    "BRANCHES_TITLE": "All your branches",
+    "BRANCHES_NOTE": "Today Tshs {{today}} · Yesterday Tshs {{yesterday}}",
+    "BR_BRANCH": "Branch",
+    "BR_TODAY": "Sales today",
+    "BR_BILLS": "Bills",
+    "BR_YESTERDAY": "Yesterday",
+    "BR_SHORT": "Short",
+    "BR_VOIDS": "Taken off",
+    "BR_OWED": "Debts",
+    "BR_LOW": "Low stock",
+    "BR_SHIFTS": "Open shifts",
+    "BRANCHES_SWITCH": "To work in another branch: sign out, then sign in and choose it."
   },
   "SELECT_STAFF_DIALOG": {
     "TITLE": "Select Staff",
@@ -2880,5 +2892,15 @@
     "NOTE": "A cashier may give up to the percent the CEO set; beyond it a Manager or CEO. The split is taken down.",
     "CONFIRM": "Give discount",
     "DONE": "Discount given"
+  },
+  "ALERTS": {
+    "VOIDS_TITLE": "Alert: many items taken off",
+    "VOIDS_MESSAGE": "{{who}} took {{n}} items off bills in one shift.",
+    "SHORT_TITLE": "Alert: cash-up short",
+    "SHORT_MESSAGE": "{{who}}'s cash-up is short by Tshs {{amount}}.",
+    "LONG_TITLE": "Alert: shift not closed",
+    "LONG_MESSAGE": "{{who}}'s shift has been open {{h}} hours.",
+    "DIGEST_TITLE": "Yesterday's summary",
+    "DIGEST_MESSAGE": "Sales Tshs {{sales}} ({{bills}} bills) · short Tshs {{short}} · taken off {{voids}} (Tshs {{voidAmount}}) · refunds Tshs {{refunds}} · discounts Tshs {{discounts}} · debts Tshs {{owed}} · low stock {{lowStock}}."
   }
 }

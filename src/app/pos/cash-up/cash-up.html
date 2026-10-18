@@ -69,6 +69,29 @@
           }
         </div>
 
+        @if (debtPayments.length) {
+          <!-- Debts paid back in this shift: already counted in the takings by their method. -->
+          <div class="cu-payouts">
+            <div class="cu-payouts-head">
+              <mat-icon>account_balance_wallet</mat-icon>
+              <strong>{{ 'CASH_UP.DEBTS_TITLE' | translate }}</strong>
+              <span class="muted">{{ 'CASH_UP.DEBTS_DESC' | translate }}</span>
+            </div>
+            @for (d of debtPayments; track $index) {
+              <div class="cu-payout">
+                <span class="muted">{{ d.at | date: 'HH:mm' }}</span>
+                <span><strong>{{ d.customerName }}</strong></span>
+                <span class="muted">{{ 'PAY_BILL.METHOD_' + d.method | translate }}@if (d.note) { · {{ d.note }} }</span>
+                <span class="num">+{{ d.amount | number }}</span>
+              </div>
+            }
+            <div class="cu-payout total">
+              <span></span><span>{{ 'OTHER_SPLIT.TOTAL' | translate }}</span><span></span>
+              <span class="num">+{{ debtTotal | number }}</span>
+            </div>
+          </div>
+        }
+
         <!-- Payouts recorded in the system during this shift: read from those records, not typed here. -->
         <div class="cu-payouts">
           <div class="cu-payouts-head">

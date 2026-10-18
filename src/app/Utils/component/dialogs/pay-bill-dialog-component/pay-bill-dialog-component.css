@@ -216,3 +216,51 @@
   height: 18px;
   font-size: 18px;
 }
+
+.pay-credit {
+  display: flex;
+  flex: 1 1 100%;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pay-credit select,
+.pay-credit input {
+  height: 38px;
+  padding: 0 10px;
+  border: 1px solid #e8dcc8;
+  border-radius: 8px;
+  background: #fff;
+  color: #1d1812;
+}
+
+.pay-credit small {
+  font-size: 12px;
+  color: #7a6f60;
+}
+
+.pay-credit .pay-credit-bad {
+  color: #b91c1c;
+  font-weight: 700;
+}
+
+.pay-credit-link {
+  align-self: flex-start;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #b86e00;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.pay-credit-new {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.pay-credit-new input {
+  flex: 1 1 140px;
+}

@@ -105,6 +105,13 @@ menuItems: SidenavItem[] = [
     roles: this.allRoles,
   },
   {
+    // Customers who drink on credit - who owes what, and paying it back.
+    label: 'MENU.DEBTS',
+    icon: 'pay',
+    route: '/pos/madeni',
+    permissions: ['VIEW_DEBT']
+  },
+  {
     label: this.reportLabel,
     icon: 'report',
     route: '/pos/barReports',

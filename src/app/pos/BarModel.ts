@@ -405,3 +405,40 @@ export interface StaffOrderLine {
     /** On a change: the bill line this one brings back. Null = an item to hand out. */
     returnOfSalesUid?: string | null;
 }
+
+/** A customer who drinks on credit, with what they owe (Madeni). */
+export interface DebtCustomer {
+  uid: string;
+  name: string;
+  phone: string;
+  note?: string | null;
+  /** The most they may owe; 0 = not set yet, so nothing goes on credit. */
+  creditLimit: number;
+  balance: number;
+  /** How much more can go on credit now. */
+  available: number;
+  owedSince?: string | null;
+  daysOwed?: number | null;
+  registeredAt?: string | null;
+}
+
+/** One line of a customer's account. */
+export interface DebtEntry {
+  uid: string;
+  kind: 'CHARGE' | 'PAYMENT' | 'WRITE_OFF';
+  amount: number;
+  billCode?: string | null;
+  method?: string | null;
+  note?: string | null;
+  entryBy: string;
+  entryByName?: string | null;
+  entryAt: string;
+}
+
+export interface DebtReport {
+  charged: number;
+  paid: number;
+  writtenOff: number;
+  owedNow: number;
+  lines: { uid: string; customerUid: string; customerName: string; kind: DebtEntry['kind']; amount: number; billCode?: string; method?: string; note?: string; by: string; at: string }[];
+}

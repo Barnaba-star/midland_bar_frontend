@@ -60,6 +60,9 @@ export class CashUp implements OnInit {
   billCount = 0;
   payouts: any[] = [];
   payoutsTotal = 0;
+  /** Money credit customers brought in this shift - already in the takings above. */
+  debtPayments: any[] = [];
+  debtTotal = 0;
   note = '';
   submitting = false;
   /** Asked once more before the shift is closed - a cash-up cannot be changed afterwards. */
@@ -152,6 +155,8 @@ export class CashUp implements OnInit {
         this.billCount = d?.billCount ?? 0;
         this.payouts = d?.payouts ?? [];
         this.payoutsTotal = Number(d?.payoutsTotal) || 0;
+        this.debtPayments = d?.debtPayments ?? [];
+        this.debtTotal = Number(d?.debtTotal) || 0;
         const lines: CountLine[] = (d?.lines ?? []).map((l: any) => ({
           method: l.method, takings: Number(l.takings) || 0, payouts: Number(l.payouts) || 0,
           expected: Number(l.expected) || 0, bills: l.bills || 0, counted: null,

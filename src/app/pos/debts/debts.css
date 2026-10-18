@@ -1,0 +1,349 @@
+.db-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+  border: 1px solid var(--color-border, #e8dcc8);
+  border-radius: 16px;
+  background: var(--color-surface, #fff);
+  text-align: left;
+}
+
+.db-card-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* The title stays bigger than every figure inside the card. */
+.db-card-header h3 {
+  margin: 0;
+  font-size: 22px;
+  color: var(--color-text, #1d1812);
+}
+
+.db-card-header p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--color-text-muted, #7a6f60);
+}
+
+.db-totals {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 10px;
+}
+
+.db-total {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 14px;
+  border: 1px solid var(--color-border, #e8dcc8);
+  border-radius: 12px;
+  background: var(--color-surface, #fff);
+  color: var(--color-text, #1d1812);
+}
+
+.db-total small,
+.db-fig small,
+.db-form small {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted, #7a6f60);
+}
+
+.db-total strong {
+  font-size: 18px;
+}
+
+.db-total span {
+  font-size: 12px;
+  color: var(--color-text-muted, #7a6f60);
+}
+
+.db-total.grand {
+  background: #1d1812;
+  border-color: #1d1812;
+  color: #fff;
+}
+
+.db-total.grand small,
+.db-total.grand span {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.db-total.warn {
+  border-color: #d97706;
+  box-shadow: inset 0 0 0 1px #d97706;
+}
+
+.db-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.db-search {
+  display: flex;
+  flex: 1;
+  min-width: 220px;
+  align-items: center;
+  gap: 8px;
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid var(--color-border, #e8dcc8);
+  border-radius: 10px;
+  background: var(--color-surface, #fff);
+  color: var(--color-text-muted, #7a6f60);
+}
+
+.db-search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--color-text, #1d1812);
+  font-size: 14px;
+}
+
+.db-check {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--color-text, #1d1812);
+}
+
+.db-empty {
+  margin: 0;
+  padding: 24px;
+  text-align: center;
+  color: var(--color-text-muted, #7a6f60);
+}
+
+.db-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.db-row {
+  display: grid;
+  grid-template-columns: minmax(160px, 2fr) minmax(130px, 1fr) minmax(130px, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--color-border, #e8dcc8);
+  border-radius: 12px;
+  background: var(--color-surface, #fff);
+}
+
+.db-row.open {
+  border-color: var(--color-primary, #b86e00);
+}
+
+.db-who {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.db-who strong {
+  font-size: 15px;
+  color: var(--color-text, #1d1812);
+}
+
+.db-who span,
+.db-fig span {
+  font-size: 12px;
+  color: var(--color-text-muted, #7a6f60);
+}
+
+.db-fig {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.db-fig strong {
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text, #1d1812);
+}
+
+.db-fig strong.zero {
+  color: #166534;
+}
+
+.db-fig .late {
+  color: #b45309;
+  font-weight: 700;
+}
+
+.db-row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.db-panel {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 10px;
+  background: var(--color-bg, #f6f0e6);
+}
+
+.db-panel h4 {
+  margin: 0;
+  font-size: 16px;
+  color: var(--color-text, #1d1812);
+}
+
+.db-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.db-form label {
+  display: flex;
+  flex: 1 1 150px;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.db-form label.wide {
+  flex: 2 1 240px;
+}
+
+.db-form input,
+.db-form select {
+  height: 40px;
+  padding: 0 10px;
+  border: 1px solid var(--color-border, #e8dcc8);
+  border-radius: 8px;
+  background: var(--color-surface, #fff);
+  color: var(--color-text, #1d1812);
+  font-size: 14px;
+}
+
+.db-change {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 2px;
+}
+
+.db-change.bad strong {
+  color: #b91c1c;
+}
+
+.db-hint {
+  margin: 0;
+  font-size: 12px;
+  color: var(--color-text-muted, #7a6f60);
+}
+
+.db-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.db-table-wrap {
+  overflow-x: auto;
+}
+
+.db-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.db-table th {
+  padding: 8px;
+  border-bottom: 1px solid var(--color-border, #e8dcc8);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: left;
+  color: var(--color-text-muted, #7a6f60);
+  white-space: nowrap;
+}
+
+.db-table td {
+  padding: 8px;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-border, #e8dcc8) 60%, transparent);
+  color: var(--color-text, #1d1812);
+}
+
+.db-table .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.db-kind {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.db-kind.CHARGE {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.db-kind.PAYMENT {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.db-kind.WRITE_OFF {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.db-writeoff {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--color-border, #e8dcc8);
+}
+
+.db-writeoff h5 {
+  margin: 0;
+  font-size: 14px;
+  color: #991b1b;
+}
+
+@media (max-width: 720px) {
+  .db-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .db-who,
+  .db-row-actions {
+    grid-column: 1 / -1;
+  }
+
+  .db-row-actions {
+    justify-content: flex-start;
+  }
+}

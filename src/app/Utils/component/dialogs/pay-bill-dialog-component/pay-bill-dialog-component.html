@@ -32,7 +32,7 @@
   <div class="pay-rows">
     @for (row of rows; track $index; let i = $index) {
       <div class="pay-row">
-        <select [(ngModel)]="row.method">
+        <select [(ngModel)]="row.method" (ngModelChange)="methodChanged(row)">
           @for (m of methods; track m) {
             <option [value]="m">{{ 'PAY_BILL.METHOD_' + m | translate }}</option>
           }
@@ -53,6 +53,46 @@
               <strong>Tshs {{ ch | number }}</strong>
             </div>
           }
+        }
+        @if (row.method === credit) {
+          <!-- Deni: whose account it goes on, within what they may still owe -->
+          <div class="pay-credit">
+            @if (customers === null) {
+              <small>…</small>
+            } @else {
+              <input type="search" class="pay-credit-search" [(ngModel)]="customerSearch" [placeholder]="'PAY_BILL.CREDIT_SEARCH' | translate" />
+              <select [(ngModel)]="row.customerUid">
+                <option [ngValue]="undefined">{{ 'PAY_BILL.CREDIT_PICK' | translate }}</option>
+                @for (c of matchingCustomers; track c.uid) {
+                  <option [ngValue]="c.uid">{{ c.name }} · {{ c.creditLimit > 0 ? ('PAY_BILL.CREDIT_AVAILABLE' | translate: { amount: (c.available | number) }) : ('PAY_BILL.CREDIT_NO_LIMIT' | translate) }}</option>
+                }
+              </select>
+              @let picked = customerOf(row);
+              @if (picked) {
+                @if (picked.creditLimit <= 0) {
+                  <small class="pay-credit-bad">{{ 'PAY_BILL.CREDIT_NO_LIMIT_FULL' | translate: { name: picked.name } }}</small>
+                } @else if ((row.amount ?? 0) > picked.available) {
+                  <small class="pay-credit-bad">{{ 'PAY_BILL.CREDIT_OVER' | translate: { name: picked.name, owes: (picked.balance | number), amount: (picked.available | number) } }}</small>
+                } @else {
+                  <small>{{ 'PAY_BILL.CREDIT_OWES' | translate: { owes: (picked.balance | number), limit: (picked.creditLimit | number) } }}</small>
+                }
+              }
+              @if (!registering) {
+                <button type="button" class="pay-credit-link" (click)="registering = true">+ {{ 'PAY_BILL.CREDIT_NEW' | translate }}</button>
+              } @else {
+                <div class="pay-credit-new">
+                  <input type="text" maxlength="80" [(ngModel)]="newCustomer.name" [placeholder]="'DEBTS.NAME' | translate" />
+                  <input type="tel" maxlength="20" [(ngModel)]="newCustomer.phone" placeholder="0712 345 678" />
+                  <button type="button" class="pay-mini" (click)="registerCustomer(row)" [attr.aria-label]="'DEBTS.SAVE' | translate">
+                    <mat-icon>check</mat-icon>
+                  </button>
+                  <button type="button" class="pay-mini" (click)="registering = false" [attr.aria-label]="'COMMON.CANCEL' | translate">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+              }
+            }
+          </div>
         }
         <div class="pay-row-actions">
           @if (remaining !== 0) {

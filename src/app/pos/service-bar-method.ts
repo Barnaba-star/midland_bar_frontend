@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../Utils/enviroments/environment';
-import { CommissionDTO, PayStockAndPurchaseDTO, SaleOpenedDTO, BarBookingDTO, BarSalesDTO, BarServiceDTO, BarStaffDTO, SpendDTO, StaffCommissionDTO, StoreDTO, StockReceiptDTO, SalesOpened, StaffSellStaff, StaffSalesRow, StaffOrder, PaymentNoteRow, StaffHandover } from './BarModel';
+import { CommissionDTO, PayStockAndPurchaseDTO, SaleOpenedDTO, BarBookingDTO, BarSalesDTO, BarServiceDTO, BarStaffDTO, SpendDTO, StaffCommissionDTO, StoreDTO, StockReceiptDTO, SalesOpened, StaffSellStaff, StaffSalesRow, StaffOrder, PaymentNoteRow, StaffHandover, DebtCustomer, DebtEntry, DebtReport } from './BarModel';
 import { PageableParam, Response, ResponseList, ResponsePage } from '../Utils/models/responces';
 
 @Injectable({
@@ -435,9 +435,43 @@ findStockAdjustments(serviceUID: string, params: PageableParam): Observable<Resp
   return this.http.post<ResponsePage<any>>(`${this.barURL}/findStockAdjustments/${serviceUID}`, params);
 }
 
-/** Settle a bill in one or more payments; they must add up to the bill. */
-payBill(dto: { salesOpenedUID: string; payments: { method: string; amount: number; tendered?: number }[] }): Observable<Response<any>> {
+/** Settle a bill in one or more payments; they must add up to the bill. A "deni" part names the credit customer. */
+payBill(dto: { salesOpenedUID: string; payments: { method: string; amount: number; tendered?: number; customerUid?: string }[] }): Observable<Response<any>> {
   return this.http.post<Response<any>>(`${this.barURL}/payBill`, dto);
+}
+
+/* Madeni - customers who drink on credit. */
+
+/** Every credit customer with what they owe, their limit and since when, most owed first. */
+findDebtCustomers(): Observable<ResponseList<DebtCustomer>> {
+  return this.http.get<ResponseList<DebtCustomer>>(`${this.barURL}/debt/customers`);
+}
+
+/** One customer's account: their row plus every line, newest first. */
+findDebtLedger(uid: string): Observable<Response<DebtCustomer & { entries: DebtEntry[] }>> {
+  return this.http.get<Response<DebtCustomer & { entries: DebtEntry[] }>>(`${this.barURL}/debt/customers/${uid}`);
+}
+
+/** Register (no uid) or edit a customer. The limit is kept only from a CEO or manager. */
+saveDebtCustomer(body: { name: string; phone: string; note?: string; creditLimit?: number }, uid?: string): Observable<Response<DebtCustomer>> {
+  return uid
+    ? this.http.put<Response<DebtCustomer>>(`${this.barURL}/debt/customers/${uid}`, body)
+    : this.http.post<Response<DebtCustomer>>(`${this.barURL}/debt/customers`, body);
+}
+
+/** Money a customer brought in - in the cashier's open shift and cash-up. */
+payDebt(body: { customerUid: string; method: string; amount: number; tendered?: number; note?: string }): Observable<Response<DebtCustomer & { entries: DebtEntry[] }>> {
+  return this.http.post<Response<DebtCustomer & { entries: DebtEntry[] }>>(`${this.barURL}/debt/pay`, body);
+}
+
+/** CEO: give up on (part of) a debt, with the reason. */
+writeOffDebt(body: { customerUid: string; amount: number; reason: string }): Observable<Response<DebtCustomer & { entries: DebtEntry[] }>> {
+  return this.http.post<Response<DebtCustomer & { entries: DebtEntry[] }>>(`${this.barURL}/debt/writeOff`, body);
+}
+
+/** Charged, paid and written off in a period (DAY, WEEK, MONTH...), its lines, and what is owed now. */
+findDebtReport(filter: string): Observable<Response<DebtReport>> {
+  return this.http.get<Response<DebtReport>>(`${this.barURL}/debt/report/${filter}`);
 }
 
 /** Lines, payments, totals and who took the money - for the printed receipt. */

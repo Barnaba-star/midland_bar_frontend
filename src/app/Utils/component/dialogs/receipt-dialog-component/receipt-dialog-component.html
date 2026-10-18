@@ -65,7 +65,7 @@
         @if (receipt.payments?.length) {
           <div class="r-rule"></div>
           @for (p of receipt.payments; track $index) {
-            <div class="r-row"><span>{{ 'PAY_BILL.METHOD_' + p.method | translate }}</span><span>{{ p.amount | number }}</span></div>
+            <div class="r-row"><span>{{ 'PAY_BILL.METHOD_' + p.method | translate }}@if (p.customerName) { · {{ p.customerName }} }</span><span>{{ p.amount | number }}</span></div>
             @if (p.tendered) {
               <div class="r-row r-muted r-sub"><span>{{ 'PAY_BILL.TENDERED' | translate }}</span><span>{{ p.tendered | number }}</span></div>
             }

@@ -174,6 +174,12 @@ export const routes: Routes = [
         loadComponent:()=>import('./pos/stock-take/stock-take-page').then(m=>m.StockTakePage)
       },
       {
+        // Customers' debts: CEO, MANAGER and CASHIER (VIEW_DEBT on the backend).
+        path: 'madeni',
+        canActivate: [posNoStoreKeeperGuard],
+        loadComponent:()=>import('./pos/debts/debts').then(m=>m.Debts)
+      },
+      {
         // Open to every POS role except CASHIER, who only works the till.
         path: 'barSupport',
         canActivate: [posNoCashierGuard, posNoStoreKeeperGuard],

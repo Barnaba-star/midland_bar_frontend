@@ -1,0 +1,267 @@
+<div class="action-container db-page">
+  <div class="db-card">
+    <div class="db-card-header">
+      <div>
+        <h3>{{ 'DEBTS.TITLE' | translate }}</h3>
+        <p>{{ 'DEBTS.SUBTITLE' | translate }}</p>
+      </div>
+      <button type="button" class="row-action edit" (click)="startAdd()">
+        <mat-icon>person_add</mat-icon>
+        <span>{{ 'DEBTS.ADD' | translate }}</span>
+      </button>
+    </div>
+
+    <!-- What is owed now, and this month's movement -->
+    <div class="db-totals">
+      <div class="db-total grand">
+        <small>{{ 'DEBTS.OWED_NOW' | translate }}</small>
+        <strong>Tshs {{ owedTotal | number }}</strong>
+        <span>{{ 'DEBTS.OWING_N' | translate: { n: owingCount } }}</span>
+      </div>
+      <div class="db-total" [class.warn]="oldCount > 0">
+        <small>{{ 'DEBTS.OLD' | translate }}</small>
+        <strong>{{ oldCount }}</strong>
+        <span>{{ 'DEBTS.OLD_NOTE' | translate }}</span>
+      </div>
+      @if (report) {
+        <div class="db-total">
+          <small>{{ 'DEBTS.MONTH_CHARGED' | translate }}</small>
+          <strong>Tshs {{ report.charged | number }}</strong>
+        </div>
+        <div class="db-total">
+          <small>{{ 'DEBTS.MONTH_PAID' | translate }}</small>
+          <strong>Tshs {{ report.paid | number }}</strong>
+        </div>
+        @if (report.writtenOff) {
+          <div class="db-total">
+            <small>{{ 'DEBTS.MONTH_WRITTEN_OFF' | translate }}</small>
+            <strong>Tshs {{ report.writtenOff | number }}</strong>
+          </div>
+        }
+      }
+    </div>
+
+    @if (adding) {
+      <div class="db-panel">
+        <h4>{{ 'DEBTS.ADD' | translate }}</h4>
+        <ng-container *ngTemplateOutlet="customerForm"></ng-container>
+        <div class="db-actions">
+          <button type="button" class="row-action view" (click)="adding = false">
+            <mat-icon>close</mat-icon><span>{{ 'COMMON.CANCEL' | translate }}</span>
+          </button>
+          <button type="button" class="row-action edit" [disabled]="busy" (click)="saveCustomer()">
+            <mat-icon>save</mat-icon><span>{{ 'DEBTS.SAVE' | translate }}</span>
+          </button>
+        </div>
+        @if (!canSetLimit) {
+          <p class="db-hint">{{ 'DEBTS.LIMIT_BY_MANAGER' | translate }}</p>
+        }
+      </div>
+    }
+
+    <div class="db-filters">
+      <label class="db-search">
+        <mat-icon>search</mat-icon>
+        <input type="search" [(ngModel)]="search" [placeholder]="'DEBTS.SEARCH_PH' | translate" />
+      </label>
+      <label class="db-check">
+        <input type="checkbox" [(ngModel)]="onlyOwing" />
+        <span>{{ 'DEBTS.ONLY_OWING' | translate }}</span>
+      </label>
+    </div>
+
+    @if (loading && !customers.length) {
+      <p class="db-empty">…</p>
+    } @else if (!visible.length) {
+      <p class="db-empty">{{ (customers.length ? 'DEBTS.EMPTY_FILTER' : 'DEBTS.EMPTY') | translate }}</p>
+    } @else {
+      <div class="db-list">
+        @for (c of visible; track c.uid) {
+          <div class="db-row" [class.open]="openUid === c.uid">
+            <div class="db-who">
+              <strong>{{ c.name }}</strong>
+              <span>{{ phone(c.phone) }}@if (c.note) { · {{ c.note }} }</span>
+            </div>
+            <div class="db-fig">
+              <small>{{ 'DEBTS.OWES' | translate }}</small>
+              <strong [class.zero]="c.balance <= 0">Tshs {{ c.balance | number }}</strong>
+              @if (c.balance > 0 && c.owedSince) {
+                <span [class.late]="(c.daysOwed ?? 0) >= 7">{{ 'DEBTS.SINCE' | translate: { date: (c.owedSince | date: 'dd MMM'), n: c.daysOwed } }}</span>
+              }
+            </div>
+            <div class="db-fig">
+              <small>{{ 'DEBTS.LIMIT' | translate }}</small>
+              @if (c.creditLimit > 0) {
+                <strong>Tshs {{ c.creditLimit | number }}</strong>
+                <span>{{ 'DEBTS.AVAILABLE' | translate: { amount: (c.available | number) } }}</span>
+              } @else {
+                <span class="late">{{ 'DEBTS.NO_LIMIT' | translate }}</span>
+              }
+            </div>
+            <div class="db-row-actions">
+              @if (canTakePayment && c.balance > 0) {
+                <button type="button" class="row-action edit" (click)="open(c, 'PAY')">
+                  <mat-icon>payments</mat-icon><span>{{ 'DEBTS.TAKE_PAYMENT' | translate }}</span>
+                </button>
+              }
+              <button type="button" class="row-action view" (click)="open(c, 'HISTORY')">
+                <mat-icon>history</mat-icon><span>{{ 'DEBTS.HISTORY' | translate }}</span>
+              </button>
+              <button type="button" class="row-action view" (click)="startEdit(c)" [attr.aria-label]="'DEBTS.EDIT' | translate">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </div>
+
+            @if (openUid === c.uid && panel === 'PAY') {
+              <div class="db-panel">
+                <h4>{{ 'DEBTS.PAY_TITLE' | translate: { name: c.name } }}</h4>
+                <div class="db-form">
+                  <label>
+                    <small>{{ 'DEBTS.METHOD' | translate }}</small>
+                    <select [(ngModel)]="pay.method">
+                      @for (m of methods; track m) {
+                        <option [value]="m">{{ 'PAY_BILL.METHOD_' + m | translate }}</option>
+                      }
+                    </select>
+                  </label>
+                  <label>
+                    <small>{{ 'PAY_BILL.AMOUNT' | translate }}</small>
+                    <input type="number" min="1" step="1" [max]="c.balance" [(ngModel)]="pay.amount" />
+                  </label>
+                  @if (pay.method === 'cash') {
+                    <label>
+                      <small>{{ 'PAY_BILL.TENDERED' | translate }}</small>
+                      <input type="number" min="0" step="1" [(ngModel)]="pay.tendered" [placeholder]="'PAY_BILL.OPTIONAL' | translate" />
+                    </label>
+                    @let ch = change();
+                    @if (ch !== null) {
+                      <div class="db-change" [class.bad]="ch < 0">
+                        <small>{{ 'PAY_BILL.CHANGE' | translate }}</small>
+                        <strong>Tshs {{ ch | number }}</strong>
+                      </div>
+                    }
+                  } @else {
+                    <label>
+                      <small>{{ 'DEBTS.REFERENCE' | translate }}</small>
+                      <input type="text" maxlength="100" [(ngModel)]="pay.note" [placeholder]="'PAY_BILL.OPTIONAL' | translate" />
+                    </label>
+                  }
+                </div>
+                @if ((pay.amount ?? 0) > 0 && (pay.amount ?? 0) <= c.balance) {
+                  <p class="db-hint">{{ 'DEBTS.LEFT_AFTER' | translate: { amount: (c.balance - (pay.amount ?? 0) | number) } }}</p>
+                }
+                <div class="db-actions">
+                  <button type="button" class="row-action view" (click)="close()">
+                    <mat-icon>close</mat-icon><span>{{ 'COMMON.CANCEL' | translate }}</span>
+                  </button>
+                  <button type="button" class="row-action edit" [disabled]="busy || !canPay(c)" (click)="takePayment(c)">
+                    <mat-icon>payments</mat-icon><span>{{ 'DEBTS.CONFIRM_PAY' | translate: { amount: ((pay.amount ?? 0) | number) } }}</span>
+                  </button>
+                </div>
+              </div>
+            }
+
+            @if (openUid === c.uid && panel === 'EDIT') {
+              <div class="db-panel">
+                <h4>{{ 'DEBTS.EDIT' | translate }}</h4>
+                <ng-container *ngTemplateOutlet="customerForm"></ng-container>
+                <div class="db-actions">
+                  <button type="button" class="row-action view" (click)="close()">
+                    <mat-icon>close</mat-icon><span>{{ 'COMMON.CANCEL' | translate }}</span>
+                  </button>
+                  <button type="button" class="row-action edit" [disabled]="busy" (click)="saveCustomer(c.uid)">
+                    <mat-icon>save</mat-icon><span>{{ 'DEBTS.SAVE' | translate }}</span>
+                  </button>
+                </div>
+              </div>
+            }
+
+            @if (openUid === c.uid && panel === 'HISTORY') {
+              <div class="db-panel">
+                <h4>{{ 'DEBTS.HISTORY_TITLE' | translate: { name: c.name } }}</h4>
+                @if (!entries.length) {
+                  <p class="db-empty">{{ 'DEBTS.NO_HISTORY' | translate }}</p>
+                } @else {
+                  <div class="db-table-wrap">
+                    <table class="db-table">
+                      <thead>
+                        <tr>
+                          <th>{{ 'DEBTS.COL_TIME' | translate }}</th>
+                          <th>{{ 'DEBTS.COL_KIND' | translate }}</th>
+                          <th>{{ 'DEBTS.COL_DETAIL' | translate }}</th>
+                          <th>{{ 'DEBTS.COL_BY' | translate }}</th>
+                          <th class="num">{{ 'DEBTS.COL_AMOUNT' | translate }}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @for (e of entries; track e.uid) {
+                          <tr>
+                            <td>{{ e.entryAt | date: 'dd MMM yyyy HH:mm' }}</td>
+                            <td><span class="db-kind" [class]="'db-kind ' + e.kind">{{ 'DEBTS.KIND_' + e.kind | translate }}</span></td>
+                            <td>
+                              @if (e.kind === 'CHARGE') { {{ 'DEBTS.BILL' | translate: { code: e.billCode } }} }
+                              @if (e.kind === 'PAYMENT') { {{ 'PAY_BILL.METHOD_' + e.method | translate }}@if (e.note) { · {{ e.note }} } }
+                              @if (e.kind === 'WRITE_OFF') { {{ e.note }} }
+                            </td>
+                            <td>{{ e.entryByName || e.entryBy }}</td>
+                            <td class="num">{{ e.kind === 'CHARGE' ? '+' : '−' }}{{ e.amount | number }}</td>
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                }
+
+                @if (canWriteOff && c.balance > 0) {
+                  <div class="db-writeoff">
+                    <h5>{{ 'DEBTS.WRITE_OFF' | translate }}</h5>
+                    <p class="db-hint">{{ 'DEBTS.WRITE_OFF_NOTE' | translate }}</p>
+                    <div class="db-form">
+                      <label>
+                        <small>{{ 'PAY_BILL.AMOUNT' | translate }}</small>
+                        <input type="number" min="1" step="1" [max]="c.balance" [(ngModel)]="writeOff.amount" (ngModelChange)="writeOff.confirming = false" />
+                      </label>
+                      <label class="wide">
+                        <small>{{ 'DEBTS.REASON' | translate }}</small>
+                        <input type="text" maxlength="300" [(ngModel)]="writeOff.reason" (ngModelChange)="writeOff.confirming = false" />
+                      </label>
+                    </div>
+                    <div class="db-actions">
+                      <button type="button" class="row-action delete" [disabled]="busy" (click)="confirmWriteOff(c)">
+                        <mat-icon>{{ writeOff.confirming ? 'warning' : 'money_off' }}</mat-icon>
+                        <span>{{ (writeOff.confirming ? 'DEBTS.WRITE_OFF_CONFIRM' : 'DEBTS.WRITE_OFF') | translate: { amount: ((writeOff.amount ?? 0) | number) } }}</span>
+                      </button>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>
+
+<ng-template #customerForm>
+  <div class="db-form">
+    <label class="wide">
+      <small>{{ 'DEBTS.NAME' | translate }}</small>
+      <input type="text" maxlength="80" [(ngModel)]="form.name" />
+    </label>
+    <label>
+      <small>{{ 'DEBTS.PHONE' | translate }}</small>
+      <input type="tel" maxlength="20" [(ngModel)]="form.phone" placeholder="0712 345 678" />
+    </label>
+    @if (canSetLimit) {
+      <label>
+        <small>{{ 'DEBTS.LIMIT' | translate }}</small>
+        <input type="number" min="0" step="1000" [(ngModel)]="form.creditLimit" />
+      </label>
+    }
+    <label class="wide">
+      <small>{{ 'DEBTS.NOTE' | translate }}</small>
+      <input type="text" maxlength="200" [(ngModel)]="form.note" [placeholder]="'PAY_BILL.OPTIONAL' | translate" />
+    </label>
+  </div>
+</ng-template>

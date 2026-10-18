@@ -53,15 +53,30 @@ export class Offers implements OnInit {
     });
   }
 
+  /** The offers the server says are running right now. */
+  runningNow = new Set<string>();
+
   load(): void {
     this.barService.findPriceRules().subscribe((res) => {
       this.rules = res?.data ?? [];
       this.cdr.markForCheck();
     });
+    this.barService.findPriceRulesNow().subscribe((res) => {
+      this.runningNow = new Set((res?.data ?? []).map((r: any) => r.uid));
+      this.cdr.markForCheck();
+    });
+  }
+
+  wholeDay(): void {
+    if (!this.editing) return;
+    this.editing.startTime = '00:00';
+    this.editing.endTime = '23:59';
   }
 
   add(): void {
-    this.editing = { name: 'Happy hour', kind: 'PERCENT', category: 'DRINK', percent: 20, days: '1234567', startTime: '17:00', endTime: '19:00', enabled: true };
+    // The whole day by default: a time window left at someone else's guess is
+    // an offer that silently never runs.
+    this.editing = { name: 'Ofa', kind: 'PERCENT', category: 'DRINK', percent: 20, days: '1234567', startTime: '00:00', endTime: '23:59', enabled: true };
   }
 
   edit(r: Rule): void {

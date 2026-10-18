@@ -2894,7 +2894,11 @@
     "DAY_4": "Thu",
     "DAY_5": "Fri",
     "DAY_6": "Sat",
-    "DAY_7": "Sun"
+    "DAY_7": "Sun",
+    "WHOLE_DAY": "Whole day",
+    "RUNNING": "Running now",
+    "NOT_RUNNING": "Not running now (check times and days)",
+    "HINT_NEW_ONLY": "An offer prices items added after it is saved - items already on a bill do not change."
   },
   "DISCOUNT": {
     "BTN": "Discount",

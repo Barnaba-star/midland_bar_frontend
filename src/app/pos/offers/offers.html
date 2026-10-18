@@ -59,6 +59,7 @@
         <div class="db-form">
           <label><small>{{ 'OFFERS.FROM' | translate }}</small><input type="time" [(ngModel)]="editing.startTime" /></label>
           <label><small>{{ 'OFFERS.TO' | translate }}</small><input type="time" [(ngModel)]="editing.endTime" /></label>
+          <button type="button" class="row-action view" (click)="wholeDay()"><mat-icon>schedule</mat-icon><span>{{ 'OFFERS.WHOLE_DAY' | translate }}</span></button>
         </div>
         <div class="of-days">
           @for (d of weekdays; track d) {
@@ -66,6 +67,7 @@
           }
         </div>
         <p class="db-hint">{{ 'OFFERS.HINT' | translate }}</p>
+        <p class="db-hint">{{ 'OFFERS.HINT_NEW_ONLY' | translate }}</p>
         <div class="db-actions">
           <button type="button" class="row-action view" (click)="editing = null"><mat-icon>close</mat-icon><span>{{ 'COMMON.CANCEL' | translate }}</span></button>
           <button type="button" class="row-action edit" [disabled]="busy" (click)="save()"><mat-icon>save</mat-icon><span>{{ 'DEBTS.SAVE' | translate }}</span></button>
@@ -97,6 +99,9 @@
           <div class="db-fig">
             <small>{{ 'OFFERS.STATE' | translate }}</small>
             <strong [class.zero]="r.enabled">{{ (r.enabled ? 'OFFERS.ON' : 'OFFERS.OFF') | translate }}</strong>
+            @if (r.enabled) {
+              <span [class.offer]="runningNow.has(r.uid!)" [class.late]="!runningNow.has(r.uid!)">{{ (runningNow.has(r.uid!) ? 'OFFERS.RUNNING' : 'OFFERS.NOT_RUNNING') | translate }}</span>
+            }
           </div>
           <div class="db-row-actions">
             <button type="button" class="row-action view" (click)="toggle(r)"><mat-icon>{{ r.enabled ? 'pause' : 'play_arrow' }}</mat-icon></button>

@@ -2894,7 +2894,11 @@
     "DAY_4": "Alh",
     "DAY_5": "Iju",
     "DAY_6": "Jmos",
-    "DAY_7": "Jpili"
+    "DAY_7": "Jpili",
+    "WHOLE_DAY": "Siku nzima",
+    "RUNNING": "Inaendelea sasa",
+    "NOT_RUNNING": "Haiendelei sasa (angalia saa na siku)",
+    "HINT_NEW_ONLY": "Ofa inaingia kwenye vitu vinavyoongezwa baada ya kuihifadhi - vilivyokuwa tayari kwenye bili havibadiliki."
   },
   "DISCOUNT": {
     "BTN": "Punguzo",

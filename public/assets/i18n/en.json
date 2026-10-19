@@ -139,7 +139,7 @@
     "STAFF_SELL": "Staff Sell",
     "SUPERVISOR": "Waiters' orders",
     "STOCK_COUNT": "Stock count",
-    "DEBTS": "Debts",
+    "DEBTS": "Debts & Offers",
     "SUPPLIERS": "Suppliers"
   },
   "SALON": {
@@ -2757,8 +2757,8 @@
     "LEFT": "left"
   },
   "DEBTS": {
-    "TITLE": "Customer debts",
-    "SUBTITLE": "Customers who drink on credit: what they owe, since when, and their payments. A bill goes on credit from Pay (method: Credit).",
+    "TITLE": "Customer debts & offers",
+    "SUBTITLE": "Customers on credit and customers with a monthly free offer: what they owe, since when, their payments and the offers given. A bill goes on credit or offer from Pay.",
     "ADD": "Register customer",
     "SAVE": "Save",
     "EDIT": "Edit customer",
@@ -2771,7 +2771,7 @@
     "MONTH_WRITTEN_OFF": "Written off this month",
     "LIMIT_BY_MANAGER": "The credit limit is set by a CEO or Manager. Until then the customer cannot take credit.",
     "SEARCH_PH": "Search name or phone number",
-    "ONLY_OWING": "Owing only",
+    "ONLY_OWING": "Owing or with an offer only",
     "EMPTY": "No credit customers yet. Register the first.",
     "EMPTY_FILTER": "Nobody owes. Untick 'Owing only' to see everyone.",
     "OWES": "Owes",

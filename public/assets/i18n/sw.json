@@ -139,7 +139,7 @@
     "STAFF_SELL": "Mauzo ya Wahudumu",
     "SUPERVISOR": "Oda za Wahudumu",
     "STOCK_COUNT": "Hesabu Stock",
-    "DEBTS": "Madeni",
+    "DEBTS": "Madeni na Ofa",
     "SUPPLIERS": "Wasambazaji"
   },
   "SALON": {
@@ -2757,8 +2757,8 @@
     "LEFT": "imebaki"
   },
   "DEBTS": {
-    "TITLE": "Madeni ya wateja",
-    "SUBTITLE": "Wateja wanaokunywa kwa mkopo: wanadaiwa nini, tangu lini, na malipo yao. Bili inawekwa deni kwenye Lipa (njia: Deni).",
+    "TITLE": "Madeni na Ofa za wateja",
+    "SUBTITLE": "Wateja wanaokopa (deni) na wanaopewa ofa ya bure kila mwezi: wanadaiwa nini, tangu lini, malipo yao na ofa walizopewa. Bili inawekwa deni au ofa kwenye Lipa.",
     "ADD": "Sajili mteja",
     "SAVE": "Hifadhi",
     "EDIT": "Hariri mteja",
@@ -2771,7 +2771,7 @@
     "MONTH_WRITTEN_OFF": "Futwa mwezi huu",
     "LIMIT_BY_MANAGER": "Kikomo cha deni kinawekwa na CEO au Manager. Mpaka kiwekwe, mteja hawezi kukopa.",
     "SEARCH_PH": "Tafuta jina au namba ya simu",
-    "ONLY_OWING": "Wanaodaiwa tu",
+    "ONLY_OWING": "Wanaodaiwa au wenye ofa tu",
     "EMPTY": "Hakuna mteja wa deni bado. Sajili wa kwanza.",
     "EMPTY_FILTER": "Hakuna anayedaiwa. Ondoa alama ya 'Wanaodaiwa tu' kuona wote.",
     "OWES": "Anadaiwa",

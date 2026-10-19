@@ -1,4 +1,6 @@
+import { provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideTranslateService } from '@ngx-translate/core';
 
 import { Form3 } from './form3';
 
@@ -8,7 +10,8 @@ describe('Form3', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Form3]
+      imports: [Form3],
+      providers: [provideZonelessChangeDetection(), provideTranslateService()]
     })
     .compileComponents();
 

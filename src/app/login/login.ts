@@ -114,7 +114,7 @@ private forcePasswordChange(): void {
     disableClose: true,
     data: {
       forced: true,
-      currentPassword: this.loginForm.value.password,
+      currentPassword: String(this.loginForm.value.password ?? '').trim(),
     },
   }).afterClosed().subscribe(changed => {
     if (!changed) {
@@ -156,9 +156,14 @@ onSubmit(branchUID?: string) {
     this.loginError = '';
     this.submitting = true;
 
+    // Trimmed like the app does: autofill and phone keyboards add a space at the end.
+    const credentials = {
+      username: String(this.loginForm.value.username ?? '').trim(),
+      password: String(this.loginForm.value.password ?? '').trim(),
+    };
     this.http.post<{ token?: string; code?: string; branches?: BranchChoice[] }>(
       this.baseUrl,
-      branchUID ? { ...this.loginForm.value, branchUID } : this.loginForm.value,
+      branchUID ? { ...credentials, branchUID } : credentials,
       {
         withCredentials: true
       }
@@ -541,8 +546,8 @@ submitSetup(): void {
         subscriptionAmount: this.expiredMonthlyAmount,
         // No token exists yet, so the backend verifies these again.
         credentials: {
-          username: this.loginForm.value.username,
-          password: this.loginForm.value.password,
+          username: String(this.loginForm.value.username ?? '').trim(),
+          password: String(this.loginForm.value.password ?? '').trim(),
         },
       },
     });

@@ -1478,7 +1478,9 @@ detailsForIncomeExpenses(item: any): void {
               maxWidth: '95vw',
               maxHeight: '90vh',
 
-              data: res.data
+              // What the row shows: the payouts made in its week or day,
+              // whichever week's money they used.
+              data: Array.isArray(item.spends) ? { ...res.data, spends: item.spends, expenses: item.expenses } : res.data
             }
           );
 
@@ -1502,9 +1504,23 @@ detailsForIncomeExpenses(item: any): void {
 
 stockAndPurchaseReports: any[] = [];
 stockSelectedFilter = '';
+/** What was bought with Manunuzi in the period, on the day it was bought (any week's savings). */
+stockSpends: any[] = [];
+
+get stockSpendOutside(): number {
+  return this.stockSpends.reduce((t, s) => t + (s.outside ? Number(s.amount) || 0 : 0), 0);
+}
+
+get stockSpendTotal(): number {
+  return this.stockSpends.reduce((t, s) => t + (Number(s.amount) || 0), 0);
+}
 
 getStockAndPurchaseByFilter(filter: string): void {
   this.stockSelectedFilter = filter;
+  this.barService.findStockPurchaseSpends(filter).subscribe({
+    next: (res) => { this.stockSpends = res?.data ?? []; this.cdr.markForCheck(); },
+    error: () => { this.stockSpends = []; this.cdr.markForCheck(); },
+  });
 
   this.barService
     .getStockAndPurchaseByFilter(filter)

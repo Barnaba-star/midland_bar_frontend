@@ -96,6 +96,7 @@
     @if (orderForm) {
       <div class="db-panel">
         <h4>{{ 'SUPPLIERS.NEW_ORDER' | translate }}</h4>
+        <p class="muted">{{ 'SUPPLIERS.PREFILLED' | translate }}</p>
         <div class="db-form">
           <label class="wide"><small>{{ 'SUPPLIERS.SUPPLIER' | translate }}</small>
             <select [(ngModel)]="orderForm.supplierUid">@for (s of suppliers; track s.uid) { <option [value]="s.uid">{{ s.name }}</option> }</select>
@@ -110,12 +111,12 @@
                 @for (p of products; track p.uid) { <option [value]="p.uid">{{ p.serviceName }}</option> }
               </select>
             </label>
-            <label><small>{{ 'SUPPLIERS.PACKS' | translate }}</small><input type="number" min="1" [(ngModel)]="l.packs" /></label>
+            <label><small>{{ 'SUPPLIERS.PACKS' | translate }}</small><input type="number" min="0" [(ngModel)]="l.packs" /></label>
             <label><small>{{ 'SUPPLIERS.PACK_PRICE' | translate }}</small><input type="number" min="0" [(ngModel)]="l.packPrice" /></label>
             @if (l.serviceUid) {
               <div class="db-fig">
                 <small>{{ 'SUPPLIERS.MANUNUZI_FREE' | translate }}</small>
-                <strong [class.zero]="(l.packs * l.packPrice) <= available(l.serviceUid)" [style.color]="(l.packs * l.packPrice) > available(l.serviceUid) ? '#b91c1c' : null">Tshs {{ available(l.serviceUid) | number }}</strong>
+                <strong [class.zero]="!overLine(l)" [style.color]="overLine(l) ? '#b91c1c' : null">Tshs {{ available(l.serviceUid) | number }}</strong>
               </div>
             }
             @if (orderForm.lines.length > 1) {
@@ -137,6 +138,7 @@
         <div class="db-actions">
           <button type="button" class="row-action view" (click)="orderForm = null">{{ 'COMMON.CANCEL' | translate }}</button>
           <button type="button" class="row-action edit" [disabled]="busy || !orderForm.supplierUid || (overBudget.length > 0 && !orderForm.allowOverBudget)" (click)="saveOrder()"><mat-icon>send</mat-icon><span>{{ 'SUPPLIERS.PLACE' | translate }}</span></button>
+          <button type="button" class="row-action edit" [disabled]="busy || !orderForm.supplierUid || (overBudget.length > 0 && !orderForm.allowOverBudget)" (click)="saveOrder(true)"><mat-icon>print</mat-icon><span>{{ 'SUPPLIERS.PLACE_PRINT' | translate }}</span></button>
         </div>
       </div>
     }
@@ -166,6 +168,7 @@
         </div>
         <div class="db-actions">
           <button type="button" class="row-action view" (click)="order = null">{{ 'COMMON.CLOSE' | translate }}</button>
+          <button type="button" class="row-action view" (click)="printOrder()"><mat-icon>print</mat-icon><span>{{ 'SUPPLIERS.PRINT' | translate }}</span></button>
           @if (canManage && order.status === 'OPEN') {
             <button type="button" class="row-action delete" [disabled]="busy" (click)="cancelOrder()"><mat-icon>block</mat-icon><span>{{ 'SUPPLIERS.CANCEL_ORDER' | translate }}</span></button>
           }

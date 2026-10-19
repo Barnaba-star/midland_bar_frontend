@@ -1824,14 +1824,15 @@ a.sv-btn {
 /* =====================================================
    COMPUTER (owner, 2026-10-16): the public pages fill the screen.
    One frame for everything - menu, tab title, the section, the step
-   buttons, the foot - so every left edge lines up; up to 1440px of
-   content, wider screens keep it centred. Each tab fills the window
+   buttons, the foot - so every left edge lines up. The content spans the
+   whole screen with a small margin (owner, 2026-10-19: no empty bands at
+   the sides on a wide screen). Each tab fills the window
    so the foot sits at the bottom, not halfway up. The phone and
    tablet layouts above are untouched.
 ===================================================== */
 @media (min-width: 961px) {
   .page {
-    --pad-x: max(clamp(24px, 5vw, 80px), calc((100% - 1440px) / 2));
+    --pad-x: clamp(24px, 4vw, 96px);
     display: flex;
     flex-direction: column;
   }

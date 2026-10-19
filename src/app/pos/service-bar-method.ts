@@ -273,6 +273,8 @@ findIncomeExpensesAndDescription(incomeUID:string):Observable<Response<any>> {
 getStockAndPurchaseByFilter(weekFilter:string):Observable<Response<any>> {
   return this.http.get<Response<any>>(`${this.barURL}/getStockAndPurchaseByFilter/${weekFilter}`);
 }
+/** What was paid out of Manunuzi in the period, on the days it was paid. */
+findStockPurchaseSpends(filter: string): Observable<ResponseList<any>> { return this.http.get<ResponseList<any>>(`${this.barURL}/stockPurchaseSpends/${filter}`); }
 payStockAndPurchase(payStockAndPurchaseDTO:PayStockAndPurchaseDTO):Observable<Response<any>>{
   return this.http.post<Response<any>>(`${this.barURL}/payStockAndPurchase`, payStockAndPurchaseDTO);
 }

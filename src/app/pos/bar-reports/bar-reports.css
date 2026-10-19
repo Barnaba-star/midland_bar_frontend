@@ -7780,16 +7780,19 @@
   background: var(--color-surface, #ffffff);
 }
 
-.ingredient-title {
+/* Above the page's own .action-container h3/p (20px, centred). */
+.action-container .ingredient-title {
   margin: 0 0 4px;
-  font-size: 18px;
+  font-size: 15px;
+  text-align: left;
   font-weight: 700;
   color: var(--color-text, #4a3f33);
 }
 
-.ingredient-hint {
+.action-container .ingredient-hint {
   margin: 0 0 12px;
   font-size: 12px;
+  text-align: left;
   color: var(--color-text-muted, #7a6f60);
 }
 
@@ -7815,7 +7818,7 @@
 }
 
 .ingredient-amount {
-  font-size: 15px;
+  font-size: 13.5px;
   font-weight: 700;
   color: var(--color-text, #4a3f33);
 }

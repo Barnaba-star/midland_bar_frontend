@@ -2122,6 +2122,36 @@
             </button>
           </div>
 
+          <!-- What was bought in the period, on the day it was bought -->
+          <div class="stock-table-wrapper" style="margin-bottom: 16px">
+            <h3 style="margin: 8px 0 2px; font-size: 15px; font-weight: 700">{{ 'REPORTS_PAGE.STOCK_SPENT_TITLE' | translate }} · Tshs {{ stockSpendTotal | number }}</h3>
+            <p style="margin: 0 0 8px; color: #6b7280; font-size: 12px">{{ 'REPORTS_PAGE.STOCK_SPENT_HINT' | translate }}@if (stockSpendOutside > 0) { {{ 'REPORTS_PAGE.STOCK_SPENT_OUTSIDE_NOTE' | translate: { amount: (stockSpendOutside | number) } }} }</p>
+            @if (stockSpends.length > 0) {
+              <table class="stock-table">
+                <thead>
+                  <tr>
+                    <th>{{ 'DEBTS.COL_TIME' | translate }}</th>
+                    <th>{{ 'COMMISSION_BREAKDOWN.SERVICE' | translate }}</th>
+                    <th>{{ 'DEBTS.COL_DETAIL' | translate }}</th>
+                    <th>{{ 'DEBTS.COL_AMOUNT' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (sp of stockSpends; track $index) {
+                    <tr>
+                      <td>{{ sp.date | date: 'dd MMM yyyy' }}</td>
+                      <td>{{ sp.serviceName }}</td>
+                      <td>{{ sp.description }}@if (sp.outside) { <strong style="color: #b45309"> · {{ 'REPORTS_PAGE.STOCK_SPENT_OUTSIDE' | translate }}</strong> }</td>
+                      <td class="amount-cell" [class.paid-amount]="!sp.outside" [style.color]="sp.outside ? '#b45309' : null">Tshs {{ sp.amount | number }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            } @else {
+              <p style="margin: 0; color: #6b7280; font-size: 12px">{{ 'REPORTS_PAGE.STOCK_SPENT_NONE' | translate }}</p>
+            }
+          </div>
+
           <!-- =========================
              TABLE
         ========================== -->

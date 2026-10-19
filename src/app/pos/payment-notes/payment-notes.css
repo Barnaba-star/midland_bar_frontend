@@ -1,4 +1,16 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.pn-page {
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .pn-card {
+  width: 100%;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -151,14 +163,15 @@
 
 .pn-table {
   width: 100%;
+  min-width: 980px;
   border-collapse: collapse;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .pn-table th {
-  padding: 10px 8px;
+  padding: 12px 16px;
   border-bottom: 1px solid var(--color-border, #e8dcc8);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -168,7 +181,8 @@
 }
 
 .pn-table td {
-  padding: 10px 8px;
+  padding: 12px 16px;
+  white-space: nowrap;
   border-bottom: 1px solid color-mix(in srgb, var(--color-border, #e8dcc8) 60%, transparent);
   color: var(--color-text, #1d1812);
 }
@@ -180,6 +194,8 @@
 
 .pn-table .name {
   font-weight: 700;
+  white-space: normal;
+  min-width: 180px;
 }
 
 .pn-table .mono {
@@ -212,4 +228,10 @@
 .pn-status.pending {
   background: #fef3c7;
   color: #92400e;
+}
+
+@media (max-width: 600px) {
+  .pn-table {
+    min-width: 0;
+  }
 }

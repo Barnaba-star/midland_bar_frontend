@@ -6,7 +6,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { ServiceBarMethod } from '../service-bar-method';
 import { PaymentNoteRow } from '../BarModel';
 
-type Range = 'TODAY' | 'YESTERDAY' | 'WEEK' | 'MONTH' | 'CUSTOM';
+type Range = 'TODAY' | 'YESTERDAY' | 'WEEK' | 'LAST_WEEK' | 'MONTH' | 'LAST_MONTH' | 'YEAR' | 'CUSTOM';
 
 /**
  * Sales > Phone payments: every bill noted "paid by phone" (at Staff Sell or
@@ -25,7 +25,7 @@ export class PaymentNotes implements OnInit {
   private barService = inject(ServiceBarMethod);
   private cdr = inject(ChangeDetectorRef);
 
-  readonly ranges: Range[] = ['TODAY', 'YESTERDAY', 'WEEK', 'MONTH'];
+  readonly ranges: Range[] = ['TODAY', 'YESTERDAY', 'WEEK', 'LAST_WEEK', 'MONTH', 'LAST_MONTH', 'YEAR'];
   range: Range = 'TODAY';
   from = iso(new Date());
   to = iso(new Date());
@@ -47,13 +47,26 @@ export class PaymentNotes implements OnInit {
       const y = new Date(today);
       y.setDate(y.getDate() - 1);
       this.from = this.to = iso(y);
-    } else if (range === 'WEEK') {
+    } else if (range === 'WEEK' || range === 'LAST_WEEK') {
       const start = new Date(today);
       start.setDate(start.getDate() - ((start.getDay() + 6) % 7)); // Monday
+      if (range === 'LAST_WEEK') {
+        start.setDate(start.getDate() - 7);
+        const end = new Date(start);
+        end.setDate(end.getDate() + 6); // Sunday
+        this.to = iso(end);
+      } else {
+        this.to = iso(today);
+      }
       this.from = iso(start);
-      this.to = iso(today);
     } else if (range === 'MONTH') {
       this.from = iso(new Date(today.getFullYear(), today.getMonth(), 1));
+      this.to = iso(today);
+    } else if (range === 'LAST_MONTH') {
+      this.from = iso(new Date(today.getFullYear(), today.getMonth() - 1, 1));
+      this.to = iso(new Date(today.getFullYear(), today.getMonth(), 0)); // its last day
+    } else if (range === 'YEAR') {
+      this.from = iso(new Date(today.getFullYear(), 0, 1));
       this.to = iso(today);
     }
     this.load();

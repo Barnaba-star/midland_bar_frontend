@@ -1,3 +1,4 @@
+import { OfflineService } from '../../Utils/offline/offline.service';
 import { Giveaways } from '../giveaways/giveaways';
 import { localDate } from '../../Utils/services/local-date';
 import { Insights } from '../insights/insights';
@@ -81,6 +82,9 @@ export class BarReports implements OnInit{
   }
 
   private route = inject(ActivatedRoute);
+  private offline = inject(OfflineService);
+  /** When each tab last had its other periods fetched ahead (see warmTab). */
+  private warmedAt = new Map<string, number>();
 
   ngOnInit(): void {
     // Open on the first tab this role can actually see: CEO and above land
@@ -205,10 +209,41 @@ export class BarReports implements OnInit{
 
 
 
+/**
+ * Fetch every period button of a tab in the background, once a minute at
+ * most, so tapping Jana / Wiki iliyopita shows at once from the device
+ * instead of waiting ~0.5 s on the server each time (see INSTANT_READS).
+ * The requests must be the very ones the buttons send.
+ */
+private warmTab(action: string): void {
+  const now = Date.now();
+  if (now - (this.warmedAt.get(action) ?? 0) < 60_000) return;
+  this.warmedAt.set(action, now);
+  const all = ['TODAY', 'YESTERDAY', 'THIS_WEEK', 'LAST_WEEK', 'THIS_MONTH', 'LAST_MONTH', 'THIS_YEAR', 'LAST_YEAR'];
+  const get = (path: string) => ({ method: 'GET' as const, path });
+  switch (action) {
+    case 'REPORTS.SERVICE':
+      this.offline.warm(['DAY', 'YESTERDAY', 'WEEK', 'LAST_WEEK', 'MONTH', 'LAST_MONTH', 'THIS_YEAR', 'LAST_YEAR']
+        .flatMap((r) => [get(`/findCurrentBarRevenueReport/${r}`), get(`/findCurrentBarRevenueByService/${r}`)]));
+      break;
+    case 'REPORTS.STAFF':
+      this.offline.warm(all.map((r) => ({ method: 'POST' as const, path: '/findStaffCommissionTotals', body: { page: 0, size: 0, filter: r } })));
+      break;
+    case 'REPORTS.INCOME':
+    case 'REPORTS.OTHER':
+      this.offline.warm(all.map((r) => get(`/findIncomeExpenses/${r}`)));
+      break;
+    case 'REPORTS.STOCK':
+      this.offline.warm(all.slice(2).flatMap((r) => [get(`/stockPurchaseSpends/${r}`), get(`/getStockAndPurchaseByFilter/${r}`)]));
+      break;
+  }
+}
+
  onAction(action: string): void {
   console.log('ACTION RECEIVED:', action);
 
   this.selectedReport = action;
+  this.warmTab(action);
 
   switch (action) {
 
@@ -618,7 +653,6 @@ findBarRevenueReport(): void {
         response
       );
       this.revenueReportToday = response.data;
-      this.findBarRevenueByService();
       this.cdr.detectChanges();
     },
 

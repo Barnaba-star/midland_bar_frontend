@@ -1,7 +1,7 @@
 import { HttpErrorResponse, HttpEvent, HttpEventType, HttpHandlerFn, HttpInterceptorFn, HttpRequest, HttpResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { NEVER, Observable, TimeoutError, catchError, filter, finalize, from, mergeMap, of, race, share, tap, throwError, timeout, timer } from 'rxjs';
+import { EMPTY, NEVER, Observable, TimeoutError, catchError, concat, filter, finalize, from, mergeMap, of, race, share, tap, throwError, timeout, timer } from 'rxjs';
 import { environment } from '../enviroments/environment';
 import { AlertService } from '../services/alert';
 import { OFFLINE_AWARE, OFFLINE_BYPASS, OfflineRefusal, OfflineService, OpKind } from '../offline/offline.service';
@@ -16,6 +16,26 @@ const OVERLAYS: { match: RegExp; view: (o: OfflineService, m: RegExpMatchArray) 
   { match: /^\/bar\/findBillReceipt\/([^/?]+)$/, view: (o, m) => o.receiptView(m[1]) },
   // Staff Sell: a staff member's bills and orders ("summary" is a report, not a code).
   { match: /^\/bar\/staffSell\/(?!summary$)([^/?]+)$/, view: (o, m) => o.staffSellView(decodeURIComponent(m[1])) },
+];
+
+/**
+ * Reports: the server is ~0.5 s away (Tanzania -> Railway's Johannesburg edge
+ * -> Amsterdam), so every tap on Leo / Jana / Wiki hii waited that long. These
+ * are answered at once from the device's last copy of the same request, and
+ * the request goes on quietly; when it lands the screen is updated again.
+ * The first time a request is ever made there is no copy, and it waits.
+ * POSTs listed here only read (page or filter in the body).
+ */
+const INSTANT_READS: { method: 'GET' | 'POST'; match: RegExp }[] = [
+  {
+    method: 'GET',
+    match: /^\/bar\/(findCurrentBarRevenueReport|findCurrentBarRevenueByService|findBarRevenueReport|findBarRevenueByService|findIncomeExpenses|getStockAndPurchaseByFilter|stockPurchaseSpends|otherSplitReport|cashUp\/list|shift\/list|stockTake\/list|stockTake\/variance|insights\/products|insights\/peak|reports\/giveaways|billLineVoids|salesOpenedListByStatus|findRevenueTrend)\/[^/]+$/,
+  },
+  { method: 'GET', match: /^\/bar\/(findBranchDashboard|findStaffEarnings|insights\/ledger)$/ },
+  {
+    method: 'POST',
+    match: /^\/bar\/(findStaffCommissionTotals|findStaffCommissionPage|findCurrentBarReportsPage|findStockMovementPage|findServiceAndStoreReportPage)$/,
+  },
 ];
 
 /** Sales-page writes that can be done offline and sent later. */
@@ -85,6 +105,35 @@ export const OfflineInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, nex
   if (!path.startsWith('/bar/')) {
     // Sign-in, notifications, heartbeat...: as before, but quiet about a missing connection.
     return next(aware);
+  }
+
+  // ---------------- reports: the device's copy first ----------------
+  if (offline.online() && INSTANT_READS.some((r) => r.method === req.method && r.match.test(path))) {
+    const keep = (ev: HttpEvent<any>) => {
+      if (ev instanceof HttpResponse && ev.status === 200 && ev.body && (ev.body as any).data !== undefined) {
+        offline.instantRemember(req.method, req.urlWithParams, req.body, ev.body);
+        if (req.method === 'GET') {
+          offline.remember(req.urlWithParams, ev.body); // the offline fallback, as for any read
+        }
+      }
+    };
+    return from(offline.instantRecall(req.method, req.urlWithParams, req.body)).pipe(
+      mergeMap((copy) => {
+        if (!copy) {
+          return next(aware).pipe(tap(keep));
+        }
+        // Shown now; the fresh answer follows without the loader or error popups.
+        const quiet = aware.clone({ context: aware.context.set(SILENT_REQUEST, true) });
+        return concat(
+          of(new HttpResponse({ status: 200, url: req.url, body: copy })),
+          next(quiet).pipe(
+            filter((ev) => ev instanceof HttpResponse),
+            tap(keep),
+            catchError(() => EMPTY),
+          ),
+        );
+      }),
+    );
   }
 
   // ---------------- reads ----------------

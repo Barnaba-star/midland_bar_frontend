@@ -150,6 +150,44 @@ export class OfflineService {
     idbSet(this.cacheKey(url), body);
   }
 
+  // ------------------------------------------------------------------
+  // Reports answered at once (see INSTANT_READS in the interceptor)
+  // ------------------------------------------------------------------
+
+  /** One report answer: this login, this branch, this exact request. */
+  private instantKey(method: string, url: string, body: any): string {
+    let branch = '';
+    try {
+      branch = this.auth.getBranchUID() || '';
+    } catch {}
+    return `instant|${this.user()}|${branch}|${method}|${url}|${body == null ? '' : JSON.stringify(body)}`;
+  }
+
+  instantRecall(method: string, url: string, body: any): Promise<any> {
+    return idbGet<any>(this.instantKey(method, url, body));
+  }
+
+  instantRemember(method: string, url: string, body: any, answer: any): void {
+    idbSet(this.instantKey(method, url, body), answer);
+  }
+
+  /**
+   * Ask for these in the background, quietly, so the next tap on them is
+   * answered from the device at once (the server is ~0.5 s away). Each one
+   * goes through the interceptor, which keeps the answer.
+   */
+  warm(requests: { method: 'GET' | 'POST'; path: string; body?: any }[]): void {
+    if (!this.browser || !this.online()) {
+      return;
+    }
+    const context = new HttpContext().set(SILENT_REQUEST, true);
+    for (const r of requests) {
+      const url = `${BAR()}${r.path}`;
+      const call = r.method === 'GET' ? this.http.get(url, { context }) : this.http.post(url, r.body, { context });
+      call.subscribe({ error: () => {} });
+    }
+  }
+
   recall<T = any>(url: string): Promise<T | undefined> {
     return idbGet<T>(this.cacheKey(url));
   }

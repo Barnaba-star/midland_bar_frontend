@@ -85,6 +85,9 @@
 
 .staff-card {
   width: 100%;
+  /* Inside the fixed-height column, a card with overflow:hidden would be
+     squeezed to it and the pagination cut off. Keep its full height. */
+  flex-shrink: 0;
   background: #ffffff;
   border: 1px solid #f1e8d8;
   border-radius: 16px;
@@ -548,6 +551,7 @@
 
 .pagination-buttons {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 4px;
 }

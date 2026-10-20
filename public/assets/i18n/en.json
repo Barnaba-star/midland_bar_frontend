@@ -481,6 +481,8 @@
     "STOCK_SPENT_HINT": "Each purchase on the day it was made, even when its money came from the savings of earlier weeks. The table below is the savings of each week.",
     "STOCK_SPENT_OUTSIDE": "BEYOND MANUNUZI",
     "STOCK_SPENT_OUTSIDE_NOTE": "Tshs {{amount}} of this was paid beyond the Manunuzi savings.",
+    "STOCK_SPENT_COL_SOURCE": "Paid from",
+    "STOCK_SPENT_INSIDE": "MANUNUZI SAVINGS",
     "STOCK_SPENT_NONE": "Nothing bought in this period.",
     "STOCK_PURCHASE_REPORT_TITLE": "Stock & Purchase Report",
     "SERVICE_LABEL": "SERVICE",

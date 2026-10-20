@@ -7827,3 +7827,41 @@
   font-size: 12px;
   color: var(--color-text-muted, #7a6f60);
 }
+
+/* Bought in this period: same table look as the weekly pots below it. */
+.stock-table-wrapper.stock-spends {
+  margin-bottom: 18px;
+  border: 1px solid #f1e8d8;
+  border-radius: 12px;
+}
+
+.stock-spends-head {
+  padding: 14px 14px 10px;
+  text-align: left;
+}
+
+.stock-spends-head h3 {
+  margin: 0 0 4px;
+  color: #1d1812;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.stock-spends-head p {
+  margin: 0;
+  color: #7a6f60;
+  font-size: 12px;
+}
+
+.stock-spends .spend-detail {
+  white-space: normal;
+  min-width: 220px;
+}
+
+.stock-spends-none {
+  margin: 0;
+  padding: 0 14px 14px;
+  color: #7a6f60;
+  font-size: 12px;
+  text-align: left;
+}

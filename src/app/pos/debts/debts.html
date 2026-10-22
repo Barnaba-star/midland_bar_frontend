@@ -1,5 +1,5 @@
 <div class="action-container db-page">
-  <!-- Madeni and the bar's offers (happy hour) live on one page; offers are CEO/manager only. -->
+  <!-- Madeni and the bar's offers (happy hour) live on one page; offers are CEO/manager/root only. -->
   @if (canOffers) {
     <div class="db-tabs" role="tablist">
       <button type="button" role="tab" [class.on]="tab === 'DEBTS'" [attr.aria-selected]="tab === 'DEBTS'" (click)="tab = 'DEBTS'">

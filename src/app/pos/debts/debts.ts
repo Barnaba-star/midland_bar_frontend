@@ -34,8 +34,8 @@ export class Debts implements OnInit {
   readonly canSetLimit = this.auth.hasPermission('MANAGE_DEBT');
   readonly canWriteOff = this.auth.hasPermission('WRITE_OFF_DEBT');
   readonly canTakePayment = this.auth.hasPermission('SAVE_SALES');
-  /** Ofa / Happy hour sits on this page as a second tab (owner, 2026-10-22). */
-  readonly canOffers = this.auth.hasRole('CEO') || this.auth.hasRole('MANAGER');
+  /** Ofa / Happy hour sits on this page as a second tab (owner, 2026-10-22): CEO, manager and root. */
+  readonly canOffers = ['ROOT', 'CEO', 'MANAGER'].some((r) => this.auth.hasRole(r));
   tab: 'DEBTS' | 'OFFERS' = 'DEBTS';
 
   customers: DebtCustomer[] = [];

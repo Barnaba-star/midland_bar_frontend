@@ -1,4 +1,3 @@
-import { Offers } from '../offers/offers';
 import { BranchRules } from '../branch-rules/branch-rules';
 import { OtherSplit } from '../other-split/other-split';
 import { UnitLabelPipe, unitKey } from '../../Utils/pipes/stock-packs.pipe';
@@ -100,7 +99,7 @@ const STOCK_UNIT_OPTIONS = [
 @Component({
   selector: 'app-bar-setting',
   imports: [CategoryLabelPipe, 
-    OtherSplit, BranchRules, Offers, EmptyStateComponent,Title2, MatIconModule, RecordtableComponent, DecimalPipe, UpperCasePipe, CommonModule, FormsModule, MatMenuModule, MatPaginator, MatButtonModule, TranslatePipe, MatTooltipModule, UnitLabelPipe],
+    OtherSplit, BranchRules, EmptyStateComponent,Title2, MatIconModule, RecordtableComponent, DecimalPipe, UpperCasePipe, CommonModule, FormsModule, MatMenuModule, MatPaginator, MatButtonModule, TranslatePipe, MatTooltipModule, UnitLabelPipe],
   templateUrl: './bar-setting.html',
   styleUrl: './bar-setting.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -172,12 +171,6 @@ private reloadPagedTab() {
       icon: 'pay',
       title: 'SALON.OTHER_SPLIT',
       roles: ['CEO']
-    },
-    {
-      // Happy hours and offers - priced in as items are sold.
-      icon: 'pay',
-      title: 'SALON.OFFERS',
-      roles: ['CEO', 'MANAGER']
     },
     {
       // The CEO's branch rules: TRA on receipts, cashier discount limit, theft alerts.

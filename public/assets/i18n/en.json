@@ -2819,7 +2819,8 @@
     "OFFER_OF": "of {{monthly}} a month",
     "MONTHLY_OFFER": "Monthly offer (free, Tshs)",
     "OFFERS_GIVEN": "Offers given",
-    "KIND_OFFER": "Offer"
+    "KIND_OFFER": "Offer",
+    "TAB_DEBTS": "Debts"
   },
   "REFUND": {
     "BTN": "Give money back",

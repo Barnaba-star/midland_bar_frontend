@@ -6,6 +6,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { ServiceBarMethod } from '../service-bar-method';
 import { DebtCustomer, DebtEntry, DebtReport } from '../BarModel';
 import { Authentication } from '../../Utils/services/authentication';
+import { Offers } from '../offers/offers';
 import { PAYMENT_METHODS } from '../../Utils/component/dialogs/pay-bill-dialog-component/pay-bill-dialog-component';
 
 type Panel = 'PAY' | 'HISTORY' | 'EDIT';
@@ -19,7 +20,7 @@ type Panel = 'PAY' | 'HISTORY' | 'EDIT';
  */
 @Component({
   selector: 'app-debts',
-  imports: [FormsModule, MatIconModule, DecimalPipe, DatePipe, NgTemplateOutlet, TranslatePipe],
+  imports: [FormsModule, MatIconModule, DecimalPipe, DatePipe, NgTemplateOutlet, TranslatePipe, Offers],
   templateUrl: './debts.html',
   styleUrl: './debts.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,6 +34,9 @@ export class Debts implements OnInit {
   readonly canSetLimit = this.auth.hasPermission('MANAGE_DEBT');
   readonly canWriteOff = this.auth.hasPermission('WRITE_OFF_DEBT');
   readonly canTakePayment = this.auth.hasPermission('SAVE_SALES');
+  /** Ofa / Happy hour sits on this page as a second tab (owner, 2026-10-22). */
+  readonly canOffers = this.auth.hasRole('CEO') || this.auth.hasRole('MANAGER');
+  tab: 'DEBTS' | 'OFFERS' = 'DEBTS';
 
   customers: DebtCustomer[] = [];
   report: DebtReport | null = null;

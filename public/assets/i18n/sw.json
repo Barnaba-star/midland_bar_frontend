@@ -2819,7 +2819,8 @@
     "OFFER_OF": "kati ya {{monthly}} kwa mwezi",
     "MONTHLY_OFFER": "Ofa kwa mwezi (bure, Tshs)",
     "OFFERS_GIVEN": "Ofa alizopewa",
-    "KIND_OFFER": "Ofa"
+    "KIND_OFFER": "Ofa",
+    "TAB_DEBTS": "Madeni"
   },
   "REFUND": {
     "BTN": "Rudisha pesa",

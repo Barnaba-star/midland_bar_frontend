@@ -399,3 +399,39 @@
   color: #92400e;
   font-weight: 700;
 }
+
+/* Madeni | Ofa na Happy hour */
+.db-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  overflow-x: auto;
+}
+
+.db-tabs button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+  padding: 8px 14px;
+  border: 1px solid var(--color-border, #e8dcc8);
+  border-radius: 999px;
+  background: var(--color-surface, #fff);
+  color: var(--color-text, #1d1812);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.db-tabs button.on {
+  background: var(--color-primary, #2b2118);
+  border-color: var(--color-primary, #2b2118);
+  color: #fff;
+}
+
+.db-tabs mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}

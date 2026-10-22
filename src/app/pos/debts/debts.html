@@ -1,4 +1,18 @@
 <div class="action-container db-page">
+  <!-- Madeni and the bar's offers (happy hour) live on one page; offers are CEO/manager only. -->
+  @if (canOffers) {
+    <div class="db-tabs" role="tablist">
+      <button type="button" role="tab" [class.on]="tab === 'DEBTS'" [attr.aria-selected]="tab === 'DEBTS'" (click)="tab = 'DEBTS'">
+        <mat-icon>account_balance_wallet</mat-icon><span>{{ 'DEBTS.TAB_DEBTS' | translate }}</span>
+      </button>
+      <button type="button" role="tab" [class.on]="tab === 'OFFERS'" [attr.aria-selected]="tab === 'OFFERS'" (click)="tab = 'OFFERS'">
+        <mat-icon>local_offer</mat-icon><span>{{ 'OFFERS.TITLE' | translate }}</span>
+      </button>
+    </div>
+  }
+  @if (tab === 'OFFERS') {
+    <app-offers />
+  } @else {
   <div class="db-card">
     <div class="db-card-header">
       <div>
@@ -251,6 +265,7 @@
       </div>
     }
   </div>
+  }
 </div>
 
 <ng-template #customerForm>

@@ -3031,5 +3031,20 @@
     "COL_CHARGED": "Kilicholipwa",
     "COL_MENU": "Kwa bei kamili",
     "COL_GIVEN": "Kilichotolewa"
+  },
+  "BILL_TRANSFER": {
+    "TITLE": "Hamishia bill kwa mwenzako",
+    "SUB": "Bill {{code}} · Tshs {{amount}}",
+    "BUTTON": "Hamisha bill",
+    "PICK": "Nani anachukua bill?",
+    "SEARCH": "Tafuta jina",
+    "NONE": "Hakuna mhudumu mwingine kwenye tawi hili",
+    "SENT": "ametuma makabidhiano",
+    "REASON": "Sababu (si lazima)",
+    "REASON_PH": "mf. anatoka zamu",
+    "CONFIRM": "Bill {{code}} ya Tshs {{amount}} pamoja na commission yake itahamia kwa {{name}}. Vinywaji vilivyokwisha hudumiwa vinabaki kwenye bill.",
+    "MOVE": "Hamisha",
+    "DONE": "Bill {{code}} sasa iko kwa {{name}} kama {{newCode}}",
+    "REPORT": "Bill zilizohamishwa kati ya wahudumu"
   }
 }

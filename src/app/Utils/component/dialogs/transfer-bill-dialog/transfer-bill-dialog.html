@@ -1,0 +1,57 @@
+<div class="tb">
+  <div class="tb-head">
+    <span class="tb-icon"><mat-icon>swap_horiz</mat-icon></span>
+    <div>
+      <h3>{{ 'BILL_TRANSFER.TITLE' | translate }}</h3>
+      <p>{{ 'BILL_TRANSFER.SUB' | translate: { code: data.bill.salesCode, amount: ((data.bill.bill || 0) | number) } }}</p>
+    </div>
+  </div>
+
+  @if (!chosen) {
+    <div class="tb-field">
+      <span>{{ 'BILL_TRANSFER.PICK' | translate }}</span>
+      @if (colleagues.length > 6) {
+        <input type="text" [(ngModel)]="query" name="query" autocomplete="off" [placeholder]="'BILL_TRANSFER.SEARCH' | translate" />
+      }
+      <div class="tb-list" role="listbox">
+        @if (loading) {
+          <p class="tb-hint">…</p>
+        } @else if (!colleagues.length) {
+          <p class="tb-hint">{{ 'BILL_TRANSFER.NONE' | translate }}</p>
+        }
+        @for (c of shown; track c.uid) {
+          <button type="button" class="tb-row" role="option" [disabled]="c.handoverSent" (click)="pick(c)">
+            <mat-icon>person</mat-icon>
+            <span class="tb-name">{{ c.name }}</span>
+            @if (c.handoverSent) {
+              <span class="tb-tag">{{ 'BILL_TRANSFER.SENT' | translate }}</span>
+            }
+          </button>
+        }
+      </div>
+    </div>
+  } @else {
+    <p class="tb-confirm">
+      {{ 'BILL_TRANSFER.CONFIRM' | translate: { code: data.bill.salesCode, amount: ((data.bill.bill || 0) | number), name: chosen.name } }}
+    </p>
+    <label class="tb-field">
+      <span>{{ 'BILL_TRANSFER.REASON' | translate }}</span>
+      <input type="text" maxlength="120" [(ngModel)]="reason" name="reason" autocomplete="off" [placeholder]="'BILL_TRANSFER.REASON_PH' | translate" />
+    </label>
+  }
+
+  <div class="tb-actions">
+    @if (chosen) {
+      <button type="button" class="tb-back" [disabled]="saving" (click)="chosen = null">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+    }
+    <span class="tb-spacer"></span>
+    <button type="button" class="tb-cancel" (click)="close()">{{ 'COMMON.CANCEL' | translate }}</button>
+    @if (chosen) {
+      <button type="button" class="tb-save" [disabled]="saving" (click)="move()">
+        <mat-icon>swap_horiz</mat-icon>{{ 'BILL_TRANSFER.MOVE' | translate }}
+      </button>
+    }
+  </div>
+</div>

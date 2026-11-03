@@ -1,6 +1,7 @@
 import { counterLoginToken, isCounterSession, returnFromCounterSession } from './counter-session';
 import { BrandWord } from '../../Utils/component/brand-word/brand-word';
 import { PaymentNoteDialog } from '../../Utils/component/dialogs/payment-note-dialog/payment-note-dialog';
+import { TransferBillDialog } from '../../Utils/component/dialogs/transfer-bill-dialog/transfer-bill-dialog';
 import { SellableItems } from '../../Utils/services/sellable-items';
 import { OfflineService } from '../../Utils/offline/offline.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -180,6 +181,24 @@ export class BarStaffSell implements OnInit, OnDestroy {
         bill.paymentNotePayer = updated.paymentNotePayer ?? null;
         bill.paymentNoteRef = updated.paymentNoteRef ?? null;
         this.cdr.markForCheck();
+      }
+    });
+  }
+
+  /** Going off while the customer is still drinking: the bill and its commission go to a colleague. */
+  transferBill(bill: SalesOpened): void {
+    if (this.frozen()) {
+      return;
+    }
+    this.dialog.open(TransferBillDialog, {
+      width: '440px',
+      maxWidth: '95vw',
+      autoFocus: false,
+      data: { bill },
+    }).afterClosed().subscribe((moved?: SalesOpened) => {
+      if (moved) {
+        this.closeBill();
+        this.refresh();
       }
     });
   }

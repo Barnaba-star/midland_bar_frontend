@@ -272,6 +272,14 @@
                   </button>
                 }
 
+                <!-- Going off with the customer still drinking: the bill and its commission go to a colleague. -->
+                @if (!handoverSent && bill.paymentStatus !== 'PAID') {
+                  <button type="button" class="pay-note" [disabled]="busyBill === bill.uid" (click)="transferBill(bill)">
+                    <mat-icon>swap_horiz</mat-icon>
+                    <span class="pay-note-text">{{ 'BILL_TRANSFER.BUTTON' | translate }}</span>
+                  </button>
+                }
+
                 <div class="bill-amount">
                   <span>{{ 'SALES_PAGE.BILL' | translate }}</span>
                   <strong>Tshs {{ (bill.bill || 0) | number }}</strong>

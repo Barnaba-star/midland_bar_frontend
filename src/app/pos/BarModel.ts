@@ -361,6 +361,14 @@ export interface StaffHandover {
 }
 
 /** One staff member's day on the Sales page. staff false = bills opened on the Sales page itself (no code is sent - it is secret). */
+/** Someone a staff bill can be handed to (name only - codes are secret). */
+export interface StaffColleague {
+  uid: string;
+  name: string;
+  /** Already sent their handover - they cannot take a bill now. */
+  handoverSent?: boolean;
+}
+
 export interface StaffSalesRow {
     staff: boolean;
     staffName: string | null;

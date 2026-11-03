@@ -1,6 +1,7 @@
 import { Refunds } from '../refunds/refunds';
 import { PaymentNotes } from '../payment-notes/payment-notes';
 import { PaymentNoteDialog } from '../../Utils/component/dialogs/payment-note-dialog/payment-note-dialog';
+import { TransferBillDialog } from '../../Utils/component/dialogs/transfer-bill-dialog/transfer-bill-dialog';
 import { SellableItems } from '../../Utils/services/sellable-items';
 import { OfflineService } from '../../Utils/offline/offline.service';
 import { StaffLossDialog } from '../../Utils/component/dialogs/staff-loss-dialog/staff-loss-dialog';
@@ -684,6 +685,20 @@ openSaleDetailsDialogForMore(sale: SalesOpened) {
         bill.paymentNotePayer = updated.paymentNotePayer ?? null;
         bill.paymentNoteRef = updated.paymentNoteRef ?? null;
         this.cdr.markForCheck();
+      }
+    });
+  }
+
+  /** A staff member went off without handing their bill on: it and its commission go to a colleague. */
+  transferBill(bill: SalesOpened): void {
+    this.dialog.open(TransferBillDialog, {
+      width: '440px',
+      maxWidth: '95vw',
+      autoFocus: false,
+      data: { bill },
+    }).afterClosed().subscribe((moved?: SalesOpened) => {
+      if (moved) {
+        this.salesOpenedListToday();
       }
     });
   }

@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../Utils/enviroments/environment';
-import { CommissionDTO, PayStockAndPurchaseDTO, SaleOpenedDTO, BarBookingDTO, BarSalesDTO, BarServiceDTO, BarStaffDTO, SpendDTO, StaffCommissionDTO, StoreDTO, StockReceiptDTO, SalesOpened, StaffSellStaff, StaffSalesRow, StaffOrder, PaymentNoteRow, StaffHandover, DebtCustomer, DebtEntry, DebtReport } from './BarModel';
+import { CommissionDTO, PayStockAndPurchaseDTO, SaleOpenedDTO, BarBookingDTO, BarSalesDTO, BarServiceDTO, BarStaffDTO, SpendDTO, StaffCommissionDTO, StoreDTO, StockReceiptDTO, SalesOpened, StaffSellStaff, StaffSalesRow, StaffColleague, StaffOrder, PaymentNoteRow, StaffHandover, DebtCustomer, DebtEntry, DebtReport } from './BarModel';
 import { PageableParam, Response, ResponseList, ResponsePage } from '../Utils/models/responces';
 
 @Injectable({
@@ -416,6 +416,16 @@ recallStaffHandover(staffCode: string): Observable<Response<number>> {
 /** Sales: the cashier took one method's money - every listed bill in it is paid, or none if any changed. */
 receiveStaffHandover(dto: { staffCode: string; method: string; bills: { uid: string; amount: number }[]; handedAmount?: number; note?: string }): Observable<Response<{ method: string; bills: number; amount: number; shortage?: number }>> {
   return this.http.post<Response<{ method: string; bills: number; amount: number; shortage?: number }>>(`${this.barURL}/staffSell/handover/receive`, dto);
+}
+
+/** Who a staff bill can be handed to: the branch's other staff, by name. [except] = the bill's staff (a staff session is left out by itself). */
+staffColleagues(except?: string): Observable<Response<StaffColleague[]>> {
+  return this.http.get<Response<StaffColleague[]>>(`${this.barURL}/staffSell/colleagues`, except ? { params: { except } } : {});
+}
+
+/** Hand an unpaid staff bill to another staff member - its commission goes with it. */
+transferStaffBill(dto: { billUid: string; toStaffUid: string; reason?: string }): Observable<Response<SalesOpened>> {
+  return this.http.post<Response<SalesOpened>>(`${this.barURL}/staffSell/transfer`, dto);
 }
 
 /** Staff Sell: open a bill that belongs to the staff member, numbered from their code (K1-1, K1-2...). */

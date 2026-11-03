@@ -3031,5 +3031,20 @@
     "COL_CHARGED": "Charged",
     "COL_MENU": "At full price",
     "COL_GIVEN": "Given"
+  },
+  "BILL_TRANSFER": {
+    "TITLE": "Hand the bill to a colleague",
+    "SUB": "Bill {{code}} · Tshs {{amount}}",
+    "BUTTON": "Hand over bill",
+    "PICK": "Who takes the bill?",
+    "SEARCH": "Search name",
+    "NONE": "No other staff in this branch",
+    "SENT": "handover sent",
+    "REASON": "Reason (optional)",
+    "REASON_PH": "e.g. going off shift",
+    "CONFIRM": "Bill {{code}} worth Tshs {{amount}} and its commission will go to {{name}}. The drinks already served stay on the bill.",
+    "MOVE": "Hand over",
+    "DONE": "Bill {{code}} is now with {{name}} as {{newCode}}",
+    "REPORT": "Bills handed between staff"
   }
 }

@@ -125,6 +125,14 @@
                   </button>
                 }
 
+                <!-- A staff member's bill: the cashier can hand it to a colleague when its staff member went off. -->
+                @if (sale.staffUid && !sale.handoverSentAt) {
+                  <button type="button" class="pay-note" (click)="transferBill(sale)">
+                    <mat-icon>swap_horiz</mat-icon>
+                    <span class="pay-note-text">{{ 'BILL_TRANSFER.BUTTON' | translate }}</span>
+                  </button>
+                }
+
                 <!-- ================= BODY ================= -->
                 <div class="sale-body">
                   <div class="sale-info">

@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../Utils/enviroments/environment';
-import { CommissionDTO, PayStockAndPurchaseDTO, SaleOpenedDTO, BarBookingDTO, BarSalesDTO, BarServiceDTO, BarStaffDTO, SpendDTO, StaffCommissionDTO, StoreDTO, StockReceiptDTO, SalesOpened, StaffSellStaff, StaffSalesRow, StaffColleague, StaffOrder, PaymentNoteRow, StaffHandover, DebtCustomer, DebtEntry, DebtReport } from './BarModel';
+import { CommissionDTO, PayStockAndPurchaseDTO, SaleOpenedDTO, BarBookingDTO, BarSalesDTO, BarServiceDTO, BarStaffDTO, SpendDTO, StaffCommissionDTO, StoreDTO, StockReceiptDTO, SalesOpened, StaffSellStaff, StaffSalesRow, StaffColleague, JackPoint, JackPointAward, JackPointProgress, StaffOrder, PaymentNoteRow, StaffHandover, DebtCustomer, DebtEntry, DebtReport } from './BarModel';
 import { PageableParam, Response, ResponseList, ResponsePage } from '../Utils/models/responces';
 
 @Injectable({
@@ -426,6 +426,28 @@ staffColleagues(except?: string): Observable<Response<StaffColleague[]>> {
 /** Hand an unpaid staff bill to another staff member - its commission goes with it. */
 transferStaffBill(dto: { billUid: string; toStaffUid: string; reason?: string }): Observable<Response<SalesOpened>> {
   return this.http.post<Response<SalesOpened>>(`${this.barURL}/staffSell/transfer`, dto);
+}
+
+/** Jack Point: the games with each staff member's run, and the winners. */
+jackPoints(): Observable<Response<{ jackPoints: { jackPoint: JackPoint; progress: JackPointProgress[] }[]; awards: JackPointAward[] }>> {
+  return this.http.get<Response<{ jackPoints: { jackPoint: JackPoint; progress: JackPointProgress[] }[]; awards: JackPointAward[] }>>(`${this.barURL}/jackPoints`);
+}
+
+saveJackPoint(jp: JackPoint): Observable<Response<JackPoint>> {
+  return this.http.post<Response<JackPoint>>(`${this.barURL}/jackPoints`, jp);
+}
+
+deleteJackPoint(uid: string): Observable<Response<boolean>> {
+  return this.http.post<Response<boolean>>(`${this.barURL}/jackPoints/${uid}/delete`, {});
+}
+
+decideJackPointAward(uid: string, body: { approve: boolean; leaveFrom: string | null; note: string }): Observable<Response<JackPointAward>> {
+  return this.http.post<Response<JackPointAward>>(`${this.barURL}/jackPoints/awards/${uid}/decide`, body);
+}
+
+/** Staff Sell: the staff member's own progress (code in the body - the logs mask it there). */
+myJackPoint(staffCode: string): Observable<Response<{ games: JackPointProgress[]; awards: JackPointAward[] }>> {
+  return this.http.post<Response<{ games: JackPointProgress[]; awards: JackPointAward[] }>>(`${this.barURL}/jackPoints/mine`, { staffCode }, { context: silent() });
 }
 
 /** Staff Sell: open a bill that belongs to the staff member, numbered from their code (K1-1, K1-2...). */

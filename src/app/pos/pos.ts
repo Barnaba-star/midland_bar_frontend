@@ -119,10 +119,18 @@ menuItems: SidenavItem[] = [
     permissions: ['VIEW_DEBT']
   },
   {
+    // The waiters' game: weeks in a row over a commission target win a reward.
+    label: 'MENU.JACK_POINT',
+    icon: 'commission',
+    route: '/pos/jackPoint',
+    permissions: ['MANAGE_JACK_POINT']
+  },
+  {
     label: this.reportLabel,
     icon: 'report',
     route: '/pos/barReports',
-    roles: this.allRoles
+    // The accountant reads the money side.
+    roles: [...this.allRoles, 'ACCOUNTANT']
   },
   {
     label: 'MENU.SETTING',

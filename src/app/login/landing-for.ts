@@ -23,6 +23,10 @@ export function landingFor(hasRole: (role: string) => boolean): string {
   if (storeKeeperOnly(hasRole)) {
     return STORE_KEEPER_HOME;
   }
+  // The accountant (alone) starts on Jack Point; Reports and Madeni are beside it.
+  if (hasRole('ACCOUNTANT') && !['CEO', 'MANAGER', 'CASHIER'].some(hasRole)) {
+    return '/pos/jackPoint';
+  }
   // Cashier-only: a user who also holds CEO/MANAGER starts on the Dashboard.
   if (hasRole('CASHIER') && !['CEO', 'MANAGER'].some(hasRole)) {
     return CASHIER_HOME;

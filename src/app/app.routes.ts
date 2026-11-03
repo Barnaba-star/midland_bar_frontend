@@ -180,6 +180,12 @@ export const routes: Routes = [
         loadComponent:()=>import('./pos/suppliers/suppliers').then(m=>m.Suppliers)
       },
       {
+        // Jack Point, the waiters' game: CEO, MANAGER, ACCOUNTANT (MANAGE_JACK_POINT on the backend).
+        path: 'jackPoint',
+        canActivate: [posNoStoreKeeperGuard],
+        loadComponent:()=>import('./pos/jack-point/jack-point').then(m=>m.JackPointPage)
+      },
+      {
         // Customers' debts: CEO, MANAGER and CASHIER (VIEW_DEBT on the backend).
         path: 'madeni',
         canActivate: [posNoStoreKeeperGuard],

@@ -1,0 +1,197 @@
+<div class="action-container db-page">
+  <div class="db-card">
+    <div class="db-card-header">
+      <div>
+        <h3><mat-icon class="jp-title-icon">emoji_events</mat-icon>{{ 'JACK_POINT.TITLE' | translate }}</h3>
+        <p>{{ 'JACK_POINT.SUBTITLE' | translate }}</p>
+      </div>
+      <button type="button" class="row-action edit" (click)="add()">
+        <mat-icon>add</mat-icon><span>{{ 'JACK_POINT.ADD' | translate }}</span>
+      </button>
+    </div>
+
+    @if (editing) {
+      <div class="db-panel">
+        <h4>{{ (editing.uid ? 'JACK_POINT.EDIT' : 'JACK_POINT.ADD') | translate }}</h4>
+        <div class="db-form">
+          <label class="wide"><small>{{ 'JACK_POINT.NAME' | translate }}</small>
+            <input type="text" maxlength="80" [(ngModel)]="editing.name" [placeholder]="'JACK_POINT.NAME_PH' | translate" /></label>
+          <label><small>{{ 'JACK_POINT.TARGET' | translate }}</small><input type="number" min="1" [(ngModel)]="editing.weeklyTarget" /></label>
+          <label><small>{{ 'JACK_POINT.WEEKS' | translate }}</small><input type="number" min="1" max="52" [(ngModel)]="editing.weeks" /></label>
+          <label><small>{{ 'JACK_POINT.START' | translate }}</small><input type="date" [(ngModel)]="editing.startDate" /></label>
+        </div>
+        <p class="db-hint">{{ 'JACK_POINT.RULE' | translate: { target: (editing.weeklyTarget || 0 | number), weeks: editing.weeks || 0 } }}</p>
+        <h4>{{ 'JACK_POINT.REWARD' | translate }}</h4>
+        <div class="db-form">
+          <label><small>{{ 'JACK_POINT.LEAVE_DAYS' | translate }}</small><input type="number" min="0" max="30" [(ngModel)]="editing.leaveDays" /></label>
+          <label><small>{{ 'JACK_POINT.BONUS' | translate }}</small><input type="number" min="0" [(ngModel)]="editing.bonusAmount" /></label>
+          <label class="wide"><small>{{ 'JACK_POINT.NOTE' | translate }}</small>
+            <input type="text" maxlength="200" [(ngModel)]="editing.rewardNote" [placeholder]="'JACK_POINT.NOTE_PH' | translate" /></label>
+        </div>
+        <p class="db-hint">{{ 'JACK_POINT.BONUS_HINT' | translate }}</p>
+        <label class="db-check"><input type="checkbox" [(ngModel)]="editing.enabled" /><span>{{ 'JACK_POINT.ENABLED' | translate }}</span></label>
+        <div class="db-actions">
+          <button type="button" class="row-action view" (click)="editing = null">{{ 'COMMON.CANCEL' | translate }}</button>
+          <button type="button" class="row-action edit" [disabled]="busy" (click)="save()"><mat-icon>save</mat-icon><span>{{ 'COMMON.SAVE' | translate }}</span></button>
+        </div>
+      </div>
+    }
+
+    <!-- Won and waiting: approve (with the first day off) or turn down. -->
+    @if (waiting.length) {
+      <section class="jp-section">
+        <h4 class="jp-h">{{ 'JACK_POINT.WAITING' | translate }} ({{ waiting.length }})</h4>
+        <div class="db-list">
+          @for (a of waiting; track a.uid) {
+            <div class="db-row jp-win">
+              <div class="db-who">
+                <strong><mat-icon class="jp-star">star</mat-icon>{{ a.staffName }}</strong>
+                <span>{{ a.jackPointName }} · {{ a.weekFrom | date: 'd MMM' }} – {{ weekEnd(a.weekTo) | date: 'd MMM y' }}</span>
+              </div>
+              <div class="db-fig"><small>{{ 'JACK_POINT.EARNED' | translate }}</small><strong>{{ a.commissionTotal | number }}</strong></div>
+              <div class="db-fig">
+                <small>{{ 'JACK_POINT.REWARD' | translate }}</small>
+                <span class="jp-reward">
+                  @if (a.leaveDays) { <b>{{ 'JACK_POINT.DAYS_OFF' | translate: { n: a.leaveDays } }}</b> }
+                  @if (a.bonusAmount) { <b>{{ 'JACK_POINT.BONUS_OF' | translate: { amount: (a.bonusAmount | number) } }}</b> }
+                  @if (a.rewardNote) { <b>{{ a.rewardNote }}</b> }
+                </span>
+              </div>
+              <div class="db-row-actions">
+                <button type="button" class="row-action edit" (click)="startDecision(a, true)"><mat-icon>check</mat-icon><span>{{ 'JACK_POINT.APPROVE' | translate }}</span></button>
+                <button type="button" class="row-action delete" (click)="startDecision(a, false)"><mat-icon>close</mat-icon><span>{{ 'JACK_POINT.REJECT' | translate }}</span></button>
+              </div>
+              @if (deciding?.uid === a.uid) {
+                <div class="db-panel">
+                  <div class="db-form">
+                    @if (deciding!.approve && a.leaveDays) {
+                      <label><small>{{ 'JACK_POINT.LEAVE_FROM' | translate }}</small><input type="date" [(ngModel)]="deciding!.leaveFrom" /></label>
+                    }
+                    <label class="wide"><small>{{ (deciding!.approve ? 'JACK_POINT.NOTE_OPTIONAL' : 'JACK_POINT.REASON') | translate }}</small>
+                      <input type="text" maxlength="300" [(ngModel)]="deciding!.note" /></label>
+                  </div>
+                  @if (deciding!.approve && a.bonusAmount) {
+                    <p class="db-hint">{{ 'JACK_POINT.BONUS_ON_APPROVE' | translate: { amount: (a.bonusAmount | number), name: a.staffName } }}</p>
+                  }
+                  <div class="db-actions">
+                    <button type="button" class="row-action view" (click)="deciding = null">{{ 'COMMON.CANCEL' | translate }}</button>
+                    <button type="button" class="row-action" [class.edit]="deciding!.approve" [class.delete]="!deciding!.approve"
+                            [disabled]="busy || (!deciding!.approve && !deciding!.note.trim())" (click)="decide(a)">
+                      {{ (deciding!.approve ? 'JACK_POINT.APPROVE' : 'JACK_POINT.REJECT') | translate }}
+                    </button>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </section>
+    }
+
+    @if (loading) {
+      <p class="db-empty">…</p>
+    } @else if (!games.length) {
+      <p class="db-empty">{{ 'JACK_POINT.EMPTY' | translate }}</p>
+    }
+
+    @for (g of games; track g.jackPoint.uid) {
+      <section class="jp-game" [class.off]="!g.jackPoint.enabled">
+        <div class="jp-game-head">
+          <div>
+            <h4 class="jp-h">{{ g.jackPoint.name }}
+              @if (!g.jackPoint.enabled) { <span class="jp-off">{{ 'JACK_POINT.OFF' | translate }}</span> }
+            </h4>
+            <p class="db-hint">
+              {{ 'JACK_POINT.RULE' | translate: { target: (g.jackPoint.weeklyTarget | number), weeks: g.jackPoint.weeks } }}
+              · {{ 'JACK_POINT.FROM' | translate }} {{ g.jackPoint.startDate | date: 'd MMM y' }}
+            </p>
+            <p class="jp-reward">
+              @if (g.jackPoint.leaveDays) { <b>{{ 'JACK_POINT.DAYS_OFF' | translate: { n: g.jackPoint.leaveDays } }}</b> }
+              @if (g.jackPoint.bonusAmount) { <b>{{ 'JACK_POINT.BONUS_OF' | translate: { amount: (g.jackPoint.bonusAmount | number) } }}</b> }
+              @if (g.jackPoint.rewardNote) { <b>{{ g.jackPoint.rewardNote }}</b> }
+            </p>
+          </div>
+          <div class="db-row-actions">
+            <button type="button" class="row-action view" (click)="edit(g.jackPoint)"><mat-icon>edit</mat-icon><span>{{ 'COMMON.EDIT' | translate }}</span></button>
+            @if (deleting === g.jackPoint.uid) {
+              <button type="button" class="row-action delete" (click)="remove(g.jackPoint.uid!)">{{ 'JACK_POINT.DELETE_SURE' | translate }}</button>
+              <button type="button" class="row-action view" (click)="deleting = null">{{ 'COMMON.CANCEL' | translate }}</button>
+            } @else {
+              <button type="button" class="row-action delete" (click)="deleting = g.jackPoint.uid!"><mat-icon>delete_outline</mat-icon><span>{{ 'COMMON.DELETE' | translate }}</span></button>
+            }
+          </div>
+        </div>
+
+        @if (g.progress.length) {
+          <div class="db-table-wrap">
+            <table class="db-table">
+              <thead>
+                <tr>
+                  <th>{{ 'JACK_POINT.STAFF' | translate }}</th>
+                  <th>{{ 'JACK_POINT.STREAK' | translate }}</th>
+                  <th>{{ 'JACK_POINT.THIS_WEEK' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (p of g.progress; track p.staffUid) {
+                  <tr>
+                    <td>{{ p.staffName }}</td>
+                    <td>
+                      <span class="jp-dots">
+                        @for (on of dots(p); track $index) { <i [class.on]="on"></i> }
+                      </span>
+                      <small class="jp-count">{{ p.streak }}/{{ p.weeks }}</small>
+                    </td>
+                    <td>
+                      <div class="jp-bar" [class.full]="p.thisWeek >= p.weeklyTarget"><span [style.width.%]="percent(p)"></span></div>
+                      <small class="jp-count">{{ p.thisWeek | number }} / {{ p.weeklyTarget | number }}</small>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </section>
+    }
+
+    @if (decided.length) {
+      <section class="jp-section">
+        <h4 class="jp-h">{{ 'JACK_POINT.HISTORY' | translate }}</h4>
+        <div class="db-table-wrap">
+          <table class="db-table">
+            <thead>
+              <tr>
+                <th>{{ 'JACK_POINT.STAFF' | translate }}</th>
+                <th>{{ 'JACK_POINT.TITLE' | translate }}</th>
+                <th>{{ 'JACK_POINT.WEEKS_COL' | translate }}</th>
+                <th>{{ 'JACK_POINT.REWARD' | translate }}</th>
+                <th>{{ 'JACK_POINT.STATUS' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (a of decided; track a.uid) {
+                <tr>
+                  <td>{{ a.staffName }}</td>
+                  <td>{{ a.jackPointName }}</td>
+                  <td>{{ a.weekFrom | date: 'd MMM' }} – {{ weekEnd(a.weekTo) | date: 'd MMM y' }}</td>
+                  <td>
+                    @if (a.status === 'APPROVED' && a.leaveFrom) {
+                      {{ 'JACK_POINT.OFF_DATES' | translate: { from: (a.leaveFrom | date: 'd MMM'), to: (leaveTo(a) | date: 'd MMM y') } }}
+                    }
+                    @if (a.bonusAmount) { · {{ a.bonusAmount | number }} }
+                    @if (a.rewardNote) { · {{ a.rewardNote }} }
+                  </td>
+                  <td>
+                    <span class="jp-status" [class.ok]="a.status === 'APPROVED'">{{ 'JACK_POINT.S_' + a.status | translate }}</span>
+                    @if (a.decisionNote) { <small class="jp-count">{{ a.decisionNote }}</small> }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+    }
+  </div>
+</div>

@@ -113,18 +113,18 @@ export class BarReports implements OnInit{
          {
       icon: 'stock',
       title: 'REPORTS.STOCK',
-      roles: [...this.fullAccessRoles, 'MANAGER', 'CASHIER']
+      roles: [...this.fullAccessRoles, 'MANAGER', 'CASHIER', 'ACCOUNTANT']
     },
        {
       icon: 'payment2',
       title: 'REPORTS.INCOME',
-      roles: [...this.fullAccessRoles, 'MANAGER', 'CASHIER']
+      roles: [...this.fullAccessRoles, 'MANAGER', 'CASHIER', 'ACCOUNTANT']
     },
     {
       // What the Other commission collected for each of the CEO's items, and paying out of them.
       icon: 'pay',
       title: 'REPORTS.OTHER',
-      roles: [...this.fullAccessRoles, 'MANAGER', 'CASHIER']
+      roles: [...this.fullAccessRoles, 'MANAGER', 'CASHIER', 'ACCOUNTANT']
     },
       {
       icon: 'store',
@@ -134,7 +134,7 @@ export class BarReports implements OnInit{
     {
       icon: 'person2',
       title: 'REPORTS.STAFF',
-      roles: [...this.fullAccessRoles, 'MANAGER', 'CASHIER']
+      roles: [...this.fullAccessRoles, 'MANAGER', 'CASHIER', 'ACCOUNTANT']
     },
     {
       icon: 'service',
@@ -145,13 +145,13 @@ export class BarReports implements OnInit{
       // Closing a shift: what the cashier took against what they counted.
       icon: 'pay',
       title: 'REPORTS.CASHUP',
-      roles: [...this.fullAccessRoles, 'MANAGER', 'CASHIER']
+      roles: [...this.fullAccessRoles, 'MANAGER', 'CASHIER', 'ACCOUNTANT']
     },
     {
       // Counting the store at one go, and what went missing.
       icon: 'stock',
       title: 'REPORTS.VARIANCE',
-      roles: [...this.fullAccessRoles, 'MANAGER']
+      roles: [...this.fullAccessRoles, 'MANAGER', 'ACCOUNTANT']
     },
     {
       // What each product earns over its cost, what sells, and when.
@@ -169,7 +169,7 @@ export class BarReports implements OnInit{
       // What was given away or taken off - offers, discounts, customers' offers, refunds - apart from sales.
       icon: 'pay',
       title: 'REPORTS.GIVEAWAYS',
-      roles: [...this.fullAccessRoles, 'MANAGER']
+      roles: [...this.fullAccessRoles, 'MANAGER', 'ACCOUNTANT']
     },
 
   ];

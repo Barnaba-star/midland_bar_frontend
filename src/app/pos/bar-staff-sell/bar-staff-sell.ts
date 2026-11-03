@@ -28,7 +28,8 @@ import { Subscription } from 'rxjs';
 import { LiveChanges } from '../../Utils/services/live-changes';
 import { landingFor } from '../../login/landing-for';
 import { Authentication } from '../../Utils/services/authentication';
-import { SalesOpened, StaffOrder, StaffSellStaff } from '../BarModel';
+import { localDate } from '../../Utils/services/local-date';
+import { JackPointAward, JackPointProgress, SalesOpened, StaffOrder, StaffSellStaff } from '../BarModel';
 import { CategoryIconPipe } from '../../Utils/pipes/product-category.pipe';
 
 /**
@@ -71,6 +72,9 @@ export class BarStaffSell implements OnInit, OnDestroy {
   code = '';
   looking = false;
   staff: StaffSellStaff | null = null;
+  /** Jack Point: how far this staff member is on each game, and a win waiting or approved. */
+  jackGames: JackPointProgress[] = [];
+  jackWin: JackPointAward | null = null;
   bills: SalesOpened[] = [];
   /** This device's nicknames for open bills - never saved to the backend. */
   readonly nicknames = inject(BillNicknames);
@@ -650,6 +654,7 @@ export class BarStaffSell implements OnInit, OnDestroy {
         this.setOrders(res.data.orders);
         this.billLines = {};
         this.bills.forEach((b) => this.loadLines(b));
+        this.loadJackPoint(res.data.staff?.staffCode);
         this.cdr.markForCheck();
         // No bill is opened for them: one left unused sat empty on the
         // Sales page. They open one with "Fungua bill" when a customer comes.
@@ -710,9 +715,46 @@ export class BarStaffSell implements OnInit, OnDestroy {
     });
   }
 
+  /** The staff member's Jack Point progress - quietly; nothing shows when there is no game. */
+  private loadJackPoint(code?: string): void {
+    this.jackGames = [];
+    this.jackWin = null;
+    if (!code) {
+      return;
+    }
+    this.barService.myJackPoint(code).subscribe({
+      next: (res) => {
+        this.jackGames = res?.data?.games ?? [];
+        // A recent win: waiting, or approved with days off still to come.
+        const today = localDate(new Date());
+        this.jackWin = (res?.data?.awards ?? []).find((a) => a.status === 'QUALIFIED'
+          || (a.status === 'APPROVED' && !!a.leaveFrom && a.leaveFrom >= today)) ?? null;
+        this.cdr.markForCheck();
+      },
+      error: () => {},
+    });
+  }
+
+  /** The last paid day off of an approved win. */
+  get jackWinTo(): string {
+    const w = this.jackWin;
+    if (!w?.leaveFrom || !w.leaveDays) {
+      return '';
+    }
+    const d = new Date(w.leaveFrom + 'T00:00:00');
+    d.setDate(d.getDate() + w.leaveDays - 1);
+    return localDate(d);
+  }
+
+  jackDots(g: JackPointProgress): boolean[] {
+    return Array.from({ length: g.weeks }, (_, i) => i < g.streak);
+  }
+
   private clearStaff(): void {
     this.stopPoll();
     this.staff = null;
+    this.jackGames = [];
+    this.jackWin = null;
     this.bills = [];
     this.orders = [];
     this.billLines = {};

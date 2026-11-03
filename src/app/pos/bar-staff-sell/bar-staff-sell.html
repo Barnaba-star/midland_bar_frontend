@@ -111,6 +111,32 @@
           </div>
         </div>
 
+        <!-- Jack Point: the waiters' game - how far they are this run. -->
+        @if (jackGames.length || jackWin) {
+          <div class="jack-strip">
+            <mat-icon class="jack-icon">emoji_events</mat-icon>
+            <div class="jack-games">
+              @if (jackWin) {
+                <strong class="jack-won">
+                  @if (jackWin.status === 'QUALIFIED') {
+                    {{ 'JACK_POINT.MY_WON' | translate }} · {{ jackWin.jackPointName }}
+                  } @else {
+                    {{ 'JACK_POINT.MY_APPROVED' | translate: { from: jackWin.leaveFrom, to: jackWinTo } }} · {{ jackWin.jackPointName }}
+                  }
+                </strong>
+              }
+              @for (g of jackGames; track g.jackPointUid) {
+                <div class="jack-game">
+                  <span class="jack-name">{{ g.name }}</span>
+                  <span class="jack-dots">@for (on of jackDots(g); track $index) { <i [class.on]="on"></i> }</span>
+                  <small>{{ 'JACK_POINT.MY_STREAK' | translate: { streak: g.streak, weeks: g.weeks } }}
+                    · {{ 'JACK_POINT.MY_WEEK' | translate: { got: (g.thisWeek | number), target: (g.weeklyTarget | number) } }}</small>
+                </div>
+              }
+            </div>
+          </div>
+        }
+
         @if (handoverSent) {
           <!-- Sent for handover: everything stays as it is until the cashier takes the money. -->
           <div class="handover-frozen">

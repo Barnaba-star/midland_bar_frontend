@@ -1,0 +1,133 @@
+.jp-title-icon {
+  vertical-align: -4px;
+  margin-right: 6px;
+  color: var(--color-accent, #f5a524);
+}
+
+.jp-section,
+.jp-game {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.jp-game {
+  padding: 14px;
+  border: 1px solid var(--color-border, #e8dcc8);
+  border-radius: 12px;
+}
+
+.jp-game.off {
+  opacity: 0.6;
+}
+
+.jp-game-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.jp-h {
+  margin: 0;
+  font-size: 17px;
+  color: var(--color-text, #1d1812);
+}
+
+.jp-off {
+  margin-left: 8px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--color-border, #e8dcc8);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.jp-reward {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 6px 0 0;
+}
+
+.jp-reward b {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-accent, #f5a524) 18%, transparent);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text, #1d1812);
+}
+
+.jp-win {
+  border-color: var(--color-accent, #f5a524);
+}
+
+.jp-star {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+  margin-right: 4px;
+  vertical-align: -3px;
+  color: var(--color-accent, #f5a524);
+}
+
+.jp-dots {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.jp-dots i {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border, #e8dcc8);
+  background: transparent;
+}
+
+.jp-dots i.on {
+  border-color: var(--color-accent, #f5a524);
+  background: var(--color-accent, #f5a524);
+}
+
+.jp-count {
+  display: inline-block;
+  font-size: 11px;
+  color: var(--color-text-muted, #7a6f60);
+}
+
+.jp-bar {
+  width: 100%;
+  max-width: 220px;
+  height: 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-border, #e8dcc8) 70%, transparent);
+  overflow: hidden;
+}
+
+.jp-bar span {
+  display: block;
+  height: 100%;
+  background: var(--color-accent, #f5a524);
+}
+
+.jp-bar.full span {
+  background: #16a34a;
+}
+
+.jp-status {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, #b91c1c 14%, transparent);
+  color: #b91c1c;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.jp-status.ok {
+  background: color-mix(in srgb, #16a34a 14%, transparent);
+  color: #15803d;
+}

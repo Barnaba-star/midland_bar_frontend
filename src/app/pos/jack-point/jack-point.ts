@@ -1,0 +1,163 @@
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+import { DatePipe, DecimalPipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { ServiceBarMethod } from '../service-bar-method';
+import { AlertService } from '../../Utils/services/alert';
+import { localDate } from '../../Utils/services/local-date';
+import { JackPoint, JackPointAward, JackPointProgress } from '../BarModel';
+
+/**
+ * Jack Point: the waiters' game (CEO, manager, accountant). A staff member
+ * whose commission reaches the weekly target for so many weeks in a row wins
+ * paid days off, a bonus and/or a written reward. The system finds the
+ * winners once each week is over; here they are approved or turned down.
+ */
+@Component({
+  selector: 'app-jack-point',
+  imports: [FormsModule, MatIconModule, TranslatePipe, DecimalPipe, DatePipe],
+  templateUrl: './jack-point.html',
+  styleUrls: ['../debts/debts.css', './jack-point.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class JackPointPage implements OnInit {
+  private barService = inject(ServiceBarMethod);
+  private cdr = inject(ChangeDetectorRef);
+  private alert = inject(AlertService);
+  private translate = inject(TranslateService);
+
+  games: { jackPoint: JackPoint; progress: JackPointProgress[] }[] = [];
+  awards: JackPointAward[] = [];
+  loading = true;
+  busy = false;
+  editing: JackPoint | null = null;
+  deleting: string | null = null;
+  /** The win being decided, and how. */
+  deciding: { uid: string; approve: boolean; leaveFrom: string; note: string } | null = null;
+
+  ngOnInit(): void {
+    this.load();
+  }
+
+  get waiting(): JackPointAward[] {
+    return this.awards.filter((a) => a.status === 'QUALIFIED');
+  }
+
+  get decided(): JackPointAward[] {
+    return this.awards.filter((a) => a.status !== 'QUALIFIED');
+  }
+
+  load(): void {
+    this.barService.jackPoints().subscribe({
+      next: (res) => {
+        this.games = res?.data?.jackPoints ?? [];
+        this.awards = res?.data?.awards ?? [];
+        this.loading = false;
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.loading = false;
+        this.cdr.markForCheck();
+      },
+    });
+  }
+
+  add(): void {
+    this.editing = { name: '', weeklyTarget: 50000, weeks: 4, startDate: localDate(new Date()), leaveDays: 1, bonusAmount: 0, rewardNote: '', enabled: true };
+  }
+
+  edit(jp: JackPoint): void {
+    this.editing = { ...jp };
+  }
+
+  save(): void {
+    if (!this.editing || this.busy) {
+      return;
+    }
+    this.busy = true;
+    this.barService.saveJackPoint(this.editing).subscribe({
+      next: (res) => {
+        this.busy = false;
+        if (res?.data) {
+          this.alert.show('success', this.translate.instant('JACK_POINT.SAVED'));
+          this.editing = null;
+          this.load();
+        } else if (res?.message) {
+          this.alert.show('error', res.message);
+        }
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.busy = false;
+        this.cdr.markForCheck();
+      },
+    });
+  }
+
+  remove(uid: string): void {
+    this.barService.deleteJackPoint(uid).subscribe(() => {
+      this.deleting = null;
+      this.load();
+    });
+  }
+
+  startDecision(a: JackPointAward, approve: boolean): void {
+    this.deciding = { uid: a.uid, approve, leaveFrom: localDate(new Date()), note: '' };
+  }
+
+  decide(a: JackPointAward): void {
+    const d = this.deciding;
+    if (!d || this.busy) {
+      return;
+    }
+    this.busy = true;
+    this.barService.decideJackPointAward(a.uid, {
+      approve: d.approve,
+      leaveFrom: d.approve && (a.leaveDays ?? 0) > 0 ? d.leaveFrom : null,
+      note: d.note.trim(),
+    }).subscribe({
+      next: (res) => {
+        this.busy = false;
+        if (res?.data) {
+          this.alert.show('success', this.translate.instant(d.approve ? 'JACK_POINT.APPROVED_MSG' : 'JACK_POINT.REJECTED_MSG', { name: a.staffName }));
+          this.deciding = null;
+          this.load();
+        } else if (res?.message) {
+          this.alert.show('error', res.message);
+        }
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.busy = false;
+        this.cdr.markForCheck();
+      },
+    });
+  }
+
+  /** The weeks of a run as dots: done ones lit. */
+  dots(p: JackPointProgress): boolean[] {
+    return Array.from({ length: p.weeks }, (_, i) => i < p.streak);
+  }
+
+  percent(p: JackPointProgress): number {
+    return Math.min(100, Math.round((p.thisWeek / Math.max(1, p.weeklyTarget)) * 100));
+  }
+
+  /** The last day off: first day + days - 1. */
+  leaveTo(a: JackPointAward): string | null {
+    if (!a.leaveFrom || !a.leaveDays) {
+      return null;
+    }
+    const d = new Date(a.leaveFrom + 'T00:00:00');
+    d.setDate(d.getDate() + a.leaveDays - 1);
+    return localDate(d);
+  }
+
+  /** Sunday of a run's last week. */
+  weekEnd(monday: string): string {
+    const d = new Date(monday + 'T00:00:00');
+    d.setDate(d.getDate() + 6);
+    return localDate(d);
+  }
+}

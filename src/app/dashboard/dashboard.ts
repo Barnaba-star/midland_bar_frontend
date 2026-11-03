@@ -43,7 +43,7 @@ cards = [
     // straight into one section of it.
     route: '/pos',
     glyph: 'point_of_sale',
-    roles: ['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'REG OFFICER', 'CEO', 'MANAGER', 'CASHIER']
+    roles: ['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'REG OFFICER', 'CEO', 'MANAGER', 'CASHIER', 'ACCOUNTANT']
   },
   {
     title: 'DASHBOARD.CARD_STAFF_SELL_TITLE',

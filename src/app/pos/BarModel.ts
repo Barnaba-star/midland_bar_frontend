@@ -454,3 +454,53 @@ export interface DebtReport {
   owedNow: number;
   lines: { uid: string; customerUid: string; customerName: string; kind: DebtEntry['kind']; amount: number; billCode?: string; method?: string; note?: string; by: string; at: string }[];
 }
+
+/** Jack Point: the waiters' game - commission over a weekly target for so many weeks in a row wins the reward. */
+export interface JackPoint {
+  uid?: string;
+  name: string;
+  weeklyTarget: number;
+  weeks: number;
+  /** yyyy-MM-dd; the backend moves it to that week's Monday. */
+  startDate: string;
+  leaveDays: number;
+  bonusAmount: number;
+  rewardNote?: string | null;
+  enabled: boolean;
+}
+
+/** Where one staff member stands on a game. */
+export interface JackPointProgress {
+  jackPointUid: string;
+  staffUid?: string;
+  staffName?: string;
+  name?: string;
+  /** Finished weeks in a row at or over the target. */
+  streak: number;
+  weeks: number;
+  weeklyTarget: number;
+  thisWeek: number;
+  started: boolean;
+  leaveDays?: number;
+  bonusAmount?: number;
+  rewardNote?: string | null;
+}
+
+/** A win: QUALIFIED (found, waiting), APPROVED or REJECTED. */
+export interface JackPointAward {
+  uid: string;
+  jackPointUid: string;
+  jackPointName: string;
+  staffUid: string;
+  staffName: string;
+  weekFrom: string;
+  weekTo: string;
+  commissionTotal: number;
+  status: 'QUALIFIED' | 'APPROVED' | 'REJECTED';
+  leaveDays?: number | null;
+  bonusAmount?: number | null;
+  rewardNote?: string | null;
+  leaveFrom?: string | null;
+  decisionNote?: string | null;
+  decidedByName?: string | null;
+}

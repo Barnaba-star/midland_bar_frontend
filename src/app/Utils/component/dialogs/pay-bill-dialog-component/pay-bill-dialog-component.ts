@@ -67,11 +67,16 @@ export class PayBillDialogComponent {
 
   constructor(
     /** method: start on this one (a bill noted "paid by phone"); note: that note, shown to check against. */
-    @Inject(MAT_DIALOG_DATA) public data: { code: string; total: number; lines: any[]; method?: string; note?: string },
+    @Inject(MAT_DIALOG_DATA) public data: { code: string; total: number; lines: any[]; method?: string; note?: string; customerUid?: string },
     private dialogRef: MatDialogRef<PayBillDialogComponent, PayBillResult>,
   ) {
-    const start = data.method && PAYMENT_METHODS.includes(data.method) ? data.method : 'cash';
+    const start = data.method && this.methods.includes(data.method) ? data.method : 'cash';
     this.rows = [{ method: start, amount: data.total, tendered: null }];
+    // Noted ofa / deni at Staff Sell: that customer is already chosen.
+    if (start === CREDIT_METHOD || start === OFFER_METHOD) {
+      this.rows[0].customerUid = data.customerUid;
+      this.loadCustomers();
+    }
   }
 
   get paid(): number {

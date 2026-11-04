@@ -1,6 +1,6 @@
 <div class="pn">
   <div class="pn-head">
-    <span class="pn-icon"><mat-icon>phone_iphone</mat-icon></span>
+    <span class="pn-icon"><mat-icon>payments</mat-icon></span>
     <div>
       <h3>{{ 'PAYMENT_NOTE.TITLE' | translate }}</h3>
       <p>{{ 'SALES_PAGE.BILL' | translate }} {{ data.bill.salesCode }}</p>
@@ -11,35 +11,78 @@
     <span>{{ 'PAYMENT_NOTE.METHOD' | translate }}</span>
     <div class="pn-methods" role="radiogroup">
       @for (m of methods; track m) {
-        <button type="button" class="pn-method" role="radio" [attr.aria-checked]="method === m" [class.on]="method === m" (click)="method = m">
+        <button type="button" class="pn-method" role="radio" [attr.aria-checked]="method === m" [class.on]="method === m" (click)="choose(m)">
           {{ 'PAY_BILL.METHOD_' + m | translate }}
         </button>
       }
     </div>
   </div>
 
-  <label class="pn-field">
-    <span>{{ 'PAYMENT_NOTE.PAYER' | translate }}</span>
-    <input type="text" maxlength="80" [(ngModel)]="payer" name="payer" autocomplete="off" [placeholder]="'PAYMENT_NOTE.PAYER_PH' | translate" />
-  </label>
+  @if (method === 'cash') {
+    <p class="pn-hint">{{ 'PAYMENT_NOTE.CASH_HINT' | translate }}</p>
+  }
 
-  <label class="pn-field">
-    <span>{{ 'PAYMENT_NOTE.REF' | translate }}</span>
-    <input type="text" maxlength="40" [(ngModel)]="reference" name="reference" autocomplete="off" [placeholder]="'PAYMENT_NOTE.REF_PH' | translate" />
-  </label>
+  @if (isPhoneMethod) {
+    <label class="pn-field">
+      <span>{{ 'PAYMENT_NOTE.PAYER' | translate }}</span>
+      <input type="text" maxlength="80" [(ngModel)]="payer" name="payer" autocomplete="off" [placeholder]="'PAYMENT_NOTE.PAYER_PH' | translate" />
+    </label>
 
-  <p class="pn-hint">{{ 'PAYMENT_NOTE.HINT' | translate }}</p>
+    <label class="pn-field">
+      <span>{{ 'PAYMENT_NOTE.REF' | translate }}</span>
+      <input type="text" maxlength="40" [(ngModel)]="reference" name="reference" autocomplete="off" [placeholder]="'PAYMENT_NOTE.REF_PH' | translate" />
+    </label>
+
+    <p class="pn-hint">{{ 'PAYMENT_NOTE.HINT' | translate }}</p>
+  }
+
+  @if (isCustomerMethod) {
+    <div class="pn-field">
+      <span>{{ (method === 'ofa' ? 'PAYMENT_NOTE.OFFER_CUSTOMERS' : 'PAYMENT_NOTE.CREDIT_CUSTOMERS') | translate }}</span>
+      @if ((customers[method]?.length ?? 0) > 6) {
+        <input type="search" [(ngModel)]="search" name="search" autocomplete="off" [placeholder]="'PAYMENT_NOTE.SEARCH' | translate" />
+      }
+      <div class="pn-customers">
+        @if (loadingCustomers) {
+          <p class="pn-empty">…</p>
+        } @else {
+          @for (c of shownCustomers; track c.uid) {
+            <button type="button" class="pn-customer" [class.on]="c.uid === customerUid" (click)="pick(c)">
+              <mat-icon>{{ c.uid === customerUid ? 'radio_button_checked' : 'radio_button_unchecked' }}</mat-icon>
+              <span class="pn-customer-name">{{ c.name }}</span>
+              <span class="pn-customer-left">{{ 'PAYMENT_NOTE.LEFT' | translate: { amount: (c.left | number) } }}</span>
+            </button>
+          } @empty {
+            <p class="pn-empty">{{ (method === 'ofa' ? 'PAYMENT_NOTE.NO_OFFER_CUSTOMERS' : 'PAYMENT_NOTE.NO_CREDIT_CUSTOMERS') | translate }}</p>
+          }
+        }
+      </div>
+    </div>
+
+    @if (chosen) {
+      <label class="pn-field">
+        <span>{{ 'PAYMENT_NOTE.CODE' | translate: { name: chosen.name } }}</span>
+        <input type="password" inputmode="numeric" maxlength="6" autocomplete="off" name="code" [ngModel]="code" (ngModelChange)="onCode($event)" [placeholder]="'PAYMENT_NOTE.CODE_PH' | translate" />
+      </label>
+      @if (overLeft) {
+        <p class="pn-warn">{{ 'PAYMENT_NOTE.OVER_LEFT' | translate: { left: (chosen.left | number), total: (data.total | number) } }}</p>
+      }
+    }
+    <p class="pn-hint">{{ 'PAYMENT_NOTE.CUSTOMER_HINT' | translate }}</p>
+  }
 
   <div class="pn-actions">
-    @if (hasNote) {
+    @if (hasNote && method !== 'cash') {
       <button type="button" class="pn-remove" [disabled]="saving" (click)="remove()">
         <mat-icon>delete_outline</mat-icon>{{ 'PAYMENT_NOTE.REMOVE' | translate }}
       </button>
     }
     <span class="pn-spacer"></span>
     <button type="button" class="pn-cancel" (click)="close()">{{ 'COMMON.CANCEL' | translate }}</button>
-    <button type="button" class="pn-save" [disabled]="!ready" (click)="save()">
-      <mat-icon>save</mat-icon>{{ 'PAYMENT_NOTE.SAVE' | translate }}
-    </button>
+    @if (method !== 'cash' || hasNote) {
+      <button type="button" class="pn-save" [disabled]="!ready" (click)="save()">
+        <mat-icon>save</mat-icon>{{ 'PAYMENT_NOTE.SAVE' | translate }}
+      </button>
+    }
   </div>
 </div>

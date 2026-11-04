@@ -638,6 +638,7 @@ openSaleDetailsDialogForMore(sale: SalesOpened) {
             lines,
             // Noted "paid by phone" at Staff Sell: start on that method, and show the note to check.
             method: sale.paymentNoteMethod || undefined,
+            customerUid: sale.paymentNoteCustomerUid || undefined,
             note: sale.paymentNoteMethod
               ? `${this.translate.instant('PAY_BILL.METHOD_' + sale.paymentNoteMethod)} · ${sale.paymentNotePayer}${sale.paymentNoteRef ? ' · ' + sale.paymentNoteRef : ''}`
               : undefined,
@@ -672,18 +673,24 @@ openSaleDetailsDialogForMore(sale: SalesOpened) {
     });
   }
 
-  /** "Paid by phone, from this name" - noted on the bill for the cashier; marks nothing paid. */
+  /** The icon of a bill's payment note: phone, gift (ofa) or credit (deni). */
+  noteIcon(method?: string | null): string {
+    return method === 'ofa' ? 'redeem' : method === 'deni' ? 'account_balance_wallet' : method === 'bank' ? 'account_balance' : 'phone_iphone';
+  }
+
+  /** How the bill is paid - noted on the bill for the cashier; marks nothing paid. */
   openPaymentNote(bill: SalesOpened): void {
     this.dialog.open(PaymentNoteDialog, {
       width: '440px',
       maxWidth: '95vw',
       autoFocus: false,
-      data: { bill },
+      data: { bill, total: bill.bill ?? undefined },
     }).afterClosed().subscribe((updated?: SalesOpened) => {
       if (updated) {
         bill.paymentNoteMethod = updated.paymentNoteMethod ?? null;
         bill.paymentNotePayer = updated.paymentNotePayer ?? null;
         bill.paymentNoteRef = updated.paymentNoteRef ?? null;
+        bill.paymentNoteCustomerUid = updated.paymentNoteCustomerUid ?? null;
         this.cdr.markForCheck();
       }
     });

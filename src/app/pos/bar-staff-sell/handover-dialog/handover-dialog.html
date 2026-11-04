@@ -37,7 +37,7 @@
           @for (g of groups; track g.method) {
             <div class="ho-group" [class.open]="expanded.has(g.method)" [class.phone]="g.method !== 'cash'">
               <button type="button" class="ho-group-head" (click)="toggle(g.method)" [attr.aria-expanded]="expanded.has(g.method)">
-                <mat-icon>{{ g.method === 'cash' ? 'payments' : 'phone_iphone' }}</mat-icon>
+                <mat-icon>{{ g.method === 'cash' ? 'payments' : g.method === 'ofa' ? 'redeem' : g.method === 'deni' ? 'account_balance_wallet' : 'phone_iphone' }}</mat-icon>
                 <span class="ho-group-name">{{ label(g.method) | translate }} <small>({{ g.bills.length }})</small></span>
                 <b>{{ g.amount | number }}</b>
                 <mat-icon class="ho-caret">{{ expanded.has(g.method) ? 'expand_less' : 'expand_more' }}</mat-icon>
@@ -87,10 +87,13 @@
                     </span>
                   } @else {
                     <span class="ho-confirm">
-                      <button type="button" class="ho-receive ho-short-btn" [disabled]="!!receiving || !fromServer" (click)="startShort(g.method)">
-                        <mat-icon>report</mat-icon>
-                        {{ 'STAFF_HANDOVER.SHORTAGE' | translate }}
-                      </button>
+                      <!-- Ofa / deni bring no money in, so nothing can be short. -->
+                      @if (g.method !== 'ofa' && g.method !== 'deni') {
+                        <button type="button" class="ho-receive ho-short-btn" [disabled]="!!receiving || !fromServer" (click)="startShort(g.method)">
+                          <mat-icon>report</mat-icon>
+                          {{ 'STAFF_HANDOVER.SHORTAGE' | translate }}
+                        </button>
+                      }
                       <button type="button" class="ho-receive" [disabled]="!!receiving || !fromServer" (click)="confirming = g.method">
                         <mat-icon>done_all</mat-icon>
                         {{ (receiving === g.method ? 'COMMON.LOADING' : 'STAFF_HANDOVER.RECEIVED') | translate }}

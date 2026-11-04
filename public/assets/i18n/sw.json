@@ -2584,9 +2584,9 @@
     "ITEM_NOT_CACHED": "Bei ya bidhaa hii bado haipo kwenye kifaa - fungua orodha ya bidhaa ukiwa online."
   },
   "PAYMENT_NOTE": {
-    "TITLE": "Amelipa kwa simu",
-    "ADD": "Amelipa kwa simu? Andika jina",
-    "METHOD": "Amelipa kwa njia gani",
+    "TITLE": "Njia ya malipo",
+    "ADD": "Njia ya malipo: Taslimu",
+    "METHOD": "Atalipa kwa njia gani",
     "PAYER": "Jina lililolipa",
     "PAYER_PH": "Kama linavyoonekana kwenye ujumbe wa M-Pesa / Tigo Pesa",
     "REF": "Namba ya muamala (si lazima)",
@@ -2596,7 +2596,19 @@
     "REMOVE": "Ondoa",
     "SAVED": "Imeandikwa kwenye bili {{code}}.",
     "REMOVED": "Maelezo yameondolewa kwenye bili {{code}}.",
-    "CHECK": "Imeandikwa imelipwa: {{note}} - hakikisha pesa imeingia."
+    "CHECK": "Imeandikwa imelipwa: {{note}} - hakikisha pesa imeingia.",
+    "CASH_HINT": "Taslimu ndiyo kawaida - hakuna cha kuandika. Mhudumu anakabidhi pesa kwa cashier.",
+    "OFFER_CUSTOMERS": "Wateja wenye ofa mwezi huu",
+    "CREDIT_CUSTOMERS": "Wateja wa madeni wenye nafasi",
+    "SEARCH": "Tafuta jina",
+    "LEFT": "Imebaki {{amount}}",
+    "NO_OFFER_CUSTOMERS": "Hakuna mteja mwenye ofa iliyobaki mwezi huu.",
+    "NO_CREDIT_CUSTOMERS": "Hakuna mteja wa madeni mwenye nafasi ya kukopa.",
+    "CODE": "Code ya {{name}} (muulize mteja)",
+    "CODE_PH": "Tarakimu 4",
+    "OVER_LEFT": "Bili ({{total}}) imezidi kilichobaki ({{left}}).",
+    "CUSTOMER_HINT": "Mteja anakupa code yake; ikilingana ndipo bili inaandikwa kwake. Cashier anaipokea wakati wa makabidhiano.",
+    "WRONG_CODE": "Code hiyo si ya mteja huyu - muulize tena."
   },
   "PHONE_PAYMENTS": {
     "TITLE": "Malipo ya Simu",
@@ -2821,7 +2833,8 @@
     "MONTHLY_OFFER": "Ofa kwa mwezi (bure, Tshs)",
     "OFFERS_GIVEN": "Ofa alizopewa",
     "KIND_OFFER": "Ofa",
-    "TAB_DEBTS": "Madeni"
+    "TAB_DEBTS": "Madeni",
+    "CODE": "Code"
   },
   "REFUND": {
     "BTN": "Rudisha pesa",

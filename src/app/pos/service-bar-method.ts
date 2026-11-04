@@ -587,8 +587,13 @@ findPaymentNotes(from: string, to: string): Observable<ResponseList<PaymentNoteR
 }
 
 /** "Paid by phone, from this name" on an unpaid bill; an empty method clears it. */
-savePaymentNote(billUid: string, body: { method: string; payerName: string; reference: string }): Observable<Response<SalesOpened>> {
+savePaymentNote(billUid: string, body: { method: string; payerName?: string; reference?: string; customerUid?: string; customerCode?: string }): Observable<Response<SalesOpened>> {
   return this.http.post<Response<SalesOpened>>(`${this.barURL}/bills/${billUid}/paymentNote`, body);
+}
+
+/** Madeni customers a bill can be noted to as ofa / deni: names and what is left. */
+noteCustomers(method: string): Observable<ResponseList<{ uid: string; name: string; left: number }>> {
+  return this.http.get<ResponseList<{ uid: string; name: string; left: number }>>(`${this.barURL}/bills/noteCustomers`, { params: { method } });
 }
 
 findBillReceipt(billUid: string): Observable<Response<any>> {

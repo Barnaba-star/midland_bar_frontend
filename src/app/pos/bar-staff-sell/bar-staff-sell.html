@@ -240,7 +240,7 @@
                         <span class="flag rejected" [attr.title]="'STAFF_SELL_PAGE.ORDER_REJECTED' | translate"><mat-icon>block</mat-icon></span>
                       }
                       @if (b.paymentNoteMethod) {
-                        <span class="flag phone"><mat-icon>phone_iphone</mat-icon></span>
+                        <span class="flag phone"><mat-icon>{{ noteIcon(b.paymentNoteMethod) }}</mat-icon></span>
                       }
                     </span>
                     <span class="picker-amount">{{ (b.bill || 0) | number }}</span>
@@ -284,17 +284,18 @@
                          [attr.aria-label]="'BILL_NICKNAME.LABEL' | translate" />
                 </label>
 
-                <!-- Paid by phone: how and from whose name, for the cashier to check at handover. -->
+                <!-- How the bill is paid: cash by default; phone (name), ofa or deni (Madeni customer + code). -->
                 @if (bill.paymentNoteMethod) {
                   <button type="button" class="pay-note on" [disabled]="handoverSent" (click)="openPaymentNote(bill)">
-                    <mat-icon>phone_iphone</mat-icon>
+                    <mat-icon>{{ noteIcon(bill.paymentNoteMethod) }}</mat-icon>
                     <span class="pay-note-text"><b>{{ 'PAY_BILL.METHOD_' + bill.paymentNoteMethod | translate }}</b> · {{ bill.paymentNotePayer }}@if (bill.paymentNoteRef) { · {{ bill.paymentNoteRef }} }</span>
                     <mat-icon class="pay-note-edit">edit</mat-icon>
                   </button>
                 } @else {
                   <button type="button" class="pay-note" [disabled]="handoverSent" (click)="openPaymentNote(bill)">
-                    <mat-icon>phone_iphone</mat-icon>
+                    <mat-icon>payments</mat-icon>
                     <span class="pay-note-text">{{ 'PAYMENT_NOTE.ADD' | translate }}</span>
+                    <mat-icon class="pay-note-edit">edit</mat-icon>
                   </button>
                 }
 

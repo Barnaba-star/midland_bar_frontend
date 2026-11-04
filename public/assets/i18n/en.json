@@ -2584,9 +2584,9 @@
     "ITEM_NOT_CACHED": "That item's price is not on this device yet - open the item list once online."
   },
   "PAYMENT_NOTE": {
-    "TITLE": "Paid by phone",
-    "ADD": "Paid by phone? Note the name",
-    "METHOD": "How they paid",
+    "TITLE": "Payment method",
+    "ADD": "Payment method: Cash",
+    "METHOD": "How will they pay",
     "PAYER": "Name the money came from",
     "PAYER_PH": "As it shows on the M-Pesa / Tigo Pesa message",
     "REF": "Transaction reference (optional)",
@@ -2596,7 +2596,19 @@
     "REMOVE": "Remove",
     "SAVED": "Noted on bill {{code}}.",
     "REMOVED": "Note removed from bill {{code}}.",
-    "CHECK": "Noted as paid: {{note}} - check it came in."
+    "CHECK": "Noted as paid: {{note}} - check it came in.",
+    "CASH_HINT": "Cash is the default - nothing to note. The waiter hands the cash to the cashier.",
+    "OFFER_CUSTOMERS": "Customers with an offer this month",
+    "CREDIT_CUSTOMERS": "Credit customers with room left",
+    "SEARCH": "Search name",
+    "LEFT": "{{amount}} left",
+    "NO_OFFER_CUSTOMERS": "No customer has offer left this month.",
+    "NO_CREDIT_CUSTOMERS": "No credit customer has room left.",
+    "CODE": "{{name}}'s code (ask the customer)",
+    "CODE_PH": "4 digits",
+    "OVER_LEFT": "The bill ({{total}}) is more than what is left ({{left}}).",
+    "CUSTOMER_HINT": "The customer gives you their code; only if it matches is the bill noted to them. The cashier takes it at handover.",
+    "WRONG_CODE": "That code is not this customer's - ask again."
   },
   "PHONE_PAYMENTS": {
     "TITLE": "Phone payments",
@@ -2821,7 +2833,8 @@
     "MONTHLY_OFFER": "Monthly offer (free, Tshs)",
     "OFFERS_GIVEN": "Offers given",
     "KIND_OFFER": "Offer",
-    "TAB_DEBTS": "Debts"
+    "TAB_DEBTS": "Debts",
+    "CODE": "Code"
   },
   "REFUND": {
     "BTN": "Give money back",

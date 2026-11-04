@@ -94,7 +94,7 @@
           <div class="db-row" [class.open]="openUid === c.uid">
             <div class="db-who">
               <strong>{{ c.name }}</strong>
-              <span>{{ phone(c.phone) }}@if (c.note) { · {{ c.note }} }</span>
+              <span>{{ phone(c.phone) }}@if (c.customerCode) { · {{ 'DEBTS.CODE' | translate }} {{ c.customerCode }} }@if (c.note) { · {{ c.note }} }</span>
             </div>
             <div class="db-fig">
               <small>{{ 'DEBTS.OWES' | translate }}</small>

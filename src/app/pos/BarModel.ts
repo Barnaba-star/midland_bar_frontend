@@ -207,6 +207,8 @@ export interface SalesOpened{
     paymentNoteMethod?: string | null;
     paymentNotePayer?: string | null;
     paymentNoteRef?: string | null;
+    /** Ofa / deni note: the Madeni customer (their name is in paymentNotePayer). */
+    paymentNoteCustomerUid?: string | null;
     paymentMethod?: string;
     paidAmount?:number;
     paymentStatus?:string;
@@ -419,6 +421,8 @@ export interface DebtCustomer {
   uid: string;
   name: string;
   phone: string;
+  /** The number the customer gives a waiter to note an ofa / deni bill for them. */
+  customerCode?: string | null;
   note?: string | null;
   /** The most they may owe; 0 = not set yet, so nothing goes on credit. */
   creditLimit: number;

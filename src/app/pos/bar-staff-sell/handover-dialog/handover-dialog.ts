@@ -9,7 +9,7 @@ import { ServiceBarMethod } from '../../service-bar-method';
 import { SalesOpened, StaffHandover } from '../../BarModel';
 
 /** Methods the bill dialogs know a label for; anything else shows as typed. */
-const KNOWN_METHODS = ['cash', 'mpesa', 'tigopesa', 'airtelmoney', 'halopesa', 'bank'];
+const KNOWN_METHODS = ['cash', 'mpesa', 'tigopesa', 'airtelmoney', 'halopesa', 'bank', 'ofa', 'deni'];
 
 /**
  * Handover summary: how much of the staff member's unpaid bills is cash

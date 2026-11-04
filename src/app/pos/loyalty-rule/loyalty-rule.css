@@ -1,0 +1,79 @@
+.lr {
+  margin-bottom: 14px;
+  padding: 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  background: var(--color-surface);
+}
+
+.lr-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.lr-head > mat-icon {
+  color: var(--color-accent);
+}
+
+.lr-title {
+  flex: 1;
+  min-width: 0;
+}
+
+.lr-title h4 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.lr-title p {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.lr-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.lr-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.lr-form small {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.lr-form input[type='number'] {
+  padding: 9px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+}
+
+.lr-check {
+  flex-direction: row !important;
+  align-items: center;
+  grid-column: 1 / -1;
+}
+
+.lr-hint {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.lr-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 10px;
+}

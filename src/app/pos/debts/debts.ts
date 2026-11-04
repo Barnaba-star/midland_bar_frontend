@@ -7,6 +7,7 @@ import { ServiceBarMethod } from '../service-bar-method';
 import { DebtCustomer, DebtEntry, DebtReport } from '../BarModel';
 import { Authentication } from '../../Utils/services/authentication';
 import { Offers } from '../offers/offers';
+import { LoyaltyRuleCard } from '../loyalty-rule/loyalty-rule';
 import { PAYMENT_METHODS } from '../../Utils/component/dialogs/pay-bill-dialog-component/pay-bill-dialog-component';
 
 type Panel = 'PAY' | 'HISTORY' | 'EDIT';
@@ -20,7 +21,7 @@ type Panel = 'PAY' | 'HISTORY' | 'EDIT';
  */
 @Component({
   selector: 'app-debts',
-  imports: [FormsModule, MatIconModule, DecimalPipe, DatePipe, NgTemplateOutlet, TranslatePipe, Offers],
+  imports: [FormsModule, MatIconModule, DecimalPipe, DatePipe, NgTemplateOutlet, TranslatePipe, Offers, LoyaltyRuleCard],
   templateUrl: './debts.html',
   styleUrl: './debts.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -34,6 +35,7 @@ export class Debts implements OnInit {
   readonly canSetLimit = this.auth.hasPermission('MANAGE_DEBT');
   readonly canWriteOff = this.auth.hasPermission('WRITE_OFF_DEBT');
   readonly canTakePayment = this.auth.hasPermission('SAVE_SALES');
+  readonly canLoyalty = this.auth.hasPermission('MANAGE_LOYALTY');
   /** Ofa / Happy hour sits on this page as a second tab (owner, 2026-10-22): CEO, manager and root. */
   readonly canOffers = ['ROOT', 'CEO', 'MANAGER'].some((r) => this.auth.hasRole(r));
   tab: 'DEBTS' | 'OFFERS' = 'DEBTS';
@@ -243,6 +245,18 @@ export class Debts implements OnInit {
       error: () => {
         this.busy = false;
         this.cdr.markForCheck();
+      },
+    });
+  }
+
+  /** A customer forgot their PIN: clear it - they set a new one at the till next time. */
+  resetPin(c: DebtCustomer): void {
+    this.barService.resetCustomerPin(c.uid).subscribe({
+      next: (res) => {
+        if (res?.data) {
+          c.hasPin = false;
+          this.cdr.markForCheck();
+        }
       },
     });
   }

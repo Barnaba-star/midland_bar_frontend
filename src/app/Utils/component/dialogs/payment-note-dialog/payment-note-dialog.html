@@ -37,38 +37,38 @@
   }
 
   @if (isCustomerMethod) {
-    <div class="pn-field">
-      <span>{{ (method === 'ofa' ? 'PAYMENT_NOTE.OFFER_CUSTOMERS' : 'PAYMENT_NOTE.CREDIT_CUSTOMERS') | translate }}</span>
-      @if ((customers[method]?.length ?? 0) > 6) {
-        <input type="search" [(ngModel)]="search" name="search" autocomplete="off" [placeholder]="'PAYMENT_NOTE.SEARCH' | translate" />
-      }
-      <div class="pn-customers">
-        @if (loadingCustomers) {
-          <p class="pn-empty">…</p>
-        } @else {
-          @for (c of shownCustomers; track c.uid) {
-            <button type="button" class="pn-customer" [class.on]="c.uid === customerUid" (click)="pick(c)">
-              <mat-icon>{{ c.uid === customerUid ? 'radio_button_checked' : 'radio_button_unchecked' }}</mat-icon>
-              <span class="pn-customer-name">{{ c.name }}</span>
-              <span class="pn-customer-left">{{ 'PAYMENT_NOTE.LEFT' | translate: { amount: (c.left | number) } }}</span>
-            </button>
-          } @empty {
-            <p class="pn-empty">{{ (method === 'ofa' ? 'PAYMENT_NOTE.NO_OFFER_CUSTOMERS' : 'PAYMENT_NOTE.NO_CREDIT_CUSTOMERS') | translate }}</p>
-          }
-        }
+    @if (onBill) {
+      <div class="pn-onbill">
+        <mat-icon>verified_user</mat-icon>
+        <span><b>{{ onBill }}</b>@if (left !== null) { · {{ 'PAYMENT_NOTE.LEFT' | translate: { amount: (left | number) } }} }</span>
       </div>
-    </div>
-
-    @if (chosen) {
-      <label class="pn-field">
-        <span>{{ 'PAYMENT_NOTE.CODE' | translate: { name: chosen.name } }}</span>
-        <input type="password" inputmode="numeric" maxlength="6" autocomplete="off" name="code" [ngModel]="code" (ngModelChange)="onCode($event)" [placeholder]="'PAYMENT_NOTE.CODE_PH' | translate" />
-      </label>
       @if (overLeft) {
-        <p class="pn-warn">{{ 'PAYMENT_NOTE.OVER_LEFT' | translate: { left: (chosen.left | number), total: (data.total | number) } }}</p>
+        <p class="pn-warn">{{ 'PAYMENT_NOTE.OVER_LEFT' | translate: { left: (left | number), total: (data.total | number) } }}</p>
       }
+    } @else {
+      <p class="pn-hint">{{ 'PAYMENT_NOTE.CUSTOMER_HINT' | translate }}</p>
+      <app-customer-pin [billUid]="data.bill.uid!" (found)="found($event)" />
     }
-    <p class="pn-hint">{{ 'PAYMENT_NOTE.CUSTOMER_HINT' | translate }}</p>
+  }
+
+  <!-- Big bill: does the customer have a code? It counts towards their reward. -->
+  @if (asksForCode && !noCode) {
+    <div class="pn-loyalty">
+      @if (!askPin) {
+        <p><mat-icon>card_giftcard</mat-icon>{{ 'CUSTOMER_PIN.ASK' | translate: { amount: (rule!.minBill | number) } }}</p>
+        <div class="pn-loyalty-row">
+          <button type="button" class="pn-cancel" (click)="noCode = true">{{ 'CUSTOMER_PIN.NO' | translate }}</button>
+          <button type="button" class="pn-save" (click)="askPin = true">{{ 'CUSTOMER_PIN.YES' | translate }}</button>
+        </div>
+      } @else {
+        <app-customer-pin [billUid]="data.bill.uid!" (found)="found($event)" />
+      }
+    </div>
+  } @else if (onBill && !isCustomerMethod) {
+    <div class="pn-onbill">
+      <mat-icon>verified_user</mat-icon>
+      <span>{{ 'CUSTOMER_PIN.ON_BILL' | translate: { name: onBill } }}</span>
+    </div>
   }
 
   <div class="pn-actions">

@@ -1,0 +1,89 @@
+.cp {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cp-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.cp-field input {
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 16px;
+}
+
+.cp-field input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.cp-title {
+  margin: 0;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.cp-hint {
+  margin: 0;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.cp-error {
+  margin: 0;
+  font-size: 13px;
+  color: #c0392b;
+}
+
+.cp-row {
+  display: flex;
+  gap: 8px;
+}
+
+.cp-go,
+.cp-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 42px;
+  padding: 0 14px;
+  border-radius: 10px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cp-go {
+  flex: 1;
+  border: none;
+  background: var(--color-accent);
+  color: var(--color-on-accent, #fff);
+}
+
+.cp-go:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.cp-back {
+  border: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text);
+}
+
+.cp-go mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}

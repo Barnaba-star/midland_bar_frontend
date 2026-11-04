@@ -209,6 +209,9 @@ export interface SalesOpened{
     paymentNoteRef?: string | null;
     /** Ofa / deni note: the Madeni customer (their name is in paymentNotePayer). */
     paymentNoteCustomerUid?: string | null;
+    /** The customer who typed their phone + PIN on this bill (it counts towards their reward). */
+    loyaltyCustomerUid?: string | null;
+    loyaltyCustomerName?: string | null;
     paymentMethod?: string;
     paidAmount?:number;
     paymentStatus?:string;
@@ -421,8 +424,10 @@ export interface DebtCustomer {
   uid: string;
   name: string;
   phone: string;
-  /** The number the customer gives a waiter to note an ofa / deni bill for them. */
-  customerCode?: string | null;
+  /** The customer set their own PIN (for ofa, deni and loyalty at the till). */
+  hasPin?: boolean;
+  /** Ofa earned by loyalty and not yet used. */
+  rewardLeft?: number;
   note?: string | null;
   /** The most they may owe; 0 = not set yet, so nothing goes on credit. */
   creditLimit: number;
@@ -507,4 +512,23 @@ export interface JackPointAward {
   leaveFrom?: string | null;
   decisionNote?: string | null;
   decidedByName?: string | null;
+}
+
+/** The branch's loyalty rule: bills of at least minBill, billsNeeded of them within periodDays, earn rewardAmount as ofa. */
+export interface LoyaltyRule {
+  enabled: boolean;
+  minBill: number;
+  billsNeeded: number;
+  periodDays: number;
+  rewardAmount: number;
+  setAt?: string | null;
+}
+
+/** A customer once they typed their phone + PIN: no phone, no PIN. */
+export interface LoyaltyCard {
+  uid: string;
+  name: string;
+  offerLeft: number;
+  creditLeft: number;
+  loyalty: { enabled: boolean; visits: number; needed: number; rewardLeft: number };
 }

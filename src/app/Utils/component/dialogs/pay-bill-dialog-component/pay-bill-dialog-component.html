@@ -18,6 +18,26 @@
     </div>
   }
 
+  <!-- Big bill: does the customer have a code? It counts towards their reward. -->
+  @if (asksForCode && !noCode) {
+    <div class="pay-loyalty">
+      @if (!askPin) {
+        <p><mat-icon>card_giftcard</mat-icon>{{ 'CUSTOMER_PIN.ASK' | translate: { amount: (rule!.minBill | number) } }}</p>
+        <div class="pay-loyalty-row">
+          <button type="button" class="pay-loyalty-no" (click)="noCode = true">{{ 'CUSTOMER_PIN.NO' | translate }}</button>
+          <button type="button" class="pay-loyalty-yes" (click)="askPin = true">{{ 'CUSTOMER_PIN.YES' | translate }}</button>
+        </div>
+      } @else {
+        <app-customer-pin [billUid]="data.billUid!" (found)="found($event)" />
+      }
+    </div>
+  } @else if (onBill) {
+    <div class="pay-note-check">
+      <mat-icon>verified_user</mat-icon>
+      <span>{{ 'CUSTOMER_PIN.ON_BILL' | translate: { name: onBill } }}</span>
+    </div>
+  }
+
   <!-- What is on the bill -->
   <div class="pay-lines">
     @for (l of data.lines; track $index) {
@@ -95,23 +115,16 @@
           </div>
         }
         @if (row.method === offer) {
-          <!-- Ofa: given free out of the customer's monthly offer -->
+          <!-- Ofa: only for the customer who typed their phone + PIN on this bill -->
           <div class="pay-credit">
-            @if (customers === null) {
-              <small>…</small>
-            } @else {
-              <select [(ngModel)]="row.customerUid">
-                <option [ngValue]="undefined">{{ 'PAY_BILL.OFFER_PICK' | translate }}</option>
-                @for (c of offerCustomers; track c.uid) {
-                  <option [ngValue]="c.uid">{{ c.name }} · {{ 'PAY_BILL.OFFER_LEFT' | translate: { amount: (c.offerLeft | number) } }}</option>
-                }
-              </select>
-              @let p = customerOf(row);
-              @if (!offerCustomers.length) {
-                <small class="pay-credit-bad">{{ 'PAY_BILL.OFFER_NONE' | translate }}</small>
-              } @else if (p && (row.amount ?? 0) > (p.offerLeft ?? 0)) {
-                <small class="pay-credit-bad">{{ 'PAY_BILL.OFFER_OVER' | translate: { name: p.name, amount: (p.offerLeft | number) } }}</small>
+            @if (onBill && row.customerUid === onBillUid) {
+              <small><mat-icon class="pay-ok-icon">verified_user</mat-icon> {{ onBill }} · {{ 'PAY_BILL.OFFER_LEFT' | translate: { amount: (offerLeftOf(row) | number) } }}</small>
+              @if ((row.amount ?? 0) > offerLeftOf(row)) {
+                <small class="pay-credit-bad">{{ 'PAY_BILL.OFFER_OVER' | translate: { name: onBill, amount: (offerLeftOf(row) | number) } }}</small>
               }
+            } @else if (data.billUid) {
+              <small>{{ 'CUSTOMER_PIN.OFFER_ASK' | translate }}</small>
+              <app-customer-pin [billUid]="data.billUid" (found)="found($event)" />
             }
           </div>
         }

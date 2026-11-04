@@ -7,7 +7,8 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { Authentication } from '../../../services/authentication';
 import { OfflineService } from '../../../offline/offline.service';
 import { ServiceBarMethod } from '../../../../pos/service-bar-method';
-import { DebtCustomer } from '../../../../pos/BarModel';
+import { DebtCustomer, LoyaltyCard, LoyaltyRule } from '../../../../pos/BarModel';
+import { CustomerPin } from '../../customer-pin/customer-pin';
 
 /** The ways a bill can be paid - the same set the backend accepts. */
 export const PAYMENT_METHODS = ['cash', 'mpesa', 'tigopesa', 'airtelmoney', 'halopesa', 'bank'];
@@ -38,7 +39,7 @@ export interface PayBillResult {
  */
 @Component({
   selector: 'app-pay-bill-dialog-component',
-  imports: [FormsModule, MatIconModule, DecimalPipe, TranslatePipe],
+  imports: [FormsModule, MatIconModule, DecimalPipe, TranslatePipe, CustomerPin],
   templateUrl: './pay-bill-dialog-component.html',
   styleUrl: './pay-bill-dialog-component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -58,6 +59,37 @@ export class PayBillDialogComponent {
   rows: PaymentRow[];
   error = '';
 
+  rule: LoyaltyRule | null = null;
+  /** The customer who typed their PIN on this bill here - ofa is only for them. */
+  card: LoyaltyCard | null = null;
+  askPin = false;
+  noCode = false;
+
+  get onBill(): string | null {
+    return this.card?.name ?? this.data.loyaltyCustomerName ?? null;
+  }
+
+  get onBillUid(): string | null {
+    return this.card?.uid ?? this.data.loyaltyCustomerUid ?? null;
+  }
+
+  /** Big enough to count for a customer, and no one is on the bill yet. */
+  get asksForCode(): boolean {
+    const r = this.rule;
+    return !!r && r.enabled && !!this.data.billUid && this.data.total >= r.minBill && !this.onBill;
+  }
+
+  found(card: LoyaltyCard): void {
+    this.card = card;
+    this.askPin = false;
+    for (const r of this.rows) {
+      if (r.method === OFFER_METHOD) {
+        r.customerUid = card.uid;
+      }
+    }
+    this.cdr.markForCheck();
+  }
+
   /** Credit customers, fetched the first time a row turns to Deni. */
   customers: DebtCustomer[] | null = null;
   customerSearch = '';
@@ -67,9 +99,20 @@ export class PayBillDialogComponent {
 
   constructor(
     /** method: start on this one (a bill noted "paid by phone"); note: that note, shown to check against. */
-    @Inject(MAT_DIALOG_DATA) public data: { code: string; total: number; lines: any[]; method?: string; note?: string; customerUid?: string },
+    @Inject(MAT_DIALOG_DATA) public data: {
+      code: string; total: number; lines: any[]; method?: string; note?: string; customerUid?: string;
+      /** The bill, so a customer can type their PIN on it; who already did. */
+      billUid?: string; loyaltyCustomerUid?: string | null; loyaltyCustomerName?: string | null;
+    },
     private dialogRef: MatDialogRef<PayBillDialogComponent, PayBillResult>,
   ) {
+    this.barService.loyaltyRule().subscribe({
+      next: (res) => {
+        this.rule = res?.data ?? null;
+        this.cdr.markForCheck();
+      },
+      error: () => {},
+    });
     const start = data.method && this.methods.includes(data.method) ? data.method : 'cash';
     this.rows = [{ method: start, amount: data.total, tendered: null }];
     // Noted ofa / deni at Staff Sell: that customer is already chosen.
@@ -125,6 +168,10 @@ export class PayBillDialogComponent {
       row.customerUid = undefined;
       return;
     }
+    // Ofa: only the customer who typed their PIN on this bill.
+    if (row.method === OFFER_METHOD) {
+      row.customerUid = this.onBillUid ?? undefined;
+    }
     if (this.customers === null) {
       this.loadCustomers();
     }
@@ -162,8 +209,16 @@ export class PayBillDialogComponent {
 
   /** The customer is chosen and the part fits in what is left of their offer this month. */
   offerOk(row: PaymentRow): boolean {
-    const c = this.customerOf(row);
-    return !!c && (c.offerLeft ?? 0) > 0 && (Number(row.amount) || 0) <= (c.offerLeft ?? 0);
+    const left = this.offerLeftOf(row);
+    return !!row.customerUid && row.customerUid === this.onBillUid && left > 0 && (Number(row.amount) || 0) <= left;
+  }
+
+  /** What the customer on the bill has left of their offer (the card when known here, else Madeni's list). */
+  offerLeftOf(row: PaymentRow): number {
+    if (this.card && this.card.uid === row.customerUid) {
+      return this.card.offerLeft;
+    }
+    return this.customerOf(row)?.offerLeft ?? 0;
   }
 
   /** Customers with an offer, for an ofa row. */

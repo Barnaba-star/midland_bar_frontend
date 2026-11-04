@@ -264,3 +264,57 @@
 .pay-credit-new input {
   flex: 1 1 140px;
 }
+
+.pay-loyalty {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 10px 0;
+  padding: 12px;
+  border: 1px dashed var(--color-accent);
+  border-radius: 12px;
+}
+
+.pay-loyalty p {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-weight: 600;
+}
+
+.pay-loyalty-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.pay-loyalty-no,
+.pay-loyalty-yes {
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: 10px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pay-loyalty-no {
+  border: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text);
+}
+
+.pay-loyalty-yes {
+  border: none;
+  background: var(--color-accent);
+  color: var(--color-on-accent, #fff);
+}
+
+.pay-ok-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  color: #0f766e;
+}

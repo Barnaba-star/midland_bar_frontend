@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../Utils/enviroments/environment';
-import { CommissionDTO, PayStockAndPurchaseDTO, SaleOpenedDTO, BarBookingDTO, BarSalesDTO, BarServiceDTO, BarStaffDTO, SpendDTO, StaffCommissionDTO, StoreDTO, StockReceiptDTO, SalesOpened, StaffSellStaff, StaffSalesRow, StaffColleague, JackPoint, JackPointAward, JackPointProgress, StaffOrder, PaymentNoteRow, StaffHandover, DebtCustomer, DebtEntry, DebtReport } from './BarModel';
+import { CommissionDTO, PayStockAndPurchaseDTO, SaleOpenedDTO, BarBookingDTO, BarSalesDTO, BarServiceDTO, BarStaffDTO, SpendDTO, StaffCommissionDTO, StoreDTO, StockReceiptDTO, SalesOpened, StaffSellStaff, StaffSalesRow, StaffColleague, JackPoint, JackPointAward, JackPointProgress, StaffOrder, PaymentNoteRow, StaffHandover, DebtCustomer, DebtEntry, DebtReport, LoyaltyRule, LoyaltyCard } from './BarModel';
 import { PageableParam, Response, ResponseList, ResponsePage } from '../Utils/models/responces';
 
 @Injectable({
@@ -587,8 +587,31 @@ findPaymentNotes(from: string, to: string): Observable<ResponseList<PaymentNoteR
 }
 
 /** "Paid by phone, from this name" on an unpaid bill; an empty method clears it. */
-savePaymentNote(billUid: string, body: { method: string; payerName?: string; reference?: string; customerUid?: string; customerCode?: string }): Observable<Response<SalesOpened>> {
+savePaymentNote(billUid: string, body: { method: string; payerName?: string; reference?: string; phone?: string; pin?: string }): Observable<Response<SalesOpened>> {
   return this.http.post<Response<SalesOpened>>(`${this.barURL}/bills/${billUid}/paymentNote`, body);
+}
+
+/** Customer loyalty: the branch rule (every till needs the bill amount). */
+loyaltyRule(): Observable<Response<LoyaltyRule>> {
+  return this.http.get<Response<LoyaltyRule>>(`${this.barURL}/loyalty/rule`, { context: silent() });
+}
+
+saveLoyaltyRule(rule: LoyaltyRule): Observable<Response<LoyaltyRule>> {
+  return this.http.post<Response<LoyaltyRule>>(`${this.barURL}/loyalty/rule`, rule);
+}
+
+/** The customer names themselves (phone + own PIN) - on a bill when billUid is given. Silent: the form words each refusal. */
+loyaltyIdentify(body: { phone: string; pin: string }, billUid?: string): Observable<Response<LoyaltyCard>> {
+  const url = billUid ? `${this.barURL}/loyalty/bills/${billUid}` : `${this.barURL}/loyalty/identify`;
+  return this.http.post<Response<LoyaltyCard>>(url, body, { context: silent() });
+}
+
+loyaltyRegister(body: { name?: string; phone: string; pin: string }): Observable<Response<LoyaltyCard>> {
+  return this.http.post<Response<LoyaltyCard>>(`${this.barURL}/loyalty/register`, body, { context: silent() });
+}
+
+resetCustomerPin(customerUid: string): Observable<Response<any>> {
+  return this.http.post<Response<any>>(`${this.barURL}/loyalty/customers/${customerUid}/resetPin`, {});
 }
 
 /** Madeni customers a bill can be noted to as ofa / deni: names and what is left. */

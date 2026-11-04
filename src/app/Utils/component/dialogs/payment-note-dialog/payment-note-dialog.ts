@@ -6,29 +6,24 @@ import { MatIconModule } from '@angular/material/icon';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ServiceBarMethod } from '../../../../pos/service-bar-method';
 import { AlertService } from '../../../services/alert';
-import { SalesOpened } from '../../../../pos/BarModel';
+import { LoyaltyCard, LoyaltyRule, SalesOpened } from '../../../../pos/BarModel';
+import { CustomerPin } from '../../customer-pin/customer-pin';
 
 /** The ways a customer can pay without handing over cash. */
 export const NOTE_METHODS = ['mpesa', 'tigopesa', 'airtelmoney', 'halopesa', 'bank'];
 /** Not money: a Madeni customer's monthly offer, or their credit. */
 export const CUSTOMER_NOTE_METHODS = ['ofa', 'deni'];
 
-export interface NoteCustomer {
-  uid: string;
-  name: string;
-  /** What is left of their offer this month (ofa) or of their credit (deni). */
-  left: number;
-}
-
 /**
  * How the customer pays an unpaid bill, for the cashier at handover. Cash is
  * the default (no note). Phone/bank: method + the name the money came from.
- * Ofa / deni: a Madeni customer, proved by the code they give the waiter.
- * It marks nothing as paid. Closes with the updated bill.
+ * Ofa / deni: the customer types their phone + own PIN. A bill at or over
+ * the branch's loyalty amount asks "does the customer have a code?" so it
+ * counts towards their reward. Marks nothing paid. Closes with the bill.
  */
 @Component({
   selector: 'app-payment-note-dialog',
-  imports: [FormsModule, MatIconModule, TranslatePipe, DecimalPipe],
+  imports: [FormsModule, MatIconModule, TranslatePipe, DecimalPipe, CustomerPin],
   templateUrl: './payment-note-dialog.html',
   styleUrl: './payment-note-dialog.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -40,12 +35,13 @@ export class PaymentNoteDialog {
   reference: string;
   saving = false;
 
-  /** Ofa / deni customers, per method, fetched the first time it is chosen. */
-  customers: Record<string, NoteCustomer[] | null> = { ofa: null, deni: null };
-  loadingCustomers = false;
-  search = '';
-  customerUid: string | null;
-  code = '';
+  rule: LoyaltyRule | null = null;
+  /** The customer who typed their PIN on this bill, once known here. */
+  card: LoyaltyCard | null = null;
+  /** "Does the customer have a code?" - answered yes. */
+  askPin = false;
+  /** Answered no: not asked again while the dialog is open. */
+  noCode = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { bill: SalesOpened; total?: number },
@@ -58,10 +54,13 @@ export class PaymentNoteDialog {
     this.method = data.bill.paymentNoteMethod || 'cash';
     this.payer = this.isCustomerMethod ? '' : data.bill.paymentNotePayer || '';
     this.reference = data.bill.paymentNoteRef || '';
-    this.customerUid = data.bill.paymentNoteCustomerUid || null;
-    if (this.isCustomerMethod) {
-      this.loadCustomers();
-    }
+    this.barService.loyaltyRule().subscribe({
+      next: (res) => {
+        this.rule = res?.data ?? null;
+        this.cdr.markForCheck();
+      },
+      error: () => {},
+    });
   }
 
   get hasNote(): boolean {
@@ -76,61 +75,42 @@ export class PaymentNoteDialog {
     return NOTE_METHODS.includes(this.method);
   }
 
+  /** Name of the customer already on this bill (typed their PIN), if any. */
+  get onBill(): string | null {
+    return this.card?.name ?? this.data.bill.loyaltyCustomerName ?? null;
+  }
+
+  /** The bill is big enough to count for a customer, and no one is on it yet. */
+  get asksForCode(): boolean {
+    const r = this.rule;
+    return !!r && r.enabled && (this.data.total ?? 0) >= r.minBill && !this.onBill && !this.isCustomerMethod;
+  }
+
   choose(m: string): void {
-    if (m === this.method) {
-      return;
-    }
     this.method = m;
-    this.customerUid = null;
-    this.code = '';
-    this.search = '';
-    if (this.isCustomerMethod) {
-      this.loadCustomers();
+  }
+
+  found(card: LoyaltyCard): void {
+    this.card = card;
+    this.askPin = false;
+    // The bill on the screen behind now knows its customer too.
+    this.data.bill.loyaltyCustomerUid = card.uid;
+    this.data.bill.loyaltyCustomerName = card.name;
+    this.alert.show('success', this.translate.instant('CUSTOMER_PIN.ON_BILL', { name: card.name }));
+    this.cdr.markForCheck();
+  }
+
+  /** What the customer on the bill has left for the chosen method; null when not known here. */
+  get left(): number | null {
+    if (!this.card) {
+      return null;
     }
+    return this.method === 'ofa' ? this.card.offerLeft : this.card.creditLeft;
   }
 
-  private loadCustomers(): void {
-    const m = this.method;
-    if (this.customers[m] !== null) {
-      return;
-    }
-    this.loadingCustomers = true;
-    this.barService.noteCustomers(m).subscribe({
-      next: (res) => {
-        this.customers = { ...this.customers, [m]: res?.data ?? [] };
-        this.loadingCustomers = false;
-        this.cdr.markForCheck();
-      },
-      error: () => {
-        this.customers = { ...this.customers, [m]: [] };
-        this.loadingCustomers = false;
-        this.cdr.markForCheck();
-      },
-    });
-  }
-
-  get shownCustomers(): NoteCustomer[] {
-    const q = this.search.trim().toLowerCase();
-    return (this.customers[this.method] ?? []).filter((c) => !q || c.name.toLowerCase().includes(q));
-  }
-
-  get chosen(): NoteCustomer | undefined {
-    return (this.customers[this.method] ?? []).find((c) => c.uid === this.customerUid);
-  }
-
-  /** The bill is bigger than what the chosen customer has left. */
   get overLeft(): boolean {
-    const c = this.chosen;
-    return !!c && this.data.total !== undefined && this.data.total > c.left;
-  }
-
-  pick(c: NoteCustomer): void {
-    this.customerUid = c.uid;
-    this.code = '';
-  }
-
-  onCode(value: string): void {
-    this.code = (value || '').replace(/\D/g, '').slice(0, 6);
+    const l = this.left;
+    return l !== null && (this.data.total ?? 0) > l;
   }
 
   get ready(): boolean {
@@ -141,7 +121,7 @@ export class PaymentNoteDialog {
       return this.hasNote;
     }
     if (this.isCustomerMethod) {
-      return !!this.chosen && this.code.length >= 4 && !this.overLeft;
+      return !!this.onBill && !this.overLeft;
     }
     return this.payer.trim().length > 0;
   }
@@ -155,7 +135,8 @@ export class PaymentNoteDialog {
       return;
     }
     if (this.isCustomerMethod) {
-      this.send({ method: this.method, customerUid: this.customerUid!, customerCode: this.code }, 'PAYMENT_NOTE.SAVED');
+      // The customer already typed their PIN on this bill.
+      this.send({ method: this.method }, 'PAYMENT_NOTE.SAVED');
       return;
     }
     this.send({ method: this.method, payerName: this.payer.trim(), reference: this.reference.trim() }, 'PAYMENT_NOTE.SAVED');
@@ -165,7 +146,7 @@ export class PaymentNoteDialog {
     this.send({ method: '' }, 'PAYMENT_NOTE.REMOVED');
   }
 
-  private send(body: { method: string; payerName?: string; reference?: string; customerUid?: string; customerCode?: string }, okKey: string): void {
+  private send(body: { method: string; payerName?: string; reference?: string }, okKey: string): void {
     this.saving = true;
     this.barService.savePaymentNote(this.data.bill.uid!, body).subscribe({
       next: (res) => {
@@ -173,16 +154,11 @@ export class PaymentNoteDialog {
         if (res?.data) {
           this.alert.show('success', this.translate.instant(okKey, { code: this.data.bill.salesCode }));
           this.dialogRef.close(res.data);
-        } else if (this.isCustomerMethod) {
-          this.code = '';
         }
         this.cdr.markForCheck();
       },
       error: () => {
         this.saving = false;
-        if (this.isCustomerMethod) {
-          this.code = '';
-        }
         this.cdr.markForCheck();
       },
     });

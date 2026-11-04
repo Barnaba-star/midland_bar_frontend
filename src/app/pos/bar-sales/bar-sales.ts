@@ -639,6 +639,9 @@ openSaleDetailsDialogForMore(sale: SalesOpened) {
             // Noted "paid by phone" at Staff Sell: start on that method, and show the note to check.
             method: sale.paymentNoteMethod || undefined,
             customerUid: sale.paymentNoteCustomerUid || undefined,
+            billUid: sale.uid,
+            loyaltyCustomerUid: sale.loyaltyCustomerUid,
+            loyaltyCustomerName: sale.loyaltyCustomerName,
             note: sale.paymentNoteMethod
               ? `${this.translate.instant('PAY_BILL.METHOD_' + sale.paymentNoteMethod)} · ${sale.paymentNotePayer}${sale.paymentNoteRef ? ' · ' + sale.paymentNoteRef : ''}`
               : undefined,

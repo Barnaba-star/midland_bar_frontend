@@ -435,3 +435,32 @@
   width: 18px;
   height: 18px;
 }
+
+.db-who .pin {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #0f766e;
+}
+
+.db-who .pin.none {
+  color: var(--color-text-muted);
+}
+
+.db-who .pin mat-icon {
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
+}
+
+.pin-reset {
+  margin-left: 6px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-accent);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}

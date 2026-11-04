@@ -1,0 +1,45 @@
+<div class="cp">
+  @if (mode === 'pin') {
+    <label class="cp-field">
+      <span>{{ 'CUSTOMER_PIN.PHONE' | translate }}</span>
+      <input type="tel" inputmode="tel" autocomplete="off" name="cpPhone" [ngModel]="phone" (ngModelChange)="phone = digits($event, 13)" placeholder="07XX XXX XXX" />
+    </label>
+    <label class="cp-field">
+      <span>{{ 'CUSTOMER_PIN.PIN' | translate }}</span>
+      <input type="password" inputmode="numeric" autocomplete="off" name="cpPin" maxlength="4" [ngModel]="pin" (ngModelChange)="pin = digits($event, 4)" (keyup.enter)="check()" placeholder="••••" />
+    </label>
+    <p class="cp-hint">{{ 'CUSTOMER_PIN.HINT' | translate }}</p>
+    <button type="button" class="cp-go" [disabled]="!canCheck" (click)="check()">
+      <mat-icon>verified_user</mat-icon>{{ (busy ? 'COMMON.LOADING' : 'CUSTOMER_PIN.CHECK') | translate }}
+    </button>
+  } @else {
+    <p class="cp-title">{{ (isNew ? 'CUSTOMER_PIN.NEW' : 'CUSTOMER_PIN.NO_PIN') | translate }}</p>
+    @if (isNew) {
+      <label class="cp-field">
+        <span>{{ 'CUSTOMER_PIN.NAME' | translate }}</span>
+        <input type="text" maxlength="80" autocomplete="off" name="cpName" [(ngModel)]="name" />
+      </label>
+    }
+    <label class="cp-field">
+      <span>{{ 'CUSTOMER_PIN.NEW_PIN' | translate }}</span>
+      <input type="password" inputmode="numeric" autocomplete="off" name="cpNew" maxlength="4" [ngModel]="pin" (ngModelChange)="pin = digits($event, 4)" placeholder="••••" />
+    </label>
+    <label class="cp-field">
+      <span>{{ 'CUSTOMER_PIN.AGAIN' | translate }}</span>
+      <input type="password" inputmode="numeric" autocomplete="off" name="cpAgain" maxlength="4" [ngModel]="pin2" (ngModelChange)="pin2 = digits($event, 4)" placeholder="••••" />
+    </label>
+    @if (pin2.length === 4 && pin !== pin2) {
+      <p class="cp-error">{{ 'CUSTOMER_PIN.MISMATCH' | translate }}</p>
+    }
+    <p class="cp-hint">{{ 'CUSTOMER_PIN.REGISTER_HINT' | translate }}</p>
+    <div class="cp-row">
+      <button type="button" class="cp-back" (click)="back()">{{ 'COMMON.BACK' | translate }}</button>
+      <button type="button" class="cp-go" [disabled]="!canRegister" (click)="register()">
+        <mat-icon>how_to_reg</mat-icon>{{ (busy ? 'COMMON.LOADING' : 'CUSTOMER_PIN.SAVE') | translate }}
+      </button>
+    </div>
+  }
+  @if (error) {
+    <p class="cp-error">{{ error }}</p>
+  }
+</div>

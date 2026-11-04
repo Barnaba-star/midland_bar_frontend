@@ -2122,7 +2122,8 @@
     "OFFER_LEFT": "ofa imebaki Tshs {{amount}}",
     "OFFER_NONE": "Hakuna mteja mwenye ofa - CEO au Manager aweke 'Ofa kwa mwezi' kwenye Madeni",
     "OFFER_OVER": "{{name}} ana ofa ya Tshs {{amount}} tu iliyobaki mwezi huu",
-    "ERR_OFFER": "Chagua mteja wa ofa, ndani ya ofa iliyobaki"
+    "ERR_OFFER": "Chagua mteja wa ofa, ndani ya ofa iliyobaki",
+    "CUSTOMER_PIN_NEEDED": "Ofa inahitaji mteja aandike PIN yake kwenye bili hii."
   },
   "RECEIPT": {
     "BTN": "Risiti",
@@ -2598,17 +2599,9 @@
     "REMOVED": "Maelezo yameondolewa kwenye bili {{code}}.",
     "CHECK": "Imeandikwa imelipwa: {{note}} - hakikisha pesa imeingia.",
     "CASH_HINT": "Taslimu ndiyo kawaida - hakuna cha kuandika. Mhudumu anakabidhi pesa kwa cashier.",
-    "OFFER_CUSTOMERS": "Wateja wenye ofa mwezi huu",
-    "CREDIT_CUSTOMERS": "Wateja wa madeni wenye nafasi",
-    "SEARCH": "Tafuta jina",
     "LEFT": "Imebaki {{amount}}",
-    "NO_OFFER_CUSTOMERS": "Hakuna mteja mwenye ofa iliyobaki mwezi huu.",
-    "NO_CREDIT_CUSTOMERS": "Hakuna mteja wa madeni mwenye nafasi ya kukopa.",
-    "CODE": "Code ya {{name}} (muulize mteja)",
-    "CODE_PH": "Tarakimu 4",
     "OVER_LEFT": "Bili ({{total}}) imezidi kilichobaki ({{left}}).",
-    "CUSTOMER_HINT": "Mteja anakupa code yake; ikilingana ndipo bili inaandikwa kwake. Cashier anaipokea wakati wa makabidhiano.",
-    "WRONG_CODE": "Code hiyo si ya mteja huyu - muulize tena."
+    "CUSTOMER_HINT": "Mteja aandike namba yake ya simu na PIN yake mwenyewe. Cashier ataipokea bili wakati wa makabidhiano."
   },
   "PHONE_PAYMENTS": {
     "TITLE": "Malipo ya Simu",
@@ -2834,7 +2827,10 @@
     "OFFERS_GIVEN": "Ofa alizopewa",
     "KIND_OFFER": "Ofa",
     "TAB_DEBTS": "Madeni",
-    "CODE": "Code"
+    "HAS_PIN": "Ana PIN",
+    "NO_PIN": "Hana PIN",
+    "RESET_PIN": "Futa PIN",
+    "REWARD": "Ofa aliyoipata"
   },
   "REFUND": {
     "BTN": "Rudisha pesa",
@@ -3113,5 +3109,39 @@
     "MY_WEEK": "Wiki hii {{got}} / {{target}}",
     "MY_WON": "Umeshinda! Inasubiri kuthibitishwa",
     "MY_APPROVED": "Imethibitishwa: mapumziko {{from}} – {{to}}"
+  },
+  "CUSTOMER_PIN": {
+    "PHONE": "Namba ya simu ya mteja",
+    "PIN": "PIN ya mteja (aandike mwenyewe)",
+    "HINT": "Mpe mteja aandike PIN yake mwenyewe - mhudumu asiione.",
+    "CHECK": "Thibitisha",
+    "NEW": "Mteja mpya - ajiandikishe",
+    "NO_PIN": "Mteja huyu hana PIN bado - aweke yake",
+    "NAME": "Jina la mteja",
+    "NEW_PIN": "PIN mpya (tarakimu 4)",
+    "AGAIN": "Rudia PIN",
+    "MISMATCH": "PIN hazilingani.",
+    "REGISTER_HINT": "Mteja aikariri PIN yake. Akiisahau, manager ataifuta kwenye Madeni na ataweka mpya.",
+    "SAVE": "Hifadhi PIN",
+    "WRONG": "PIN si sahihi. Majaribio 5 yakikosewa, namba inafungwa dakika 15.",
+    "FAILED": "Imeshindikana - jaribu tena.",
+    "ON_BILL": "Bili hii ni ya {{name}} - inahesabiwa kwenye ofa yake.",
+    "ASK": "Bili imefika {{amount}} - mteja ana code (PIN)?",
+    "YES": "Ndiyo",
+    "NO": "Hapana",
+    "OFFER_ASK": "Mteja aandike simu na PIN yake kutumia ofa."
+  },
+  "LOYALTY": {
+    "TITLE": "Ofa ya wateja wa kudumu",
+    "SUMMARY": "Bili {{n}} za {{min}} au zaidi ndani ya siku {{days}} = ofa ya {{reward}}.",
+    "OFF": "Imezimwa - weka kiasi na idadi ya bili kuanza.",
+    "SET": "Weka",
+    "ENABLED": "Washa ofa ya wateja wa kudumu",
+    "MIN_BILL": "Bili ya angalau (Tshs)",
+    "BILLS": "Idadi ya bili",
+    "DAYS": "Ndani ya siku",
+    "REWARD": "Ofa atakayopata (Tshs)",
+    "HINT": "Bili ikifika kiasi hiki, mfumo unauliza kama mteja ana code. Akifikisha idadi ya bili, ofa inaingia yenyewe na inadumu siku hizo hizo; kisha anaanza kuhesabiwa upya.",
+    "SAVED": "Ofa ya wateja wa kudumu imehifadhiwa."
   }
 }

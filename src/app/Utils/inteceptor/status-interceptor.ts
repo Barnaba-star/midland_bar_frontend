@@ -313,8 +313,8 @@ export const StatusInterceptor: HttpInterceptorFn = (
           // Codes the backend sends for the screen to word.
           if (errorMessage === 'HANDOVER_SENT') {
             errorMessage = injector.get(TranslateService).instant('STAFF_SELL_PAGE.HANDOVER_FROZEN');
-          } else if (errorMessage === 'WRONG_CUSTOMER_CODE') {
-            errorMessage = injector.get(TranslateService).instant('PAYMENT_NOTE.WRONG_CODE');
+          } else if (errorMessage === 'WRONG_CUSTOMER_PIN') {
+            errorMessage = injector.get(TranslateService).instant('CUSTOMER_PIN.WRONG');
           }
         }
 

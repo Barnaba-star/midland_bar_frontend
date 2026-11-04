@@ -2122,7 +2122,8 @@
     "OFFER_LEFT": "offer left Tshs {{amount}}",
     "OFFER_NONE": "No customer has an offer - a CEO or Manager sets 'Monthly offer' in Debts",
     "OFFER_OVER": "{{name}} has only Tshs {{amount}} of this month's offer left",
-    "ERR_OFFER": "Choose the offer customer, within what is left"
+    "ERR_OFFER": "Choose the offer customer, within what is left",
+    "CUSTOMER_PIN_NEEDED": "An offer needs the customer to type their PIN on this bill."
   },
   "RECEIPT": {
     "BTN": "Receipt",
@@ -2598,17 +2599,9 @@
     "REMOVED": "Note removed from bill {{code}}.",
     "CHECK": "Noted as paid: {{note}} - check it came in.",
     "CASH_HINT": "Cash is the default - nothing to note. The waiter hands the cash to the cashier.",
-    "OFFER_CUSTOMERS": "Customers with an offer this month",
-    "CREDIT_CUSTOMERS": "Credit customers with room left",
-    "SEARCH": "Search name",
     "LEFT": "{{amount}} left",
-    "NO_OFFER_CUSTOMERS": "No customer has offer left this month.",
-    "NO_CREDIT_CUSTOMERS": "No credit customer has room left.",
-    "CODE": "{{name}}'s code (ask the customer)",
-    "CODE_PH": "4 digits",
     "OVER_LEFT": "The bill ({{total}}) is more than what is left ({{left}}).",
-    "CUSTOMER_HINT": "The customer gives you their code; only if it matches is the bill noted to them. The cashier takes it at handover.",
-    "WRONG_CODE": "That code is not this customer's - ask again."
+    "CUSTOMER_HINT": "The customer types their phone number and their own PIN. The cashier takes the bill at handover."
   },
   "PHONE_PAYMENTS": {
     "TITLE": "Phone payments",
@@ -2834,7 +2827,10 @@
     "OFFERS_GIVEN": "Offers given",
     "KIND_OFFER": "Offer",
     "TAB_DEBTS": "Debts",
-    "CODE": "Code"
+    "HAS_PIN": "Has PIN",
+    "NO_PIN": "No PIN",
+    "RESET_PIN": "Clear PIN",
+    "REWARD": "Offer earned"
   },
   "REFUND": {
     "BTN": "Give money back",
@@ -3113,5 +3109,39 @@
     "MY_WEEK": "This week {{got}} / {{target}}",
     "MY_WON": "You won! Waiting for approval",
     "MY_APPROVED": "Approved: off {{from}} – {{to}}"
+  },
+  "CUSTOMER_PIN": {
+    "PHONE": "Customer's phone number",
+    "PIN": "Customer's PIN (they type it)",
+    "HINT": "Let the customer type their own PIN - the waiter should not see it.",
+    "CHECK": "Confirm",
+    "NEW": "New customer - sign them up",
+    "NO_PIN": "This customer has no PIN yet - they set one",
+    "NAME": "Customer's name",
+    "NEW_PIN": "New PIN (4 digits)",
+    "AGAIN": "PIN again",
+    "MISMATCH": "The PINs do not match.",
+    "REGISTER_HINT": "The customer remembers their PIN. If forgotten, a manager clears it in Madeni and they set a new one.",
+    "SAVE": "Save PIN",
+    "WRONG": "Wrong PIN. After 5 wrong tries the number is locked for 15 minutes.",
+    "FAILED": "That did not work - try again.",
+    "ON_BILL": "This bill is {{name}}'s - it counts towards their offer.",
+    "ASK": "The bill reached {{amount}} - does the customer have a code (PIN)?",
+    "YES": "Yes",
+    "NO": "No",
+    "OFFER_ASK": "The customer types their phone and PIN to use their offer."
+  },
+  "LOYALTY": {
+    "TITLE": "Regular customer offer",
+    "SUMMARY": "{{n}} bills of {{min}} or more within {{days}} days = {{reward}} offer.",
+    "OFF": "Off - set the amount and number of bills to start.",
+    "SET": "Set",
+    "ENABLED": "Turn on the regular customer offer",
+    "MIN_BILL": "Bill of at least (Tshs)",
+    "BILLS": "Number of bills",
+    "DAYS": "Within days",
+    "REWARD": "Offer they earn (Tshs)",
+    "HINT": "When a bill reaches this amount, the system asks whether the customer has a code. Once they reach the number of bills, the offer is added by itself and lasts as many days; then the count starts again.",
+    "SAVED": "Regular customer offer saved."
   }
 }

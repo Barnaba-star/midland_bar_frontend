@@ -13,6 +13,9 @@
   @if (tab === 'OFFERS') {
     <app-offers />
   } @else {
+  @if (canLoyalty) {
+    <app-loyalty-rule />
+  }
   <div class="db-card">
     <div class="db-card-header">
       <div>
@@ -94,7 +97,13 @@
           <div class="db-row" [class.open]="openUid === c.uid">
             <div class="db-who">
               <strong>{{ c.name }}</strong>
-              <span>{{ phone(c.phone) }}@if (c.customerCode) { · {{ 'DEBTS.CODE' | translate }} {{ c.customerCode }} }@if (c.note) { · {{ c.note }} }</span>
+              <span>{{ phone(c.phone) }}@if (c.note) { · {{ c.note }} }</span>
+              <span class="pin" [class.none]="!c.hasPin">
+                <mat-icon>{{ c.hasPin ? 'lock' : 'lock_open' }}</mat-icon>{{ (c.hasPin ? 'DEBTS.HAS_PIN' : 'DEBTS.NO_PIN') | translate }}
+                @if (c.hasPin && canSetLimit) {
+                  <button type="button" class="pin-reset" (click)="resetPin(c)">{{ 'DEBTS.RESET_PIN' | translate }}</button>
+                }
+              </span>
             </div>
             <div class="db-fig">
               <small>{{ 'DEBTS.OWES' | translate }}</small>
@@ -110,6 +119,9 @@
                 <span>{{ 'DEBTS.AVAILABLE' | translate: { amount: (c.available | number) } }}</span>
               } @else {
                 <span class="late">{{ 'DEBTS.NO_LIMIT' | translate }}</span>
+              }
+              @if ((c.rewardLeft ?? 0) > 0) {
+                <span class="offer">{{ 'DEBTS.REWARD' | translate }}: Tshs {{ c.rewardLeft | number }}</span>
               }
               @if ((c.monthlyOffer ?? 0) > 0) {
                 <span class="offer">{{ 'DEBTS.OFFER' | translate }}: Tshs {{ c.offerLeft | number }} {{ 'DEBTS.OFFER_OF' | translate: { monthly: (c.monthlyOffer | number) } }}</span>

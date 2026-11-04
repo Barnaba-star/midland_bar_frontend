@@ -60,6 +60,8 @@ export class PayBillDialogComponent {
   error = '';
 
   rule: LoyaltyRule | null = null;
+  /** The server's answer: the bill reached the rule's amount and has no customer yet. */
+  serverAsks = false;
   /** The customer who typed their PIN on this bill here - ofa is only for them. */
   card: LoyaltyCard | null = null;
   askPin = false;
@@ -75,8 +77,7 @@ export class PayBillDialogComponent {
 
   /** Big enough to count for a customer, and no one is on the bill yet. */
   get asksForCode(): boolean {
-    const r = this.rule;
-    return !!r && r.enabled && !!this.data.billUid && this.data.total >= r.minBill && !this.onBill;
+    return this.serverAsks && !!this.data.billUid && !this.onBill;
   }
 
   found(card: LoyaltyCard): void {
@@ -106,13 +107,19 @@ export class PayBillDialogComponent {
     },
     private dialogRef: MatDialogRef<PayBillDialogComponent, PayBillResult>,
   ) {
-    this.barService.loyaltyRule().subscribe({
-      next: (res) => {
-        this.rule = res?.data ?? null;
-        this.cdr.markForCheck();
-      },
-      error: () => {},
-    });
+    // The server adds the bill up and says whether to ask for the customer's code.
+    const askUid = data.billUid;
+    if (askUid) {
+      this.barService.loyaltyAsk(askUid).subscribe({
+        next: (res) => {
+          const a = res?.data;
+          this.rule = a ? { enabled: a.enabled, minBill: a.minBill, billsNeeded: 0, periodDays: 0, rewardAmount: 0 } : null;
+          this.serverAsks = !!a?.ask;
+          this.cdr.markForCheck();
+        },
+        error: () => {},
+      });
+    }
     const start = data.method && this.methods.includes(data.method) ? data.method : 'cash';
     this.rows = [{ method: start, amount: data.total, tendered: null }];
     // Noted ofa / deni at Staff Sell: that customer is already chosen.

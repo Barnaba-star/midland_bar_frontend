@@ -600,6 +600,11 @@ saveLoyaltyRule(rule: LoyaltyRule): Observable<Response<LoyaltyRule>> {
   return this.http.post<Response<LoyaltyRule>>(`${this.barURL}/loyalty/rule`, rule);
 }
 
+/** Whether this bill asks for the customer's code: the server adds up its lines against the rule. */
+loyaltyAsk(billUid: string): Observable<Response<{ ask: boolean; enabled: boolean; minBill: number; total: number; customerName?: string | null }>> {
+  return this.http.get<Response<{ ask: boolean; enabled: boolean; minBill: number; total: number; customerName?: string | null }>>(`${this.barURL}/loyalty/bills/${billUid}/ask`, { context: silent() });
+}
+
 /** The customer names themselves (phone + own PIN) - on a bill when billUid is given. Silent: the form words each refusal. */
 loyaltyIdentify(body: { phone: string; pin: string }, billUid?: string): Observable<Response<LoyaltyCard>> {
   const url = billUid ? `${this.barURL}/loyalty/bills/${billUid}` : `${this.barURL}/loyalty/identify`;

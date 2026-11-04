@@ -36,6 +36,8 @@ export class PaymentNoteDialog {
   saving = false;
 
   rule: LoyaltyRule | null = null;
+  /** The server's answer: the bill reached the rule's amount and has no customer yet. */
+  serverAsks = false;
   /** The customer who typed their PIN on this bill, once known here. */
   card: LoyaltyCard | null = null;
   /** "Does the customer have a code?" - answered yes. */
@@ -54,13 +56,19 @@ export class PaymentNoteDialog {
     this.method = data.bill.paymentNoteMethod || 'cash';
     this.payer = this.isCustomerMethod ? '' : data.bill.paymentNotePayer || '';
     this.reference = data.bill.paymentNoteRef || '';
-    this.barService.loyaltyRule().subscribe({
-      next: (res) => {
-        this.rule = res?.data ?? null;
-        this.cdr.markForCheck();
-      },
-      error: () => {},
-    });
+    // The server adds the bill up and says whether to ask for the customer's code.
+    const askUid = data.bill.uid!;
+    if (askUid) {
+      this.barService.loyaltyAsk(askUid).subscribe({
+        next: (res) => {
+          const a = res?.data;
+          this.rule = a ? { enabled: a.enabled, minBill: a.minBill, billsNeeded: 0, periodDays: 0, rewardAmount: 0 } : null;
+          this.serverAsks = !!a?.ask;
+          this.cdr.markForCheck();
+        },
+        error: () => {},
+      });
+    }
   }
 
   get hasNote(): boolean {
@@ -82,8 +90,7 @@ export class PaymentNoteDialog {
 
   /** The bill is big enough to count for a customer, and no one is on it yet. */
   get asksForCode(): boolean {
-    const r = this.rule;
-    return !!r && r.enabled && (this.data.total ?? 0) >= r.minBill && !this.onBill && !this.isCustomerMethod;
+    return this.serverAsks && !this.onBill && !this.isCustomerMethod;
   }
 
   choose(m: string): void {

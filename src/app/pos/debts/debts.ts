@@ -35,7 +35,8 @@ export class Debts implements OnInit {
   readonly canSetLimit = this.auth.hasPermission('MANAGE_DEBT');
   readonly canWriteOff = this.auth.hasPermission('WRITE_OFF_DEBT');
   readonly canTakePayment = this.auth.hasPermission('SAVE_SALES');
-  readonly canLoyalty = this.auth.hasPermission('MANAGE_LOYALTY');
+  /** By role too: a login from before MANAGE_LOYALTY existed carries an old token. */
+  readonly canLoyalty = this.auth.hasPermission('MANAGE_LOYALTY') || ['CEO', 'MANAGER', 'CASHIER'].some((r) => this.auth.hasRole(r));
   /** Ofa / Happy hour sits on this page as a second tab (owner, 2026-10-22): CEO, manager and root. */
   readonly canOffers = ['ROOT', 'CEO', 'MANAGER'].some((r) => this.auth.hasRole(r));
   tab: 'DEBTS' | 'OFFERS' = 'DEBTS';

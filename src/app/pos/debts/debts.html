@@ -11,6 +11,10 @@
     </div>
   }
   @if (tab === 'OFFERS') {
+    <!-- The regular-customer offer is set here too: this is where owners look for offers. -->
+    @if (canLoyalty) {
+      <app-loyalty-rule />
+    }
     <app-offers />
   } @else {
   @if (canLoyalty) {

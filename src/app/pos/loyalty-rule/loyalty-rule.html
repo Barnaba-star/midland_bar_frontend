@@ -6,11 +6,11 @@
       @if (rule.enabled) {
         <p>{{ 'LOYALTY.SUMMARY' | translate: { n: rule.billsNeeded, min: (rule.minBill | number), reward: (rule.rewardAmount | number) } }}</p>
       } @else {
-        <p>{{ 'LOYALTY.OFF' | translate }}</p>
+        <p><span class="lr-off">{{ 'LOYALTY.OFF_TAG' | translate }}</span> {{ 'LOYALTY.OFF' | translate }}</p>
       }
     </div>
     @if (!editing) {
-      <button type="button" class="lr-btn primary" (click)="editing = true">
+      <button type="button" class="lr-btn primary" (click)="startEdit()">
         <mat-icon>tune</mat-icon><span>{{ 'LOYALTY.SET' | translate }}</span>
       </button>
     }

@@ -3141,6 +3141,7 @@
     "BILLS": "Idadi ya bili",
     "REWARD": "Ofa atakayopata (Tshs)",
     "HINT": "Bili ikifika kiasi hiki, mfumo unauliza kama mteja ana code. Bili zinahesabiwa ndani ya mwezi wa kalenda; akifikisha idadi, ofa inaingia yenyewe na inatumika mpaka mwisho wa mwezi. Kila tarehe 1 wote wanaanza upya.",
-    "SAVED": "Ofa ya wateja wa kudumu imehifadhiwa."
+    "SAVED": "Ofa ya wateja wa kudumu imehifadhiwa.",
+    "OFF_TAG": "IMEZIMWA"
   }
 }

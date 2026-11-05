@@ -3141,6 +3141,7 @@
     "BILLS": "Number of bills",
     "REWARD": "Offer they earn (Tshs)",
     "HINT": "When a bill reaches this amount, the system asks whether the customer has a code. Bills count within the calendar month; once they reach the number, the offer is added by itself and lasts to the end of the month. Everyone starts again on the 1st.",
-    "SAVED": "Regular customer offer saved."
+    "SAVED": "Regular customer offer saved.",
+    "OFF_TAG": "OFF"
   }
 }

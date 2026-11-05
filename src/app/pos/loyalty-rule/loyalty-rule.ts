@@ -41,6 +41,14 @@ export class LoyaltyRuleCard implements OnInit {
     });
   }
 
+  /** Setting the rule is turning it on: "Washa" starts ticked (owner saved it off by mistake, 2026-11-05). */
+  startEdit(): void {
+    if (!this.rule.enabled) {
+      this.rule = { ...this.rule, enabled: true };
+    }
+    this.editing = true;
+  }
+
   save(): void {
     this.saving = true;
     this.bar.saveLoyaltyRule(this.rule).subscribe({

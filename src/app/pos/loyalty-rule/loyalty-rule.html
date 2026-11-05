@@ -1,6 +1,6 @@
 <div class="lr">
   <div class="lr-head">
-    <mat-icon>card_giftcard</mat-icon>
+    <span class="lr-icon"><mat-icon>card_giftcard</mat-icon></span>
     <div class="lr-title">
       <h4>{{ 'LOYALTY.TITLE' | translate }}</h4>
       @if (rule.enabled) {
@@ -10,39 +10,44 @@
       }
     </div>
     @if (!editing) {
-      <button type="button" class="row-action edit" (click)="editing = true">
+      <button type="button" class="lr-btn primary" (click)="editing = true">
         <mat-icon>tune</mat-icon><span>{{ 'LOYALTY.SET' | translate }}</span>
       </button>
     }
   </div>
 
   @if (editing) {
-    <div class="lr-form">
-      <label class="lr-check">
+    <div class="lr-body">
+      <label class="lr-switch">
         <input type="checkbox" [(ngModel)]="rule.enabled" />
         <span>{{ 'LOYALTY.ENABLED' | translate }}</span>
       </label>
-      <label>
-        <small>{{ 'LOYALTY.MIN_BILL' | translate }}</small>
-        <input type="number" min="1000" step="1000" [(ngModel)]="rule.minBill" />
-      </label>
-      <label>
-        <small>{{ 'LOYALTY.BILLS' | translate }}</small>
-        <input type="number" min="1" step="1" [(ngModel)]="rule.billsNeeded" />
-      </label>
-      <label>
-        <small>{{ 'LOYALTY.REWARD' | translate }}</small>
-        <input type="number" min="1" step="1000" [(ngModel)]="rule.rewardAmount" />
-      </label>
-    </div>
-    <p class="lr-hint">{{ 'LOYALTY.HINT' | translate }}</p>
-    <div class="lr-actions">
-      <button type="button" class="row-action view" (click)="editing = false">
-        <mat-icon>close</mat-icon><span>{{ 'COMMON.CANCEL' | translate }}</span>
-      </button>
-      <button type="button" class="row-action edit" [disabled]="saving" (click)="save()">
-        <mat-icon>save</mat-icon><span>{{ 'DEBTS.SAVE' | translate }}</span>
-      </button>
+
+      <div class="lr-fields">
+        <label class="lr-field">
+          <small>{{ 'LOYALTY.MIN_BILL' | translate }}</small>
+          <input type="number" inputmode="numeric" min="1000" step="1000" [(ngModel)]="rule.minBill" />
+        </label>
+        <label class="lr-field">
+          <small>{{ 'LOYALTY.BILLS' | translate }}</small>
+          <input type="number" inputmode="numeric" min="1" step="1" [(ngModel)]="rule.billsNeeded" />
+        </label>
+        <label class="lr-field">
+          <small>{{ 'LOYALTY.REWARD' | translate }}</small>
+          <input type="number" inputmode="numeric" min="1" step="1000" [(ngModel)]="rule.rewardAmount" />
+        </label>
+      </div>
+
+      <p class="lr-hint">{{ 'LOYALTY.HINT' | translate }}</p>
+
+      <div class="lr-actions">
+        <button type="button" class="lr-btn" (click)="editing = false">
+          <mat-icon>close</mat-icon><span>{{ 'COMMON.CANCEL' | translate }}</span>
+        </button>
+        <button type="button" class="lr-btn primary" [disabled]="saving" (click)="save()">
+          <mat-icon>save</mat-icon><span>{{ 'DEBTS.SAVE' | translate }}</span>
+        </button>
+      </div>
     </div>
   }
 </div>

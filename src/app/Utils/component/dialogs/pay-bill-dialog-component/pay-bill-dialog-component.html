@@ -24,11 +24,15 @@
       @if (!askPin) {
         <p><mat-icon>card_giftcard</mat-icon>{{ 'CUSTOMER_PIN.ASK' | translate: { amount: (rule!.minBill | number) } }}</p>
         <div class="pay-loyalty-row">
-          <button type="button" class="pay-loyalty-no" (click)="noCode = true">{{ 'CUSTOMER_PIN.NO' | translate }}</button>
-          <button type="button" class="pay-loyalty-yes" (click)="askPin = true">{{ 'CUSTOMER_PIN.YES' | translate }}</button>
+          <button type="button" class="pay-loyalty-no" (click)="askPin = true; signUp = true">{{ 'CUSTOMER_PIN.NO' | translate }}</button>
+          <button type="button" class="pay-loyalty-yes" (click)="askPin = true; signUp = false">{{ 'CUSTOMER_PIN.YES' | translate }}</button>
         </div>
       } @else {
-        <app-customer-pin [billUid]="data.billUid!" (found)="found($event)" />
+        @if (signUp) {
+          <p class="skip-note">{{ 'CUSTOMER_PIN.SIGN_UP' | translate }}</p>
+        }
+        <app-customer-pin [startNew]="signUp" [billUid]="data.billUid!" (found)="found($event)" />
+        <button type="button" class="skip-link" (click)="noCode = true">{{ 'CUSTOMER_PIN.SKIP' | translate }}</button>
       }
     </div>
   } @else if (onBill) {

@@ -190,3 +190,20 @@
   font-size: 13px;
   color: #c0392b;
 }
+
+.skip-note {
+  margin: 0;
+  font-weight: 600;
+}
+
+.skip-link {
+  align-self: flex-start;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-text-muted);
+  font: inherit;
+  font-size: 13px;
+  text-decoration: underline;
+  cursor: pointer;
+}

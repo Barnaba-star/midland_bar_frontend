@@ -13,11 +13,15 @@
       @if (!askPin) {
         <p><mat-icon>card_giftcard</mat-icon>{{ 'CUSTOMER_PIN.ASK' | translate: { amount: (rule!.minBill | number) } }}</p>
         <div class="pn-loyalty-row">
-          <button type="button" class="pn-cancel" (click)="noCode = true">{{ 'CUSTOMER_PIN.NO' | translate }}</button>
-          <button type="button" class="pn-save" (click)="askPin = true">{{ 'CUSTOMER_PIN.YES' | translate }}</button>
+          <button type="button" class="pn-cancel" (click)="askPin = true; signUp = true">{{ 'CUSTOMER_PIN.NO' | translate }}</button>
+          <button type="button" class="pn-save" (click)="askPin = true; signUp = false">{{ 'CUSTOMER_PIN.YES' | translate }}</button>
         </div>
       } @else {
-        <app-customer-pin [billUid]="data.bill.uid!" (found)="found($event)" />
+        @if (signUp) {
+          <p class="skip-note">{{ 'CUSTOMER_PIN.SIGN_UP' | translate }}</p>
+        }
+        <app-customer-pin [startNew]="signUp" [billUid]="data.bill.uid!" (found)="found($event)" />
+        <button type="button" class="skip-link" (click)="noCode = true">{{ 'CUSTOMER_PIN.SKIP' | translate }}</button>
       }
     </div>
   } @else if (onBill && !isCustomerMethod) {

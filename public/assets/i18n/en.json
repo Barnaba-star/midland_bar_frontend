@@ -3129,7 +3129,10 @@
     "ASK": "The bill reached {{amount}} - does the customer have a code (PIN)?",
     "YES": "Yes",
     "NO": "No",
-    "OFFER_ASK": "The customer types their phone and PIN to use their offer."
+    "OFFER_ASK": "The customer types their phone and PIN to use their offer.",
+    "SIGN_UP": "Sign the customer up now: name, phone number and a PIN they will remember.",
+    "SKIP": "Skip - they do not want to sign up",
+    "HAS_CODE": "Already has a code"
   },
   "LOYALTY": {
     "TITLE": "Regular customer offer",

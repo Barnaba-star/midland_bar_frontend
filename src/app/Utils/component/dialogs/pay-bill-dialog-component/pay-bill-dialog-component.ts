@@ -66,6 +66,8 @@ export class PayBillDialogComponent {
   card: LoyaltyCard | null = null;
   askPin = false;
   noCode = false;
+  /** Answered "no code": the form opens on signing up. */
+  signUp = false;
 
   get onBill(): string | null {
     return this.card?.name ?? this.data.loyaltyCustomerName ?? null;

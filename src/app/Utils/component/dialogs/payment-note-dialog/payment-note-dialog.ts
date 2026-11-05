@@ -44,6 +44,8 @@ export class PaymentNoteDialog {
   askPin = false;
   /** Answered no: not asked again while the dialog is open. */
   noCode = false;
+  /** Answered "no code": the form opens on signing up. */
+  signUp = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { bill: SalesOpened; total?: number },

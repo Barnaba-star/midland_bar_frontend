@@ -20,6 +20,12 @@
         <input type="text" maxlength="80" autocomplete="off" name="cpName" [(ngModel)]="name" />
       </label>
     }
+    @if (startNew) {
+      <label class="cp-field">
+        <span>{{ 'CUSTOMER_PIN.PHONE' | translate }}</span>
+        <input type="tel" inputmode="tel" autocomplete="off" name="cpNewPhone" [ngModel]="phone" (ngModelChange)="phone = digits($event, 13)" placeholder="07XX XXX XXX" />
+      </label>
+    }
     <label class="cp-field">
       <span>{{ 'CUSTOMER_PIN.NEW_PIN' | translate }}</span>
       <input type="password" inputmode="numeric" autocomplete="off" name="cpNew" maxlength="4" [ngModel]="pin" (ngModelChange)="pin = digits($event, 4)" placeholder="••••" />
@@ -33,7 +39,7 @@
     }
     <p class="cp-hint">{{ 'CUSTOMER_PIN.REGISTER_HINT' | translate }}</p>
     <div class="cp-row">
-      <button type="button" class="cp-back" (click)="back()">{{ 'COMMON.BACK' | translate }}</button>
+      <button type="button" class="cp-back" (click)="back()">{{ (startNew ? 'CUSTOMER_PIN.HAS_CODE' : 'COMMON.BACK') | translate }}</button>
       <button type="button" class="cp-go" [disabled]="!canRegister" (click)="register()">
         <mat-icon>how_to_reg</mat-icon>{{ (busy ? 'COMMON.LOADING' : 'CUSTOMER_PIN.SAVE') | translate }}
       </button>

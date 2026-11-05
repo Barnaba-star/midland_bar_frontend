@@ -3129,7 +3129,10 @@
     "ASK": "Bili imefika {{amount}} - mteja ana code (PIN)?",
     "YES": "Ndiyo",
     "NO": "Hapana",
-    "OFFER_ASK": "Mteja aandike simu na PIN yake kutumia ofa."
+    "OFFER_ASK": "Mteja aandike simu na PIN yake kutumia ofa.",
+    "SIGN_UP": "Mteja ajisajili sasa: jina, namba ya simu na PIN atakayoikumbuka.",
+    "SKIP": "Ruka - hataki kujisajili",
+    "HAS_CODE": "Ana code tayari"
   },
   "LOYALTY": {
     "TITLE": "Ofa ya wateja wa kudumu",

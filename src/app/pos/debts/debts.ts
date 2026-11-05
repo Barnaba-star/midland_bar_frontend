@@ -38,7 +38,8 @@ export class Debts implements OnInit {
   /** By role too: a login from before MANAGE_LOYALTY existed carries an old token. */
   readonly canLoyalty = this.auth.hasPermission('MANAGE_LOYALTY') || ['CEO', 'MANAGER', 'CASHIER'].some((r) => this.auth.hasRole(r));
   /** Ofa / Happy hour sits on this page as a second tab (owner, 2026-10-22): CEO, manager and root. */
-  readonly canOffers = ['ROOT', 'CEO', 'MANAGER'].some((r) => this.auth.hasRole(r));
+  /** Happy hour / offers: by permission (root passes it even without a ROOT role row), or by role. */
+  readonly canOffers = this.auth.hasPermission('MANAGE_PRICE_RULES') || ['ROOT', 'CEO', 'MANAGER'].some((r) => this.auth.hasRole(r));
   tab: 'DEBTS' | 'OFFERS' = 'DEBTS';
 
   customers: DebtCustomer[] = [];

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -19,8 +19,10 @@ import { LoyaltyCard } from '../../../pos/BarModel';
   styleUrl: './customer-pin.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CustomerPin {
+export class CustomerPin implements OnInit {
   @Input() billUid?: string;
+  /** The customer said they have no code: open straight on signing up (name, phone, PIN). */
+  @Input() startNew = false;
   @Output() found = new EventEmitter<LoyaltyCard>();
 
   mode: 'pin' | 'register' = 'pin';
@@ -39,6 +41,13 @@ export class CustomerPin {
     private cdr: ChangeDetectorRef,
   ) {}
 
+  ngOnInit(): void {
+    if (this.startNew) {
+      this.mode = 'register';
+      this.isNew = true;
+    }
+  }
+
   digits(v: string, max: number): string {
     return (v || '').replace(/\D/g, '').slice(0, max);
   }
@@ -48,7 +57,8 @@ export class CustomerPin {
   }
 
   get canRegister(): boolean {
-    return !this.busy && this.pin.length === 4 && this.pin === this.pin2 && (!this.isNew || this.name.trim().length >= 2);
+    return !this.busy && this.pin.length === 4 && this.pin === this.pin2 && (!this.isNew || this.name.trim().length >= 2)
+      && this.phone.replace(/\D/g, '').length >= 9;
   }
 
   check(): void {

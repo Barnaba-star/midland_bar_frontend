@@ -3133,15 +3133,14 @@
   },
   "LOYALTY": {
     "TITLE": "Ofa ya wateja wa kudumu",
-    "SUMMARY": "Bili {{n}} za {{min}} au zaidi ndani ya siku {{days}} = ofa ya {{reward}}.",
+    "SUMMARY": "Bili {{n}} za {{min}} au zaidi ndani ya mwezi huu = ofa ya {{reward}} mpaka mwisho wa mwezi.",
     "OFF": "Imezimwa - weka kiasi na idadi ya bili kuanza.",
     "SET": "Weka",
     "ENABLED": "Washa ofa ya wateja wa kudumu",
     "MIN_BILL": "Bili ya angalau (Tshs)",
     "BILLS": "Idadi ya bili",
-    "DAYS": "Ndani ya siku",
     "REWARD": "Ofa atakayopata (Tshs)",
-    "HINT": "Bili ikifika kiasi hiki, mfumo unauliza kama mteja ana code. Akifikisha idadi ya bili, ofa inaingia yenyewe na inadumu siku hizo hizo; kisha anaanza kuhesabiwa upya.",
+    "HINT": "Bili ikifika kiasi hiki, mfumo unauliza kama mteja ana code. Bili zinahesabiwa ndani ya mwezi wa kalenda; akifikisha idadi, ofa inaingia yenyewe na inatumika mpaka mwisho wa mwezi. Kila tarehe 1 wote wanaanza upya.",
     "SAVED": "Ofa ya wateja wa kudumu imehifadhiwa."
   }
 }

@@ -3133,15 +3133,14 @@
   },
   "LOYALTY": {
     "TITLE": "Regular customer offer",
-    "SUMMARY": "{{n}} bills of {{min}} or more within {{days}} days = {{reward}} offer.",
+    "SUMMARY": "{{n}} bills of {{min}} or more this month = {{reward}} offer until the month ends.",
     "OFF": "Off - set the amount and number of bills to start.",
     "SET": "Set",
     "ENABLED": "Turn on the regular customer offer",
     "MIN_BILL": "Bill of at least (Tshs)",
     "BILLS": "Number of bills",
-    "DAYS": "Within days",
     "REWARD": "Offer they earn (Tshs)",
-    "HINT": "When a bill reaches this amount, the system asks whether the customer has a code. Once they reach the number of bills, the offer is added by itself and lasts as many days; then the count starts again.",
+    "HINT": "When a bill reaches this amount, the system asks whether the customer has a code. Bills count within the calendar month; once they reach the number, the offer is added by itself and lasts to the end of the month. Everyone starts again on the 1st.",
     "SAVED": "Regular customer offer saved."
   }
 }

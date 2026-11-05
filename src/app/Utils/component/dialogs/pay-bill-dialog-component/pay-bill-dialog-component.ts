@@ -85,6 +85,11 @@ export class PayBillDialogComponent {
   found(card: LoyaltyCard): void {
     this.card = card;
     this.askPin = false;
+    if ((card.offerNow ?? 0) > 0 && !this.rows.some((r) => r.method === OFFER_METHOD)) {
+      this.autoOffer(card.uid, card.offerLeft, card.offerNow ?? 0);
+      this.cdr.markForCheck();
+      return;
+    }
     for (const r of this.rows) {
       if (r.method === OFFER_METHOD) {
         r.customerUid = card.uid;
@@ -117,6 +122,9 @@ export class PayBillDialogComponent {
           const a = res?.data;
           this.rule = a ? { enabled: a.enabled, minBill: a.minBill, billsNeeded: 0, periodDays: 0, rewardAmount: 0 } : null;
           this.serverAsks = !!a?.ask;
+          if (a?.customerUid && (a.offerNow ?? 0) > 0) {
+            this.autoOffer(a.customerUid, a.offerLeft ?? a.offerNow ?? 0, a.offerNow ?? 0);
+          }
           this.cdr.markForCheck();
         },
         error: () => {},
@@ -222,10 +230,44 @@ export class PayBillDialogComponent {
     return !!row.customerUid && row.customerUid === this.onBillUid && left > 0 && (Number(row.amount) || 0) <= left;
   }
 
+  /** What the customer on the bill has left of their offer this month, told by the server. */
+  private autoLeft: { uid: string; left: number } | null = null;
+
+  /**
+   * The customer on the bill has an offer: it comes off by itself - an ofa
+   * row for it, and the first row keeps only what is left to pay.
+   */
+  private autoOffer(uid: string, left: number, off: number): void {
+    if (!this.offers || off <= 0) {
+      return;
+    }
+    this.autoLeft = { uid, left };
+    const rest = this.data.total - off;
+    const first = this.rows[0];
+    if (rest > 0) {
+      first.amount = rest;
+      this.rows = [first, { method: OFFER_METHOD, amount: off, tendered: null, customerUid: uid }];
+    } else {
+      this.rows = [{ method: OFFER_METHOD, amount: off, tendered: null, customerUid: uid }];
+    }
+    this.offerNote = { off, rest: Math.max(0, rest) };
+  }
+
+  /** Shown above the rows: "NAME has OFF offer - they pay REST". */
+  offerNote: { off: number; rest: number } | null = null;
+
+  /** Ofa needs Deni/ofa methods to be offered here (with internet, VIEW_DEBT). */
+  private get offers(): boolean {
+    return this.methods.includes(OFFER_METHOD);
+  }
+
   /** What the customer on the bill has left of their offer (the card when known here, else Madeni's list). */
   offerLeftOf(row: PaymentRow): number {
     if (this.card && this.card.uid === row.customerUid) {
       return this.card.offerLeft;
+    }
+    if (this.autoLeft && this.autoLeft.uid === row.customerUid) {
+      return this.autoLeft.left;
     }
     return this.customerOf(row)?.offerLeft ?? 0;
   }

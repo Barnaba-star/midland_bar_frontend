@@ -3132,7 +3132,9 @@
     "OFFER_ASK": "The customer types their phone and PIN to use their offer.",
     "SIGN_UP": "Sign the customer up now: name, phone number and a PIN they will remember.",
     "SKIP": "Skip - they do not want to sign up",
-    "HAS_CODE": "Already has a code"
+    "HAS_CODE": "Already has a code",
+    "HAS_OFFER": "{{name}} has a {{offer}} offer - it comes off this bill. They pay {{pay}} only.",
+    "OFFER_OFF": "offer -{{amount}}"
   },
   "LOYALTY": {
     "TITLE": "Regular customer offer",

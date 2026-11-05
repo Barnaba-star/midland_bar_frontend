@@ -48,7 +48,7 @@
                   @for (b of g.bills; track b.uid) {
                     <li>
                       <span class="ho-code">{{ b.salesCode }}</span>
-                      <span class="ho-method" [class.phone]="b.method !== 'cash'">@if (b.payer) { {{ b.payer }} }</span>
+                      <span class="ho-method" [class.phone]="b.method !== 'cash'">@if (b.payer) { {{ b.payer }} }@if ((b.offer ?? 0) > 0 && b.method !== 'ofa') { · {{ 'CUSTOMER_PIN.OFFER_OFF' | translate: { amount: (b.offer | number) } }} }</span>
                       <b>{{ b.amount | number }}</b>
                     </li>
                   }

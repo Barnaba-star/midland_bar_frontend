@@ -38,6 +38,9 @@ export class PaymentNoteDialog {
   rule: LoyaltyRule | null = null;
   /** The server's answer: the bill reached the rule's amount and has no customer yet. */
   serverAsks = false;
+  /** The customer's offer that comes off this bill by itself, and what they pay. */
+  offerNow = 0;
+  toPay = 0;
   /** The customer who typed their PIN on this bill, once known here. */
   card: LoyaltyCard | null = null;
   /** "Does the customer have a code?" - answered yes. */
@@ -66,6 +69,8 @@ export class PaymentNoteDialog {
           const a = res?.data;
           this.rule = a ? { enabled: a.enabled, minBill: a.minBill, billsNeeded: 0, periodDays: 0, rewardAmount: 0 } : null;
           this.serverAsks = !!a?.ask;
+          this.offerNow = a?.offerNow ?? 0;
+          this.toPay = a?.toPay ?? 0;
           this.cdr.markForCheck();
         },
         error: () => {},
@@ -102,6 +107,8 @@ export class PaymentNoteDialog {
   found(card: LoyaltyCard): void {
     this.card = card;
     this.askPin = false;
+    this.offerNow = card.offerNow ?? 0;
+    this.toPay = card.toPay ?? 0;
     // The bill on the screen behind now knows its customer too.
     this.data.bill.loyaltyCustomerUid = card.uid;
     this.data.bill.loyaltyCustomerName = card.name;

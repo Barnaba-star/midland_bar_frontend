@@ -360,7 +360,7 @@ export interface StaffHandover {
     open: {
         byMethod: StaffHandoverMethod[];
         total: number;
-        bills: { uid: string; salesCode: string; amount: number; method: string; payer?: string | null; sentAt?: string | null }[];
+        bills: { uid: string; salesCode: string; amount: number; method: string; payer?: string | null; sentAt?: string | null; total?: number; offer?: number }[];
     };
     paid: { byMethod: StaffHandoverMethod[]; total: number };
 }
@@ -531,4 +531,7 @@ export interface LoyaltyCard {
   offerLeft: number;
   creditLeft: number;
   loyalty: { enabled: boolean; visits: number; needed: number; rewardLeft: number };
+  /** On a bill: the offer that comes off it by itself, and what is left to pay. */
+  offerNow?: number;
+  toPay?: number;
 }

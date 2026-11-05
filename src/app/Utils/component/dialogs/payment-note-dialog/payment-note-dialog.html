@@ -30,6 +30,13 @@
       <span>{{ 'CUSTOMER_PIN.ON_BILL' | translate: { name: onBill } }}</span>
     </div>
   }
+  <!-- The customer has an offer: it comes off this bill by itself, they pay the rest. -->
+  @if (onBill && offerNow > 0 && !isCustomerMethod) {
+    <div class="pn-offer">
+      <mat-icon>redeem</mat-icon>
+      <span>{{ 'CUSTOMER_PIN.HAS_OFFER' | translate: { name: onBill, offer: (offerNow | number), pay: (toPay | number) } }}</span>
+    </div>
+  }
 
   <div class="pn-field">
     <span>{{ 'PAYMENT_NOTE.METHOD' | translate }}</span>

@@ -207,3 +207,21 @@
   text-decoration: underline;
   cursor: pointer;
 }
+
+.pn-offer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 12px;
+  background: color-mix(in srgb, #0f766e 16%, var(--color-surface));
+  border: 1px solid color-mix(in srgb, #0f766e 40%, transparent);
+  color: var(--color-text);
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.pn-offer mat-icon {
+  flex: 0 0 auto;
+  color: #0f766e;
+}

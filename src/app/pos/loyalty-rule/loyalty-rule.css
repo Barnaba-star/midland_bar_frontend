@@ -1,5 +1,7 @@
 :host {
   display: block;
+  flex-shrink: 0;
+  width: 100%;
 }
 
 .lr,
@@ -14,6 +16,7 @@
   border-radius: 14px;
   background: var(--color-surface, #fff);
   color: var(--color-text, #1d1812);
+  text-align: left;
 }
 
 .lr-head {

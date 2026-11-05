@@ -403,9 +403,21 @@
 /* Madeni | Ofa na Happy hour */
 .db-tabs {
   display: flex;
+  flex-shrink: 0;
   gap: 8px;
   margin-bottom: 12px;
   overflow-x: auto;
+}
+
+/* The page grows with what is on it: the shared .action-container is a fixed
+   80vh column, which squeezed the tabs to nothing under the loyalty card. */
+.db-page {
+  height: auto;
+  min-height: 80vh;
+}
+
+.db-page > * {
+  flex-shrink: 0;
 }
 
 .db-tabs button {

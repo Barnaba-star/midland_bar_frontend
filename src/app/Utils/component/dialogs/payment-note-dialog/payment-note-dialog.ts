@@ -1,3 +1,4 @@
+import { LoyaltyProgressComponent } from '../../loyalty-progress/loyalty-progress';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -6,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ServiceBarMethod } from '../../../../pos/service-bar-method';
 import { AlertService } from '../../../services/alert';
-import { LoyaltyCard, LoyaltyRule, SalesOpened } from '../../../../pos/BarModel';
+import { LoyaltyProgress, LoyaltyCard, LoyaltyRule, SalesOpened } from '../../../../pos/BarModel';
 import { CustomerPin } from '../../customer-pin/customer-pin';
 
 /** The ways a customer can pay without handing over cash. */
@@ -23,7 +24,7 @@ export const CUSTOMER_NOTE_METHODS = ['ofa', 'deni'];
  */
 @Component({
   selector: 'app-payment-note-dialog',
-  imports: [FormsModule, MatIconModule, TranslatePipe, DecimalPipe, CustomerPin],
+  imports: [LoyaltyProgressComponent, FormsModule, MatIconModule, TranslatePipe, DecimalPipe, CustomerPin],
   templateUrl: './payment-note-dialog.html',
   styleUrl: './payment-note-dialog.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -41,6 +42,8 @@ export class PaymentNoteDialog {
   /** The customer's offer that comes off this bill by itself, and what they pay. */
   offerNow = 0;
   toPay = 0;
+  /** The customer's month so far: bills paid of the rule's count, and unpaid ones. */
+  progress: LoyaltyProgress | null = null;
   /** The customer who typed their PIN on this bill, once known here. */
   card: LoyaltyCard | null = null;
   /** "Does the customer have a code?" - answered yes. */
@@ -71,6 +74,7 @@ export class PaymentNoteDialog {
           this.serverAsks = !!a?.ask;
           this.offerNow = a?.offerNow ?? 0;
           this.toPay = a?.toPay ?? 0;
+          this.progress = a?.loyalty ?? null;
           this.cdr.markForCheck();
         },
         error: () => {},
@@ -109,10 +113,14 @@ export class PaymentNoteDialog {
     this.askPin = false;
     this.offerNow = card.offerNow ?? 0;
     this.toPay = card.toPay ?? 0;
+    this.progress = card.loyalty ?? null;
     // The bill on the screen behind now knows its customer too.
     this.data.bill.loyaltyCustomerUid = card.uid;
     this.data.bill.loyaltyCustomerName = card.name;
-    this.alert.show('success', this.translate.instant('CUSTOMER_PIN.ON_BILL', { name: card.name }));
+    // The waiter is told there and then when the customer's offer comes off this bill.
+    this.alert.show('success', this.offerNow > 0
+      ? this.translate.instant('CUSTOMER_PIN.HAS_OFFER', { name: card.name, offer: this.offerNow.toLocaleString(), pay: this.toPay.toLocaleString() })
+      : this.translate.instant('CUSTOMER_PIN.ON_BILL', { name: card.name }));
     this.cdr.markForCheck();
   }
 

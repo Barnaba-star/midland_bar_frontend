@@ -3134,6 +3134,10 @@
     "SKIP": "Skip - they do not want to sign up",
     "HAS_CODE": "Already has a code",
     "HAS_OFFER": "{{name}} has a {{offer}} offer - it comes off this bill. They pay {{pay}} only.",
+    "OFFER_TITLE": "CUSTOMER HAS AN OFFER!",
+    "PROGRESS": "Bills paid this month: {{visits}} of {{needed}} - {{left}} more to earn the offer.",
+    "PROGRESS_WAITING": "{{waiting}} waiting for payment - they count once paid.",
+    "PROGRESS_DONE": "Reached {{needed}} bills this month.",
     "OFFER_OFF": "offer -{{amount}}"
   },
   "LOYALTY": {

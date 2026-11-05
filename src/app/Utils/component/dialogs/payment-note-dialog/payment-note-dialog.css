@@ -225,3 +225,13 @@
   flex: 0 0 auto;
   color: #0f766e;
 }
+
+.pn-offer-big {
+  padding: 16px;
+  border-width: 2px;
+  animation: pn-pop .35s ease-out;
+}
+.pn-offer-big div { display: flex; flex-direction: column; gap: 4px; text-align: left; }
+.pn-offer-big strong { font-size: 20px; letter-spacing: .04em; color: #0f766e; }
+.pn-offer-big mat-icon { font-size: 34px; width: 34px; height: 34px; }
+@keyframes pn-pop { from { transform: scale(.94); opacity: 0; } to { transform: none; opacity: 1; } }

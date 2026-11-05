@@ -525,12 +525,15 @@ export interface LoyaltyRule {
 }
 
 /** A customer once they typed their phone + PIN: no phone, no PIN. */
+/** Bills counted for the customer this month, and their big unpaid ones (they count once paid). */
+export interface LoyaltyProgress { enabled: boolean; visits: number; needed: number; rewardLeft: number; waiting?: number }
+
 export interface LoyaltyCard {
   uid: string;
   name: string;
   offerLeft: number;
   creditLeft: number;
-  loyalty: { enabled: boolean; visits: number; needed: number; rewardLeft: number };
+  loyalty: LoyaltyProgress;
   /** On a bill: the offer that comes off it by itself, and what is left to pay. */
   offerNow?: number;
   toPay?: number;

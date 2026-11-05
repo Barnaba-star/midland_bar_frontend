@@ -3134,6 +3134,10 @@
     "SKIP": "Ruka - hataki kujisajili",
     "HAS_CODE": "Ana code tayari",
     "HAS_OFFER": "{{name}} ana ofa ya {{offer}} - inakatwa kwenye bili hii. Atalipa {{pay}} tu.",
+    "OFFER_TITLE": "MTEJA ANA OFA!",
+    "PROGRESS": "Bili zilizolipwa mwezi huu: {{visits}} kati ya {{needed}} - bado {{left}} apate ofa.",
+    "PROGRESS_WAITING": "{{waiting}} zinasubiri malipo - zitahesabiwa zikilipwa.",
+    "PROGRESS_DONE": "Ametimiza bili {{needed}} mwezi huu.",
     "OFFER_OFF": "ofa -{{amount}}"
   },
   "LOYALTY": {

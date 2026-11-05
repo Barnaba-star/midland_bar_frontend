@@ -42,10 +42,12 @@
     </div>
   }
   @if (onBill && offerNote) {
-    <div class="pay-note-check">
+    <div class="pay-note-check pay-offer-big" role="alert">
       <mat-icon>redeem</mat-icon>
-      <span><b>{{ 'CUSTOMER_PIN.HAS_OFFER' | translate: { name: onBill, offer: (offerNote.off | number), pay: (offerNote.rest | number) } }}</b></span>
+      <span><strong>{{ 'CUSTOMER_PIN.OFFER_TITLE' | translate }}</strong><b>{{ 'CUSTOMER_PIN.HAS_OFFER' | translate: { name: onBill, offer: (offerNote.off | number), pay: (offerNote.rest | number) } }}</b></span>
     </div>
+  } @else if (onBill) {
+    <app-loyalty-progress [p]="progress" />
   }
 
   <!-- What is on the bill -->

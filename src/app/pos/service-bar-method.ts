@@ -601,8 +601,8 @@ saveLoyaltyRule(rule: LoyaltyRule): Observable<Response<LoyaltyRule>> {
 }
 
 /** Whether this bill asks for the customer's code: the server adds up its lines against the rule. */
-loyaltyAsk(billUid: string): Observable<Response<{ ask: boolean; enabled: boolean; minBill: number; total: number; customerName?: string | null; customerUid?: string | null; offerLeft?: number; offerNow?: number; toPay?: number }>> {
-  return this.http.get<Response<{ ask: boolean; enabled: boolean; minBill: number; total: number; customerName?: string | null; customerUid?: string | null; offerLeft?: number; offerNow?: number; toPay?: number }>>(`${this.barURL}/loyalty/bills/${billUid}/ask`, { context: silent() });
+loyaltyAsk(billUid: string): Observable<Response<{ ask: boolean; enabled: boolean; minBill: number; total: number; customerName?: string | null; customerUid?: string | null; offerLeft?: number; offerNow?: number; toPay?: number; loyalty?: import('./BarModel').LoyaltyProgress }>> {
+  return this.http.get<Response<{ ask: boolean; enabled: boolean; minBill: number; total: number; customerName?: string | null; customerUid?: string | null; offerLeft?: number; offerNow?: number; toPay?: number; loyalty?: import('./BarModel').LoyaltyProgress }>>(`${this.barURL}/loyalty/bills/${billUid}/ask`, { context: silent() });
 }
 
 /** The customer names themselves (phone + own PIN) - on a bill when billUid is given. Silent: the form words each refusal. */

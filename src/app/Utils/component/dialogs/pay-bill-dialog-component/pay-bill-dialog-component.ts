@@ -1,3 +1,4 @@
+import { LoyaltyProgressComponent } from '../../loyalty-progress/loyalty-progress';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, inject } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -7,7 +8,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { Authentication } from '../../../services/authentication';
 import { OfflineService } from '../../../offline/offline.service';
 import { ServiceBarMethod } from '../../../../pos/service-bar-method';
-import { DebtCustomer, LoyaltyCard, LoyaltyRule } from '../../../../pos/BarModel';
+import { LoyaltyProgress, DebtCustomer, LoyaltyCard, LoyaltyRule } from '../../../../pos/BarModel';
 import { CustomerPin } from '../../customer-pin/customer-pin';
 
 /** The ways a bill can be paid - the same set the backend accepts. */
@@ -39,7 +40,7 @@ export interface PayBillResult {
  */
 @Component({
   selector: 'app-pay-bill-dialog-component',
-  imports: [FormsModule, MatIconModule, DecimalPipe, TranslatePipe, CustomerPin],
+  imports: [LoyaltyProgressComponent, FormsModule, MatIconModule, DecimalPipe, TranslatePipe, CustomerPin],
   templateUrl: './pay-bill-dialog-component.html',
   styleUrl: './pay-bill-dialog-component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -82,9 +83,13 @@ export class PayBillDialogComponent {
     return this.serverAsks && !!this.data.billUid && !this.onBill;
   }
 
+  /** The customer's month so far: bills paid of the rule's count, and unpaid ones. */
+  progress: LoyaltyProgress | null = null;
+
   found(card: LoyaltyCard): void {
     this.card = card;
     this.askPin = false;
+    this.progress = card.loyalty ?? null;
     if ((card.offerNow ?? 0) > 0 && !this.rows.some((r) => r.method === OFFER_METHOD)) {
       this.autoOffer(card.uid, card.offerLeft, card.offerNow ?? 0);
       this.cdr.markForCheck();
@@ -122,6 +127,7 @@ export class PayBillDialogComponent {
           const a = res?.data;
           this.rule = a ? { enabled: a.enabled, minBill: a.minBill, billsNeeded: 0, periodDays: 0, rewardAmount: 0 } : null;
           this.serverAsks = !!a?.ask;
+          this.progress = a?.loyalty ?? null;
           if (a?.customerUid && (a.offerNow ?? 0) > 0) {
             this.autoOffer(a.customerUid, a.offerLeft ?? a.offerNow ?? 0, a.offerNow ?? 0);
           }

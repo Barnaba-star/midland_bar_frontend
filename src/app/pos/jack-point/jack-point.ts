@@ -6,7 +6,9 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ServiceBarMethod } from '../service-bar-method';
 import { AlertService } from '../../Utils/services/alert';
 import { localDate } from '../../Utils/services/local-date';
-import { JackPoint, JackPointAward, JackPointProgress } from '../BarModel';
+import { JackPeriod, JackPoint, JackPointAward, JackPointGame, JackPointProgress } from '../BarModel';
+
+type Filter = 'RUNNING' | 'UPCOMING' | 'OFF' | 'ALL';
 
 /**
  * Jack Point: the waiters' game (CEO, manager, accountant). A staff member
@@ -27,7 +29,11 @@ export class JackPointPage implements OnInit {
   private alert = inject(AlertService);
   private translate = inject(TranslateService);
 
-  games: { jackPoint: JackPoint; progress: JackPointProgress[] }[] = [];
+  games: JackPointGame[] = [];
+  readonly periods: JackPeriod[] = ['DAY', 'WEEK', 'MONTH'];
+  readonly filters: Filter[] = ['RUNNING', 'UPCOMING', 'OFF', 'ALL'];
+  /** Which games the list and the cards show. */
+  filter: Filter = 'RUNNING';
   awards: JackPointAward[] = [];
   loading = true;
   busy = false;
@@ -52,6 +58,10 @@ export class JackPointPage implements OnInit {
     this.barService.jackPoints().subscribe({
       next: (res) => {
         this.games = res?.data?.jackPoints ?? [];
+        // Nothing running yet: show them all rather than an empty list.
+        if (this.filter === 'RUNNING' && !this.games.some((g) => this.stateOf(g) === 'RUNNING')) {
+          this.filter = 'ALL';
+        }
         this.awards = res?.data?.awards ?? [];
         this.loading = false;
         this.cdr.markForCheck();
@@ -64,11 +74,43 @@ export class JackPointPage implements OnInit {
   }
 
   add(): void {
-    this.editing = { name: '', weeklyTarget: 50000, weeks: 4, startDate: localDate(new Date()), leaveDays: 1, bonusAmount: 0, rewardNote: '', enabled: true };
+    this.editing = { name: '', period: 'WEEK', weeklyTarget: 50000, weeks: 4, startDate: localDate(new Date()), leaveDays: 1, bonusAmount: 0, rewardNote: '', enabled: true };
   }
 
   edit(jp: JackPoint): void {
-    this.editing = { ...jp };
+    this.editing = { ...jp, period: this.periodOf(jp) };
+  }
+
+  periodOf(x: { period?: JackPeriod | null } | null | undefined): JackPeriod {
+    return x?.period === 'DAY' || x?.period === 'MONTH' ? x.period : 'WEEK';
+  }
+
+  stateOf(g: JackPointGame): 'RUNNING' | 'UPCOMING' | 'OFF' {
+    if (g.state) {
+      return g.state;
+    }
+    if (!g.jackPoint.enabled) {
+      return 'OFF';
+    }
+    return g.jackPoint.startDate > localDate(new Date()) ? 'UPCOMING' : 'RUNNING';
+  }
+
+  count(f: Filter): number {
+    return f === 'ALL' ? this.games.length : this.games.filter((g) => this.stateOf(g) === f).length;
+  }
+
+  get shown(): JackPointGame[] {
+    return this.filter === 'ALL' ? this.games : this.games.filter((g) => this.stateOf(g) === this.filter);
+  }
+
+  /** Most rounds in a row a game may ask for. */
+  maxRounds(p: JackPeriod): number {
+    return p === 'DAY' ? 90 : p === 'MONTH' ? 12 : 52;
+  }
+
+  /** Last day of a run: the backend sends it; older answers fall back to Sunday of its last week. */
+  runEnd(a: JackPointAward): string {
+    return a.runEnd ?? this.weekEnd(a.weekTo);
   }
 
   save(): void {

@@ -16,11 +16,23 @@
         <div class="db-form">
           <label class="wide"><small>{{ 'JACK_POINT.NAME' | translate }}</small>
             <input type="text" maxlength="80" [(ngModel)]="editing.name" [placeholder]="'JACK_POINT.NAME_PH' | translate" /></label>
-          <label><small>{{ 'JACK_POINT.TARGET' | translate }}</small><input type="number" min="1" [(ngModel)]="editing.weeklyTarget" /></label>
-          <label><small>{{ 'JACK_POINT.WEEKS' | translate }}</small><input type="number" min="1" max="52" [(ngModel)]="editing.weeks" /></label>
-          <label><small>{{ 'JACK_POINT.START' | translate }}</small><input type="date" [(ngModel)]="editing.startDate" /></label>
         </div>
-        <p class="db-hint">{{ 'JACK_POINT.RULE' | translate: { target: (editing.weeklyTarget || 0 | number), weeks: editing.weeks || 0 } }}</p>
+        <!-- One round of the game: a day, a week (Monday-Sunday) or a calendar month. -->
+        <div class="jp-period">
+          <small>{{ 'JACK_POINT.PERIOD' | translate }}</small>
+          <div class="jp-chips" role="radiogroup">
+            @for (p of periods; track p) {
+              <button type="button" role="radio" class="jp-chip" [class.on]="periodOf(editing) === p" [attr.aria-checked]="periodOf(editing) === p"
+                      (click)="editing.period = p">{{ 'JACK_POINT.P_' + p | translate }}</button>
+            }
+          </div>
+        </div>
+        <div class="db-form">
+          <label><small>{{ 'JACK_POINT.TARGET_' + periodOf(editing) | translate }}</small><input type="number" min="1" [(ngModel)]="editing.weeklyTarget" /></label>
+          <label><small>{{ 'JACK_POINT.ROUNDS_' + periodOf(editing) | translate }}</small><input type="number" min="1" [max]="maxRounds(periodOf(editing))" [(ngModel)]="editing.weeks" /></label>
+          <label><small>{{ 'JACK_POINT.START_' + periodOf(editing) | translate }}</small><input type="date" [(ngModel)]="editing.startDate" /></label>
+        </div>
+        <p class="db-hint">{{ 'JACK_POINT.RULE_' + periodOf(editing) | translate: { target: (editing.weeklyTarget || 0 | number), weeks: editing.weeks || 0 } }}</p>
         <h4>{{ 'JACK_POINT.REWARD' | translate }}</h4>
         <div class="db-form">
           <label><small>{{ 'JACK_POINT.LEAVE_DAYS' | translate }}</small><input type="number" min="0" max="30" [(ngModel)]="editing.leaveDays" /></label>
@@ -46,7 +58,7 @@
             <div class="db-row jp-win">
               <div class="db-who">
                 <strong><mat-icon class="jp-star">star</mat-icon>{{ a.staffName }}</strong>
-                <span>{{ a.jackPointName }} · {{ a.weekFrom | date: 'd MMM' }} – {{ weekEnd(a.weekTo) | date: 'd MMM y' }}</span>
+                <span>{{ a.jackPointName }} · {{ a.weekFrom | date: 'd MMM' }} – {{ runEnd(a) | date: 'd MMM y' }}</span>
               </div>
               <div class="db-fig"><small>{{ 'JACK_POINT.EARNED' | translate }}</small><strong>{{ a.commissionTotal | number }}</strong></div>
               <div class="db-fig">
@@ -92,9 +104,57 @@
       <p class="db-empty">…</p>
     } @else if (!games.length) {
       <p class="db-empty">{{ 'JACK_POINT.EMPTY' | translate }}</p>
+    } @else {
+      <!-- The list: games running, starting later, switched off, or all of them. -->
+      <section class="jp-section">
+        <h4 class="jp-h">{{ 'JACK_POINT.LIST' | translate }}</h4>
+        <div class="jp-chips" role="tablist">
+          @for (f of filters; track f) {
+            <button type="button" role="tab" class="jp-chip" [class.on]="filter === f" [attr.aria-selected]="filter === f" (click)="filter = f">
+              {{ 'JACK_POINT.F_' + f | translate }} <b>{{ count(f) }}</b>
+            </button>
+          }
+        </div>
+        @if (!shown.length) {
+          <p class="db-empty">{{ 'JACK_POINT.NONE_HERE' | translate }}</p>
+        } @else {
+          <div class="db-table-wrap">
+            <table class="db-table">
+              <thead>
+                <tr>
+                  <th>{{ 'JACK_POINT.NAME' | translate }}</th>
+                  <th>{{ 'JACK_POINT.COL_KIND' | translate }}</th>
+                  <th>{{ 'JACK_POINT.COL_TARGET' | translate }}</th>
+                  <th>{{ 'JACK_POINT.COL_ROUNDS' | translate }}</th>
+                  <th>{{ 'JACK_POINT.REWARD' | translate }}</th>
+                  <th>{{ 'JACK_POINT.COL_WINNERS' | translate }}</th>
+                  <th>{{ 'JACK_POINT.STATUS' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (g of shown; track g.jackPoint.uid) {
+                  <tr>
+                    <td><b>{{ g.jackPoint.name }}</b><small class="jp-count">{{ 'JACK_POINT.FROM' | translate }} {{ g.jackPoint.startDate | date: 'd MMM y' }}</small></td>
+                    <td><span class="jp-kind">{{ 'JACK_POINT.P_' + periodOf(g.jackPoint) | translate }}</span></td>
+                    <td>{{ g.jackPoint.weeklyTarget | number }}</td>
+                    <td>{{ g.jackPoint.weeks }}</td>
+                    <td>
+                      @if (g.jackPoint.leaveDays) { {{ 'JACK_POINT.DAYS_OFF' | translate: { n: g.jackPoint.leaveDays } }} }
+                      @if (g.jackPoint.bonusAmount) { · {{ g.jackPoint.bonusAmount | number }} }
+                      @if (g.jackPoint.rewardNote) { · {{ g.jackPoint.rewardNote }} }
+                    </td>
+                    <td>{{ g.winners ?? 0 }}@if (g.waiting) { <small class="jp-count">{{ 'JACK_POINT.WAITING_N' | translate: { n: g.waiting } }}</small> }</td>
+                    <td><span class="jp-state" [attr.data-state]="stateOf(g)">{{ 'JACK_POINT.ST_' + stateOf(g) | translate }}</span></td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </section>
     }
 
-    @for (g of games; track g.jackPoint.uid) {
+    @for (g of shown; track g.jackPoint.uid) {
       <section class="jp-game" [class.off]="!g.jackPoint.enabled">
         <div class="jp-game-head">
           <div>
@@ -102,8 +162,12 @@
               @if (!g.jackPoint.enabled) { <span class="jp-off">{{ 'JACK_POINT.OFF' | translate }}</span> }
             </h4>
             <p class="db-hint">
-              {{ 'JACK_POINT.RULE' | translate: { target: (g.jackPoint.weeklyTarget | number), weeks: g.jackPoint.weeks } }}
+              <span class="jp-kind">{{ 'JACK_POINT.P_' + periodOf(g.jackPoint) | translate }}</span>
+              {{ 'JACK_POINT.RULE_' + periodOf(g.jackPoint) | translate: { target: (g.jackPoint.weeklyTarget | number), weeks: g.jackPoint.weeks } }}
               · {{ 'JACK_POINT.FROM' | translate }} {{ g.jackPoint.startDate | date: 'd MMM y' }}
+              @if (stateOf(g) === 'RUNNING' && g.currentFrom) {
+                · {{ 'JACK_POINT.NOW_ROUND' | translate: { from: (g.currentFrom | date: 'd MMM'), to: (g.currentTo | date: 'd MMM') } }}
+              }
             </p>
             <p class="jp-reward">
               @if (g.jackPoint.leaveDays) { <b>{{ 'JACK_POINT.DAYS_OFF' | translate: { n: g.jackPoint.leaveDays } }}</b> }
@@ -128,8 +192,8 @@
               <thead>
                 <tr>
                   <th>{{ 'JACK_POINT.STAFF' | translate }}</th>
-                  <th>{{ 'JACK_POINT.STREAK' | translate }}</th>
-                  <th>{{ 'JACK_POINT.THIS_WEEK' | translate }}</th>
+                  <th>{{ 'JACK_POINT.ROUNDS_' + periodOf(g.jackPoint) | translate }}</th>
+                  <th>{{ 'JACK_POINT.NOW_' + periodOf(g.jackPoint) | translate }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -164,7 +228,7 @@
               <tr>
                 <th>{{ 'JACK_POINT.STAFF' | translate }}</th>
                 <th>{{ 'JACK_POINT.TITLE' | translate }}</th>
-                <th>{{ 'JACK_POINT.WEEKS_COL' | translate }}</th>
+                <th>{{ 'JACK_POINT.PERIOD_COL' | translate }}</th>
                 <th>{{ 'JACK_POINT.REWARD' | translate }}</th>
                 <th>{{ 'JACK_POINT.STATUS' | translate }}</th>
               </tr>
@@ -174,7 +238,7 @@
                 <tr>
                   <td>{{ a.staffName }}</td>
                   <td>{{ a.jackPointName }}</td>
-                  <td>{{ a.weekFrom | date: 'd MMM' }} – {{ weekEnd(a.weekTo) | date: 'd MMM y' }}</td>
+                  <td>{{ a.weekFrom | date: 'd MMM' }} – {{ runEnd(a) | date: 'd MMM y' }}</td>
                   <td>
                     @if (a.status === 'APPROVED' && a.leaveFrom) {
                       {{ 'JACK_POINT.OFF_DATES' | translate: { from: (a.leaveFrom | date: 'd MMM'), to: (leaveTo(a) | date: 'd MMM y') } }}

@@ -465,12 +465,28 @@ export interface DebtReport {
 }
 
 /** Jack Point: the waiters' game - commission over a weekly target for so many weeks in a row wins the reward. */
+export type JackPeriod = 'DAY' | 'WEEK' | 'MONTH';
+
+/** One game on the Jack Point page, with how it stands. */
+export interface JackPointGame {
+  jackPoint: JackPoint;
+  progress: JackPointProgress[];
+  /** RUNNING (on and started), UPCOMING (starts later) or OFF. */
+  state?: 'RUNNING' | 'UPCOMING' | 'OFF';
+  winners?: number;
+  waiting?: number;
+  currentFrom?: string;
+  currentTo?: string;
+}
+
 export interface JackPoint {
   uid?: string;
   name: string;
   weeklyTarget: number;
   weeks: number;
-  /** yyyy-MM-dd; the backend moves it to that week's Monday. */
+  /** DAY, WEEK or MONTH: one round of the game (missing = WEEK). */
+  period?: JackPeriod;
+  /** yyyy-MM-dd; the backend moves it to the start of that round (Monday, the 1st). */
   startDate: string;
   leaveDays: number;
   bonusAmount: number;
@@ -489,6 +505,7 @@ export interface JackPointProgress {
   weeks: number;
   weeklyTarget: number;
   thisWeek: number;
+  period?: JackPeriod;
   started: boolean;
   leaveDays?: number;
   bonusAmount?: number;
@@ -504,6 +521,9 @@ export interface JackPointAward {
   staffName: string;
   weekFrom: string;
   weekTo: string;
+  /** Last day of the run. */
+  runEnd?: string;
+  period?: JackPeriod | null;
   commissionTotal: number;
   status: 'QUALIFIED' | 'APPROVED' | 'REJECTED';
   leaveDays?: number | null;

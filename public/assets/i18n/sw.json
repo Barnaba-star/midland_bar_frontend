@@ -503,7 +503,9 @@
     "REVIEW_PAYMENT_DESC": "Kagua taarifa za malipo",
     "STOCK_PURCHASES_LABEL": "manunuzi",
     "EMPTY_STOCK_TITLE": "Hakuna Ripoti ya Manunuzi",
-    "EMPTY_STOCK_TEXT": "Tafadhali badilisha chujio ili kupata kumbukumbu za manunuzi."
+    "EMPTY_STOCK_TEXT": "Tafadhali badilisha chujio ili kupata kumbukumbu za manunuzi.",
+    "SPLIT_COMMISSION": "Commission",
+    "SPLIT_JACK": "Jack Point"
   },
   "ROLE_DETAILS_DIALOG": {
     "TITLE": "Maelezo ya Wajibu",

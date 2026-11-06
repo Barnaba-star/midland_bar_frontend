@@ -503,7 +503,9 @@
     "REVIEW_PAYMENT_DESC": "Review payment information",
     "STOCK_PURCHASES_LABEL": "stock purchases",
     "EMPTY_STOCK_TITLE": "Stock & Purchase Report Not Found",
-    "EMPTY_STOCK_TEXT": "Please change the filter to find stock purchase records."
+    "EMPTY_STOCK_TEXT": "Please change the filter to find stock purchase records.",
+    "SPLIT_COMMISSION": "Commission",
+    "SPLIT_JACK": "Jack Point"
   },
   "ROLE_DETAILS_DIALOG": {
     "TITLE": "Role Details",

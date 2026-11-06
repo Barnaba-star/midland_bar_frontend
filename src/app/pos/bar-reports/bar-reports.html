@@ -732,6 +732,20 @@
                 </div>
               </div>
 
+              <!-- Jack Point bonuses inside the total -->
+              @if (getBonusCommission()) {
+                <div class="summary-card jackpoint">
+                  <div class="summary-icon">
+                    <mat-icon>emoji_events</mat-icon>
+                  </div>
+                  <div class="summary-info">
+                    <span>{{ 'REPORTS_PAGE.SPLIT_JACK' | translate }}</span>
+                    <strong>{{ getBonusCommission() | number }}</strong>
+                    <small>{{ 'REPORTS_PAGE.SPLIT_COMMISSION' | translate }} {{ getTotalCommission() - getBonusCommission() | number }}</small>
+                  </div>
+                </div>
+              }
+
               <!-- Paid -->
               <div class="summary-card paid">
                 <div class="summary-icon">
@@ -930,6 +944,12 @@
                               {{ report.middleName | uppercase }}
                               {{ report.lastName | uppercase }}
                             </strong>
+                            <!-- Commission from sales + Jack Point bonus = the total, so the two are never mixed up. -->
+                            <span class="staff-split">
+                              <span>{{ 'REPORTS_PAGE.SPLIT_COMMISSION' | translate }} <b>{{ salesCommissionOf(report) | number }}</b></span>
+                              <span class="jp" [class.none]="!report.bonusAmount">+ {{ 'REPORTS_PAGE.SPLIT_JACK' | translate }} <b>{{ (report.bonusAmount || 0) | number }}</b></span>
+                              <span class="sum">= {{ 'COMMON.TOTAL' | translate }} <b>{{ report.totalAmount | number }}</b></span>
+                            </span>
                           </div>
                         </div>
                       </td>

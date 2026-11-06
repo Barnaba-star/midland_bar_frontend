@@ -906,6 +906,19 @@ getPaidCommission(): number {
   );
 }
 
+/** Jack Point bonuses inside the totals (the rest is commission from sales). */
+getBonusCommission(): number {
+  return this.commissionReports.reduce(
+    (total, item) => total + Number(item.bonusAmount || 0),
+    0
+  );
+}
+
+/** A row's commission from sales: its total less the Jack Point bonus in it. */
+salesCommissionOf(report: any): number {
+  return Number(report?.totalAmount || 0) - Number(report?.bonusAmount || 0);
+}
+
 getLossCommission(): number {
   return this.commissionReports.reduce(
     (total, item) => total + Number(item.lossAmount || 0),

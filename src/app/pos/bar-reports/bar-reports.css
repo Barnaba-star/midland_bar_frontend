@@ -7865,3 +7865,13 @@
   font-size: 12px;
   text-align: left;
 }
+
+/* Staff report: commission from sales + Jack Point bonus = total. */
+.staff-split { display: flex; flex-wrap: wrap; gap: 4px 8px; margin-top: 4px; font-size: 12px; font-weight: 500;
+  color: var(--color-text-muted, #7a6f60); }
+.staff-split b { color: var(--color-text, #1d1812); font-weight: 700; }
+.staff-split .jp { padding: 0 8px; border-radius: 999px; background: color-mix(in srgb, var(--color-accent, #f5a524) 20%, transparent); }
+.staff-split .jp.none { background: transparent; opacity: .6; }
+.staff-split .sum b { color: #15803d; }
+.summary-card.jackpoint .summary-icon { color: var(--color-accent, #f5a524); }
+.summary-card.jackpoint small { display: block; font-size: 11px; opacity: .7; }

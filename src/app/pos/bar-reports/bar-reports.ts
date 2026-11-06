@@ -1,5 +1,6 @@
 import { OfflineService } from '../../Utils/offline/offline.service';
 import { Giveaways } from '../giveaways/giveaways';
+import { LoyaltyReport } from '../loyalty-report/loyalty-report';
 import { localDate } from '../../Utils/services/local-date';
 import { Insights } from '../insights/insights';
 import { PotsLedger } from '../pots-ledger/pots-ledger';
@@ -42,7 +43,7 @@ import { StockPacksPipe } from '../../Utils/pipes/stock-packs.pipe';
 @Component({
   selector: 'app-bar-reports',
   standalone: true,
-  imports: [Giveaways, Insights, PotsLedger, CashUp, StockTake, PotNamePipe, StockPacksPipe, 
+  imports: [Giveaways, LoyaltyReport, Insights, PotsLedger, CashUp, StockTake, PotNamePipe, StockPacksPipe, 
     EmptyStateComponent,Title2, MatIcon, CommonModule, FormsModule, CdkConnectedOverlay, CdkOverlayOrigin, MatFormField, MatLabel, FormsModule,
     MatDatepickerModule,
     MatFormFieldModule,
@@ -169,6 +170,12 @@ export class BarReports implements OnInit{
       // What was given away or taken off - offers, discounts, customers' offers, refunds - apart from sales.
       icon: 'pay',
       title: 'REPORTS.GIVEAWAYS',
+      roles: [...this.fullAccessRoles, 'MANAGER', 'ACCOUNTANT']
+    },
+    {
+      // The regular-customer offer: big bills, offers earned and spent, held now.
+      icon: 'pay',
+      title: 'REPORTS.LOYALTY',
       roles: [...this.fullAccessRoles, 'MANAGER', 'ACCOUNTANT']
     },
 

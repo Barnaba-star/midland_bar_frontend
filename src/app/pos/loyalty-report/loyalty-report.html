@@ -1,0 +1,70 @@
+<div class="action-container db-page">
+  <div class="db-card">
+    <div class="db-card-header">
+      <div>
+        <h3>{{ 'LOYALTY_REPORT.TITLE' | translate }}</h3>
+        <p>
+          {{ 'LOYALTY_REPORT.SUBTITLE' | translate }}
+          @if (data?.rule?.enabled) {
+            · {{ 'LOYALTY_REPORT.RULE' | translate: { min: (data.rule.minBill | number), bills: data.rule.billsNeeded, reward: (data.rule.rewardAmount | number) } }}
+          }
+        </p>
+      </div>
+    </div>
+    <div class="of-days">
+      @for (r of ranges; track r) {
+        <button type="button" class="row-action" [class.edit]="range === r" [class.view]="range !== r" (click)="setRange(r)">{{ 'LOYALTY_REPORT.R_' + r | translate }}</button>
+      }
+    </div>
+
+    @if (data) {
+      <div class="db-totals">
+        <div class="db-total grand"><small>{{ 'LOYALTY_REPORT.QUALIFIED' | translate }}</small><strong>{{ data.totals.qualified }}</strong><span>{{ 'LOYALTY_REPORT.CUSTOMERS_NOTE' | translate: { n: data.totals.customers } }}</span></div>
+        <div class="db-total"><small>{{ 'LOYALTY_REPORT.EARNED' | translate }}</small><strong>Tshs {{ data.totals.earned | number }}</strong></div>
+        <div class="db-total"><small>{{ 'LOYALTY_REPORT.USED' | translate }}</small><strong>Tshs {{ data.totals.used | number }}</strong></div>
+        <div class="db-total"><small>{{ 'LOYALTY_REPORT.LEFT_NOW' | translate }}</small><strong>Tshs {{ data.totals.leftNow | number }}</strong></div>
+        <div class="db-total"><small>{{ 'LOYALTY_REPORT.BILLS' | translate }}</small><strong>{{ data.totals.bills }}</strong><span>Tshs {{ data.totals.billsAmount | number }}</span></div>
+      </div>
+
+      <h4 class="rf-head">{{ 'LOYALTY_REPORT.BY_CUSTOMER' | translate }}</h4>
+      @if (!data.customers.length) { <p class="db-hint">{{ 'LOYALTY_REPORT.NONE' | translate }}</p> } @else {
+        <div class="db-table-wrap"><table class="db-table">
+          <thead><tr>
+            <th>{{ 'DEBTS.NAME' | translate }}</th>
+            <th>{{ 'DEBTS.PHONE' | translate }}</th>
+            <th class="num">{{ 'LOYALTY_REPORT.COL_BILLS' | translate }}</th>
+            <th class="num">{{ 'LOYALTY_REPORT.COL_BILLS_AMOUNT' | translate }}</th>
+            <th class="num">{{ 'LOYALTY_REPORT.EARNED' | translate }}</th>
+            <th class="num">{{ 'LOYALTY_REPORT.USED' | translate }}</th>
+            <th class="num">{{ 'LOYALTY_REPORT.LEFT_NOW' | translate }}</th>
+          </tr></thead>
+          <tbody>
+            @for (c of data.customers; track c.customerUid) {
+              <tr>
+                <td><b>{{ c.name }}</b></td>
+                <td>{{ c.phone }}</td>
+                <td class="num">{{ c.bills }}</td>
+                <td class="num">{{ c.billsAmount | number }}</td>
+                <td class="num">{{ c.earned | number }}</td>
+                <td class="num">{{ c.used | number }}</td>
+                <td class="num"><b>{{ c.leftNow | number }}</b></td>
+              </tr>
+            }
+          </tbody>
+        </table></div>
+      }
+
+      <h4 class="rf-head">{{ 'LOYALTY_REPORT.SPENT' | translate }}</h4>
+      @if (!data.spent.length) { <p class="db-hint">{{ 'LOYALTY_REPORT.NONE' | translate }}</p> } @else {
+        <div class="db-table-wrap"><table class="db-table">
+          <thead><tr><th>{{ 'DEBTS.COL_TIME' | translate }}</th><th>{{ 'DEBTS.NAME' | translate }}</th><th>{{ 'REFUND.COL_BILL' | translate }}</th><th>{{ 'DEBTS.COL_BY' | translate }}</th><th class="num">{{ 'DEBTS.COL_AMOUNT' | translate }}</th></tr></thead>
+          <tbody>
+            @for (u of data.spent; track $index) {
+              <tr><td>{{ u.usedAt | date: 'dd MMM HH:mm' }}</td><td>{{ u.customerName }}</td><td>{{ u.billCode }}</td><td>{{ u.usedBy }}</td><td class="num">{{ u.amount | number }}</td></tr>
+            }
+          </tbody>
+        </table></div>
+      }
+    }
+  </div>
+</div>

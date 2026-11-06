@@ -495,6 +495,10 @@ findManunuziBudget(): Observable<ResponseList<any>> { return this.http.get<Respo
 findPurchasePrices(serviceUid: string): Observable<ResponseList<any>> { return this.http.get<ResponseList<any>>(`${this.barURL}/suppliers/prices/${serviceUid}`); }
 
 /** Reports > Ofa na Punguzo for a period (DAY, WEEK, MONTH...). */
+loyaltyReport(filter: string): Observable<Response<any>> {
+  return this.http.get<Response<any>>(`${this.barURL}/loyalty/report/${filter}`);
+}
+
 findGiveaways(filter: string): Observable<Response<any>> {
   return this.http.get<Response<any>>(`${this.barURL}/reports/giveaways/${filter}`);
 }

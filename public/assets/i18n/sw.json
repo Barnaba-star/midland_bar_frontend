@@ -186,7 +186,8 @@
     "MGR_OTHER_EXPENSES": "Matumizi Mengineyo",
     "MGR_SERVICE_EXPENSES": "Matumizi ya Huduma",
     "MGR_STOCK_PURCHASE": "Manunuzi ya Stock",
-    "GIVEAWAYS": "Ofa na Punguzo"
+    "GIVEAWAYS": "Ofa na Punguzo",
+    "LOYALTY": "Ofa za Wateja"
   },
   "STORE": {
     "ADD": "Ongeza Kwenye Store",
@@ -3161,5 +3162,27 @@
     "WINNERS_OF": "kati ya {{earned}}",
     "WINNERS_UNTIL": "hadi {{date}}",
     "WINNERS_USED": "Ameitumia yote"
+  },
+  "LOYALTY_REPORT": {
+    "TITLE": "Ofa za wateja wa kudumu",
+    "SUBTITLE": "Bili kubwa walizolipa, ofa walizopata na walizotumia",
+    "RULE": "Sheria: bili {{bills}} za {{min}}+ → ofa {{reward}}",
+    "R_DAY": "Leo",
+    "R_YESTERDAY": "Jana",
+    "R_WEEK": "Wiki hii",
+    "R_MONTH": "Mwezi huu",
+    "R_LAST_MONTH": "Mwezi uliopita",
+    "R_THIS_YEAR": "Mwaka huu",
+    "QUALIFIED": "Waliopata ofa",
+    "CUSTOMERS_NOTE": "Wateja {{n}} walihusika",
+    "EARNED": "Ofa walizopata",
+    "USED": "Ofa zilizotumika",
+    "LEFT_NOW": "Ofa iliyobaki sasa",
+    "BILLS": "Bili kubwa zilizolipwa",
+    "BY_CUSTOMER": "Kwa kila mteja",
+    "COL_BILLS": "Bili",
+    "COL_BILLS_AMOUNT": "Thamani ya bili",
+    "SPENT": "Ofa zilizotumika (kila bili)",
+    "NONE": "Hakuna kwa kipindi hiki."
   }
 }

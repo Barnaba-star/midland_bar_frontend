@@ -186,7 +186,8 @@
     "MGR_OTHER_EXPENSES": "Other Expenses",
     "MGR_SERVICE_EXPENSES": "Service Expenses",
     "MGR_STOCK_PURCHASE": "Stock Purchase",
-    "GIVEAWAYS": "Offers & Discounts"
+    "GIVEAWAYS": "Offers & Discounts",
+    "LOYALTY": "Customer Offers"
   },
   "STORE": {
     "ADD": "Add Store",
@@ -3161,5 +3162,27 @@
     "WINNERS_OF": "of {{earned}}",
     "WINNERS_UNTIL": "till {{date}}",
     "WINNERS_USED": "All used"
+  },
+  "LOYALTY_REPORT": {
+    "TITLE": "Regular-customer offers",
+    "SUBTITLE": "Big bills paid, offers earned and spent",
+    "RULE": "Rule: {{bills}} bills of {{min}}+ → {{reward}} offer",
+    "R_DAY": "Today",
+    "R_YESTERDAY": "Yesterday",
+    "R_WEEK": "This week",
+    "R_MONTH": "This month",
+    "R_LAST_MONTH": "Last month",
+    "R_THIS_YEAR": "This year",
+    "QUALIFIED": "Earned an offer",
+    "CUSTOMERS_NOTE": "{{n}} customers involved",
+    "EARNED": "Offers earned",
+    "USED": "Offers used",
+    "LEFT_NOW": "Offer left now",
+    "BILLS": "Big bills paid",
+    "BY_CUSTOMER": "By customer",
+    "COL_BILLS": "Bills",
+    "COL_BILLS_AMOUNT": "Bills value",
+    "SPENT": "Offers used (per bill)",
+    "NONE": "Nothing in this period."
   }
 }

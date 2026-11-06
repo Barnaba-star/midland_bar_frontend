@@ -40,7 +40,12 @@
           <label class="wide"><small>{{ 'JACK_POINT.NOTE' | translate }}</small>
             <input type="text" maxlength="200" [(ngModel)]="editing.rewardNote" [placeholder]="'JACK_POINT.NOTE_PH' | translate" /></label>
         </div>
-        <p class="db-hint">{{ 'JACK_POINT.BONUS_HINT' | translate }}</p>
+        @if (editing.bonusAmount) {
+          <label class="db-check"><input type="checkbox" [(ngModel)]="editing.autoBonus" /><span>{{ 'JACK_POINT.AUTO_BONUS' | translate }}</span></label>
+        }
+        <p class="db-hint">{{ (editing.autoBonus ? 'JACK_POINT.AUTO_BONUS_HINT' : 'JACK_POINT.BONUS_HINT') | translate: { amount: (editing.bonusAmount || 0 | number) } }}</p>
+        <label class="db-form-wide jp-desc"><small>{{ 'JACK_POINT.DESCRIPTION' | translate }}</small>
+          <textarea rows="3" maxlength="500" [(ngModel)]="editing.description" [placeholder]="'JACK_POINT.DESCRIPTION_PH' | translate"></textarea></label>
         <label class="db-check"><input type="checkbox" [(ngModel)]="editing.enabled" /><span>{{ 'JACK_POINT.ENABLED' | translate }}</span></label>
         <div class="db-actions">
           <button type="button" class="row-action view" (click)="editing = null">{{ 'COMMON.CANCEL' | translate }}</button>
@@ -65,7 +70,7 @@
                 <small>{{ 'JACK_POINT.REWARD' | translate }}</small>
                 <span class="jp-reward">
                   @if (a.leaveDays) { <b>{{ 'JACK_POINT.DAYS_OFF' | translate: { n: a.leaveDays } }}</b> }
-                  @if (a.bonusAmount) { <b>{{ 'JACK_POINT.BONUS_OF' | translate: { amount: (a.bonusAmount | number) } }}</b> }
+                  @if (a.bonusAmount) { <b>{{ 'JACK_POINT.BONUS_OF' | translate: { amount: (a.bonusAmount | number) } }}@if (a.bonusPaidAt) { ✓ {{ 'JACK_POINT.PAID_TAG' | translate }} }</b> }
                   @if (a.rewardNote) { <b>{{ a.rewardNote }}</b> }
                 </span>
               </div>
@@ -82,7 +87,7 @@
                     <label class="wide"><small>{{ (deciding!.approve ? 'JACK_POINT.NOTE_OPTIONAL' : 'JACK_POINT.REASON') | translate }}</small>
                       <input type="text" maxlength="300" [(ngModel)]="deciding!.note" /></label>
                   </div>
-                  @if (deciding!.approve && a.bonusAmount) {
+                  @if (deciding!.approve && a.bonusAmount && !a.bonusPaidAt) {
                     <p class="db-hint">{{ 'JACK_POINT.BONUS_ON_APPROVE' | translate: { amount: (a.bonusAmount | number), name: a.staffName } }}</p>
                   }
                   <div class="db-actions">
@@ -126,6 +131,7 @@
                   <th>{{ 'JACK_POINT.COL_KIND' | translate }}</th>
                   <th>{{ 'JACK_POINT.COL_TARGET' | translate }}</th>
                   <th>{{ 'JACK_POINT.COL_ROUNDS' | translate }}</th>
+                  <th>{{ 'JACK_POINT.COL_BONUS' | translate }}</th>
                   <th>{{ 'JACK_POINT.REWARD' | translate }}</th>
                   <th>{{ 'JACK_POINT.COL_WINNERS' | translate }}</th>
                   <th>{{ 'JACK_POINT.STATUS' | translate }}</th>
@@ -134,14 +140,21 @@
               <tbody>
                 @for (g of shown; track g.jackPoint.uid) {
                   <tr>
-                    <td><b>{{ g.jackPoint.name }}</b><small class="jp-count">{{ 'JACK_POINT.FROM' | translate }} {{ g.jackPoint.startDate | date: 'd MMM y' }}</small></td>
+                    <td><b>{{ g.jackPoint.name }}</b><small class="jp-count">{{ 'JACK_POINT.FROM' | translate }} {{ g.jackPoint.startDate | date: 'd MMM y' }}</small>
+                      @if (g.jackPoint.description) { <small class="jp-desc-line">{{ g.jackPoint.description }}</small> }</td>
                     <td><span class="jp-kind">{{ 'JACK_POINT.P_' + periodOf(g.jackPoint) | translate }}</span></td>
                     <td>{{ g.jackPoint.weeklyTarget | number }}</td>
                     <td>{{ g.jackPoint.weeks }}</td>
                     <td>
+                      @if (g.jackPoint.bonusAmount) {
+                        <b>{{ g.jackPoint.bonusAmount | number }}</b>
+                        <small class="jp-count">{{ (g.jackPoint.autoBonus ? 'JACK_POINT.AUTO_TAG' : 'JACK_POINT.APPROVE_TAG') | translate }}</small>
+                      } @else { – }
+                    </td>
+                    <td>
                       @if (g.jackPoint.leaveDays) { {{ 'JACK_POINT.DAYS_OFF' | translate: { n: g.jackPoint.leaveDays } }} }
-                      @if (g.jackPoint.bonusAmount) { · {{ g.jackPoint.bonusAmount | number }} }
-                      @if (g.jackPoint.rewardNote) { · {{ g.jackPoint.rewardNote }} }
+                      @if (g.jackPoint.rewardNote) { @if (g.jackPoint.leaveDays) { · } {{ g.jackPoint.rewardNote }} }
+                      @if (!g.jackPoint.leaveDays && !g.jackPoint.rewardNote) { – }
                     </td>
                     <td>{{ g.winners ?? 0 }}@if (g.waiting) { <small class="jp-count">{{ 'JACK_POINT.WAITING_N' | translate: { n: g.waiting } }}</small> }</td>
                     <td><span class="jp-state" [attr.data-state]="stateOf(g)">{{ 'JACK_POINT.ST_' + stateOf(g) | translate }}</span></td>
@@ -169,6 +182,7 @@
                 · {{ 'JACK_POINT.NOW_ROUND' | translate: { from: (g.currentFrom | date: 'd MMM'), to: (g.currentTo | date: 'd MMM') } }}
               }
             </p>
+            @if (g.jackPoint.description) { <p class="jp-desc-line">{{ g.jackPoint.description }}</p> }
             <p class="jp-reward">
               @if (g.jackPoint.leaveDays) { <b>{{ 'JACK_POINT.DAYS_OFF' | translate: { n: g.jackPoint.leaveDays } }}</b> }
               @if (g.jackPoint.bonusAmount) { <b>{{ 'JACK_POINT.BONUS_OF' | translate: { amount: (g.jackPoint.bonusAmount | number) } }}</b> }
@@ -216,6 +230,40 @@
             </table>
           </div>
         }
+      </section>
+    }
+
+    <!-- Who had a Jack Point bonus put onto their commission. -->
+    @if (bonuses.length) {
+      <section class="jp-section">
+        <h4 class="jp-h">{{ 'JACK_POINT.BONUSES' | translate }} ({{ bonuses.length }}) · Tshs {{ bonusTotal | number }}</h4>
+        <p class="db-hint">{{ 'JACK_POINT.BONUSES_HINT' | translate }}</p>
+        <div class="db-table-wrap">
+          <table class="db-table">
+            <thead>
+              <tr>
+                <th>{{ 'JACK_POINT.STAFF' | translate }}</th>
+                <th>{{ 'JACK_POINT.TITLE' | translate }}</th>
+                <th>{{ 'JACK_POINT.PERIOD_COL' | translate }}</th>
+                <th>{{ 'JACK_POINT.EARNED' | translate }}</th>
+                <th>{{ 'JACK_POINT.COL_BONUS' | translate }}</th>
+                <th>{{ 'JACK_POINT.COL_ADDED' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (b of bonuses; track b.uid) {
+                <tr>
+                  <td><b>{{ b.staffName }}</b></td>
+                  <td>{{ b.jackPointName }}</td>
+                  <td>{{ b.weekFrom | date: 'd MMM' }} – {{ runEnd(b) | date: 'd MMM y' }}</td>
+                  <td>{{ b.commissionTotal | number }}</td>
+                  <td><b>+{{ b.bonusAmount | number }}</b></td>
+                  <td>{{ b.bonusPaidAt | date: 'd MMM y HH:mm' }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
       </section>
     }
 

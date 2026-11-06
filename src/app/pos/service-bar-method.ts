@@ -429,8 +429,8 @@ transferStaffBill(dto: { billUid: string; toStaffUid: string; reason?: string })
 }
 
 /** Jack Point: the games with each staff member's run, and the winners. */
-jackPoints(): Observable<Response<{ jackPoints: import('./BarModel').JackPointGame[]; awards: JackPointAward[]; counts?: Record<string, number> }>> {
-  return this.http.get<Response<{ jackPoints: import('./BarModel').JackPointGame[]; awards: JackPointAward[]; counts?: Record<string, number> }>>(`${this.barURL}/jackPoints`);
+jackPoints(): Observable<Response<{ jackPoints: import('./BarModel').JackPointGame[]; awards: JackPointAward[]; counts?: Record<string, number>; bonuses?: JackPointAward[]; bonusTotal?: number }>> {
+  return this.http.get<Response<{ jackPoints: import('./BarModel').JackPointGame[]; awards: JackPointAward[]; counts?: Record<string, number>; bonuses?: JackPointAward[]; bonusTotal?: number }>>(`${this.barURL}/jackPoints`);
 }
 
 saveJackPoint(jp: JackPoint): Observable<Response<JackPoint>> {

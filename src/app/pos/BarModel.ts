@@ -492,6 +492,10 @@ export interface JackPoint {
   bonusAmount: number;
   rewardNote?: string | null;
   enabled: boolean;
+  /** Bonus straight onto the commission when they qualify (no approval for the money). */
+  autoBonus?: boolean | null;
+  /** How the game works, in the boss's words. */
+  description?: string | null;
 }
 
 /** Where one staff member stands on a game. */
@@ -510,6 +514,7 @@ export interface JackPointProgress {
   leaveDays?: number;
   bonusAmount?: number;
   rewardNote?: string | null;
+  description?: string | null;
 }
 
 /** A win: QUALIFIED (found, waiting), APPROVED or REJECTED. */
@@ -532,6 +537,9 @@ export interface JackPointAward {
   leaveFrom?: string | null;
   decisionNote?: string | null;
   decidedByName?: string | null;
+  decidedAt?: string | null;
+  /** When the bonus went onto the commission. */
+  bonusPaidAt?: string | null;
 }
 
 /** The branch's loyalty rule: bills of at least minBill, billsNeeded of them within periodDays, earn rewardAmount as ofa. */

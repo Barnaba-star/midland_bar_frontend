@@ -35,6 +35,9 @@ export class JackPointPage implements OnInit {
   /** Which games the list and the cards show. */
   filter: Filter = 'RUNNING';
   awards: JackPointAward[] = [];
+  /** Who had a bonus put onto their commission, and how much in all. */
+  bonuses: JackPointAward[] = [];
+  bonusTotal = 0;
   loading = true;
   busy = false;
   editing: JackPoint | null = null;
@@ -63,6 +66,8 @@ export class JackPointPage implements OnInit {
           this.filter = 'ALL';
         }
         this.awards = res?.data?.awards ?? [];
+        this.bonuses = res?.data?.bonuses ?? [];
+        this.bonusTotal = res?.data?.bonusTotal ?? 0;
         this.loading = false;
         this.cdr.markForCheck();
       },
@@ -74,11 +79,11 @@ export class JackPointPage implements OnInit {
   }
 
   add(): void {
-    this.editing = { name: '', period: 'WEEK', weeklyTarget: 50000, weeks: 4, startDate: localDate(new Date()), leaveDays: 1, bonusAmount: 0, rewardNote: '', enabled: true };
+    this.editing = { name: '', period: 'WEEK', weeklyTarget: 50000, weeks: 4, startDate: localDate(new Date()), leaveDays: 0, bonusAmount: 20000, rewardNote: '', enabled: true, autoBonus: true, description: '' };
   }
 
   edit(jp: JackPoint): void {
-    this.editing = { ...jp, period: this.periodOf(jp) };
+    this.editing = { ...jp, period: this.periodOf(jp), autoBonus: !!jp.autoBonus, description: jp.description ?? '' };
   }
 
   periodOf(x: { period?: JackPeriod | null } | null | undefined): JackPeriod {

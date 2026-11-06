@@ -127,7 +127,7 @@
               }
               @for (g of jackGames; track g.jackPointUid) {
                 <div class="jack-game">
-                  <span class="jack-name">{{ g.name }}</span>
+                  <span class="jack-name" [attr.title]="g.description || null">{{ g.name }}</span>
                   <span class="jack-dots">@for (on of jackDots(g); track $index) { <i [class.on]="on"></i> }</span>
                   <small>{{ 'JACK_POINT.MY_STREAK_' + (g.period || 'WEEK') | translate: { streak: g.streak, weeks: g.weeks } }}
                     · {{ 'JACK_POINT.MY_NOW_' + (g.period || 'WEEK') | translate: { got: (g.thisWeek | number), target: (g.weeklyTarget | number) } }}</small>

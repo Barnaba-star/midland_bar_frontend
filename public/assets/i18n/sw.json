@@ -3151,7 +3151,18 @@
     "MY_STREAK_MONTH": "Miezi {{streak}} kati ya {{weeks}}",
     "MY_NOW_DAY": "Leo {{got}} / {{target}}",
     "MY_NOW_WEEK": "Wiki hii {{got}} / {{target}}",
-    "MY_NOW_MONTH": "Mwezi huu {{got}} / {{target}}"
+    "MY_NOW_MONTH": "Mwezi huu {{got}} / {{target}}",
+    "AUTO_BONUS": "Ongeza bonus kwenye commission yake moja kwa moja akishinda (bila kusubiri kuthibitisha)",
+    "AUTO_BONUS_HINT": "Mhudumu akitimiza vigezo, {{amount}} inaingia kwenye commission yake siku hiyo hiyo na kulipwa kwenye Matumizi ya Wahudumu. Siku za mapumziko (kama zipo) bado zinasubiri kuthibitishwa.",
+    "DESCRIPTION": "Maelezo ya Jack Point (inavyofanya kazi)",
+    "DESCRIPTION_PH": "mf. Mhudumu atakayefikisha commission ya 50,000 kila wiki kwa wiki 4 mfululizo ataongezewa 20,000 kwenye commission yake.",
+    "COL_BONUS": "Bonus (Tshs)",
+    "AUTO_TAG": "moja kwa moja",
+    "APPROVE_TAG": "baada ya kuthibitisha",
+    "COL_ADDED": "Iliongezwa",
+    "BONUSES": "Walioongezewa commission",
+    "BONUSES_HINT": "Wahudumu waliotimiza vigezo na bonus ya Jack Point ikaongezwa kwenye commission yao.",
+    "PAID_TAG": "imeshaongezwa"
   },
   "CUSTOMER_PIN": {
     "PHONE": "Namba ya simu ya mteja",

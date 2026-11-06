@@ -74,15 +74,17 @@
             <div class="r-muted r-sub">{{ l.offer }}@if (l.listPrice && l.listPrice !== l.unitPrice) { · {{ 'RECEIPT.WAS' | translate: { price: (l.listPrice | number) } }} }</div>
           }
         }
-        @if (receipt.offerTotal) {
-          <div class="r-row"><span>{{ 'RECEIPT.OFFER' | translate }}@if (receipt.offerCustomer) { · {{ receipt.offerCustomer }} }</span><span>−{{ receipt.offerTotal | number }}</span></div>
-        }
         @if (receipt.discountTotal) {
           <div class="r-row"><span>{{ 'RECEIPT.DISCOUNT' | translate }}</span><span>−{{ receipt.discountTotal | number }}</span></div>
         }
         <div class="r-rule"></div>
 
         <div class="r-row r-total"><span>{{ 'RECEIPT.TOTAL' | translate }}</span><span>Tshs {{ receipt.total | number }}</span></div>
+        <!-- The customer's offer comes off the total; what is left is what they pay. -->
+        @if (receipt.offerTotal) {
+          <div class="r-row"><span>{{ 'RECEIPT.OFFER' | translate }}@if (receipt.offerCustomer) { · {{ receipt.offerCustomer }} }</span><span>−{{ receipt.offerTotal | number }}</span></div>
+          <div class="r-row r-total"><span>{{ 'RECEIPT.TO_PAY' | translate }}</span><span>Tshs {{ (receipt.toPay ?? (receipt.total - receipt.offerTotal)) | number }}</span></div>
+        }
 
         @if (receipt.payments?.length) {
           <div class="r-rule"></div>

@@ -601,6 +601,10 @@ saveLoyaltyRule(rule: LoyaltyRule): Observable<Response<LoyaltyRule>> {
 }
 
 /** Whether this bill asks for the customer's code: the server adds up its lines against the rule. */
+loyaltyWinners(): Observable<Response<{ customers: { customerUid: string; name: string; phone?: string; earned: number; used: number; left: number; grantedAt?: string; expiresAt?: string }[]; withOffer: number; totalLeft: number }>> {
+  return this.http.get<Response<any>>(`${this.barURL}/loyalty/winners`, { context: silent() });
+}
+
 loyaltyAsk(billUid: string): Observable<Response<{ ask: boolean; enabled: boolean; minBill: number; total: number; customerName?: string | null; customerUid?: string | null; offerLeft?: number; offerNow?: number; toPay?: number; loyalty?: import('./BarModel').LoyaltyProgress }>> {
   return this.http.get<Response<{ ask: boolean; enabled: boolean; minBill: number; total: number; customerName?: string | null; customerUid?: string | null; offerLeft?: number; offerNow?: number; toPay?: number; loyalty?: import('./BarModel').LoyaltyProgress }>>(`${this.barURL}/loyalty/bills/${billUid}/ask`, { context: silent() });
 }

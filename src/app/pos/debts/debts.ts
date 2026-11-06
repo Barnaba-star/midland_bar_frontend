@@ -1,3 +1,4 @@
+import { LoyaltyWinnersCard } from '../loyalty-rule/loyalty-winners';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { DatePipe, DecimalPipe, NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -21,7 +22,7 @@ type Panel = 'PAY' | 'HISTORY' | 'EDIT';
  */
 @Component({
   selector: 'app-debts',
-  imports: [FormsModule, MatIconModule, DecimalPipe, DatePipe, NgTemplateOutlet, TranslatePipe, Offers, LoyaltyRuleCard],
+  imports: [FormsModule, MatIconModule, DecimalPipe, DatePipe, NgTemplateOutlet, TranslatePipe, Offers, LoyaltyRuleCard, LoyaltyWinnersCard],
   templateUrl: './debts.html',
   styleUrl: './debts.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

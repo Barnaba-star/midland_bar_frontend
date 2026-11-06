@@ -2153,7 +2153,8 @@
     "DIRECT_2": "Right-click the Google Chrome shortcut > Properties > at the end of 'Target' add a space and:",
     "DIRECT_3": "Close all of Chrome and open it from that shortcut. Every 'Print' now goes straight out.",
     "OFFER": "Offer",
-    "FREE_WORD": "FREE (offer)"
+    "FREE_WORD": "FREE (offer)",
+    "TO_PAY": "TO PAY"
   },
   "STAFF_SELL_PAGE": {
     "RECALL_HANDOVER": "Take handover back",
@@ -3151,6 +3152,14 @@
     "REWARD": "Offer they earn (Tshs)",
     "HINT": "When a bill reaches this amount, the system asks whether the customer has a code. Bills count within the calendar month; once they reach the number, the offer is added by itself and lasts to the end of the month. Everyone starts again on the 1st.",
     "SAVED": "Regular customer offer saved.",
-    "OFF_TAG": "OFF"
+    "OFF_TAG": "OFF",
+    "WINNERS_TITLE": "Customers on an offer",
+    "WINNERS_SUB": "Met the rule this month, with the offer left to spend.",
+    "WINNERS_COUNT": "Customers with offer",
+    "WINNERS_LEFT": "Offer left",
+    "WINNERS_NONE": "No customer has met the rule this month yet.",
+    "WINNERS_OF": "of {{earned}}",
+    "WINNERS_UNTIL": "till {{date}}",
+    "WINNERS_USED": "All used"
   }
 }

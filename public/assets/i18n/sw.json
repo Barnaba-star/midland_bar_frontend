@@ -2153,7 +2153,8 @@
     "DIRECT_2": "Bonyeza kulia shortcut ya Google Chrome > Properties > mwishoni mwa 'Target' ongeza nafasi kisha:",
     "DIRECT_3": "Funga Chrome yote, ifungue kwa shortcut hiyo. Kila 'Chapisha' sasa inatoka moja kwa moja.",
     "OFFER": "Ofa",
-    "FREE_WORD": "BURE (ofa)"
+    "FREE_WORD": "BURE (ofa)",
+    "TO_PAY": "KULIPA"
   },
   "STAFF_SELL_PAGE": {
     "RECALL_HANDOVER": "Rudisha makabidhiano",
@@ -3151,6 +3152,14 @@
     "REWARD": "Ofa atakayopata (Tshs)",
     "HINT": "Bili ikifika kiasi hiki, mfumo unauliza kama mteja ana code. Bili zinahesabiwa ndani ya mwezi wa kalenda; akifikisha idadi, ofa inaingia yenyewe na inatumika mpaka mwisho wa mwezi. Kila tarehe 1 wote wanaanza upya.",
     "SAVED": "Ofa ya wateja wa kudumu imehifadhiwa.",
-    "OFF_TAG": "IMEZIMWA"
+    "OFF_TAG": "IMEZIMWA",
+    "WINNERS_TITLE": "Wateja walio kwenye ofa",
+    "WINNERS_SUB": "Waliotimiza vigezo mwezi huu na kiasi cha ofa kilichobaki kutumia.",
+    "WINNERS_COUNT": "Wateja wenye ofa",
+    "WINNERS_LEFT": "Ofa iliyobaki",
+    "WINNERS_NONE": "Bado hakuna mteja aliyetimiza vigezo mwezi huu.",
+    "WINNERS_OF": "kati ya {{earned}}",
+    "WINNERS_UNTIL": "hadi {{date}}",
+    "WINNERS_USED": "Ameitumia yote"
   }
 }

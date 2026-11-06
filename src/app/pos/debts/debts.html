@@ -15,10 +15,14 @@
     @if (canLoyalty) {
       <app-loyalty-rule />
     }
+    <app-loyalty-winners />
     <app-offers />
   } @else {
   @if (canLoyalty) {
     <app-loyalty-rule />
+  }
+  @if (!canOffers) {
+    <app-loyalty-winners />
   }
   <div class="db-card">
     <div class="db-card-header">

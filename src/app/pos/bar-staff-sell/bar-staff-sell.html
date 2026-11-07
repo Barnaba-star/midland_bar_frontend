@@ -75,6 +75,12 @@
             {{ (looking ? 'COMMON.LOADING' : 'STAFF_SELL_PAGE.OPEN_CODE') | translate }}
             <mat-icon>arrow_forward</mat-icon>
           </button>
+
+          <!-- Forgot the PIN they sign in with on their phone: a new one here, a manager approving. -->
+          <button type="button" class="forgot-pin" (click)="forgotPin()">
+            <mat-icon>lock_reset</mat-icon>
+            {{ 'STAFF_SELL_PAGE.FORGOT_PIN' | translate }}
+          </button>
         </form>
       } @else {
         <!-- ============ THE STAFF MEMBER AND THEIR BILLS ============ -->

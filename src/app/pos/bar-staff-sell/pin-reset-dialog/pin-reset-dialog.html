@@ -1,0 +1,77 @@
+@if (done) {
+  <div class="unlock">
+    <div class="unlock-head">
+      <span class="unlock-icon ok"><mat-icon>check</mat-icon></span>
+      <div>
+        <h3>{{ 'STAFF_SELL_PAGE.PIN_RESET_DONE' | translate }}</h3>
+        <p>{{ 'STAFF_SELL_PAGE.PIN_RESET_DONE_HINT' | translate }}</p>
+      </div>
+    </div>
+    <div class="unlock-actions">
+      <button type="button" class="unlock-btn" (click)="close()">
+        <mat-icon>done</mat-icon>
+        {{ 'COMMON.CLOSE' | translate }}
+      </button>
+    </div>
+  </div>
+} @else {
+  <form class="unlock" (ngSubmit)="submit()" autocomplete="off">
+    <div class="unlock-head">
+      <span class="unlock-icon"><mat-icon>password</mat-icon></span>
+      <div>
+        <h3>{{ 'STAFF_SELL_PAGE.PIN_RESET_TITLE' | translate }}</h3>
+        <p>{{ 'STAFF_SELL_PAGE.PIN_RESET_HINT' | translate }}</p>
+      </div>
+    </div>
+
+    <span class="step">{{ 'STAFF_SELL_PAGE.PIN_RESET_STAFF' | translate }}</span>
+    <label class="unlock-field">
+      <span>{{ 'STAFF_SELL_PAGE.PIN_RESET_CODE' | translate }}</span>
+      <input name="staffCode" type="password" inputmode="numeric" maxlength="6" [ngModel]="staffCode"
+        (ngModelChange)="staffCode = digits($event)" autocomplete="off" placeholder="••••" />
+    </label>
+    <div class="pin-row">
+      <label class="unlock-field">
+        <span>{{ 'STAFF_SELL_PAGE.PIN_RESET_NEW' | translate }}</span>
+        <input name="newPin" type="password" inputmode="numeric" maxlength="4" [ngModel]="newPin"
+          (ngModelChange)="newPin = digits($event)" autocomplete="new-password" placeholder="••••" />
+      </label>
+      <label class="unlock-field">
+        <span>{{ 'STAFF_SELL_PAGE.PIN_RESET_AGAIN' | translate }}</span>
+        <input name="confirmPin" type="password" inputmode="numeric" maxlength="4" [ngModel]="confirmPin"
+          (ngModelChange)="confirmPin = digits($event)" autocomplete="new-password" placeholder="••••" />
+      </label>
+    </div>
+    @if (pinMismatch) {
+      <p class="pin-error">{{ 'STAFF_SELL_PAGE.PIN_RESET_MISMATCH' | translate }}</p>
+    }
+    <p class="pin-rule">{{ 'STAFF_SELL_PAGE.PIN_RESET_RULE' | translate }}</p>
+
+    <span class="step">{{ 'STAFF_SELL_PAGE.PIN_RESET_MANAGER' | translate }}</span>
+    <label class="unlock-field">
+      <span>{{ 'COMMON.USERNAME' | translate }}</span>
+      <input name="username" [(ngModel)]="username" autocomplete="off" autocapitalize="none" spellcheck="false" />
+    </label>
+    <label class="unlock-field">
+      <span>{{ 'COMMON.PASSWORD' | translate }}</span>
+      <div class="pass-wrap">
+        <input name="password" [(ngModel)]="password" [type]="showPassword ? 'text' : 'password'" autocomplete="off" />
+        <button type="button" class="pass-toggle" (click)="showPassword = !showPassword"
+          [attr.aria-label]="(showPassword ? 'LOGIN.HIDE_PASSWORD' : 'LOGIN.SHOW_PASSWORD') | translate">
+          <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </div>
+    </label>
+
+    <div class="unlock-actions">
+      <button type="button" class="row-action view" (click)="close()">
+        <mat-icon>close</mat-icon>
+        <span>{{ 'COMMON.CANCEL' | translate }}</span>
+      </button>
+      <button type="submit" class="unlock-btn" [disabled]="!ready">
+        <mat-icon>lock_reset</mat-icon>
+        {{ (checking ? 'COMMON.LOADING' : 'STAFF_SELL_PAGE.PIN_RESET_BTN') | translate }}
+      </button>
+    </div>
+  </form>
+}

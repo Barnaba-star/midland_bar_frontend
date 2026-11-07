@@ -22,6 +22,7 @@ import { AlertService } from '../../Utils/services/alert';
 import { ServiceBarMethod } from '../service-bar-method';
 import { lockStaffSell, unlockStaffSell } from './staff-sell-lock';
 import { StaffSellUnlockDialog } from './unlock-dialog/unlock-dialog';
+import { StaffPinResetDialog } from './pin-reset-dialog/pin-reset-dialog';
 import { StaffHandoverDialog } from './handover-dialog/handover-dialog';
 import { ColleagueResult, StaffColleagueDialog } from './colleague-dialog/colleague-dialog';
 import { Subscription } from 'rxjs';
@@ -581,6 +582,11 @@ export class BarStaffSell implements OnInit, OnDestroy {
         this.router.navigate([landingFor((role) => this.auth.hasRole(role))]);
       }
     });
+  }
+
+  /** A staff member who forgot their PIN sets a new one, a manager approving. */
+  forgotPin(): void {
+    this.dialog.open(StaffPinResetDialog, { width: '440px', maxWidth: '95vw', autoFocus: true });
   }
 
   private signOut(): void {

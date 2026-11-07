@@ -182,6 +182,30 @@
   font-size: 18px;
 }
 
+.forgot-pin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  align-self: center;
+  padding: 6px 10px;
+  border: none;
+  background: transparent;
+  color: #9a6a10;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.forgot-pin mat-icon {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
+
 /* ============ Staff bar ============ */
 
 .staff-bar {

@@ -179,6 +179,10 @@
         <span>{{ (submitting ? 'LOGIN.SIGNING_IN' : 'LOGIN.SIGN_IN') | translate }}</span>
       </button>
 
+      <button type="button" class="forgot-link" (click)="openForgotPassword()" [disabled]="submitting">
+        {{ 'FORGOT.LINK' | translate }}
+      </button>
+
       <!-- Its own line, not a field hint: two lines of hint ran over the password box. -->
       <p class="staff-tip">
         <mat-icon>badge</mat-icon>

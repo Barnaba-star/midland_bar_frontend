@@ -3251,5 +3251,29 @@
     "COL_BILLS_AMOUNT": "Bills value",
     "SPENT": "Offers used (per bill)",
     "NONE": "Nothing in this period."
+  },
+  "FORGOT": {
+    "LINK": "Forgot your password?",
+    "TITLE": "Set a new password",
+    "HINT": "Forgot your password? Set a new one here. Someone senior to you approves with their login.",
+    "STEP_YOU": "1. Your account",
+    "NEW": "New password",
+    "AGAIN": "Repeat password",
+    "RULE": "At least 6 characters.",
+    "STEP_APPROVER": "2. Approval",
+    "APPROVER_HINT": "A manager (for branch staff), the CEO (for a manager), or the main office (for anyone).",
+    "APPROVER_USER": "Approver's username",
+    "APPROVER_PASS": "Their password",
+    "STAFF_PIN": "Staff who forgot their PIN: open Staff Sell, then \"Forgot your PIN?\".",
+    "SAVE": "Change password",
+    "DONE": "Password changed",
+    "DONE_HINT": "Sign in now with your username and the new password.",
+    "TO_LOGIN": "Go to sign in",
+    "ERR_NOT_APPROVED": "Approval refused: check the approver's username and password, or whether they are senior to this account.",
+    "ERR_SELF": "You cannot approve yourself - someone senior to you must.",
+    "ERR_SHORT": "The password needs at least 6 characters.",
+    "ERR_MISMATCH": "The passwords do not match.",
+    "ERR_MISSING": "Fill in every field.",
+    "ERR_FAILED": "It did not work. Try again."
   }
 }

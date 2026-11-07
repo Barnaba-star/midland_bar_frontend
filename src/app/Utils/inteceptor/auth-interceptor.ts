@@ -22,7 +22,8 @@ export const AuthInterceptor: HttpInterceptorFn = (
   // colleague signing in from Staff Sell must not throw out the one there.
   const isLoginRequest = req.url.includes('/authentication/login')
     || req.url.includes('/authentication/staffLogin')
-    || req.url.includes('/authentication/staffSetup');
+    || req.url.includes('/authentication/staffSetup')
+    || req.url.includes('/authentication/forgotPassword');
 
   // A sign-in carries no old token: an expired one left in the browser made
   // the backend refuse the sign-in itself (500), so login never went through.

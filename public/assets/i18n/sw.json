@@ -3251,5 +3251,29 @@
     "COL_BILLS_AMOUNT": "Thamani ya bili",
     "SPENT": "Ofa zilizotumika (kila bili)",
     "NONE": "Hakuna kwa kipindi hiki."
+  },
+  "FORGOT": {
+    "LINK": "Umesahau password?",
+    "TITLE": "Weka password mpya",
+    "HINT": "Umesahau password yako? Weka mpya hapa. Mtu wa juu yako ataidhinisha kwa login yake.",
+    "STEP_YOU": "1. Akaunti yako",
+    "NEW": "Password mpya",
+    "AGAIN": "Rudia password",
+    "RULE": "Angalau herufi 6.",
+    "STEP_APPROVER": "2. Idhini",
+    "APPROVER_HINT": "Meneja (kwa wafanyakazi wa tawi), CEO (kwa meneja), au ofisi kuu (kwa yeyote).",
+    "APPROVER_USER": "Username ya anayeidhinisha",
+    "APPROVER_PASS": "Password yake",
+    "STAFF_PIN": "Mhudumu aliyesahau PIN: fungua Mauzo ya Wahudumu, kisha \"Umesahau PIN?\".",
+    "SAVE": "Badilisha password",
+    "DONE": "Password imebadilishwa",
+    "DONE_HINT": "Sasa ingia kwa username yako na password mpya.",
+    "TO_LOGIN": "Nenda kuingia",
+    "ERR_NOT_APPROVED": "Idhini haikukubaliwa: angalia username, password ya anayeidhinisha, au kama ana mamlaka juu ya akaunti hii.",
+    "ERR_SELF": "Huwezi kujiidhinisha mwenyewe - mtu mwingine wa juu yako aidhinishe.",
+    "ERR_SHORT": "Password iwe angalau herufi 6.",
+    "ERR_MISMATCH": "Password hazilingani.",
+    "ERR_MISSING": "Jaza sehemu zote.",
+    "ERR_FAILED": "Imeshindikana. Jaribu tena."
   }
 }

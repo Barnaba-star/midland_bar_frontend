@@ -494,6 +494,21 @@ input.mat-input-element:-webkit-autofill {
 }
 
 /* How bar staff sign in: code as username, PIN as password. */
+.forgot-link {
+  display: block;
+  margin: 10px auto 0;
+  padding: 4px 8px;
+  border: none;
+  background: transparent;
+  color: var(--color-primary, #b86e00);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
 .staff-tip {
   display: flex;
   align-items: flex-start;

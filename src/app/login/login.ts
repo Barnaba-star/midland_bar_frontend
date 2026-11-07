@@ -17,6 +17,7 @@ import { HttpClient } from '@angular/common/http';
 import { AlertService } from '../Utils/services/alert';
 import { Authentication } from '../Utils/services/authentication';
 import { environment } from '../Utils/enviroments/environment';
+import { ForgotPasswordDialog } from './forgot-password-dialog/forgot-password-dialog';
 import { ChangeDetectorRef } from '@angular/core';
 import { lockStaffSell, unlockStaffSell } from '../pos/bar-staff-sell/staff-sell-lock';
 import { DeviceRegistration } from '../Utils/services/device-registration';
@@ -568,5 +569,16 @@ submitSetup(): void {
 
   get username() { return this.loginForm.get('username'); }
   get password() { return this.loginForm.get('password'); }
-}
 
+  /** "Umesahau password?": a new password with a senior login approving; fills the username on return. */
+  openForgotPassword(): void {
+    this.dialog.open(ForgotPasswordDialog, { width: '480px', maxWidth: '95vw', autoFocus: true })
+      .afterClosed().subscribe((username?: string) => {
+        if (username) {
+          this.loginForm.patchValue({ username, password: '' });
+          this.loginError = '';
+          this.cdr.markForCheck();
+        }
+      });
+  }
+}

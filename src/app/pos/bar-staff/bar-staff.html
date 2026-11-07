@@ -218,6 +218,12 @@
                           <span>{{ 'COMMON.EDIT' | translate }}</span>
                         </button>
 
+                        <!-- Forgot their code or PIN: a new one-time pair, the old one stops working. -->
+                        <button type="button" class="row-action view" (click)="onResetAccess(staff)" [title]="'STAFF_PAGE.NEW_CODE_HINT' | translate">
+                          <mat-icon>key</mat-icon>
+                          <span>{{ 'STAFF_PAGE.NEW_CODE' | translate }}</span>
+                        </button>
+
                         @if (canDeleteStaff) {
                         <!-- Someone with a login role would sign in again: the CEO removes the role first. -->
                         <span [matTooltip]="staff.roles?.length ? ('STAFF_PAGE.DELETE_HAS_ROLE' | translate) : ''">

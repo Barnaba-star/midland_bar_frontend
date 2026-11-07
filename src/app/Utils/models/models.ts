@@ -29,4 +29,6 @@ export interface DeleteConfirmationData {
   itemName?: string;
   confirmText?: string;
   cancelText?: string;
+  /** Material icon instead of the bin, for a confirm that is not a delete. */
+  icon?: string;
 }

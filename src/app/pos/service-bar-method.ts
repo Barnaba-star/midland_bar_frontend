@@ -393,6 +393,11 @@ unlockStaffSell(dto: { username: string; password: string }): Observable<Respons
   return this.http.post<Response<boolean>>(`${this.barURL}/staffSell/unlock`, dto);
 }
 
+/** Manage Staff: a new one-time code + PIN for a staff member who forgot theirs (issuedPin shown once). */
+resetStaffAccess(staffUid: string): Observable<Response<any>> {
+  return this.http.post<Response<any>>(`${this.barURL}/resetStaffAccess/${staffUid}`, {});
+}
+
 /** Staff Sell: a staff member who forgot their PIN sets a new one, with a manager's login as approval. */
 resetStaffPin(dto: { staffCode: string; newPin: string; username: string; password: string }): Observable<Response<boolean>> {
   return this.http.post<Response<boolean>>(`${this.barURL}/staffSell/resetPin`, dto);

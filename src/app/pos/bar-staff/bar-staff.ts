@@ -332,6 +332,46 @@ export class BarStaff implements OnInit{
     });
   }
 
+  /**
+   * Forgot their code or PIN: after a confirm, the old pair stops working and
+   * a new one-time code + PIN is shown once; at their next sign-in they set
+   * their own.
+   */
+  onResetAccess(staff: any): void {
+    const name = [staff.firstName, staff.middleName, staff.lastName].filter((x: string) => !!x && x.trim()).join(' ');
+    this.dialog.open(DeleteConfirmationComponent, {
+      width: '420px',
+      disableClose: true,
+      data: {
+        title: this.translate.instant('STAFF_PAGE.NEW_CODE_TITLE'),
+        message: this.translate.instant('STAFF_PAGE.NEW_CODE_MESSAGE'),
+        itemName: name,
+        confirmText: this.translate.instant('STAFF_PAGE.NEW_CODE_CONFIRM'),
+        icon: 'key',
+        cancelText: this.translate.instant('COMMON.CANCEL'),
+      },
+    }).afterClosed().subscribe((confirmed: boolean) => {
+      if (!confirmed) {
+        return;
+      }
+      this.barService.resetStaffAccess(staff.uid).subscribe({
+        next: (res) => {
+          if (!res?.data) {
+            return;
+          }
+          const rows = this.barStaffDataSource.data;
+          const i = rows.findIndex((r) => r.uid === staff.uid);
+          if (i !== -1) {
+            rows[i] = { ...rows[i], hasCode: true, hasPin: true };
+            this.barStaffDataSource.data = [...rows];
+          }
+          this.showIssuedCode(res.data);
+          this.cdr.detectChanges();
+        },
+      });
+    });
+  }
+
   /** The optional code and PIN changes of an edit: empty leaves each as it is. */
   private codeAndPinChange(result: any, current?: string): Pick<BarStaffDTO, 'staffCode' | 'pin'> {
     const code = String(result?.newCode ?? '').trim();

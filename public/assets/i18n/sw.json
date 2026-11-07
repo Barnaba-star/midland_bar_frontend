@@ -215,6 +215,11 @@
     "PERCENTAGE": "Asilimia"
   },
   "STAFF_PAGE": {
+    "NEW_CODE": "Code mpya",
+    "NEW_CODE_HINT": "Amesahau code au PIN: mpe code na PIN mpya za mara moja",
+    "NEW_CODE_TITLE": "Code na PIN mpya",
+    "NEW_CODE_MESSAGE": "Code na PIN za zamani zitafutwa na hazitafanya kazi tena. Utaona code na PIN mpya za mara moja; akiingia nazo ataweka zake za kudumu.",
+    "NEW_CODE_CONFIRM": "Tengeneza mpya",
     "FORM_TITLE_ADD": "Ongeza Mhudumu Mpya",
     "MANAGEMENT_TITLE": "Usimamizi wa Wahudumu",
     "MANAGEMENT_SUBTITLE": "Simamia na fuatilia wahudumu wa bar",

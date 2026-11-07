@@ -215,6 +215,11 @@
     "PERCENTAGE": "Percentage"
   },
   "STAFF_PAGE": {
+    "NEW_CODE": "New code",
+    "NEW_CODE_HINT": "Forgot their code or PIN: give a new one-time code and PIN",
+    "NEW_CODE_TITLE": "New code and PIN",
+    "NEW_CODE_MESSAGE": "The old code and PIN are removed and stop working. You will see a new one-time code and PIN; signing in with them, they set their own.",
+    "NEW_CODE_CONFIRM": "Make new ones",
     "FORM_TITLE_ADD": "Add New Staff",
     "MANAGEMENT_TITLE": "Staff Management",
     "MANAGEMENT_SUBTITLE": "Manage and track the bar staff",

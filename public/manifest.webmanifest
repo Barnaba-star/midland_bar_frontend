@@ -21,9 +21,9 @@
       "purpose": "any"
     },
     {
-      "src": "favicon-b.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
+      "src": "favicon-b.png",
+      "sizes": "64x64",
+      "type": "image/png",
       "purpose": "any"
     }
   ]

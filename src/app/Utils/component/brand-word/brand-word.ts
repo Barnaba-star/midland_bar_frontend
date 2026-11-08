@@ -22,10 +22,8 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { role: 'img', 'aria-label': 'BaronixTZ', '[class.bw-mark]': 'mark()' },
   template: `
-    <svg class="bw-b" viewBox="18 19 30 34" aria-hidden="true">
-      <path fill="currentColor" fill-rule="evenodd"
-            d="M19 19h15.5c6.4 0 10.5 3.4 10.5 8.6 0 3.2-1.6 5.6-4.3 6.9 3.7 1.2 5.8 4 5.8 7.8 0 6-4.6 9.7-11.6 9.7H19zm8 6.6v6.5h6.8c2.4 0 3.8-1.2 3.8-3.2s-1.4-3.3-3.8-3.3zm0 12.4v7.4h7.8c2.7 0 4.3-1.4 4.3-3.7s-1.6-3.7-4.3-3.7z"/>
-    </svg>@if (!mark()) {<span class="bw-rest" aria-hidden="true"><span class="bw-line">a<span class="bw-r">r<svg class="bw-rs" viewBox="425 -705 795 353"><path d="M430 -566C520 -640 750 -700 900 -700C1050 -700 1150 -660 1215 -600C1130 -625 1030 -640 900 -640C750 -640 560 -610 480 -500C455 -460 438 -400 430 -357Z"/></svg></span>oni<span class="bw-x">x<svg class="bw-xs" viewBox="-2760 -1220 3740 1580"><path d="M10 -561L225 -561L619 0L404 0Z"/><path d="M404 -561L967.8 -1211L619 -561L225 0C160 120 -330 215 -600 225C-1500 250 -2297 285 -2747 270C-2297 300 -1500 350 -600 340C-260 330 -120 180 10 0Z"/></svg></span><svg class="bw-tz" viewBox="0 -1000 780 1000"><rect class="bw-tg" x="0" y="-960" width="780" height="170" rx="15"/><rect class="bw-tg" x="305" y="-790" width="170" height="790"/><path d="M90 -640H690V-510L290 -130H690V0H90V-130L490 -510H90Z"/></svg></span></span>}
+    <!-- The B from the owner's logo (2026-11-09): bottle and glass inside, on its black tile. -->
+    <img class="bw-b" src="assets/images/baronix-b-tile.png" alt="" aria-hidden="true" draggable="false" />@if (!mark()) {<span class="bw-rest" aria-hidden="true"><span class="bw-line">a<span class="bw-r">r<svg class="bw-rs" viewBox="425 -705 795 353"><path d="M430 -566C520 -640 750 -700 900 -700C1050 -700 1150 -660 1215 -600C1130 -625 1030 -640 900 -640C750 -640 560 -610 480 -500C455 -460 438 -400 430 -357Z"/></svg></span>oni<span class="bw-x">x<svg class="bw-xs" viewBox="-2760 -1220 3740 1580"><path d="M10 -561L225 -561L619 0L404 0Z"/><path d="M404 -561L967.8 -1211L619 -561L225 0C160 120 -330 215 -600 225C-1500 250 -2297 285 -2747 270C-2297 300 -1500 350 -600 340C-260 330 -120 180 10 0Z"/></svg></span><svg class="bw-tz" viewBox="0 -1000 780 1000"><rect class="bw-tg" x="0" y="-960" width="780" height="170" rx="15"/><rect class="bw-tg" x="305" y="-790" width="170" height="790"/><path d="M90 -640H690V-510L290 -130H690V0H90V-130L490 -510H90Z"/></svg></span></span>}
   `,
   styles: [`
     :host {
@@ -38,10 +36,11 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
     }
     /* A big B, the words centred on it. */
     .bw-b {
-      height: 1.24em;
-      width: auto;
+      height: 1.5em;
+      width: 1.5em;
       flex-shrink: 0;
-      margin-right: 0.04em;
+      margin-right: 0.12em;
+      border-radius: 0.3em;
     }
     .bw-line, .bw-x, .bw-r {
       position: relative;
@@ -109,12 +108,10 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
       overflow: visible;
     }
     /* Mark only: the B at cap height, on the text's baseline. */
-    :host(.bw-mark) {
-      align-items: baseline;
-    }
     :host(.bw-mark) .bw-b {
-      height: 0.74em;
-      margin-right: 0.015em;
+      height: 1.2em;
+      width: 1.2em;
+      margin-right: 0;
     }
   `],
 })

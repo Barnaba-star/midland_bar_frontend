@@ -907,10 +907,13 @@ export class BarStaffSell implements OnInit, OnDestroy {
           panelClass: 'sale-details-dialog',
           autoFocus: false,
           data: { sale: bill, services, showPayment: false, canPay: false, previewReceipt: true, canExchange: true },
-        }).afterClosed().subscribe((result?: { action?: string; service?: any }) => {
+        }).afterClosed().subscribe((result?: { action?: string; service?: any; quantity?: number }) => {
           this.cdr.markForCheck();
           if (result?.action === 'EXCHANGE' && result.service) {
             this.exchange(bill, result.service);
+          }
+          if (result?.action === 'RETURN' && result.service) {
+            this.returnLine(bill, result.service, result.quantity ?? 1);
           }
         });
       },
@@ -975,6 +978,41 @@ export class BarStaffSell implements OnInit, OnDestroy {
           this.cdr.markForCheck();
         },
       });
+    });
+  }
+
+  /**
+   * Rudisha: the customer ordered 3 beers, drank 1 - the other 2 go back to
+   * the station, nothing comes instead. The bill changes when they receive them.
+   */
+  returnLine(bill: SalesOpened, line: any, quantity: number): void {
+    if (this.frozen() || !bill.uid || !line?.uid || this.busyBill) {
+      return;
+    }
+    const max = Math.max(1, Number(line.quantity) || 1);
+    const back = Math.min(max, Math.max(1, quantity));
+    this.busyBill = bill.uid;
+    this.cdr.markForCheck();
+    this.barService.exchangeStaffOrder({ barSalesUID: line.uid, returnQuantity: back }).subscribe({
+      next: (res) => {
+        this.busyBill = null;
+        if (res?.data?.length) {
+          const uids = new Set(res.data.map((o) => o.uid));
+          this.setOrders([...this.orders.filter((o) => !uids.has(o.uid)), ...res.data]);
+          const place = res.data.map((o) => this.translate.instant(this.placeKey(o))).join(' / ');
+          this.alertService.show('success', this.translate.instant('STAFF_SELL_PAGE.RETURN_SENT', {
+            place,
+            back: `${back} × ${line.serviceName}`,
+          }));
+        } else if (res?.message) {
+          this.alertService.show('error', res.message);
+        }
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.busyBill = null;
+        this.cdr.markForCheck();
+      },
     });
   }
 

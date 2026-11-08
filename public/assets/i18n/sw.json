@@ -2173,6 +2173,7 @@
     "EXCHANGE_WAITING": "Badilisho · inasubiri {{place}}",
     "EXCHANGE_REJECTED": "Badilisho limekataliwa",
     "EXCHANGE_SENT": "Badilisho limetumwa {{place}} - rudisha {{back}}, chukua {{take}}",
+    "RETURN_SENT": "Ombi la kurudisha limetumwa {{place}} - rudisha {{back}}",
     "RETURN": "Rudisha",
     "GIVE": "Mpe",
     "PLACE_COUNTER": "counter",
@@ -2526,6 +2527,10 @@
     "LABEL": "Jina la utani la mteja (kifaa hiki tu)"
   },
   "BILL_EDIT": {
+    "RETURN": "Rudisha",
+    "RETURN_TITLE": "Rudisha {{name}} - ngapi zinarudi?",
+    "RETURN_NOTE": "Zinarudi counter/jikoni. Wakishazipokea zinatoka kwenye bill na kurudi store.",
+    "RETURN_CONFIRM": "Rudisha {{n}}",
     "EXCHANGE": "Badilisha",
     "REMOVE": "Ondoa kwenye bill",
     "TITLE": "Ondoa {{name}} kwenye bill",

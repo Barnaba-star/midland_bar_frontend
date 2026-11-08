@@ -180,6 +180,14 @@
               </button>
             }
 
+            <!-- Staff Sell: the customer can't finish them (3 beers, 1 drunk) - the rest go back, nothing instead. -->
+            @if (canSwap && returningUid !== service.uid) {
+              <button type="button" class="line-swap-btn line-return-btn" (click)="startReturn(service)">
+                <mat-icon>undo</mat-icon>
+                <span>{{ 'BILL_EDIT.RETURN' | translate }}</span>
+              </button>
+            }
+
             <!-- Wrong item on an open bill: take it off (with a reason), then add the right one. -->
             @if (canEdit && removingUid !== service.uid) {
               <button type="button" class="line-remove-btn" (click)="startRemove(service)"
@@ -197,6 +205,27 @@
             }
 
           </div>
+
+          @if (returningUid === service.uid) {
+            <div class="line-remove-form">
+              <strong>{{ 'BILL_EDIT.RETURN_TITLE' | translate: { name: service.serviceName } }}</strong>
+              @if ((service.quantity || 1) > 1) {
+                <div class="lr-stepper">
+                  <button type="button" (click)="returnQty = Math.max(1, returnQty - 1)" [disabled]="returnQty <= 1" aria-label="-"><mat-icon>remove</mat-icon></button>
+                  <strong>{{ returnQty }}</strong>
+                  <button type="button" (click)="returnQty = Math.min(service.quantity || 1, returnQty + 1)" [disabled]="returnQty >= (service.quantity || 1)" aria-label="+"><mat-icon>add</mat-icon></button>
+                  <small>/ {{ service.quantity }}</small>
+                </div>
+              }
+              <p class="lr-note">{{ 'BILL_EDIT.RETURN_NOTE' | translate }}</p>
+              <div class="lr-actions">
+                <button type="button" class="lr-cancel" (click)="returningUid = null">{{ 'COMMON.CANCEL' | translate }}</button>
+                <button type="button" class="lr-confirm" (click)="confirmReturn(service)">
+                  <mat-icon>undo</mat-icon>{{ 'BILL_EDIT.RETURN_CONFIRM' | translate: { n: returnQty } }}
+                </button>
+              </div>
+            </div>
+          }
 
           @if (refundingUid === service.uid) {
             <div class="line-remove-form">

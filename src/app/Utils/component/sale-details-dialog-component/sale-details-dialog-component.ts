@@ -227,6 +227,23 @@ export class SaleDetailsDialogComponent {
     return !!this.data.canExchange && this.data.sale?.paymentStatus !== 'PAID';
   }
 
+  readonly Math = Math;
+  returningUid: string | null = null;
+  returnQty = 1;
+
+  /** Rudisha: how many go back (default all but one - "3 ordered, 1 drunk" leaves 2). */
+  startReturn(service: any): void {
+    const qty = Math.max(1, Number(service.quantity) || 1);
+    this.returningUid = service.uid;
+    this.returnQty = qty > 1 ? qty - 1 : 1;
+    this.cdr.markForCheck();
+  }
+
+  /** The page sends the return to the station; the bill changes when they have it back. */
+  confirmReturn(service: any): void {
+    this.dialogRef.close({ action: 'RETURN', service, quantity: this.returnQty });
+  }
+
   /** The customer wants something else instead: the page picks it and sends the change. */
   exchange(service: any): void {
     this.dialogRef.close({ action: 'EXCHANGE', service });

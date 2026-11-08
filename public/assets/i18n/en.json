@@ -2173,6 +2173,7 @@
     "EXCHANGE_WAITING": "Change · waiting at the {{place}}",
     "EXCHANGE_REJECTED": "Change rejected",
     "EXCHANGE_SENT": "Change sent to the {{place}} - bring back {{back}}, take {{take}}",
+    "RETURN_SENT": "Return sent to the {{place}} - bring back {{back}}",
     "RETURN": "Bring back",
     "GIVE": "Give",
     "PLACE_COUNTER": "counter",
@@ -2526,6 +2527,10 @@
     "LABEL": "Customer nickname (this device only)"
   },
   "BILL_EDIT": {
+    "RETURN": "Bring back",
+    "RETURN_TITLE": "Bring back {{name}} - how many?",
+    "RETURN_NOTE": "They go back to the counter/kitchen. Once received they come off the bill and go back to the store.",
+    "RETURN_CONFIRM": "Bring back {{n}}",
     "EXCHANGE": "Change",
     "REMOVE": "Take off the bill",
     "TITLE": "Take {{name}} off the bill",

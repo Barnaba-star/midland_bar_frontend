@@ -353,7 +353,7 @@ addStaffOrderItem(dto: { salesOpenedUID: string; barServiceUID: string; quantity
 }
 
 /** Staff Sell: a change on a received line - what goes back and what comes instead, straight to the station(s). */
-exchangeStaffOrder(dto: { barSalesUID: string; returnQuantity: number | null; barServiceUID: string; quantity: number; serving?: string | null }): Observable<Response<StaffOrder[]>> {
+exchangeStaffOrder(dto: { barSalesUID: string; returnQuantity: number | null; barServiceUID?: string | null; quantity?: number | null; serving?: string | null }): Observable<Response<StaffOrder[]>> {
   return this.http.post<Response<StaffOrder[]>>(`${this.barURL}/staffOrders/exchange`, dto);
 }
 

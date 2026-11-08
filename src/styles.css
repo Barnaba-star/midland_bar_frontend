@@ -662,3 +662,16 @@ body :not(:is(app-landing, app-login, app-download) *):is(p, li, dd, dt, td smal
     font-size: 13px !important;
   }
 }
+
+/* Usernames and passwords show exactly what was typed - small letters stay
+   small (owner, 2026-11-08: small passwords failed because the box showed
+   them as capitals). Covers a password shown with the eye (type="text"). */
+input:is([name*="username" i], [name*="password" i], [autocomplete="username"], [autocomplete*="password"], .keep-case),
+input:is([name*="username" i], [name*="password" i], [autocomplete="username"], [autocomplete*="password"], .keep-case)::placeholder {
+  text-transform: none !important;
+}
+
+/* A username shown to be copied (new account, new code) - as it really is. */
+.keep-case {
+  text-transform: none !important;
+}

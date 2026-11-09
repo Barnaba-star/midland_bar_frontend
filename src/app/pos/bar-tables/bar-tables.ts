@@ -151,7 +151,7 @@ export class BarTables {
         <img class="qr" src="${codes[i]}" alt="">
         <div class="table">${esc(t.name)}</div>
         ${branch ? `<div class="branch">${branch}</div>` : ''}
-        <div class="hint">Fungua camera ya simu, elekeza kwenye QR</div>
+        <div class="hint">Scan QR, kisha gusa <b>Open</b></div>
       </div>`).join('');
     const html = `<!doctype html><html><head><meta charset="utf-8"><title>QR za meza</title>
       <style>
@@ -167,7 +167,7 @@ export class BarTables {
         .qr { width: 62mm; height: 62mm; margin: 4mm 0; }
         .table { font-size: 26pt; font-weight: 800; }
         .branch { margin-top: 1mm; font-size: 11pt; color: #5c5246; }
-        .hint { margin-top: 3mm; font-size: 9pt; color: #7a6f60; }
+        .hint { margin-top: 3mm; font-size: 12pt; color: #1a1206; }
       </style></head><body><div class="sheet">${cards}</div></body></html>`;
     const frame = document.createElement('iframe');
     frame.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0';

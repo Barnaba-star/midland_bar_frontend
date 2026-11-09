@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import * as QRCode from 'qrcode';
 import { environment } from '../../Utils/enviroments/environment';
 import { AlertService } from '../../Utils/services/alert';
+import { silent } from '../../Utils/inteceptor/silent-request';
 
 interface BarTable { uid: string; number: number; name: string; token: string; }
 
@@ -63,7 +64,7 @@ export class BarTables {
       .then((pairs) => this.qr.set(Object.fromEntries(pairs)));
     // The branch name for the cards - the customers' window already says it.
     if (list.length && !this.branchName()) {
-      this.http.get<{ data?: { branchName?: string } }>(`${environment.baseApiUrl}/public/table/${list[0].token}`)
+      this.http.get<{ data?: { branchName?: string } }>(`${environment.baseApiUrl}/public/table/${list[0].token}`, { context: silent() })
         .subscribe((res) => this.branchName.set(res?.data?.branchName ?? ''));
     }
   }

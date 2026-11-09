@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { DecimalPipe } from '@angular/common';
 import { environment } from '../Utils/enviroments/environment';
 import { BrandWord } from '../Utils/component/brand-word/brand-word';
+import { silent } from '../Utils/inteceptor/silent-request';
 
 interface MenuItem { name: string; price: number; category?: string | null; description?: string | null; }
 interface TableView { tableName: string; tableNumber: number; branchName?: string; menu: MenuItem[]; }
@@ -55,7 +56,8 @@ export class CustomerTable {
 
   load(): void {
     this.state.set('loading');
-    this.http.get<{ data?: TableView; message?: string }>(`${environment.baseApiUrl}/public/table/${encodeURIComponent(this.token)}`)
+    // silent: the page says it itself - no app popups or loader for a customer.
+    this.http.get<{ data?: TableView; message?: string }>(`${environment.baseApiUrl}/public/table/${encodeURIComponent(this.token)}`, { context: silent() })
       .subscribe({
         next: (res) => {
           if (res?.data) {

@@ -6,7 +6,22 @@ import {
   provideZonelessChangeDetection
 } from '@angular/core';
 
-import { PreloadAllModules, provideRouter, withPreloading } from '@angular/router';
+import { PreloadAllModules, PreloadingStrategy, Route, provideRouter, withPreloading } from '@angular/router';
+import { EMPTY, Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
+
+/**
+ * Preload every page in the background - except on the customers' window
+ * (/meza/...): a customer's phone, often on mobile data, needs only the menu.
+ */
+@Injectable({ providedIn: 'root' })
+class PreloadUnlessCustomer implements PreloadingStrategy {
+  private readonly all = new PreloadAllModules();
+  preload(route: Route, load: () => Observable<unknown>): Observable<unknown> {
+    if (typeof location !== 'undefined' && location.pathname.startsWith('/meza/')) return EMPTY;
+    return this.all.preload(route, load);
+  }
+}
 import { provideServiceWorker } from '@angular/service-worker';
 
 import {
@@ -44,7 +59,7 @@ export const appConfig: ApplicationConfig = {
 
     // Every page's code is fetched in the background once the app is up, so
     // after signing in Staff Sell, POS... open without a wait.
-    provideRouter(routes, withPreloading(PreloadAllModules)),
+    provideRouter(routes, withPreloading(PreloadUnlessCustomer)),
 
     // Keeps the app's own files on the device so it opens without internet.
     // Production builds only - ng serve has no service worker.

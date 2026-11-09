@@ -1,10 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpBackend, HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { DecimalPipe } from '@angular/common';
 import { environment } from '../Utils/enviroments/environment';
 import { BrandWord } from '../Utils/component/brand-word/brand-word';
-import { silent } from '../Utils/inteceptor/silent-request';
 
 interface MenuItem { name: string; price: number; category?: string | null; description?: string | null; }
 interface TableView { tableName: string; tableNumber: number; branchName?: string; menu: MenuItem[]; }
@@ -26,7 +25,12 @@ const CATEGORY: Record<string, string> = { DRINK: 'Vinywaji', FOOD: 'Chakula', S
   styleUrl: './customer-table.css',
 })
 export class CustomerTable {
-  private readonly http = inject(HttpClient);
+  /**
+   * A client with no interceptors: no login token is sent, so an old or
+   * half-valid staff login on the phone can never turn the scan into a
+   * sign-in page; no loader, popups or offline queue either - and it is quicker.
+   */
+  private readonly http = new HttpClient(inject(HttpBackend));
   private readonly token = inject(ActivatedRoute).snapshot.paramMap.get('token') ?? '';
 
   readonly view = signal<TableView | null>(null);
@@ -56,8 +60,7 @@ export class CustomerTable {
 
   load(): void {
     this.state.set('loading');
-    // silent: the page says it itself - no app popups or loader for a customer.
-    this.http.get<{ data?: TableView; message?: string }>(`${environment.baseApiUrl}/public/table/${encodeURIComponent(this.token)}`, { context: silent() })
+    this.http.get<{ data?: TableView; message?: string }>(`${environment.baseApiUrl}/public/table/${encodeURIComponent(this.token)}`)
       .subscribe({
         next: (res) => {
           if (res?.data) {

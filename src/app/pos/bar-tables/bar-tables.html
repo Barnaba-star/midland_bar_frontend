@@ -24,6 +24,24 @@
     }
   </header>
 
+  <section class="bt-info">
+    <button type="button" class="bt-info-toggle" (click)="infoOpen.set(!infoOpen())">
+      <mat-icon>info</mat-icon>Taarifa kwa wateja (WiFi, saa, simu, matukio, Lipa namba)
+      <mat-icon>{{ infoOpen() ? 'expand_less' : 'expand_more' }}</mat-icon>
+    </button>
+    @if (infoOpen()) {
+      <div class="bt-info-grid">
+        @for (f of infoFields; track f.key) {
+          <label><span>{{ f.label }}</span><input type="text" [(ngModel)]="info[f.key]" [name]="f.key" [placeholder]="f.ph || ''" /></label>
+        }
+        <label class="wide"><span>Matukio / tangazo (mfano: Jumamosi mpira live, Ijumaa muziki)</span>
+          <textarea rows="3" maxlength="500" [(ngModel)]="info['note']" name="note"></textarea></label>
+      </div>
+      <p class="bt-hint">Wateja wanalipa namba hizi moja kwa moja, kisha wanabonyeza "Nimelipa" - cashier anaona na kuhakiki.</p>
+      <button type="button" class="bt-save" [disabled]="busy()" (click)="saveInfo()"><mat-icon>save</mat-icon>Hifadhi taarifa</button>
+    }
+  </section>
+
   @if (loaded() && !tables().length) {
     <p class="bt-empty">Bado hakuna meza. Weka idadi hapo juu na ubonyeze Hifadhi.</p>
   }

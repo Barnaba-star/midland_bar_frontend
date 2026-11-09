@@ -6,7 +6,7 @@ import { environment } from '../../Utils/enviroments/environment';
 
 interface Feedback {
   uid: string; tableName?: string; kind: string; message: string; rating?: number | null;
-  customerName?: string | null; customerPhone?: string | null; sentAt: string; readAt?: string | null;
+  customerName?: string | null; customerPhone?: string | null; sentAt: string; readAt?: string | null; staffName?: string | null;
 }
 
 const KIND: Record<string, string> = { PRAISE: 'Pongezi', COMPLAINT: 'Malalamiko', QUESTION: 'Swali', ADVICE: 'Ushauri' };
@@ -41,6 +41,7 @@ const KIND: Record<string, string> = { PRAISE: 'Pongezi', COMPLAINT: 'Malalamiko
               <span class="cf-meta">{{ f.tableName }} · {{ f.sentAt | date: 'dd/MM HH:mm' }}</span>
             </div>
             <p class="cf-msg">{{ f.message }}</p>
+            @if (f.staffName) { <p class="cf-who"><mat-icon>badge</mat-icon>Mhudumu: {{ f.staffName }}</p> }
             @if (f.customerName || f.customerPhone) {
               <p class="cf-who"><mat-icon>person</mat-icon>{{ f.customerName }} @if (f.customerPhone) { · <a [href]="'tel:' + f.customerPhone">{{ f.customerPhone }}</a> }</p>
             }

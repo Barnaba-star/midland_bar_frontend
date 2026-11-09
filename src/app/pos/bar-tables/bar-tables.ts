@@ -36,10 +36,36 @@ export class BarTables {
   /** A step that needs a second tap: fewer tables, or a new card for one table. */
   readonly confirming = signal<string | null>(null);
   editing: string | null = null;
+  /** What customers see besides the menu: WiFi, hours, phone, events, Lipa numbers. */
+  info: Record<string, string> = {};
+  readonly infoFields = [
+    { key: 'wifiName', label: 'WiFi - jina' }, { key: 'wifiPassword', label: 'WiFi - password' },
+    { key: 'hours', label: 'Saa za kufungua', ph: 'mfano Kila siku 10:00 - 02:00' }, { key: 'phone', label: 'Simu ya bar' },
+    { key: 'payMpesa', label: 'Lipa namba M-Pesa' }, { key: 'payTigo', label: 'Tigo Pesa' },
+    { key: 'payAirtel', label: 'Airtel Money' }, { key: 'payHalo', label: 'HaloPesa' },
+    { key: 'payBank', label: 'Benki (jina + namba)' },
+  ];
+  readonly infoOpen = signal(false);
   editName = '';
 
   constructor() {
     this.load();
+    this.http.get<{ data?: Record<string, string> }>(`${this.url}/info`, { context: silent() })
+      .subscribe((res) => (this.info = { ...(res?.data ?? {}) }));
+  }
+
+  saveInfo(): void {
+    this.busy.set(true);
+    this.http.post<{ data?: Record<string, string>; message?: string }>(`${this.url}/info`, this.info).subscribe({
+      next: (res) => {
+        this.busy.set(false);
+        if (res?.data) {
+          this.info = { ...res.data };
+          this.alerts.show('success', 'Taarifa kwa wateja zimehifadhiwa');
+        }
+      },
+      error: () => this.busy.set(false),
+    });
   }
 
   load(): void {

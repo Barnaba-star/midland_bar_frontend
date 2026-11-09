@@ -1,52 +1,86 @@
 <main class="ct">
   <header class="ct-top">
     <app-brand-word class="ct-brand" />
-    @if (view()?.branchName) { <span class="ct-branch">{{ view()!.branchName }}</span> }
+    <div class="ct-top-right">
+      @if (view()?.branchName) { <span class="ct-branch">{{ view()!.branchName }}</span> }
+      <div class="ct-lang" role="group" aria-label="Language">
+        <button type="button" [class.on]="lang() === 'sw'" (click)="setLang('sw')">SW</button>
+        <button type="button" [class.on]="lang() === 'en'" (click)="setLang('en')">EN</button>
+      </div>
+    </div>
   </header>
 
   @switch (state()) {
     @case ('loading') {
-      <section class="ct-msg"><span class="ct-spinner" aria-hidden="true"></span><p>Inafungua menyu…</p></section>
+      <section class="ct-msg"><span class="ct-spinner" aria-hidden="true"></span><p>{{ t('loading') }}</p></section>
     }
     @case ('missing') {
-      <section class="ct-msg">
-        <h1>Kadi hii haifanyi kazi</h1>
-        <p>QR hii imebadilishwa au meza imeondolewa. Mwombe mhudumu akusaidie.</p>
-      </section>
+      <section class="ct-msg"><h1>{{ t('deadTitle') }}</h1><p>{{ t('deadText') }}</p></section>
     }
     @case ('offline') {
       <section class="ct-msg">
-        <h1>Hakuna mtandao</h1>
-        <p>Hatukuweza kufungua menyu. Hakikisha una internet kisha jaribu tena.</p>
-        <button type="button" class="ct-retry" (click)="load()">Jaribu tena</button>
+        <h1>{{ t('offTitle') }}</h1><p>{{ t('offText') }}</p>
+        <button type="button" class="ct-retry" (click)="load()">{{ t('retry') }}</button>
       </section>
     }
     @case ('ready') {
       <section class="ct-hero">
-        <p class="ct-eyebrow">Karibu</p>
-        <h1>Uko <span>{{ view()!.tableName }}</span></h1>
-        <p class="ct-sub">Angalia menyu na bei. Mhudumu wa meza yako atakuhudumia.</p>
+        <p class="ct-eyebrow">{{ t('welcome') }}</p>
+        <h1>{{ t('youAt') }} <span>{{ view()!.tableName }}</span></h1>
+        <p class="ct-sub">{{ t('sub') }}</p>
+        @if (waiter()) { <p class="ct-waiter">{{ t('yourWaiter') }}: <strong>{{ waiter() }}</strong></p> }
       </section>
 
       <div class="ct-actions">
-        <button type="button" (click)="call('WAITER')" [disabled]="called()['WAITER']">
-          <span class="ct-ico" aria-hidden="true">🙋</span>{{ called()['WAITER'] ? 'Ameitwa' : 'Mwite mhudumu' }}
+        <button type="button" class="primary" (click)="call('WAITER')" [disabled]="called()['WAITER']">
+          <span class="ct-ico" aria-hidden="true">🙋</span>{{ called()['WAITER'] ? t('called') : t('callWaiter') }}
         </button>
         <button type="button" (click)="call('BILL')" [disabled]="called()['BILL']">
-          <span class="ct-ico" aria-hidden="true">🧾</span>{{ called()['BILL'] ? 'Imeombwa' : 'Omba bill' }}
+          <span class="ct-ico" aria-hidden="true">🧾</span>{{ called()['BILL'] ? t('billAsked') : t('askBill') }}
         </button>
-        <button type="button" (click)="openSheet('feedback')"><span class="ct-ico" aria-hidden="true">💬</span>Toa maoni</button>
-        <button type="button" (click)="openSheet('card')"><span class="ct-ico" aria-hidden="true">⭐</span>Pointi zangu</button>
+        <button type="button" (click)="openSheet('pay')"><span class="ct-ico" aria-hidden="true">💳</span>{{ t('pay') }}</button>
+        <button type="button" (click)="openSheet('feedback')"><span class="ct-ico" aria-hidden="true">💬</span>{{ t('feedback') }}</button>
+        <button type="button" class="wide" (click)="openSheet('card')"><span class="ct-ico" aria-hidden="true">⭐</span>{{ t('points') }}</button>
       </div>
+
+      @if (orders().length) {
+        <section class="ct-orders">
+          <h2>{{ t('myOrders') }}</h2>
+          @for (o of orders(); track o.uid) {
+            <div class="ct-order" [class]="'st-' + o.status">
+              <div class="ct-order-top">
+                <strong>{{ o.status === 'PENDING' ? t('stPending') : o.status === 'ACCEPTED' ? t('stAccepted') : t('stRejected') }}</strong>
+                <span>Tsh {{ o.total | number: '1.0-0' }}</span>
+              </div>
+              <small>@for (l of o.lines; track $index) { {{ l.qty }} × {{ l.name }}@if (!$last) {, } }</small>
+              @if (o.status === 'ACCEPTED' && o.staffName) { <small class="ct-order-by">{{ t('by') }} {{ o.staffName }}</small> }
+              @if (o.status === 'REJECTED' && o.rejectReason) { <small class="ct-order-why">{{ o.rejectReason }}</small> }
+            </div>
+          }
+        </section>
+      }
+
+      @if (view()!.info; as i) {
+        @if (i.wifiName || i.hours || i.phone || i.note) {
+          <section class="ct-info">
+            @if (i.note) { <p class="ct-note">{{ i.note }}</p> }
+            <dl>
+              @if (i.wifiName) { <div><dt>{{ t('wifi') }}</dt><dd>{{ i.wifiName }}@if (i.wifiPassword) { · {{ t('password') }}: <b>{{ i.wifiPassword }}</b> }</dd></div> }
+              @if (i.hours) { <div><dt>{{ t('hours') }}</dt><dd>{{ i.hours }}</dd></div> }
+              @if (i.phone) { <div><dt>{{ t('phone') }}</dt><dd><a [href]="'tel:' + i.phone">{{ i.phone }}</a></dd></div> }
+            </dl>
+          </section>
+        }
+      }
 
       <div class="ct-tools">
         <label class="ct-search">
           <span class="ct-search-icon" aria-hidden="true">⌕</span>
-          <input type="search" placeholder="Tafuta kinywaji au chakula" enterkeyhint="search" [value]="search()" (input)="onSearch($event)" />
+          <input type="search" [placeholder]="t('search')" enterkeyhint="search" [value]="search()" (input)="onSearch($event)" />
         </label>
         @if (categories().length > 1) {
-          <nav class="ct-cats" aria-label="Aina">
-            <button type="button" [class.on]="category() === 'ALL'" (click)="category.set('ALL')">Zote</button>
+          <nav class="ct-cats">
+            <button type="button" [class.on]="category() === 'ALL'" (click)="category.set('ALL')">{{ t('all') }}</button>
             @for (c of categories(); track c) {
               <button type="button" [class.on]="category() === c" (click)="category.set(c)">{{ label(c) }}</button>
             }
@@ -56,30 +90,45 @@
 
       @for (g of groups(); track g.key) {
         <section class="ct-group">
-          <h2>{{ g.label }}</h2>
+          <h2>{{ label(g.key) }}</h2>
           <ul>
-            @for (m of g.items; track m.name) {
+            @for (m of g.items; track m.uid) {
               <li [class.out]="m.available === false">
                 <div class="ct-item">
                   <strong>{{ m.name }}</strong>
                   @if (m.description) { <small>{{ m.description }}</small> }
-                  @if (m.offerPrice != null && m.available !== false) {
-                    <span class="ct-offer">{{ m.offerName || 'Ofa' }}@if (m.offerUntil) { · hadi {{ m.offerUntil }} }</span>
+                  @if (m.offerPrice != null && m.available !== false) { <span class="ct-offer">{{ m.offerName || t('offer') }}</span> }
+                  @if (m.available === false) {
+                    <span class="ct-out">{{ t('soldOut') }}</span>
+                  } @else if (m.offerPrice != null) {
+                    <span class="ct-price"><s>{{ m.price | number: '1.0-0' }}</s> Tsh {{ m.offerPrice | number: '1.0-0' }}</span>
+                  } @else {
+                    <span class="ct-price">Tsh {{ m.price | number: '1.0-0' }}</span>
                   }
                 </div>
-                @if (m.available === false) {
-                  <span class="ct-out">Kimeisha</span>
-                } @else if (m.offerPrice != null) {
-                  <span class="ct-price"><s>{{ m.price | number: '1.0-0' }}</s> Tsh {{ m.offerPrice | number: '1.0-0' }}</span>
-                } @else {
-                  <span class="ct-price">Tsh {{ m.price | number: '1.0-0' }}</span>
+                @if (m.available !== false) {
+                  @if (qty(m.uid) > 0) {
+                    <div class="ct-step">
+                      <button type="button" (click)="change(m.uid, -1)" aria-label="-">−</button>
+                      <b>{{ qty(m.uid) }}</b>
+                      <button type="button" (click)="change(m.uid, 1)" aria-label="+">+</button>
+                    </div>
+                  } @else {
+                    <button type="button" class="ct-add" (click)="change(m.uid, 1)">+ {{ t('add') }}</button>
+                  }
                 }
               </li>
             }
           </ul>
         </section>
       } @empty {
-        <p class="ct-none">{{ search() ? 'Hakuna kinacholingana na "' + search() + '".' : 'Menyu bado haijawekwa.' }}</p>
+        <p class="ct-none">{{ search() ? t('noMatch') : t('none') }}</p>
+      }
+
+      @if (cartCount() > 0 && sheet() === 'none') {
+        <button type="button" class="ct-cartbar" (click)="openSheet('cart')">
+          <span>{{ t('cart') }} ({{ cartCount() }})</span><b>Tsh {{ cartTotal() | number: '1.0-0' }}</b>
+        </button>
       }
 
       @if (notice()) { <div class="ct-toast" role="status">{{ notice() }}</div> }
@@ -87,43 +136,78 @@
       @if (sheet() !== 'none') {
         <div class="ct-backdrop" (click)="sheet.set('none')"></div>
         <section class="ct-sheet" role="dialog" aria-modal="true">
-          <button type="button" class="ct-close" (click)="sheet.set('none')" aria-label="Funga">✕</button>
-          @if (sheet() === 'feedback') {
-            <h2>Toa maoni</h2>
-            <p class="ct-sub">Ujumbe wako unamfikia meneja wa {{ view()!.branchName || 'bar' }} moja kwa moja.</p>
-            <div class="ct-kinds">
-              @for (k of kinds; track k.key) {
-                <button type="button" [class.on]="fbKind === k.key" (click)="fbKind = k.key">{{ k.label }}</button>
-              }
-            </div>
-            <div class="ct-stars" aria-label="Huduma">
-              <span>Huduma:</span>
-              @for (n of [1, 2, 3, 4, 5]; track n) {
-                <button type="button" [class.on]="fbRating >= n" (click)="fbRating = n" [attr.aria-label]="n + ' nyota'">★</button>
-              }
-            </div>
-            <textarea rows="4" maxlength="1000" [(ngModel)]="fbMessage" placeholder="Andika hapa…"></textarea>
-            <div class="ct-row">
-              <input type="text" maxlength="60" [(ngModel)]="fbName" placeholder="Jina (si lazima)" />
-              <input type="tel" maxlength="20" [(ngModel)]="fbPhone" placeholder="Simu (si lazima)" />
-            </div>
-            <button type="button" class="ct-send" [disabled]="sending() || fbMessage.trim().length < 2" (click)="sendFeedback()">
-              {{ sending() ? 'Inatuma…' : 'Tuma' }}
-            </button>
-          } @else {
-            <h2>Pointi zangu</h2>
-            @if (card(); as c) {
-              @if (c.name) { <p class="ct-sub">Karibu {{ c.name }}</p> }
+          <button type="button" class="ct-close" (click)="sheet.set('none')" [attr.aria-label]="t('close')">✕</button>
+          @switch (sheet()) {
+            @case ('cart') {
+              <h2>{{ t('cartTitle') }}</h2>
               <ul class="ct-card">
-                @for (l of c.lines; track l.label) { <li><span>{{ l.label }}</span><strong>{{ l.value }}</strong></li> }
+                @for (l of cartLines(); track l.item.uid) {
+                  <li>
+                    <span>{{ l.item.name }}<br /><small>Tsh {{ unit(l.item) | number: '1.0-0' }}</small></span>
+                    <div class="ct-step">
+                      <button type="button" (click)="change(l.item.uid, -1)" aria-label="-">−</button>
+                      <b>{{ l.qty }}</b>
+                      <button type="button" (click)="change(l.item.uid, 1)" aria-label="+">+</button>
+                    </div>
+                  </li>
+                }
+                <li><span>{{ t('total') }}</span><strong>Tsh {{ cartTotal() | number: '1.0-0' }}</strong></li>
               </ul>
-              <button type="button" class="ct-send" (click)="card.set(null)">Angalia namba nyingine</button>
-            } @else {
-              <p class="ct-sub">Weka namba ya simu na PIN uliyosajiliwa nayo bar hii.</p>
-              <input type="tel" maxlength="20" [(ngModel)]="cardPhone" placeholder="Namba ya simu" />
-              <input type="password" inputmode="numeric" maxlength="6" [(ngModel)]="cardPin" placeholder="PIN" name="password" />
-              @if (cardError()) { <p class="ct-err">{{ cardError() }}</p> }
-              <button type="button" class="ct-send" [disabled]="sending()" (click)="checkCard()">{{ sending() ? 'Inaangalia…' : 'Angalia' }}</button>
+              <input type="text" maxlength="200" [(ngModel)]="orderNote" [placeholder]="t('note')" />
+              <button type="button" class="ct-send" [disabled]="sending() || !cartCount()" (click)="sendOrder()">{{ sending() ? t('sending') : t('sendOrder') }}</button>
+            }
+            @case ('pay') {
+              <h2>{{ t('payTitle') }}</h2>
+              @if (payNumbers().length) {
+                <p class="ct-sub">{{ t('payText') }}</p>
+                <ul class="ct-card">
+                  @for (p of payNumbers(); track p.method) { <li><span>{{ p.method }}</span><strong>{{ p.number }}</strong></li> }
+                </ul>
+                <label class="ct-field"><span>{{ t('method') }}</span>
+                  <select [(ngModel)]="payMethod">@for (p of payNumbers(); track p.method) { <option [value]="p.method">{{ p.method }}</option> }</select>
+                </label>
+                <input type="text" maxlength="60" [(ngModel)]="payName" [placeholder]="t('name')" />
+                <div class="ct-row">
+                  <input type="text" maxlength="40" [(ngModel)]="payRef" [placeholder]="t('ref')" />
+                  <input type="number" inputmode="numeric" [(ngModel)]="payAmount" [placeholder]="t('amount')" />
+                </div>
+                <button type="button" class="ct-send" [disabled]="sending() || (!payName.trim() && !payRef.trim())" (click)="sendPaid()">{{ sending() ? t('sending') : t('iPaid') }}</button>
+              } @else {
+                <p class="ct-sub">{{ t('noPay') }}</p>
+              }
+            }
+            @case ('feedback') {
+              <h2>{{ t('fbTitle') }}</h2>
+              <p class="ct-sub">{{ t('fbText') }}</p>
+              <div class="ct-kinds">
+                @for (k of kinds; track k) { <button type="button" [class.on]="fbKind === k" (click)="fbKind = k">{{ kindLabel(k) }}</button> }
+              </div>
+              <div class="ct-stars">
+                <span>{{ waiter() ? t('rateWaiter') + ' ' + waiter() : t('service') }}:</span>
+                @for (n of [1, 2, 3, 4, 5]; track n) {
+                  <button type="button" [class.on]="fbRating >= n" (click)="fbRating = n" [attr.aria-label]="n">★</button>
+                }
+              </div>
+              <textarea rows="4" maxlength="1000" [(ngModel)]="fbMessage" [placeholder]="t('write')"></textarea>
+              <div class="ct-row">
+                <input type="text" maxlength="60" [(ngModel)]="fbName" [placeholder]="t('nameOpt')" />
+                <input type="tel" maxlength="20" [(ngModel)]="fbPhone" [placeholder]="t('phoneOpt')" />
+              </div>
+              <button type="button" class="ct-send" [disabled]="sending() || fbMessage.trim().length < 2" (click)="sendFeedback()">{{ sending() ? t('sending') : t('send') }}</button>
+            }
+            @case ('card') {
+              <h2>{{ t('cardTitle') }}</h2>
+              @if (card(); as c) {
+                @if (c.name) { <p class="ct-sub">{{ t('hello') }} {{ c.name }}</p> }
+                <ul class="ct-card">@for (l of c.lines; track l.label) { <li><span>{{ l.label }}</span><strong>{{ l.value }}</strong></li> }</ul>
+                <button type="button" class="ct-send" (click)="card.set(null)">{{ t('other') }}</button>
+              } @else {
+                <p class="ct-sub">{{ t('cardText') }}</p>
+                <input type="tel" maxlength="20" [(ngModel)]="cardPhone" [placeholder]="t('phoneNo')" />
+                <input type="password" inputmode="numeric" maxlength="6" [(ngModel)]="cardPin" placeholder="PIN" name="password" />
+                @if (cardError()) { <p class="ct-err">{{ cardError() }}</p> }
+                <button type="button" class="ct-send" [disabled]="sending()" (click)="checkCard()">{{ sending() ? t('checking') : t('check') }}</button>
+              }
             }
           }
         </section>

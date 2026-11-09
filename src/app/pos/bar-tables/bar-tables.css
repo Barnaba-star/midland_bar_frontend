@@ -30,3 +30,13 @@
   .bt-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
   .bt-qr { width: 120px; height: 120px; }
 }
+
+.bt-info { margin-top: 14px; padding: 14px 18px; border-radius: 16px; background: var(--color-surface, #fbf6ec); border: 1px solid var(--color-border, #e6dccb); }
+.bt-info-toggle { display: flex; align-items: center; gap: 8px; width: 100%; border: 0; background: transparent; color: var(--color-text); font: inherit; font-weight: 700; cursor: pointer; text-align: left; }
+.bt-info-toggle mat-icon:last-child { margin-left: auto; }
+.bt-info-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; margin-top: 12px; }
+.bt-info-grid label { display: flex; flex-direction: column; gap: 4px; }
+.bt-info-grid label.wide { grid-column: 1 / -1; }
+.bt-info-grid span { font-size: 12px; color: var(--color-text-muted, #7a6f60); }
+.bt-info-grid input, .bt-info-grid textarea { padding: 10px 12px; border: 1px solid var(--color-border, #d8cdb9); border-radius: 10px; font: inherit; font-size: 15px; background: var(--color-bg, #fff); color: var(--color-text); text-transform: none; }
+.bt-hint { margin: 10px 0; color: var(--color-text-muted, #7a6f60); font-size: 13px; }

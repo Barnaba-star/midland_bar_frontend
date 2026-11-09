@@ -1,0 +1,50 @@
+<div class="bt">
+  <header class="bt-head">
+    <div class="bt-title">
+      <mat-icon>qr_code_2</mat-icon>
+      <div>
+        <h3>Meza &amp; QR</h3>
+        <p>Weka idadi ya meza za tawi hili, kisha chapisha QR uweke kila meza. Mteja akiscan anaona menyu na bei.</p>
+      </div>
+    </div>
+    <div class="bt-count">
+      <label>
+        <span>Idadi ya meza</span>
+        <input type="number" min="0" max="300" step="1" inputmode="numeric" [(ngModel)]="count" (keyup.enter)="saveCount()" />
+      </label>
+      <button type="button" class="bt-save" [disabled]="busy()" (click)="saveCount()">
+        <mat-icon>save</mat-icon>{{ confirming() === 'COUNT' ? 'Ndiyo, punguza' : 'Hifadhi' }}
+      </button>
+      @if (tables().length) {
+        <button type="button" class="bt-print" (click)="print()"><mat-icon>print</mat-icon>Chapisha zote ({{ tables().length }})</button>
+      }
+    </div>
+    @if (confirming() === 'COUNT') {
+      <p class="bt-warn">Meza {{ tables().length - count }} za mwisho zitaondolewa na QR zake hazitafanya kazi tena. Bonyeza "Ndiyo, punguza" kuthibitisha.</p>
+    }
+  </header>
+
+  @if (loaded() && !tables().length) {
+    <p class="bt-empty">Bado hakuna meza. Weka idadi hapo juu na ubonyeze Hifadhi.</p>
+  }
+
+  <div class="bt-grid">
+    @for (t of tables(); track t.uid) {
+      <article class="bt-card">
+        @if (qr()[t.uid]) { <img class="bt-qr" [src]="qr()[t.uid]" [alt]="'QR ya ' + t.name" /> }
+        @if (editing === t.uid) {
+          <input class="bt-name-input" maxlength="40" [(ngModel)]="editName" (keyup.enter)="saveName(t)" (blur)="saveName(t)" />
+        } @else {
+          <button type="button" class="bt-name" (click)="startRename(t)" title="Badilisha jina">{{ t.name }} <mat-icon>edit</mat-icon></button>
+        }
+        <a class="bt-link" [href]="link(t)" target="_blank" rel="noopener">Fungua dirisha la mteja</a>
+        <div class="bt-actions">
+          <button type="button" (click)="print(t)"><mat-icon>print</mat-icon>Chapisha</button>
+          <button type="button" class="bt-new" [class.sure]="confirming() === t.uid" (click)="newCard(t)">
+            <mat-icon>autorenew</mat-icon>{{ confirming() === t.uid ? 'Una uhakika?' : 'Kadi mpya' }}
+          </button>
+        </div>
+      </article>
+    }
+  </div>
+</div>

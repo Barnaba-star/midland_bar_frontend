@@ -1,0 +1,68 @@
+<main class="ct">
+  <header class="ct-top">
+    <app-brand-word class="ct-brand" />
+    @if (view()?.branchName) { <span class="ct-branch">{{ view()!.branchName }}</span> }
+  </header>
+
+  @switch (state()) {
+    @case ('loading') {
+      <section class="ct-msg"><span class="ct-spinner" aria-hidden="true"></span><p>Inafungua menyu…</p></section>
+    }
+    @case ('missing') {
+      <section class="ct-msg">
+        <h1>Kadi hii haifanyi kazi</h1>
+        <p>QR hii imebadilishwa au meza imeondolewa. Mwombe mhudumu akusaidie.</p>
+      </section>
+    }
+    @case ('offline') {
+      <section class="ct-msg">
+        <h1>Hakuna mtandao</h1>
+        <p>Hatukuweza kufungua menyu. Hakikisha una internet kisha jaribu tena.</p>
+        <button type="button" class="ct-retry" (click)="load()">Jaribu tena</button>
+      </section>
+    }
+    @case ('ready') {
+      <section class="ct-hero">
+        <p class="ct-eyebrow">Karibu</p>
+        <h1>Uko <span>{{ view()!.tableName }}</span></h1>
+        <p class="ct-sub">Angalia menyu na bei. Mhudumu wa meza yako atakuhudumia.</p>
+      </section>
+
+      <div class="ct-tools">
+        <label class="ct-search">
+          <span class="ct-search-icon" aria-hidden="true">⌕</span>
+          <input type="search" placeholder="Tafuta kinywaji au chakula" enterkeyhint="search" [value]="search()" (input)="onSearch($event)" />
+        </label>
+        @if (categories().length > 1) {
+          <nav class="ct-cats" aria-label="Aina">
+            <button type="button" [class.on]="category() === 'ALL'" (click)="category.set('ALL')">Zote</button>
+            @for (c of categories(); track c) {
+              <button type="button" [class.on]="category() === c" (click)="category.set(c)">{{ label(c) }}</button>
+            }
+          </nav>
+        }
+      </div>
+
+      @for (g of groups(); track g.key) {
+        <section class="ct-group">
+          <h2>{{ g.label }}</h2>
+          <ul>
+            @for (m of g.items; track m.name) {
+              <li>
+                <div class="ct-item">
+                  <strong>{{ m.name }}</strong>
+                  @if (m.description) { <small>{{ m.description }}</small> }
+                </div>
+                <span class="ct-price">Tsh {{ m.price | number: '1.0-0' }}</span>
+              </li>
+            }
+          </ul>
+        </section>
+      } @empty {
+        <p class="ct-none">{{ search() ? 'Hakuna kinacholingana na "' + search() + '".' : 'Menyu bado haijawekwa.' }}</p>
+      }
+
+      <footer class="ct-foot">BaronixTZ · Bar Online Management &amp; Supervision</footer>
+    }
+  }
+</main>

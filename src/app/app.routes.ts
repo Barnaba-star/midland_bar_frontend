@@ -107,6 +107,11 @@ export const routes: Routes = [
   loadComponent: () => import('./download/download').then(m => m.Download)
 },
 {
+  // The customers' window behind a table's QR card - public, no login (owner, 2026-11-09).
+  path: 'meza/:token',
+  loadComponent: () => import('./customer-table/customer-table').then(m => m.CustomerTable)
+},
+{
   path: 'login',
   loadComponent: () => import('./login/login').then(m => m.Login)
 },

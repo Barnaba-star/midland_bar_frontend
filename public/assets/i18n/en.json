@@ -151,6 +151,7 @@
     "SERVICE": "Services",
     "COMMISSION": "Commissions",
     "BILL_CODES": "Bill Codes",
+    "TABLES": "Tables & QR",
     "OTHER_SPLIT": "Other Expenses",
     "BRANCH_RULES": "Branch: TRA and rules",
     "OFFERS": "Offers / Happy hour"

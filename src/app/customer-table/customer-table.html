@@ -28,6 +28,17 @@
         <p class="ct-sub">Angalia menyu na bei. Mhudumu wa meza yako atakuhudumia.</p>
       </section>
 
+      <div class="ct-actions">
+        <button type="button" (click)="call('WAITER')" [disabled]="called()['WAITER']">
+          <span class="ct-ico" aria-hidden="true">🙋</span>{{ called()['WAITER'] ? 'Ameitwa' : 'Mwite mhudumu' }}
+        </button>
+        <button type="button" (click)="call('BILL')" [disabled]="called()['BILL']">
+          <span class="ct-ico" aria-hidden="true">🧾</span>{{ called()['BILL'] ? 'Imeombwa' : 'Omba bill' }}
+        </button>
+        <button type="button" (click)="openSheet('feedback')"><span class="ct-ico" aria-hidden="true">💬</span>Toa maoni</button>
+        <button type="button" (click)="openSheet('card')"><span class="ct-ico" aria-hidden="true">⭐</span>Pointi zangu</button>
+      </div>
+
       <div class="ct-tools">
         <label class="ct-search">
           <span class="ct-search-icon" aria-hidden="true">⌕</span>
@@ -48,18 +59,74 @@
           <h2>{{ g.label }}</h2>
           <ul>
             @for (m of g.items; track m.name) {
-              <li>
+              <li [class.out]="m.available === false">
                 <div class="ct-item">
                   <strong>{{ m.name }}</strong>
                   @if (m.description) { <small>{{ m.description }}</small> }
+                  @if (m.offerPrice != null && m.available !== false) {
+                    <span class="ct-offer">{{ m.offerName || 'Ofa' }}@if (m.offerUntil) { · hadi {{ m.offerUntil }} }</span>
+                  }
                 </div>
-                <span class="ct-price">Tsh {{ m.price | number: '1.0-0' }}</span>
+                @if (m.available === false) {
+                  <span class="ct-out">Kimeisha</span>
+                } @else if (m.offerPrice != null) {
+                  <span class="ct-price"><s>{{ m.price | number: '1.0-0' }}</s> Tsh {{ m.offerPrice | number: '1.0-0' }}</span>
+                } @else {
+                  <span class="ct-price">Tsh {{ m.price | number: '1.0-0' }}</span>
+                }
               </li>
             }
           </ul>
         </section>
       } @empty {
         <p class="ct-none">{{ search() ? 'Hakuna kinacholingana na "' + search() + '".' : 'Menyu bado haijawekwa.' }}</p>
+      }
+
+      @if (notice()) { <div class="ct-toast" role="status">{{ notice() }}</div> }
+
+      @if (sheet() !== 'none') {
+        <div class="ct-backdrop" (click)="sheet.set('none')"></div>
+        <section class="ct-sheet" role="dialog" aria-modal="true">
+          <button type="button" class="ct-close" (click)="sheet.set('none')" aria-label="Funga">✕</button>
+          @if (sheet() === 'feedback') {
+            <h2>Toa maoni</h2>
+            <p class="ct-sub">Ujumbe wako unamfikia meneja wa {{ view()!.branchName || 'bar' }} moja kwa moja.</p>
+            <div class="ct-kinds">
+              @for (k of kinds; track k.key) {
+                <button type="button" [class.on]="fbKind === k.key" (click)="fbKind = k.key">{{ k.label }}</button>
+              }
+            </div>
+            <div class="ct-stars" aria-label="Huduma">
+              <span>Huduma:</span>
+              @for (n of [1, 2, 3, 4, 5]; track n) {
+                <button type="button" [class.on]="fbRating >= n" (click)="fbRating = n" [attr.aria-label]="n + ' nyota'">★</button>
+              }
+            </div>
+            <textarea rows="4" maxlength="1000" [(ngModel)]="fbMessage" placeholder="Andika hapa…"></textarea>
+            <div class="ct-row">
+              <input type="text" maxlength="60" [(ngModel)]="fbName" placeholder="Jina (si lazima)" />
+              <input type="tel" maxlength="20" [(ngModel)]="fbPhone" placeholder="Simu (si lazima)" />
+            </div>
+            <button type="button" class="ct-send" [disabled]="sending() || fbMessage.trim().length < 2" (click)="sendFeedback()">
+              {{ sending() ? 'Inatuma…' : 'Tuma' }}
+            </button>
+          } @else {
+            <h2>Pointi zangu</h2>
+            @if (card(); as c) {
+              @if (c.name) { <p class="ct-sub">Karibu {{ c.name }}</p> }
+              <ul class="ct-card">
+                @for (l of c.lines; track l.label) { <li><span>{{ l.label }}</span><strong>{{ l.value }}</strong></li> }
+              </ul>
+              <button type="button" class="ct-send" (click)="card.set(null)">Angalia namba nyingine</button>
+            } @else {
+              <p class="ct-sub">Weka namba ya simu na PIN uliyosajiliwa nayo bar hii.</p>
+              <input type="tel" maxlength="20" [(ngModel)]="cardPhone" placeholder="Namba ya simu" />
+              <input type="password" inputmode="numeric" maxlength="6" [(ngModel)]="cardPin" placeholder="PIN" name="password" />
+              @if (cardError()) { <p class="ct-err">{{ cardError() }}</p> }
+              <button type="button" class="ct-send" [disabled]="sending()" (click)="checkCard()">{{ sending() ? 'Inaangalia…' : 'Angalia' }}</button>
+            }
+          }
+        </section>
       }
 
       <footer class="ct-foot">BaronixTZ · Bar Online Management &amp; Supervision</footer>

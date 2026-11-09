@@ -152,6 +152,7 @@
     "COMMISSION": "Commissions",
     "BILL_CODES": "Bill Codes",
     "TABLES": "Tables & QR",
+    "FEEDBACK": "Customer Feedback",
     "OTHER_SPLIT": "Other Expenses",
     "BRANCH_RULES": "Branch: TRA and rules",
     "OFFERS": "Offers / Happy hour"
@@ -2997,7 +2998,9 @@
     "DIGEST_TITLE": "Yesterday's summary",
     "DIGEST_MESSAGE": "Sales Tshs {{sales}} ({{bills}} bills) · short Tshs {{short}} · taken off {{voids}} (Tshs {{voidAmount}}) · refunds Tshs {{refunds}} · discounts Tshs {{discounts}} · debts Tshs {{owed}} · low stock {{lowStock}}.",
     "JACK_TITLE": "Jack Point won",
-    "JACK_MESSAGE": "{{who}} reached Jack Point \"{{game}}\". Approve the reward in POS > Jack Point."
+    "JACK_MESSAGE": "{{who}} reached Jack Point \"{{game}}\". Approve the reward in POS > Jack Point.",
+    "FEEDBACK_TITLE": "Customer feedback: {{table}}",
+    "FEEDBACK_MESSAGE": "{{kind}}: {{text}}"
   },
   "SUPPLIERS": {
     "TITLE": "Suppliers",

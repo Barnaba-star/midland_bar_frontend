@@ -11,11 +11,12 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { CASHIER_HOME, POS_FULL_ACCESS_ROLES, STOCK_COUNT_ROUTE, STORE_KEEPER_HOME, isCashierOnly, isStoreKeeperOnly } from './pos-role.guard';
 import { ServiceBarMethod } from './service-bar-method';
 import { EmptyStateComponent } from '../Utils/component/empty-state/empty-state';
+import { TableCalls } from '../Utils/component/table-calls/table-calls';
 
 @Component({
   selector: 'app-pos',
   imports:  [
-    EmptyStateComponent,CommonModule, RouterModule, MainSidenav2, MatIconModule, TranslatePipe],
+    EmptyStateComponent, TableCalls, CommonModule, RouterModule, MainSidenav2, MatIconModule, TranslatePipe],
   templateUrl: './pos.html',
   styleUrl: './pos.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

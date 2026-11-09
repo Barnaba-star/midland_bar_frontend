@@ -1,3 +1,4 @@
+import { TableCalls } from '../../Utils/component/table-calls/table-calls';
 import { ORDER_STATIONS } from './supervisor-role.guard';
 import { BrandWord } from '../../Utils/component/brand-word/brand-word';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
@@ -30,7 +31,7 @@ const REMIND_MS = 30000;
  */
 @Component({
   selector: 'app-bar-supervisor',
-  imports: [BrandWord, MatIconModule, DecimalPipe, DatePipe, TranslatePipe],
+  imports: [BrandWord, MatIconModule, DecimalPipe, DatePipe, TranslatePipe, TableCalls],
   templateUrl: './bar-supervisor.html',
   styleUrl: './bar-supervisor.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

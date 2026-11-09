@@ -1,5 +1,6 @@
 import { BranchRules } from '../branch-rules/branch-rules';
 import { BarTables } from '../bar-tables/bar-tables';
+import { CustomerFeedback } from '../customer-feedback/customer-feedback';
 import { OtherSplit } from '../other-split/other-split';
 import { UnitLabelPipe, unitKey } from '../../Utils/pipes/stock-packs.pipe';
 import { StockItemDialogComponent, StockItemResult } from '../../Utils/component/dialogs/stock-item-dialog-component/stock-item-dialog-component';
@@ -100,7 +101,7 @@ const STOCK_UNIT_OPTIONS = [
 @Component({
   selector: 'app-bar-setting',
   imports: [CategoryLabelPipe, 
-    OtherSplit, BranchRules, BarTables, EmptyStateComponent,Title2, MatIconModule, RecordtableComponent, DecimalPipe, UpperCasePipe, CommonModule, FormsModule, MatMenuModule, MatPaginator, MatButtonModule, TranslatePipe, MatTooltipModule, UnitLabelPipe],
+    OtherSplit, BranchRules, BarTables, CustomerFeedback, EmptyStateComponent,Title2, MatIconModule, RecordtableComponent, DecimalPipe, UpperCasePipe, CommonModule, FormsModule, MatMenuModule, MatPaginator, MatButtonModule, TranslatePipe, MatTooltipModule, UnitLabelPipe],
   templateUrl: './bar-setting.html',
   styleUrl: './bar-setting.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -189,6 +190,12 @@ private reloadPagedTab() {
       icon: 'more',
       title: 'SALON.TABLES',
       roles: ['ROOT', 'STAFF', 'DIRECTOR', 'ADMIN', 'CEO', 'MANAGER', 'CASHIER']
+    },
+    {
+      // What customers wrote from the tables' QR window - the boss and the manager.
+      icon: 'support',
+      title: 'SALON.FEEDBACK',
+      roles: ['ROOT', 'DIRECTOR', 'CEO', 'MANAGER']
     }
   ];
 

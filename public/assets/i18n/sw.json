@@ -152,6 +152,7 @@
     "COMMISSION": "Kamisheni",
     "BILL_CODES": "Codes za Bill",
     "TABLES": "Meza & QR",
+    "FEEDBACK": "Maoni ya Wateja",
     "OTHER_SPLIT": "Matumizi ya Mengineyo",
     "BRANCH_RULES": "Tawi: TRA na kanuni",
     "OFFERS": "Ofa / Happy hour"
@@ -2997,7 +2998,9 @@
     "DIGEST_TITLE": "Muhtasari wa jana",
     "DIGEST_MESSAGE": "Mauzo Tshs {{sales}} (bili {{bills}}) · upungufu Tshs {{short}} · vimeondolewa {{voids}} (Tshs {{voidAmount}}) · refund Tshs {{refunds}} · punguzo Tshs {{discounts}} · madeni Tshs {{owed}} · stock chini {{lowStock}}.",
     "JACK_TITLE": "Jack Point imefikiwa",
-    "JACK_MESSAGE": "{{who}} amefikia Jack Point \"{{game}}\". Thibitisha zawadi kwenye POS > Jack Point."
+    "JACK_MESSAGE": "{{who}} amefikia Jack Point \"{{game}}\". Thibitisha zawadi kwenye POS > Jack Point.",
+    "FEEDBACK_TITLE": "Maoni ya mteja: {{table}}",
+    "FEEDBACK_MESSAGE": "{{kind}}: {{text}}"
   },
   "SUPPLIERS": {
     "TITLE": "Wasambazaji",

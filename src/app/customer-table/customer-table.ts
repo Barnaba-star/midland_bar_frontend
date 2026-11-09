@@ -2,10 +2,12 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { HttpBackend, HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { DecimalPipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { environment } from '../Utils/enviroments/environment';
 import { BrandWord } from '../Utils/component/brand-word/brand-word';
 
-interface MenuItem { name: string; price: number; category?: string | null; description?: string | null; }
+interface MenuItem { name: string; price: number; category?: string | null; description?: string | null; available?: boolean; offerPrice?: number | null; offerName?: string | null; offerUntil?: string | null; }
+interface Card { name?: string; lines: { label: string; value: string }[]; }
 interface TableView { tableName: string; tableNumber: number; branchName?: string; menu: MenuItem[]; }
 
 /** DRINK / FOOD / SHISHA / POOL as the customer reads them. */
@@ -20,7 +22,7 @@ const CATEGORY: Record<string, string> = { DRINK: 'Vinywaji', FOOD: 'Chakula', S
 @Component({
   selector: 'app-customer-table',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DecimalPipe, BrandWord],
+  imports: [DecimalPipe, FormsModule, BrandWord],
   templateUrl: './customer-table.html',
   styleUrl: './customer-table.css',
 })
@@ -37,6 +39,27 @@ export class CustomerTable {
   readonly state = signal<'loading' | 'ready' | 'missing' | 'offline'>('loading');
   readonly search = signal('');
   readonly category = signal<string>('ALL');
+
+  /** Calls to the bar: which one was just sent (the button rests a minute). */
+  readonly called = signal<Record<string, boolean>>({});
+  readonly sheet = signal<'none' | 'feedback' | 'card'>('none');
+  readonly sending = signal(false);
+  readonly notice = signal('');
+  fbKind = 'PRAISE';
+  fbRating = 0;
+  fbMessage = '';
+  fbName = '';
+  fbPhone = '';
+  cardPhone = '';
+  cardPin = '';
+  readonly card = signal<Card | null>(null);
+  readonly cardError = signal('');
+  readonly kinds = [
+    { key: 'PRAISE', label: 'Pongezi' },
+    { key: 'COMPLAINT', label: 'Malalamiko' },
+    { key: 'QUESTION', label: 'Swali' },
+    { key: 'ADVICE', label: 'Ushauri' },
+  ];
 
   readonly categories = computed(() => {
     const seen = new Set((this.view()?.menu ?? []).map((m) => m.category || 'OTHER'));
@@ -72,6 +95,80 @@ export class CustomerTable {
         },
         error: () => this.state.set('offline'),
       });
+  }
+
+  private url(path = ''): string {
+    return `${environment.baseApiUrl}/public/table/${encodeURIComponent(this.token)}${path}`;
+  }
+
+  private flash(text: string): void {
+    this.notice.set(text);
+    setTimeout(() => this.notice.set(''), 4000);
+  }
+
+  /** WAITER or BILL: the bar sees it at once; the button rests a minute. */
+  call(kind: 'WAITER' | 'BILL'): void {
+    if (this.called()[kind]) return;
+    this.http.post<{ data?: unknown; message?: string }>(this.url('/call'), { kind }).subscribe({
+      next: (res) => {
+        if (res?.data) {
+          this.called.set({ ...this.called(), [kind]: true });
+          setTimeout(() => this.called.set({ ...this.called(), [kind]: false }), 60_000);
+          this.flash(kind === 'WAITER' ? 'Mhudumu amejulishwa - anakuja.' : 'Bill yako inaandaliwa - mhudumu ataileta.');
+        } else {
+          this.flash(res?.message === 'TOO_SOON' ? 'Tayari umeita - subiri kidogo.' : 'Haikufanikiwa, jaribu tena.');
+        }
+      },
+      error: () => this.flash('Hakuna mtandao - jaribu tena.'),
+    });
+  }
+
+  openSheet(which: 'feedback' | 'card'): void {
+    this.sheet.set(which);
+  }
+
+  sendFeedback(): void {
+    const message = this.fbMessage.trim();
+    if (message.length < 2 || this.sending()) return;
+    this.sending.set(true);
+    this.http.post<{ data?: unknown; message?: string }>(this.url('/feedback'), {
+      kind: this.fbKind, message, rating: this.fbRating || null,
+      name: this.fbName.trim() || null, phone: this.fbPhone.trim() || null,
+    }).subscribe({
+      next: (res) => {
+        this.sending.set(false);
+        if (res?.data) {
+          this.sheet.set('none');
+          this.fbMessage = '';
+          this.fbRating = 0;
+          this.flash('Asante! Ujumbe wako umemfikia meneja.');
+        } else {
+          this.flash(res?.message === 'TOO_MANY' ? 'Umetuma mara nyingi - jaribu baadaye.' : 'Haikufanikiwa, jaribu tena.');
+        }
+      },
+      error: () => {
+        this.sending.set(false);
+        this.flash('Hakuna mtandao - jaribu tena.');
+      },
+    });
+  }
+
+  checkCard(): void {
+    if (!this.cardPhone.trim() || !this.cardPin.trim() || this.sending()) return;
+    this.sending.set(true);
+    this.cardError.set('');
+    this.http.post<{ data?: Card; message?: string }>(this.url('/card'), { phone: this.cardPhone.trim(), pin: this.cardPin.trim() }).subscribe({
+      next: (res) => {
+        this.sending.set(false);
+        this.cardPin = '';
+        if (res?.data) this.card.set(res.data);
+        else this.cardError.set(res?.message === 'TOO_MANY_ATTEMPTS' ? 'Umekosea mara nyingi - jaribu baada ya dakika 15.' : 'Namba au PIN si sahihi.');
+      },
+      error: () => {
+        this.sending.set(false);
+        this.cardError.set('Hakuna mtandao - jaribu tena.');
+      },
+    });
   }
 
   label(c: string): string {

@@ -7,6 +7,7 @@ import { interval } from 'rxjs';
 import { environment } from '../../enviroments/environment';
 import { silent } from '../../inteceptor/silent-request';
 import { LiveChanges } from '../../services/live-changes';
+import { Authentication } from '../../services/authentication';
 
 interface TableCall { uid: string; tableName: string; kind: 'WAITER' | 'BILL' | 'PAID'; calledAt: string; note?: string; }
 interface OrderLine { name: string; qty: number; price: number; }
@@ -92,6 +93,8 @@ interface Waiter { uid: string; name: string; }
 })
 export class TableCalls {
   private readonly http = inject(HttpClient);
+  /** A waiter signed in with code + PIN takes orders onto their own bill - no waiter to pick. */
+  private readonly ownBill = inject(Authentication).isStaffSession();
   private readonly base = `${environment.baseApiUrl}/bar/tables`;
   readonly calls = signal<TableCall[]>([]);
   readonly orders = signal<TableOrder[]>([]);
@@ -140,6 +143,11 @@ export class TableCalls {
 
   startTake(o: TableOrder): void {
     this.rejecting.set(null);
+    if (this.ownBill) {
+      this.waiterUid = '';
+      this.accept(o);
+      return;
+    }
     this.taking.set(this.taking() === o.uid ? null : o.uid);
     this.waiterUid = '';
     if (!this.waiters().length) {

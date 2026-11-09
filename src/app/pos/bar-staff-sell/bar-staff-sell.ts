@@ -1,3 +1,4 @@
+import { TableCalls } from '../../Utils/component/table-calls/table-calls';
 import { counterLoginToken, isCounterSession, returnFromCounterSession } from './counter-session';
 import { BrandWord } from '../../Utils/component/brand-word/brand-word';
 import { PaymentNoteDialog } from '../../Utils/component/dialogs/payment-note-dialog/payment-note-dialog';
@@ -51,7 +52,7 @@ import { CategoryIconPipe } from '../../Utils/pipes/product-category.pipe';
  */
 @Component({
   selector: 'app-bar-staff-sell',
-  imports: [CategoryIconPipe, BrandWord, ShiftBar, EmptyStateComponent, MatIconModule, FormsModule, DecimalPipe, TranslatePipe],
+  imports: [CategoryIconPipe, BrandWord, ShiftBar, EmptyStateComponent, MatIconModule, FormsModule, DecimalPipe, TranslatePipe, TableCalls],
   templateUrl: './bar-staff-sell.html',
   styleUrl: './bar-staff-sell.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

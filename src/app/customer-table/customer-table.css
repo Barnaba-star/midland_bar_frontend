@@ -288,3 +288,14 @@
 .ct-field { display: flex; flex-direction: column; gap: 4px; color: #a89c8a; font-size: 13px; }
 .ct-field select { height: 46px; padding: 0 12px; border: 1px solid rgba(246,236,220,.2); border-radius: 12px; background: #0e0c0a; color: #f6ecdc; font: inherit; font-size: 16px; }
 .ct { padding-bottom: 90px; }
+/* Baridi / moto on each drink (owner, 2026-11-09): ice blue for cold, ember for warm. */
+.ct-serve { flex: none; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.ct-serve .ct-add { height: 34px; min-width: 104px; border-color: #7cc4f0; color: #7cc4f0; }
+.ct-serve .ct-add.warm { border-color: #f0866a; color: #f0866a; }
+.ct-serve .ct-step { gap: 8px; }
+.ct-serve .ct-step em { min-width: 50px; text-align: right; font-style: normal; font-size: 13px; font-weight: 800; color: #7cc4f0; }
+.ct-serve .ct-step button { width: 32px; height: 32px; background: #7cc4f0; }
+.ct-serve .ct-step.warm em { color: #f0866a; }
+.ct-serve .ct-step.warm button { background: #f0866a; }
+.ct-tag { display: inline-block; margin-left: 6px; padding: 1px 8px; border-radius: 999px; background: rgba(124,196,240,.18); color: #7cc4f0; font-style: normal; font-size: 12px; font-weight: 800; }
+.ct-tag.warm { background: rgba(240,134,106,.18); color: #f0866a; }

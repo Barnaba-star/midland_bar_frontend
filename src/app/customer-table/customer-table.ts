@@ -10,7 +10,10 @@ interface MenuItem { uid: string; name: string; price: number; category?: string
 interface Info { wifiName?: string; wifiPassword?: string; hours?: string; phone?: string; note?: string; payMpesa?: string; payTigo?: string; payAirtel?: string; payHalo?: string; payBank?: string; }
 interface TableView { tableName: string; tableNumber: number; branchName?: string; menu: MenuItem[]; info?: Info; }
 interface Card { name?: string; lines: { label: string; value: string }[]; }
-interface OrderLine { name: string; qty: number; price: number; }
+interface OrderLine { name: string; qty: number; price: number; serving?: Serving | null; }
+type Serving = 'COLD' | 'WARM';
+/** Asked baridi / moto like the waiters' picker: everything but food, shisha, pool and juice. */
+const NO_SERVING = ['FOOD', 'SHISHA', 'POOL', 'JUICE'];
 interface TableOrder { uid: string; status: 'PENDING' | 'ACCEPTED' | 'REJECTED'; total: number; lines: OrderLine[]; staffName?: string; rejectReason?: string; }
 
 type Lang = 'sw' | 'en';
@@ -33,6 +36,7 @@ const T: Record<string, [string, string]> = {
   soldOut: ['Kimeisha', 'Sold out'], offer: ['Ofa', 'Offer'], add: ['Ongeza', 'Add'],
   none: ['Menyu bado haijawekwa.', 'The menu is not set up yet.'], noMatch: ['Hakuna kinacholingana.', 'Nothing matches.'],
   cart: ['Agiza', 'Order'], cartTitle: ['Oda yako', 'Your order'], note: ['Maelezo (si lazima), mfano "baridi sana"', 'Note (optional), e.g. "very cold"'],
+  cold: ['Baridi', 'Cold'], warm: ['Moto', 'Warm'],
   sendOrder: ['Tuma oda', 'Send order'], sending: ['Inatuma…', 'Sending…'], total: ['Jumla', 'Total'],
   myOrders: ['Oda zako', 'Your orders'], stPending: ['Inasubiri kupokelewa', 'Waiting to be taken'],
   stAccepted: ['Imepokelewa', 'Taken'], stRejected: ['Imekataliwa', 'Declined'], by: ['na', 'by'],
@@ -128,7 +132,10 @@ export class CustomerTable {
   readonly cartLines = computed(() => {
     const menu = new Map((this.view()?.menu ?? []).map((m) => [m.uid, m]));
     return Object.entries(this.cart()).filter(([, q]) => q > 0)
-      .map(([uid, qty]) => ({ item: menu.get(uid)!, qty })).filter((l) => !!l.item);
+      .map(([key, qty]) => {
+        const [uid, s] = key.split('|');
+        return { key, item: menu.get(uid)!, qty, serving: (s || null) as Serving | null };
+      }).filter((l) => !!l.item);
   });
   readonly cartCount = computed(() => this.cartLines().reduce((n, l) => n + l.qty, 0));
   readonly cartTotal = computed(() => this.cartLines().reduce((n, l) => n + l.qty * this.unit(l.item), 0));
@@ -203,13 +210,29 @@ export class CustomerTable {
     return m.offerPrice ?? m.price;
   }
 
-  qty(uid: string): number {
-    return this.cart()[uid] ?? 0;
+  readonly servings: Serving[] = ['COLD', 'WARM'];
+
+  /** A drink: the customer says baridi or moto right on it (owner, 2026-11-09). */
+  asksServing(m: MenuItem): boolean {
+    return !NO_SERVING.includes((m.category || '').toUpperCase());
   }
 
-  change(uid: string, by: number): void {
-    const next = Math.max(0, Math.min(20, this.qty(uid) + by));
-    this.cart.set({ ...this.cart(), [uid]: next });
+  /** Cart key: the item, and baridi / moto for a drink - 2 cold and 1 warm stay apart. */
+  key(m: MenuItem, s: Serving | null = null): string {
+    return m.uid + '|' + (s ?? '');
+  }
+
+  servingLabel(s?: Serving | null): string {
+    return s === 'COLD' ? this.t('cold') : s === 'WARM' ? this.t('warm') : '';
+  }
+
+  qty(key: string): number {
+    return this.cart()[key] ?? 0;
+  }
+
+  change(key: string, by: number): void {
+    const next = Math.max(0, Math.min(20, this.qty(key) + by));
+    this.cart.set({ ...this.cart(), [key]: next });
   }
 
   private flash(key: string): void {
@@ -239,7 +262,7 @@ export class CustomerTable {
   }
 
   sendOrder(): void {
-    const items = this.cartLines().map((l) => ({ uid: l.item.uid, qty: l.qty }));
+    const items = this.cartLines().map((l) => ({ uid: l.item.uid, qty: l.qty, serving: l.serving }));
     if (!items.length || this.sending()) return;
     this.sending.set(true);
     this.http.post<{ data?: unknown; message?: string }>(this.url('/order'), { items, note: this.orderNote.trim() || null }).subscribe({

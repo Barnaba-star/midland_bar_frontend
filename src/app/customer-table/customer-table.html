@@ -52,7 +52,7 @@
                 <strong>{{ o.status === 'PENDING' ? t('stPending') : o.status === 'ACCEPTED' ? t('stAccepted') : t('stRejected') }}</strong>
                 <span>Tsh {{ o.total | number: '1.0-0' }}</span>
               </div>
-              <small>@for (l of o.lines; track $index) { {{ l.qty }} × {{ l.name }}@if (!$last) {, } }</small>
+              <small>@for (l of o.lines; track $index) { {{ l.qty }} × {{ l.name }}@if (l.serving) { ({{ servingLabel(l.serving) }})}@if (!$last) {, } }</small>
               @if (o.status === 'ACCEPTED' && o.staffName) { <small class="ct-order-by">{{ t('by') }} {{ o.staffName }}</small> }
               @if (o.status === 'REJECTED' && o.rejectReason) { <small class="ct-order-why">{{ o.rejectReason }}</small> }
             </div>
@@ -107,14 +107,29 @@
                   }
                 </div>
                 @if (m.available !== false) {
-                  @if (qty(m.uid) > 0) {
+                  @if (asksServing(m)) {
+                    <div class="ct-serve">
+                      @for (s of servings; track s) {
+                        @if (qty(key(m, s)) > 0) {
+                          <div class="ct-step" [class.warm]="s === 'WARM'">
+                            <em>{{ servingLabel(s) }}</em>
+                            <button type="button" (click)="change(key(m, s), -1)" aria-label="-">−</button>
+                            <b>{{ qty(key(m, s)) }}</b>
+                            <button type="button" (click)="change(key(m, s), 1)" aria-label="+">+</button>
+                          </div>
+                        } @else {
+                          <button type="button" class="ct-add" [class.warm]="s === 'WARM'" (click)="change(key(m, s), 1)">+ {{ servingLabel(s) }}</button>
+                        }
+                      }
+                    </div>
+                  } @else if (qty(key(m)) > 0) {
                     <div class="ct-step">
-                      <button type="button" (click)="change(m.uid, -1)" aria-label="-">−</button>
-                      <b>{{ qty(m.uid) }}</b>
-                      <button type="button" (click)="change(m.uid, 1)" aria-label="+">+</button>
+                      <button type="button" (click)="change(key(m), -1)" aria-label="-">−</button>
+                      <b>{{ qty(key(m)) }}</b>
+                      <button type="button" (click)="change(key(m), 1)" aria-label="+">+</button>
                     </div>
                   } @else {
-                    <button type="button" class="ct-add" (click)="change(m.uid, 1)">+ {{ t('add') }}</button>
+                    <button type="button" class="ct-add" (click)="change(key(m), 1)">+ {{ t('add') }}</button>
                   }
                 }
               </li>
@@ -141,13 +156,13 @@
             @case ('cart') {
               <h2>{{ t('cartTitle') }}</h2>
               <ul class="ct-card">
-                @for (l of cartLines(); track l.item.uid) {
+                @for (l of cartLines(); track l.key) {
                   <li>
-                    <span>{{ l.item.name }}<br /><small>Tsh {{ unit(l.item) | number: '1.0-0' }}</small></span>
+                    <span>{{ l.item.name }}@if (l.serving) { <em class="ct-tag" [class.warm]="l.serving === 'WARM'">{{ servingLabel(l.serving) }}</em> }<br /><small>Tsh {{ unit(l.item) | number: '1.0-0' }}</small></span>
                     <div class="ct-step">
-                      <button type="button" (click)="change(l.item.uid, -1)" aria-label="-">−</button>
+                      <button type="button" (click)="change(l.key, -1)" aria-label="-">−</button>
                       <b>{{ l.qty }}</b>
-                      <button type="button" (click)="change(l.item.uid, 1)" aria-label="+">+</button>
+                      <button type="button" (click)="change(l.key, 1)" aria-label="+">+</button>
                     </div>
                   </li>
                 }

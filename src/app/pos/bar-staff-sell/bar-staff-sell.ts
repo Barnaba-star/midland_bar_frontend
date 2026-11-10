@@ -33,6 +33,7 @@ import { Authentication } from '../../Utils/services/authentication';
 import { localDate } from '../../Utils/services/local-date';
 import { JackPointAward, JackPointProgress, SalesOpened, StaffOrder, StaffSellStaff } from '../BarModel';
 import { CategoryIconPipe } from '../../Utils/pipes/product-category.pipe';
+import { BillQrDialog } from '../../Utils/component/dialogs/bill-qr-dialog/bill-qr-dialog';
 
 /**
  * Staff Sell, a module of its own beside POS, Settings and Admin. Staff are
@@ -198,6 +199,11 @@ export class BarStaffSell implements OnInit, OnDestroy {
   }
 
   /** Going off while the customer is still drinking: the bill and its commission go to a colleague. */
+  /** The bill's own QR on screen, for the customer to scan (owner, 2026-11-10). */
+  showBillQr(bill: SalesOpened): void {
+    this.dialog.open(BillQrDialog, { width: '380px', maxWidth: '95vw', autoFocus: false, data: { billUid: bill.uid, code: bill.salesCode } });
+  }
+
   transferBill(bill: SalesOpened): void {
     if (this.frozen()) {
       return;

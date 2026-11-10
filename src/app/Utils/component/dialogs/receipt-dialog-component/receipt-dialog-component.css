@@ -106,3 +106,6 @@
 .r-direct code {
   font-size: 11px;
 }
+
+/* The bill's own QR on screen (the printed slip has its own copy of this rule). */
+.r-qr img { display: block; margin: 8px auto 4px; width: 140px; height: 140px; }

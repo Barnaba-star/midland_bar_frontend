@@ -8,7 +8,7 @@ import { BrandWord } from '../Utils/component/brand-word/brand-word';
 
 interface MenuItem { uid: string; name: string; price: number; category?: string | null; description?: string | null; available?: boolean; offerPrice?: number | null; offerName?: string | null; }
 interface Info { wifiName?: string; wifiPassword?: string; hours?: string; phone?: string; note?: string; payMpesa?: string; payTigo?: string; payAirtel?: string; payHalo?: string; payBank?: string; }
-interface TableView { tableName: string; tableNumber: number; branchName?: string; menu: MenuItem[]; info?: Info; }
+interface TableView { tableName: string; tableNumber: number; branchName?: string; menu: MenuItem[]; info?: Info; bill?: { code: string; staffName?: string | null; open: boolean } | null; }
 interface BillCopy { code: string; staffName?: string; status: 'PENDING' | 'PAID' | string; lines: { name: string; qty: number; price: number; total: number; offer?: string | null }[]; total: number; paid: number; toPay: number; }
 interface Card { name?: string; lines: { label: string; value: string }[]; }
 interface OrderLine { name: string; qty: number; price: number; serving?: Serving | null; }
@@ -32,7 +32,10 @@ const T: Record<string, [string, string]> = {
   yourWaiter: ['Mhudumu wako', 'Your waiter'],
   callWaiter: ['Mwite mhudumu', 'Call waiter'], called: ['Ameitwa', 'Called'],
   askBill: ['Omba bill', 'Ask for bill'], billAsked: ['Imeombwa', 'Requested'],
-  billTitle: ['Bill yako', 'Your bill'], free: ['Bure', 'Free'], billText: ['Andika namba ya bill yako (iko kwenye bill au muulize mhudumu), mfano MK-1.', 'Type your bill number (on the bill, or ask your waiter), e.g. MK-1.'],
+  billTitle: ['Bill yako', 'Your bill'], free: ['Bure', 'Free'],
+  yourBill: ['Bill yako', 'Your bill'], billSub: ['Agiza zaidi hapa - inaingia kwenye bill yako na kwa mhudumu wako.', 'Order more here - it goes on your bill and to your waiter.'],
+  billClosed: ['Bill hii imelipwa - asante! Kuagiza tena, mwombe mhudumu bill mpya.', 'This bill is paid - thank you! To order again, ask for a new bill.'],
+  seeMyBill: ['Angalia bill', 'See bill'], billText: ['Andika namba ya bill yako (iko kwenye bill au muulize mhudumu), mfano MK-1.', 'Type your bill number (on the bill, or ask your waiter), e.g. MK-1.'],
   billNo: ['Namba ya bill, mfano MK-1', 'Bill number, e.g. MK-1'], seeBill: ['Angalia bill', 'See bill'],
   noBillNo: ['Sijui namba - mwite mhudumu', "I don't know it - call the waiter"], billNotFound: ['Bill hiyo haipo. Hakikisha namba, au mwite mhudumu.', 'No such bill. Check the number, or call the waiter.'],
   billWaiter: ['Mhudumu', 'Waiter'], billPaidAll: ['Imelipwa yote - asante!', 'Fully paid - thank you!'], billPaidSoFar: ['Umelipa', 'Paid'],
@@ -198,6 +201,7 @@ export class CustomerTable {
         if (res?.data) {
           this.view.set(res.data);
           this.state.set('ready');
+          if (res.data.bill) this.loadMyBill(false);
         } else {
           this.state.set('missing');
         }
@@ -206,7 +210,23 @@ export class CustomerTable {
     });
   }
 
+  /** A bill's own window (its QR): the bill, always at hand (owner, 2026-11-10). */
+  readonly billMode = computed(() => !!this.view()?.bill);
+  readonly billOpen = computed(() => {
+    const b = this.bill();
+    return this.billMode() && (b ? b.status === 'PENDING' : !!this.view()?.bill?.open);
+  });
+
+  /** The bill's copy; with ask, its waiter is told the customer wants it. */
+  loadMyBill(ask = false): void {
+    this.http.get<{ data?: BillCopy }>(this.url('/myBill'), { params: { ask } }).subscribe({
+      next: (res) => { if (res?.data) this.bill.set(res.data); },
+      error: () => {},
+    });
+  }
+
   private loadOrders(): void {
+    if (this.billMode()) this.loadMyBill(false);
     this.http.get<{ data?: { orders: TableOrder[]; waiter?: string } }>(this.url('/orders')).subscribe({
       next: (res) => {
         if (!res?.data) return;
@@ -269,7 +289,11 @@ export class CustomerTable {
 
   openSheet(which: 'feedback' | 'card' | 'cart' | 'pay' | 'bill'): void {
     if (which === 'pay' && !this.payMethod) this.payMethod = this.payNumbers()[0]?.method ?? 'M-Pesa';
-    if (which === 'bill' && !this.billCode) {
+    if (which === 'bill' && this.billMode()) {
+      // Its own bill: no number to type - the copy, and the waiter is told.
+      this.loadMyBill(true);
+      this.called.set({ ...this.called(), BILL: true });
+    } else if (which === 'bill' && !this.billCode) {
       try { this.billCode = localStorage.getItem('meza.bill.' + this.token) ?? ''; } catch { /* private mode */ }
     }
     this.billError.set('');

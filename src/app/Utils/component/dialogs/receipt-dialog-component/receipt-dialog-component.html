@@ -86,6 +86,12 @@
           <div class="r-row r-total"><span>{{ 'RECEIPT.TO_PAY' | translate }}</span><span>Tshs {{ (receipt.toPay ?? (receipt.total - receipt.offerTotal)) | number }}</span></div>
         }
 
+        <!-- Unpaid waiter's bill: its own QR - the customer scans to see it and order more (owner, 2026-11-10). -->
+        @if (receipt.qrImg) {
+          <div class="r-rule"></div>
+          <div class="r-center r-qr"><img [src]="receipt.qrImg" alt="" /><div class="r-muted r-sub">Scan: ona bill yako, agiza zaidi</div></div>
+        }
+
         @if (receipt.payments?.length) {
           <div class="r-rule"></div>
           @for (p of receipt.payments; track $index) {

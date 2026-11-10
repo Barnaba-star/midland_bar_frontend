@@ -306,6 +306,14 @@
                   </button>
                 }
 
+                <!-- The bill's own QR: the customer scans it to see the bill and order more onto it. -->
+                @if (bill.paymentStatus !== 'PAID') {
+                  <button type="button" class="pay-note" (click)="showBillQr(bill)">
+                    <mat-icon>qr_code_2</mat-icon>
+                    <span class="pay-note-text">QR ya bill</span>
+                  </button>
+                }
+
                 <!-- Going off with the customer still drinking: the bill and its commission go to a colleague. -->
                 @if (!handoverSent && bill.paymentStatus !== 'PAID') {
                   <button type="button" class="pay-note" [disabled]="busyBill === bill.uid" (click)="transferBill(bill)">

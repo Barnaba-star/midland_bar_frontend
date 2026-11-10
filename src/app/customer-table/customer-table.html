@@ -26,10 +26,22 @@
     @case ('ready') {
       <section class="ct-hero">
         <p class="ct-eyebrow">{{ t('welcome') }}</p>
-        <h1>{{ t('youAt') }} <span>{{ view()!.tableName }}</span></h1>
-        <p class="ct-sub">{{ t('sub') }}</p>
-        @if (waiter()) { <p class="ct-waiter">{{ t('yourWaiter') }}: <strong>{{ waiter() }}</strong></p> }
+        @if (view()!.bill; as vb) {
+          <h1>{{ t('yourBill') }} <span>{{ vb.code }}</span></h1>
+          <p class="ct-sub">{{ billOpen() ? t('billSub') : t('billClosed') }}</p>
+          @if (vb.staffName) { <p class="ct-waiter">{{ t('yourWaiter') }}: <strong>{{ vb.staffName }}</strong></p> }
+        } @else {
+          <h1>{{ t('youAt') }} <span>{{ view()!.tableName }}</span></h1>
+          <p class="ct-sub">{{ t('sub') }}</p>
+          @if (waiter()) { <p class="ct-waiter">{{ t('yourWaiter') }}: <strong>{{ waiter() }}</strong></p> }
+        }
       </section>
+      @if (billMode() && bill(); as b) {
+        <button type="button" class="ct-billbar" (click)="openSheet('bill')">
+          <span>{{ b.status === 'PAID' ? t('billPaidAll') : t('billToPay') }}</span>
+          <b>@if (b.status !== 'PAID') { Tsh {{ b.toPay | number: '1.0-0' }} · }{{ t('seeMyBill') }} ›</b>
+        </button>
+      }
 
       <div class="ct-actions">
         <button type="button" class="primary" (click)="call('WAITER')" [disabled]="called()['WAITER']">
@@ -106,7 +118,7 @@
                     <span class="ct-price">Tsh {{ m.price | number: '1.0-0' }}</span>
                   }
                 </div>
-                @if (m.available !== false) {
+                @if (m.available !== false && (!billMode() || billOpen())) {
                   @if (asksServing(m)) {
                     <div class="ct-serve">
                       @for (s of servings; track s) {
@@ -140,7 +152,7 @@
         <p class="ct-none">{{ search() ? t('noMatch') : t('none') }}</p>
       }
 
-      @if (cartCount() > 0 && sheet() === 'none') {
+      @if (cartCount() > 0 && sheet() === 'none' && (!billMode() || billOpen())) {
         <button type="button" class="ct-cartbar" (click)="openSheet('cart')">
           <span>{{ t('cart') }} ({{ cartCount() }})</span><b>Tsh {{ cartTotal() | number: '1.0-0' }}</b>
         </button>
@@ -196,7 +208,9 @@
                   <p class="ct-sub">{{ t('billWaiterTold') }}</p>
                   @if (b.toPay > 0) { <button type="button" class="ct-send" (click)="payBill()">{{ t('payNow') }}</button> }
                 }
-                <button type="button" class="ct-link" (click)="bill.set(null)">{{ t('otherBill') }}</button>
+                @if (!billMode()) { <button type="button" class="ct-link" (click)="bill.set(null)">{{ t('otherBill') }}</button> }
+              } @else if (billMode()) {
+                <p class="ct-sub">{{ t('loading') }}</p>
               } @else {
                 <p class="ct-sub">{{ t('billText') }}</p>
                 <input type="text" maxlength="30" autocapitalize="characters" [(ngModel)]="billCode" [placeholder]="t('billNo')" (keydown.enter)="findBill()" />

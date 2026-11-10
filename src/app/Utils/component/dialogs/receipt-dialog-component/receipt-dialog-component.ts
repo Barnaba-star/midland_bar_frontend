@@ -1,3 +1,4 @@
+import { billQrImage } from '../bill-qr-dialog/bill-qr-dialog';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { catchError, forkJoin, of, switchMap } from 'rxjs';
 import { SystemSettingService } from '../../../services/system-setting';
@@ -69,6 +70,9 @@ export class ReceiptDialogComponent implements OnInit {
     }).subscribe({
       next: ({ all, logo }) => {
         this.receipts = all.map((res) => res?.data).filter(Boolean);
+        // Each unpaid waiter's bill carries its own QR image, ready before printing.
+        this.qrReady = Promise.all(this.receipts.filter((r) => r.customerToken).map((r) =>
+          billQrImage(r.customerToken, 320).then((src) => { r.qrImg = src; this.cdr.detectChanges(); }))).then(() => undefined);
         // No logo of their own (or it would not load): BaronixTZ's, in black for the roll.
         this.logoIsDefault = !logo;
         this.logoUrl = logo || `${location.origin}/assets/images/baronix-receipt-logo.png`;
@@ -100,7 +104,11 @@ export class ReceiptDialogComponent implements OnInit {
     return (receipt?.payments ?? []).reduce((sum: number, p: any) => sum + (p.change ?? 0), 0);
   }
 
+  /** The bills' QR images being drawn - printing waits for them. */
+  private qrReady: Promise<void> = Promise.resolve();
+
   async print(): Promise<void> {
+    await this.qrReady;
     const pages = Array.from(this.papers?.nativeElement.querySelectorAll<HTMLElement>(':scope > .r-paper') ?? [])
       .map((el) => el.innerHTML);
     if (!pages.length) {
@@ -159,6 +167,7 @@ export class ReceiptDialogComponent implements OnInit {
         .r-wm span { font-size: 1.25em; font-weight: 700; letter-spacing: 0.08em; white-space: nowrap; color: #000; opacity: ${ReceiptDialogComponent.WATERMARK_OPACITY}; }
         .r-paper + .r-paper { page-break-before: always; break-before: page; }
         .r-center { text-align: center; }
+        .r-qr img { display: block; margin: ${vw(2)} auto ${vw(1)}; width: ${vw(34)}; height: ${vw(34)}; }
         .r-title { font-size: 1.333em; font-weight: 700; }
         .r-muted { color: #000; }
         .r-rule { border-top: 1px dashed #000; margin: 0.5em 0; }

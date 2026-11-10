@@ -11,7 +11,7 @@ import { Authentication } from '../../services/authentication';
 
 interface TableCall { uid: string; tableName: string; kind: 'WAITER' | 'BILL' | 'PAID'; calledAt: string; note?: string; }
 interface OrderLine { name: string; qty: number; price: number; serving?: 'COLD' | 'WARM' | null; }
-interface TableOrder { uid: string; tableName: string; total: number; note?: string; placedAt: string; lines: OrderLine[]; }
+interface TableOrder { uid: string; tableName: string; total: number; note?: string; placedAt: string; lines: OrderLine[]; billUid?: string | null; billCode?: string | null; staffName?: string | null; }
 interface Waiter { uid: string; name: string; }
 
 /**
@@ -30,7 +30,7 @@ interface Waiter { uid: string; name: string; }
           <div class="tc-item order">
             <span class="tc-ico" aria-hidden="true">🛎️</span>
             <div class="tc-text">
-              <strong>{{ o.tableName }} imeagiza · Tsh {{ o.total | number: '1.0-0' }}</strong>
+              <strong>{{ o.tableName }} imeagiza · Tsh {{ o.total | number: '1.0-0' }}@if (o.billUid && o.staffName) { · ya {{ o.staffName }} }</strong>
               <span>@for (l of o.lines; track $index) { {{ l.qty }}× {{ l.name }}@if (l.serving) { ({{ l.serving === 'COLD' ? 'Baridi' : 'Moto' }})}@if (!$last) {, } } · {{ ago(o.placedAt) }}</span>
               @if (o.note) { <em>"{{ o.note }}"</em> }
               @if (taking() === o.uid) {
@@ -143,7 +143,8 @@ export class TableCalls {
 
   startTake(o: TableOrder): void {
     this.rejecting.set(null);
-    if (this.ownBill) {
+    // Ordered from a bill's own QR: it goes on that bill - no waiter to choose.
+    if (this.ownBill || o.billUid) {
       this.waiterUid = '';
       this.accept(o);
       return;

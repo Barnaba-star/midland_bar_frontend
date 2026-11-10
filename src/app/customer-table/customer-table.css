@@ -311,3 +311,8 @@
 .ct-link { margin-top: 10px; width: 100%; height: 44px; border: 0; background: transparent; color: #f5a524; font: inherit; font-weight: 700; text-decoration: underline; cursor: pointer; }
 .ct-link:disabled { color: #a89c8a; text-decoration: none; cursor: default; }
 .ct-free { display: block; color: #7fd18b; font-size: 12px; font-weight: 700; }
+
+/* A bill's own window: what is left to pay, always at hand (owner, 2026-11-10). */
+.ct-billbar { width: 100%; margin: 4px 0 14px; display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 14px 16px; border: 1px solid rgba(245,165,36,.45); border-radius: 14px; background: #1c170f; color: #f6ecdc; font: inherit; cursor: pointer; text-align: left; }
+.ct-billbar span { color: #a89c8a; font-size: 14px; }
+.ct-billbar b { color: #ffc861; font-size: 16px; white-space: nowrap; }

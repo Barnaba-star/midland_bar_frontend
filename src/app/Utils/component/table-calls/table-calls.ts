@@ -9,7 +9,7 @@ import { silent } from '../../inteceptor/silent-request';
 import { LiveChanges } from '../../services/live-changes';
 import { Authentication } from '../../services/authentication';
 
-interface TableCall { uid: string; tableName: string; kind: 'WAITER' | 'BILL' | 'PAID'; calledAt: string; note?: string; }
+interface TableCall { uid: string; tableName: string; kind: 'WAITER' | 'BILL' | 'PAID' | 'ORDER'; calledAt: string; note?: string; }
 interface OrderLine { name: string; qty: number; price: number; serving?: 'COLD' | 'WARM' | null; }
 interface TableOrder { uid: string; tableName: string; total: number; note?: string; placedAt: string; lines: OrderLine[]; billUid?: string | null; billCode?: string | null; staffName?: string | null; }
 interface Waiter { uid: string; name: string; }
@@ -58,12 +58,13 @@ interface Waiter { uid: string; name: string; }
         }
         @for (c of calls(); track c.uid) {
           <div class="tc-item" [class.bill]="c.kind === 'BILL'" [class.paid]="c.kind === 'PAID'">
-            <span class="tc-ico" aria-hidden="true">{{ c.kind === 'BILL' ? '🧾' : c.kind === 'PAID' ? '💳' : '🙋' }}</span>
+            <span class="tc-ico" aria-hidden="true">{{ c.kind === 'BILL' ? '🧾' : c.kind === 'PAID' ? '💳' : c.kind === 'ORDER' ? '🛎️' : '🙋' }}</span>
             <div class="tc-text">
               <strong>{{ c.tableName }}</strong>
-              <span>{{ c.kind === 'BILL' ? 'inaomba bill' + (c.note ? ': ' + c.note : '') : c.kind === 'PAID' ? 'imelipa: ' + (c.note || '') : 'inaita mhudumu' }} · {{ ago(c.calledAt) }}</span>
+              <!-- ORDER: from the bill's own QR, already sent to the counter / kitchen - the waiter takes it over. -->
+              <span>{{ c.kind === 'BILL' ? 'inaomba bill' + (c.note ? ': ' + c.note : '') : c.kind === 'PAID' ? 'imelipa: ' + (c.note || '') : c.kind === 'ORDER' ? 'imeagiza (imeenda counter/jikoni): ' + (c.note || '') : 'inaita mhudumu' }} · {{ ago(c.calledAt) }}</span>
             </div>
-            <button type="button" (click)="done(c)">{{ c.kind === 'PAID' ? 'Nimehakiki' : 'Nimeenda' }}</button>
+            <button type="button" (click)="done(c)">{{ c.kind === 'PAID' ? 'Nimehakiki' : c.kind === 'ORDER' ? 'Sawa' : 'Nimeenda' }}</button>
           </div>
         }
       </aside>

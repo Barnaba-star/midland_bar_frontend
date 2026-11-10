@@ -47,12 +47,19 @@
         <button type="button" class="primary" (click)="call('WAITER')" [disabled]="called()['WAITER']">
           <span class="ct-ico" aria-hidden="true">🙋</span>{{ called()['WAITER'] ? t('called') : t('callWaiter') }}
         </button>
-        <button type="button" (click)="openSheet('bill')">
-          <span class="ct-ico" aria-hidden="true">🧾</span>{{ called()['BILL'] ? t('billAsked') : t('askBill') }}
-        </button>
-        <button type="button" (click)="openSheet('pay')"><span class="ct-ico" aria-hidden="true">💳</span>{{ t('pay') }}</button>
+        @if (billMode()) {
+          <!-- A bill's window is kept simple: its bill is the bar above; services open the menu. -->
+          @if (billOpen()) {
+            <button type="button" (click)="openMenu()"><span class="ct-ico" aria-hidden="true">🍽️</span>{{ t('services') }}</button>
+          }
+        } @else {
+          <button type="button" (click)="openSheet('bill')">
+            <span class="ct-ico" aria-hidden="true">🧾</span>{{ called()['BILL'] ? t('billAsked') : t('askBill') }}
+          </button>
+          <button type="button" (click)="openSheet('pay')"><span class="ct-ico" aria-hidden="true">💳</span>{{ t('pay') }}</button>
+        }
         <button type="button" (click)="openSheet('feedback')"><span class="ct-ico" aria-hidden="true">💬</span>{{ t('feedback') }}</button>
-        <button type="button" class="wide" (click)="openSheet('card')"><span class="ct-ico" aria-hidden="true">⭐</span>{{ t('points') }}</button>
+        <button type="button" [class.wide]="!billMode() || !billOpen()" (click)="openSheet('card')"><span class="ct-ico" aria-hidden="true">⭐</span>{{ t('points') }}</button>
       </div>
 
       @if (orders().length) {
@@ -85,71 +92,75 @@
         }
       }
 
-      <div class="ct-tools">
-        <label class="ct-search">
-          <span class="ct-search-icon" aria-hidden="true">⌕</span>
-          <input type="search" [placeholder]="t('search')" enterkeyhint="search" [value]="search()" (input)="onSearch($event)" />
-        </label>
-        @if (categories().length > 1) {
-          <nav class="ct-cats">
-            <button type="button" [class.on]="category() === 'ALL'" (click)="category.set('ALL')">{{ t('all') }}</button>
-            @for (c of categories(); track c) {
-              <button type="button" [class.on]="category() === c" (click)="category.set(c)">{{ label(c) }}</button>
-            }
-          </nav>
-        }
-      </div>
+      <!-- A bill's window: the menu opens from "Huduma" (owner, 2026-11-10) - a table's shows it at once. -->
+      @if (!billMode() || showMenu()) {
+      <div id="ct-menu"></div>
+        <div class="ct-tools">
+          <label class="ct-search">
+            <span class="ct-search-icon" aria-hidden="true">⌕</span>
+            <input type="search" [placeholder]="t('search')" enterkeyhint="search" [value]="search()" (input)="onSearch($event)" />
+          </label>
+          @if (categories().length > 1) {
+            <nav class="ct-cats">
+              <button type="button" [class.on]="category() === 'ALL'" (click)="category.set('ALL')">{{ t('all') }}</button>
+              @for (c of categories(); track c) {
+                <button type="button" [class.on]="category() === c" (click)="category.set(c)">{{ label(c) }}</button>
+              }
+            </nav>
+          }
+        </div>
 
-      @for (g of groups(); track g.key) {
-        <section class="ct-group">
-          <h2>{{ label(g.key) }}</h2>
-          <ul>
-            @for (m of g.items; track m.uid) {
-              <li [class.out]="m.available === false">
-                <div class="ct-item">
-                  <strong>{{ m.name }}</strong>
-                  @if (m.description) { <small>{{ m.description }}</small> }
-                  @if (m.offerPrice != null && m.available !== false) { <span class="ct-offer">{{ m.offerName || t('offer') }}</span> }
-                  @if (m.available === false) {
-                    <span class="ct-out">{{ t('soldOut') }}</span>
-                  } @else if (m.offerPrice != null) {
-                    <span class="ct-price"><s>{{ m.price | number: '1.0-0' }}</s> Tsh {{ m.offerPrice | number: '1.0-0' }}</span>
-                  } @else {
-                    <span class="ct-price">Tsh {{ m.price | number: '1.0-0' }}</span>
-                  }
-                </div>
-                @if (m.available !== false && (!billMode() || billOpen())) {
-                  @if (asksServing(m)) {
-                    <div class="ct-serve">
-                      @for (s of servings; track s) {
-                        @if (qty(key(m, s)) > 0) {
-                          <div class="ct-step" [class.warm]="s === 'WARM'">
-                            <em>{{ servingLabel(s) }}</em>
-                            <button type="button" (click)="change(key(m, s), -1)" aria-label="-">−</button>
-                            <b>{{ qty(key(m, s)) }}</b>
-                            <button type="button" (click)="change(key(m, s), 1)" aria-label="+">+</button>
-                          </div>
-                        } @else {
-                          <button type="button" class="ct-add" [class.warm]="s === 'WARM'" (click)="change(key(m, s), 1)">+ {{ servingLabel(s) }}</button>
+        @for (g of groups(); track g.key) {
+          <section class="ct-group">
+            <h2>{{ label(g.key) }}</h2>
+            <ul>
+              @for (m of g.items; track m.uid) {
+                <li [class.out]="m.available === false">
+                  <div class="ct-item">
+                    <strong>{{ m.name }}</strong>
+                    @if (m.description) { <small>{{ m.description }}</small> }
+                    @if (m.offerPrice != null && m.available !== false) { <span class="ct-offer">{{ m.offerName || t('offer') }}</span> }
+                    @if (m.available === false) {
+                      <span class="ct-out">{{ t('soldOut') }}</span>
+                    } @else if (m.offerPrice != null) {
+                      <span class="ct-price"><s>{{ m.price | number: '1.0-0' }}</s> Tsh {{ m.offerPrice | number: '1.0-0' }}</span>
+                    } @else {
+                      <span class="ct-price">Tsh {{ m.price | number: '1.0-0' }}</span>
+                    }
+                  </div>
+                  @if (m.available !== false && (!billMode() || billOpen())) {
+                    @if (asksServing(m)) {
+                      <div class="ct-serve">
+                        @for (s of servings; track s) {
+                          @if (qty(key(m, s)) > 0) {
+                            <div class="ct-step" [class.warm]="s === 'WARM'">
+                              <em>{{ servingLabel(s) }}</em>
+                              <button type="button" (click)="change(key(m, s), -1)" aria-label="-">−</button>
+                              <b>{{ qty(key(m, s)) }}</b>
+                              <button type="button" (click)="change(key(m, s), 1)" aria-label="+">+</button>
+                            </div>
+                          } @else {
+                            <button type="button" class="ct-add" [class.warm]="s === 'WARM'" (click)="change(key(m, s), 1)">+ {{ servingLabel(s) }}</button>
+                          }
                         }
-                      }
-                    </div>
-                  } @else if (qty(key(m)) > 0) {
-                    <div class="ct-step">
-                      <button type="button" (click)="change(key(m), -1)" aria-label="-">−</button>
-                      <b>{{ qty(key(m)) }}</b>
-                      <button type="button" (click)="change(key(m), 1)" aria-label="+">+</button>
-                    </div>
-                  } @else {
-                    <button type="button" class="ct-add" (click)="change(key(m), 1)">+ {{ t('add') }}</button>
+                      </div>
+                    } @else if (qty(key(m)) > 0) {
+                      <div class="ct-step">
+                        <button type="button" (click)="change(key(m), -1)" aria-label="-">−</button>
+                        <b>{{ qty(key(m)) }}</b>
+                        <button type="button" (click)="change(key(m), 1)" aria-label="+">+</button>
+                      </div>
+                    } @else {
+                      <button type="button" class="ct-add" (click)="change(key(m), 1)">+ {{ t('add') }}</button>
+                    }
                   }
-                }
-              </li>
-            }
-          </ul>
-        </section>
-      } @empty {
-        <p class="ct-none">{{ search() ? t('noMatch') : t('none') }}</p>
+                </li>
+              }
+            </ul>
+          </section>
+        } @empty {
+          <p class="ct-none">{{ search() ? t('noMatch') : t('none') }}</p>
+        }
       }
 
       @if (cartCount() > 0 && sheet() === 'none' && (!billMode() || billOpen())) {
@@ -205,8 +216,12 @@
                   <p class="ct-bill-done">{{ t('billPaidAll') }}</p>
                 } @else {
                   <div class="ct-bill-due"><span>{{ t('billToPay') }}</span><b>Tsh {{ b.toPay | number: '1.0-0' }}</b></div>
-                  <p class="ct-sub">{{ t('billWaiterTold') }}</p>
-                  @if (b.toPay > 0) { <button type="button" class="ct-send" (click)="payBill()">{{ t('payNow') }}</button> }
+                  @if (!billMode()) { <p class="ct-sub">{{ t('billWaiterTold') }}</p> }
+                  @if (billMode()) {
+                    <button type="button" class="ct-send" (click)="openMenu()">{{ t('addServices') }}</button>
+                  } @else if (b.toPay > 0) {
+                    <button type="button" class="ct-send" (click)="payBill()">{{ t('payNow') }}</button>
+                  }
                 }
                 @if (!billMode()) { <button type="button" class="ct-link" (click)="bill.set(null)">{{ t('otherBill') }}</button> }
               } @else if (billMode()) {

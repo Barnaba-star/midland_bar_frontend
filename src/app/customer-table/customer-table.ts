@@ -35,7 +35,9 @@ const T: Record<string, [string, string]> = {
   billTitle: ['Bill yako', 'Your bill'], free: ['Bure', 'Free'],
   yourBill: ['Bill yako', 'Your bill'], billSub: ['Agiza zaidi hapa - inaingia kwenye bill yako na kwa mhudumu wako.', 'Order more here - it goes on your bill and to your waiter.'],
   billClosed: ['Bill hii imelipwa - asante! Kuagiza tena, mwombe mhudumu bill mpya.', 'This bill is paid - thank you! To order again, ask for a new bill.'],
-  seeMyBill: ['Angalia bill', 'See bill'], billText: ['Andika namba ya bill yako (iko kwenye bill au muulize mhudumu), mfano MK-1.', 'Type your bill number (on the bill, or ask your waiter), e.g. MK-1.'],
+  seeMyBill: ['Angalia bill', 'See bill'],
+  services: ['Huduma', 'Services'], addServices: ['Ongeza huduma', 'Add services'],
+  billOrderSent: ['Oda imetumwa - mhudumu wako ameiona na inaandaliwa.', 'Order sent - your waiter has it and it is being prepared.'], billText: ['Andika namba ya bill yako (iko kwenye bill au muulize mhudumu), mfano MK-1.', 'Type your bill number (on the bill, or ask your waiter), e.g. MK-1.'],
   billNo: ['Namba ya bill, mfano MK-1', 'Bill number, e.g. MK-1'], seeBill: ['Angalia bill', 'See bill'],
   noBillNo: ['Sijui namba - mwite mhudumu', "I don't know it - call the waiter"], billNotFound: ['Bill hiyo haipo. Hakikisha namba, au mwite mhudumu.', 'No such bill. Check the number, or call the waiter.'],
   billWaiter: ['Mhudumu', 'Waiter'], billPaidAll: ['Imelipwa yote - asante!', 'Fully paid - thank you!'], billPaidSoFar: ['Umelipa', 'Paid'],
@@ -217,6 +219,15 @@ export class CustomerTable {
     return this.billMode() && (b ? b.status === 'PENDING' : !!this.view()?.bill?.open);
   });
 
+  /** A bill's window: the menu is shown once "Huduma" is tapped. */
+  readonly showMenu = signal(false);
+
+  openMenu(): void {
+    this.sheet.set('none');
+    this.showMenu.set(true);
+    setTimeout(() => document.getElementById('ct-menu')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+  }
+
   /** The bill's copy; with ask, its waiter is told the customer wants it. */
   loadMyBill(ask = false): void {
     this.http.get<{ data?: BillCopy }>(this.url('/myBill'), { params: { ask } }).subscribe({
@@ -290,9 +301,8 @@ export class CustomerTable {
   openSheet(which: 'feedback' | 'card' | 'cart' | 'pay' | 'bill'): void {
     if (which === 'pay' && !this.payMethod) this.payMethod = this.payNumbers()[0]?.method ?? 'M-Pesa';
     if (which === 'bill' && this.billMode()) {
-      // Its own bill: no number to type - the copy, and the waiter is told.
-      this.loadMyBill(true);
-      this.called.set({ ...this.called(), BILL: true });
+      // Its own bill: no number to type - just the copy (the waiter is called with "Mwite mhudumu").
+      this.loadMyBill(false);
     } else if (which === 'bill' && !this.billCode) {
       try { this.billCode = localStorage.getItem('meza.bill.' + this.token) ?? ''; } catch { /* private mode */ }
     }
@@ -338,7 +348,7 @@ export class CustomerTable {
           this.cart.set({});
           this.orderNote = '';
           this.sheet.set('none');
-          this.flash('orderSent');
+          this.flash(this.billMode() ? 'billOrderSent' : 'orderSent');
           this.loadOrders();
         } else {
           this.flash(res?.message === 'TOO_MANY' ? 'tooMany' : 'failed');

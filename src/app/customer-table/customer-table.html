@@ -35,7 +35,7 @@
         <button type="button" class="primary" (click)="call('WAITER')" [disabled]="called()['WAITER']">
           <span class="ct-ico" aria-hidden="true">🙋</span>{{ called()['WAITER'] ? t('called') : t('callWaiter') }}
         </button>
-        <button type="button" (click)="call('BILL')" [disabled]="called()['BILL']">
+        <button type="button" (click)="openSheet('bill')">
           <span class="ct-ico" aria-hidden="true">🧾</span>{{ called()['BILL'] ? t('billAsked') : t('askBill') }}
         </button>
         <button type="button" (click)="openSheet('pay')"><span class="ct-ico" aria-hidden="true">💳</span>{{ t('pay') }}</button>
@@ -170,6 +170,40 @@
               </ul>
               <input type="text" maxlength="200" [(ngModel)]="orderNote" [placeholder]="t('note')" />
               <button type="button" class="ct-send" [disabled]="sending() || !cartCount()" (click)="sendOrder()">{{ sending() ? t('sending') : t('sendOrder') }}</button>
+            }
+            @case ('bill') {
+              <h2>{{ t('billTitle') }}</h2>
+              @if (bill(); as b) {
+                <div class="ct-bill-head">
+                  <strong>{{ b.code }}</strong>
+                  @if (b.staffName) { <span>{{ t('billWaiter') }}: {{ b.staffName }}</span> }
+                </div>
+                @if (b.lines.length) {
+                  <ul class="ct-card">
+                    @for (l of b.lines; track $index) {
+                      <li><span>{{ l.qty }} × {{ l.name }}@if (l.offer) { <small class="ct-free">{{ t('free') }} · {{ l.offer }}</small> }</span><strong>{{ l.total | number: '1.0-0' }}</strong></li>
+                    }
+                    <li><span>{{ t('total') }}</span><strong>Tsh {{ b.total | number: '1.0-0' }}</strong></li>
+                    @if (b.paid > 0 && b.status !== 'PAID') { <li><span>{{ t('billPaidSoFar') }}</span><strong>Tsh {{ b.paid | number: '1.0-0' }}</strong></li> }
+                  </ul>
+                } @else {
+                  <p class="ct-sub">{{ t('billEmpty') }}</p>
+                }
+                @if (b.status === 'PAID') {
+                  <p class="ct-bill-done">{{ t('billPaidAll') }}</p>
+                } @else {
+                  <div class="ct-bill-due"><span>{{ t('billToPay') }}</span><b>Tsh {{ b.toPay | number: '1.0-0' }}</b></div>
+                  <p class="ct-sub">{{ t('billWaiterTold') }}</p>
+                  @if (b.toPay > 0) { <button type="button" class="ct-send" (click)="payBill()">{{ t('payNow') }}</button> }
+                }
+                <button type="button" class="ct-link" (click)="bill.set(null)">{{ t('otherBill') }}</button>
+              } @else {
+                <p class="ct-sub">{{ t('billText') }}</p>
+                <input type="text" maxlength="30" autocapitalize="characters" [(ngModel)]="billCode" [placeholder]="t('billNo')" (keydown.enter)="findBill()" />
+                @if (billError()) { <p class="ct-err">{{ billError() }}</p> }
+                <button type="button" class="ct-send" [disabled]="sending() || !billCode.trim()" (click)="findBill()">{{ sending() ? t('sending') : t('seeBill') }}</button>
+                <button type="button" class="ct-link" [disabled]="called()['BILL']" (click)="call('BILL'); sheet.set('none')">{{ called()['BILL'] ? t('billAsked') : t('noBillNo') }}</button>
+              }
             }
             @case ('pay') {
               <h2>{{ t('payTitle') }}</h2>

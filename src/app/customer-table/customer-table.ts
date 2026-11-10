@@ -9,6 +9,7 @@ import { BrandWord } from '../Utils/component/brand-word/brand-word';
 interface MenuItem { uid: string; name: string; price: number; category?: string | null; description?: string | null; available?: boolean; offerPrice?: number | null; offerName?: string | null; }
 interface Info { wifiName?: string; wifiPassword?: string; hours?: string; phone?: string; note?: string; payMpesa?: string; payTigo?: string; payAirtel?: string; payHalo?: string; payBank?: string; }
 interface TableView { tableName: string; tableNumber: number; branchName?: string; menu: MenuItem[]; info?: Info; }
+interface BillCopy { code: string; staffName?: string; status: 'PENDING' | 'PAID' | string; lines: { name: string; qty: number; price: number; total: number; offer?: string | null }[]; total: number; paid: number; toPay: number; }
 interface Card { name?: string; lines: { label: string; value: string }[]; }
 interface OrderLine { name: string; qty: number; price: number; serving?: Serving | null; }
 type Serving = 'COLD' | 'WARM';
@@ -31,6 +32,12 @@ const T: Record<string, [string, string]> = {
   yourWaiter: ['Mhudumu wako', 'Your waiter'],
   callWaiter: ['Mwite mhudumu', 'Call waiter'], called: ['Ameitwa', 'Called'],
   askBill: ['Omba bill', 'Ask for bill'], billAsked: ['Imeombwa', 'Requested'],
+  billTitle: ['Bill yako', 'Your bill'], free: ['Bure', 'Free'], billText: ['Andika namba ya bill yako (iko kwenye bill au muulize mhudumu), mfano MK-1.', 'Type your bill number (on the bill, or ask your waiter), e.g. MK-1.'],
+  billNo: ['Namba ya bill, mfano MK-1', 'Bill number, e.g. MK-1'], seeBill: ['Angalia bill', 'See bill'],
+  noBillNo: ['Sijui namba - mwite mhudumu', "I don't know it - call the waiter"], billNotFound: ['Bill hiyo haipo. Hakikisha namba, au mwite mhudumu.', 'No such bill. Check the number, or call the waiter.'],
+  billWaiter: ['Mhudumu', 'Waiter'], billPaidAll: ['Imelipwa yote - asante!', 'Fully paid - thank you!'], billPaidSoFar: ['Umelipa', 'Paid'],
+  billToPay: ['Kiasi cha kulipa', 'To pay'], billWaiterTold: ['Mhudumu wako amejulishwa unataka bill.', 'Your waiter has been told you want the bill.'],
+  billEmpty: ['Bado hakuna kilichowekwa kwenye bill hii.', 'Nothing is on this bill yet.'], payNow: ['Lipa sasa', 'Pay now'], otherBill: ['Angalia bill nyingine', 'Another bill'],
   pay: ['Lipa', 'Pay'], feedback: ['Toa maoni', 'Feedback'], points: ['Pointi zangu', 'My points'],
   search: ['Tafuta kinywaji au chakula', 'Search drinks or food'], all: ['Zote', 'All'],
   soldOut: ['Kimeisha', 'Sold out'], offer: ['Ofa', 'Offer'], add: ['Ongeza', 'Add'],
@@ -90,7 +97,11 @@ export class CustomerTable {
   readonly search = signal('');
   readonly category = signal<string>('ALL');
   readonly called = signal<Record<string, boolean>>({});
-  readonly sheet = signal<'none' | 'feedback' | 'card' | 'cart' | 'pay'>('none');
+  readonly sheet = signal<'none' | 'feedback' | 'card' | 'cart' | 'pay' | 'bill'>('none');
+  /** The bill the customer looked up by its number (owner, 2026-11-10). */
+  readonly bill = signal<BillCopy | null>(null);
+  readonly billError = signal('');
+  billCode = '';
   readonly sending = signal(false);
   readonly notice = signal('');
   readonly cart = signal<Record<string, number>>({});
@@ -256,9 +267,40 @@ export class CustomerTable {
     });
   }
 
-  openSheet(which: 'feedback' | 'card' | 'cart' | 'pay'): void {
+  openSheet(which: 'feedback' | 'card' | 'cart' | 'pay' | 'bill'): void {
     if (which === 'pay' && !this.payMethod) this.payMethod = this.payNumbers()[0]?.method ?? 'M-Pesa';
+    if (which === 'bill' && !this.billCode) {
+      try { this.billCode = localStorage.getItem('meza.bill.' + this.token) ?? ''; } catch { /* private mode */ }
+    }
+    this.billError.set('');
     this.sheet.set(which);
+  }
+
+  /** The customer's bill by its number: a copy of it, and their waiter is told. */
+  findBill(): void {
+    const code = this.billCode.trim().toUpperCase();
+    if (!code || this.sending()) return;
+    this.sending.set(true);
+    this.billError.set('');
+    this.http.post<{ data?: BillCopy; message?: string }>(this.url('/bill'), { code }).subscribe({
+      next: (res) => {
+        this.sending.set(false);
+        if (res?.data) {
+          this.bill.set(res.data);
+          try { localStorage.setItem('meza.bill.' + this.token, res.data.code); } catch { /* private mode */ }
+        } else {
+          this.billError.set(this.t(res?.message === 'TOO_MANY' ? 'tooMany' : res?.message === 'BILL_NOT_FOUND' ? 'billNotFound' : 'failed'));
+        }
+      },
+      error: () => { this.sending.set(false); this.billError.set(this.t('offline')); },
+    });
+  }
+
+  /** From the bill copy to paying it: the amount left is filled in. */
+  payBill(): void {
+    const b = this.bill();
+    if (b && b.toPay > 0) this.payAmount = String(b.toPay);
+    this.openSheet('pay');
   }
 
   sendOrder(): void {

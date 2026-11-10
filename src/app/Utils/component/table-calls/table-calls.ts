@@ -61,7 +61,7 @@ interface Waiter { uid: string; name: string; }
             <span class="tc-ico" aria-hidden="true">{{ c.kind === 'BILL' ? '🧾' : c.kind === 'PAID' ? '💳' : '🙋' }}</span>
             <div class="tc-text">
               <strong>{{ c.tableName }}</strong>
-              <span>{{ c.kind === 'BILL' ? 'inaomba bill' : c.kind === 'PAID' ? 'imelipa: ' + (c.note || '') : 'inaita mhudumu' }} · {{ ago(c.calledAt) }}</span>
+              <span>{{ c.kind === 'BILL' ? 'inaomba bill' + (c.note ? ': ' + c.note : '') : c.kind === 'PAID' ? 'imelipa: ' + (c.note || '') : 'inaita mhudumu' }} · {{ ago(c.calledAt) }}</span>
             </div>
             <button type="button" (click)="done(c)">{{ c.kind === 'PAID' ? 'Nimehakiki' : 'Nimeenda' }}</button>
           </div>

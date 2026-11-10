@@ -299,3 +299,15 @@
 .ct-serve .ct-step.warm button { background: #f0866a; }
 .ct-tag { display: inline-block; margin-left: 6px; padding: 1px 8px; border-radius: 999px; background: rgba(124,196,240,.18); color: #7cc4f0; font-style: normal; font-size: 12px; font-weight: 800; }
 .ct-tag.warm { background: rgba(240,134,106,.18); color: #f0866a; }
+
+/* The bill copy by its number (owner, 2026-11-10). */
+.ct-bill-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 6px; }
+.ct-bill-head strong { font-size: 22px; color: #f5a524; letter-spacing: .5px; }
+.ct-bill-head span { color: #a89c8a; font-size: 14px; }
+.ct-bill-due { display: flex; justify-content: space-between; align-items: baseline; margin: 14px 0 4px; }
+.ct-bill-due b { font-size: 26px; color: #ffc861; }
+.ct-bill-done { margin: 14px 0; color: #7fd18b; font-weight: 700; }
+.ct-err { margin: 0; color: #e57368; font-weight: 600; }
+.ct-link { margin-top: 10px; width: 100%; height: 44px; border: 0; background: transparent; color: #f5a524; font: inherit; font-weight: 700; text-decoration: underline; cursor: pointer; }
+.ct-link:disabled { color: #a89c8a; text-decoration: none; cursor: default; }
+.ct-free { display: block; color: #7fd18b; font-size: 12px; font-weight: 700; }

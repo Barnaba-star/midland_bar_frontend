@@ -8,8 +8,9 @@ import { environment } from '../../enviroments/environment';
 import { silent } from '../../inteceptor/silent-request';
 import { LiveChanges } from '../../services/live-changes';
 import { Authentication } from '../../services/authentication';
+import { Router } from '@angular/router';
 
-interface TableCall { uid: string; tableName: string; kind: 'WAITER' | 'BILL' | 'PAID' | 'ORDER'; calledAt: string; note?: string; }
+interface TableCall { uid: string; tableName: string; kind: 'WAITER' | 'BILL' | 'PAID' | 'ORDER'; calledAt: string; note?: string; billUid?: string | null; billCode?: string | null; payMethod?: string | null; payRef?: string | null; payAmount?: number | null; }
 interface OrderLine { name: string; qty: number; price: number; serving?: 'COLD' | 'WARM' | null; }
 interface TableOrder { uid: string; tableName: string; total: number; note?: string; placedAt: string; lines: OrderLine[]; billUid?: string | null; billCode?: string | null; staffName?: string | null; }
 interface Waiter { uid: string; name: string; }
@@ -64,8 +65,26 @@ interface Waiter { uid: string; name: string; }
               <!-- ORDER: from the bill's own QR, already sent to the counter / kitchen - the waiter takes it over. -->
               <span>{{ c.kind === 'BILL' ? 'inaomba bill' + (c.note ? ': ' + c.note : '') : c.kind === 'PAID' ? 'imelipa: ' + (c.note || '') : c.kind === 'ORDER' ? 'imeagiza (imeenda counter/jikoni): ' + (c.note || '') : 'inaita mhudumu' }} · {{ ago(c.calledAt) }}</span>
             </div>
-            <button type="button" (click)="done(c)">{{ c.kind === 'PAID' ? 'Nimehakiki' : c.kind === 'ORDER' ? 'Sawa' : 'Nimeenda' }}</button>
+            @if (c.kind === 'PAID' && canPay) {
+              <!-- Lipa kwa simu (owner, 2026-11-11): check the ref on the bar's phone, then pay the bill or say why not. -->
+              <div class="tc-acts">
+                @if (c.billUid) {
+                  <button type="button" (click)="confirmPaid(c)">Thibitisha</button>
+                } @else {
+                  <button type="button" (click)="done(c)">Nimehakiki</button>
+                }
+                <button type="button" class="ghost" (click)="startRejectPaid(c)">Kataa</button>
+              </div>
+            } @else {
+              <button type="button" (click)="done(c)">{{ c.kind === 'PAID' ? 'Nimehakiki' : c.kind === 'ORDER' ? 'Sawa' : 'Nimeenda' }}</button>
+            }
           </div>
+          @if (rejectingPaid() === c.uid) {
+            <div class="tc-reject">
+              <input type="text" maxlength="200" [(ngModel)]="paidReason" placeholder="Sababu (mteja ataiona) - mf. hela haijaingia" />
+              <button type="button" [disabled]="!paidReason.trim() || busy()" (click)="rejectPaid(c)">Kataa</button>
+            </div>
+          }
         }
       </aside>
     }
@@ -84,6 +103,7 @@ interface Waiter { uid: string; name: string; }
     .tc-item.bill button { background: #f5a524; color: #1a1206; }
     .tc-item.paid button { background: #fff; color: #1e5d32; }
     .tc-item button.ghost { background: transparent; color: #c0392b; border: 1px solid #c0392b; }
+    .tc-acts { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
     .tc-item button:disabled { opacity: .5; }
     .tc-btns { display: flex; flex-direction: column; gap: 6px; }
     .tc-pick { display: flex; gap: 6px; margin-top: 6px; }
@@ -135,6 +155,33 @@ export class TableCalls {
     ids.forEach((id) => this.known.add(id));
     if (fresh && !this.first) this.chime();
     this.first = false;
+  }
+
+  private router = inject(Router);
+  /** Who may take the money: the "Nimelipa" buttons (others just see it). */
+  readonly canPay = inject(Authentication).hasPermission('SAVE_SALES');
+  readonly rejectingPaid = signal<string | null>(null);
+  paidReason = '';
+
+  /** Opens the Pay dialog on Sales for that bill, filled from the customer's claim; paying it confirms the claim. */
+  confirmPaid(c: TableCall): void {
+    this.router.navigate(['/pos/barSales'], {
+      queryParams: { payBill: c.billUid, claim: c.uid, method: c.payMethod || null, ref: c.payRef || null, amount: c.payAmount || null },
+    });
+  }
+
+  startRejectPaid(c: TableCall): void {
+    this.rejectingPaid.set(this.rejectingPaid() === c.uid ? null : c.uid);
+    this.paidReason = '';
+  }
+
+  rejectPaid(c: TableCall): void {
+    this.busy.set(true);
+    this.http.post<{ data?: unknown; message?: string }>(`${this.base}/calls/${c.uid}/rejectPaid`, { reason: this.paidReason.trim() }, { context: silent() })
+      .subscribe({
+        next: () => { this.busy.set(false); this.rejectingPaid.set(null); this.load(); },
+        error: () => { this.busy.set(false); this.load(); },
+      });
   }
 
   done(c: TableCall): void {

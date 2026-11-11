@@ -316,3 +316,13 @@
 .ct-billbar { width: 100%; margin: 4px 0 14px; display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 14px 16px; border: 1px solid rgba(245,165,36,.45); border-radius: 14px; background: #1c170f; color: #f6ecdc; font: inherit; cursor: pointer; text-align: left; }
 .ct-billbar span { color: #a89c8a; font-size: 14px; }
 .ct-billbar b { color: #ffc861; font-size: 16px; white-space: nowrap; }
+
+/* "Nimelipa" status (owner, 2026-11-11). */
+.ct-claim { position: fixed; left: 12px; right: 12px; bottom: 84px; z-index: 40; display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 14px; background: #2a2115; border: 1px solid rgba(245, 165, 36, 0.5); color: #f6ecdc; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45); }
+.ct-claim.ok { border-color: rgba(46, 160, 90, 0.7); background: #12261a; }
+.ct-claim.no { border-color: rgba(220, 80, 60, 0.7); background: #2a1512; }
+.ct-claim > div { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.ct-claim strong { font-size: 15px; }
+.ct-claim span { font-size: 13px; color: #d9cbb3; }
+.ct-claim-ico { font-size: 22px; }
+.ct-claim button { border: 0; background: transparent; color: inherit; font-size: 18px; cursor: pointer; }

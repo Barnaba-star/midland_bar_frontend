@@ -63,6 +63,13 @@ const T: Record<string, [string, string]> = {
   payText: ['Lipa kwa namba hizi, kisha bonyeza "Nimelipa" ili cashier ahakiki.', 'Pay to these numbers, then tap "I have paid" so the cashier can check.'],
   noPay: ['Bar hii bado haijaweka namba za malipo - mwombe mhudumu.', 'This bar has not set payment numbers yet - ask a waiter.'],
   method: ['Njia', 'Method'], name: ['Jina', 'Name'], ref: ['Kumbukumbu ya muamala (ref)', 'Transaction reference'], amount: ['Kiasi (Tsh)', 'Amount (Tsh)'],
+  refNeeded: ['Andika kumbukumbu ya muamala (ref) kutoka kwenye SMS ya malipo.', 'Write the transaction reference from the payment SMS.'],
+  refUsed: ['Kumbukumbu hii (ref) imeshatumika. Angalia SMS yako tena.', 'This reference was already used. Check your SMS again.'],
+  billAlreadyPaid: ['Bill hii imeshalipwa - asante!', 'This bill is already paid - thank you!'],
+  claimPending: ['Tumepokea - cashier anahakiki malipo yako...', 'Received - the cashier is checking your payment...'],
+  claimOk: ['Malipo yamethibitishwa. Asante!', 'Payment confirmed. Thank you!'],
+  claimNo: ['Malipo hayajathibitishwa', 'Payment not confirmed'],
+  forBill: ['Kwa bill', 'For bill'],
   iPaid: ['Nimelipa', 'I have paid'], paidOk: ['Asante! Cashier atahakiki malipo yako.', 'Thank you! The cashier will check your payment.'],
   fbTitle: ['Toa maoni', 'Feedback'], fbText: ['Ujumbe wako unamfikia meneja moja kwa moja.', 'Your message goes straight to the manager.'],
   praise: ['Pongezi', 'Praise'], complaint: ['Malalamiko', 'Complaint'], question: ['Swali', 'Question'], advice: ['Ushauri', 'Advice'],
@@ -126,6 +133,9 @@ export class CustomerTable {
   payName = '';
   payRef = '';
   payAmount = '';
+  /** The customer's last "Nimelipa", watched until the cashier answers (owner, 2026-11-11). */
+  readonly claim = signal<{ uid: string; status: 'PENDING' | 'CONFIRMED' | 'REJECTED'; reason?: string | null; amount?: number | null; billCode?: string | null } | null>(null);
+  private claimTimer: ReturnType<typeof setInterval> | null = null;
   readonly kinds = ['PRAISE', 'COMPLAINT', 'QUESTION', 'ADVICE'];
   private ordersTimer: ReturnType<typeof setInterval> | null = null;
 
@@ -166,7 +176,14 @@ export class CustomerTable {
     this.load();
     this.loadOrders();
     this.ordersTimer = setInterval(() => this.loadOrders(), 20_000);
-    inject(DestroyRef).onDestroy(() => this.ordersTimer && clearInterval(this.ordersTimer));
+    inject(DestroyRef).onDestroy(() => {
+      if (this.ordersTimer) clearInterval(this.ordersTimer);
+      if (this.claimTimer) clearInterval(this.claimTimer);
+    });
+    try {
+      const last = localStorage.getItem('meza.claim.' + this.token);
+      if (last) this.watchClaim(last);
+    } catch { /* private mode */ }
   }
 
   t(key: string): string {
@@ -300,6 +317,10 @@ export class CustomerTable {
 
   openSheet(which: 'feedback' | 'card' | 'cart' | 'pay' | 'bill'): void {
     if (which === 'pay' && !this.payMethod) this.payMethod = this.payNumbers()[0]?.method ?? 'M-Pesa';
+    // The amount left on the bill the customer is looking at.
+    if (which === 'pay' && !this.payAmount && this.bill()?.status === 'PENDING' && (this.bill()?.toPay ?? 0) > 0) {
+      this.payAmount = String(this.bill()!.toPay);
+    }
     if (which === 'bill' && this.billMode()) {
       // Its own bill: no number to type - just the copy (the waiter is called with "Mwite mhudumu").
       this.loadMyBill(false);
@@ -358,11 +379,19 @@ export class CustomerTable {
     });
   }
 
+  /** The bill this payment is for: the bill's own QR, or the one looked up by its number here. */
+  readonly payBillCode = computed(() => {
+    const b = this.bill();
+    return b && b.status === 'PENDING' ? b.code : null;
+  });
+
   sendPaid(): void {
-    if ((!this.payName.trim() && !this.payRef.trim()) || this.sending()) return;
+    if (!this.payRef.trim()) { this.flash('refNeeded'); return; }
+    if (this.sending()) return;
     this.sending.set(true);
-    this.http.post<{ data?: unknown; message?: string }>(this.url('/paid'), {
-      method: this.payMethod, name: this.payName.trim() || null, ref: this.payRef.trim() || null, amount: this.payAmount.trim() || null,
+    this.http.post<{ data?: { claim?: string }; message?: string }>(this.url('/paid'), {
+      method: this.payMethod, name: this.payName.trim() || null, ref: this.payRef.trim(), amount: this.payAmount ? String(this.payAmount).trim() : null,
+      billCode: this.billMode() ? null : this.payBillCode(),
     }).subscribe({
       next: (res) => {
         this.sending.set(false);
@@ -371,12 +400,43 @@ export class CustomerTable {
           this.payRef = '';
           this.payAmount = '';
           this.flash('paidOk');
+          if (res.data.claim) this.watchClaim(res.data.claim);
         } else {
-          this.flash(res?.message === 'TOO_SOON' ? 'tooSoon' : 'failed');
+          const m = res?.message;
+          this.flash(m === 'TOO_SOON' ? 'tooSoon' : m === 'REF_REQUIRED' ? 'refNeeded' : m === 'REF_USED' ? 'refUsed' : m === 'BILL_PAID' ? 'billAlreadyPaid' : 'failed');
         }
       },
       error: () => { this.sending.set(false); this.flash('offline'); },
     });
+  }
+
+  /** Asks every 10 s until the cashier confirms or turns it down. */
+  private watchClaim(uid: string): void {
+    this.claim.set({ uid, status: 'PENDING' });
+    try { localStorage.setItem('meza.claim.' + this.token, uid); } catch { /* private mode */ }
+    if (this.claimTimer) clearInterval(this.claimTimer);
+    const ask = () => this.http.get<{ data?: { status: 'PENDING' | 'CONFIRMED' | 'REJECTED'; reason?: string; amount?: number; billCode?: string } }>(this.url('/paid/' + uid)).subscribe({
+      next: (res) => {
+        const d = res?.data;
+        if (!d) { this.stopClaim(); return; }
+        this.claim.set({ uid, ...d });
+        if (d.status !== 'PENDING') {
+          if (this.claimTimer) clearInterval(this.claimTimer);
+          this.claimTimer = null;
+          if (d.status === 'CONFIRMED' && this.billMode()) this.loadMyBill(false);
+        }
+      },
+      error: () => {},
+    });
+    ask();
+    this.claimTimer = setInterval(ask, 10_000);
+  }
+
+  stopClaim(): void {
+    if (this.claimTimer) clearInterval(this.claimTimer);
+    this.claimTimer = null;
+    this.claim.set(null);
+    try { localStorage.removeItem('meza.claim.' + this.token); } catch { /* private mode */ }
   }
 
   sendFeedback(): void {

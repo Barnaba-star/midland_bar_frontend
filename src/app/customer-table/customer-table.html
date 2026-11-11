@@ -166,6 +166,18 @@
         </button>
       }
 
+      <!-- The customer's "Nimelipa": waiting for the cashier, confirmed, or turned down (owner, 2026-11-11). -->
+      @if (claim(); as c) {
+        <div class="ct-claim" [class.ok]="c.status === 'CONFIRMED'" [class.no]="c.status === 'REJECTED'" role="status">
+          <span class="ct-claim-ico">{{ c.status === 'CONFIRMED' ? '✅' : c.status === 'REJECTED' ? '⚠️' : '⏳' }}</span>
+          <div>
+            <strong>{{ c.status === 'CONFIRMED' ? t('claimOk') : c.status === 'REJECTED' ? t('claimNo') : t('claimPending') }}</strong>
+            @if (c.status === 'REJECTED' && c.reason) { <span>{{ c.reason }}</span> }
+            @if (c.amount) { <span>Tsh {{ c.amount | number: '1.0-0' }}@if (c.billCode) { · {{ c.billCode }} }</span> }
+          </div>
+          @if (c.status !== 'PENDING') { <button type="button" (click)="stopClaim()" aria-label="OK">✕</button> }
+        </div>
+      }
       @if (notice()) { <div class="ct-toast" role="status">{{ notice() }}</div> }
 
       @if (sheet() !== 'none') {
@@ -237,12 +249,13 @@
                 <label class="ct-field"><span>{{ t('method') }}</span>
                   <select [(ngModel)]="payMethod">@for (p of payNumbers(); track p.method) { <option [value]="p.method">{{ p.method }}</option> }</select>
                 </label>
+                @if (payBillCode()) { <p class="ct-sub">{{ t('forBill') }} <strong>{{ payBillCode() }}</strong></p> }
                 <input type="text" maxlength="60" [(ngModel)]="payName" [placeholder]="t('name')" />
                 <div class="ct-row">
                   <input type="text" maxlength="40" [(ngModel)]="payRef" [placeholder]="t('ref')" />
                   <input type="number" inputmode="numeric" [(ngModel)]="payAmount" [placeholder]="t('amount')" />
                 </div>
-                <button type="button" class="ct-send" [disabled]="sending() || (!payName.trim() && !payRef.trim())" (click)="sendPaid()">{{ sending() ? t('sending') : t('iPaid') }}</button>
+                <button type="button" class="ct-send" [disabled]="sending() || !payRef.trim()" (click)="sendPaid()">{{ sending() ? t('sending') : t('iPaid') }}</button>
               } @else {
                 <p class="ct-sub">{{ t('noPay') }}</p>
               }

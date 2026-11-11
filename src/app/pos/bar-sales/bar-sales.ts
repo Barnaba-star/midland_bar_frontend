@@ -11,6 +11,9 @@ import { LiveChanges } from '../../Utils/services/live-changes';
 import { BillNicknames } from '../../Utils/services/bill-nicknames';
 import { ShiftBar, ShiftState } from '../shift-bar/shift-bar';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../Utils/enviroments/environment';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TitleAction, Title2 } from '../../Utils/component/title2/title2';
 import { Authentication } from '../../Utils/services/authentication';
@@ -102,6 +105,40 @@ export class BarSales implements OnInit{
     });
     // Selling is what this page is opened for: start on New Sale, not History.
     this.onAction('SALES.ADD');
+    // "Thibitisha" on a customer's Nimelipa (Lipa kwa simu, 2026-11-11): open that bill's Pay dialog.
+    this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((q) => {
+      const billUid = q.get('payBill');
+      if (!billUid) {
+        return;
+      }
+      const claim = { uid: q.get('claim') ?? '', method: q.get('method'), ref: q.get('ref'), amount: q.get('amount') };
+      this.router.navigate([], { queryParams: {}, replaceUrl: true });
+      this.barServce.salesOpenedList(true).subscribe({
+        next: (res) => {
+          const sale = (res?.data ?? []).find((b) => b.uid === billUid);
+          if (sale) {
+            this.onPay(sale, claim);
+          } else {
+            this.alertService.show('error', 'Bill hii haipo tena kwenye zilizo wazi (huenda imeshalipwa).');
+          }
+        },
+      });
+    });
+  }
+
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private http = inject(HttpClient);
+
+  /** The customer's network name (as on the table page) -> the Pay dialog's method. */
+  private static claimMethod(m: string | null): string | undefined {
+    const k = (m ?? '').toLowerCase().replace(/[^a-z]/g, '');
+    if (k.includes('mpesa')) return 'mpesa';
+    if (k.includes('tigo')) return 'tigopesa';
+    if (k.includes('airtel')) return 'airtelmoney';
+    if (k.includes('halo')) return 'halopesa';
+    if (k.includes('benki') || k.includes('bank')) return 'bank';
+    return undefined;
   }
   selectedSales = '';
   saleOpenedUID: string = '';
@@ -615,7 +652,7 @@ openSaleDetailsDialogForMore(sale: SalesOpened) {
   payingBill: string | null = null;
 
   /** Lipa: settle the bill, then show its receipt. */
-  onPay(sale: SalesOpened) {
+  onPay(sale: SalesOpened, claim?: { uid: string; method: string | null; ref: string | null; amount: string | null }) {
     if (!sale?.uid || this.payingBill) {
       return;
     }
@@ -637,12 +674,14 @@ openSaleDetailsDialogForMore(sale: SalesOpened) {
             total,
             lines,
             // Noted "paid by phone" at Staff Sell: start on that method, and show the note to check.
-            method: sale.paymentNoteMethod || undefined,
+            method: (claim ? BarSales.claimMethod(claim.method) : undefined) || sale.paymentNoteMethod || undefined,
             customerUid: sale.paymentNoteCustomerUid || undefined,
             billUid: sale.uid,
             loyaltyCustomerUid: sale.loyaltyCustomerUid,
             loyaltyCustomerName: sale.loyaltyCustomerName,
-            note: sale.paymentNoteMethod
+            note: claim
+              ? `Mteja: Nimelipa · ${claim.method ?? ''}${claim.ref ? ' · ref ' + claim.ref : ''}${claim.amount ? ' · Tsh ' + Number(claim.amount).toLocaleString() : ''}`
+              : sale.paymentNoteMethod
               ? `${this.translate.instant('PAY_BILL.METHOD_' + sale.paymentNoteMethod)} · ${sale.paymentNotePayer}${sale.paymentNoteRef ? ' · ' + sale.paymentNoteRef : ''}`
               : undefined,
           },
@@ -660,6 +699,10 @@ openSaleDetailsDialogForMore(sale: SalesOpened) {
                 this.salesOpenedList = this.salesOpenedList.filter((b) => b.uid !== sale.uid);
                 this.nicknames.remove(sale.uid);
                 this.alertService.show('success', this.translate.instant('PAY_BILL.DONE', { code: sale.salesCode }));
+                // The customer's page now says "Malipo yamethibitishwa".
+                if (claim?.uid) {
+                  this.http.post(`${environment.baseApiUrl}/bar/tables/calls/${claim.uid}/confirmPaid`, {}).subscribe({ error: () => {} });
+                }
                 this.openReceipt(sale.uid!);
               }
               this.cdr.detectChanges();

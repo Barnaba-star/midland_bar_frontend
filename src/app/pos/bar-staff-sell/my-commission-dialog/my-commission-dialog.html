@@ -1,0 +1,58 @@
+<div class="mc">
+  <header class="mc-head">
+    <div>
+      <h2>{{ 'MY_COMMISSION.TITLE' | translate }}</h2>
+      <span class="mc-name">{{ info?.name || data.name }}</span>
+    </div>
+    <button type="button" class="mc-close" (click)="ref.close()" [attr.aria-label]="'COMMON.CLOSE' | translate">
+      <mat-icon>close</mat-icon>
+    </button>
+  </header>
+
+  @if (loading) {
+    <p class="mc-note">{{ 'MY_COMMISSION.LOADING' | translate }}</p>
+  } @else if (failed || !info) {
+    <p class="mc-note">{{ 'MY_COMMISSION.FAILED' | translate }}</p>
+  } @else {
+    <section class="mc-owed">
+      <span>{{ 'MY_COMMISSION.OWED_ALL' | translate }}</span>
+      <strong>{{ info.owedAll | number }} <small>TZS</small></strong>
+    </section>
+
+    <div class="mc-tabs" role="tablist">
+      <button type="button" role="tab" [class.on]="period === 'today'" (click)="period = 'today'">{{ 'MY_COMMISSION.TODAY' | translate }}</button>
+      <button type="button" role="tab" [class.on]="period === 'week'" (click)="period = 'week'">{{ 'MY_COMMISSION.WEEK' | translate }}</button>
+      <button type="button" role="tab" [class.on]="period === 'month'" (click)="period = 'month'">{{ 'MY_COMMISSION.MONTH' | translate }}</button>
+    </div>
+
+    @if (sums; as s) {
+      <section class="mc-grid">
+        <div class="mc-tile"><span>{{ 'MY_COMMISSION.EARNED' | translate }}</span><strong>{{ s.earned | number }}</strong></div>
+        <div class="mc-tile"><span>{{ 'MY_COMMISSION.PAID' | translate }}</span><strong>{{ s.paid | number }}</strong></div>
+        <div class="mc-tile" [class.bad]="s.loss > 0"><span>{{ 'MY_COMMISSION.LOSS' | translate }}</span><strong>{{ s.loss | number }}</strong></div>
+        <div class="mc-tile good"><span>{{ 'MY_COMMISSION.OWED' | translate }}</span><strong>{{ s.owed | number }}</strong></div>
+      </section>
+      @if (s.bonus > 0) {
+        <p class="mc-bonus"><mat-icon>emoji_events</mat-icon>{{ 'MY_COMMISSION.BONUS' | translate: { amount: (s.bonus | number) } }}</p>
+      }
+    }
+
+    <h3>{{ 'MY_COMMISSION.DAYS' | translate }}</h3>
+    @if (info.days.length) {
+      <ul class="mc-days">
+        @for (d of info.days; track d.date) {
+          <li>
+            <span class="mc-date">{{ d.date | date: 'EEE d MMM' }}</span>
+            <span class="mc-amt">{{ d.earned | number }}</span>
+            <span class="mc-state" [class.owed]="d.owed > 0">
+              @if (d.owed > 0) { {{ 'MY_COMMISSION.OWED_SHORT' | translate: { amount: (d.owed | number) } }} }
+              @else { {{ 'MY_COMMISSION.PAID_SHORT' | translate }} }
+            </span>
+          </li>
+        }
+      </ul>
+    } @else {
+      <p class="mc-note">{{ 'MY_COMMISSION.NO_DAYS' | translate }}</p>
+    }
+  }
+</div>

@@ -112,6 +112,11 @@
               <mat-icon>account_balance_wallet</mat-icon>
               <span>{{ 'STAFF_HANDOVER.BUTTON' | translate }}</span>
             </button>
+            <!-- Their own commission: owed, today / week / month, day by day (owner, 2026-11-11). -->
+            <button type="button" class="row-action view" (click)="openMyCommission()" [title]="'MY_COMMISSION.TITLE' | translate">
+              <mat-icon>payments</mat-icon>
+              <span>{{ 'MY_COMMISSION.BUTTON' | translate }}</span>
+            </button>
             <button type="button" class="row-action view" (click)="refresh()">
               <mat-icon>refresh</mat-icon>
             </button>

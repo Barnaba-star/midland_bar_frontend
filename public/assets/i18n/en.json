@@ -3289,5 +3289,24 @@
     "ERR_MISMATCH": "The passwords do not match.",
     "ERR_MISSING": "Fill in every field.",
     "ERR_FAILED": "It did not work. Try again."
+  },
+  "MY_COMMISSION": {
+    "BUTTON": "My commission",
+    "TITLE": "My commission",
+    "LOADING": "Loading...",
+    "FAILED": "Could not load. Try again.",
+    "OWED_ALL": "Owed to you in total (not yet paid)",
+    "TODAY": "Today",
+    "WEEK": "This week",
+    "MONTH": "This month",
+    "EARNED": "Earned",
+    "PAID": "Paid",
+    "LOSS": "Shortage",
+    "OWED": "Owed",
+    "BONUS": "Includes a TZS {{amount}} bonus",
+    "DAYS": "Last 14 days",
+    "OWED_SHORT": "Owed {{amount}}",
+    "PAID_SHORT": "Paid",
+    "NO_DAYS": "No commission on these days yet."
   }
 }

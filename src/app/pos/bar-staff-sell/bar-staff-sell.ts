@@ -24,6 +24,7 @@ import { ServiceBarMethod } from '../service-bar-method';
 import { lockStaffSell, unlockStaffSell } from './staff-sell-lock';
 import { StaffSellUnlockDialog } from './unlock-dialog/unlock-dialog';
 import { StaffPinResetDialog } from './pin-reset-dialog/pin-reset-dialog';
+import { MyCommissionDialog } from './my-commission-dialog/my-commission-dialog';
 import { StaffHandoverDialog } from './handover-dialog/handover-dialog';
 import { ColleagueResult, StaffColleagueDialog } from './colleague-dialog/colleague-dialog';
 import { Subscription } from 'rxjs';
@@ -592,6 +593,19 @@ export class BarStaffSell implements OnInit, OnDestroy {
   }
 
   /** A staff member who forgot their PIN sets a new one, a manager approving. */
+  /** The staff member's own commission (owner, 2026-11-11). */
+  openMyCommission(): void {
+    if (!this.staff) {
+      return;
+    }
+    this.dialog.open(MyCommissionDialog, {
+      width: '460px',
+      maxWidth: '95vw',
+      autoFocus: false,
+      data: { staffUid: this.staff.uid, name: this.staff.name },
+    });
+  }
+
   forgotPin(): void {
     this.dialog.open(StaffPinResetDialog, { width: '440px', maxWidth: '95vw', autoFocus: true });
   }

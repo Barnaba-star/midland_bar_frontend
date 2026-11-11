@@ -3289,5 +3289,24 @@
     "ERR_MISMATCH": "Password hazilingani.",
     "ERR_MISSING": "Jaza sehemu zote.",
     "ERR_FAILED": "Imeshindikana. Jaribu tena."
+  },
+  "MY_COMMISSION": {
+    "BUTTON": "Kamisheni yangu",
+    "TITLE": "Kamisheni yangu",
+    "LOADING": "Inapakia...",
+    "FAILED": "Imeshindikana kupakia. Jaribu tena.",
+    "OWED_ALL": "Unadai jumla (hujalipwa bado)",
+    "TODAY": "Leo",
+    "WEEK": "Wiki hii",
+    "MONTH": "Mwezi huu",
+    "EARNED": "Umepata",
+    "PAID": "Umelipwa",
+    "LOSS": "Upungufu",
+    "OWED": "Unadai",
+    "BONUS": "Ndani yake bonasi ya TZS {{amount}}",
+    "DAYS": "Siku 14 zilizopita",
+    "OWED_SHORT": "Unadai {{amount}}",
+    "PAID_SHORT": "Umelipwa",
+    "NO_DAYS": "Bado hakuna kamisheni kwa siku hizi."
   }
 }

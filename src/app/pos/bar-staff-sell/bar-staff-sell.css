@@ -1215,3 +1215,27 @@
   border-color: var(--color-accent);
   background: var(--color-accent);
 }
+
+/* Their commission, always in view under their name (owner, 2026-11-12). */
+.comm-strip {
+  display: flex;
+  align-items: center;
+  gap: 6px 14px;
+  flex-wrap: wrap;
+  width: 100%;
+  margin: 8px 0;
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, #16a34a 45%, var(--color-border));
+  border-radius: 12px;
+  background: color-mix(in srgb, #16a34a 9%, var(--color-surface));
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.comm-icon { color: #16a34a; }
+.comm-cell { display: flex; flex-direction: column; min-width: 64px; }
+.comm-cell small { font-size: 11px; color: var(--color-text-muted); }
+.comm-cell strong { font-size: 16px; font-variant-numeric: tabular-nums; }
+.comm-cell.owed strong { color: #15803d; }
+.comm-more { margin-left: auto; color: var(--color-text-muted); }

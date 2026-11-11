@@ -25,6 +25,9 @@ import { lockStaffSell, unlockStaffSell } from './staff-sell-lock';
 import { StaffSellUnlockDialog } from './unlock-dialog/unlock-dialog';
 import { StaffPinResetDialog } from './pin-reset-dialog/pin-reset-dialog';
 import { MyCommissionDialog } from './my-commission-dialog/my-commission-dialog';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../Utils/enviroments/environment';
+import { silent } from '../../Utils/inteceptor/silent-request';
 import { StaffHandoverDialog } from './handover-dialog/handover-dialog';
 import { ColleagueResult, StaffColleagueDialog } from './colleague-dialog/colleague-dialog';
 import { Subscription } from 'rxjs';
@@ -86,6 +89,10 @@ export class BarStaffSell implements OnInit, OnDestroy {
   private sellable = inject(SellableItems);
   private destroyRef = inject(DestroyRef);
   private liveChanges = inject(LiveChanges);
+  private http = inject(HttpClient);
+
+  /** Their commission, right on the page (owner, 2026-11-12): today, this week, this month, still owed. */
+  myComm: { today: number; week: number; month: number; owedAll: number } | null = null;
   /** Lines on each bill, keyed by bill uid. */
   billLines: Partial<Record<string, any[]>> = {};
   busyBill: string | null = null;
@@ -688,6 +695,7 @@ export class BarStaffSell implements OnInit, OnDestroy {
         this.billLines = {};
         this.bills.forEach((b) => this.loadLines(b));
         this.loadJackPoint(res.data.staff?.staffCode);
+        this.loadMyCommission();
         this.cdr.markForCheck();
         // No bill is opened for them: one left unused sat empty on the
         // Sales page. They open one with "Fungua bill" when a customer comes.
@@ -748,6 +756,31 @@ export class BarStaffSell implements OnInit, OnDestroy {
     });
   }
 
+  /** Their own commission for the strip under their name - quietly; on failure the strip just waits. */
+  private loadMyCommission(): void {
+    const uid = this.staff?.uid;
+    if (!uid) {
+      this.myComm = null;
+      return;
+    }
+    this.http.get<{ data: any }>(`${environment.baseApiUrl}/bar/staffSell/myCommission?staffUid=${encodeURIComponent(uid)}`, { context: silent() })
+      .subscribe({
+        next: (res) => {
+          const d = res?.data;
+          if (d && this.staff?.uid === uid) {
+            this.myComm = {
+              today: d.today?.earned ?? 0,
+              week: d.week?.earned ?? 0,
+              month: d.month?.earned ?? 0,
+              owedAll: d.owedAll ?? 0,
+            };
+            this.cdr.markForCheck();
+          }
+        },
+        error: () => {},
+      });
+  }
+
   /** The staff member's Jack Point progress - quietly; nothing shows when there is no game. */
   private loadJackPoint(code?: string): void {
     this.jackGames = [];
@@ -786,6 +819,7 @@ export class BarStaffSell implements OnInit, OnDestroy {
   private clearStaff(): void {
     this.stopPoll();
     this.staff = null;
+    this.myComm = null;
     this.jackGames = [];
     this.jackWin = null;
     this.bills = [];
@@ -814,6 +848,7 @@ export class BarStaffSell implements OnInit, OnDestroy {
           }
           this.setOrders(res.data.orders);
           this.bills.forEach((b) => this.loadLines(b));
+          this.loadMyCommission();
         }
         this.cdr.markForCheck();
       },

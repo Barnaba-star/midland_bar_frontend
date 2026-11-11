@@ -44,7 +44,7 @@
       }
 
       <div class="ct-actions">
-        <button type="button" class="primary" (click)="call('WAITER')" [disabled]="called()['WAITER']">
+        <button type="button" class="primary" (click)="callWaiter()" [disabled]="called()['WAITER']">
           <span class="ct-ico" aria-hidden="true">🙋</span>{{ called()['WAITER'] ? t('called') : t('callWaiter') }}
         </button>
         <!-- Kept simple, a table's window as a bill's (owner, 2026-11-10): services open the menu,
@@ -185,6 +185,26 @@
         <section class="ct-sheet" role="dialog" aria-modal="true">
           <button type="button" class="ct-close" (click)="sheet.set('none')" [attr.aria-label]="t('close')">✕</button>
           @switch (sheet()) {
+            @case ('waiter') {
+              <h2>{{ t('pickWaiter') }}</h2>
+              <p class="ct-sub">{{ t('pickWaiterText') }}</p>
+              <div class="ct-waiters">
+                <button type="button" class="ct-wtile" (click)="pickWaiter(null)">
+                  <span class="ct-wface any" aria-hidden="true">🙋</span>
+                  <span class="ct-wname">{{ t('anyone') }}</span>
+                </button>
+                @for (w of waiters(); track w.uid) {
+                  <button type="button" class="ct-wtile" (click)="pickWaiter(w)">
+                    @if (photoUrl(w) && !brokenPhotos()[w.uid]) {
+                      <img class="ct-wface" [src]="photoUrl(w)" [alt]="w.name" loading="lazy" (error)="photoFailed(w.uid)" />
+                    } @else {
+                      <span class="ct-wface" aria-hidden="true">{{ initials(w.name) }}</span>
+                    }
+                    <span class="ct-wname">{{ w.name }}</span>
+                  </button>
+                }
+              </div>
+            }
             @case ('cart') {
               <h2>{{ t('cartTitle') }}</h2>
               <ul class="ct-card">

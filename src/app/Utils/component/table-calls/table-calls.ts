@@ -10,7 +10,7 @@ import { LiveChanges } from '../../services/live-changes';
 import { Authentication } from '../../services/authentication';
 import { Router } from '@angular/router';
 
-interface TableCall { uid: string; tableName: string; kind: 'WAITER' | 'BILL' | 'PAID' | 'ORDER'; calledAt: string; note?: string; billUid?: string | null; billCode?: string | null; payMethod?: string | null; payRef?: string | null; payAmount?: number | null; }
+interface TableCall { uid: string; tableName: string; kind: 'WAITER' | 'BILL' | 'PAID' | 'ORDER'; calledAt: string; note?: string; billUid?: string | null; billCode?: string | null; payMethod?: string | null; payRef?: string | null; payAmount?: number | null; staffUid?: string | null; staffName?: string | null; }
 interface OrderLine { name: string; qty: number; price: number; serving?: 'COLD' | 'WARM' | null; }
 interface TableOrder { uid: string; tableName: string; total: number; note?: string; placedAt: string; lines: OrderLine[]; billUid?: string | null; billCode?: string | null; staffName?: string | null; }
 interface Waiter { uid: string; name: string; }
@@ -63,7 +63,7 @@ interface Waiter { uid: string; name: string; }
             <div class="tc-text">
               <strong>{{ c.tableName }}</strong>
               <!-- ORDER: from the bill's own QR, already sent to the counter / kitchen - the waiter takes it over. -->
-              <span>{{ c.kind === 'BILL' ? 'inaomba bill' + (c.note ? ': ' + c.note : '') : c.kind === 'PAID' ? 'imelipa: ' + (c.note || '') : c.kind === 'ORDER' ? 'imeagiza (imeenda counter/jikoni): ' + (c.note || '') : 'inaita mhudumu' }} · {{ ago(c.calledAt) }}</span>
+              <span>{{ c.kind === 'BILL' ? 'inaomba bill' + (c.note ? ': ' + c.note : '') : c.kind === 'PAID' ? 'imelipa: ' + (c.note || '') : c.kind === 'ORDER' ? 'imeagiza (imeenda counter/jikoni): ' + (c.note || '') : c.staffName ? 'inamwita ' + c.staffName : 'inaita mhudumu' }} · {{ ago(c.calledAt) }}</span>
             </div>
             @if (c.kind === 'PAID' && canPay) {
               <!-- Lipa kwa simu (owner, 2026-11-11): check the ref on the bar's phone, then pay the bill or say why not. -->

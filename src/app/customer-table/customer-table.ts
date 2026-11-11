@@ -8,7 +8,9 @@ import { BrandWord } from '../Utils/component/brand-word/brand-word';
 
 interface MenuItem { uid: string; name: string; price: number; category?: string | null; description?: string | null; available?: boolean; offerPrice?: number | null; offerName?: string | null; }
 interface Info { wifiName?: string; wifiPassword?: string; hours?: string; phone?: string; note?: string; payMpesa?: string; payTigo?: string; payAirtel?: string; payHalo?: string; payBank?: string; }
-interface TableView { tableName: string; tableNumber: number; branchName?: string; menu: MenuItem[]; info?: Info; bill?: { code: string; staffName?: string | null; open: boolean } | null; }
+/** A waiter the customer can call by photo (owner, 2026-11-12). */
+interface Waiter { uid: string; name: string; photo?: string | null; }
+interface TableView { tableName: string; tableNumber: number; branchName?: string; menu: MenuItem[]; info?: Info; bill?: { code: string; staffName?: string | null; open: boolean } | null; waiters?: Waiter[] | null; }
 interface BillCopy { code: string; staffName?: string; status: 'PENDING' | 'PAID' | string; lines: { name: string; qty: number; price: number; total: number; offer?: string | null }[]; total: number; paid: number; toPay: number; }
 interface Card { name?: string; lines: { label: string; value: string }[]; }
 interface OrderLine { name: string; qty: number; price: number; serving?: Serving | null; }
@@ -81,6 +83,8 @@ const T: Record<string, [string, string]> = {
   hello: ['Karibu', 'Hello'], other: ['Angalia namba nyingine', 'Check another number'],
   badPin: ['Namba au PIN si sahihi.', 'Wrong number or PIN.'], locked: ['Umekosea mara nyingi - jaribu baada ya dakika 15.', 'Too many wrong tries - try again in 15 minutes.'],
   close: ['Funga', 'Close'],
+  pickWaiter: ['Mwite nani?', 'Call whom?'], pickWaiterText: ['Gusa picha ya mhudumu unayemtaka, au Yeyote.', "Tap the waiter you want, or Anyone."],
+  anyone: ['Yeyote', 'Anyone'], waiterNamedOk: ['amejulishwa - anakuja.', 'has been told - on the way.'],
 };
 const CATEGORY: Record<string, [string, string]> = { DRINK: ['Vinywaji', 'Drinks'], FOOD: ['Chakula', 'Food'], SHISHA: ['Shisha', 'Shisha'], POOL: ['Pool', 'Pool'], JUICE: ['Juisi', 'Juice'] };
 
@@ -109,7 +113,7 @@ export class CustomerTable {
   readonly search = signal('');
   readonly category = signal<string>('ALL');
   readonly called = signal<Record<string, boolean>>({});
-  readonly sheet = signal<'none' | 'feedback' | 'card' | 'cart' | 'pay' | 'bill'>('none');
+  readonly sheet = signal<'none' | 'feedback' | 'card' | 'cart' | 'pay' | 'bill' | 'waiter'>('none');
   /** The bill the customer looked up by its number (owner, 2026-11-10). */
   readonly bill = signal<BillCopy | null>(null);
   readonly billError = signal('');
@@ -299,14 +303,53 @@ export class CustomerTable {
     setTimeout(() => this.notice.set(''), 4000);
   }
 
-  call(kind: 'WAITER' | 'BILL'): void {
+  /** The waiters on duty the customer can pick by photo; none (or an older server) = no picker. */
+  readonly waiters = computed(() => this.view()?.waiters ?? []);
+
+  /** "Mwite mhudumu": pick which one when the bar sends its waiters, else call straight away. */
+  callWaiter(): void {
+    if (this.called()['WAITER']) return;
+    if (this.waiters().length) this.sheet.set('waiter');
+    else this.call('WAITER');
+  }
+
+  /** A tile in the picker: that waiter, or null for Yeyote. */
+  pickWaiter(w: Waiter | null): void {
+    this.sheet.set('none');
+    this.call('WAITER', w);
+  }
+
+  photoUrl(w: Waiter): string | null {
+    if (!w.photo) return null;
+    return /^https?:/i.test(w.photo) ? w.photo : environment.baseApiUrl + (w.photo.startsWith('/') ? '' : '/') + w.photo;
+  }
+
+  initials(name: string): string {
+    const parts = (name || '').trim().split(/\s+/).filter(Boolean);
+    return ((parts[0]?.[0] ?? '') + (parts.length > 1 ? parts[parts.length - 1][0] : '')).toUpperCase() || '?';
+  }
+
+  /** A photo that will not load falls back to the initials. */
+  readonly brokenPhotos = signal<Record<string, boolean>>({});
+  photoFailed(uid: string): void {
+    this.brokenPhotos.set({ ...this.brokenPhotos(), [uid]: true });
+  }
+
+  call(kind: 'WAITER' | 'BILL', waiter: Waiter | null = null): void {
     if (this.called()[kind]) return;
-    this.http.post<{ data?: unknown; message?: string }>(this.url('/call'), { kind }).subscribe({
+    const body: { kind: string; staffUid?: string } = { kind };
+    if (kind === 'WAITER' && waiter) body.staffUid = waiter.uid;
+    this.http.post<{ data?: unknown; message?: string }>(this.url('/call'), body).subscribe({
       next: (res) => {
         if (res?.data) {
           this.called.set({ ...this.called(), [kind]: true });
           setTimeout(() => this.called.set({ ...this.called(), [kind]: false }), 60_000);
-          this.flash(kind === 'WAITER' ? 'waiterOk' : 'billOk');
+          if (kind === 'WAITER' && waiter) {
+            this.notice.set(waiter.name + ' ' + this.t('waiterNamedOk'));
+            setTimeout(() => this.notice.set(''), 4000);
+          } else {
+            this.flash(kind === 'WAITER' ? 'waiterOk' : 'billOk');
+          }
         } else {
           this.flash(res?.message === 'TOO_SOON' ? 'tooSoon' : 'failed');
         }

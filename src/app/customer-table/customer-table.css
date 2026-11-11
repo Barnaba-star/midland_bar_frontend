@@ -326,3 +326,11 @@
 .ct-claim span { font-size: 13px; color: #d9cbb3; }
 .ct-claim-ico { font-size: 22px; }
 .ct-claim button { border: 0; background: transparent; color: inherit; font-size: 18px; cursor: pointer; }
+
+/* Mwite mhudumu: pick which waiter by photo, or Yeyote (owner, 2026-11-12). */
+.ct-waiters { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 14px 10px; }
+.ct-wtile { display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 0; padding: 6px 2px; border: 0; border-radius: 14px; background: transparent; color: #f6ecdc; font: inherit; cursor: pointer; }
+.ct-wtile:active { background: rgba(245,165,36,.12); }
+.ct-wface { display: flex; align-items: center; justify-content: center; width: 76px; height: 76px; border-radius: 50%; border: 2px solid #f5a524; background: #2a2219; color: #f5a524; font-size: 24px; font-weight: 800; object-fit: cover; box-sizing: border-box; }
+.ct-wface.any { background: #f5a524; color: #1a1206; font-size: 32px; }
+.ct-wname { max-width: 100%; font-size: 14px; font-weight: 600; line-height: 1.2; text-align: center; overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }

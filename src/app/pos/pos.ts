@@ -119,12 +119,14 @@ menuItems: SidenavItem[] = [
     route: '/pos/madeni',
     permissions: ['VIEW_DEBT']
   },
+  // Jack Point (the waiters' game) is a tab inside Madeni na Ofa now (owner, 2026-11-12);
+  // /pos/jackPoint still opens it on its own for old links.
   {
-    // The waiters' game: weeks in a row over a commission target win a reward.
+    // The accountant (no Madeni) still has it in the menu - their landing page.
     label: 'MENU.JACK_POINT',
     icon: 'commission',
     route: '/pos/jackPoint',
-    permissions: ['MANAGE_JACK_POINT']
+    roles: ['ACCOUNTANT']
   },
   {
     label: this.reportLabel,

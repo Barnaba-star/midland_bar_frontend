@@ -1,3 +1,4 @@
+import { JackPointPage } from '../jack-point/jack-point';
 import { LoyaltyWinnersCard } from '../loyalty-rule/loyalty-winners';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { DatePipe, DecimalPipe, NgTemplateOutlet } from '@angular/common';
@@ -22,7 +23,7 @@ type Panel = 'PAY' | 'HISTORY' | 'EDIT';
  */
 @Component({
   selector: 'app-debts',
-  imports: [FormsModule, MatIconModule, DecimalPipe, DatePipe, NgTemplateOutlet, TranslatePipe, Offers, LoyaltyRuleCard, LoyaltyWinnersCard],
+  imports: [FormsModule, MatIconModule, DecimalPipe, DatePipe, NgTemplateOutlet, TranslatePipe, Offers, LoyaltyRuleCard, LoyaltyWinnersCard, JackPointPage],
   templateUrl: './debts.html',
   styleUrl: './debts.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -41,7 +42,9 @@ export class Debts implements OnInit {
   /** Ofa / Happy hour sits on this page as a second tab (owner, 2026-10-22): CEO, manager and root. */
   /** Happy hour / offers: by permission (root passes it even without a ROOT role row), or by role. */
   readonly canOffers = this.auth.hasPermission('MANAGE_PRICE_RULES') || ['ROOT', 'CEO', 'MANAGER'].some((r) => this.auth.hasRole(r));
-  tab: 'DEBTS' | 'OFFERS' = 'DEBTS';
+  /** Jack Point is a tab here, not a menu item of its own (owner, 2026-11-12). */
+  readonly canJack = this.auth.hasPermission('MANAGE_JACK_POINT');
+  tab: 'DEBTS' | 'OFFERS' | 'JACK' = 'DEBTS';
 
   customers: DebtCustomer[] = [];
   report: DebtReport | null = null;

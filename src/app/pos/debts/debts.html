@@ -1,16 +1,25 @@
 <div class="action-container db-page">
   <!-- Madeni and the bar's offers (happy hour) live on one page; offers are CEO/manager/root only. -->
-  @if (canOffers) {
+  @if (canOffers || canJack) {
     <div class="db-tabs" role="tablist">
       <button type="button" role="tab" [class.on]="tab === 'DEBTS'" [attr.aria-selected]="tab === 'DEBTS'" (click)="tab = 'DEBTS'">
         <mat-icon>account_balance_wallet</mat-icon><span>{{ 'DEBTS.TAB_DEBTS' | translate }}</span>
       </button>
+      @if (canOffers) {
       <button type="button" role="tab" [class.on]="tab === 'OFFERS'" [attr.aria-selected]="tab === 'OFFERS'" (click)="tab = 'OFFERS'">
         <mat-icon>local_offer</mat-icon><span>{{ 'OFFERS.TITLE' | translate }}</span>
       </button>
+      }
+      @if (canJack) {
+      <button type="button" role="tab" [class.on]="tab === 'JACK'" [attr.aria-selected]="tab === 'JACK'" (click)="tab = 'JACK'">
+        <mat-icon>emoji_events</mat-icon><span>Jack Point</span>
+      </button>
+      }
     </div>
   }
-  @if (tab === 'OFFERS') {
+  @if (tab === 'JACK') {
+    <app-jack-point />
+  } @else if (tab === 'OFFERS') {
     <!-- The regular-customer offer is set here too: this is where owners look for offers. -->
     @if (canLoyalty) {
       <app-loyalty-rule />

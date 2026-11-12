@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DecimalPipe } from '@angular/common';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
@@ -38,6 +39,7 @@ export type StockState = 'OUT' | 'LOW' | 'OK' | 'NOT_COUNTED';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BarStore implements OnInit {
+  private destroyRef = inject(DestroyRef);
   constructor(
     private visibility: Authentication,
     private barService: ServiceBarMethod,
@@ -65,6 +67,8 @@ export class BarStore implements OnInit {
   ngOnInit(): void {
     this.selectedAction = 'STORE.MANAGE';
     this.loadStock();
+    // Group names are this page's own words: rename them when EN | SW flips.
+    this.translate.onLangChange.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.regroup());
   }
 
   selectedAction = '';
@@ -194,33 +198,28 @@ export class BarStore implements OnInit {
     );
   }
 
-  page = 0;
-  size = 10;
-  totalElements = 0;
-  totalPages = 0;
-  products: BarServiceEntity[] = [];
+  /**
+   * Every counted product, loaded once and folded by group: drinks, food,
+   * shisha, pool, juice, and the store's own measures (Mchele, Nyama ya
+   * kuku - the malighafi a dish is made from). A group opens on a click;
+   * a search opens every group that has a match (owner, 2026-11-12).
+   */
+  allProducts: BarServiceEntity[] = [];
+  loaded = false;
+  groups: StoreGroup[] = [];
+  private openGroups = new Set<string>();
 
   /** Matched against name, code and description, as on the Services page. */
   searchTerm = '';
   private searchTimer?: ReturnType<typeof setTimeout>;
 
   loadStock() {
-    const params: PageableParam = {
-      page: this.page,
-      size: this.size,
-      searchParam: this.searchTerm || undefined,
-      // By default only what has a count of its own: bottles and stock
-      // items. A mshikaki or a nusu is counted through the meat it is made
-      // from. "Zote" lists every service as well.
-      filter: this.showAll ? undefined : 'COUNTED',
-    };
-
+    const params: PageableParam = { page: 0, size: 1000, filter: 'COUNTED' };
     this.barService.findBarServicePage(params).subscribe({
       next: (res) => {
-        this.products = res.data ?? [];
-        this.totalElements = res.totalElements ?? 0;
-        this.totalPages = res.totalPages ?? 0;
-        this.cdr.detectChanges();
+        this.allProducts = res.data ?? [];
+        this.loaded = true;
+        this.regroup();
       },
       error: (err) => {
         console.error('Error loading store:', err);
@@ -228,49 +227,78 @@ export class BarStore implements OnInit {
     });
   }
 
+  private regroup() {
+    const words = this.searchTerm.toLowerCase().split(/\s+/).filter(Boolean);
+    const shown = this.allProducts.filter((p) => {
+      const hay = [p.serviceName, p.serviceCode, p.description].join(' ').toLowerCase();
+      return words.every((w) => hay.includes(w));
+    });
+    const by = new Map<string, BarServiceEntity[]>();
+    for (const p of shown) {
+      const key = p.kind === 'STOCK_ITEM' ? 'STOCK' : (p.category || 'DRINK');
+      by.set(key, [...(by.get(key) ?? []), p]);
+    }
+    const order = ['DRINK', 'JUICE', 'FOOD', 'SHISHA', 'POOL', 'STOCK'];
+    const rank = (k: string) => (order.indexOf(k) < 0 ? 99 : order.indexOf(k));
+    this.groups = [...by.entries()]
+      .sort((x, y) => rank(x[0]) - rank(y[0]))
+      .map(([key, items]) => ({
+        key,
+        name: this.groupName(key),
+        icon: GROUP_ICONS[key] ?? 'local_bar',
+        items,
+        value: items.reduce((sum, p) => sum + this.stockValue(p), 0),
+        out: items.filter((p) => this.stockState(p) === 'OUT').length,
+        low: items.filter((p) => this.stockState(p) === 'LOW').length,
+      }));
+    this.cdr.detectChanges();
+  }
+
+  private groupName(key: string): string {
+    const en = this.translate.getCurrentLang() === 'en';
+    const names: Record<string, [string, string]> = {
+      DRINK: ['Vinywaji', 'Drinks'],
+      FOOD: ['Chakula', 'Food'],
+      SHISHA: ['Shisha', 'Shisha'],
+      POOL: ['Pool table', 'Pool table'],
+      JUICE: ['Fresh Juice', 'Fresh Juice'],
+      STOCK: ['Malighafi', 'Ingredients'],
+    };
+    const n = names[key] ?? [key, key];
+    return en ? n[1] : n[0];
+  }
+
+  isOpen(key: string): boolean {
+    return !!this.searchTerm || this.openGroups.has(key);
+  }
+
+  toggleGroup(key: string) {
+    if (this.openGroups.has(key)) {
+      this.openGroups.delete(key);
+    } else {
+      this.openGroups.add(key);
+    }
+    this.cdr.detectChanges();
+  }
+
+  get totalStockValue(): number {
+    return this.allProducts.reduce((sum, p) => sum + this.stockValue(p), 0);
+  }
+
   onSearch(event: Event) {
     const value = (event.target as HTMLInputElement).value;
     clearTimeout(this.searchTimer);
-    // Wait for a pause in typing rather than asking the backend per keystroke.
     this.searchTimer = setTimeout(() => {
       this.searchTerm = value.trim();
-      this.page = 0;
-      this.loadStock();
-    }, 300);
+      this.regroup();
+    }, 200);
   }
 
   clearSearch(input: HTMLInputElement) {
     input.value = '';
     clearTimeout(this.searchTimer);
     this.searchTerm = '';
-    this.page = 0;
-    this.loadStock();
-  }
-
-  /** Zinazohesabiwa (counted in the store) or Zote (every service). Zote first, so every service can be paged through. */
-  showAll = true;
-
-  setShowAll(all: boolean) {
-    if (this.showAll === all) {
-      return;
-    }
-    this.showAll = all;
-    this.page = 0;
-    this.loadStock();
-  }
-
-  changePage(page: number) {
-    if (page < 0 || page >= this.totalPages) {
-      return;
-    }
-    this.page = page;
-    this.loadStock();
-  }
-
-  changePageSize(event: Event) {
-    this.size = Number((event.target as HTMLSelectElement).value);
-    this.page = 0;
-    this.loadStock();
+    this.regroup();
   }
 
   stockState(product: BarServiceEntity): StockState {
@@ -400,12 +428,26 @@ export class BarStore implements OnInit {
       data: product,
     });
   }
-
-  /** Value of the stock on this page, for the header. */
-  get pageStockValue(): number {
-    return this.products.reduce((sum, p) => sum + this.stockValue(p), 0);
-  }
 }
+
+interface StoreGroup {
+  key: string;
+  name: string;
+  icon: string;
+  items: BarServiceEntity[];
+  value: number;
+  out: number;
+  low: number;
+}
+
+const GROUP_ICONS: Record<string, string> = {
+  DRINK: 'local_bar',
+  FOOD: 'restaurant',
+  SHISHA: 'smoking_rooms',
+  POOL: 'sports_baseball',
+  JUICE: 'blender',
+  STOCK: 'inventory_2',
+};
 
 /** Local calendar date as yyyy-MM-dd (toISOString would shift it to UTC). */
 function toIsoDate(date: Date): string {

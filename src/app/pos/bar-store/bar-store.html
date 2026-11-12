@@ -9,7 +9,7 @@
 @switch (selectedAction) {
   @case ('STORE.MANAGE') {
     <div class="action-container">
-      @if (products.length > 0 || searchTerm) {
+      @if (allProducts.length > 0) {
         <div class="store-card">
           <!-- Header -->
           <div class="store-card-header">
@@ -35,217 +35,174 @@
               }
             </div>
 
-            <!-- Counted in the store only, or every service (made-from and uncounted ones too). -->
-            <div class="store-scope" role="group">
-              <button type="button" class="scope-btn" [class.active]="!showAll" (click)="setShowAll(false)">
-                {{ 'STORE_PAGE.SCOPE_COUNTED' | translate }}
-              </button>
-              <button type="button" class="scope-btn" [class.active]="showAll" (click)="setShowAll(true)">
-                {{ 'STORE_PAGE.SCOPE_ALL' | translate }}
-              </button>
-            </div>
-
+            <!-- Whole store at a glance; the products stay folded in their groups (owner, 2026-11-12). -->
             <div class="store-summary">
-              <span class="summary-number">{{ totalElements }}</span>
-              <span class="summary-label">{{ (showAll ? 'SERVICE_PAGE.SERVICES_LABEL' : 'STORE_PAGE.COUNTED_LABEL') | translate }}</span>
+              <span class="summary-number">{{ allProducts.length }}</span>
+              <span class="summary-label">{{ 'STORE_PAGE.COUNTED_LABEL' | translate }}</span>
+              @if (seesMoney) {
+                <span class="summary-value">Tshs {{ totalStockValue | number: '1.0-0' }}</span>
+              }
             </div>
           </div>
 
-          <!-- Table -->
-          <div class="table-responsive">
-            <table class="table store-table stock-list-table">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>{{ 'SERVICE_PAGE.COL_SERVICE' | translate }}</th>
-                  <th>{{ 'SETTING_PAGE.COL_CATEGORY' | translate }}</th>
-                  <th>{{ 'STORE_PAGE.COL_BOUGHT_IN' | translate }}</th>
-                  <th>{{ 'STORE_PAGE.COL_ON_HAND' | translate }}</th>
-                  <th>{{ 'STORE_PAGE.COL_UNITS' | translate }}</th>
-                  @if (seesMoney) {
-                    <th>{{ 'SETTING_PAGE.COL_BUYING_PRICE' | translate }}</th>
-                    <th>{{ 'STORE_PAGE.COL_VALUE' | translate }}</th>
-                  }
-                  <th>{{ 'COMMON.STATUS' | translate }}</th>
-                  <th>{{ 'COMMON.ACTIONS' | translate }}</th>
-                </tr>
-              </thead>
+          @for (grp of groups; track grp.key) {
+            @let open = isOpen(grp.key);
+            <button type="button" class="store-group" [class.open]="open" (click)="toggleGroup(grp.key)">
+              <span class="group-icon"><mat-icon>{{ grp.icon }}</mat-icon></span>
+              <span class="group-text">
+                <span class="group-name">{{ grp.name }}</span>
+                <small>{{ grp.items.length }} · @if (seesMoney) { Tshs {{ grp.value | number: '1.0-0' }} }</small>
+              </span>
+              @if (grp.out) { <span class="group-chip out">{{ grp.out }}</span> }
+              @if (grp.low) { <span class="group-chip low">{{ grp.low }}</span> }
+              <mat-icon class="group-chevron">{{ open ? 'expand_less' : 'expand_more' }}</mat-icon>
+            </button>
+            @if (open) {
+              <!-- Table -->
+              <div class="table-responsive">
+                <table class="table store-table stock-list-table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>{{ 'SERVICE_PAGE.COL_SERVICE' | translate }}</th>
+                      <th>{{ 'SETTING_PAGE.COL_CATEGORY' | translate }}</th>
+                      <th>{{ 'STORE_PAGE.COL_BOUGHT_IN' | translate }}</th>
+                      <th>{{ 'STORE_PAGE.COL_ON_HAND' | translate }}</th>
+                      <th>{{ 'STORE_PAGE.COL_UNITS' | translate }}</th>
+                      @if (seesMoney) {
+                        <th>{{ 'SETTING_PAGE.COL_BUYING_PRICE' | translate }}</th>
+                        <th>{{ 'STORE_PAGE.COL_VALUE' | translate }}</th>
+                      }
+                      <th>{{ 'COMMON.STATUS' | translate }}</th>
+                      <th>{{ 'COMMON.ACTIONS' | translate }}</th>
+                    </tr>
+                  </thead>
 
-              <tbody>
-                @for (product of products; track product.uid; let i = $index) {
-                  @let st = product | stockPacks;
-                  @let state = stockState(product);
-                  <tr>
-                    <!-- Number -->
-                    <td class="index-column">
-                      {{ page * size + i + 1 }}
-                    </td>
+                  <tbody>
+                    @for (product of grp.items; track product.uid; let i = $index) {
+                      @let st = product | stockPacks;
+                      @let state = stockState(product);
+                      <tr>
+                        <!-- Number -->
+                        <td class="index-column">
+                          {{ i + 1 }}
+                        </td>
 
-                    <!-- Service -->
-                    <td>
-                      <div class="product-info">
-                        <span class="product-name">
-                          {{ product.serviceName || '--' }}
-                          @if (product.kind === 'STOCK_ITEM') {
-                            <span class="kind-badge">{{ 'PRODUCT_FORM.KIND_STOCK_ITEM' | translate }}</span>
+                        <!-- Service -->
+                        <td>
+                          <div class="product-info">
+                            <span class="product-name">
+                              {{ product.serviceName || '--' }}
+                              @if (product.kind === 'STOCK_ITEM') {
+                                <span class="kind-badge">{{ 'PRODUCT_FORM.KIND_STOCK_ITEM' | translate }}</span>
+                              }
+                            </span>
+                            <small class="product-code">{{ product.serviceCode || '--' }}</small>
+                          </div>
+                        </td>
+
+                        <!-- Category -->
+                        <td>
+                          <span class="category-chip" [class.food]="product.category === 'FOOD'" [class.shisha]="product.category === 'SHISHA'" [class.pool]="product.category === 'POOL'" [class.juice]="product.category === 'JUICE'">
+                            <mat-icon>{{ product.category | categoryIcon }}</mat-icon>
+                            {{ product.category | categoryLabel | translate }}
+                          </span>
+                        </td>
+
+                        <!-- Bought in -->
+                        <td>
+                          @if (st.packKey) {
+                            {{ st.packKey | translate }} ({{ product.unitsPerPack }})
+                          } @else {
+                            <span class="muted">{{ 'PRODUCT_FORM.NO_PACK' | translate }}</span>
                           }
-                        </span>
-                        <small class="product-code">{{ product.serviceCode || '--' }}</small>
-                      </div>
-                    </td>
+                        </td>
 
-                    <!-- Category -->
-                    <td>
-                      <span class="category-chip" [class.food]="product.category === 'FOOD'" [class.shisha]="product.category === 'SHISHA'" [class.pool]="product.category === 'POOL'" [class.juice]="product.category === 'JUICE'">
-                        <mat-icon>{{ product.category | categoryIcon }}</mat-icon>
-                        {{ product.category | categoryLabel | translate }}
-                      </span>
-                    </td>
+                        <!-- On hand, as packs + loose -->
+                        <td>
+                          @if (product.stockSourceName) {
+                            <span class="muted">{{ (product.saleUnitName ? 'PRODUCT_FORM.SOURCE_NOTE_LEVEL' : 'PRODUCT_FORM.SOURCE_NOTE') | translate: { name: product.stockSourceName, n: product.saleUnitName ? (product.saleUnitCount || 1) : product.unitsPerSale, level: product.saleUnitName } }}</span>
+                          } @else if (state === 'NOT_COUNTED') {
+                            <span class="muted">{{ 'SETTING_PAGE.NOT_COUNTED' | translate }}</span>
+                          } @else {
+                            <span class="on-hand" [class.low]="state !== 'OK'">
+                              @for (p of st.parts; track $index) { {{ p.count }} {{ p.label | translate }}@if (!$last) {, } }
+                            </span>
+                          }
+                        </td>
 
-                    <!-- Bought in -->
-                    <td>
-                      @if (st.packKey) {
-                        {{ st.packKey | translate }} ({{ product.unitsPerPack }})
-                      } @else {
-                        <span class="muted">{{ 'PRODUCT_FORM.NO_PACK' | translate }}</span>
-                      }
-                    </td>
+                        <!-- Total units -->
+                        <td>
+                          @if (state === 'NOT_COUNTED') {
+                            <span class="muted">--</span>
+                          } @else {
+                            {{ st.total | number }}
+                          }
+                        </td>
 
-                    <!-- On hand, as packs + loose -->
-                    <td>
-                      @if (product.stockSourceName) {
-                        <span class="muted">{{ (product.saleUnitName ? 'PRODUCT_FORM.SOURCE_NOTE_LEVEL' : 'PRODUCT_FORM.SOURCE_NOTE') | translate: { name: product.stockSourceName, n: product.saleUnitName ? (product.saleUnitCount || 1) : product.unitsPerSale, level: product.saleUnitName } }}</span>
-                      } @else if (state === 'NOT_COUNTED') {
-                        <span class="muted">{{ 'SETTING_PAGE.NOT_COUNTED' | translate }}</span>
-                      } @else {
-                        <span class="on-hand" [class.low]="state !== 'OK'">
-                          @for (p of st.parts; track $index) { {{ p.count }} {{ p.label | translate }}@if (!$last) {, } }
-                        </span>
-                      }
-                    </td>
+                        @if (seesMoney) {
+                          <!-- Buying price -->
+                          <td>
+                            Tshs {{ (product.buyingPrice || 0) | number }}
+                            @if (st.packKey) {
+                              <span class="muted">/ {{ st.packKey | translate }}</span>
+                            }
+                          </td>
 
-                    <!-- Total units -->
-                    <td>
-                      @if (state === 'NOT_COUNTED') {
-                        <span class="muted">--</span>
-                      } @else {
-                        {{ st.total | number }}
-                      }
-                    </td>
-
-                    @if (seesMoney) {
-                      <!-- Buying price -->
-                      <td>
-                        Tshs {{ (product.buyingPrice || 0) | number }}
-                        @if (st.packKey) {
-                          <span class="muted">/ {{ st.packKey | translate }}</span>
+                          <!-- Stock value -->
+                          <td class="value-cell">
+                            Tshs {{ stockValue(product) | number: '1.0-0' }}
+                          </td>
                         }
-                      </td>
 
-                      <!-- Stock value -->
-                      <td class="value-cell">
-                        Tshs {{ stockValue(product) | number: '1.0-0' }}
-                      </td>
+                        <!-- Status -->
+                        <td>
+                          <span class="stock-badge" [attr.data-state]="state">
+                            <span class="status-dot"></span>
+                            {{ 'STORE_PAGE.STATE_' + state | translate }}
+                          </span>
+                        </td>
+
+                        <!-- Actions -->
+                        <td>
+                          <div class="row-actions">
+                            @if (canAddStock && state !== 'NOT_COUNTED') {
+                              <button type="button" class="row-action edit" (click)="onAddStock(product)"
+                                      [matTooltip]="'STOCK_FORM.ADD_BTN' | translate" [attr.aria-label]="'STOCK_FORM.ADD_BTN' | translate">
+                                <mat-icon>add_box</mat-icon>
+                                <span>{{ 'STOCK_FORM.ADD_BTN' | translate }}</span>
+                              </button>
+                            }
+                            @if (canAddStock && state !== 'NOT_COUNTED') {
+                              <button type="button" class="row-action delete" (click)="onAdjust(product)"
+                                      [matTooltip]="'STOCK_ADJUST.BTN' | translate" [attr.aria-label]="'STOCK_ADJUST.BTN' | translate">
+                                <mat-icon>tune</mat-icon>
+                                <span>{{ 'STOCK_ADJUST.BTN' | translate }}</span>
+                              </button>
+                            }
+                            <button type="button" class="row-action view" (click)="onHistory(product)"
+                                      [matTooltip]="'STOCK_FORM.HISTORY_BTN' | translate" [attr.aria-label]="'STOCK_FORM.HISTORY_BTN' | translate">
+                              <mat-icon>history</mat-icon>
+                              <span>{{ 'STOCK_FORM.HISTORY_BTN' | translate }}</span>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
                     }
 
-                    <!-- Status -->
-                    <td>
-                      <span class="stock-badge" [attr.data-state]="state">
-                        <span class="status-dot"></span>
-                        {{ 'STORE_PAGE.STATE_' + state | translate }}
-                      </span>
-                    </td>
-
-                    <!-- Actions -->
-                    <td>
-                      <div class="row-actions">
-                        @if (canAddStock && state !== 'NOT_COUNTED') {
-                          <button type="button" class="row-action edit" (click)="onAddStock(product)"
-                                  [matTooltip]="'STOCK_FORM.ADD_BTN' | translate" [attr.aria-label]="'STOCK_FORM.ADD_BTN' | translate">
-                            <mat-icon>add_box</mat-icon>
-                            <span>{{ 'STOCK_FORM.ADD_BTN' | translate }}</span>
-                          </button>
-                        }
-                        @if (canAddStock && state !== 'NOT_COUNTED') {
-                          <button type="button" class="row-action delete" (click)="onAdjust(product)"
-                                  [matTooltip]="'STOCK_ADJUST.BTN' | translate" [attr.aria-label]="'STOCK_ADJUST.BTN' | translate">
-                            <mat-icon>tune</mat-icon>
-                            <span>{{ 'STOCK_ADJUST.BTN' | translate }}</span>
-                          </button>
-                        }
-                        <button type="button" class="row-action view" (click)="onHistory(product)"
-                                  [matTooltip]="'STOCK_FORM.HISTORY_BTN' | translate" [attr.aria-label]="'STOCK_FORM.HISTORY_BTN' | translate">
-                          <mat-icon>history</mat-icon>
-                          <span>{{ 'STOCK_FORM.HISTORY_BTN' | translate }}</span>
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                }
-
-                @if (products.length === 0 && searchTerm) {
-                  <tr>
-                    <td [attr.colspan]="seesMoney ? 10 : 8" class="no-match">
-                      {{ 'SERVICE_PAGE.NO_MATCH' | translate: { term: searchTerm } }}
-                    </td>
-                  </tr>
-                }
-              </tbody>
-            </table>
-          </div>
-
-          <!-- Pagination -->
-          <div class="store-pagination">
-            <div class="page-size">
-              <span>{{ 'COMMON.SHOW' | translate }}</span>
-              <select [value]="size" (change)="changePageSize($event)">
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="20">20</option>
-                <option value="50">50</option>
-              </select>
-              <span>{{ 'COMMON.ENTRIES' | translate }}</span>
-            </div>
-
-            @if (seesMoney) {
-              <div class="page-value">
-                {{ 'STORE_PAGE.PAGE_VALUE' | translate }}:
-                <strong>Tshs {{ pageStockValue | number: '1.0-0' }}</strong>
+                  </tbody>
+                </table>
               </div>
             }
+          }
 
-            <div class="page-info">
-              {{ 'STORE_PAGE.PAGE_INFO' | translate: {
-                page: totalPages ? page + 1 : 0,
-                pages: totalPages,
-                from: totalElements ? page * size + 1 : 0,
-                to: page * size + products.length,
-                total: totalElements
-              } }}
-            </div>
-
-            <div class="pagination-buttons">
-              <button type="button" class="page-btn" [disabled]="page === 0" (click)="changePage(page - 1)">
-                <mat-icon>chevron_left</mat-icon>
-                {{ 'COMMON.PREVIOUS' | translate }}
-              </button>
-
-              @for (p of [].constructor(totalPages); track $index) {
-                <button type="button" class="page-btn" [class.active-page]="page === $index" (click)="changePage($index)">
-                  {{ $index + 1 }}
-                </button>
-              }
-
-              <button type="button" class="page-btn" [disabled]="page >= totalPages - 1" (click)="changePage(page + 1)">
-                {{ 'COMMON.NEXT' | translate }}
-                <mat-icon>chevron_right</mat-icon>
-              </button>
-            </div>
-          </div>
+          @if (groups.length === 0 && searchTerm) {
+            <p class="no-match">{{ 'SERVICE_PAGE.NO_MATCH' | translate: { term: searchTerm } }}</p>
+          }
         </div>
       }
 
-      @if (products.length === 0 && !searchTerm) {
+      @if (loaded && allProducts.length === 0) {
         <app-empty-state
           icon="store"
           title="STORE_PAGE.EMPTY_TITLE"

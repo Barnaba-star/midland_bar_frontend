@@ -128,6 +128,8 @@ export class MainSidenav2 implements OnInit, OnDestroy {
   // ============================================================
 
   @Input() menuItems: SidenavItem[] = [];
+  /** route -> how many things wait there (POS, owner 2026-11-13); 0 / missing shows nothing. */
+  @Input() badges: Record<string, number> = {};
 
   @Input() logoUrl = 'assets/images/baronix-logo.png';
 

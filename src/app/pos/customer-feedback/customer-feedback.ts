@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { environment } from '../../Utils/enviroments/environment';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDeleteDialogComponent } from '../../Utils/component/dialogs/confirm-delete-dialog-component/confirm-delete-dialog-component';
 
 interface Feedback {
   uid: string; tableName?: string; kind: string; message: string; rating?: number | null;
@@ -27,6 +29,8 @@ const KIND: Record<string, string> = { PRAISE: 'Pongezi', COMPLAINT: 'Malalamiko
           @for (f of filters; track f.key) {
             <button type="button" [class.on]="filter() === f.key" (click)="load(f.key)">{{ f.label }}</button>
           }
+          <!-- Keeps the database small (owner, 2026-11-13): unread ones stay. -->
+          <button type="button" class="cf-sweep" (click)="deleteRead()"><mat-icon>delete_sweep</mat-icon>Futa yaliyosomwa</button>
         </div>
       </header>
       @if (!items().length && loaded()) {
@@ -45,9 +49,12 @@ const KIND: Record<string, string> = { PRAISE: 'Pongezi', COMPLAINT: 'Malalamiko
             @if (f.customerName || f.customerPhone) {
               <p class="cf-who"><mat-icon>person</mat-icon>{{ f.customerName }} @if (f.customerPhone) { · <a [href]="'tel:' + f.customerPhone">{{ f.customerPhone }}</a> }</p>
             }
-            @if (!f.readAt) {
-              <button type="button" class="cf-read" (click)="read(f)"><mat-icon>done</mat-icon>Nimesoma</button>
-            }
+            <div class="cf-actions">
+              @if (!f.readAt) {
+                <button type="button" class="cf-read" (click)="read(f)"><mat-icon>done</mat-icon>Nimesoma</button>
+              }
+              <button type="button" class="cf-read cf-del" (click)="remove(f)"><mat-icon>delete</mat-icon>Futa</button>
+            </div>
           </article>
         }
       </div>
@@ -76,10 +83,15 @@ const KIND: Record<string, string> = { PRAISE: 'Pongezi', COMPLAINT: 'Malalamiko
     .cf-who mat-icon { width: 16px; height: 16px; font-size: 16px; }
     .cf-read { display: inline-flex; align-items: center; gap: 4px; margin-top: 10px; height: 34px; padding: 0 14px; border: 1px solid var(--color-border, #d8cdb9); border-radius: 999px; background: transparent; color: var(--color-text); font: inherit; font-weight: 700; cursor: pointer; }
     .cf-read mat-icon { width: 16px; height: 16px; font-size: 16px; }
+    .cf-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .cf-del { color: #c0392b; border-color: rgba(192,57,43,.4); }
+    .cf-sweep { display: inline-flex; align-items: center; gap: 4px; color: #c0392b !important; border-color: rgba(192,57,43,.4) !important; }
+    .cf-sweep mat-icon { width: 18px; height: 18px; font-size: 18px; }
   `],
 })
 export class CustomerFeedback {
   private readonly http = inject(HttpClient);
+  private readonly dialog = inject(MatDialog);
   private readonly url = `${environment.baseApiUrl}/bar/tables/feedback`;
   readonly items = signal<Feedback[]>([]);
   readonly loaded = signal(false);
@@ -107,6 +119,26 @@ export class CustomerFeedback {
     this.http.post<{ data?: Feedback }>(`${this.url}/${f.uid}/read`, {}).subscribe((res) => {
       if (res?.data) this.items.set(this.items().map((x) => (x.uid === f.uid ? res.data! : x)));
     });
+  }
+
+  private confirm(title: string, message: string, then: () => void): void {
+    this.dialog.open(ConfirmDeleteDialogComponent, {
+      width: '450px',
+      data: { title, message, item: { branchName: title, branchCode: '' } },
+    }).afterClosed().subscribe((ok) => { if (ok) then(); });
+  }
+
+  /** Gone for good (owner, 2026-11-13). */
+  remove(f: Feedback): void {
+    this.confirm('Futa maoni haya?', 'Yatafutwa kabisa - hayawezi kurudishwa.', () =>
+      this.http.post(`${this.url}/${f.uid}/delete`, {}).subscribe(() =>
+        this.items.set(this.items().filter((x) => x.uid !== f.uid))));
+  }
+
+  /** Every message already read, in every period; unread ones stay. */
+  deleteRead(): void {
+    this.confirm('Futa yote yaliyosomwa?', 'Maoni yote yaliyokwisha somwa (vipindi vyote) yatafutwa kabisa. Ambayo hayajasomwa yatabaki.', () =>
+      this.http.post(`${this.url}/deleteRead`, {}).subscribe(() => this.load(this.filter())));
   }
 
   kind(k: string): string { return KIND[k] ?? k; }

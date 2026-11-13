@@ -563,6 +563,10 @@
           >
           </mat-icon>
 
+          @if (item.route && badges[item.route]) {
+            <span class="menu-badge">{{ badges[item.route] > 99 ? '99+' : badges[item.route] }}</span>
+          }
+
 
           <!-- ARROW -->
           @if (

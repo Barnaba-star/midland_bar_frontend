@@ -1,4 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../Utils/enviroments/environment';
+import { silent } from '../Utils/inteceptor/silent-request';
 import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
 
 import { filter } from 'rxjs';
@@ -26,13 +29,49 @@ export  class Pos implements OnInit{
 // when the field initializers below (e.g. reportLabel) run - constructor
 // parameters are only assigned after those initializers.
 private visibility = inject(Authentication);
+private http = inject(HttpClient);
+private destroyRef = inject(DestroyRef);
+
+/**
+ * What waits behind each menu item (owner, 2026-11-13), for those who act on
+ * it: route -> count. Read on opening, every 30 s, and on every move.
+ */
+posBadges: Record<string, number> = {};
+private readonly seesBadges = ['ROOT', 'CEO', 'MANAGER', 'ACCOUNTANT'].some(r => this.visibility.hasRole(r));
+
+private loadBadges(): void {
+  if (!this.seesBadges) {
+    return;
+  }
+  this.http.get<{ data?: Record<string, number> }>(`${environment.baseApiUrl}/bar/posBadges`, { context: silent() }).subscribe({
+    next: (res) => {
+      const d = res?.data ?? {};
+      this.posBadges = {
+        '/pos/barSales': d['sales'] ?? 0,
+        '/pos/barStore': d['store'] ?? 0,
+        '/pos/suppliers': d['store'] ?? 0,
+        '/pos/madeni': d['debts'] ?? 0,
+        '/pos/jackPoint': d['debts'] ?? 0,
+        // Maoni ya Wateja lives in Setting on the website.
+        '/pos/barSetting': d['feedback'] ?? 0,
+      };
+      this.cdr.markForCheck();
+    },
+    error: () => {},
+  });
+}
+
 constructor(private router: Router, private route: ActivatedRoute, private cdr: ChangeDetectorRef, private barService: ServiceBarMethod) {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
         this.checkIfHome();
+        this.loadBadges();
         this.cdr.markForCheck();
       });
+    this.loadBadges();
+    const timer = setInterval(() => this.loadBadges(), 30000);
+    this.destroyRef.onDestroy(() => clearInterval(timer));
 }
   ngOnInit(): void {
     // isHome starts true as a field default, which is not the same as being

@@ -1,5 +1,5 @@
 <app-table-calls />
-<app-main-sidenav2 [menuItems]=this.getItems(menuItems) >
+<app-main-sidenav2 [menuItems]=this.getItems(menuItems) [badges]="posBadges">
   <router-outlet></router-outlet>
   @if(isHome===true){
 

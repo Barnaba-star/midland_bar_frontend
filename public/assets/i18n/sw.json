@@ -3308,5 +3308,13 @@
     "OWED_SHORT": "Unadai {{amount}}",
     "PAID_SHORT": "Umelipwa",
     "NO_DAYS": "Bado hakuna kamisheni kwa siku hizi."
+  },
+  "STAFF_SELL_V2": {
+    "FIND_DRINK": "Tafuta kinywaji",
+    "PHOTOS": "Picha {{n}}/5",
+    "ADD_PHOTO": "Weka picha",
+    "PHOTOS_TITLE": "Picha zako",
+    "PHOTOS_HINT": "Hadi picha 5 - zinapokezana juu ya skrini yako. Ya kwanza ndiyo mteja anaiona akikuita kwa QR.",
+    "ADD": "Ongeza"
   }
 }

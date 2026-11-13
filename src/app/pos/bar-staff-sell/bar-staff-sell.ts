@@ -272,6 +272,7 @@ export class BarStaffSell implements OnInit, OnDestroy {
     ['pointerdown', 'keydown', 'touchstart'].forEach((e) => document.removeEventListener(e, this.wakeSound, { capture: true }));
     this.audio?.close().catch(() => undefined);
     this.stopPoll();
+    clearInterval(this.photoTimer);
     this.live?.unsubscribe();
     if (this.counterWatch) {
       clearInterval(this.counterWatch);
@@ -462,6 +463,97 @@ export class BarStaffSell implements OnInit, OnDestroy {
 
   hasOrders(bill: SalesOpened): boolean {
     return this.orders.some((o) => o.salesOpenedUid === bill.uid);
+  }
+
+  // ---- Laid out as the app (owner, 2026-11-13) ----
+
+  /** "Tafuta kinywaji" opens the drink search under the top buttons. */
+  drinkOpen = false;
+  jackOpen = false;
+
+  toggleDrinkSearch(): void {
+    this.drinkOpen = !this.drinkOpen;
+    if (!this.drinkOpen) {
+      this.drinkQuery = '';
+    } else {
+      setTimeout(() => (document.querySelector('input[name="drinkQuery"]') as HTMLInputElement | null)?.focus());
+    }
+  }
+
+  /** Their pictures (/public/staffPhoto/...), up to five, taking turns every 6 s. */
+  photos: string[] = [];
+  photoAt = 0;
+  photoPanel = false;
+  photoBusy = false;
+  private photoTimer?: ReturnType<typeof setInterval>;
+
+  photoSrc(url: string): string {
+    return url.startsWith('http') ? url : `${environment.baseApiUrl}${url}`;
+  }
+
+  private setPhotos(list: string[] | undefined | null): void {
+    this.photos = (list ?? []).filter(Boolean);
+    this.photoAt = 0;
+    clearInterval(this.photoTimer);
+    this.photoTimer = undefined;
+    if (this.photos.length > 1) {
+      this.photoTimer = setInterval(() => {
+        this.photoAt = (this.photoAt + 1) % this.photos.length;
+        this.cdr.markForCheck();
+      }, 6000);
+    }
+    this.cdr.markForCheck();
+  }
+
+  private photosOf(data: any): string[] {
+    if (Array.isArray(data?.photos)) {
+      return data.photos.map(String);
+    }
+    return data?.photo ? [String(data.photo)] : [];
+  }
+
+  uploadPhoto(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    input.value = '';
+    if (!file || !this.staff || this.photoBusy) {
+      return;
+    }
+    const form = new FormData();
+    form.append('file', file, file.name || 'photo.jpg');
+    this.photoBusy = true;
+    this.cdr.markForCheck();
+    const q = this.staff.uid ? `?staffUid=${encodeURIComponent(this.staff.uid)}` : '';
+    this.http.post<{ data: any }>(`${environment.baseApiUrl}/bar/staffSell/photo${q}`, form).subscribe({
+      next: (res) => {
+        this.photoBusy = false;
+        const list = this.photosOf(res?.data);
+        this.setPhotos(list.length ? list : this.photos);
+        this.photoAt = Math.max(0, this.photos.length - 1);
+      },
+      error: () => {
+        this.photoBusy = false;
+        this.cdr.markForCheck();
+      },
+    });
+  }
+
+  removePhoto(url: string): void {
+    if (!this.staff || this.photoBusy) {
+      return;
+    }
+    this.photoBusy = true;
+    this.cdr.markForCheck();
+    this.http.post<{ data: any }>(`${environment.baseApiUrl}/bar/staffSell/photo/remove`, { photo: url, staffUid: this.staff.uid }).subscribe({
+      next: (res) => {
+        this.photoBusy = false;
+        this.setPhotos(this.photosOf(res?.data));
+      },
+      error: () => {
+        this.photoBusy = false;
+        this.cdr.markForCheck();
+      },
+    });
   }
 
   // ---- One bill at a time: picked from a list, closed again once sent ----
@@ -689,6 +781,7 @@ export class BarStaffSell implements OnInit, OnDestroy {
           return;
         }
         this.staff = res.data.staff;
+        this.setPhotos(this.photosOf(res.data.staff));
         this.bills = res.data.bills ?? [];
         this.handoverSent = res.data.handoverSent === true;
         this.setOrders(res.data.orders);
@@ -819,6 +912,9 @@ export class BarStaffSell implements OnInit, OnDestroy {
   private clearStaff(): void {
     this.stopPoll();
     this.staff = null;
+    this.setPhotos([]);
+    this.photoPanel = false;
+    this.drinkOpen = false;
     this.myComm = null;
     this.jackGames = [];
     this.jackWin = null;
@@ -871,8 +967,10 @@ export class BarStaffSell implements OnInit, OnDestroy {
         if (opened?.data) {
           this.bills = [...this.bills, opened.data];
           this.billLines = { ...this.billLines, [opened.data.uid!]: [] };
-          // A new bill is opened to sell on: straight to it.
+          // A new bill is opened to sell on: straight to it, the name the
+          // waiter will remember the customer by first.
           this.selectBill(opened.data);
+          setTimeout(() => (document.getElementById('billNickname') as HTMLInputElement | null)?.focus(), 50);
         }
         this.cdr.markForCheck();
       },

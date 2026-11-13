@@ -343,6 +343,9 @@ export interface StaffSellStaff {
     staffCode: string;
     name: string;
     category?: string;
+    /** /public/staffPhoto/... - the first is what customers see. */
+    photo?: string | null;
+    photos?: string[];
 }
 
 /** Staff Sell summary: unpaid bills split cash / phone, and what is paid this shift. */

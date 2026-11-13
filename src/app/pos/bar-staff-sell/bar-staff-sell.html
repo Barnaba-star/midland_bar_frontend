@@ -16,13 +16,6 @@
       <span class="module-logo"><app-brand-word [mark]="true" /></span>
       <span class="module-name">{{ 'STAFF_SELL_PAGE.TITLE' | translate }}</span>
     </div>
-    <!-- A colleague whose phone is broken sells here under their own code + PIN. -->
-    @if (canLetColleague || tillStaff) {
-      <button type="button" class="exit-btn colleague-btn" [disabled]="sending" (click)="canLetColleague ? letColleagueSell() : switchStaff()">
-        <mat-icon>swap_horiz</mat-icon>
-        <span>{{ 'STAFF_SELL_PAGE.COLLEAGUE_BTN' | translate }}</span>
-      </button>
-    }
   </header>
 
     <div class="staff-sell">
@@ -84,200 +77,14 @@
           </button>
         </form>
       } @else {
-        <!-- ============ THE STAFF MEMBER AND THEIR BILLS ============ -->
-        <div class="staff-bar">
-          <div class="staff-who">
-            <span class="staff-code"><mat-icon>person</mat-icon></span>
-            <div>
-              <strong class="staff-name">{{ staff.name }}</strong>
-              <small>
-                {{ bills.length }} {{ 'STAFF_SELL_PAGE.OPEN_BILLS' | translate }}
-                · Tshs {{ total | number }}
-              </small>
-            </div>
-          </div>
-
-          <div class="staff-actions">
-            @if (unsentCount) {
-              <button type="button" class="send-btn" [disabled]="sending" (click)="sendOrders()">
-                <mat-icon>send</mat-icon>
-                <span>{{ 'STAFF_SELL_PAGE.SEND' | translate }} ({{ unsentCount }})</span>
-              </button>
-            }
-            <button type="button" class="row-action edit" [hidden]="handoverSent" [disabled]="opening" (click)="openBill()">
-              <mat-icon>add</mat-icon>
-              <span>{{ 'SALES_PAGE.OPEN_BILL' | translate }}</span>
+        <!-- ============ THE STAFF MEMBER AND THEIR BILLS (laid out as the app, owner 2026-11-13) ============ -->
+        @if (selectedBill) {
+          <!-- A bill that is open fills the screen until it is closed. -->
+          <div class="bill-full">
+            <button type="button" class="bill-back" (click)="closeBill()">
+              <mat-icon>arrow_back</mat-icon>
+              <span>{{ 'COMMON.BACK' | translate }}</span>
             </button>
-            <button type="button" class="row-action handover-btn" (click)="openHandover()">
-              <mat-icon>account_balance_wallet</mat-icon>
-              <span>{{ 'STAFF_HANDOVER.BUTTON' | translate }}</span>
-            </button>
-            <!-- Their own commission: owed, today / week / month, day by day (owner, 2026-11-11). -->
-            <button type="button" class="row-action view" (click)="openMyCommission()" [title]="'MY_COMMISSION.TITLE' | translate">
-              <mat-icon>payments</mat-icon>
-              <span>{{ 'MY_COMMISSION.BUTTON' | translate }}</span>
-            </button>
-            <button type="button" class="row-action view" (click)="refresh()">
-              <mat-icon>refresh</mat-icon>
-            </button>
-          </div>
-        </div>
-
-        <!-- Their commission right here (owner, 2026-11-12); a tap opens the full breakdown. -->
-        <button type="button" class="comm-strip" (click)="openMyCommission()" [title]="'MY_COMMISSION.TITLE' | translate">
-          <mat-icon class="comm-icon">payments</mat-icon>
-          <span class="comm-cell"><small>{{ 'MY_COMMISSION.TODAY' | translate }}</small><strong>{{ myComm ? (myComm.today | number) : '…' }}</strong></span>
-          <span class="comm-cell"><small>{{ 'MY_COMMISSION.WEEK' | translate }}</small><strong>{{ myComm ? (myComm.week | number) : '…' }}</strong></span>
-          <span class="comm-cell"><small>{{ 'MY_COMMISSION.MONTH' | translate }}</small><strong>{{ myComm ? (myComm.month | number) : '…' }}</strong></span>
-          <span class="comm-cell owed"><small>{{ 'MY_COMMISSION.OWED' | translate }}</small><strong>{{ myComm ? (myComm.owedAll | number) : '…' }}</strong></span>
-          <mat-icon class="comm-more">chevron_right</mat-icon>
-        </button>
-
-        <!-- Jack Point: the waiters' game - how far they are this run. -->
-        @if (jackGames.length || jackWin) {
-          <div class="jack-strip">
-            <mat-icon class="jack-icon">emoji_events</mat-icon>
-            <div class="jack-games">
-              @if (jackWin) {
-                <strong class="jack-won">
-                  @if (jackWin.status === 'QUALIFIED') {
-                    {{ 'JACK_POINT.MY_WON' | translate }} · {{ jackWin.jackPointName }}
-                  } @else {
-                    {{ 'JACK_POINT.MY_APPROVED' | translate: { from: jackWin.leaveFrom, to: jackWinTo } }} · {{ jackWin.jackPointName }}
-                  }
-                </strong>
-              }
-              @for (g of jackGames; track g.jackPointUid) {
-                <div class="jack-game">
-                  <span class="jack-name" [attr.title]="g.description || null">{{ g.name }}</span>
-                  <span class="jack-dots">@for (on of jackDots(g); track $index) { <i [class.on]="on"></i> }</span>
-                  <small>{{ 'JACK_POINT.MY_STREAK_' + (g.period || 'WEEK') | translate: { streak: g.streak, weeks: g.weeks } }}
-                    · {{ 'JACK_POINT.MY_NOW_' + (g.period || 'WEEK') | translate: { got: (g.thisWeek | number), target: (g.weeklyTarget | number) } }}</small>
-                </div>
-              }
-            </div>
-          </div>
-        }
-
-        @if (handoverSent) {
-          <!-- Sent for handover: everything stays as it is until the cashier takes the money. -->
-          <div class="handover-frozen">
-            <mat-icon>lock</mat-icon>
-            <div>
-              <strong>{{ 'STAFF_SELL_PAGE.HANDOVER_FROZEN_TITLE' | translate }}</strong>
-              <span>{{ 'STAFF_SELL_PAGE.HANDOVER_FROZEN' | translate }}</span>
-            </div>
-            <button type="button" class="recall-btn" [disabled]="recalling" (click)="recallHandover()">
-              <mat-icon>undo</mat-icon>
-              {{ 'STAFF_SELL_PAGE.RECALL_HANDOVER' | translate }}
-            </button>
-          </div>
-        }
-
-        <!-- "A drink that tastes of lime?" - find it by name, code, flavour (description) or category. -->
-        <div class="drink-search" [hidden]="handoverSent">
-          <label class="drink-search-box">
-            <mat-icon>search</mat-icon>
-            <input type="search" name="drinkQuery" autocomplete="off" [(ngModel)]="drinkQuery"
-                   [placeholder]="'STAFF_SELL_PAGE.DRINK_SEARCH_PH' | translate"
-                   [attr.aria-label]="'STAFF_SELL_PAGE.DRINK_SEARCH_PH' | translate" />
-            @if (drinkQuery) {
-              <button type="button" class="drink-clear" (click)="drinkQuery = ''" [attr.aria-label]="'COMMON.CLOSE' | translate">
-                <mat-icon>close</mat-icon>
-              </button>
-            }
-          </label>
-          @if (drinkQuery.trim()) {
-            <div class="drink-results">
-              @for (d of drinkMatches; track d.uid) {
-                @let left = drinkLeft(d);
-                <button type="button" class="drink-row" [class.out]="left === 0" (click)="pickDrink(d)">
-                  <mat-icon class="drink-icon">{{ d.category | categoryIcon }}</mat-icon>
-                  <span class="drink-main">
-                    <span class="drink-name">{{ d.serviceName }}</span>
-                    @if (d.description) {
-                      <small class="drink-desc">{{ d.description }}</small>
-                    }
-                  </span>
-                  <span class="drink-side">
-                    <strong>Tshs {{ d.price | number }}</strong>
-                    @if (left === 0) {
-                      <small class="drink-out">{{ 'STORE_PAGE.STATE_OUT' | translate }}</small>
-                    } @else if (left !== null) {
-                      <small>{{ 'STAFF_SELL_PAGE.DRINK_IN_STOCK' | translate: { n: left } }}</small>
-                    }
-                  </span>
-                </button>
-              } @empty {
-                <p class="drink-empty">{{ 'SALE_ITEM.NO_MATCH' | translate: { term: drinkQuery } }}</p>
-              }
-              @if (drinkMatches.length && !selectedBill) {
-                <p class="drink-hint">{{ 'STAFF_SELL_PAGE.DRINK_PICK_BILL' | translate }}</p>
-              }
-            </div>
-          }
-        </div>
-
-        @if (bills.length === 0) {
-          <app-empty-state
-            icon="payment2"
-            title="STAFF_SELL_PAGE.NO_BILLS_TITLE"
-            text="STAFF_SELL_PAGE.NO_BILLS_TEXT"
-          />
-        } @else {
-          <!-- Many bills: pick one from the list rather than scroll through all of them. -->
-          <div class="bill-picker" [class.open]="pickerOpen">
-            <button type="button" class="picker-toggle" (click)="togglePicker()" [attr.aria-expanded]="pickerOpen">
-              <mat-icon>receipt_long</mat-icon>
-              @if (selectedBill; as sb) {
-                <span class="picker-label"><b>{{ sb.salesCode }}</b>@if (nicknames.get(sb.uid)) { · {{ nicknames.get(sb.uid) }} }</span>
-              } @else {
-                <span class="picker-label">{{ 'STAFF_SELL_PAGE.PICK_BILL' | translate }} <small>({{ bills.length }})</small></span>
-              }
-              <mat-icon class="picker-caret">{{ pickerOpen ? 'expand_less' : 'expand_more' }}</mat-icon>
-            </button>
-
-            @if (pickerOpen) {
-              <div class="picker-panel" role="listbox">
-                @if (bills.length > 6) {
-                  <label class="picker-search">
-                    <mat-icon>search</mat-icon>
-                    <input type="text" [(ngModel)]="pickerSearch" name="pickerSearch" autocomplete="off"
-                           [placeholder]="'STAFF_SELL_PAGE.PICK_SEARCH' | translate" />
-                  </label>
-                }
-                @for (b of pickerBills; track b.uid) {
-                  <button type="button" class="picker-row" role="option" [attr.aria-selected]="b.uid === selectedUid"
-                          [class.on]="b.uid === selectedUid" (click)="selectBill(b)">
-                    <span class="picker-code">{{ b.salesCode }}</span>
-                    <span class="picker-nick">{{ nicknames.get(b.uid) }}</span>
-                    <span class="picker-flags">
-                      @if (countOf(b, 'DRAFT')) {
-                        <span class="flag draft" [attr.title]="'STAFF_SELL_PAGE.ORDER_DRAFT' | translate"><mat-icon>edit</mat-icon>{{ countOf(b, 'DRAFT') }}</span>
-                      }
-                      @if (countOf(b, 'SENT')) {
-                        <span class="flag sent" [attr.title]="'STAFF_SELL_PAGE.ORDER_SENT' | translate"><mat-icon>hourglass_top</mat-icon></span>
-                      }
-                      @if (countOf(b, 'REJECTED')) {
-                        <span class="flag rejected" [attr.title]="'STAFF_SELL_PAGE.ORDER_REJECTED' | translate"><mat-icon>block</mat-icon></span>
-                      }
-                      @if (b.paymentNoteMethod) {
-                        <span class="flag phone"><mat-icon>{{ noteIcon(b.paymentNoteMethod) }}</mat-icon></span>
-                      }
-                    </span>
-                    <span class="picker-amount">{{ (b.bill || 0) | number }}</span>
-                  </button>
-                } @empty {
-                  <p class="picker-empty">{{ 'STAFF_SELL_PAGE.PICK_NONE' | translate }}</p>
-                }
-              </div>
-            }
-          </div>
-
-          @if (!selectedBill && !pickerOpen) {
-            <p class="picker-hint">{{ 'STAFF_SELL_PAGE.PICK_HINT' | translate }}</p>
-          }
-
           <div class="bill-grid">
             @for (bill of shownBills; track bill.uid) {
               <div class="bill-card">
@@ -299,7 +106,7 @@
                 <!-- Only on this device, never saved: who the customer is. -->
                 <label class="bill-nickname">
                   <mat-icon>sell</mat-icon>
-                  <input type="text" maxlength="40" [readOnly]="handoverSent"
+                  <input id="billNickname" type="text" maxlength="40" [readOnly]="handoverSent"
                          [value]="nicknames.get(bill.uid)"
                          (input)="nicknames.set(bill.uid, $any($event.target).value)"
                          [placeholder]="'BILL_NICKNAME.PH' | translate"
@@ -421,6 +228,235 @@
                 </div>
               </div>
             }
+          </div>
+          </div>
+        } @else {
+          <!-- The two coloured buttons up top -->
+          <div class="top-buttons">
+            <button type="button" class="top-btn find" [disabled]="handoverSent" (click)="toggleDrinkSearch()">
+              <mat-icon>search</mat-icon>
+              <span>{{ 'STAFF_SELL_V2.FIND_DRINK' | translate }}</span>
+            </button>
+            @if (canLetColleague || tillStaff) {
+              <button type="button" class="top-btn colleague" [disabled]="sending" (click)="canLetColleague ? letColleagueSell() : switchStaff()">
+                <mat-icon>swap_horiz</mat-icon>
+                <span>{{ 'STAFF_SELL_PAGE.COLLEAGUE_BTN' | translate }}</span>
+              </button>
+            }
+          </div>
+
+          @if (drinkOpen && !handoverSent) {
+        <!-- "A drink that tastes of lime?" - find it by name, code, flavour (description) or category. -->
+        <div class="drink-search">
+          <label class="drink-search-box">
+            <mat-icon>search</mat-icon>
+            <input #drinkBox type="search" name="drinkQuery" autocomplete="off" [(ngModel)]="drinkQuery"
+                   [placeholder]="'STAFF_SELL_PAGE.DRINK_SEARCH_PH' | translate"
+                   [attr.aria-label]="'STAFF_SELL_PAGE.DRINK_SEARCH_PH' | translate" />
+            @if (drinkQuery) {
+              <button type="button" class="drink-clear" (click)="drinkQuery = ''" [attr.aria-label]="'COMMON.CLOSE' | translate">
+                <mat-icon>close</mat-icon>
+              </button>
+            }
+          </label>
+          @if (drinkQuery.trim()) {
+            <div class="drink-results">
+              @for (d of drinkMatches; track d.uid) {
+                @let left = drinkLeft(d);
+                <button type="button" class="drink-row" [class.out]="left === 0" (click)="pickDrink(d)">
+                  <mat-icon class="drink-icon">{{ d.category | categoryIcon }}</mat-icon>
+                  <span class="drink-main">
+                    <span class="drink-name">{{ d.serviceName }}</span>
+                    @if (d.description) {
+                      <small class="drink-desc">{{ d.description }}</small>
+                    }
+                  </span>
+                  <span class="drink-side">
+                    <strong>Tshs {{ d.price | number }}</strong>
+                    @if (left === 0) {
+                      <small class="drink-out">{{ 'STORE_PAGE.STATE_OUT' | translate }}</small>
+                    } @else if (left !== null) {
+                      <small>{{ 'STAFF_SELL_PAGE.DRINK_IN_STOCK' | translate: { n: left } }}</small>
+                    }
+                  </span>
+                </button>
+              } @empty {
+                <p class="drink-empty">{{ 'SALE_ITEM.NO_MATCH' | translate: { term: drinkQuery } }}</p>
+              }
+              @if (drinkMatches.length && !selectedBill) {
+                <p class="drink-hint">{{ 'STAFF_SELL_PAGE.DRINK_PICK_BILL' | translate }}</p>
+              }
+            </div>
+          }
+        </div>
+          }
+
+          <!-- Their pictures, big, taking turns; the first is what a customer sees calling by QR. -->
+          <div class="staff-hero" [class.empty]="!photos.length">
+            @for (url of photos; track url; let i = $index) {
+              <img class="hero-img" [class.on]="i === photoAt" [src]="photoSrc(url)" alt="" />
+            }
+            <div class="hero-shade"></div>
+            <div class="hero-foot">
+              <div class="hero-who">
+                <strong class="hero-name">{{ staff.name }}</strong>
+                @if (photos.length > 1) {
+                  <span class="hero-dots">@for (u of photos; track u; let i = $index) { <i [class.on]="i === photoAt"></i> }</span>
+                }
+              </div>
+              <button type="button" class="hero-photo-btn" (click)="photoPanel = true">
+                <mat-icon>photo_camera</mat-icon>
+                {{ (photos.length ? 'STAFF_SELL_V2.PHOTOS' : 'STAFF_SELL_V2.ADD_PHOTO') | translate: { n: photos.length } }}
+              </button>
+            </div>
+          </div>
+
+        @if (handoverSent) {
+          <!-- Sent for handover: everything stays as it is until the cashier takes the money. -->
+          <div class="handover-frozen">
+            <mat-icon>lock</mat-icon>
+            <div>
+              <strong>{{ 'STAFF_SELL_PAGE.HANDOVER_FROZEN_TITLE' | translate }}</strong>
+              <span>{{ 'STAFF_SELL_PAGE.HANDOVER_FROZEN' | translate }}</span>
+            </div>
+            <button type="button" class="recall-btn" [disabled]="recalling" (click)="recallHandover()">
+              <mat-icon>undo</mat-icon>
+              {{ 'STAFF_SELL_PAGE.RECALL_HANDOVER' | translate }}
+            </button>
+          </div>
+        }
+
+          <!-- Jack Point: folded until tapped. -->
+          @if (jackGames.length || jackWin) {
+            <div class="jack-fold" [class.open]="jackOpen">
+              <button type="button" class="jack-head" (click)="jackOpen = !jackOpen">
+                <mat-icon class="jack-icon">emoji_events</mat-icon>
+                <span>Jack Point</span>
+                <mat-icon class="jack-caret">{{ jackOpen ? 'expand_less' : 'expand_more' }}</mat-icon>
+              </button>
+              @if (jackOpen) {
+                <div class="jack-games">
+                  @if (jackWin) {
+                    <strong class="jack-won">
+                      @if (jackWin.status === 'QUALIFIED') {
+                        {{ 'JACK_POINT.MY_WON' | translate }} · {{ jackWin.jackPointName }}
+                      } @else {
+                        {{ 'JACK_POINT.MY_APPROVED' | translate: { from: jackWin.leaveFrom, to: jackWinTo } }} · {{ jackWin.jackPointName }}
+                      }
+                    </strong>
+                  }
+                  @for (g of jackGames; track g.jackPointUid) {
+                    <div class="jack-game">
+                      <span class="jack-name" [attr.title]="g.description || null">{{ g.name }}</span>
+                      <span class="jack-dots">@for (on of jackDots(g); track $index) { <i [class.on]="on"></i> }</span>
+                      <small>{{ 'JACK_POINT.MY_STREAK_' + (g.period || 'WEEK') | translate: { streak: g.streak, weeks: g.weeks } }}
+                        · {{ 'JACK_POINT.MY_NOW_' + (g.period || 'WEEK') | translate: { got: (g.thisWeek | number), target: (g.weeklyTarget | number) } }}</small>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          }
+
+          <!-- The two buttons used most: big. -->
+          <div class="big-row">
+            <button type="button" class="big-btn pick" [class.open]="pickerOpen" (click)="togglePicker()" [attr.aria-expanded]="pickerOpen">
+              <mat-icon>receipt_long</mat-icon>
+              <span class="big-text">
+                <b>{{ 'STAFF_SELL_PAGE.PICK_BILL' | translate }} ({{ bills.length }})</b>
+                <small>Tshs {{ total | number }}</small>
+              </span>
+            </button>
+            <button type="button" class="big-btn open" [hidden]="handoverSent" [disabled]="opening" (click)="openBill()">
+              <mat-icon>add</mat-icon>
+              <span class="big-text"><b>{{ 'SALES_PAGE.OPEN_BILL' | translate }}</b></span>
+            </button>
+          </div>
+
+          <div class="bill-picker">
+            @if (pickerOpen) {
+              <div class="picker-panel" role="listbox">
+                @if (bills.length > 6) {
+                  <label class="picker-search">
+                    <mat-icon>search</mat-icon>
+                    <input type="text" [(ngModel)]="pickerSearch" name="pickerSearch" autocomplete="off"
+                           [placeholder]="'STAFF_SELL_PAGE.PICK_SEARCH' | translate" />
+                  </label>
+                }
+                @for (b of pickerBills; track b.uid) {
+                  <button type="button" class="picker-row" role="option" [attr.aria-selected]="b.uid === selectedUid"
+                          [class.on]="b.uid === selectedUid" (click)="selectBill(b)">
+                    <span class="picker-code">{{ b.salesCode }}</span>
+                    <span class="picker-nick">{{ nicknames.get(b.uid) }}</span>
+                    <span class="picker-flags">
+                      @if (countOf(b, 'DRAFT')) {
+                        <span class="flag draft" [attr.title]="'STAFF_SELL_PAGE.ORDER_DRAFT' | translate"><mat-icon>edit</mat-icon>{{ countOf(b, 'DRAFT') }}</span>
+                      }
+                      @if (countOf(b, 'SENT')) {
+                        <span class="flag sent" [attr.title]="'STAFF_SELL_PAGE.ORDER_SENT' | translate"><mat-icon>hourglass_top</mat-icon></span>
+                      }
+                      @if (countOf(b, 'REJECTED')) {
+                        <span class="flag rejected" [attr.title]="'STAFF_SELL_PAGE.ORDER_REJECTED' | translate"><mat-icon>block</mat-icon></span>
+                      }
+                      @if (b.paymentNoteMethod) {
+                        <span class="flag phone"><mat-icon>{{ noteIcon(b.paymentNoteMethod) }}</mat-icon></span>
+                      }
+                    </span>
+                    <span class="picker-amount">{{ (b.bill || 0) | number }}</span>
+                  </button>
+                } @empty {
+                  <p class="picker-empty">{{ 'STAFF_SELL_PAGE.PICK_NONE' | translate }}</p>
+                }
+              </div>
+            }
+          </div>
+
+          @if (unsentCount) {
+            <button type="button" class="wide-btn send" [disabled]="sending" (click)="sendOrders()">
+              <mat-icon>send</mat-icon>
+              <span>{{ 'STAFF_SELL_PAGE.SEND' | translate }} ({{ unsentCount }})</span>
+            </button>
+          }
+          <button type="button" class="wide-btn handover" (click)="openHandover()">
+            <mat-icon>account_balance_wallet</mat-icon>
+            <span>{{ 'STAFF_HANDOVER.BUTTON' | translate }}</span>
+          </button>
+          <button type="button" class="wide-btn commission" (click)="openMyCommission()">
+            <mat-icon>payments</mat-icon>
+            <span>{{ 'MY_COMMISSION.BUTTON' | translate }}</span>
+          </button>
+
+          <div class="small-tools">
+            <button type="button" class="row-action view" (click)="refresh()">
+              <mat-icon>refresh</mat-icon>
+            </button>
+          </div>
+        }
+
+        <!-- Their pictures: up to five, add or remove. -->
+        @if (photoPanel) {
+          <div class="photo-backdrop" (click)="photoPanel = false"></div>
+          <div class="photo-panel" role="dialog">
+            <div class="photo-panel-head">
+              <strong>{{ 'STAFF_SELL_V2.PHOTOS_TITLE' | translate }}</strong>
+              <button type="button" class="bill-close" (click)="photoPanel = false" [attr.aria-label]="'COMMON.CLOSE' | translate"><mat-icon>close</mat-icon></button>
+            </div>
+            <p class="photo-hint">{{ 'STAFF_SELL_V2.PHOTOS_HINT' | translate }}</p>
+            <div class="photo-grid">
+              @for (url of photos; track url) {
+                <div class="photo-cell">
+                  <img [src]="photoSrc(url)" alt="" />
+                  <button type="button" class="photo-del" [disabled]="photoBusy" (click)="removePhoto(url)" [attr.aria-label]="'COMMON.DELETE' | translate"><mat-icon>close</mat-icon></button>
+                </div>
+              }
+              @if (photos.length < 5) {
+                <label class="photo-cell add" [class.busy]="photoBusy">
+                  <mat-icon>add_a_photo</mat-icon>
+                  <span>{{ 'STAFF_SELL_V2.ADD' | translate }}</span>
+                  <input type="file" accept="image/*" hidden [disabled]="photoBusy" (change)="uploadPhoto($event)" />
+                </label>
+              }
+            </div>
           </div>
         }
       }

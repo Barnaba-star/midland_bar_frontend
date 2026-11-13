@@ -3308,5 +3308,13 @@
     "OWED_SHORT": "Owed {{amount}}",
     "PAID_SHORT": "Paid",
     "NO_DAYS": "No commission on these days yet."
+  },
+  "STAFF_SELL_V2": {
+    "FIND_DRINK": "Find a drink",
+    "PHOTOS": "Photos {{n}}/5",
+    "ADD_PHOTO": "Add a photo",
+    "PHOTOS_TITLE": "Your photos",
+    "PHOTOS_HINT": "Up to 5 photos - they take turns at the top of your screen. The first is what a customer sees calling you by QR.",
+    "ADD": "Add"
   }
 }

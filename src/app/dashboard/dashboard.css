@@ -345,3 +345,10 @@
     transition: none;
   }
 }
+
+/* The sentence under each title: smaller and light (owner, 2026-11-13). */
+.intro p,
+.module-desc {
+  font-size: 0.74rem !important;
+  font-weight: 300;
+}

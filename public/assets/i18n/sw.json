@@ -903,14 +903,14 @@
   "SETTINGS_PAGE": {
     "TITLE": "Mipangilio ya Mfumo",
     "PURPOSE_TEXT": "Moduli ya Mipangilio inawawezesha wasimamizi kupanga na kusimamia vipengele vikuu vya programu, usalama, watumiaji, mifumo ya kazi, na mapendeleo ya mfumo.",
-    "WHAT_YOU_CAN_DO_LIST": "• Simamia matawi na taarifa za taasisi.<br>• Panga watumiaji, majukumu, na ruhusa.<br>• Weka mifumo ya kazi na taratibu za idhini.<br>• Simamia arifa na mapendeleo ya mfumo.<br>• Panga muunganiko na mipangilio mingine ya kiutawala.",
+    "WHAT_YOU_CAN_DO_LIST": "• Simamia matawi na taarifa za taasisi.<br>• Panga watumiaji, majukumu, na ruhusa.<br>• Weka mifumo ya kazi na taratibu za idhini.<br>• Simamia taarifa na mapendeleo ya mfumo.<br>• Panga muunganiko na mipangilio mingine ya kiutawala.",
     "NOTE_TEXT": "Mabadiliko yanayofanyika katika sehemu hii yanaweza kuathiri mfumo mzima. Wasimamizi walioidhinishwa pekee ndio wanapaswa kubadilisha mipangilio ya mfumo ili kuhakikisha usalama, uthabiti, na uendeshaji sahihi wa programu."
   },
   "CONFIGURATION_PAGE": {
     "TITLE": "Mipangilio ya Mfumo",
     "MGMT_TITLE": "Usimamizi wa Mipangilio",
     "PURPOSE_TEXT": "Usimamizi wa Mipangilio unawawezesha wasimamizi kupanga na kudumisha mipangilio ya mfumo mzima inayodhibiti tabia, usalama, na uendeshaji wa programu.",
-    "WHAT_YOU_CAN_DO_LIST": "• Panga mipangilio ya barua pepe.<br>• Panga mipangilio ya SMS.<br>• Simamia mapendeleo ya arifa.<br>• Angalia na simamia kumbukumbu za ukaguzi.<br>• Badilisha tabia ya mfumo.<br>• Hifadhi na sasisha mipangilio ya mfumo.",
+    "WHAT_YOU_CAN_DO_LIST": "• Panga mipangilio ya barua pepe.<br>• Panga mipangilio ya SMS.<br>• Simamia mapendeleo ya taarifa.<br>• Angalia na simamia kumbukumbu za ukaguzi.<br>• Badilisha tabia ya mfumo.<br>• Hifadhi na sasisha mipangilio ya mfumo.",
     "NOTE_TEXT": "Mipangilio ya mfumo huathiri mfumo mzima. Mabadiliko yanapaswa kufanywa na wasimamizi walioidhinishwa pekee ili kuhakikisha uthabiti wa mfumo, usalama, na uendeshaji sahihi.",
     "GENERAL": "Kwa Ujumla",
     "GENERAL_SUBTITLE": "Namba za mfumo mzima zinazodhibiti malipo, vikao na matunzo.",
@@ -1160,11 +1160,11 @@
     "FOOTER_SUFFIX_PLURAL": "watumiaji katika tawi hili"
   },
   "NOTIFICATIONS": {
-    "TITLE": "Arifa",
+    "TITLE": "Taarifa",
     "MARK_ALL_READ": "Weka zote kama zimesomwa",
-    "EMPTY": "Bado hakuna arifa",
+    "EMPTY": "Bado hakuna taarifa",
     "WELCOME_TITLE": "Karibu",
-    "WELCOME_MESSAGE": "Karibu kwenye BaronixTZ. Hapa ndipo arifa za mfumo zitaonekana.",
+    "WELCOME_MESSAGE": "Karibu kwenye BaronixTZ. Hapa ndipo taarifa za mfumo zitaonekana.",
     "NEW_SALE_TITLE": "Mauzo Mapya",
     "NEW_SALE_MESSAGE": "Mauzo {{code}} yamekamilika — Tshs {{amount}}."
   },
@@ -1181,7 +1181,7 @@
     "SHORTCUT_CLOSE": "Funga kidirisha au dialog",
     "HEADER_ICONS_TITLE": "Alama za Kichwa cha Ukurasa",
     "ICON_SEARCH": "Tafuta — ruka kwenda ukurasa wowote",
-    "ICON_NOTIFICATIONS": "Arifa — masasisho ya mfumo",
+    "ICON_NOTIFICATIONS": "Taarifa — masasisho ya mfumo",
     "ICON_FULLSCREEN": "Skrini Nzima — ficha vipengele vya kivinjari",
     "ICON_THEME": "Mandhari — badilisha hali ya giza/mwanga",
     "ICON_SETTINGS": "Mipangilio — fungua moduli ya mipangilio",
@@ -2257,7 +2257,7 @@
     "REJECT_REASON_PH": "mfano Imeisha stoo",
     "EMPTY_TITLE": "Hakuna oda inayosubiri",
     "EMPTY_TEXT": "Oda za wahudumu zitajitokeza hapa wakitumwa. Pokea ndipo vinywaji vitoke.",
-    "NOTIFY_ASK": "Ruhusu arifa - kompyuta italia oda mpya zikija hata kabla ya kubonyeza ukurasa",
+    "NOTIFY_ASK": "Ruhusu taarifa - kompyuta italia oda mpya zikija hata kabla ya kubonyeza ukurasa",
     "NOTIFY_TITLE": "Oda mpya",
     "NOTIFY_MANY": "Oda mpya {{count}}",
     "SOUND_UNLOCK": "Sauti imezimwa - bonyeza hapa ili oda mpya zilie",
@@ -2892,18 +2892,18 @@
   },
   "BRANCH_RULES": {
     "TITLE": "Kanuni za tawi",
-    "SUBTITLE": "TRA kwenye risiti, punguzo la cashier, na lini CEO anapata arifa.",
+    "SUBTITLE": "TRA kwenye risiti, punguzo la cashier, na lini CEO anapata taarifa.",
     "TRA": "TRA",
     "TRA_NOTE": "TIN, VRN na namba ya mashine ya EFD zinaonekana kwenye kila risiti. Kuunganisha VFD (risiti ya TRA moja kwa moja) kunakuja baadaye.",
     "EFD": "Namba ya EFD/VFD",
     "DISCOUNT": "Punguzo",
     "CASHIER_PERCENT": "Cashier anaweza kupunguza hadi (%)",
     "DISCOUNT_NOTE": "Zaidi ya asilimia hii, punguzo linatolewa na Manager au CEO tu. Kila punguzo lina sababu na rekodi.",
-    "ALERTS": "Arifa za wizi",
+    "ALERTS": "Taarifa za wizi",
     "VOIDS": "Vitu vilivyoondolewa kwenye zamu moja",
     "SHORTAGE": "Cash-up pungufu kwa (Tshs)",
     "HOURS": "Zamu wazi zaidi ya (saa)",
-    "ALERTS_NOTE": "Ikivuka, CEO anapata arifa (kengele) - na SMS ikiwashwa.",
+    "ALERTS_NOTE": "Ikivuka, CEO anapata taarifa (kengele) - na SMS ikiwashwa.",
     "SAVED": "Imehifadhiwa"
   },
   "OFFERS": {

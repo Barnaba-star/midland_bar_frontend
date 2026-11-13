@@ -676,3 +676,9 @@ input:is([name*="username" i], [name*="password" i], [autocomplete="username"], 
 .keep-case {
   text-transform: none !important;
 }
+
+/* Hints inside boxes: a little smaller everywhere (owner, 2026-11-13). */
+input::placeholder,
+textarea::placeholder {
+  font-size: 0.86em;
+}

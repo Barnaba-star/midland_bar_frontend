@@ -14,12 +14,12 @@
         <p class="note apple"><mat-icon>info</mat-icon> {{ 'DOWNLOAD.APPLE' | translate }}</p>
       }
 
-      <a class="btn-amber" [href]="main.href" download>
+      <a class="btn-amber" [href]="main().href" download>
         <mat-icon>download</mat-icon>
         {{ 'DOWNLOAD.BUTTON' | translate }}
-        <span class="size">{{ main.mb }} MB</span>
+        <span class="size">{{ main().mb }} MB</span>
       </a>
-      <p class="meta">{{ 'DOWNLOAD.VERSION' | translate: { v: version } }} · {{ 'DOWNLOAD.ALL_PHONES' | translate }}</p>
+      <p class="meta">{{ 'DOWNLOAD.VERSION' | translate: { v: version() } }} · {{ 'DOWNLOAD.ALL_PHONES' | translate }}</p>
     </div>
 
     <ol class="steps">

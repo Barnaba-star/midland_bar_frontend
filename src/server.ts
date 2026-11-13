@@ -22,6 +22,14 @@ const angularApp = new AngularNodeAppEngine();
  */
 const ALWAYS_CHECK = /(^|\/)(index(\.csr)?\.html|ngsw\.json|ngsw-worker\.js|safety-worker\.js|worker-basic\.min\.js|manifest\.webmanifest|favicon[^/]*|baronix-b-[^/]*)$|\/assets\/i18n\//;
 
+/**
+ * The APKs moved to the backend (owner, 2026-11-13). Links people already
+ * shared (/downloads/baronixtz-1.0.x.apk) go to the newest one there.
+ */
+app.get(/^\/downloads\/baronixtz-[\d.]+\.apk$/, (_req, res) => {
+  res.redirect(302, 'https://api.baronixtz.com/public/app/latest/download');
+});
+
 app.use(
   express.static(browserDistFolder, {
     maxAge: '1y',

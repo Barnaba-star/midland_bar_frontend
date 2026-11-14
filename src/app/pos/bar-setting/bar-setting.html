@@ -404,7 +404,7 @@
     @if (serviceKindView === 'SERVICES' && catalogShown().length) {
       <div class="catalog-strip">
         <div class="catalog-strip-head">
-          <strong>{{ 'CATALOG.TICK_HERE' | translate }}</strong>
+          <span></span>
           @if (catalogTick.size) {
             <button type="button" class="add-service-btn" mat-flat-button (click)="pricesForTicked()">
               {{ 'CATALOG.CONTINUE_PRICES' | translate: { n: catalogTick.size } }}

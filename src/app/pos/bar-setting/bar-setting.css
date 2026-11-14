@@ -2779,9 +2779,12 @@ mat-paginator {
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  margin-bottom: 10px;
   font-size: 13px;
   color: #4a3f33;
+}
+
+.catalog-strip-head:has(button) {
+  margin-bottom: 10px;
 }
 
 .catalog-strip-list {

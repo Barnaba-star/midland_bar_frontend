@@ -46,10 +46,14 @@ export class CatalogPick implements OnInit {
     private catalog: CatalogService,
     private ref: MatDialogRef<CatalogPick, number | 'manual'>,
     private translate: TranslateService,
-    @Optional() @Inject(MAT_DIALOG_DATA) data: { offerManual?: boolean } | null,
+    @Optional() @Inject(MAT_DIALOG_DATA) data: { offerManual?: boolean; preselected?: string[] } | null,
   ) {
     this.offerManual = !!data?.offerManual;
+    this.preselected = new Set(data?.preselected || []);
   }
+
+  /** Ticked already on the Huduma page: open straight at their prices. */
+  private readonly preselected: Set<string>;
 
   /** Opened from Ongeza Huduma: a way out to type one not in the catalog (owner, 2026-11-14). */
   readonly offerManual: boolean;
@@ -61,7 +65,8 @@ export class CatalogPick implements OnInit {
   ngOnInit(): void {
     this.catalog.forBranch().subscribe({
       next: (r) => {
-        this.rows.set((r.data || []).map((c) => ({ ...c, ticked: false, sell: c.price ?? null, buy: c.buyingPrice ?? null })));
+        this.rows.set((r.data || []).map((c) => ({ ...c, ticked: this.preselected.has(c.uid), sell: c.price ?? null, buy: c.buyingPrice ?? null })));
+        if (this.preselected.size && this.ticked().length) this.step.set(2);
         this.loading.set(false);
       },
       error: () => this.loading.set(false),

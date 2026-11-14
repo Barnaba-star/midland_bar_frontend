@@ -3336,6 +3336,8 @@
     "BARCODE": "Barcode ya chupa",
     "PACK_BARCODE": "Barcode ya kreti",
     "QR_CODE": "QR code (kama ipo)",
+    "CONTINUE_PRICES": "Endelea - weka bei ({{n}})",
+    "TICK_HERE": "Vinywaji vya mfumo - tiki vilivyopo tawini",
     "TYPE_OTHER": "Andika nyingine",
     "BUY_PER_PACK": "Bei ya kununua {{pack}}",
     "SELL_PER": "Bei ya kuuza {{unit}}",

@@ -3336,6 +3336,8 @@
     "BARCODE": "Bottle barcode",
     "PACK_BARCODE": "Crate barcode",
     "QR_CODE": "QR code (if any)",
+    "CONTINUE_PRICES": "Continue - set prices ({{n}})",
+    "TICK_HERE": "System drinks - tick the ones this branch has",
     "TYPE_OTHER": "Type another",
     "BUY_PER_PACK": "Buying price per {{pack}}",
     "SELL_PER": "Selling price per {{unit}}",

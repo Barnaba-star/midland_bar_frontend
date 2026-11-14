@@ -2764,3 +2764,60 @@ mat-paginator {
     margin: 0;
   }
 }
+
+/* System drinks this branch does not have yet, ticked above its own services (owner, 2026-11-14). */
+.catalog-strip {
+  margin: 0 16px 14px;
+  padding: 12px;
+  border: 1px dashed #d4a017;
+  border-radius: 12px;
+  background: #fffaf0;
+}
+
+.catalog-strip-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-size: 13px;
+  color: #4a3f33;
+}
+
+.catalog-strip-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 8px;
+}
+
+.catalog-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid #f0e6d6;
+  border-radius: 10px;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.catalog-chip.on {
+  border-color: #d4a017;
+  background: #fff3d6;
+}
+
+.catalog-chip span {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.catalog-chip strong {
+  font-size: 13px;
+  color: #1d1812;
+}
+
+.catalog-chip small {
+  font-size: 11px;
+  color: #7a6f60;
+}

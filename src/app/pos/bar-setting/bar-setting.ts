@@ -38,6 +38,7 @@ import { EmptyStateComponent } from '../../Utils/component/empty-state/empty-sta
 import { ComfirmDialogComponent } from '../../Utils/component/comfirm-dialog/comfirm-dialog';
 import { CategoryLabelPipe } from '../../Utils/pipes/product-category.pipe';
 import { CatalogPick } from '../catalog-pick/catalog-pick';
+import { BranchCatalogItem, CatalogService } from '../../settings/catalog-setting/catalog-service';
 
 export interface BarServiceEntity {
   uid?: string;
@@ -139,7 +140,7 @@ private reloadPagedTab() {
   barServiceInfo:Boolean=false;
   barServiceAddForm:Boolean=false;
   constructor(
-    private visibility: Authentication, private service: ServiceBarMethod, private alertService: AlertService, private cdr: ChangeDetectorRef,
+    private visibility: Authentication, private service: ServiceBarMethod, private alertService: AlertService, private cdr: ChangeDetectorRef, private catalogService: CatalogService,
     private dialog:MatDialog, private barService:ServiceBarMethod, private userService: UserService,
     private translate: TranslateService
   ) { }
@@ -363,6 +364,42 @@ serviceColumns: {
 onAddService(){
   this.barServiceInfo=false;
   this.loadStockItems(() => this.openServiceDialog('SERVICE'));
+}
+
+/** System drinks this branch does not have yet - shown above its own services (owner, 2026-11-14). */
+catalogMissing: BranchCatalogItem[] = [];
+catalogTick = new Set<string>();
+
+loadCatalogMissing(){
+  this.catalogService.forBranch().subscribe({
+    next: (r) => {
+      this.catalogMissing = (r.data || []).filter((c) => !c.added);
+      this.catalogTick = new Set([...this.catalogTick].filter((u) => this.catalogMissing.some((c) => c.uid === u)));
+      this.cdr.markForCheck();
+    },
+    error: () => {},
+  });
+}
+
+catalogShown(): BranchCatalogItem[] {
+  const q = (this.serviceSearch || '').trim().toLowerCase();
+  return q ? this.catalogMissing.filter((c) => (c.displayName + ' ' + (c.barcode || '')).toLowerCase().includes(q)) : this.catalogMissing;
+}
+
+toggleCatalog(uid: string){
+  const next = new Set(this.catalogTick);
+  next.has(uid) ? next.delete(uid) : next.add(uid);
+  this.catalogTick = next;
+}
+
+pricesForTicked(){
+  this.dialog.open(CatalogPick, { width: '760px', maxWidth: '96vw', autoFocus: false, data: { preselected: [...this.catalogTick] } })
+    .afterClosed().subscribe((result?: number | 'manual') => {
+      if (result && result !== 'manual') {
+        this.catalogTick = new Set();
+        this.findBarServicePage();
+      }
+    });
 }
 
 /** The main office's drinks: tick the ones this branch has, then set its prices. */
@@ -599,6 +636,7 @@ clearServiceSearch(input: HTMLInputElement) {
 }
 
 findBarServicePage() {
+  this.loadCatalogMissing();
   this.barServiceAddForm = false;
   this.barServiceInfo = false;
   this.barServiceEntity = {};

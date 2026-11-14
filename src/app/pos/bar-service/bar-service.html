@@ -56,12 +56,7 @@
           <tr>
             <th>#</th>
             <th>{{ 'SERVICE_PAGE.COL_SERVICE' | translate }}</th>
-            <th>{{ 'COMMON.CODE' | translate }}</th>
-            <th>{{ 'SETTING_PAGE.COL_CATEGORY' | translate }}</th>
-            <th>{{ 'SETTING_PAGE.COL_BUYING_PRICE' | translate }}</th>
             <th>{{ 'COMMON.PRICE' | translate }}</th>
-            <th>{{ 'COMMON.STATUS' | translate }}</th>
-            <th>{{ 'COMMON.ACTIONS' | translate }}</th>
           </tr>
         </thead>
 
@@ -93,77 +88,18 @@
                       {{ service.serviceName || '--' }}
                     </span>
 
-                    <small>
-                      {{ service.description || ('SERVICE_PAGE.NO_DESCRIPTION' | translate) }}
-                    </small>
                   </div>
 
                 </div>
               </td>
 
-              <!-- Code -->
-              <td>
-                <span class="service-code">
-                  {{ service.serviceCode || '--' }}
-                </span>
-              </td>
-
-
-
-              <!-- Category -->
-              <td>
-                <span class="service-code">
-                  {{ service.category | categoryLabel | translate }}
-                </span>
-              </td>
-
-
-              <!-- Buying price -->
-              <td>
-                <span class="price">
-                  Tshs {{ (service.buyingPrice || 0) | number:'1.2-2' }} @if (service.packUnit) { / {{ service.packUnit | unitLabel | translate }} }
-                </span>
-              </td>
-
-              <!-- Price -->
+              <!-- Price (POS Huduma is only name and price - owner, 2026-11-14) -->
               <td>
                 <span class="service-price">
                   Tshs {{ service.price | number: '1.2-2' }}
                 </span>
               </td>
 
-              <!-- Status -->
-              <td>
-
-                @if (service.status === 'active') {
-
-                  <span class="status-badge active">
-                    <span class="status-dot"></span>
-                    {{ 'COMMON.ACTIVE' | translate }}
-                  </span>
-
-                } @else {
-
-                  <span class="status-badge inactive">
-                    <span class="status-dot"></span>
-                    {{ service.status || ('COMMON.INACTIVE' | translate) }}
-                  </span>
-
-                }
-
-              </td>
-
-              <!-- Actions -->
-              <td class="actions-column">
-
-                <div class="row-actions">
-                  <button type="button" class="row-action view" (click)="onMoreService(service)">
-                    <mat-icon>visibility</mat-icon>
-                    <span>{{ 'COMMON.VIEW' | translate }}</span>
-                  </button>
-                </div>
-
-              </td>
 
             </tr>
 
@@ -171,7 +107,7 @@
 
           @if (barServiceDataSource.length === 0 && searchTerm) {
             <tr>
-              <td colspan="8" class="no-match">
+              <td colspan="3" class="no-match">
                 {{ 'SERVICE_PAGE.NO_MATCH' | translate: { term: searchTerm } }}
               </td>
             </tr>

@@ -37,7 +37,7 @@ export class CatalogPick implements OnInit {
   readonly shown = computed(() => {
     const q = this.search().trim().toLowerCase();
     const all = this.rows();
-    return q ? all.filter((r) => [r.displayName, r.barcode, r.packBarcode].some((v) => (v || '').toLowerCase().includes(q))) : all;
+    return q ? all.filter((r) => [r.displayName, r.barcode, r.packBarcode, r.qrCode].some((v) => (v || '').toLowerCase().includes(q))) : all;
   });
   readonly ticked = computed(() => this.rows().filter((r) => r.ticked));
 

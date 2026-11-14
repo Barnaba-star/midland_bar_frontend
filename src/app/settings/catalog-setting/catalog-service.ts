@@ -16,6 +16,8 @@ export interface CatalogItem {
   unitsPerPack?: number | null;
   barcode?: string | null;
   packBarcode?: string | null;
+  /** The QR code on the label, when it has one beside the barcode. */
+  qrCode?: string | null;
 }
 
 /** The same drink as one branch sees it, with its prices there if it sells it. */

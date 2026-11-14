@@ -47,6 +47,9 @@
         <label>{{ 'CATALOG.PACK_BARCODE' | translate }}
           <input [ngModel]="f.packBarcode" (ngModelChange)="patch('packBarcode', $event)" />
         </label>
+        <label>{{ 'CATALOG.QR_CODE' | translate }}
+          <input [ngModel]="f.qrCode" (ngModelChange)="patch('qrCode', $event)" />
+        </label>
       </div>
       @if (error()) { <div class="err">{{ error() }}</div> }
       <div class="form-actions">
@@ -81,7 +84,7 @@
               <small>{{ (c.category === 'JUICE' ? 'CATALOG.CAT_JUICE' : 'CATALOG.CAT_DRINK') | translate }}</small>
             </td>
             <td>{{ packText(c) }}</td>
-            <td class="codes">{{ c.barcode || '-' }}@if (c.packBarcode) {<br /><small>{{ c.packUnit }}: {{ c.packBarcode }}</small>}</td>
+            <td class="codes">{{ c.barcode || '-' }}@if (c.packBarcode) {<br /><small>{{ c.packUnit }}: {{ c.packBarcode }}</small>}@if (c.qrCode) {<br /><small>QR: {{ c.qrCode }}</small>}</td>
             @if (canEdit) {
               <td class="row-actions">
                 <button type="button" class="ghost-btn" (click)="edit(c)">{{ 'COMMON.EDIT' | translate }}</button>

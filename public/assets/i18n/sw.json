@@ -3335,6 +3335,7 @@
     "PACK": "Kreti",
     "BARCODE": "Barcode ya chupa",
     "PACK_BARCODE": "Barcode ya kreti",
+    "QR_CODE": "QR code (kama ipo)",
     "SEARCH": "Tafuta kinywaji au barcode",
     "EMPTY": "Bado hakuna kinywaji kilichosajiliwa",
     "NAME_REQUIRED": "Andika jina la kinywaji",

@@ -36,7 +36,7 @@ export class CatalogSetting implements OnInit {
     const q = this.search().trim().toLowerCase();
     if (!q) return this.items();
     return this.items().filter((c) =>
-      [c.name, c.flavour, c.size, c.barcode, c.packBarcode].some((v) => (v || '').toLowerCase().includes(q)));
+      [c.name, c.flavour, c.size, c.barcode, c.packBarcode, c.qrCode].some((v) => (v || '').toLowerCase().includes(q)));
   });
 
   constructor(
@@ -70,7 +70,7 @@ export class CatalogSetting implements OnInit {
 
   add(): void {
     this.error.set('');
-    this.form.set({ name: '', flavour: '', size: '', category: 'DRINK', unit: 'Chupa', packUnit: 'Kreti', unitsPerPack: 24, barcode: '', packBarcode: '' });
+    this.form.set({ name: '', flavour: '', size: '', category: 'DRINK', unit: 'Chupa', packUnit: 'Kreti', unitsPerPack: 24, barcode: '', packBarcode: '', qrCode: '' });
   }
 
   edit(c: CatalogItem): void {

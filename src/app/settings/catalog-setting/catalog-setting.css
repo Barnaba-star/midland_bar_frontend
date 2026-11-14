@@ -173,6 +173,13 @@ th {
   font-weight: 600;
 }
 
+td.codes small {
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 td.name {
   font-weight: 600;
 }

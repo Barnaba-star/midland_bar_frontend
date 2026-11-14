@@ -3335,6 +3335,7 @@
     "PACK": "Crate",
     "BARCODE": "Bottle barcode",
     "PACK_BARCODE": "Crate barcode",
+    "QR_CODE": "QR code (if any)",
     "SEARCH": "Search drink or barcode",
     "EMPTY": "No drinks registered yet",
     "NAME_REQUIRED": "Enter the drink's name",

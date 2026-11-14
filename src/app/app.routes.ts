@@ -28,6 +28,11 @@ export const routes: Routes = [
         loadComponent: () =>import('./settings/role-setting/role-setting').then(m => m.RoleSetting)
       },
       {
+        // Main office's drink catalog (owner, 2026-11-14).
+        path: 'catalog',
+        loadComponent: () => import('./settings/catalog-setting/catalog-setting').then(m => m.CatalogSetting)
+      },
+      {
         path: 'commission',
         loadComponent: () => import('./settings/commission-setting/commission-setting').then(m => m.CommissionSetting)
       },

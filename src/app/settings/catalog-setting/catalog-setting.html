@@ -1,0 +1,99 @@
+<div class="cat-container">
+  <div class="cat-header">
+    <div>
+      <h2>{{ 'CATALOG.TITLE' | translate }}</h2>
+      <p>{{ 'CATALOG.SUBTITLE' | translate }}</p>
+    </div>
+    @if (canEdit && !form()) {
+      <button type="button" class="primary-btn" (click)="add()">
+        <mat-icon>add</mat-icon> {{ 'CATALOG.ADD' | translate }}
+      </button>
+    }
+  </div>
+
+  @if (form(); as f) {
+    <div class="cat-form">
+      <h3>{{ (f.uid ? 'CATALOG.EDIT' : 'CATALOG.ADD') | translate }}</h3>
+      <div class="grid">
+        <label>{{ 'CATALOG.NAME' | translate }} *
+          <input [ngModel]="f.name" (ngModelChange)="patch('name', $event)" placeholder="Castle Lite" />
+        </label>
+        <label>{{ 'CATALOG.FLAVOUR' | translate }}
+          <input [ngModel]="f.flavour" (ngModelChange)="patch('flavour', $event)" placeholder="Dry, Lemon..." />
+        </label>
+        <label>{{ 'CATALOG.SIZE' | translate }}
+          <input [ngModel]="f.size" (ngModelChange)="patch('size', $event)" placeholder="375ml" />
+        </label>
+        <label>{{ 'CATALOG.CATEGORY' | translate }}
+          <select [ngModel]="f.category" (ngModelChange)="patch('category', $event)">
+            <option value="DRINK">{{ 'CATALOG.CAT_DRINK' | translate }}</option>
+            <option value="JUICE">{{ 'CATALOG.CAT_JUICE' | translate }}</option>
+          </select>
+        </label>
+        <label>{{ 'CATALOG.UNIT' | translate }}
+          <input [ngModel]="f.unit" (ngModelChange)="patch('unit', $event)" placeholder="Chupa" />
+        </label>
+        <label>{{ 'CATALOG.PACK_UNIT' | translate }}
+          <input [ngModel]="f.packUnit" (ngModelChange)="patch('packUnit', $event)" placeholder="Kreti" />
+        </label>
+        @if (f.packUnit) {
+          <label>{{ 'CATALOG.UNITS_PER_PACK' | translate }}
+            <input type="number" min="2" [ngModel]="f.unitsPerPack" (ngModelChange)="patch('unitsPerPack', $event)" />
+          </label>
+        }
+        <label>{{ 'CATALOG.BARCODE' | translate }}
+          <input [ngModel]="f.barcode" (ngModelChange)="patch('barcode', $event)" />
+        </label>
+        <label>{{ 'CATALOG.PACK_BARCODE' | translate }}
+          <input [ngModel]="f.packBarcode" (ngModelChange)="patch('packBarcode', $event)" />
+        </label>
+      </div>
+      @if (error()) { <div class="err">{{ error() }}</div> }
+      <div class="form-actions">
+        <button type="button" class="ghost-btn" (click)="cancel()">{{ 'COMMON.CANCEL' | translate }}</button>
+        <button type="button" class="primary-btn" [disabled]="saving()" (click)="save()">{{ 'COMMON.SAVE' | translate }}</button>
+      </div>
+    </div>
+  }
+
+  <div class="search">
+    <mat-icon>search</mat-icon>
+    <input type="search" [ngModel]="search()" (ngModelChange)="search.set($event)" [placeholder]="'CATALOG.SEARCH' | translate" />
+    <span class="count">{{ items().length }}</span>
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>{{ 'CATALOG.NAME' | translate }}</th>
+          <th>{{ 'CATALOG.PACK' | translate }}</th>
+          <th>{{ 'CATALOG.BARCODE' | translate }}</th>
+          @if (canEdit) { <th></th> }
+        </tr>
+      </thead>
+      <tbody>
+        @for (c of shown(); track c.uid; let i = $index) {
+          <tr>
+            <td>{{ i + 1 }}</td>
+            <td class="name">{{ label(c) }}
+              <small>{{ (c.category === 'JUICE' ? 'CATALOG.CAT_JUICE' : 'CATALOG.CAT_DRINK') | translate }}</small>
+            </td>
+            <td>{{ packText(c) }}</td>
+            <td class="codes">{{ c.barcode || '-' }}@if (c.packBarcode) {<br /><small>{{ c.packUnit }}: {{ c.packBarcode }}</small>}</td>
+            @if (canEdit) {
+              <td class="row-actions">
+                <button type="button" class="ghost-btn" (click)="edit(c)">{{ 'COMMON.EDIT' | translate }}</button>
+                <button type="button" class="ghost-btn danger" (click)="remove(c)">{{ 'COMMON.DELETE' | translate }}</button>
+              </td>
+            }
+          </tr>
+        }
+        @if (!loading() && shown().length === 0) {
+          <tr><td [attr.colspan]="canEdit ? 5 : 4" class="empty">{{ 'CATALOG.EMPTY' | translate }}</td></tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

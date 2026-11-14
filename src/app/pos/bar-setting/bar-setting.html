@@ -307,6 +307,7 @@
           <div class="button-section">
             <button class="btn btn-primary" (click)="onAddService()">{{ 'SERVICE.ADD' | translate }}</button>
             <button class="btn btn-primary" (click)="onAddStockItem()">{{ 'PRODUCT_FORM.ADD_STOCK_ITEM_TITLE' | translate }}</button>
+            <button class="btn btn-primary" (click)="openCatalogPick()">{{ 'CATALOG.PICK_BTN' | translate }}</button>
 
             <button class="btn btn-primary" (click)="findBarServicePage()">
               {{ 'SERVICE.MANAGE' | translate }}
@@ -382,6 +383,15 @@
     (click)="onAddStockItem()">
     <mat-icon>inventory_2</mat-icon>
     <span>{{ 'PRODUCT_FORM.ADD_STOCK_ITEM_TITLE' | translate }}</span>
+  </button>
+  <!-- The main office's drinks, ticked for this branch (owner, 2026-11-14). -->
+  <button
+    mat-stroked-button
+    class="add-service-btn secondary"
+    type="button"
+    (click)="openCatalogPick()">
+    <mat-icon>playlist_add_check</mat-icon>
+    <span>{{ 'CATALOG.PICK_TITLE' | translate }}</span>
   </button>
 </div>
 

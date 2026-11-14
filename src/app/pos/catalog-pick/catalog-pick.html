@@ -1,0 +1,71 @@
+<div class="pick">
+  <div class="pick-head">
+    <div>
+      <h2>{{ 'CATALOG.PICK_TITLE' | translate }}</h2>
+      <p>{{ (step() === 1 ? 'CATALOG.PICK_STEP1' : 'CATALOG.PICK_STEP2') | translate }}</p>
+    </div>
+    <button type="button" class="icon-btn" (click)="close()" [attr.aria-label]="'COMMON.CLOSE' | translate">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="empty">...</div>
+  } @else if (rows().length === 0) {
+    <div class="empty">{{ 'CATALOG.NO_CATALOG' | translate }}</div>
+  } @else if (step() === 1) {
+    <div class="search">
+      <mat-icon>search</mat-icon>
+      <input type="search" [ngModel]="search()" (ngModelChange)="search.set($event)" [placeholder]="'CATALOG.SEARCH' | translate" />
+    </div>
+    <div class="list">
+      @for (r of shown(); track r.uid) {
+        <label class="row" [class.on]="r.ticked">
+          <input type="checkbox" [checked]="r.ticked" (change)="toggle(r)" />
+          <span class="main">
+            <strong>{{ r.displayName }}</strong>
+            <small>{{ pack(r) }}@if (r.barcode) { · {{ r.barcode }} }</small>
+          </span>
+          @if (r.added) {
+            <span class="badge">{{ 'CATALOG.IN_BRANCH' | translate }} · {{ r.price | number }}</span>
+          }
+        </label>
+      }
+    </div>
+  } @else {
+    <div class="list">
+      @for (r of ticked(); track r.uid) {
+        <div class="price-row">
+          <div class="main">
+            <strong>{{ r.displayName }}</strong>
+            <small>{{ pack(r) }}</small>
+          </div>
+          <label>{{ 'CATALOG.SELL_PRICE' | translate }}
+            <input type="number" min="1" [ngModel]="r.sell" (ngModelChange)="setPrice(r, 'sell', $event)" />
+          </label>
+          <label>{{ 'CATALOG.BUY_PRICE' | translate }} ({{ 'CATALOG.BUY_PER' | translate: { pack: r.packUnit || r.unit } }})
+            <input type="number" min="1" [ngModel]="r.buy" (ngModelChange)="setPrice(r, 'buy', $event)" />
+          </label>
+        </div>
+      }
+    </div>
+  }
+
+  @if (failed().length) {
+    <div class="err">
+      {{ 'CATALOG.SOME_FAILED' | translate }}
+      @for (f of failed(); track f.catalogUid) { <div>{{ f.name }}: {{ f.message }}</div> }
+    </div>
+  }
+  @if (error()) { <div class="err">{{ error() }}</div> }
+
+  <div class="pick-foot">
+    @if (step() === 1) {
+      <span class="count">{{ 'CATALOG.SELECTED' | translate: { n: ticked().length } }}</span>
+      <button type="button" class="primary-btn" [disabled]="rows().length === 0" (click)="next()">{{ 'CATALOG.NEXT' | translate }}</button>
+    } @else {
+      <button type="button" class="ghost-btn" (click)="step.set(1)">{{ 'CATALOG.BACK' | translate }}</button>
+      <button type="button" class="primary-btn" [disabled]="saving()" (click)="save()">{{ 'CATALOG.SAVE_PRICES' | translate }}</button>
+    }
+  </div>
+</div>

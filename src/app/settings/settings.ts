@@ -59,6 +59,12 @@ menuItems: SidenavItem[] = [
         roles: this.manageRoles
       },
       {
+        label: 'SETTINGS_MENU.CATALOG',
+        icon: 'bar',
+        route: '/settings/catalog',
+        roles: this.settingsRoles
+      },
+      {
         label: 'SETTINGS_MENU.COMMISSION',
         icon: 'commission',
         route: '/settings/commission',

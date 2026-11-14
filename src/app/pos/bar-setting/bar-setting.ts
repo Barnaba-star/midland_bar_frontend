@@ -37,6 +37,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { EmptyStateComponent } from '../../Utils/component/empty-state/empty-state';
 import { ComfirmDialogComponent } from '../../Utils/component/comfirm-dialog/comfirm-dialog';
 import { CategoryLabelPipe } from '../../Utils/pipes/product-category.pipe';
+import { CatalogPick } from '../catalog-pick/catalog-pick';
 
 export interface BarServiceEntity {
   uid?: string;
@@ -362,6 +363,15 @@ serviceColumns: {
 onAddService(){
   this.barServiceInfo=false;
   this.loadStockItems(() => this.openServiceDialog('SERVICE'));
+}
+
+/** The main office's drinks: tick the ones this branch has, then set its prices. */
+openCatalogPick(){
+  this.barServiceInfo=false;
+  this.dialog.open(CatalogPick, { width: '760px', maxWidth: '96vw', autoFocus: false })
+    .afterClosed().subscribe((saved?: number) => {
+      if (saved) this.findBarServicePage();
+    });
 }
 
 onAddStockItem(){

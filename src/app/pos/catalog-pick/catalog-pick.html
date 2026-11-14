@@ -23,7 +23,8 @@
         <label class="row" [class.on]="r.ticked">
           <input type="checkbox" [checked]="r.ticked" (change)="toggle(r)" />
           <span class="main">
-            <strong>{{ r.displayName }}</strong>
+            <strong>{{ r.name }}</strong>
+            @if (detail(r)) { <span class="detail">{{ detail(r) }}</span> }
             <small>{{ pack(r) }}@if (r.barcode) { · {{ r.barcode }} }</small>
           </span>
           @if (r.added) {
@@ -37,14 +38,15 @@
       @for (r of ticked(); track r.uid) {
         <div class="price-row">
           <div class="main">
-            <strong>{{ r.displayName }}</strong>
+            <strong>{{ r.name }}</strong>
+            @if (detail(r)) { <span class="detail">{{ detail(r) }}</span> }
             <small>{{ pack(r) }}</small>
           </div>
-          <label>{{ 'CATALOG.SELL_PRICE' | translate }}
-            <input type="number" min="1" [ngModel]="r.sell" (ngModelChange)="setPrice(r, 'sell', $event)" />
+          <label>{{ 'CATALOG.SELL_PER' | translate: { unit: (r.unit || 'chupa').toLowerCase() } }}
+            <input type="number" min="1" placeholder="TSh" [ngModel]="r.sell" (ngModelChange)="setPrice(r, 'sell', $event)" />
           </label>
-          <label>{{ 'CATALOG.BUY_PRICE' | translate }} ({{ 'CATALOG.BUY_PER' | translate: { pack: r.packUnit || r.unit } }})
-            <input type="number" min="1" [ngModel]="r.buy" (ngModelChange)="setPrice(r, 'buy', $event)" />
+          <label>{{ 'CATALOG.BUY_PER_PACK' | translate: { pack: (r.packUnit || r.unit || '').toLowerCase() } }}
+            <input type="number" min="1" placeholder="TSh" [ngModel]="r.buy" (ngModelChange)="setPrice(r, 'buy', $event)" />
           </label>
         </div>
       }

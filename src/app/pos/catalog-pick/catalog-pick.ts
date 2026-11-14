@@ -67,6 +67,11 @@ export class CatalogPick implements OnInit {
     this.rows.set(this.rows().map((r) => (r.uid === row.uid ? { ...r, [field]: n } : r)));
   }
 
+  /** Ladha and size, under the name rather than in it, so a long one reads. */
+  detail(r: Row): string {
+    return [r.flavour, r.size].filter((v) => !!v).join(' · ');
+  }
+
   pack(r: Row): string {
     return r.packUnit ? `${r.unitsPerPack} ${r.unit || ''} / ${r.packUnit}` : (r.unit || '');
   }

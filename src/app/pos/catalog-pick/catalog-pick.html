@@ -4,6 +4,9 @@
       <h2>{{ 'CATALOG.PICK_TITLE' | translate }}</h2>
       <p>{{ (step() === 1 ? 'CATALOG.PICK_STEP1' : 'CATALOG.PICK_STEP2') | translate }}</p>
     </div>
+ @if (offerManual && step() === 1) {
+      <button type="button" class="ghost-btn" (click)="manual()">{{ 'CATALOG.TYPE_OTHER' | translate }}</button>
+    }
     <button type="button" class="icon-btn" (click)="close()" [attr.aria-label]="'COMMON.CLOSE' | translate">
       <mat-icon>close</mat-icon>
     </button>

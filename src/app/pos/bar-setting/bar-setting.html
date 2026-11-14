@@ -305,7 +305,7 @@
           </div>
 
           <div class="button-section">
-            <button class="btn btn-primary" (click)="onAddService()">{{ 'SERVICE.ADD' | translate }}</button>
+            <button class="btn btn-primary" (click)="openCatalogPick(true)">{{ 'SERVICE.ADD' | translate }}</button>
             <button class="btn btn-primary" (click)="onAddStockItem()">{{ 'PRODUCT_FORM.ADD_STOCK_ITEM_TITLE' | translate }}</button>
             <button class="btn btn-primary" (click)="openCatalogPick()">{{ 'CATALOG.PICK_BTN' | translate }}</button>
 
@@ -369,7 +369,7 @@
     mat-flat-button
     class="add-service-btn"
     type="button"
-    (click)="onAddService()">
+    (click)="openCatalogPick(true)">
 
     <mat-icon>add</mat-icon>
 
@@ -657,7 +657,7 @@
             mat-flat-button
             type="button"
             class="add-service-btn"
-            (click)="onAddService()">
+            (click)="openCatalogPick(true)">
             <mat-icon>add</mat-icon>
             <span>{{ 'SERVICE.ADD' | translate }}</span>
           </button>

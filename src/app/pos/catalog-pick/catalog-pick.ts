@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, OnInit, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Inject, Optional } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { BranchCatalogItem, CatalogPickResult, CatalogService } from '../../settings/catalog-setting/catalog-service';
@@ -43,9 +44,19 @@ export class CatalogPick implements OnInit {
 
   constructor(
     private catalog: CatalogService,
-    private ref: MatDialogRef<CatalogPick, number>,
+    private ref: MatDialogRef<CatalogPick, number | 'manual'>,
     private translate: TranslateService,
-  ) {}
+    @Optional() @Inject(MAT_DIALOG_DATA) data: { offerManual?: boolean } | null,
+  ) {
+    this.offerManual = !!data?.offerManual;
+  }
+
+  /** Opened from Ongeza Huduma: a way out to type one not in the catalog (owner, 2026-11-14). */
+  readonly offerManual: boolean;
+
+  manual(): void {
+    this.ref.close('manual');
+  }
 
   ngOnInit(): void {
     this.catalog.forBranch().subscribe({

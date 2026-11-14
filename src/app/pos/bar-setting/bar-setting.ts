@@ -366,11 +366,12 @@ onAddService(){
 }
 
 /** The main office's drinks: tick the ones this branch has, then set its prices. */
-openCatalogPick(){
+openCatalogPick(offerManual = false){
   this.barServiceInfo=false;
-  this.dialog.open(CatalogPick, { width: '760px', maxWidth: '96vw', autoFocus: false })
-    .afterClosed().subscribe((saved?: number) => {
-      if (saved) this.findBarServicePage();
+  this.dialog.open(CatalogPick, { width: '760px', maxWidth: '96vw', autoFocus: false, data: { offerManual } })
+    .afterClosed().subscribe((result?: number | 'manual') => {
+      if (result === 'manual') this.loadStockItems(() => this.openServiceDialog('SERVICE'));
+      else if (result) this.findBarServicePage();
     });
 }
 

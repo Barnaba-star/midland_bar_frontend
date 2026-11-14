@@ -3336,6 +3336,7 @@
     "BARCODE": "Barcode ya chupa",
     "PACK_BARCODE": "Barcode ya kreti",
     "QR_CODE": "QR code (kama ipo)",
+    "TYPE_OTHER": "Andika nyingine",
     "BUY_PER_PACK": "Bei ya kununua {{pack}}",
     "SELL_PER": "Bei ya kuuza {{unit}}",
     "SEARCH": "Tafuta kinywaji au barcode",

@@ -3336,6 +3336,7 @@
     "BARCODE": "Bottle barcode",
     "PACK_BARCODE": "Crate barcode",
     "QR_CODE": "QR code (if any)",
+    "TYPE_OTHER": "Type another",
     "BUY_PER_PACK": "Buying price per {{pack}}",
     "SELL_PER": "Selling price per {{unit}}",
     "SEARCH": "Search drink or barcode",
